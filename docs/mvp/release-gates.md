@@ -19,16 +19,16 @@ Atlas must remain private until mandatory public-preview gates are satisfied.
 
 ## Stage 1 Architecture / Governance Sync
 
-- [ ] `docs/project-state.md` merged
-- [ ] Phase 5.1 consistently marked COMPLETE
-- [ ] Atlas / DefenseOps / Forge ownership synchronized
-- [ ] Canonical identifier architecture recorded
-- [ ] Shared-core/Desktop/Web sequencing synchronized
-- [ ] Universal telemetry taxonomy recorded
-- [ ] Coverage architecture recorded
-- [ ] Controlled content release pipeline recorded
-- [ ] Legacy/current telemetry lifecycle recorded
-- [ ] ADR-0004 through ADR-0010 merged
+- [x] `docs/project-state.md` merged
+- [x] Phase 5.1 consistently marked COMPLETE
+- [x] Atlas / DefenseOps / Forge ownership synchronized
+- [x] Canonical identifier architecture recorded
+- [x] Shared-core/Desktop/Web sequencing synchronized
+- [x] Universal telemetry taxonomy recorded
+- [x] Coverage architecture recorded
+- [x] Controlled content release pipeline recorded
+- [x] Legacy/current telemetry lifecycle recorded
+- [x] ADR-0004 through ADR-0010 merged
 
 ## Before Public Preview
 
