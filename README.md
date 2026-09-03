@@ -4,7 +4,7 @@
 
 Cyber-Sentinel-Atlas is the signature product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed knowledge system.
 
-> Status: **Phase 5.1 — Product Foundation COMPLETE; Stage 1 Architecture Sync in review**
+> Status: **Phase 5.1 — Product Foundation COMPLETE; Stage 1 — Governance / Architecture Sync COMPLETE; Phase 5.2 NOT STARTED**
 > Visibility: **Private during active development**
 
 ## Product Thesis
