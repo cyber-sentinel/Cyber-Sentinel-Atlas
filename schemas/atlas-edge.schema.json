@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyber-sentinel.dev/schemas/atlas-edge.schema.json",
+  "title": "Atlas Edge",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "from",
+    "to",
+    "type",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^atlas:edge:[a-z0-9][a-z0-9._:-]*$"
+    },
+    "from": {
+      "type": "string",
+      "pattern": "^atlas:"
+    },
+    "to": {
+      "type": "string",
+      "pattern": "^atlas:"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "RUNS_ON",
+        "EMITS",
+        "HAS_FIELD",
+        "INDICATES",
+        "RELATED_TO",
+        "EQUIVALENT_SIGNAL",
+        "PRECEDES",
+        "FOLLOWS",
+        "MAPS_TO_ATTACK",
+        "COUNTERED_BY",
+        "DETECTED_BY",
+        "HUNTED_BY",
+        "INVESTIGATED_BY",
+        "RESPONDED_BY",
+        "REQUIRES_TELEMETRY",
+        "DERIVED_FROM",
+        "SUPPORTED_BY",
+        "SUPERSEDES",
+        "VERSION_OF",
+        "VALIDATED_BY"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "validated",
+        "deprecated"
+      ]
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "authoritative",
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^atlas:source:"
+      },
+      "uniqueItems": true
+    }
+  }
+}
