@@ -2,7 +2,7 @@
 
 ## Objective
 
-Make Atlas trustworthy enough that a user can inspect why a technical statement exists and whether it is current.
+Make Atlas trustworthy enough that a user can inspect why a technical statement exists, where it came from, whether it is current, and how it entered a released content pack.
 
 ## Source Classes
 
@@ -16,17 +16,27 @@ Preferred source of truth:
 - standards bodies and specifications;
 - official project documentation and repositories.
 
+Canonical Microsoft references:
+
+- Sysmon: https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
+- Sysinternals: https://learn.microsoft.com/en-us/sysinternals/
+
 ### Tier B — Primary Engineering
 
 High-value original engineering sources:
 
 - vendor-maintained detection repositories;
 - official open-source project repositories;
-- maintainers' technical specifications.
+- maintainers' technical specifications;
+- Cyber-Sentinel-DefenseOps validated engineering content.
+
+Tier B engineering content does not become authoritative merely because it is validated engineering content.
 
 ### Tier C — Secondary Research
 
 May support context but should not override authoritative sources without review.
+
+UltimateWindowsSecurity and similar references belong here unless a more specific classification is justified.
 
 ### Tier D — Community
 
@@ -60,6 +70,12 @@ Every material claim should support:
 - machine-generated relationship;
 - manually validated relationship.
 
+## Controlled Publication Boundary
+
+No upstream source or connector directly mutates the production/public Atlas dataset.
+
+All released content follows the controlled pipeline documented in [Controlled Content Release Pipeline](content-release-pipeline.md).
+
 ## AI Rule
 
 AI-assisted content is never promoted to trusted knowledge solely because a model produced it.
@@ -86,4 +102,4 @@ Each source connector must define:
 
 Atlas should store normalized facts and attribution metadata, not indiscriminately mirror copyrighted documentation.
 
-Any source ingestion must record its redistribution and licensing constraints before public release.
+Any source ingestion must record redistribution and licensing constraints before public release.
