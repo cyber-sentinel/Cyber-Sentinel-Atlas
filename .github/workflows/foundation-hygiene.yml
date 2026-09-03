@@ -1,0 +1,30 @@
+name: Foundation Hygiene
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - "product/**"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-foundation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Validate Phase 5.1 foundation
+        run: python tools/validate_foundation.py
+
+      - name: Check sensitive filenames
+        shell: bash
+        run: |
+          set -euo pipefail
+          if find . -type f \( -name "*.pem" -o -name "*.key" -o -name "*.pfx" -o -name ".env" \) | grep -q .; then
+            echo "Potential secret-bearing file detected."
+            exit 1
+          fi

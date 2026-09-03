@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyber-sentinel.dev/schemas/atlas-node.schema.json",
+  "title": "Atlas Node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "type",
+    "title",
+    "status",
+    "version"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^atlas:[a-z0-9][a-z0-9._:-]*$"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Platform",
+        "Product",
+        "Technology",
+        "TelemetrySource",
+        "Event",
+        "Field",
+        "Artifact",
+        "Behavior",
+        "ATTACKTechnique",
+        "ATTACKTactic",
+        "D3FENDTechnique",
+        "CARAnalytic",
+        "Detection",
+        "Hunt",
+        "InvestigationProcedure",
+        "ResponseAction",
+        "DefensiveControl",
+        "Source",
+        "Claim",
+        "ValidationRecord",
+        "VersionRecord"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "validated",
+        "deprecated"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "platforms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
