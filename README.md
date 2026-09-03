@@ -2,9 +2,9 @@
 
 **Intelligent Cyber Defense Knowledge & Investigation Platform**
 
-Cyber-Sentinel-Atlas is the signature product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security events, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed knowledge system.
+Cyber-Sentinel-Atlas is the signature product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed knowledge system.
 
-> Status: **Phase 5.1 — Product Foundation**
+> Status: **Phase 5.1 — Product Foundation COMPLETE; Stage 1 Architecture Sync in review**
 > Visibility: **Private during active development**
 
 ## Product Thesis
@@ -16,9 +16,9 @@ Atlas makes those relationships searchable and operational:
 ```text
 Platform / Technology
         ↓
-Telemetry Source
+Telemetry Provider / Source
         ↓
-Event / Log / Artifact
+Telemetry Record / Artifact
         ↓
 Security Meaning / Behavior
         ↓
@@ -43,16 +43,29 @@ Atlas is **not**:
 - another SIEM-specific content portal;
 - an AI chatbot without verifiable sources.
 
-Atlas is designed as a **cyber defense knowledge graph + analyst workbench**.
+Atlas is designed as a **Cyber Defense Knowledge Graph + Analyst Workbench + Offline Knowledge Platform + Detection Engineering Platform**.
 
-## Planned Interfaces
+## Interface Sequence
 
-- Web application / PWA
-- Offline knowledge packs
-- Desktop experience
-- REST/Graph API
-- CLI
-- Grounded AI assistant with mandatory source attribution
+```text
+Canonical Data Model
+        ↓
+Source / Ingestion Core
+        ↓
+Deterministic Search Core
+        ↓
+Offline Pack Runtime / Shared Core
+        ↓
+Windows Desktop MVP
+        ↓
+Web / PWA
+        ↓
+API / CLI
+        ↓
+Grounded AI
+```
+
+The official user-facing CLI command is `atlas`.
 
 ## Initial MVP Domain
 
@@ -63,26 +76,30 @@ The first usable MVP intentionally starts narrow:
 - PowerShell
 - Active Directory
 - MITRE ATT&CK relationships
-- DefenseOps detections and hunts
-- Investigation pivots
-- Official-source provenance
-- Fast exact/event search
-- Offline-first local dataset
+- selected D3FEND/CAR relationships
+- DefenseOps validated detections and hunts
+- investigation pivots
+- official-source provenance
+- fast exact/lexical search
+- offline-first local dataset
 
-The architecture is intentionally extensible to Linux, macOS, Exchange, SharePoint, Azure, AWS, Google Cloud, Docker, Kubernetes, databases, CI/CD, DFIR, incident response, and cyber deception.
+The architecture is intentionally extensible to Linux, macOS, Exchange, SharePoint, Microsoft 365, Azure, AWS, Google Cloud, Docker, Kubernetes, DevOps/CI-CD, databases, LOLBAS, GTFOBins, DFIR, incident response, and cyber deception.
 
 ## Ecosystem
 
 ```text
 Cyber-Sentinel
-├── DefenseOps  → validated defensive engineering content
-└── Atlas       → knowledge graph, search, analyst workspace, API and CLI
+├── DefenseOps  → approved defensive engineering source for validated content
+└── Atlas       → knowledge graph, search, offline runtime, analyst workspace and product interfaces
 ```
 
-DefenseOps is an engineering source. Atlas is the product and knowledge layer.
+Cyber-Sentinel-Forge is retired as an independent Atlas architectural component. Historical Forge material, if present, is preserved rather than deleted automatically.
+
+DefenseOps content enters Atlas only through versioned ingestion, provenance, validation, and controlled release gates.
 
 ## Foundation Documents
 
+- [Project State](docs/project-state.md)
 - [Product Vision](docs/product/product-vision.md)
 - [Product Principles](docs/product/product-principles.md)
 - [Personas](docs/product/personas.md)
@@ -99,6 +116,7 @@ DefenseOps is an engineering source. Atlas is the product and knowledge layer.
 - [MVP Scope](docs/mvp/mvp-scope.md)
 - [MVP Release Gates](docs/mvp/release-gates.md)
 - [Roadmap](docs/roadmap.md)
+- [Architecture Decision Records](docs/adr/)
 
 ## Core Principle
 

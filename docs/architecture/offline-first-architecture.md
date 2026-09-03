@@ -2,75 +2,134 @@
 
 ## Principle
 
-Offline is not an export feature. It is a supported operating mode.
+Offline is not an export feature. It is a supported operating mode and part of the shared runtime required before the Windows Desktop MVP.
+
+Authoritative decisions:
+
+- [ADR-0003 — Offline-first Core](../adr/0003-offline-first.md)
+- [ADR-0006 — Shared Core and Interface Sequencing](../adr/0006-shared-core-and-interface-sequencing.md)
+- [ADR-0009 — Controlled Content Release Pipeline](../adr/0009-controlled-content-release-pipeline.md)
 
 ## Offline Core
 
-The MVP offline package should include:
+The MVP offline runtime should support:
 
 - canonical entities;
+- native identifiers and aliases;
 - claims;
 - relationships;
+- lifecycle/applicability metadata;
 - source metadata;
 - selected source excerpts/locators where redistribution permits;
 - exact search index;
 - lexical search index;
-- saved analyst workspace;
+- coverage metadata;
+- saved analyst workspace where product design requires it;
 - product schema/version metadata.
 
-## Pack Model
+## Content Pack Model
+
+Atlas requires independent, versioned content packs.
+
+Candidate names currently include:
 
 ```text
-atlas-core.pack
-atlas-windows.pack
-atlas-sysmon.pack
-atlas-attack.pack
-atlas-defenseops.pack
+atlas-core
+atlas-windows
+atlas-sysmon
+atlas-mitre-attack
+atlas-defenseops
 ```
 
-A pack is:
+Additional domain packs are expected later.
 
-- versioned;
-- signed;
-- checksummed;
-- schema-compatible;
-- independently updateable where feasible.
+**Exact final pack naming is an open architecture decision.**
 
-## Update Model
+A released pack must support:
+
+- content version;
+- schema version;
+- source version;
+- source provenance;
+- checksum;
+- signature;
+- compatibility;
+- freshness;
+- coverage;
+- validation status;
+- rollback.
+
+## Controlled Publication
+
+No source directly updates installed/production Atlas content.
+
+See [Controlled Content Release Pipeline](content-release-pipeline.md).
+
+## Client Update Flow
 
 ```text
-Installed Pack
-    ↓
-Manifest Check
-    ↓
-Signed Update Metadata
-    ↓
-Delta or Full Package
-    ↓
-Verify Signature + Checksum
-    ↓
-Atomic Replace
-    ↓
-Index Rebuild / Migration
+Released Pack
+        ↓
+Manifest Verification
+        ↓
+Signature Verification
+        ↓
+Checksum Verification
+        ↓
+Schema/Compatibility Check
+        ↓
+Preserve Last Known Good
+        ↓
+Atomic Install
+        ↓
+Index/Migration
+        ↓
+Health Check
+        ↓
+Activation
 ```
 
-## Conflict Rule
+Failure requires rollback to Last Known Good.
 
-An interrupted update must not corrupt the last known-good offline dataset.
+## Shared Runtime Position
 
-## Local Storage
+The approved sequence is:
 
-Implementation should favor a portable embedded database for the MVP.
+```text
+Deterministic Search Core
+        ↓
+Offline Pack Runtime / Shared Core
+        ↓
+Windows Desktop MVP
+        ↓
+Web / PWA
+```
 
-The storage engine remains an implementation decision; domain schemas must remain portable.
+The Desktop application must not require Internet connectivity for core lookup/search/navigation over installed packs.
 
-## PWA
+## Local Storage Requirement
 
-The web client should support:
+The architecture requires portable embedded local storage and deterministic offline search.
 
-- application-shell caching;
-- offline navigation;
-- local search;
-- cached knowledge packs;
-- explicit online/offline state;
-- safe synchronization when connectivity returns.
+The exact database/storage engine remains an open implementation decision.
+
+## Windows Desktop Requirement
+
+The first full end-user interface must support:
+
+- fast offline lookup;
+- exact identifier resolution;
+- lexical search;
+- local canonical dataset;
+- relationship navigation;
+- provenance visibility;
+- signed pack updates;
+- safe rollback.
+
+Portable Windows mode remains an approved requirement candidate.
+
+## Web / PWA
+
+Web/PWA follows the shared core/Desktop MVP and uses the same canonical model/contracts.
+
+It must not become a separate source of truth.

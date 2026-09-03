@@ -2,15 +2,48 @@
 
 ## Goal
 
-Represent cyber defense knowledge as explicit entities, claims, and typed relationships rather than a collection of disconnected Markdown pages.
+Represent cyber defense knowledge as explicit entities, claims, typed relationships, provenance, lifecycle, and versioned measurements rather than disconnected pages.
 
-## Canonical Node Types
+## Universal Telemetry Spine
+
+Per [ADR-0007](../adr/0007-universal-telemetry-taxonomy.md):
+
+```text
+Platform
+  ↓
+Product
+  ↓
+TelemetryProvider
+  ↓
+TelemetrySource
+  ↓
+TelemetryRecordType
+        ├── Event
+        ├── AuditRecord
+        ├── Operation
+        ├── Activity
+        ├── Finding
+        └── FlowRecord
+```
+
+Event remains a valid subtype. Atlas is not Event-ID-centric.
+
+## Canonical Concept Families
+
+The conceptual model must support at minimum:
 
 - Platform
 - Product
 - Technology
+- TelemetryProvider
 - TelemetrySource
+- TelemetryRecordType
 - Event
+- AuditRecord
+- Operation
+- Activity
+- Finding
+- FlowRecord
 - Field
 - Artifact
 - Behavior
@@ -27,20 +60,38 @@ Represent cyber defense knowledge as explicit entities, claims, and typed relati
 - Claim
 - ValidationRecord
 - VersionRecord
+- CoverageSnapshot / CoverageRecord
 
-## Example Identifiers
+Phase 5.2 determines exact production schema representation and controlled vocabulary.
+
+## Canonical Identifiers
+
+Per [ADR-0005](../adr/0005-canonical-identifier-architecture.md):
 
 ```text
-atlas:event:windows-security:4688
-atlas:event:sysmon:1
-atlas:behavior:powershell-encoded-command
-atlas:attack:T1059.001
-atlas:detection:defenseops:DET-WIN-001
+atlas:<entity-type>:<namespace>:<canonical-key>
 ```
 
-Identifiers are stable and independent from display labels.
+Examples:
 
-## Core Edge Types
+```text
+atlas:event:microsoft.windows.security:4688
+atlas:event:microsoft.sysmon:1
+atlas:audit-record:linux.audit:execve
+atlas:attack-technique:mitre.attack:t1059.001
+atlas:operation:aws.cloudtrail.iam:createaccesskey
+atlas:activity:kubernetes.audit:create.pods.exec
+atlas:audit-action:mongodb.audit:authcheck
+atlas:detection:defenseops:det-win-001
+```
+
+Canonical IDs are lowercase internal identities.
+
+Native identifiers and aliases are separately preserved.
+
+## Core Relationship Semantics
+
+The graph must support relationships including:
 
 - RUNS_ON
 - EMITS
@@ -60,18 +111,21 @@ Identifiers are stable and independent from display labels.
 - DERIVED_FROM
 - SUPPORTED_BY
 - SUPERSEDES
+- SUPERSEDED_BY
 - VERSION_OF
 - VALIDATED_BY
 
+Relationship vocabulary remains controlled and source/provenance aware.
+
 ## Claim as a First-Class Object
 
-A technical statement is not stored only as prose.
+A material technical statement is not stored only as prose.
 
-Example:
+Conceptual example:
 
 ```text
 Claim:
-  subject: atlas:event:windows-security:4688
+  subject: atlas:event:microsoft.windows.security:4688
   predicate: "represents"
   value: "new process creation"
   confidence: authoritative
@@ -81,7 +135,7 @@ Claim:
     - source-id
 ```
 
-This allows:
+This enables:
 
 - claim-level citations;
 - conflicting-source handling;
@@ -91,15 +145,39 @@ This allows:
 
 ## Relationship Quality
 
-Every relationship should have:
+Every material relationship should support:
 
 - relationship type;
-- source or derivation;
+- source/derivation;
 - confidence;
 - applicable version;
 - validation state;
 - created/updated metadata.
 
+## Lifecycle
+
+Telemetry lifecycle uses:
+
+- current
+- legacy
+- deprecated
+- superseded
+- retired
+
+Lifecycle state is metadata, not a telemetry subtype.
+
+See [Telemetry Lifecycle](telemetry-lifecycle.md).
+
+## Coverage
+
+Coverage is represented by versioned measurements rather than mutable percentages on entities.
+
+See [Coverage Model](coverage-model.md).
+
 ## Schema Boundary
 
-The graph model is conceptual. Storage technology is an implementation choice and must not leak into the domain model.
+The graph model is conceptual.
+
+Storage technology, graph database choice, embedded database choice, and search implementation must not leak into the canonical domain model.
+
+The existing Phase 5.1 JSON schemas are provisional until Phase 5.2 implements the accepted ADRs.
