@@ -1,6 +1,6 @@
 # ADR-0003 — Offline-first Core
 
-**Status:** Accepted  
+**Status:** Accepted
 **Decision:** 2026-09-03
 
 ## Context
