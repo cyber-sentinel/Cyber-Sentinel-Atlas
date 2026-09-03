@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - "product/**"
+      - "architecture/**"
 
 permissions:
   contents: read
@@ -19,6 +20,9 @@ jobs:
 
       - name: Validate Phase 5.1 foundation
         run: python tools/validate_foundation.py
+
+      - name: Validate Stage 1 architecture sync
+        run: python tools/validate_stage1_sync.py
 
       - name: Check sensitive filenames
         shell: bash
