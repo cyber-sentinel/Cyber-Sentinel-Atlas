@@ -2,30 +2,54 @@
 
 ## Phase 5.1 — Product Foundation
 
-Status: **In progress / foundation authored**
+Status: **COMPLETE**
+
+Completed foundation:
 
 - product vision;
 - positioning;
 - personas;
-- knowledge graph;
-- provenance;
-- search;
-- AI/RAG;
-- offline-first;
-- API/CLI;
-- security;
+- knowledge graph foundation;
+- claim-level provenance;
+- search architecture;
+- AI/RAG boundaries;
+- offline-first architecture;
+- API/CLI direction;
+- security architecture;
 - UX;
 - MVP scope;
-- ADRs;
+- ADR foundation;
 - foundation CI.
+
+## Stage 1 — Governance / Architecture Sync
+
+Status: **IN REVIEW**
+
+Synchronize the accepted cross-chat architecture decisions before Phase 5.2:
+
+- project-state control;
+- Atlas / DefenseOps / Forge ownership;
+- canonical identifier architecture;
+- shared-core/interface sequencing;
+- universal telemetry taxonomy;
+- coverage architecture;
+- controlled content release pipeline;
+- legacy/current telemetry lifecycle.
 
 ## Phase 5.2 — Canonical Data Model
 
+Starts only after Stage 1 is reviewed and merged.
+
 - production schemas;
 - canonical identifier conventions;
+- native identifier model;
+- aliases and scoped search identifiers;
+- telemetry provider/source/record taxonomy;
 - claim model;
 - relationship model;
+- lifecycle/applicability model;
 - source registry schema;
+- coverage snapshot model;
 - validation records;
 - migration/version strategy.
 
@@ -36,54 +60,102 @@ Initial authoritative sources:
 - Microsoft Windows event documentation;
 - Microsoft Sysinternals Sysmon;
 - MITRE ATT&CK;
-- DefenseOps validated content.
+- selected MITRE D3FEND/CAR relationships;
+- DefenseOps validated content through an explicit ingestion contract.
 
-Outputs:
+Required controlled flow:
 
-- source adapters;
-- normalization;
-- deduplication;
-- provenance;
-- freshness;
-- tests.
+```text
+Official Source
+        ↓
+Raw Snapshot
+        ↓
+Parser
+        ↓
+Normalizer
+        ↓
+Schema Validation
+        ↓
+Inventory Diff
+        ↓
+Tests
+        ↓
+Human Review
+        ↓
+Signed Content Pack
+        ↓
+Release
+```
 
-## Phase 5.4 — Search Core
+No upstream source may directly mutate the production/public Atlas dataset.
+
+## Phase 5.4 — Deterministic Search Core
 
 - exact resolver;
 - lexical index;
-- filters;
+- structured filters;
 - graph traversal;
 - ranking;
-- benchmarks.
+- benchmarks;
+- universal identifier resolution.
 
-## Phase 5.5 — MVP Web/PWA
+Exact identifier matches must precede semantic retrieval.
 
-- command-center search;
-- event/entity pages;
+## Phase 5.5 — Offline Pack Runtime / Shared Core
+
+- pack manifest;
+- signed/checksummed updates;
+- schema/compatibility verification;
+- embedded local data access;
+- deterministic local search;
+- last-known-good preservation;
+- atomic installation;
+- health checks;
+- automatic rollback;
+- shared contracts for Desktop, Web/PWA, API, and CLI.
+
+Exact pack names remain an open decision.
+
+## Phase 5.6 — Windows Desktop MVP
+
+First full end-user interface.
+
+Requirements:
+
+- fast offline lookup;
+- exact identifier resolution;
+- lexical search;
+- local canonical dataset;
+- relationship navigation;
+- provenance visibility;
+- no mandatory Internet connection;
+- signed pack updates;
+- safe rollback;
+- portable Windows mode evaluation.
+
+Technology stack selection requires an implementation spike and dedicated ADR.
+
+## Phase 5.7 — Web / PWA
+
+Build on the same canonical model and shared runtime/contracts.
+
+- global search;
+- entity pages;
 - relationship navigation;
 - source/evidence panel;
 - responsive dark/light UI;
-- offline shell.
+- offline-capable experience where technically appropriate.
 
-## Phase 5.6 — Offline Packs
+## Phase 5.8 — API / CLI
 
-- pack format;
-- signed manifests;
-- checksum verification;
-- local index;
-- atomic update;
-- first Windows/Sysmon/ATT&CK/DefenseOps pack.
-
-## Phase 5.7 — API & CLI
-
-- read API;
+- versioned read API;
 - search;
 - graph;
 - sources;
 - packs;
-- Atlas CLI.
+- official `atlas` CLI.
 
-## Phase 5.8 — Grounded AI
+## Phase 5.9 — Grounded AI
 
 Only after deterministic retrieval and provenance are mature:
 
@@ -91,31 +163,46 @@ Only after deterministic retrieval and provenance are mature:
 - evidence-grounded explanations;
 - investigation pivots;
 - cited summaries;
-- offline model option later.
+- optional offline model path later.
 
-## Phase 5.9 — Public Preview Readiness
+AI does not become the canonical source of truth.
+
+## Phase 5.10 — Public Preview Readiness
 
 - security review;
-- licensing review;
+- licensing/source redistribution review;
 - performance;
 - accessibility;
 - contributor workflow;
+- source freshness monitoring;
+- signed release process;
 - public documentation;
 - launch criteria.
 
 ## Expansion After MVP
 
+The universal model should support future:
+
 - Linux;
 - macOS;
 - Exchange;
 - SharePoint;
-- Azure;
+- Microsoft 365;
+- Azure / Entra ID;
 - AWS;
 - Google Cloud;
-- Docker;
-- Kubernetes;
-- CI/CD;
+- Docker / containerd / CRI-O;
+- Kubernetes / OpenShift;
+- DevOps / CI-CD;
 - SQL Server;
+- PostgreSQL / pgAudit;
+- MySQL / MariaDB;
 - MongoDB;
-- MariaDB;
+- Oracle;
+- Redis;
+- managed cloud databases;
+- LOLBAS;
+- GTFOBins;
 - broader DFIR/IR/deception content.
+
+Architecture support does not imply MVP ingestion of all domains.
