@@ -4,7 +4,7 @@
 
 Cyber-Sentinel-Atlas is the signature product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security events, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed knowledge system.
 
-> Status: **Phase 5.1 — Product Foundation**  
+> Status: **Phase 5.1 — Product Foundation**
 > Visibility: **Private during active development**
 
 ## Product Thesis
@@ -106,5 +106,5 @@ DefenseOps is an engineering source. Atlas is the product and knowledge layer.
 
 ---
 
-**Maintainer:** Ali RahimDabagh  
+**Maintainer:** Ali RahimDabagh
 **GitHub:** `cyber-sentinel`
