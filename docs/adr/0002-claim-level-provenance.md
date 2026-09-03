@@ -1,6 +1,6 @@
 # ADR-0002 — Claim-Level Provenance
 
-**Status:** Accepted  
+**Status:** Accepted
 **Decision:** 2026-09-03
 
 ## Context
