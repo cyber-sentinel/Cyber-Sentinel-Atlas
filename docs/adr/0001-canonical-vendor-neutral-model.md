@@ -1,6 +1,6 @@
 # ADR-0001 — Canonical Vendor-Neutral Model
 
-**Status:** Accepted  
+**Status:** Accepted
 **Decision:** 2026-09-03
 
 ## Context
