@@ -38,6 +38,7 @@ def read(path):
 readme = read("README.md")
 roadmap = read("docs/roadmap.md")
 state = read("docs/project-state.md")
+gates = read("docs/mvp/release-gates.md")
 api_cli = read("docs/architecture/api-cli-architecture.md")
 ids = read("docs/architecture/canonical-identifier-architecture.md")
 taxonomy = read("docs/architecture/universal-telemetry-taxonomy.md")
@@ -49,17 +50,40 @@ lifecycle = read("docs/architecture/telemetry-lifecycle.md")
 if "Phase 5.1 — Product Foundation COMPLETE" not in readme:
     errors.append("README must mark Phase 5.1 COMPLETE")
 
+if "Stage 1 — Governance / Architecture Sync COMPLETE" not in readme:
+    errors.append("README must mark Stage 1 COMPLETE")
+
+if "Phase 5.2 NOT STARTED" not in readme:
+    errors.append("README must mark Phase 5.2 NOT STARTED")
+
 if "## Phase 5.1 — Product Foundation" not in roadmap or "Status: **COMPLETE**" not in roadmap:
     errors.append("Roadmap must mark Phase 5.1 COMPLETE")
 
+stage1_block = roadmap.split("## Stage 1 — Governance / Architecture Sync", 1)
+if len(stage1_block) != 2 or "Status: **COMPLETE**" not in stage1_block[1].split("## Phase 5.2", 1)[0]:
+    errors.append("Roadmap must mark Stage 1 COMPLETE")
+
+phase52_block = roadmap.split("## Phase 5.2 — Canonical Data Model", 1)
+if len(phase52_block) != 2 or "Status: **NOT STARTED**" not in phase52_block[1].split("## Phase 5.3", 1)[0]:
+    errors.append("Roadmap must keep Phase 5.2 NOT STARTED")
+
 if "Phase 5.1 — Product Foundation: **COMPLETE**" not in state:
     errors.append("project-state must mark Phase 5.1 COMPLETE")
+
+if "Stage 1 — Governance / Architecture Sync: **COMPLETE**" not in state:
+    errors.append("project-state must mark Stage 1 COMPLETE")
 
 if "Phase 5.2 — Canonical Data Model: **NOT STARTED**" not in state:
     errors.append("project-state must keep Phase 5.2 NOT STARTED")
 
 if not re.search(r"Last Reviewed Main SHA: `[0-9a-f]{40}`", state):
     errors.append("project-state must record a 40-character Last Reviewed Main SHA")
+
+if "Architecture Sync Status: **GREEN**" not in state:
+    errors.append("project-state must record GREEN architecture sync status")
+
+if "Stage 1 — Governance / Architecture Sync: **COMPLETE**" in state and "- [ ] `docs/project-state.md` merged" in gates:
+    errors.append("release-gates must not leave Stage 1 governance checks open after completion")
 
 # Ecosystem ownership.
 if "The former Sentinel Forge CLI concept becomes an Atlas interface." in api_cli:
@@ -155,7 +179,17 @@ for phrase in (
     if phrase not in lifecycle:
         errors.append(f"Telemetry lifecycle missing: {phrase}")
 
-# Accepted ADR-0001..0003 must remain accepted and retain their core decision.
+# ADR-0001 through ADR-0010 must all remain Accepted.
+for i in range(1, 11):
+    candidates = sorted(Path("docs/adr").glob(f"{i:04d}-*.md"))
+    if len(candidates) != 1:
+        errors.append(f"Expected exactly one ADR-{i:04d} file, found {len(candidates)}")
+        continue
+    text = read(candidates[0])
+    if "**Status:** Accepted" not in text:
+        errors.append(f"ADR-{i:04d} must remain Accepted")
+
+# Preserve core decisions of ADR-0001..0003.
 accepted_checks = {
     "docs/adr/0001-canonical-vendor-neutral-model.md": "vendor becomes the domain model",
     "docs/adr/0002-claim-level-provenance.md": "Material technical claims are first-class records",

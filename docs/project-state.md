@@ -5,16 +5,16 @@
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Authoritative Branch: `main`
 - Current Version: `0.1.0-foundation.1`
-- Last Reviewed Main SHA: `835204e2eb24fe2297ef0238a9cce41452eebd39`
+- Last Reviewed Main SHA: `06061e686fe60f7f9f195000c8c9d97f4f6da8d7`
 - Repository Visibility: Private during active development
 
 ## Current Phase
 
 - Phase 5.1 — Product Foundation: **COMPLETE**
-- Stage 1 — Governance / Architecture Sync: **IN REVIEW**
+- Stage 1 — Governance / Architecture Sync: **COMPLETE**
 - Phase 5.2 — Canonical Data Model: **NOT STARTED**
 
-Phase 5.2 must not begin until the Stage 1 architecture/governance synchronization is reviewed and merged.
+Phase 5.2 must not begin until Architecture Authority gives separate explicit approval.
 
 ## Product Definition
 
@@ -57,8 +57,15 @@ Atlas is not an Event-ID-only wiki. Event ID is one identifier type inside a uni
 - [ADR-0001 — Canonical Vendor-Neutral Model](adr/0001-canonical-vendor-neutral-model.md)
 - [ADR-0002 — Claim-Level Provenance](adr/0002-claim-level-provenance.md)
 - [ADR-0003 — Offline-first Core](adr/0003-offline-first.md)
+- [ADR-0004 — Ecosystem Ownership: Atlas, DefenseOps and Forge](adr/0004-ecosystem-ownership-atlas-defenseops-forge.md)
+- [ADR-0005 — Canonical Identifier Architecture](adr/0005-canonical-identifier-architecture.md)
+- [ADR-0006 — Shared Core and Interface Sequencing](adr/0006-shared-core-and-interface-sequencing.md)
+- [ADR-0007 — Universal Telemetry Taxonomy](adr/0007-universal-telemetry-taxonomy.md)
+- [ADR-0008 — Coverage Measurement Model](adr/0008-coverage-measurement-model.md)
+- [ADR-0009 — Controlled Content Release Pipeline](adr/0009-controlled-content-release-pipeline.md)
+- [ADR-0010 — Telemetry Lifecycle and Legacy Preservation](adr/0010-telemetry-lifecycle-and-legacy-preservation.md)
 
-Stage 1 introduces ADR-0004 through ADR-0010 for review. Full ADR content remains authoritative in `docs/adr/`; this file only summarizes project state.
+Full ADR content remains authoritative in `docs/adr/`; this file only summarizes project state.
 
 ## Current MVP Scope
 
@@ -167,7 +174,7 @@ Tauri, Rust, SQLite, React, and TypeScript remain candidates only.
 
 ## Active Architecture Issues
 
-No unresolved Stage 1 architecture conflict is known after the 2026-09-03 Architecture Sync handoff.
+No blocking architecture conflict is known after the approved Stage 1 merge.
 
 Implementation questions that require new architectural choices must be raised as `ARCHITECTURE ISSUE` before changing the accepted model.
 
@@ -194,5 +201,7 @@ Telemetry Coverage and Detection Coverage are separate first-class measurements 
 
 - Architecture Sync Date: 2026-09-03
 - Architecture Authority: Atlas Architecture / Product / Data / Security Design workspace
-- GitHub Engineering baseline reviewed: `main@835204e2eb24fe2297ef0238a9cce41452eebd39`
+- Architecture Authority Decision: **STAGE 1 APPROVED FOR MERGE**
+- Stage 1 merged baseline: `main@06061e686fe60f7f9f195000c8c9d97f4f6da8d7`
 - Sync scope: A-001 through A-003 and G-001 through G-006
+- Architecture Sync Status: **GREEN**

@@ -23,9 +23,9 @@ Completed foundation:
 
 ## Stage 1 — Governance / Architecture Sync
 
-Status: **IN REVIEW**
+Status: **COMPLETE**
 
-Synchronize the accepted cross-chat architecture decisions before Phase 5.2:
+Completed synchronization:
 
 - project-state control;
 - Atlas / DefenseOps / Forge ownership;
@@ -34,11 +34,14 @@ Synchronize the accepted cross-chat architecture decisions before Phase 5.2:
 - universal telemetry taxonomy;
 - coverage architecture;
 - controlled content release pipeline;
-- legacy/current telemetry lifecycle.
+- legacy/current telemetry lifecycle;
+- ADR-0004 through ADR-0010 accepted and merged.
 
 ## Phase 5.2 — Canonical Data Model
 
-Starts only after Stage 1 is reviewed and merged.
+Status: **NOT STARTED**
+
+Starts only after separate explicit Architecture Authority approval.
 
 - production schemas;
 - canonical identifier conventions;
