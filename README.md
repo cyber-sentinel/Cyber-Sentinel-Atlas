@@ -81,5 +81,5 @@ Forge is retired as an independent Atlas component. Historical Forge material is
 
 > **No technical claim without provenance. No AI answer without inspectable evidence. No engine-specific syntax confused with the underlying security concept.**
 
-**Maintainer:** Ali RahimDabagh  
+**Maintainer:** Ali RahimDabagh
 **GitHub:** `cyber-sentinel`
