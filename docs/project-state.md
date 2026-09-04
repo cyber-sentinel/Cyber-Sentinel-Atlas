@@ -6,10 +6,14 @@
 - Authoritative Branch: `main`
 - Phase 5.2 Source Branch: `architecture/phase-5.2-canonical-data-model` (retained after merge)
 - Phase 5.2 Pull Request: `#4 — Implement Phase 5.2 canonical data model — MERGED`
+- Phase 5.3.1 Feature Branch: `feature/phase-5.3.1-ingestion-foundation`
+- Phase 5.3.1 Approved Baseline Main SHA: `095a33bc55bca92fff9d9004b91c82f64209529e`
 - Current Version: `0.1.0-foundation.1`
 - Canonical Schema Version: `1.0.0`
 - Canonical Schema URI Base: `https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/`
-- Last Reviewed Main SHA: `89868a0bece363ba5d5a74d435880b4a1de03751`
+- Ingestion Contract Version: `1.0.0`
+- Ingestion Schema URI Base: `https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/ingestion/v1/`
+- Last Reviewed Main SHA: `095a33bc55bca92fff9d9004b91c82f64209529e`
 - Repository Visibility: Private during active development
 
 ## Current Phase
@@ -17,9 +21,13 @@
 - Phase 5.1 — Product Foundation: **COMPLETE**
 - Stage 1 — Governance / Architecture Sync: **COMPLETE**
 - Phase 5.2 — Canonical Data Model: **COMPLETE**
-- Phase 5.3 — Source & Ingestion Core: **NOT STARTED**
+- Phase 5.3 — Source & Ingestion Core: **IN PROGRESS**
+- Phase 5.3.1 — Ingestion Foundation / Contracts: **IMPLEMENTATION COMPLETE — PENDING ARCHITECTURE REVIEW**
+- Phase 5.3.2 — MITRE ATT&CK Structured-Source Canary: **NOT STARTED**
+- Phase 5.3.3 — Windows Security + Sysmon Encyclopedia Pipeline: **NOT STARTED**
+- Phase 5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates: **NOT STARTED**
 
-Phase 5.2 schema v1.0.0 is now authoritative on `main`. Phase 5.3 must not start before separate Architecture Authority authorization.
+Phase 5.2 schema v1.0.0 remains authoritative. Phase 5.3.1 adds a separate ingestion/control-plane schema stream and does not modify the Canonical Knowledge Model. Later Phase 5.3 slices require separate Architecture Authority authorization.
 
 ## Product Definition
 
@@ -74,8 +82,13 @@ Atlas is not an Event-ID-only wiki. Event ID is one identifier type inside a uni
 - [ADR-0013 — Applicability, Versioning and Curation/Lifecycle Separation](adr/0013-applicability-versioning-and-curation-lifecycle-separation.md)
 - [ADR-0014 — Claim, Evidence and Relationship Contracts](adr/0014-claim-evidence-and-relationship-contracts.md)
 - [ADR-0015 — Schema Versioning, Migration and Referential Integrity](adr/0015-schema-versioning-migration-and-referential-integrity.md)
+- [ADR-0016 — Source & Ingestion Control Plane Boundary](adr/0016-source-ingestion-control-plane-boundary.md)
+- [ADR-0017 — Deterministic Acquisition, Parsing and Normalization](adr/0017-deterministic-acquisition-parsing-normalization.md)
+- [ADR-0018 — Authoritative Inventory, Completeness and Change Safety](adr/0018-authoritative-inventory-completeness-change-safety.md)
+- [ADR-0019 — Validation, Review and Pack-Ready Promotion](adr/0019-validation-review-pack-ready-promotion.md)
+- [ADR-0020 — Encyclopedia Identifier Search/Browse Data Contract](adr/0020-encyclopedia-identifier-search-browse-data-contract.md)
 
-ADR-0001 through ADR-0010 remain unchanged. ADR-0011 through ADR-0015 define the accepted Phase 5.2 v1 architecture. Full ADR content remains authoritative in `docs/adr/`.
+ADR-0001 through ADR-0015 remain intact and authoritative for the foundation and Canonical Model. ADR-0016 through ADR-0020 define the accepted Phase 5.3 control-plane, deterministic transformation, inventory, promotion and Encyclopedia data-contract decisions without overriding the Canonical Model.
 
 ## Current MVP Scope
 
@@ -102,13 +115,35 @@ Product focus:
 - Windows Desktop as the first full end-user interface;
 - Web/PWA afterward using the same shared contracts.
 
-Phase 5.2 cross-domain records are sanitized schema/architecture fixtures only and are not production ingestion.
+Phase 5.2 cross-domain records and Phase 5.3.1 ingestion records are sanitized architecture/test fixtures only. They are not production ingestion.
+
+## Phase 5.3.1 Ingestion Foundation
+
+The Phase 5.3.1 implementation establishes:
+
+- `schemas/ingestion/v1/` as the independent ingestion-contract schema authority;
+- SourceConnectorDefinition, AcquisitionRun and RawSnapshot contracts;
+- ParserDefinition, ParserRun and ParsedSourceRecord/PSR contracts;
+- NormalizerDefinition, NormalizationRun and NormalizationLineage contracts;
+- AuthoritativeInventoryDefinition and three-layer InventoryDiff;
+- BuildValidationReport for G1 through G15;
+- digest-bound ReviewDecision and CanonicalBuildManifest;
+- public-source fail-closed acquisition controls;
+- parser/normalizer deterministic no-network/no-AI boundaries;
+- cross-corpus source-snapshot resolution;
+- exact candidate/review/diff digest binding;
+- `PACK_READY` as the terminal successful Phase 5.3 boundary;
+- synthetic, deterministic, non-secret fixtures;
+- permanent validator `tools/ingestion/validate_ingestion_foundation.py`;
+- permanent tests under `tests/phase53/`.
+
+The ingestion artifact corpus is not part of the `AtlasRecord` union. The seven Phase 5.2 canonical families remain unchanged.
 
 ## Deferred Scope
 
 The architecture must support future Linux, Azure, AWS, GCP, Docker, Kubernetes, DevOps/CI-CD, databases, Exchange, SharePoint, Microsoft 365, LOLBAS, GTFOBins, broader DFIR/IR, and additional detection backends.
 
-Broad production content ingestion for those domains remains deferred beyond Phase 5.2 unless separately approved.
+Broad production content ingestion remains deferred. Phase 5.3.1 specifically does not authorize live ATT&CK, Windows, Sysmon, D3FEND, CAR or DefenseOps ingestion.
 
 ## Current Interface Sequence
 
@@ -147,15 +182,15 @@ Canonical sources include:
 
 UltimateWindowsSecurity and similar sources may be used for research/reference but do not override authoritative upstream sources.
 
+No production source registry is populated by Phase 5.3.1.
+
 ## Content Pack Status
 
 Architecture requirement: versioned, schema-versioned, source-versioned, provenance-bearing, checksummed, signed, compatibility-aware, freshness-aware, coverage-aware, validation-aware, rollback-safe packs.
 
-Exact final pack naming and implementation remain **OPEN**.
+Phase 5.3 ends at `PACK_READY`; it does not implement the signed pack runtime. Exact final pack naming, archive format, signing implementation and key management remain **OPEN**.
 
-Candidate families include core, Windows, Sysmon, MITRE ATT&CK/D3FEND/CAR, Linux, cloud, container, DevOps, database, LOLBAS, GTFOBins, and DefenseOps-derived content.
-
-No production content packs have been released or implemented in Phase 5.2.
+No production content packs have been released or installed by Phase 5.3.1.
 
 ## Technology Decisions — Accepted
 
@@ -171,6 +206,9 @@ No production content packs have been released or implemented in Phase 5.2.
 - Historical Forge material must not be deleted automatically.
 - Phase 5.2 canonical records use JSON Schema Draft 2020-12.
 - Schema v1 canonical URI base is the repository-controlled GitHub raw `/schemas/v1/` path.
+- Phase 5.3.1 ingestion contracts use an independent repository-controlled `/schemas/ingestion/v1/` path.
+- Ingestion artifacts do not become canonical `AtlasRecord` records.
+- Public ingestion is fail-closed and deterministic core transformation is network-free/AI-free.
 
 ## Technology Decisions — Open
 
@@ -183,48 +221,57 @@ No production content packs have been released or implemented in Phase 5.2.
 - Exact DefenseOps → Atlas ingestion contract
 - Code signing / pack signing implementation and key management
 - Exact search engine implementation
+- Exact parser sandbox technology
+- Secret-provider implementation
+- Reviewer identity/workflow implementation
 
 Tauri, Rust, SQLite, React, and TypeScript remain candidates only.
 
 ## Active Architecture Issues
 
-No blocking architecture conflict is known. Phase 5.2 Architecture Authority review is complete and PR #4 has been approved and merged.
+No blocking architecture conflict is known. Phase 5.3 architecture is approved and Slice 5.3.1 implementation is pending Architecture Authority PR review.
 
 Any new implementation issue requiring a change to accepted architecture must be raised as `ARCHITECTURE ISSUE` before changing the model.
 
 ## Data / Coverage Status
 
 - Phase 5.2 schema v1.0.0: authoritative on `main`
+- Phase 5.3.1 ingestion contract v1.0.0: implementation complete on feature branch, pending review/merge
 - Source registry production ingestion: not started
 - Controlled registries for schema validation: implemented on `main`
 - Telemetry Coverage snapshots: schema/fixture implemented; production measurements not started
 - Detection Coverage snapshots: schema supported; production measurements not started
 - Production telemetry inventory: not ingested
-- Cross-domain fixtures: Windows, Sysmon, Linux, AWS, Azure, GCP, Kubernetes, Docker, MongoDB, MITRE
-- DefenseOps ingestion contract: open decision
+- Cross-domain Phase 5.2 fixtures: Windows, Sysmon, Linux, AWS, Azure, GCP, Kubernetes, Docker, MongoDB, MITRE
+- Phase 5.3.1 fixtures: sanitized synthetic contract/search-readiness fixtures only
+- DefenseOps ingestion contract: open decision / Phase 5.3.4 not started
 
-Telemetry Coverage and Detection Coverage remain separate first-class measurements and must declare scope, version, and denominator.
+Telemetry Coverage and Detection Coverage remain separate first-class measurements and must declare scope, version and denominator.
 
-## Phase 5.2 Validation State
+## Validation State
 
-Permanent validation source of truth:
+Phase 5.2 permanent validation source of truth:
 
 - `tools/validate_phase52.py`
-
-Permanent test suites:
-
 - `tests/test_phase52_model.py`
 - `tests/test_phase52_invariants.py`
 
-Validation covers typed referential integrity, structural telemetry-spine typing, semantic relationship provenance, extensions, coverage numerator semantics, alias/native identifier integrity, authoritative trust, HTTPS source URLs, offset-aware time ordering, registry contracts, canonical schema URI policy, migration, legacy preservation, cross-domain fixtures, exact/native resolution, and vendor-neutral root constraints.
+Phase 5.3.1 permanent validation source of truth:
+
+- `tools/ingestion/validate_ingestion_foundation.py`
+- `tests/phase53/test_contracts.py`
+- `tests/phase53/test_security_invariants.py`
+
+Phase 5.3.1 validation covers ingestion schema/URI authority, no-eighth-family protection, secrets/URI/SSRF/archive/Git controls, deterministic snapshot/PSR/lineage identities, mapping/registry/schema pinning, cross-corpus source-snapshot resolution, inventory guardrails, G1–G15 representation, review digest binding, PACK_READY promotion, Last Known Good preservation, numeric native-ID context preservation, legacy identity separation and fixture/repository hygiene.
 
 ## Known Risks / Blockers
 
 - Phase 5.1 JSON schemas remain provisional/legacy foundation contracts and are preserved during migration review.
 - Exact storage/graph/search implementation is intentionally open.
 - Pack-signing/key-management design is open.
+- Parser sandbox technology is open.
 - Production ingestion has not started.
-- Phase 5.3 implementation requires separate Architecture Authority authorization.
+- Phase 5.3.2, 5.3.3 and 5.3.4 require separate Architecture Authority authorization.
 
 ## Last Architecture Sync
 
@@ -238,3 +285,6 @@ Validation covers typed referential integrity, structural telemetry-spine typing
 - Phase 5.2 Architecture Decision: **APPROVED AND MERGED**
 - PR #4: **MERGED**
 - Phase 5.2 merge commit: `89868a0bece363ba5d5a74d435880b4a1de03751`
+- Phase 5.3 Architecture Decision: **APPROVED**
+- Phase 5.3.1 Implementation Authorization Baseline: `main@095a33bc55bca92fff9d9004b91c82f64209529e`
+- Phase 5.3.1 Status: **IMPLEMENTATION COMPLETE — PENDING ARCHITECTURE REVIEW**
