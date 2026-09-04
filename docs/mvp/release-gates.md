@@ -32,9 +32,9 @@ Atlas must remain private until mandatory public-preview gates are satisfied.
 
 ## Before Public Preview
 
-- [ ] Canonical Phase 5.2 schemas implemented and versioned
+- [x] Canonical Phase 5.2 schemas implemented and versioned
 - [ ] Source registry implemented
-- [ ] Claim-level provenance enforced
+- [x] Claim-level provenance enforced
 - [ ] Windows/Sysmon ingestion pipeline implemented
 - [ ] Exact and lexical search implemented
 - [ ] Offline shared runtime implemented

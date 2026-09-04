@@ -39,11 +39,9 @@ Completed synchronization:
 
 ## Phase 5.2 — Canonical Data Model
 
-Feature-branch status: **READY FOR ARCHITECTURE REVIEW — REVISION 2**
+Status: **COMPLETE**
 
-Authoritative `main` status: **NOT STARTED / NOT MERGED**
-
-Phase 5.2 scope:
+Phase 5.2 delivered:
 
 - production JSON Schema Draft 2020-12 contracts;
 - seven first-class Atlas record families;

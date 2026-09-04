@@ -1,6 +1,6 @@
 # Canonical Data Model v1
 
-Schema contract: **1.0.0** — Phase 5.2 under architecture review.
+Schema contract: **1.0.0** — authoritative Phase 5.2 Canonical Data Model on `main`.
 
 AtlasRecord discriminates seven first-class record families: EntityRecord, ClaimRecord, RelationshipRecord, SourceRecord, ValidationRecord, VersionRecord, and CoverageSnapshot. The model implements ADR-0001 through ADR-0015 without selecting storage, graph, search, Desktop, Detection IR, pack-format or signing technology.
 

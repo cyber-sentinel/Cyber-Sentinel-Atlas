@@ -4,22 +4,22 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Authoritative Branch: `main`
-- Phase 5.2 Working Branch: `architecture/phase-5.2-canonical-data-model`
-- Phase 5.2 Pull Request: `#4 — Implement Phase 5.2 canonical data model`
+- Phase 5.2 Source Branch: `architecture/phase-5.2-canonical-data-model` (retained after merge)
+- Phase 5.2 Pull Request: `#4 — Implement Phase 5.2 canonical data model — MERGED`
 - Current Version: `0.1.0-foundation.1`
-- Canonical Schema Version Under Review: `1.0.0`
+- Canonical Schema Version: `1.0.0`
 - Canonical Schema URI Base: `https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/`
-- Last Reviewed Main SHA: `47e3a2b70e337c477dbf395192cd9a4e84b6050a`
+- Last Reviewed Main SHA: `89868a0bece363ba5d5a74d435880b4a1de03751`
 - Repository Visibility: Private during active development
 
 ## Current Phase
 
 - Phase 5.1 — Product Foundation: **COMPLETE**
 - Stage 1 — Governance / Architecture Sync: **COMPLETE**
-- Phase 5.2 — Canonical Data Model: **READY FOR ARCHITECTURE REVIEW — REVISION 2**
+- Phase 5.2 — Canonical Data Model: **COMPLETE**
 - Phase 5.3 — Source & Ingestion Core: **NOT STARTED**
 
-Phase 5.2 remains non-authoritative on `main` until Architecture Authority explicitly approves PR #4 for merge. Phase 5.3 must not start before a separate authorization.
+Phase 5.2 schema v1.0.0 is now authoritative on `main`. Phase 5.3 must not start before separate Architecture Authority authorization.
 
 ## Product Definition
 
@@ -75,7 +75,7 @@ Atlas is not an Event-ID-only wiki. Event ID is one identifier type inside a uni
 - [ADR-0014 — Claim, Evidence and Relationship Contracts](adr/0014-claim-evidence-and-relationship-contracts.md)
 - [ADR-0015 — Schema Versioning, Migration and Referential Integrity](adr/0015-schema-versioning-migration-and-referential-integrity.md)
 
-ADR-0001 through ADR-0010 remain unchanged. ADR-0011 through ADR-0015 define the accepted Phase 5.2 v1 architecture and review remediation invariants. Full ADR content remains authoritative in `docs/adr/`.
+ADR-0001 through ADR-0010 remain unchanged. ADR-0011 through ADR-0015 define the accepted Phase 5.2 v1 architecture. Full ADR content remains authoritative in `docs/adr/`.
 
 ## Current MVP Scope
 
@@ -188,15 +188,15 @@ Tauri, Rust, SQLite, React, and TypeScript remain candidates only.
 
 ## Active Architecture Issues
 
-No blocking architecture conflict is known. Architecture Authority remediation R-001 through R-012 and final consolidation are implemented on PR #4. Final Architecture Authority approval is pending.
+No blocking architecture conflict is known. Phase 5.2 Architecture Authority review is complete and PR #4 has been approved and merged.
 
 Any new implementation issue requiring a change to accepted architecture must be raised as `ARCHITECTURE ISSUE` before changing the model.
 
 ## Data / Coverage Status
 
-- Phase 5.2 schema v1.0.0: implemented on feature branch, pending final architecture approval
+- Phase 5.2 schema v1.0.0: authoritative on `main`
 - Source registry production ingestion: not started
-- Controlled registries for schema validation: implemented on feature branch
+- Controlled registries for schema validation: implemented on `main`
 - Telemetry Coverage snapshots: schema/fixture implemented; production measurements not started
 - Detection Coverage snapshots: schema supported; production measurements not started
 - Production telemetry inventory: not ingested
@@ -220,12 +220,11 @@ Validation covers typed referential integrity, structural telemetry-spine typing
 
 ## Known Risks / Blockers
 
-- Phase 5.2 remains unmerged and non-authoritative until final Architecture Authority approval.
 - Phase 5.1 JSON schemas remain provisional/legacy foundation contracts and are preserved during migration review.
 - Exact storage/graph/search implementation is intentionally open.
 - Pack-signing/key-management design is open.
 - Production ingestion has not started.
-- Schema v1.0.0 must not be treated as released until PR #4 is approved and merged.
+- Phase 5.3 implementation requires separate Architecture Authority authorization.
 
 ## Last Architecture Sync
 
@@ -235,6 +234,7 @@ Validation covers typed referential integrity, structural telemetry-spine typing
 - Stage 1 baseline remains represented by ADR-0001 through ADR-0010.
 - Architecture Sync Status: **GREEN**
 - Approved Phase 5.2 baseline: `main@47e3a2b70e337c477dbf395192cd9a4e84b6050a`
-- Previous reviewed Phase 5.2 head: `10d222a01f320915a339e13dded572974b12e408`
-- Phase 5.2 Architecture Review: **PENDING FINAL ARCHITECTURE AUTHORITY APPROVAL**
-- PR #4: **OPEN / NOT MERGED**
+- Approved Phase 5.2 head: `99704f607f3a40bb783587e31c919eb86b29d9cd`
+- Phase 5.2 Architecture Decision: **APPROVED AND MERGED**
+- PR #4: **MERGED**
+- Phase 5.2 merge commit: `89868a0bece363ba5d5a74d435880b4a1de03751`

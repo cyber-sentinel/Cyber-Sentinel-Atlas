@@ -1,6 +1,6 @@
 # Atlas Canonical Schemas v1
 
-Schema contract version: **1.0.0** (under Phase 5.2 architecture review).
+Schema contract version: **1.0.0** — authoritative on `main` after Phase 5.2 merge.
 
 Canonical schema URI base:
 

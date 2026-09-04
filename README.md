@@ -4,8 +4,7 @@
 
 Cyber-Sentinel-Atlas is the signature product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed knowledge system.
 
-> Branch status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 Canonical Data Model READY FOR ARCHITECTURE REVIEW — REVISION 2**
-> Authoritative `main`: Phase 5.2 remains **NOT STARTED** until PR #4 is explicitly approved and merged.
+> Status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 COMPLETE; Phase 5.3 NOT STARTED**
 > Visibility: **Private during active development**
 
 ## Product Thesis
@@ -70,7 +69,7 @@ The official user-facing CLI command is `atlas`.
 
 ## Phase 5.2 Canonical Model
 
-The schema contract under architecture review is **1.0.0**, using JSON Schema Draft 2020-12.
+The authoritative schema contract is **1.0.0**, using JSON Schema Draft 2020-12.
 
 Record families:
 
