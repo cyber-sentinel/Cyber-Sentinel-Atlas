@@ -1,0 +1,5 @@
+{
+  "version": "1.0.0",
+  "registries": ["entity-types", "namespaces", "relationship-types", "native-identifier-types", "claim-predicates", "alias-kinds"],
+  "digest": "sha256-184524bfe2ba20fb4863595ddeaaf604639da17d98a4032d8b48aea5212da9a1"
+}

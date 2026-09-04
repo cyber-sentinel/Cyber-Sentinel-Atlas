@@ -71,38 +71,73 @@ Phase 5.1 legacy schemas remain preserved. Phase 5.2 does not authorize producti
 
 ## Phase 5.3 — Source & Ingestion Core
 
+Status: **IN PROGRESS**
+
+Phase 5.3 transforms controlled source acquisitions into reviewed canonical candidate builds and terminates at `PACK_READY`. It does not implement signed pack runtime, client installation, runtime rollback, final pack signing, archive-format or key-management decisions.
+
+### Phase 5.3.1 — Ingestion Foundation / Contracts
+
+Status: **IMPLEMENTATION COMPLETE — PENDING ARCHITECTURE REVIEW**
+
+Implemented on the Phase 5.3.1 feature branch:
+
+- independent Ingestion Contract Version 1.0.0 under `schemas/ingestion/v1/`;
+- SourceConnectorDefinition and acquisition/run contracts;
+- immutable RawSnapshot/content-addressing contract;
+- ParserDefinition, ParserRun and ParsedSourceRecord/PSR contracts;
+- NormalizerDefinition, NormalizationRun and NormalizationLineage contracts;
+- authoritative inventory and three-layer diff contracts;
+- G1–G15 BuildValidationReport contract;
+- digest-bound ReviewDecision and CanonicalBuildManifest contracts;
+- public-source acquisition security boundaries;
+- synthetic deterministic fixtures only;
+- permanent ingestion validator and invariant/security tests;
+- ADR-0016 through ADR-0020.
+
+No live upstream source ingestion is part of Slice 5.3.1.
+
+### Phase 5.3.2 — MITRE ATT&CK Structured-Source Canary
+
 Status: **NOT STARTED**
 
-Initial authoritative sources:
+Requires separate Architecture Authority authorization. No ATT&CK STIX acquisition or normalization has started.
 
-- Microsoft Windows event documentation;
-- Microsoft Sysinternals Sysmon;
-- MITRE ATT&CK;
-- selected MITRE D3FEND/CAR relationships;
-- DefenseOps validated content through an explicit ingestion contract.
+### Phase 5.3.3 — Windows Security + Sysmon Encyclopedia Pipeline
 
-Required controlled flow:
+Status: **NOT STARTED**
+
+Requires separate Architecture Authority authorization. No Windows provider/documentation or Sysmon live ingestion has started.
+
+### Phase 5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates
+
+Status: **NOT STARTED**
+
+Requires separate Architecture Authority authorization. No D3FEND, CAR or DefenseOps ingestion has started.
+
+Approved controlled flow:
 
 ```text
-Official Source
+SourceRecord / Source Control
         ↓
-Raw Snapshot
+SourceConnectorDefinition
         ↓
-Parser
+AcquisitionRun
         ↓
-Normalizer
+RawSnapshot
         ↓
-Schema Validation
+ParserRun / Parsed Source Representation
         ↓
-Inventory Diff
+Normalizer / NormalizationLineage
         ↓
-Tests
+Canonical Candidate Build
+        ↓
+Authoritative Inventory / Inventory Diff
+        ↓
+Validation G1–G15
         ↓
 Human Review
         ↓
-Signed Content Pack
-        ↓
-Release
+PACK_READY
 ```
 
 No upstream source may directly mutate the production/public Atlas dataset.
@@ -119,7 +154,7 @@ Status: **NOT STARTED**
 - benchmarks;
 - universal identifier resolution.
 
-Exact identifier matches must precede semantic retrieval.
+Exact identifier matches must precede semantic retrieval. Phase 5.3 preserves lossless native identifier/context data but does not implement search projections.
 
 ## Phase 5.5 — Offline Pack Runtime / Shared Core
 

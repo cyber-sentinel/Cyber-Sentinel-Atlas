@@ -4,7 +4,7 @@
 
 Cyber-Sentinel-Atlas is the signature product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed knowledge system.
 
-> Status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 COMPLETE; Phase 5.3 NOT STARTED**
+> Status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 COMPLETE; Phase 5.3 IN PROGRESS; Phase 5.3.1 IMPLEMENTATION COMPLETE — PENDING ARCHITECTURE REVIEW**
 > Visibility: **Private during active development**
 
 ## Product Thesis
@@ -89,6 +89,34 @@ https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schem
 
 The permanent canonical semantic validator is `tools/validate_phase52.py`. Permanent model tests are `tests/test_phase52_model.py` and `tests/test_phase52_invariants.py`.
 
+## Phase 5.3 Source & Ingestion Core
+
+Phase 5.3 is **IN PROGRESS**. Slice 5.3.1 establishes the ingestion/control-plane contract without live upstream ingestion.
+
+Ingestion Contract Version: **1.0.0**
+
+```text
+SourceRecord / source control
+        ↓
+SourceConnectorDefinition
+        ↓
+AcquisitionRun → RawSnapshot
+        ↓
+ParserRun → ParsedSourceRecord
+        ↓
+NormalizationRun + Lineage
+        ↓
+Canonical Candidate Corpus
+        ↓
+Inventory Diff → Validation → Human Review
+        ↓
+PACK_READY
+```
+
+`PACK_READY` is the successful terminal Phase 5.3 state and is not equivalent to signed, released or installed content. The canonical seven-family `AtlasRecord` model remains unchanged.
+
+Phase 5.3.2, 5.3.3 and 5.3.4 remain **NOT STARTED** and require separate Architecture Authority authorization.
+
 ## Initial MVP Domain
 
 The first usable MVP intentionally starts narrow:
@@ -137,6 +165,7 @@ DefenseOps content enters Atlas only through versioned ingestion, provenance, va
 - [Knowledge Graph Model](docs/architecture/knowledge-graph-model.md)
 - [Canonical Identifier Architecture](docs/architecture/canonical-identifier-architecture.md)
 - [Source & Provenance Model](docs/architecture/source-provenance-model.md)
+- [Source & Ingestion Core](docs/architecture/source-ingestion-core.md)
 - [Search Architecture](docs/architecture/search-architecture.md)
 - [AI / RAG Architecture](docs/architecture/ai-rag-architecture.md)
 - [Offline-first Architecture](docs/architecture/offline-first-architecture.md)
