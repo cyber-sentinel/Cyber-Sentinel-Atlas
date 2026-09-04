@@ -30,6 +30,9 @@ jobs:
       - name: Validate Phase 5.2 canonical data model
         run: python tools/validate_phase52.py
 
+      - name: Validate Phase 5.2 Revision 2 invariants
+        run: python tools/validate_phase52_revision2.py
+
       - name: Run Phase 5.2 model tests
         run: python -m unittest discover -s tests -v
 
