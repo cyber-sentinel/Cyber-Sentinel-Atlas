@@ -33,6 +33,26 @@ jobs:
       - name: Run Phase 5.2 model and invariant tests
         run: python -m unittest discover -s tests -v
 
+      - name: Check canonical schema URI policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RIn --exclude-dir=.git "cyber-sentinel\.dev" schemas/v1 tools docs/architecture docs/adr; then
+            echo "Uncontrolled cyber-sentinel.dev schema reference detected."
+            exit 1
+          fi
+
+      - name: Check temporary and checkpoint artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          bad_files="$(git ls-files | grep -Ei '(\.tmp$|TEMP|checkpoint|persistence|pending|should-not-exist|atomic-remediation|temporary-cleanup|\.revision2-)' || true)"
+          if [ -n "$bad_files" ]; then
+            echo "Temporary/checkpoint artifacts detected:"
+            echo "$bad_files"
+            exit 1
+          fi
+
       - name: Check sensitive filenames
         shell: bash
         run: |
