@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyber-sentinel.dev/schemas/v1/relationship.schema.json",
+  "title": "RelationshipRecord",
+  "allOf": [
+    {"$ref": "https://cyber-sentinel.dev/schemas/v1/defs/common-metadata.schema.json"},
+    {"type": "object", "required": ["record_kind", "namespace", "canonical_key", "from", "to", "relationship_type", "confidence"], "properties": {
+      "record_kind": {"const": "relationship"},
+      "namespace": {"const": "atlas.graph"},
+      "canonical_key": {"type": "string", "pattern": "^sha256-[a-f0-9]{64}$"},
+      "from": {"$ref": "https://cyber-sentinel.dev/schemas/v1/defs/canonical-id.schema.json"},
+      "to": {"$ref": "https://cyber-sentinel.dev/schemas/v1/defs/canonical-id.schema.json"},
+      "relationship_type": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"},
+      "confidence": {"type": "string", "enum": ["authoritative", "high", "medium", "low"]},
+      "applicability": {"$ref": "https://cyber-sentinel.dev/schemas/v1/defs/applicability.schema.json"},
+      "supporting_claim_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "https://cyber-sentinel.dev/schemas/v1/defs/canonical-id.schema.json"}},
+      "qualifier": {"type": "object", "additionalProperties": false, "required": ["key", "value"], "properties": {"key": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]*$"}, "value": {"type": "string", "minLength": 1}}}
+    }}
+  ],
+  "unevaluatedProperties": false
+}

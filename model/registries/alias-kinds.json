@@ -1,0 +1,5 @@
+{
+  "registry": "alias-kinds",
+  "version": "1.0.0",
+  "values": ["native", "display", "common", "historical-name", "provider-qualified", "legacy-canonical-id"]
+}

@@ -14,7 +14,7 @@
 
 - Phase 5.1 — Product Foundation: **COMPLETE**
 - Stage 1 — Governance / Architecture Sync: **COMPLETE**
-- Phase 5.2 — Canonical Data Model: **IN PROGRESS — ARCHITECTURE REVIEW REQUIRED**
+- Phase 5.2 — Canonical Data Model: **IN PROGRESS**
 
 Phase 5.2 is authorized for implementation on the feature branch but is not authoritative on `main` until Architecture Authority approves and the PR is merged.
 
@@ -81,7 +81,7 @@ Full ADR content remains authoritative in `docs/adr/`.
 
 ## Phase 5.2 Canonical Model Status
 
-Implemented for architecture review:
+Implemented on the feature branch; validation and PR review are still pending:
 
 - AtlasRecord root union;
 - EntityRecord;
@@ -217,7 +217,7 @@ Any implementation dependency that would force vendor-specific root fields, iden
 
 ## Data / Coverage Status
 
-- Phase 5.2 production schema contracts: implemented on feature branch for review
+- Phase 5.2 production schema contracts: prepared/committing on feature branch; final CI pending
 - Source registry contract: implemented; production source ingestion not started
 - Telemetry Coverage contract: implemented; production coverage not measured
 - Detection Coverage contract: implemented; production coverage not measured

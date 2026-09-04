@@ -1,0 +1,9 @@
+{
+  "registry": "claim-predicates",
+  "version": "1.0.0",
+  "values": [
+    "telemetry.represents", "security.relevance", "field.description", "telemetry.requires-policy",
+    "behavior.description", "telemetry.lifecycle", "relationship.evidence", "source.description",
+    "telemetry.provider", "telemetry.source", "telemetry.field-semantics"
+  ]
+}

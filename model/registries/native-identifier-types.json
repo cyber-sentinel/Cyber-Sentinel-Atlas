@@ -1,0 +1,9 @@
+{
+  "registry": "native-identifier-types",
+  "version": "1.0.0",
+  "values": [
+    "event_id", "attack_id", "d3fend_id", "car_id", "audit_record_type", "audit_action",
+    "aws_event_name", "azure_operation_name", "gcp_method_name", "kubernetes_activity", "docker_action",
+    "tool_name", "detection_id", "provider_name", "field_name", "record_type"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "registry": "namespaces",
+  "version": "1.0.0",
+  "values": [
+    "atlas.claim", "atlas.graph", "atlas.validation", "atlas.version", "atlas.coverage", "atlas.source", "atlas.schema",
+    "microsoft.windows", "microsoft.windows.security", "microsoft.sysmon", "linux.audit",
+    "mitre.attack", "mitre.d3fend", "mitre.car", "aws.cloudtrail.iam", "microsoft.azure.activity", "gcp.audit",
+    "kubernetes.audit", "docker.events", "mongodb.audit", "lolbas", "gtfobins", "defenseops"
+  ]
+}

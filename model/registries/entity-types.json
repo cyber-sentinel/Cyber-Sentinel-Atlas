@@ -1,0 +1,10 @@
+{
+  "registry": "entity-types",
+  "version": "1.0.0",
+  "values": [
+    "platform", "product", "technology", "telemetry-provider", "telemetry-source",
+    "event", "audit-record", "audit-action", "operation", "activity", "finding", "flow-record",
+    "field", "artifact", "behavior", "attack-technique", "attack-tactic", "d3fend-technique", "car-analytic",
+    "detection", "hunt", "investigation-procedure", "response-action", "defensive-control", "tool"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyber-sentinel.dev/schemas/v1/defs/canonical-id.schema.json",
+  "title": "Atlas Canonical Identifier",
+  "type": "string",
+  "pattern": "^atlas:[a-z0-9][a-z0-9-]*:[a-z0-9-]+(?:\\.[a-z0-9-]+)*:[a-z0-9][a-z0-9._-]*$"
+}

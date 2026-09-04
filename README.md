@@ -4,48 +4,15 @@
 
 Cyber-Sentinel-Atlas is the signature product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed knowledge system.
 
-> Status: **Phase 5.1 — Product Foundation COMPLETE; Stage 1 — Governance / Architecture Sync COMPLETE; Phase 5.2 NOT STARTED**
+> Branch status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 Canonical Data Model IN PROGRESS — Architecture Review Required**
+> Authoritative `main`: Phase 5.2 remains **NOT STARTED** until this branch is approved and merged.
 > Visibility: **Private during active development**
-
-## Product Thesis
-
-Cyber defense knowledge is fragmented across operating systems, SIEMs, EDRs, cloud platforms, container runtimes, databases, vendor documentation, detection repositories, threat intelligence, and incident-response references.
-
-Atlas makes those relationships searchable and operational:
-
-```text
-Platform / Technology
-        ↓
-Telemetry Provider / Source
-        ↓
-Telemetry Record / Artifact
-        ↓
-Security Meaning / Behavior
-        ↓
-ATT&CK / D3FEND / CAR
-        ↓
-Detection / Hunt
-        ↓
-Investigation / DFIR
-        ↓
-Response / Defensive Action
-        ↓
-Claim-level Sources & Provenance
-```
 
 ## Product Position
 
-Atlas is **not**:
+Atlas is a **Cyber Defense Knowledge Graph + Analyst Workbench + Offline Knowledge Platform + Detection Engineering Platform**. It is not an Event-ID-only wiki, a vendor-specific detection portal, or an AI system without inspectable evidence.
 
-- another Event ID wiki;
-- another detection-rule repository;
-- another ATT&CK browser;
-- another SIEM-specific content portal;
-- an AI chatbot without verifiable sources.
-
-Atlas is designed as a **Cyber Defense Knowledge Graph + Analyst Workbench + Offline Knowledge Platform + Detection Engineering Platform**.
-
-## Interface Sequence
+## Architecture Sequence
 
 ```text
 Canonical Data Model
@@ -67,62 +34,52 @@ Grounded AI
 
 The official user-facing CLI command is `atlas`.
 
-## Initial MVP Domain
+## Phase 5.2 Canonical Model
 
-The first usable MVP intentionally starts narrow:
+Schema contract under review: **1.0.0** using JSON Schema Draft 2020-12.
 
-- Windows Security Events
-- Sysmon
-- PowerShell
-- Active Directory
-- MITRE ATT&CK relationships
-- selected D3FEND/CAR relationships
-- DefenseOps validated detections and hunts
-- investigation pivots
-- official-source provenance
-- fast exact/lexical search
-- offline-first local dataset
+Record families:
 
-The architecture is intentionally extensible to Linux, macOS, Exchange, SharePoint, Microsoft 365, Azure, AWS, Google Cloud, Docker, Kubernetes, DevOps/CI-CD, databases, LOLBAS, GTFOBins, DFIR, incident response, and cyber deception.
+- EntityRecord
+- ClaimRecord
+- RelationshipRecord
+- SourceRecord
+- ValidationRecord
+- VersionRecord
+- CoverageSnapshot
+
+See:
+
+- [Project State](docs/project-state.md)
+- [Canonical Data Model v1](docs/architecture/canonical-data-model-v1.md)
+- [Schema Versioning & Migration](docs/architecture/schema-versioning-and-migration.md)
+- [Knowledge Graph Model](docs/architecture/knowledge-graph-model.md)
+- [Canonical Identifier Architecture](docs/architecture/canonical-identifier-architecture.md)
+- [Source & Provenance](docs/architecture/source-provenance-model.md)
+- [Coverage Model](docs/architecture/coverage-model.md)
+- [Telemetry Lifecycle](docs/architecture/telemetry-lifecycle.md)
+- [Roadmap](docs/roadmap.md)
+- [Architecture Decision Records](docs/adr/)
+
+## MVP Boundary
+
+MVP content remains intentionally narrow: Windows Security Events, Sysmon, PowerShell, Active Directory, MITRE ATT&CK, selected D3FEND/CAR relationships, validated DefenseOps content, provenance, and offline deterministic search.
+
+Cross-domain Phase 5.2 fixtures for Linux/cloud/container/database telemetry validate the universal schema only; they do not authorize production ingestion.
 
 ## Ecosystem
 
 ```text
 Cyber-Sentinel
-├── DefenseOps  → approved defensive engineering source for validated content
-└── Atlas       → knowledge graph, search, offline runtime, analyst workspace and product interfaces
+├── DefenseOps  → approved defensive engineering source
+└── Atlas       → knowledge graph, search, offline runtime and analyst product
 ```
 
-Cyber-Sentinel-Forge is retired as an independent Atlas architectural component. Historical Forge material, if present, is preserved rather than deleted automatically.
-
-DefenseOps content enters Atlas only through versioned ingestion, provenance, validation, and controlled release gates.
-
-## Foundation Documents
-
-- [Project State](docs/project-state.md)
-- [Product Vision](docs/product/product-vision.md)
-- [Product Principles](docs/product/product-principles.md)
-- [Personas](docs/product/personas.md)
-- [Competitive Positioning](docs/product/competitive-positioning.md)
-- [System Context](docs/architecture/system-context.md)
-- [Knowledge Graph Model](docs/architecture/knowledge-graph-model.md)
-- [Source & Provenance Model](docs/architecture/source-provenance-model.md)
-- [Search Architecture](docs/architecture/search-architecture.md)
-- [AI / RAG Architecture](docs/architecture/ai-rag-architecture.md)
-- [Offline-first Architecture](docs/architecture/offline-first-architecture.md)
-- [API / CLI Architecture](docs/architecture/api-cli-architecture.md)
-- [Security Architecture](docs/architecture/security-architecture.md)
-- [UX Information Architecture](docs/ux/ux-information-architecture.md)
-- [MVP Scope](docs/mvp/mvp-scope.md)
-- [MVP Release Gates](docs/mvp/release-gates.md)
-- [Roadmap](docs/roadmap.md)
-- [Architecture Decision Records](docs/adr/)
+Forge is retired as an independent Atlas component. Historical Forge material is preserved rather than automatically deleted.
 
 ## Core Principle
 
 > **No technical claim without provenance. No AI answer without inspectable evidence. No engine-specific syntax confused with the underlying security concept.**
 
----
-
-**Maintainer:** Ali RahimDabagh
+**Maintainer:** Ali RahimDabagh  
 **GitHub:** `cyber-sentinel`
