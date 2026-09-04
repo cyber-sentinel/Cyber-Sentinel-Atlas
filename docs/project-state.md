@@ -4,17 +4,19 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Authoritative Branch: `main`
-- Current Version: `0.1.0-foundation.1`
-- Last Reviewed Main SHA: `06061e686fe60f7f9f195000c8c9d97f4f6da8d7`
+- Phase 5.2 Working Branch: `architecture/phase-5.2-canonical-data-model`
+- Current Product Version: `0.1.0-foundation.1`
+- Canonical Schema Version Under Review: `1.0.0`
+- Last Reviewed Main SHA: `47e3a2b70e337c477dbf395192cd9a4e84b6050a`
 - Repository Visibility: Private during active development
 
 ## Current Phase
 
 - Phase 5.1 — Product Foundation: **COMPLETE**
 - Stage 1 — Governance / Architecture Sync: **COMPLETE**
-- Phase 5.2 — Canonical Data Model: **NOT STARTED**
+- Phase 5.2 — Canonical Data Model: **IN PROGRESS — ARCHITECTURE REVIEW REQUIRED**
 
-Phase 5.2 must not begin until Architecture Authority gives separate explicit approval.
+Phase 5.2 is authorized for implementation on the feature branch but is not authoritative on `main` until Architecture Authority approves and the PR is merged.
 
 ## Product Definition
 
@@ -54,22 +56,61 @@ Atlas is not an Event-ID-only wiki. Event ID is one identifier type inside a uni
 
 ## Accepted ADRs
 
-- [ADR-0001 — Canonical Vendor-Neutral Model](adr/0001-canonical-vendor-neutral-model.md)
-- [ADR-0002 — Claim-Level Provenance](adr/0002-claim-level-provenance.md)
-- [ADR-0003 — Offline-first Core](adr/0003-offline-first.md)
-- [ADR-0004 — Ecosystem Ownership: Atlas, DefenseOps and Forge](adr/0004-ecosystem-ownership-atlas-defenseops-forge.md)
-- [ADR-0005 — Canonical Identifier Architecture](adr/0005-canonical-identifier-architecture.md)
-- [ADR-0006 — Shared Core and Interface Sequencing](adr/0006-shared-core-and-interface-sequencing.md)
-- [ADR-0007 — Universal Telemetry Taxonomy](adr/0007-universal-telemetry-taxonomy.md)
-- [ADR-0008 — Coverage Measurement Model](adr/0008-coverage-measurement-model.md)
-- [ADR-0009 — Controlled Content Release Pipeline](adr/0009-controlled-content-release-pipeline.md)
-- [ADR-0010 — Telemetry Lifecycle and Legacy Preservation](adr/0010-telemetry-lifecycle-and-legacy-preservation.md)
+Existing accepted baseline:
 
-Full ADR content remains authoritative in `docs/adr/`; this file only summarizes project state.
+- ADR-0001 — Canonical Vendor-Neutral Model
+- ADR-0002 — Claim-Level Provenance
+- ADR-0003 — Offline-first Core
+- ADR-0004 — Ecosystem Ownership: Atlas, DefenseOps and Forge
+- ADR-0005 — Canonical Identifier Architecture
+- ADR-0006 — Shared Core and Interface Sequencing
+- ADR-0007 — Universal Telemetry Taxonomy
+- ADR-0008 — Coverage Measurement Model
+- ADR-0009 — Controlled Content Release Pipeline
+- ADR-0010 — Telemetry Lifecycle and Legacy Preservation
+
+Phase 5.2 decisions implemented on this branch:
+
+- ADR-0011 — Canonical Record Families and Record Envelope
+- ADR-0012 — Native Identifiers, Aliases and Controlled Registries
+- ADR-0013 — Applicability, Versioning and Curation/Lifecycle Separation
+- ADR-0014 — Claim, Evidence and Relationship Contracts
+- ADR-0015 — Schema Versioning, Migration and Referential Integrity
+
+Full ADR content remains authoritative in `docs/adr/`.
+
+## Phase 5.2 Canonical Model Status
+
+Implemented for architecture review:
+
+- AtlasRecord root union;
+- EntityRecord;
+- ClaimRecord;
+- RelationshipRecord;
+- SourceRecord;
+- ValidationRecord;
+- VersionRecord;
+- CoverageSnapshot;
+- shared strict definitions;
+- controlled registries;
+- canonical ID component validation;
+- structured native identifiers;
+- structured aliases;
+- lifecycle/curation separation;
+- applicability/version contracts;
+- namespaced extensions;
+- deterministic Claim/Relationship identity;
+- source/provenance evidence contracts;
+- referential integrity validation;
+- Phase 5.1 migration inventory;
+- cross-domain architecture fixtures;
+- exact-resolution tests.
+
+Phase 5.1 schemas remain preserved and are not the v1 production contracts.
 
 ## Current MVP Scope
 
-Content focus:
+Content focus remains intentionally narrow:
 
 - Windows Security Events
 - Sysmon
@@ -81,22 +122,24 @@ Content focus:
 - provenance
 - deterministic offline search
 
-Product focus:
-
-- canonical local dataset;
-- exact identifier resolution;
-- lexical search;
-- relationship navigation;
-- provenance visibility;
-- signed and rollback-safe content packs;
-- Windows Desktop as the first full end-user interface;
-- Web/PWA afterward using the same shared contracts.
+Phase 5.2 cross-domain records are schema fixtures only and do not authorize production ingestion.
 
 ## Deferred Scope
 
-The architecture must support future Linux, Azure, AWS, GCP, Docker, Kubernetes, DevOps/CI-CD, databases, Exchange, SharePoint, Microsoft 365, LOLBAS, GTFOBins, broader DFIR/IR, and additional detection backends.
+Production ingestion remains deferred for:
 
-Broad content ingestion for those domains is deferred beyond the current MVP unless separately approved.
+- Linux
+- Azure / Entra ID
+- AWS
+- GCP
+- Docker
+- Kubernetes / OpenShift
+- DevOps / CI-CD
+- databases
+- Exchange
+- SharePoint
+- Microsoft 365
+- LOLBAS / GTFOBins expansion
 
 ## Current Interface Sequence
 
@@ -133,30 +176,24 @@ Canonical sources include:
 - MITRE CAR: official MITRE CAR sources
 - Other products/projects: official vendor documentation or official project repository
 
-UltimateWindowsSecurity and similar sources may be used for research/reference but do not override authoritative upstream sources.
+Canonical SourceRecord URLs must be credential-free.
 
 ## Content Pack Status
 
-Architecture requirement: versioned, schema-versioned, source-versioned, provenance-bearing, checksummed, signed, compatibility-aware, freshness-aware, coverage-aware, validation-aware, rollback-safe packs.
+No production content pack is implemented in Phase 5.2.
 
-Exact final pack naming is **OPEN**.
-
-Candidate families include core, Windows, Sysmon, MITRE ATT&CK/D3FEND/CAR, Linux, cloud, container, DevOps, database, LOLBAS, GTFOBins, and DefenseOps-derived content.
-
-No production content packs have been released yet.
+Pack naming, format, signing algorithm, key management, and dependency implementation remain open.
 
 ## Technology Decisions — Accepted
 
-- Canonical security model is vendor-neutral.
-- Material claims use claim-level provenance.
-- Offline operation is first-class.
-- Shared canonical contracts must serve all interfaces.
-- Windows Desktop is the first full end-user interface.
-- Web/PWA follows the shared core/Desktop MVP.
-- Official Atlas CLI command: `atlas`.
-- DefenseOps is the approved defensive engineering source for Atlas.
-- Cyber-Sentinel-Forge is retired as an independent Atlas architecture/product component.
-- Historical Forge material must not be deleted automatically.
+- JSON-compatible canonical domain contracts
+- JSON Schema Draft 2020-12
+- Canonical schema version independent from product/source/record versions
+- Controlled registries outside monolithic vendor enums
+- Strict canonical root records with explicit namespaced extensions
+- Deterministic Claim and Relationship semantic identity
+- Explicit referential integrity validation
+- Phase 5.1 schema preservation during migration review
 
 ## Technology Decisions — Open
 
@@ -168,40 +205,37 @@ No production content packs have been released yet.
 - Portable Windows packaging implementation
 - Exact DefenseOps → Atlas ingestion contract
 - Code signing / pack signing implementation and key management
-- Exact search engine implementation
+- Exact deterministic/lexical search implementation
 
 Tauri, Rust, SQLite, React, and TypeScript remain candidates only.
 
 ## Active Architecture Issues
 
-No blocking architecture conflict is known after the approved Stage 1 merge.
+No blocking Architecture Issue is currently identified.
 
-Implementation questions that require new architectural choices must be raised as `ARCHITECTURE ISSUE` before changing the accepted model.
+Any implementation dependency that would force vendor-specific root fields, identity collisions, loss of native identifier fidelity, broken provenance/legacy preservation, storage coupling, or broken referential integrity must be returned to Architecture Authority before resolution.
 
 ## Data / Coverage Status
 
-- Phase 5.2 production schemas: not started
-- Source registry implementation: not started
-- Telemetry Coverage snapshots: not implemented
-- Detection Coverage snapshots: not implemented
+- Phase 5.2 production schema contracts: implemented on feature branch for review
+- Source registry contract: implemented; production source ingestion not started
+- Telemetry Coverage contract: implemented; production coverage not measured
+- Detection Coverage contract: implemented; production coverage not measured
 - Production telemetry inventory: not ingested
 - DefenseOps ingestion contract: open decision
 
-Telemetry Coverage and Detection Coverage are separate first-class measurements and must declare scope, version, and denominator.
-
 ## Known Risks / Blockers
 
-- Current Phase 5.1 JSON schemas are provisional foundation schemas and must not be treated as the final Phase 5.2 model.
-- Exact storage/graph/search implementation is intentionally open.
-- Pack-signing/key-management design is open.
-- Existing provisional canonical ID examples must be inventoried before Phase 5.2 migration.
-- Stale merged branches must not be used as implementation baselines.
+- Phase 5.2 is not authoritative until reviewed/merged.
+- Existing Phase 5.1 `status=deprecated` values require explicit migration review.
+- Pack dependency boundaries are not finalized.
+- Storage/graph/search implementation remains intentionally open.
+- Pack signing/key management remains open.
 
 ## Last Architecture Sync
 
-- Architecture Sync Date: 2026-09-03
-- Architecture Authority: Atlas Architecture / Product / Data / Security Design workspace
-- Architecture Authority Decision: **STAGE 1 APPROVED FOR MERGE**
-- Stage 1 merged baseline: `main@06061e686fe60f7f9f195000c8c9d97f4f6da8d7`
-- Sync scope: A-001 through A-003 and G-001 through G-006
+- Architecture Sync Date: 2026-09-04
+- Architecture Authority Decision: **PHASE 5.2 APPROVED TO START**
+- Approved baseline: `main@47e3a2b70e337c477dbf395192cd9a4e84b6050a`
+- Phase 5.2 Architecture Review: **REQUIRED BEFORE MERGE**
 - Architecture Sync Status: **GREEN**
