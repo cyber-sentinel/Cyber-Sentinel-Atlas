@@ -1,0 +1,9 @@
+{
+  "id": "atlas:mapping-profile:atlas.ingestion:synthetic-event-v1",
+  "version": "1.0.0",
+  "rules": [
+    {"rule_id": "fixture.event.identity", "description": "Map provider/channel/event ID into a scoped synthetic event identity"},
+    {"rule_id": "fixture.event.native-id", "description": "Preserve event_id as a lossless string native identifier"}
+  ],
+  "digest": "sha256-70468ca2b4063ec2fc6fc73989fe447c1b5824be919909e6eecc9adaac9f9b6a"
+}

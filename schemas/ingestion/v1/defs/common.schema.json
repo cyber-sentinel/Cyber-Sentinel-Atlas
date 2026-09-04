@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/ingestion/v1/defs/common.schema.json",
+  "title": "Atlas Ingestion Common Definitions v1",
+  "$defs": {
+    "semver": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "contract_version": {"type": "string", "const": "1.0.0"},
+    "sha256_digest": {"type": "string", "pattern": "^sha256-[a-f0-9]{64}$"},
+    "artifact_id": {"type": "string", "pattern": "^atlas:[a-z0-9-]+:atlas\\.ingestion:[a-z0-9][a-z0-9._-]*$"},
+    "canonical_id": {"type": "string", "pattern": "^atlas:[a-z0-9-]+:[a-z0-9-]+(?:\\.[a-z0-9-]+)*:[a-z0-9][a-z0-9._-]*$"},
+    "date_time": {"type": "string", "format": "date-time"},
+    "diagnostics": {"type": "array", "items": {"type": "string"}, "default": []},
+    "https_uri": {"type": "string", "format": "uri", "pattern": "^https://"},
+    "status": {"type": "string", "enum": ["draft", "active", "disabled", "deprecated"]},
+    "transport": {"type": "string", "enum": ["https", "git"]},
+    "acquisition_strategy": {"type": "string", "enum": ["single-document", "document-set", "api-pagination", "git-tree", "release-asset", "release-feed", "structured-feed"]},
+    "source_version": {"type": "string", "minLength": 1},
+    "resource_locator": {
+      "type": "object", "additionalProperties": false, "required": ["uri"],
+      "properties": {
+        "uri": {"type": "string", "format": "uri"},
+        "media_type": {"type": "string", "minLength": 1},
+        "encoding": {"type": "string", "minLength": 1}
+      }
+    },
+    "security_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["tls_verify", "allowed_hosts", "redirect_limit", "block_private_destinations", "max_response_bytes", "max_decompressed_bytes", "max_archive_entries", "max_compression_ratio", "connect_timeout_seconds", "read_timeout_seconds", "archive_safety", "uri_sanitization", "git_safety"],
+      "properties": {
+        "tls_verify": {"const": true},
+        "allowed_hosts": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "redirect_limit": {"type": "integer", "minimum": 0, "maximum": 10},
+        "block_private_destinations": {"const": true},
+        "max_response_bytes": {"type": "integer", "minimum": 1},
+        "max_decompressed_bytes": {"type": "integer", "minimum": 1},
+        "max_archive_entries": {"type": "integer", "minimum": 1},
+        "max_compression_ratio": {"type": "number", "exclusiveMinimum": 1},
+        "connect_timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "read_timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "archive_safety": {
+          "type": "object", "additionalProperties": false,
+          "required": ["reject_path_traversal", "reject_absolute_paths", "reject_symlink_escape", "reject_device_files"],
+          "properties": {
+            "reject_path_traversal": {"const": true}, "reject_absolute_paths": {"const": true},
+            "reject_symlink_escape": {"const": true}, "reject_device_files": {"const": true}
+          }
+        },
+        "uri_sanitization": {
+          "type": "object", "additionalProperties": false, "required": ["reject_userinfo", "reject_signed_query"],
+          "properties": {"reject_userinfo": {"const": true}, "reject_signed_query": {"const": true}}
+        },
+        "git_safety": {
+          "type": "object", "additionalProperties": false,
+          "required": ["submodules", "hooks", "credential_helpers", "execute_source", "follow_symlinks"],
+          "properties": {
+            "submodules": {"const": false}, "hooks": {"const": false}, "credential_helpers": {"const": false},
+            "execute_source": {"const": false}, "follow_symlinks": {"const": false}
+          }
+        }
+      }
+    },
+    "parser_security": {
+      "type": "object", "additionalProperties": false,
+      "required": ["network_access", "dns_access", "http_access", "git_access", "source_execution", "javascript_execution", "xml_external_entities", "dtd_external_resolution", "macros", "ai_enabled", "filesystem_mode", "input_mode", "output_mode", "resource_limits"],
+      "properties": {
+        "network_access": {"const": false}, "dns_access": {"const": false}, "http_access": {"const": false}, "git_access": {"const": false},
+        "source_execution": {"const": false}, "javascript_execution": {"const": false}, "xml_external_entities": {"const": false},
+        "dtd_external_resolution": {"const": false}, "macros": {"const": false}, "ai_enabled": {"const": false},
+        "filesystem_mode": {"const": "restricted"}, "input_mode": {"const": "read-only"}, "output_mode": {"const": "designated-only"},
+        "resource_limits": {
+          "type": "object", "additionalProperties": false, "required": ["cpu_seconds", "memory_bytes", "wall_seconds", "max_output_records"],
+          "properties": {
+            "cpu_seconds": {"type": "number", "exclusiveMinimum": 0}, "memory_bytes": {"type": "integer", "minimum": 1048576},
+            "wall_seconds": {"type": "number", "exclusiveMinimum": 0}, "max_output_records": {"type": "integer", "minimum": 1}
+          }
+        }
+      }
+    }
+  }
+}
