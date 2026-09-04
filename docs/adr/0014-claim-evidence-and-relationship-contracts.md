@@ -1,40 +1,14 @@
 # ADR-0014 — Claim, Evidence and Relationship Contracts
 
-**Status:** Accepted
+**Status:** Accepted  
 **Decision:** 2026-09-04
-
-## Context
-
-Claim-level provenance is an accepted Atlas principle. Material semantic graph edges also require evidence without making evidence metadata part of semantic identity.
 
 ## Decision
 
-ClaimRecord supports subject, controlled predicate, typed object, confidence, applicability and one or more evidence entries.
+Claims and relationships are first-class records. Claim `entity-ref` objects resolve only to EntityRecord. Evidence `source_id` resolves to SourceRecord. Material semantic relationships require supporting claims. `PRECEDES` and `FOLLOWS` are semantic temporal/ordering assertions and therefore require `supporting_claim_ids`; they are not structural exceptions.
 
-Claim objects support:
+Structural endpoint invariants are enforced for `HAS_TELEMETRY_PROVIDER`, `HAS_TELEMETRY_SOURCE`, `EMITS`, `HAS_FIELD`, and `RUNS_ON`.
 
-- canonical entity reference;
-- typed literal;
-- structured JSON only when a canonical entity/relationship is not the appropriate representation.
+### Authoritative trust
 
-Evidence records source ID, optional source snapshot ID, source version, retrieval time, explicit locator, transformation type and reviewer status.
-
-Claim semantic identity is deterministically derived from normalized:
-
-`subject + predicate + object + applicability semantic scope`
-
-Evidence source lists, review status and timestamps do not change claim identity.
-
-RelationshipRecord is a first-class graph record. Its semantic identity is deterministically derived from:
-
-`from + relationship_type + to + optional semantic qualifier`
-
-Confidence, evidence, timestamps and curation state do not define relationship identity.
-
-Material semantic relationships must be supported through claims/provenance. Pure structural edges such as RUNS_ON, HAS_TELEMETRY_PROVIDER, HAS_TELEMETRY_SOURCE, EMITS and HAS_FIELD may be validated structurally when their fixture/corpus endpoints establish the declared hierarchy.
-
-Full SHA-256 based canonical keys are used for deterministic Claim and Relationship identities.
-
-## Consequences
-
-Adding a second supporting source does not duplicate a semantic claim/edge. Evidence remains inspectable, and graph identity is stable across review state changes.
+A ClaimRecord with `confidence=authoritative` requires at least one evidence entry that simultaneously references a Tier A authoritative SourceRecord, has `reviewer_status=approved`, and uses `direct-structured-import` or `normalized-fact`. An authoritative RelationshipRecord requires at least one supporting claim that satisfies the same authoritative trust invariant. Human synthesis, AI-assisted derivation, community interpretation or non-authoritative engineering judgment cannot become authoritative merely by citing a Tier A URL.

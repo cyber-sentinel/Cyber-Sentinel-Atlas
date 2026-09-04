@@ -1,44 +1,21 @@
-# Schema Versioning and Phase 5.1 Migration
+# Schema Versioning and Migration
 
 ## Independent versions
 
-Atlas distinguishes:
+Atlas separates canonical `schema_version`, `record_revision`, registry version, product/source versions and future content-pack versions. Schema v1 uses Semantic Versioning principles; controlled registry additions follow their own `registry_version` lifecycle and do not imply a schema version change unless the schema contract itself changes.
 
-- canonical schema version;
-- record revision;
-- product version;
-- source version;
-- platform/product/provider VersionRecords.
+## Canonical schema URI
 
-Schema v1 starts at `1.0.0` and follows Semantic Versioning principles defined in ADR-0015.
+Version 1 schema identifiers use `https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/`. The validator derives the expected `$id` from repository-relative schema paths and rejects non-canonical internal `$ref` values. The previous `cyber-sentinel.dev` URI base is not part of the v1 release contract because project control was not verified.
 
-## Migration inventory
+The repository path `/schemas/v1/` is stable for schema major v1. Breaking structural/semantic changes require a new major schema path/version, and changing this URI policy later requires an explicit migration/ADR decision.
 
-Phase 5.1 provisional IDs are explicitly mapped under `migrations/phase-5.1-to-v1/`.
+## Phase 5.1 migration
 
-Required reviewed examples:
+The migration inventory explicitly maps provisional identifiers to v1 canonical identifiers and preserves same-identity old Atlas IDs as `legacy-canonical-id` aliases. Phase 5.1 `status=deprecated` is not auto-migrated because it mixed curation and lifecycle semantics.
 
-```text
-atlas:event:windows-security:4688
-→ atlas:event:microsoft.windows.security:4688
-
-atlas:event:sysmon:1
-→ atlas:event:microsoft.sysmon:1
-
-atlas:attack:T1059.001
-→ atlas:attack-technique:mitre.attack:t1059.001
-```
-
-When an old Atlas ID refers to the same identity, it is preserved as a `legacy-canonical-id` alias on the new EntityRecord. Distinct historical telemetry identities remain distinct entities.
-
-## Deprecated ambiguity
-
-Phase 5.1 used `deprecated` in a mixed status vocabulary. The migration map therefore declares `deprecated_status_auto_migration=false`. Any real deprecated record requires explicit interpretation into lifecycle and/or curation state.
-
-## Legacy schemas
-
-`schemas/atlas-node.schema.json` and `schemas/atlas-edge.schema.json` remain untouched during Phase 5.2 review. They may later be archived or wrapped only after migration/reference inventory and Architecture Authority review.
+The legacy `schemas/atlas-node.schema.json` and `schemas/atlas-edge.schema.json` remain preserved until migration/compatibility review is complete.
 
 ## Referential integrity
 
-Phase 5.2 validation treats missing canonical entity/source/claim/version/relationship endpoints as failures inside the fixture corpus. Cross-pack dependency mechanics remain an open later decision.
+Canonical references must resolve in the validated corpus or a future explicit dependency boundary. For v1, semantically typed references are additionally checked against expected record families/entity types. Wrong-family references fail validation even when the target ID exists.

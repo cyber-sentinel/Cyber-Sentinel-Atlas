@@ -1,5 +1,7 @@
-# Atlas Controlled Registries
+# Controlled Registries
 
-Phase 5.2 keeps vendor/product vocabulary out of monolithic JSON Schema enums. JSON Schema validates syntax and record structure; `tools/validate_phase52.py` enforces membership in these registries.
+Phase 5.2 uses registries for controlled vocabulary membership instead of hard-coding future vendor values into monolithic JSON Schema enums.
 
-Registry changes are controlled data-model changes and require review. Additive registry entries do not by themselves require a schema major version unless the schema semantics change.
+Every registry JSON document must contain `registry`, `registry_version`, and unique `values`. Registry identity is unique across the registry directory. `registry_version` follows semantic-version syntax but is **independent** from canonical schema version and may evolve on its own lifecycle.
+
+Required v1 registries: `entity-types`, `namespaces`, `relationship-types`, `native-identifier-types`, `claim-predicates`, and `alias-kinds`.

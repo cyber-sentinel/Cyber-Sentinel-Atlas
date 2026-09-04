@@ -15,230 +15,54 @@
 
 - Phase 5.1 — Product Foundation: **COMPLETE**
 - Stage 1 — Governance / Architecture Sync: **COMPLETE**
-- Phase 5.2 — Canonical Data Model: **READY FOR ARCHITECTURE REVIEW**
+- Phase 5.2 — Canonical Data Model: **IN PROGRESS — REVISION 2**
 
-Phase 5.2 implementation is committed and validated on the feature branch. It is not authoritative on `main` until Architecture Authority explicitly approves PR #4 and the PR is merged.
+Architecture Authority requested remediation R-001 through R-012 on PR #4. Phase 5.2 remains non-authoritative on `main` until a second architecture review explicitly approves merge. Phase 5.3 is not started.
 
-## Product Definition
+## Accepted Architecture
 
-Cyber-Sentinel-Atlas is a universal cybersecurity telemetry, detection, and threat knowledge platform implemented as:
+ADR-0001 through ADR-0010 remain unchanged. ADR-0011 through ADR-0015 remain the Phase 5.2 decision set and are updated only to record accepted Revision 2 invariants. Core principles remain offline-first, source-backed, vendor-neutral, analyst-first, exact-before-semantic, claim-level provenance, controlled releases, legacy preservation, universal architecture and narrow MVP.
 
-- a Cyber Defense Knowledge Graph;
-- an Analyst Workbench;
-- an Offline Knowledge Platform;
-- a Detection Engineering Platform.
+## Phase 5.2 Revision 2 Remediation
 
-Atlas is not an Event-ID-only wiki. Event ID is one identifier type inside a universal telemetry model.
+- typed referential integrity and telemetry-spine endpoint typing;
+- PRECEDES/FOLLOWS provenance requirement;
+- extension registry enforcement across all record families;
+- CoverageSnapshot `numerator_basis`;
+- effective alias scope collision detection;
+- native identifier primary/duplicate integrity;
+- deterministic authoritative trust semantics;
+- HTTPS-only canonical Source URLs;
+- offset-aware datetime ordering;
+- strict registry contract validation with independent registry versions;
+- project-controlled canonical schema URI base;
+- restoration of Product Foundation README context/navigation.
 
-## Approved Core Principles
+## MVP / Deferred Scope
 
-- Offline-first
-- Source-backed
-- Vendor-neutral
-- Analyst-first
-- Knowledge Graph based
-- Exact search before semantic search
-- Claim-level provenance
-- No technical claim without source
-- No AI answer without inspectable evidence
-- No direct upstream-to-production content update
-- Versioned content
-- Signed/checksummed offline packs
-- Rollback-safe updates
-- Canonical identifiers
-- Legacy + Current telemetry preservation
-- Old Event IDs are preserved
-- Modern/Legacy relationships are explicit
-- Universal telemetry model, not Windows-only
-- Event ID is only one identifier type
-- Content completeness must be measurable
-- Telemetry Coverage and Detection Coverage are separate metrics
-- Universal architecture with an intentionally narrow MVP
+MVP content remains Windows Security Events, Sysmon, PowerShell, Active Directory, MITRE ATT&CK, selected D3FEND/CAR, validated DefenseOps content, provenance and offline deterministic search. Linux/cloud/container/database records in Phase 5.2 are schema fixtures only. Production ingestion, Desktop/Web implementation, storage/search/graph selection, Detection IR, pack/signing/key-management design remain deferred/open.
 
-## Accepted ADRs
-
-Existing accepted baseline:
-
-- ADR-0001 — Canonical Vendor-Neutral Model
-- ADR-0002 — Claim-Level Provenance
-- ADR-0003 — Offline-first Core
-- ADR-0004 — Ecosystem Ownership: Atlas, DefenseOps and Forge
-- ADR-0005 — Canonical Identifier Architecture
-- ADR-0006 — Shared Core and Interface Sequencing
-- ADR-0007 — Universal Telemetry Taxonomy
-- ADR-0008 — Coverage Measurement Model
-- ADR-0009 — Controlled Content Release Pipeline
-- ADR-0010 — Telemetry Lifecycle and Legacy Preservation
-
-Phase 5.2 decisions implemented and ready for Architecture Authority review:
-
-- ADR-0011 — Canonical Record Families and Record Envelope
-- ADR-0012 — Native Identifiers, Aliases and Controlled Registries
-- ADR-0013 — Applicability, Versioning and Curation/Lifecycle Separation
-- ADR-0014 — Claim, Evidence and Relationship Contracts
-- ADR-0015 — Schema Versioning, Migration and Referential Integrity
-
-Full ADR content remains authoritative in `docs/adr/`.
-
-## Phase 5.2 Canonical Model Status
-
-Implemented, committed, validated, and presented in open PR #4:
-
-- AtlasRecord root union;
-- EntityRecord;
-- ClaimRecord;
-- RelationshipRecord;
-- SourceRecord;
-- ValidationRecord;
-- VersionRecord;
-- CoverageSnapshot;
-- shared strict definitions;
-- controlled registries;
-- canonical ID component validation;
-- structured native identifiers;
-- structured aliases;
-- lifecycle/curation separation;
-- applicability/version contracts;
-- namespaced extensions;
-- deterministic Claim/Relationship identity;
-- source/provenance evidence contracts;
-- referential integrity validation;
-- Phase 5.1 migration inventory;
-- cross-domain architecture fixtures;
-- exact-resolution tests;
-- GitHub CI regression and model validation.
-
-Phase 5.1 schemas remain preserved unchanged and are not the v1 production contracts.
-
-## Current MVP Scope
-
-Content focus remains intentionally narrow:
-
-- Windows Security Events
-- Sysmon
-- PowerShell
-- Active Directory
-- MITRE ATT&CK
-- selected D3FEND/CAR relationships where authoritative mappings are defensible
-- validated DefenseOps detections and hunts
-- provenance
-- deterministic offline search
-
-Phase 5.2 cross-domain records are schema fixtures only and do not authorize production ingestion.
-
-## Deferred Scope
-
-Production ingestion remains deferred for:
-
-- Linux
-- Azure / Entra ID
-- AWS
-- GCP
-- Docker
-- Kubernetes / OpenShift
-- DevOps / CI-CD
-- databases
-- Exchange
-- SharePoint
-- Microsoft 365
-- LOLBAS / GTFOBins expansion
-
-## Current Interface Sequence
-
-```text
-Canonical Data Model
-        ↓
-Source / Ingestion Core
-        ↓
-Deterministic Search Core
-        ↓
-Offline Pack Runtime / Shared Core
-        ↓
-Windows Desktop MVP
-        ↓
-Web / PWA
-        ↓
-API / CLI
-        ↓
-Grounded AI
-```
-
-The user-facing CLI command is `atlas`.
-
-## Canonical Source Policy
-
-Authoritative sources take precedence over secondary/community references.
-
-Canonical sources include:
-
-- Sysmon: https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
-- Microsoft Sysinternals: https://learn.microsoft.com/en-us/sysinternals/
-- MITRE ATT&CK: official MITRE ATT&CK sources
-- MITRE D3FEND: official MITRE D3FEND sources
-- MITRE CAR: official MITRE CAR sources
-- Other products/projects: official vendor documentation or official project repository
-
-Canonical SourceRecord URLs must be credential-free.
-
-## Content Pack Status
-
-No production content pack is implemented in Phase 5.2.
-
-Pack naming, format, signing algorithm, key management, and dependency implementation remain open.
-
-## Technology Decisions — Accepted
-
-- JSON-compatible canonical domain contracts
-- JSON Schema Draft 2020-12
-- Canonical schema version independent from product/source/record versions
-- Controlled registries outside monolithic vendor enums
-- Strict canonical root records with explicit namespaced extensions
-- Deterministic Claim and Relationship semantic identity
-- Explicit referential integrity validation
-- Phase 5.1 schema preservation during migration review
-
-## Technology Decisions — Open
+## Open Implementation Decisions
 
 - Windows Desktop implementation stack
 - Embedded local database/storage engine
 - Graph persistence/index implementation
 - Detection Intermediate Representation
-- Exact content-pack naming convention
-- Portable Windows packaging implementation
+- Exact content-pack naming/format
+- Portable Windows packaging
 - Exact DefenseOps → Atlas ingestion contract
-- Code signing / pack signing implementation and key management
+- Code/pack signing and key-management implementation
 - Exact deterministic/lexical search implementation
 
 Tauri, Rust, SQLite, React, and TypeScript remain candidates only.
 
-## Active Architecture Issues
+## Legacy / Migration Status
 
-No blocking Architecture Issue is currently identified.
+Phase 5.1 `schemas/atlas-node.schema.json` and `schemas/atlas-edge.schema.json` remain preserved. Explicit ID migration inventory is retained; Phase 5.1 `status=deprecated` is not auto-migrated.
 
-Any implementation dependency that would force vendor-specific root fields, identity collisions, loss of native identifier fidelity, broken provenance/legacy preservation, storage coupling, or broken referential integrity must be returned to Architecture Authority before resolution.
+## Architecture Sync
 
-## Data / Coverage Status
-
-- Phase 5.2 production schema contracts: implemented and validated on feature branch; architecture review pending
-- Source registry contract: implemented; production source ingestion not started
-- Telemetry Coverage contract: implemented; production coverage not measured
-- Detection Coverage contract: implemented; production coverage not measured
-- Production telemetry inventory: not ingested
-- DefenseOps ingestion contract: open decision
-
-## Known Risks / Blockers
-
-- Phase 5.2 is not authoritative until reviewed and merged.
-- Existing Phase 5.1 `status=deprecated` values require explicit migration review.
-- Pack dependency boundaries are not finalized.
-- Storage/graph/search implementation remains intentionally open.
-- Pack signing/key management remains open.
-
-## Last Architecture Sync
-
-- Architecture Sync Date: 2026-09-04
-- Architecture Authority Decision: **PHASE 5.2 APPROVED TO START**
-- Approved baseline: `main@47e3a2b70e337c477dbf395192cd9a4e84b6050a`
-- Phase 5.2 Implementation Review: **READY FOR ARCHITECTURE AUTHORITY REVIEW**
-- Phase 5.2 Merge: **NOT AUTHORIZED**
-- Architecture Sync Status: **GREEN**
+- Approved Phase 5.2 baseline: `main@47e3a2b70e337c477dbf395192cd9a4e84b6050a`
+- Previous reviewed Phase 5.2 head: `10d222a01f320915a339e13dded572974b12e408`
+- Architecture Review: **CHANGES REQUIRED — REMEDIATION IN PROGRESS**
+- PR #4: OPEN / NOT MERGED

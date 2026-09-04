@@ -1,24 +1,25 @@
-# Atlas Canonical Schema v1
+# Atlas Canonical Schemas v1
 
-Schema contract version: **1.0.0**
+Schema contract version: **1.0.0** (under Phase 5.2 architecture review).
 
-Machine validation uses JSON Schema Draft 2020-12.
+Canonical schema URI base:
 
-## Record Families
+`https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/`
 
-- `atlas-record.schema.json` — root AtlasRecord union
-- `entity.schema.json` — EntityRecord
-- `claim.schema.json` — ClaimRecord
-- `relationship.schema.json` — RelationshipRecord
-- `source.schema.json` — SourceRecord
-- `validation-record.schema.json` — ValidationRecord
-- `version-record.schema.json` — VersionRecord
-- `coverage-snapshot.schema.json` — CoverageSnapshot
+This base is derived from the project-controlled GitHub repository path rather than the previously unverified `cyber-sentinel.dev` domain. `$id` values equal the canonical base plus repository-relative paths under `schemas/v1/`; internal `$ref` values use the same base.
 
-## Shared Definitions
+The repository path `/schemas/v1/` is stable for schema major v1. Breaking schema changes require a new major schema path/version. This URI policy may change later only through an explicit migration/ADR decision.
 
-`defs/` contains strict reusable contracts for canonical IDs, common record metadata, native identifiers, aliases, lifecycle, applicability, evidence, namespaced extensions, and claim objects.
+The canonical domain model uses JSON Schema Draft 2020-12 and remains storage-engine independent. Schema version, registry version, record revision, product version and source version have independent lifecycles.
 
-JSON Schema validates structure and syntax. Phase 5.2 deterministic validators additionally enforce registry membership, canonical ID/component consistency, deterministic semantic IDs, reference integrity, source URL secret hygiene, alias ambiguity/scoping, migration rules, coverage semantics, and exact resolution behavior.
+Record families:
 
-The Phase 5.1 schemas remain preserved at `schemas/atlas-node.schema.json` and `schemas/atlas-edge.schema.json`; they are not the v1 production contracts.
+- EntityRecord
+- ClaimRecord
+- RelationshipRecord
+- SourceRecord
+- ValidationRecord
+- VersionRecord
+- CoverageSnapshot
+
+The root contract is `atlas-record.schema.json`. The legacy Phase 5.1 schemas remain outside this directory and are preserved during migration review.
