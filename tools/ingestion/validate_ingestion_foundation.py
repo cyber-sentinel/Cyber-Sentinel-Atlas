@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from collections import Counter, defaultdict
+from datetime import datetime
 from pathlib import Path, PurePosixPath
-from urllib.parse import urlparse, parse_qsl
+from urllib.parse import parse_qsl, urlparse
 import copy
 import hashlib
 import ipaddress
@@ -73,7 +75,8 @@ FORBIDDEN_SECRET_FIELDS = {
 ALLOWED_SECURITY_FIELD_NAMES = {"credential_helpers", "auth_profile_ref"}
 SECRET_VALUE_PATTERNS = [
     re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
-    re.compile(r"\bAKIA[0-9A-Z]{16}\b"), re.compile(r"\bgh[pousr]_[A-Za-z0-9]{20,}\b"),
+    re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
+    re.compile(r"\bgh[pousr]_[A-Za-z0-9]{20,}\b"),
     re.compile(r"\bBearer\s+[A-Za-z0-9._~+/=-]{12,}\b", re.I),
 ]
 INTERNAL_HOSTNAMES = {"localhost", "localhost.localdomain", "ip6-localhost"}
@@ -87,6 +90,23 @@ SEMANTIC_RELATIONSHIPS_REQUIRING_SUPPORT = {
     "REQUIRES_TELEMETRY", "DERIVED_FROM", "SUPPORTED_BY", "SUPERSEDES", "SUPERSEDED_BY",
     "VERSION_OF", "VALIDATED_BY",
 }
+MANDATORY_GATES = {f"G{i}" for i in range(1, 16)}
+REVIEW_SUCCESS = {"approved", "approved-with-exceptions"}
+RECORD_KIND_TO_COUNT = {
+    "entity": "EntityRecord", "claim": "ClaimRecord", "relationship": "RelationshipRecord",
+    "source": "SourceRecord", "validation": "ValidationRecord", "version": "VersionRecord",
+    "coverage-snapshot": "CoverageSnapshot",
+}
+
+
+def _set_root(root: Path):
+    global ROOT, INGESTION_SCHEMA_DIR, CANONICAL_SCHEMA_DIR, FIXTURE_DIR, BUNDLE_PATH, REGISTRY_DIR
+    ROOT = Path(root)
+    INGESTION_SCHEMA_DIR = ROOT / "schemas" / "ingestion" / "v1"
+    CANONICAL_SCHEMA_DIR = ROOT / "schemas" / "v1"
+    FIXTURE_DIR = ROOT / "fixtures" / "phase-5.3"
+    BUNDLE_PATH = FIXTURE_DIR / "foundation-valid.json"
+    REGISTRY_DIR = ROOT / "model" / "registries"
 
 
 def load_json(path: Path):
@@ -115,6 +135,27 @@ def digest_without_field(record: dict, field: str) -> str:
 
 def stable_artifact_id(kind: str, payload) -> str:
     return f"atlas:{kind}:atlas.ingestion:{sha256_digest(payload)}"
+
+
+def parse_datetime(value: str):
+    if not isinstance(value, str):
+        raise ValueError("timestamp must be a string")
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        raise ValueError("timestamp must be offset-aware")
+    return parsed
+
+
+def timestamp_order_errors(record: dict, started_field="started_at", finished_field="finished_at", label="run"):
+    errors = []
+    try:
+        started = parse_datetime(record[started_field])
+        finished = parse_datetime(record[finished_field])
+        if finished < started:
+            errors.append(f"{label} finish precedes start")
+    except (KeyError, ValueError) as exc:
+        errors.append(f"{label} timestamp invalid: {exc}")
+    return errors
 
 
 def walk_refs(value):
@@ -260,29 +301,77 @@ def archive_entry_errors(path: str, *, is_symlink=False, symlink_target=None, is
 
 def acquisition_semantic_errors(connector, run):
     errors = []
-    expected_required = {t["target_key"]: t["required"] for t in connector["targets"]}
-    required_failure = optional_failure = False
-    for resource in run["resource_results"]:
-        if resource["target_key"] in expected_required and resource["required"] != expected_required[resource["target_key"]]:
+    targets = connector.get("targets", [])
+    target_keys = [t.get("target_key") for t in targets]
+    if len(target_keys) != len(set(target_keys)):
+        errors.append("connector target_key values must be unique")
+    declared = {t["target_key"]: t for t in targets if t.get("target_key")}
+    by_target = defaultdict(list)
+    for resource in run.get("resource_results", []):
+        key = resource.get("target_key")
+        if key not in declared:
+            errors.append(f"unknown resource_result target_key {key!r}")
+            continue
+        by_target[key].append(resource)
+        if resource.get("required") != declared[key].get("required"):
             errors.append("resource required flag conflicts with connector target")
-        if resource["status"] == "failed":
-            required_failure |= resource["required"]
-            optional_failure |= not resource["required"]
-        if resource["status"] == "not-modified":
+        status = resource.get("status")
+        if status == "success":
+            if not resource.get("snapshot_id"):
+                errors.append("successful resource must reference snapshot_id")
+            if resource.get("previous_snapshot_id"):
+                errors.append("successful resource must not masquerade as not-modified")
+        elif status == "not-modified":
             if resource.get("snapshot_id"):
                 errors.append("HTTP not-modified must not create a fake new snapshot")
             if not resource.get("previous_snapshot_id"):
                 errors.append("not-modified resource must reference previous valid snapshot")
-    if required_failure and run["publication_eligible"]:
+        elif status in {"failed", "skipped"} and resource.get("snapshot_id"):
+            errors.append("failed/skipped resource must not reference a new snapshot")
+
+    for key, target in declared.items():
+        results = by_target.get(key, [])
+        if target.get("required") and not results:
+            errors.append(f"required connector target absent from AcquisitionRun: {key}")
+        if target.get("required") and results:
+            usable = [r for r in results if (r.get("status") == "success" and r.get("snapshot_id")) or
+                      (r.get("status") == "not-modified" and r.get("previous_snapshot_id") and not r.get("snapshot_id"))]
+            if not usable and run.get("publication_eligible"):
+                errors.append(f"required target {key} has no usable resource result and must make acquisition non-publishable")
+
+    statuses = [r.get("status") for r in run.get("resource_results", [])]
+    good = sum(s in {"success", "not-modified"} for s in statuses)
+    bad = sum(s in {"failed", "skipped"} for s in statuses)
+    result_status = run.get("result_status")
+    if result_status == "success" and (bad or not any(s == "success" for s in statuses)):
+        errors.append("AcquisitionRun success status is incoherent with resource results")
+    if result_status == "failed":
+        if run.get("publication_eligible"):
+            errors.append("failed AcquisitionRun must not be publication eligible")
+        if good:
+            errors.append("failed AcquisitionRun cannot conceal usable resource results; use partial")
+    if result_status == "partial" and not (good and bad):
+        errors.append("partial AcquisitionRun must represent mixed usable and failed/skipped completion")
+    if result_status == "not-modified" and (not statuses or any(s != "not-modified" for s in statuses)):
+        errors.append("not-modified AcquisitionRun must contain only not-modified resource results")
+    if any(t.get("required") and by_target.get(t["target_key"]) and
+           not any((r.get("status") == "success" and r.get("snapshot_id")) or
+                   (r.get("status") == "not-modified" and r.get("previous_snapshot_id") and not r.get("snapshot_id"))
+                   for r in by_target[t["target_key"]]) for t in targets) and run.get("publication_eligible"):
         errors.append("required target failure must make acquisition non-publishable")
-    if run["result_status"] == "partial" and not (required_failure or optional_failure):
-        errors.append("partial run must represent a failed resource")
-    statuses = [r["status"] for r in run["resource_results"]]
-    expected = {"resource_count": len(statuses), "success_count": statuses.count("success"),
-                "failed_count": statuses.count("failed"), "not_modified_count": statuses.count("not-modified")}
+
+    counts = Counter(statuses)
+    expected = {
+        "resource_count": len(statuses),
+        "success_count": counts["success"],
+        "failed_count": counts["failed"],
+        "not_modified_count": counts["not-modified"],
+        "skipped_count": counts["skipped"],
+    }
     for key, value in expected.items():
-        if run["metrics"].get(key) != value:
+        if run.get("metrics", {}).get(key) != value:
             errors.append(f"acquisition metrics {key} does not match resource results")
+    errors.extend(timestamp_order_errors(run, label="AcquisitionRun"))
     return errors
 
 
@@ -339,124 +428,403 @@ def search_readiness_errors(records):
 
 def inventory_guardrail_errors(inventory, diff):
     errors = []
-    if diff["inventory_id"] != inventory["inventory_id"]:
+    if diff.get("inventory_id") != inventory.get("inventory_id"):
         errors.append("InventoryDiff inventory_id does not resolve")
-    expected_digest = sha256_digest({"inventory_source_version": inventory["inventory_source_version"], "scope_metadata": inventory["scope_metadata"]})
-    if inventory["digest"] != expected_digest:
-        errors.append("AuthoritativeInventoryDefinition digest does not bind denominator")
+    if inventory.get("digest") != digest_without_field(inventory, "digest"):
+        errors.append("AuthoritativeInventoryDefinition digest does not bind complete semantic definition")
     expected_ids = inventory.get("scope_metadata", {}).get("expected_identities")
-    if isinstance(expected_ids, list) and inventory["expected_identity_count"] != len(expected_ids):
+    if isinstance(expected_ids, list) and inventory.get("expected_identity_count") != len(expected_ids):
         errors.append("expected_identity_count does not match denominator")
-    if diff["diff_digest"] != digest_without_field(diff, "diff_digest"):
+    for layer_name in ("raw", "parsed", "canonical"):
+        layer = diff.get(layer_name, {})
+        for field in ("baseline_ref", "baseline_digest", "candidate_ref", "candidate_digest"):
+            if not layer.get(field):
+                errors.append(f"InventoryDiff {layer_name} layer lacks {field} audit binding")
+    if diff.get("diff_digest") != digest_without_field(diff, "diff_digest"):
         errors.append("InventoryDiff digest mismatch")
-    before, after = diff["canonical"]["before_count"], diff["canonical"]["after_count"]
+    before, after = diff.get("canonical", {}).get("before_count", 0), diff.get("canonical", {}).get("after_count", 0)
     shrink = ((before - after) / before * 100) if before and after < before else 0
     growth = ((after - before) / before * 100) if before and after > before else (100 if before == 0 and after > 0 else 0)
-    guard, evaluation = inventory["guardrails"], diff["guardrail_evaluation"]
-    if shrink > guard["max_unexplained_shrink_percent"] and not evaluation["shrink_explained"] and not evaluation["blocked"]:
+    guard, evaluation = inventory.get("guardrails", {}), diff.get("guardrail_evaluation", {})
+    if shrink > guard.get("max_unexplained_shrink_percent", 0) and not evaluation.get("shrink_explained") and not evaluation.get("blocked"):
         errors.append("unexplained inventory mass shrink must be blocked")
-    if growth > guard["max_unexplained_growth_percent"] and not evaluation["growth_explained"] and not evaluation["blocked"]:
+    if growth > guard.get("max_unexplained_growth_percent", 0) and not evaluation.get("growth_explained") and not evaluation.get("blocked"):
         errors.append("unexplained inventory explosion must be blocked")
-    if diff["not_observed_is_removed"] is not False:
+    if diff.get("not_observed_is_removed") is not False:
         errors.append("NOT_OBSERVED must never be automatically treated as REMOVED")
     return errors
 
 
-def validation_report_errors(report):
+def review_decision_errors(review):
     errors = []
-    names = [g["gate"] for g in report["gates"]]
-    if len(names) != 15 or set(names) != {f"G{i}" for i in range(1, 16)}:
-        errors.append("BuildValidationReport must represent exactly G1 through G15")
-    failures = sum(g["mandatory"] and g["result"] == "fail" for g in report["gates"])
-    if report["mandatory_failures"] != failures:
-        errors.append("mandatory_failures does not match gates")
-    if failures and report["publication_eligible"]:
+    if review.get("review_digest") != digest_without_field(review, "review_digest"):
+        errors.append("ReviewDecision digest mismatch")
+    approvals = review.get("approvals", [])
+    qualifying = [a for a in approvals if a.get("status") == "approved"]
+    actors = [a.get("actor_ref") for a in qualifying if a.get("actor_ref")]
+    distinct = set(actors)
+    if len(actors) != len(distinct):
+        errors.append("duplicate approval actor refs do not count twice")
+    outcome = review.get("outcome")
+    required = review.get("required_approvals", 0)
+    if outcome in REVIEW_SUCCESS and len(distinct) < required:
+        errors.append("required_approvals not satisfied by distinct qualifying actors")
+    if review.get("high_risk") and (required < 2 or len(distinct) < 2):
+        errors.append("high_risk review requires four-eyes approval from at least two independent actors")
+    if outcome in {"rejected", "needs-changes"}:
+        errors.append("rejected / needs-changes review cannot satisfy approval for promotion")
+    try:
+        reviewed_at = parse_datetime(review["reviewed_at"])
+        for approval in approvals:
+            approved_at = parse_datetime(approval["approved_at"])
+            if approved_at > reviewed_at:
+                errors.append("approval timestamp occurs after ReviewDecision.reviewed_at")
+    except (KeyError, ValueError) as exc:
+        errors.append(f"review timestamp invalid: {exc}")
+    return errors
+
+
+def validation_report_errors(report, review=None):
+    errors = []
+    gates = report.get("gates", [])
+    names = [g.get("gate") for g in gates]
+    if len(names) != 15 or set(names) != MANDATORY_GATES or len(names) != len(set(names)):
+        errors.append("BuildValidationReport must represent exactly one each of G1 through G15")
+    if any(g.get("mandatory") is not True for g in gates):
+        errors.append("Ingestion Contract v1 mandatory gates cannot self-declare mandatory=false")
+    failures = sum(g.get("result") != "pass" for g in gates)
+    declared_failures = sum(g.get("result") == "fail" for g in gates)
+    if report.get("mandatory_failures") != declared_failures:
+        errors.append("mandatory_failures does not match failed gates")
+    if failures and report.get("publication_eligible"):
         errors.append("mandatory validation failures cannot be waived")
-    if report["report_digest"] != digest_without_field(report, "report_digest"):
+    if report.get("report_digest") != digest_without_field(report, "report_digest"):
         errors.append("BuildValidationReport digest mismatch")
+    g15 = next((g for g in gates if g.get("gate") == "G15"), None)
+    if g15 and g15.get("result") == "pass":
+        if review is None:
+            errors.append("G15 PASS requires a qualifying ReviewDecision")
+        else:
+            review_errors = review_decision_errors(review)
+            if review.get("outcome") not in REVIEW_SUCCESS or any("required_approvals" in e or "four-eyes" in e or "cannot satisfy approval" in e for e in review_errors):
+                errors.append("G15 PASS is inconsistent with ReviewDecision")
+            try:
+                if parse_datetime(report["created_at"]) < parse_datetime(review["reviewed_at"]):
+                    errors.append("review/report temporal inversion: G15 report predates ReviewDecision")
+            except (KeyError, ValueError) as exc:
+                errors.append(f"G15 causal timestamp invalid: {exc}")
+    return errors
+
+
+def build_state_errors(build):
+    errors = []
+    state = build.get("state")
+    if build.get("manifest_digest") != digest_without_field(build, "manifest_digest"):
+        errors.append("CanonicalBuildManifest digest mismatch")
+    if state == "PACK_READY":
+        if build.get("pack_ready") is not True:
+            errors.append("PACK_READY state and flag must agree")
+        if build.get("last_known_good_preserved") is not True:
+            errors.append("PACK_READY must preserve Last Known Good")
+    elif build.get("pack_ready") is True:
+        errors.append("non-PACK_READY build cannot set pack_ready=true")
+    if state in {"FAILED", "QUARANTINED", "REJECTED"} and build.get("last_known_good_preserved") is not True:
+        errors.append("failed build must never replace/destroy Last Known Good")
+    if state in {"FAILED", "QUARANTINED", "REJECTED"}:
+        deps = [
+            ("parser_run_ids", "acquisition_run_ids"),
+            ("normalization_run_ids", "parser_run_ids"),
+            ("inventory_definition_ids", "normalization_run_ids"),
+            ("inventory_diff_id", "inventory_definition_ids"),
+            ("validation_report_id", "inventory_diff_id"),
+            ("review_decision_id", "validation_report_id"),
+        ]
+        for later, earlier in deps:
+            if build.get(later) and not build.get(earlier):
+                errors.append(f"{state} manifest contains impossible forward reference: {later} without {earlier}")
     return errors
 
 
 def review_and_pack_ready_errors(build, report, review, diff, norm_runs, actual_candidate_digest):
     errors = []
-    if review["review_digest"] != digest_without_field(review, "review_digest"):
-        errors.append("ReviewDecision digest mismatch")
-    if build["manifest_digest"] != digest_without_field(build, "manifest_digest"):
-        errors.append("CanonicalBuildManifest digest mismatch")
-    if review["candidate_build_id"] != build["build_id"]:
+    errors.extend(build_state_errors(build))
+    errors.extend(review_decision_errors(review))
+    errors.extend(validation_report_errors(report, review))
+    if review.get("candidate_build_id") != build.get("build_id"):
         errors.append("ReviewDecision candidate_build_id does not resolve")
-    if review["candidate_corpus_digest"] != actual_candidate_digest:
+    if review.get("candidate_corpus_digest") != actual_candidate_digest:
         errors.append("candidate changed after approval; ReviewDecision is invalidated")
-    if build["candidate_corpus_digest"] != actual_candidate_digest:
+    if build.get("candidate_corpus_digest") != actual_candidate_digest:
         errors.append("build candidate digest does not bind actual corpus")
-    if review["inventory_diff_id"] != diff["inventory_diff_id"] or review["inventory_diff_digest"] != diff["diff_digest"]:
+    if review.get("inventory_diff_id") != diff.get("inventory_diff_id") or review.get("inventory_diff_digest") != diff.get("diff_digest"):
         errors.append("ReviewDecision must bind exact inventory diff id/digest")
-    if build["inventory_diff_digest"] != diff["diff_digest"] or build["validation_report_digest"] != report["report_digest"] or build["review_decision_digest"] != review["review_digest"]:
-        errors.append("CanonicalBuildManifest digest binding mismatch")
-    success_review = review["outcome"] in {"approved", "approved-with-exceptions"}
-    if build["pack_ready"] or build["state"] == "PACK_READY":
-        if build["state"] != "PACK_READY" or build["pack_ready"] is not True:
-            errors.append("PACK_READY state and flag must agree")
-        if report["mandatory_failures"] or not report["publication_eligible"]:
+    if build.get("inventory_diff_id") != diff.get("inventory_diff_id") or build.get("inventory_diff_digest") != diff.get("diff_digest"):
+        errors.append("CanonicalBuildManifest inventory diff id/digest binding mismatch")
+    if build.get("validation_report_id") != report.get("validation_report_id") or build.get("validation_report_digest") != report.get("report_digest"):
+        errors.append("CanonicalBuildManifest validation report id/digest binding mismatch")
+    if build.get("review_decision_id") != review.get("review_decision_id") or build.get("review_decision_digest") != review.get("review_digest"):
+        errors.append("CanonicalBuildManifest review decision id/digest binding mismatch")
+    if build.get("state") == "PACK_READY":
+        if report.get("publication_eligible") is not True or any(g.get("result") != "pass" for g in report.get("gates", [])):
             errors.append("mandatory validation failure/eligibility blocks PACK_READY")
-        if not success_review:
-            errors.append("approved review required for PACK_READY")
-        if diff["guardrail_evaluation"]["blocked"]:
+        if review.get("outcome") not in REVIEW_SUCCESS or review_decision_errors(review):
+            errors.append("qualifying approved review required for PACK_READY")
+        if diff.get("guardrail_evaluation", {}).get("blocked"):
             errors.append("blocked inventory guardrail prevents PACK_READY")
-        if not build["last_known_good_preserved"]:
-            errors.append("PACK_READY must preserve Last Known Good")
-        if any((not r["publishable"] or r["identity_outcomes"]["AMBIGUOUS"] > 0) for r in norm_runs):
+        if any((not r.get("publishable") or r.get("identity_outcomes", {}).get("AMBIGUOUS", 0) > 0) for r in norm_runs):
             errors.append("non-publishable/AMBIGUOUS normalization prevents PACK_READY")
-    if build["state"] in {"FAILED", "QUARANTINED", "REJECTED"} and not build["last_known_good_preserved"]:
-        errors.append("failed build must never replace/destroy Last Known Good")
     return errors
+
+
+def _produced_psrs(bundle):
+    artifact = bundle["artifacts"].get("parsed-source-record")
+    if artifact is None:
+        return []
+    return artifact if isinstance(artifact, list) else [artifact]
+
+
+def _snapshots(bundle):
+    artifact = bundle["artifacts"].get("raw-snapshot")
+    if artifact is None:
+        return []
+    return artifact if isinstance(artifact, list) else [artifact]
+
+
+def cross_stage_ri_errors(bundle):
+    errors = []
+    a = bundle["artifacts"]
+    connector = a["connector-definition"]
+    run = a["acquisition-run"]
+    parser_def = a["parser-definition"]
+    parser_run = a["parser-run"]
+    psrs = _produced_psrs(bundle)
+    snapshots = _snapshots(bundle)
+    norm_def = a["normalizer-definition"]
+    norm = a["normalization-run"]
+    lineage = a["normalization-lineage"]
+    inventory = a["inventory-definition"]
+    diff = a["inventory-diff"]
+    report = a["build-validation-report"]
+    review = a["review-decision"]
+    build = a["canonical-build-manifest"]
+    support = bundle.get("canonical_support", [])
+    candidates = bundle.get("canonical_candidates", [])
+
+    sources = {r["id"]: r for r in support if r.get("record_kind") == "source"}
+    source = sources.get(connector.get("source_id"))
+    if source is None:
+        errors.append("ConnectorDefinition.source_id does not resolve to SourceRecord")
+    else:
+        if connector.get("refresh_policy_ref") != "source:freshness_policy" or "freshness_policy" not in source:
+            errors.append("connector refresh_policy_ref does not resolve SourceRecord freshness_policy semantics")
+        if connector.get("change_detection_policy_ref") != "source:change_detection_policy" or "change_detection_policy" not in source:
+            errors.append("connector change_detection_policy_ref does not resolve SourceRecord change_detection_policy semantics")
+        if connector.get("retention_policy", {}).get("source_policy_field") != "redistribution.policy" or "redistribution" not in source:
+            errors.append("connector retention policy does not resolve SourceRecord redistribution semantics")
+
+    if run.get("connector_id") != connector.get("connector_id"):
+        errors.append("AcquisitionRun.connector_id mismatch")
+    if run.get("connector_version") != connector.get("connector_version"):
+        errors.append("AcquisitionRun.connector_version mismatch")
+    if run.get("source_id") != connector.get("source_id"):
+        errors.append("AcquisitionRun.source_id mismatch")
+    binding = connector.get("parser_binding", {})
+    if binding.get("parser_id") != parser_def.get("parser_id") or binding.get("parser_version") != parser_def.get("parser_version"):
+        errors.append("ConnectorDefinition parser_binding does not resolve ParserDefinition")
+
+    declared_targets = {t["target_key"]: t for t in connector.get("targets", [])}
+    snapshot_by_id = {s["snapshot_id"]: s for s in snapshots}
+    rr_success = [r for r in run.get("resource_results", []) if r.get("status") == "success"]
+    for rr in rr_success:
+        snapshot = snapshot_by_id.get(rr.get("snapshot_id"))
+        if snapshot is None:
+            errors.append("successful AcquisitionRun resource_result.snapshot_id does not resolve RawSnapshot")
+            continue
+        if snapshot.get("acquisition_run_id") != run.get("acquisition_run_id"):
+            errors.append("RawSnapshot.acquisition_run_id does not resolve AcquisitionRun")
+        if snapshot.get("source_id") != run.get("source_id"):
+            errors.append("RawSnapshot.source_id mismatch")
+        if snapshot.get("connector_id") != run.get("connector_id"):
+            errors.append("RawSnapshot.connector_id mismatch")
+        if snapshot.get("connector_version") != run.get("connector_version"):
+            errors.append("RawSnapshot.connector_version mismatch")
+        if snapshot.get("target_key") not in declared_targets:
+            errors.append("RawSnapshot.target_key does not resolve ConnectorDefinition target")
+        if snapshot.get("target_key") != rr.get("target_key") or snapshot.get("resource_key") != rr.get("resource_key"):
+            errors.append("RawSnapshot target/resource identity mismatch with AcquisitionRun resource_result")
+        if snapshot.get("requested_resource", {}).get("uri") != rr.get("requested_uri") or snapshot.get("resolved_resource", {}).get("uri") != rr.get("resolved_uri"):
+            errors.append("RawSnapshot URI identity mismatch with AcquisitionRun resource_result")
+
+    if not snapshots:
+        errors.append("RawSnapshot corpus is empty")
+    else:
+        snapshot = snapshots[0]
+        if parser_run.get("source_snapshot_id") != snapshot.get("snapshot_id"):
+            errors.append("ParserRun.source_snapshot_id does not resolve RawSnapshot")
+        if parser_run.get("input_blob_digest") != snapshot.get("raw_content_digest"):
+            errors.append("ParserRun.input_blob_digest does not bind RawSnapshot raw_content_digest")
+
+    if parser_run.get("parser_id") != parser_def.get("parser_id") or parser_run.get("parser_version") != parser_def.get("parser_version"):
+        errors.append("ParserRun parser_id/version do not resolve ParserDefinition")
+    for psr in psrs:
+        if psr.get("parser_id") != parser_def.get("parser_id") or psr.get("parser_version") != parser_def.get("parser_version"):
+            errors.append("ParsedSourceRecord parser_id/version do not resolve ParserDefinition")
+        if psr.get("parser_id") != parser_run.get("parser_id") or psr.get("parser_version") != parser_run.get("parser_version"):
+            errors.append("ParsedSourceRecord parser_id/version do not resolve ParserRun")
+        if psr.get("psr_version") != parser_run.get("psr_version"):
+            errors.append("ParserRun.psr_version mismatch with ParsedSourceRecord")
+        if psr.get("source_snapshot_id") not in snapshot_by_id:
+            errors.append("ParsedSourceRecord source_snapshot_id does not resolve")
+    if parser_run.get("output_record_count") != len(psrs):
+        errors.append("ParserRun.output_record_count does not match produced PSR count")
+    rep = sha256_digest(sorted(
+        [{"parsed_record_id": p["parsed_record_id"], "record_digest": p["record_digest"]} for p in psrs],
+        key=lambda x: x["parsed_record_id"]))
+    if parser_run.get("representation_digest") != rep:
+        errors.append("ParserRun.representation_digest does not bind deterministic produced PSR set")
+    errors.extend(timestamp_order_errors(parser_run, label="ParserRun"))
+
+    if norm.get("parser_run_id") != parser_run.get("parser_run_id"):
+        errors.append("NormalizationRun.parser_run_id does not resolve ParserRun")
+    if norm.get("normalizer_id") != norm_def.get("normalizer_id") or norm.get("normalizer_version") != norm_def.get("normalizer_version"):
+        errors.append("NormalizationRun normalizer_id/version do not resolve NormalizerDefinition")
+    expected_psr_version = parser_run.get("psr_version")
+    if norm.get("psr_version") != expected_psr_version or norm_def.get("psr_version") != expected_psr_version or any(p.get("psr_version") != expected_psr_version for p in psrs):
+        errors.append("NormalizationRun psr_version is incompatible with parser/PSR/NormalizerDefinition")
+    if lineage.get("normalizer_id") != norm.get("normalizer_id") or lineage.get("normalizer_version") != norm.get("normalizer_version"):
+        errors.append("NormalizationLineage normalizer binding mismatch")
+    if lineage.get("mapping_profile") != norm.get("mapping_profile"):
+        errors.append("NormalizationLineage mapping_profile mismatch")
+    psr_ids = {p["parsed_record_id"] for p in psrs}
+    if any(x not in psr_ids for x in lineage.get("parsed_record_ids", [])):
+        errors.append("NormalizationLineage parsed_record_ids contain unresolved PSR")
+    snapshot_ids = set(snapshot_by_id)
+    if any(x not in snapshot_ids for x in lineage.get("source_snapshot_ids", [])):
+        errors.append("NormalizationLineage source_snapshot_ids contain unresolved RawSnapshot")
+    candidate_ids = {r["id"] for r in candidates}
+    if lineage.get("output_record_id") not in candidate_ids:
+        errors.append("NormalizationLineage output_record_id does not resolve canonical candidate")
+    expected_counts = Counter(RECORD_KIND_TO_COUNT.get(r.get("record_kind"), r.get("record_kind")) for r in candidates)
+    if dict(expected_counts) != norm.get("output_counts"):
+        errors.append("NormalizationRun.output_counts do not match candidate corpus")
+    actual_candidate_digest = sha256_digest(sorted(candidates, key=lambda r: r["id"]))
+    if norm.get("canonical_candidate_digest") != actual_candidate_digest:
+        errors.append("NormalizationRun candidate digest mismatch")
+    errors.extend(timestamp_order_errors(norm, label="NormalizationRun"))
+
+    if report.get("build_id") != build.get("build_id"):
+        errors.append("BuildValidationReport.build_id mismatch")
+    if build.get("inventory_diff_id") != diff.get("inventory_diff_id"):
+        errors.append("CanonicalBuildManifest.inventory_diff_id mismatch")
+    if build.get("inventory_diff_digest") != diff.get("diff_digest"):
+        errors.append("CanonicalBuildManifest.inventory_diff_digest mismatch")
+    if build.get("validation_report_id") != report.get("validation_report_id"):
+        errors.append("CanonicalBuildManifest.validation_report_id mismatch")
+    if build.get("validation_report_digest") != report.get("report_digest"):
+        errors.append("CanonicalBuildManifest.validation_report_digest mismatch")
+    if build.get("review_decision_id") != review.get("review_decision_id"):
+        errors.append("CanonicalBuildManifest.review_decision_id mismatch")
+    if build.get("review_decision_digest") != review.get("review_digest"):
+        errors.append("CanonicalBuildManifest.review_decision_digest mismatch")
+
+    actual_source_ids = {run.get("source_id")}
+    if set(build.get("source_ids", [])) != actual_source_ids or any(s not in sources for s in build.get("source_ids", [])):
+        errors.append("CanonicalBuildManifest source_ids do not resolve exact acquisition sources")
+    if set(build.get("acquisition_run_ids", [])) != {run.get("acquisition_run_id")}:
+        errors.append("CanonicalBuildManifest acquisition_run_ids do not resolve exact supplied AcquisitionRun")
+    if set(build.get("parser_run_ids", [])) != {parser_run.get("parser_run_id")}:
+        errors.append("CanonicalBuildManifest parser_run_ids do not resolve exact supplied ParserRun")
+    if set(build.get("normalization_run_ids", [])) != {norm.get("normalization_run_id")}:
+        errors.append("CanonicalBuildManifest normalization_run_ids do not resolve exact supplied NormalizationRun")
+    if set(build.get("inventory_definition_ids", [])) != {inventory.get("inventory_id")}:
+        errors.append("CanonicalBuildManifest inventory_definition_ids do not resolve exact supplied inventory")
+
+    raw_layer, parsed_layer, canonical_layer = diff.get("raw", {}), diff.get("parsed", {}), diff.get("canonical", {})
+    if snapshots and (raw_layer.get("candidate_ref") != snapshots[0].get("snapshot_id") or raw_layer.get("candidate_digest") != snapshots[0].get("raw_content_digest")):
+        errors.append("InventoryDiff raw candidate audit binding mismatch")
+    if parsed_layer.get("candidate_ref") != parser_run.get("parser_run_id") or parsed_layer.get("candidate_digest") != parser_run.get("representation_digest"):
+        errors.append("InventoryDiff parsed candidate audit binding mismatch")
+    if canonical_layer.get("candidate_ref") != build.get("build_id") or canonical_layer.get("candidate_digest") != actual_candidate_digest:
+        errors.append("InventoryDiff canonical candidate audit binding mismatch")
+    if build.get("previous_last_known_good_build_id") and canonical_layer.get("baseline_ref") != build.get("previous_last_known_good_build_id"):
+        errors.append("InventoryDiff canonical baseline does not bind Last Known Good build")
+
+    for claim in [r for r in candidates if r.get("record_kind") == "claim"]:
+        for evidence in claim.get("evidence", []):
+            if evidence.get("source_snapshot_id") not in snapshot_ids:
+                errors.append("Claim Evidence.source_snapshot_id does not resolve to RawSnapshot")
+            if evidence.get("source_id") not in sources:
+                errors.append("Claim Evidence.source_id does not resolve")
+            source_snapshot = snapshot_by_id.get(evidence.get("source_snapshot_id"))
+            if source_snapshot and evidence.get("source_version") != source_snapshot.get("source_version"):
+                errors.append("Claim Evidence source_version mismatch")
+
+    try:
+        acq_finish = parse_datetime(run["finished_at"])
+        parser_start = parse_datetime(parser_run["started_at"])
+        parser_finish = parse_datetime(parser_run["finished_at"])
+        norm_start = parse_datetime(norm["started_at"])
+        norm_finish = parse_datetime(norm["finished_at"])
+        review_time = parse_datetime(review["reviewed_at"])
+        report_time = parse_datetime(report["created_at"])
+        build_time = parse_datetime(build["created_at"])
+        if parser_start < acq_finish:
+            errors.append("ParserRun starts before AcquisitionRun finished")
+        if norm_start < parser_finish:
+            errors.append("NormalizationRun starts before ParserRun finished")
+        if review_time < norm_finish:
+            errors.append("ReviewDecision predates completed normalization")
+        if report_time < review_time:
+            errors.append("review/report temporal inversion")
+        if build_time < report_time:
+            errors.append("CanonicalBuildManifest created before validation report")
+    except (KeyError, ValueError) as exc:
+        errors.append(f"cross-stage timestamp invalid: {exc}")
+
+    return errors
+
+
+def tracked_repository_hygiene_errors(tracked_paths):
+    errors = []
+    temp_suffixes = (".tmp", ".bak", ".orig", ".rej", ".pyc", "~")
+    sensitive_suffixes = {".pem", ".key", ".pfx", ".p12"}
+    sensitive_names = {".env", "id_rsa", "id_ed25519", ".secrets"}
+    for raw in tracked_paths:
+        path = PurePosixPath(str(raw).replace("\\", "/"))
+        parts = {p.lower() for p in path.parts}
+        name = path.name.lower()
+        if "__pycache__" in parts or ".pytest_cache" in parts:
+            errors.append(f"tracked temporary/generated artifact detected: {path}")
+        if name.endswith(temp_suffixes):
+            errors.append(f"tracked temporary/checkpoint file detected: {path}")
+        if path.suffix.lower() in sensitive_suffixes or name in sensitive_names:
+            errors.append(f"tracked sensitive filename detected: {path}")
+    return errors
+
+
+def repository_hygiene_errors(tracked_paths):
+    """Backward-compatible public helper; hygiene is evaluated only on tracked paths."""
+    return tracked_repository_hygiene_errors(tracked_paths)
+
+
+def _git_tracked_paths(root: Path):
+    try:
+        proc = subprocess.run(
+            ["git", "-C", str(root), "ls-files", "-z"],
+            check=True, capture_output=True, text=False,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise RuntimeError(f"unable to enumerate Git-tracked paths: {exc}") from exc
+    return [p.decode("utf-8") for p in proc.stdout.split(b"\0") if p]
 
 
 def _format_schema_errors(name, validator, record):
     return [f"{name}: {e.message}" for e in validator.iter_errors(record)]
 
 
-def git_tracked_paths(root: Path | None = None):
-    root = Path(root or ROOT)
-    try:
-        result = subprocess.run(
-            ["git", "-C", str(root), "ls-files", "-z"],
-            check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-    except (OSError, subprocess.CalledProcessError):
-        return None
-    return [PurePosixPath(p) for p in result.stdout.decode("utf-8").split("\0") if p]
-
-
-def repository_hygiene_errors(tracked_paths):
-    errors = []
-    temp_suffixes = (".tmp", ".bak", ".orig", ".rej", ".pyc", "~")
-    sensitive_suffixes = {".pem", ".key", ".pfx", ".p12"}
-    sensitive_names = {".env", "id_rsa", "id_ed25519", ".secrets"}
-    for raw_path in tracked_paths:
-        path = PurePosixPath(str(raw_path).replace("\\", "/"))
-        lowered_parts = {part.lower() for part in path.parts}
-        lower_name = path.name.lower()
-        if "__pycache__" in lowered_parts or ".pytest_cache" in lowered_parts:
-            errors.append(f"tracked temporary/generated artifact detected: {path.as_posix()}")
-        if lower_name.endswith(temp_suffixes):
-            errors.append(f"tracked temporary/checkpoint file detected: {path.as_posix()}")
-        if path.suffix.lower() in sensitive_suffixes or lower_name in sensitive_names:
-            errors.append(f"tracked sensitive filename detected: {path.as_posix()}")
-    return errors
-
-
 def validate_repository(root: Path | None = None):
-    global ROOT, INGESTION_SCHEMA_DIR, CANONICAL_SCHEMA_DIR, FIXTURE_DIR, BUNDLE_PATH, REGISTRY_DIR
     if root is not None:
-        ROOT = Path(root)
-        INGESTION_SCHEMA_DIR = ROOT / "schemas" / "ingestion" / "v1"
-        CANONICAL_SCHEMA_DIR = ROOT / "schemas" / "v1"
-        FIXTURE_DIR = ROOT / "fixtures" / "phase-5.3"
-        BUNDLE_PATH = FIXTURE_DIR / "foundation-valid.json"
-        REGISTRY_DIR = ROOT / "model" / "registries"
+        _set_root(Path(root))
     errors = []
 
     try:
@@ -499,6 +867,7 @@ def validate_repository(root: Path | None = None):
 
     if set(artifacts) == set(ARTIFACT_SCHEMA_MAP):
         connector = artifacts["connector-definition.json"]
+        run = artifacts["acquisition-run.json"]
         policy = connector["security_policy"]
         if policy["tls_verify"] is not True or policy["block_private_destinations"] is not True or not policy["allowed_hosts"]:
             errors.append("public connector security policy must fail closed")
@@ -509,39 +878,42 @@ def validate_repository(root: Path | None = None):
             errors.extend(public_uri_errors(target["resource_uri"], policy["allowed_hosts"], target.get("allowed_path_prefixes")))
         if any(policy["git_safety"].values()):
             errors.append("Git acquisition must remain data-only")
-        errors.extend(acquisition_semantic_errors(connector, artifacts["acquisition-run.json"]))
+        errors.extend(acquisition_semantic_errors(connector, run))
 
-        snapshot = artifacts["raw-snapshot.json"]
-        raw_path = FIXTURE_DIR / "raw" / snapshot["resource_key"]
-        if raw_path.is_file():
-            raw = raw_path.read_bytes()
-            if sha256_digest(raw) != snapshot["raw_content_digest"] or len(raw) != snapshot["byte_length"]:
-                errors.append("RawSnapshot must bind exact raw bytes")
-        expected_snapshot_id = stable_artifact_id("raw-snapshot", {"acquisition_run_id": snapshot["acquisition_run_id"], "target_key": snapshot["target_key"], "resource_key": snapshot["resource_key"], "raw_content_digest": snapshot["raw_content_digest"]})
-        if snapshot["snapshot_id"] != expected_snapshot_id or snapshot["blob_ref"] != "blob:" + snapshot["raw_content_digest"]:
-            errors.append("RawSnapshot identity/content addressing mismatch")
-        if snapshot["acquisition_run_id"] != artifacts["acquisition-run.json"]["acquisition_run_id"]:
-            errors.append("RawSnapshot acquisition run does not resolve")
-        for loc in (snapshot["requested_resource"], snapshot["resolved_resource"]):
-            errors.extend(public_uri_errors(loc["uri"], policy["allowed_hosts"], connector["targets"][0].get("allowed_path_prefixes")))
+        snapshots = _snapshots(bundle)
+        for snapshot in snapshots:
+            raw_path = FIXTURE_DIR / "raw" / snapshot["resource_key"]
+            if raw_path.is_file():
+                raw = raw_path.read_bytes()
+                if sha256_digest(raw) != snapshot["raw_content_digest"] or len(raw) != snapshot["byte_length"]:
+                    errors.append("RawSnapshot must bind exact raw bytes")
+            expected_snapshot_id = stable_artifact_id("raw-snapshot", {
+                "acquisition_run_id": snapshot["acquisition_run_id"], "target_key": snapshot["target_key"],
+                "resource_key": snapshot["resource_key"], "raw_content_digest": snapshot["raw_content_digest"],
+            })
+            if snapshot["snapshot_id"] != expected_snapshot_id or snapshot["blob_ref"] != "blob:" + snapshot["raw_content_digest"]:
+                errors.append("RawSnapshot identity/content addressing mismatch")
+            for loc in (snapshot["requested_resource"], snapshot["resolved_resource"]):
+                errors.extend(public_uri_errors(loc["uri"], policy["allowed_hosts"], connector["targets"][0].get("allowed_path_prefixes")))
 
-        parser_def, parser_run, psr = artifacts["parser-definition.json"], artifacts["parser-run.json"], artifacts["parsed-source-record.json"]
+        parser_def, psrs = artifacts["parser-definition.json"], _produced_psrs(bundle)
         if parser_def["unknown_field_policy"] != "preserve-and-report":
             errors.append("unknown structured fields must be preserved + reported")
         sec = parser_def["security_policy"]
         forbidden = ("network_access", "dns_access", "http_access", "git_access", "source_execution", "javascript_execution", "xml_external_entities", "dtd_external_resolution", "macros", "ai_enabled")
         if any(sec[k] is not False for k in forbidden):
             errors.append("parser must be offline/non-executing/XXE-safe/AI-free")
-        if parser_run["source_snapshot_id"] != snapshot["snapshot_id"] or psr["source_snapshot_id"] != snapshot["snapshot_id"]:
-            errors.append("parser/PSR snapshot linkage broken")
-        if parser_run["parser_id"] != parser_def["parser_id"] or psr["parser_id"] != parser_def["parser_id"]:
-            errors.append("parser definition linkage broken")
-        psr_payload = {k: psr.get(k) for k in ("native_type", "native_key", "native_identifiers", "native_fields", "unknown_fields", "locator")}
-        if psr["record_digest"] != sha256_digest(psr_payload):
-            errors.append("ParsedSourceRecord deterministic digest mismatch")
-        expected_psr_id = stable_artifact_id("parsed-source-record", {"source_snapshot_id": psr["source_snapshot_id"], "parser_id": psr["parser_id"], "parser_version": psr["parser_version"], "psr_version": psr["psr_version"], "native_type": psr["native_type"], "native_key": psr.get("native_key"), "record_digest": psr["record_digest"]})
-        if psr["parsed_record_id"] != expected_psr_id:
-            errors.append("ParsedSourceRecord identity is not deterministic")
+        for psr in psrs:
+            psr_payload = {k: psr.get(k) for k in ("native_type", "native_key", "native_identifiers", "native_fields", "unknown_fields", "locator")}
+            if psr["record_digest"] != sha256_digest(psr_payload):
+                errors.append("ParsedSourceRecord deterministic digest mismatch")
+            expected_psr_id = stable_artifact_id("parsed-source-record", {
+                "source_snapshot_id": psr["source_snapshot_id"], "parser_id": psr["parser_id"],
+                "parser_version": psr["parser_version"], "psr_version": psr["psr_version"],
+                "native_type": psr["native_type"], "native_key": psr.get("native_key"), "record_digest": psr["record_digest"],
+            })
+            if psr["parsed_record_id"] != expected_psr_id:
+                errors.append("ParsedSourceRecord identity is not deterministic")
 
         mapping = load_json(FIXTURE_DIR / "mapping-profile.json")
         registry_pin = load_json(FIXTURE_DIR / "registry-bundle-pin.json")
@@ -578,13 +950,8 @@ def validate_repository(root: Path | None = None):
                 errors.append("claim predicate is not registered")
         errors.extend(relationship_provenance_errors(candidates))
         errors.extend(search_readiness_errors(search))
-        actual_candidate_digest = sha256_digest(sorted(candidates, key=lambda r: r["id"]))
-        if norm["canonical_candidate_digest"] != actual_candidate_digest:
-            errors.append("normalization candidate digest mismatch")
 
         lineage = artifacts["normalization-lineage.json"]
-        if psr["parsed_record_id"] not in lineage["parsed_record_ids"] or snapshot["snapshot_id"] not in lineage["source_snapshot_ids"]:
-            errors.append("NormalizationLineage cross-stage linkage broken")
         expected_lineage = stable_artifact_id("normalization-lineage", {k: v for k, v in lineage.items() if k not in {"lineage_id", "lineage_digest"}})
         if lineage["lineage_id"] != expected_lineage or lineage["lineage_digest"] != digest_without_field(lineage, "lineage_digest"):
             errors.append("NormalizationLineage deterministic identity/digest mismatch")
@@ -592,37 +959,23 @@ def validate_repository(root: Path | None = None):
         inventory, diff = artifacts["inventory-definition.json"], artifacts["inventory-diff.json"]
         errors.extend(inventory_guardrail_errors(inventory, diff))
         report, review, build = artifacts["build-validation-report.json"], artifacts["review-decision.json"], artifacts["canonical-build-manifest.json"]
-        errors.extend(validation_report_errors(report))
+        actual_candidate_digest = sha256_digest(sorted(candidates, key=lambda r: r["id"]))
         errors.extend(review_and_pack_ready_errors(build, report, review, diff, [norm], actual_candidate_digest))
+        errors.extend(cross_stage_ri_errors(bundle))
 
-        snapshots = {snapshot["snapshot_id"]}
-        sources = {r["id"] for r in support if r.get("record_kind") == "source"}
-        for claim in [r for r in candidates if r.get("record_kind") == "claim"]:
-            for evidence in claim.get("evidence", []):
-                if evidence.get("source_snapshot_id") not in snapshots:
-                    errors.append("Claim Evidence.source_snapshot_id does not resolve to RawSnapshot")
-                if evidence.get("source_id") not in sources:
-                    errors.append("Claim Evidence.source_id does not resolve")
-                if evidence.get("source_version") != snapshot["source_version"]:
-                    errors.append("Claim Evidence source_version mismatch")
+    try:
+        tracked = _git_tracked_paths(ROOT)
+        errors.extend(tracked_repository_hygiene_errors(tracked))
+        for path in tracked:
+            pp = PurePosixPath(path)
+            if len(pp.parts) >= 3 and pp.parts[0] == "ingestion" and pp.parts[1] in {"connectors", "parsers", "normalizers"} and pp.name != "README.md":
+                errors.append(f"broad/live ingestion implementation is not authorized: {path}")
+    except RuntimeError as exc:
+        errors.append(str(exc))
 
-        if artifacts["acquisition-run.json"]["acquisition_run_id"] not in build["acquisition_run_ids"] or parser_run["parser_run_id"] not in build["parser_run_ids"] or norm["normalization_run_id"] not in build["normalization_run_ids"] or inventory["inventory_id"] not in build["inventory_definition_ids"]:
-            errors.append("CanonicalBuildManifest stage linkage incomplete")
-
-    tracked_paths = git_tracked_paths(ROOT)
-    if tracked_paths is None:
-        errors.append("repository hygiene validation requires readable Git tracked-path context")
-    else:
-        errors.extend(repository_hygiene_errors(tracked_paths))
     for path in FIXTURE_DIR.rglob("*"):
         if path.is_file() and path.stat().st_size > 131072:
             errors.append(f"Phase 5.3 fixture unexpectedly large: {path.relative_to(ROOT)}")
-    for sub in ("connectors", "parsers", "normalizers"):
-        directory = ROOT / "ingestion" / sub
-        if directory.exists():
-            for path in directory.iterdir():
-                if path.is_file() and path.name != "README.md":
-                    errors.append(f"broad/live ingestion implementation is not authorized: {path.relative_to(ROOT)}")
     return errors
 
 
