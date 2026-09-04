@@ -1,6 +1,6 @@
 # ADR-0014 — Claim, Evidence and Relationship Contracts
 
-**Status:** Accepted  
+**Status:** Accepted
 **Decision:** 2026-09-04
 
 ## Decision

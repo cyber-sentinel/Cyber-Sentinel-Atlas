@@ -1,6 +1,6 @@
 # ADR-0011 — Canonical Record Families and Record Envelope
 
-**Status:** Accepted  
+**Status:** Accepted
 **Decision:** 2026-09-04
 
 ## Context

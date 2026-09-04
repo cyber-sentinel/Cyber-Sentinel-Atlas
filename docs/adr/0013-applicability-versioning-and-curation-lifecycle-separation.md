@@ -1,6 +1,6 @@
 # ADR-0013 — Applicability, Versioning and Curation/Lifecycle Separation
 
-**Status:** Accepted  
+**Status:** Accepted
 **Decision:** 2026-09-04
 
 ## Decision

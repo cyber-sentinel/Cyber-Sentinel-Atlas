@@ -1,6 +1,6 @@
 # ADR-0012 — Native Identifiers, Aliases and Controlled Registries
 
-**Status:** Accepted  
+**Status:** Accepted
 **Decision:** 2026-09-04
 
 ## Decision

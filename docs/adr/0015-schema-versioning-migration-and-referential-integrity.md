@@ -1,6 +1,6 @@
 # ADR-0015 — Schema Versioning, Migration and Referential Integrity
 
-**Status:** Accepted  
+**Status:** Accepted
 **Decision:** 2026-09-04
 
 ## Decision
