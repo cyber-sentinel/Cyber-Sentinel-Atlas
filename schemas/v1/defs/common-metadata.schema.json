@@ -1,17 +1,1 @@
-{
-  "$schema":"https://json-schema.org/draft/2020-12/schema",
-  "$id":"https://cyber-sentinel.dev/schemas/v1/defs/common-metadata.schema.json",
-  "title":"Common Record Envelope",
-  "type":"object",
-  "required":["schema_version","record_kind","id","record_revision","created_at","updated_at","curation_status"],
-  "properties":{
-    "schema_version":{"type":"string","const":"1.0.0"},
-    "record_kind":{"type":"string","enum":["entity","claim","relationship","source","validation","version","coverage-snapshot"]},
-    "id":{"$ref":"https://cyber-sentinel.dev/schemas/v1/defs/canonical-id.schema.json"},
-    "record_revision":{"type":"integer","minimum":1},
-    "created_at":{"type":"string","format":"date-time"},
-    "updated_at":{"type":"string","format":"date-time"},
-    "curation_status":{"type":"string","enum":["draft","review","validated","published","withdrawn"]},
-    "extensions":{"type":"array","items":{"$ref":"https://cyber-sentinel.dev/schemas/v1/defs/extension.schema.json"}}
-  }
-}
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/defs/common-metadata.schema.json","title":"Common Record Envelope","type":"object","required":["schema_version","record_kind","id","record_revision","created_at","updated_at","curation_status"],"properties":{"schema_version":{"type":"string","const":"1.0.0"},"record_kind":{"type":"string","enum":["entity","claim","relationship","source","validation","version","coverage-snapshot"]},"id":{"$ref":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/defs/canonical-id.schema.json"},"record_revision":{"type":"integer","minimum":1},"created_at":{"type":"string","format":"date-time"},"updated_at":{"type":"string","format":"date-time"},"curation_status":{"type":"string","enum":["draft","review","validated","published","withdrawn"]},"extensions":{"type":"array","items":{"$ref":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/defs/extension.schema.json"}}}}

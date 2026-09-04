@@ -1,17 +1,1 @@
-{
-  "$schema":"https://json-schema.org/draft/2020-12/schema",
-  "$id":"https://cyber-sentinel.dev/schemas/v1/defs/evidence.schema.json",
-  "title":"Claim Evidence",
-  "type":"object",
-  "additionalProperties":false,
-  "required":["source_id","source_version","retrieved_at","locator","transformation_type","reviewer_status"],
-  "properties":{
-    "source_id":{"$ref":"https://cyber-sentinel.dev/schemas/v1/defs/canonical-id.schema.json"},
-    "source_snapshot_id":{"$ref":"https://cyber-sentinel.dev/schemas/v1/defs/canonical-id.schema.json"},
-    "source_version":{"type":"string","minLength":1},
-    "retrieved_at":{"type":"string","format":"date-time"},
-    "locator":{"type":"object","additionalProperties":false,"minProperties":1,"properties":{"section":{"type":"string","minLength":1},"heading":{"type":"string","minLength":1},"page":{"type":"integer","minimum":1},"line_range":{"type":"string","pattern":"^[0-9]+(?:-[0-9]+)?$"},"url_fragment":{"type":"string","minLength":1},"json_pointer":{"type":"string","pattern":"^(?:/.*)?$"},"other":{"type":"string","minLength":1}}},
-    "transformation_type":{"type":"string","enum":["direct-structured-import","normalized-fact","human-authored-synthesis","defenseops-derived-engineering-content","ai-assisted-draft","machine-generated-relationship","manually-validated-relationship"]},
-    "reviewer_status":{"type":"string","enum":["unreviewed","reviewed","approved","rejected"]}
-  }
-}
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/defs/evidence.schema.json","title":"Claim Evidence","type":"object","additionalProperties":false,"required":["source_id","source_version","retrieved_at","locator","transformation_type","reviewer_status"],"properties":{"source_id":{"$ref":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/defs/canonical-id.schema.json"},"source_snapshot_id":{"$ref":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/defs/canonical-id.schema.json"},"source_version":{"type":"string","minLength":1},"retrieved_at":{"type":"string","format":"date-time"},"locator":{"type":"object","additionalProperties":false,"minProperties":1,"properties":{"section":{"type":"string","minLength":1},"heading":{"type":"string","minLength":1},"page":{"type":"integer","minimum":1},"line_range":{"type":"string","pattern":"^[0-9]+(?:-[0-9]+)?$"},"url_fragment":{"type":"string","minLength":1},"json_pointer":{"type":"string","pattern":"^(?:/.*)?$"},"other":{"type":"string","minLength":1}}},"transformation_type":{"type":"string","enum":["direct-structured-import","normalized-fact","human-authored-synthesis","defenseops-derived-engineering-content","ai-assisted-draft","machine-generated-relationship","manually-validated-relationship"]},"reviewer_status":{"type":"string","enum":["unreviewed","reviewed","approved","rejected"]}}}

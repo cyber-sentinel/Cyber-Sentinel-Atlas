@@ -1,7 +1,1 @@
-{
-  "$schema":"https://json-schema.org/draft/2020-12/schema",
-  "$id":"https://cyber-sentinel.dev/schemas/v1/defs/canonical-id.schema.json",
-  "title":"Atlas Canonical ID",
-  "type":"string",
-  "pattern":"^atlas:[a-z0-9-]+:[a-z0-9-]+(?:\\.[a-z0-9-]+)*:[a-z0-9._-]+$"
-}
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/defs/canonical-id.schema.json","title":"Atlas Canonical ID","type":"string","pattern":"^atlas:[a-z0-9-]+:[a-z0-9-]+(?:\\.[a-z0-9-]+)*:[a-z0-9._-]+$"}

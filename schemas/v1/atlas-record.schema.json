@@ -1,14 +1,1 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cyber-sentinel.dev/schemas/v1/atlas-record.schema.json",
-  "title": "AtlasRecord",
-  "oneOf": [
-    {"$ref":"https://cyber-sentinel.dev/schemas/v1/entity.schema.json"},
-    {"$ref":"https://cyber-sentinel.dev/schemas/v1/claim.schema.json"},
-    {"$ref":"https://cyber-sentinel.dev/schemas/v1/relationship.schema.json"},
-    {"$ref":"https://cyber-sentinel.dev/schemas/v1/source.schema.json"},
-    {"$ref":"https://cyber-sentinel.dev/schemas/v1/validation-record.schema.json"},
-    {"$ref":"https://cyber-sentinel.dev/schemas/v1/version-record.schema.json"},
-    {"$ref":"https://cyber-sentinel.dev/schemas/v1/coverage-snapshot.schema.json"}
-  ]
-}
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/atlas-record.schema.json","title":"AtlasRecord","oneOf":[{"$ref":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/entity.schema.json"},{"$ref":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/claim.schema.json"},{"$ref":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/relationship.schema.json"},{"$ref":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/source.schema.json"},{"$ref":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/validation-record.schema.json"},{"$ref":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/version-record.schema.json"},{"$ref":"https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/coverage-snapshot.schema.json"}]}
