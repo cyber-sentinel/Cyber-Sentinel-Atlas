@@ -1,14 +1,14 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cyber-sentinel.dev/schemas/v1/defs/lifecycle.schema.json",
-  "title": "Lifecycle",
-  "type": "object",
-  "additionalProperties": false,
-  "required": ["state"],
-  "properties": {
-    "state": {"type": "string", "enum": ["current", "legacy", "deprecated", "superseded", "retired"]},
-    "valid_from": {"type": "string", "format": "date-time"},
-    "valid_to": {"type": "string", "format": "date-time"},
-    "reason_claim_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "https://cyber-sentinel.dev/schemas/v1/defs/canonical-id.schema.json"}}
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://cyber-sentinel.dev/schemas/v1/defs/lifecycle.schema.json",
+  "title":"Lifecycle",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["state"],
+  "properties":{
+    "state":{"type":"string","enum":["current","legacy","deprecated","superseded","retired"]},
+    "valid_from":{"type":"string","format":"date-time"},
+    "valid_to":{"type":"string","format":"date-time"},
+    "reason_claim_ids":{"type":"array","items":{"$ref":"https://cyber-sentinel.dev/schemas/v1/defs/canonical-id.schema.json"},"uniqueItems":true}
   }
 }

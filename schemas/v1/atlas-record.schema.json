@@ -3,12 +3,12 @@
   "$id": "https://cyber-sentinel.dev/schemas/v1/atlas-record.schema.json",
   "title": "AtlasRecord",
   "oneOf": [
-    {"$ref": "https://cyber-sentinel.dev/schemas/v1/entity.schema.json"},
-    {"$ref": "https://cyber-sentinel.dev/schemas/v1/claim.schema.json"},
-    {"$ref": "https://cyber-sentinel.dev/schemas/v1/relationship.schema.json"},
-    {"$ref": "https://cyber-sentinel.dev/schemas/v1/source.schema.json"},
-    {"$ref": "https://cyber-sentinel.dev/schemas/v1/validation-record.schema.json"},
-    {"$ref": "https://cyber-sentinel.dev/schemas/v1/version-record.schema.json"},
-    {"$ref": "https://cyber-sentinel.dev/schemas/v1/coverage-snapshot.schema.json"}
+    {"$ref":"https://cyber-sentinel.dev/schemas/v1/entity.schema.json"},
+    {"$ref":"https://cyber-sentinel.dev/schemas/v1/claim.schema.json"},
+    {"$ref":"https://cyber-sentinel.dev/schemas/v1/relationship.schema.json"},
+    {"$ref":"https://cyber-sentinel.dev/schemas/v1/source.schema.json"},
+    {"$ref":"https://cyber-sentinel.dev/schemas/v1/validation-record.schema.json"},
+    {"$ref":"https://cyber-sentinel.dev/schemas/v1/version-record.schema.json"},
+    {"$ref":"https://cyber-sentinel.dev/schemas/v1/coverage-snapshot.schema.json"}
   ]
 }

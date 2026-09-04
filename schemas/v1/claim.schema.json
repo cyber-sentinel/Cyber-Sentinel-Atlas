@@ -1,20 +1,20 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cyber-sentinel.dev/schemas/v1/claim.schema.json",
-  "title": "ClaimRecord",
-  "allOf": [
-    {"$ref": "https://cyber-sentinel.dev/schemas/v1/defs/common-metadata.schema.json"},
-    {"type": "object", "required": ["record_kind", "namespace", "canonical_key", "subject_id", "predicate", "object", "confidence", "evidence"], "properties": {
-      "record_kind": {"const": "claim"},
-      "namespace": {"const": "atlas.claim"},
-      "canonical_key": {"type": "string", "pattern": "^sha256-[a-f0-9]{64}$"},
-      "subject_id": {"$ref": "https://cyber-sentinel.dev/schemas/v1/defs/canonical-id.schema.json"},
-      "predicate": {"type": "string", "pattern": "^[a-z][a-z0-9-]*(?:\\.[a-z][a-z0-9-]*)+$"},
-      "object": {"$ref": "https://cyber-sentinel.dev/schemas/v1/defs/claim-object.schema.json"},
-      "confidence": {"type": "string", "enum": ["authoritative", "high", "medium", "low"]},
-      "applicability": {"$ref": "https://cyber-sentinel.dev/schemas/v1/defs/applicability.schema.json"},
-      "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "https://cyber-sentinel.dev/schemas/v1/defs/evidence.schema.json"}}
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://cyber-sentinel.dev/schemas/v1/claim.schema.json",
+  "title":"ClaimRecord",
+  "allOf":[
+    {"$ref":"https://cyber-sentinel.dev/schemas/v1/defs/common-metadata.schema.json"},
+    {"type":"object","required":["record_kind","namespace","canonical_key","subject_id","predicate","object","confidence","evidence"],"properties":{
+      "record_kind":{"const":"claim"},
+      "namespace":{"type":"string","const":"atlas.claim"},
+      "canonical_key":{"type":"string","pattern":"^sha256-[a-f0-9]{64}$"},
+      "subject_id":{"$ref":"https://cyber-sentinel.dev/schemas/v1/defs/canonical-id.schema.json"},
+      "predicate":{"type":"string","pattern":"^[a-z][a-z0-9-]*(?:\\.[a-z][a-z0-9-]*)+$"},
+      "object":{"$ref":"https://cyber-sentinel.dev/schemas/v1/defs/claim-object.schema.json"},
+      "confidence":{"type":"string","enum":["authoritative","high","medium","low"]},
+      "applicability":{"$ref":"https://cyber-sentinel.dev/schemas/v1/defs/applicability.schema.json"},
+      "evidence":{"type":"array","minItems":1,"items":{"$ref":"https://cyber-sentinel.dev/schemas/v1/defs/evidence.schema.json"}}
     }}
   ],
-  "unevaluatedProperties": false
+  "unevaluatedProperties":false
 }
