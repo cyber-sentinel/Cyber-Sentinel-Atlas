@@ -1,9 +1,17 @@
 {
-  "registry": "claim-predicates",
-  "version": "1.0.0",
-  "values": [
-    "telemetry.represents", "security.relevance", "field.description", "telemetry.requires-policy",
-    "behavior.description", "telemetry.lifecycle", "relationship.evidence", "source.description",
-    "telemetry.provider", "telemetry.source", "telemetry.field-semantics"
+  "registry_version":"1.0.0",
+  "registry":"claim-predicates",
+  "values":[
+    {"value":"telemetry.represents"},
+    {"value":"security.relevance"},
+    {"value":"field.description"},
+    {"value":"telemetry.requires-policy"},
+    {"value":"behavior.description"},
+    {"value":"telemetry.lifecycle"},
+    {"value":"relationship.evidence"},
+    {"value":"source.description"},
+    {"value":"telemetry.provider"},
+    {"value":"telemetry.source"},
+    {"value":"telemetry.field-semantics"}
   ]
 }

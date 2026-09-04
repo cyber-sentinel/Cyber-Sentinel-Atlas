@@ -1,5 +1,12 @@
 {
+  "registry_version": "1.0.0",
   "registry": "alias-kinds",
-  "version": "1.0.0",
-  "values": ["native", "display", "common", "historical-name", "provider-qualified", "legacy-canonical-id"]
+  "values": [
+    {"value":"native"},
+    {"value":"display"},
+    {"value":"common"},
+    {"value":"historical-name"},
+    {"value":"provider-qualified"},
+    {"value":"legacy-canonical-id"}
+  ]
 }

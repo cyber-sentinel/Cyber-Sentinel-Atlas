@@ -1,10 +1,10 @@
 {
-  "registry": "relationship-types",
-  "version": "1.0.0",
-  "values": [
-    "RUNS_ON", "EMITS", "HAS_FIELD", "INDICATES", "RELATED_TO", "EQUIVALENT_SIGNAL", "PRECEDES", "FOLLOWS",
-    "MAPS_TO_ATTACK", "COUNTERED_BY", "DETECTED_BY", "HUNTED_BY", "INVESTIGATED_BY", "RESPONDED_BY",
-    "REQUIRES_TELEMETRY", "DERIVED_FROM", "SUPPORTED_BY", "SUPERSEDES", "SUPERSEDED_BY", "VERSION_OF", "VALIDATED_BY",
-    "HAS_TELEMETRY_PROVIDER", "HAS_TELEMETRY_SOURCE"
+  "registry_version":"1.0.0",
+  "registry":"relationship-types",
+  "values":[
+    {"value":"RUNS_ON"},{"value":"EMITS"},{"value":"HAS_FIELD"},{"value":"INDICATES"},{"value":"RELATED_TO"},{"value":"EQUIVALENT_SIGNAL"},
+    {"value":"PRECEDES"},{"value":"FOLLOWS"},{"value":"MAPS_TO_ATTACK"},{"value":"COUNTERED_BY"},{"value":"DETECTED_BY"},{"value":"HUNTED_BY"},
+    {"value":"INVESTIGATED_BY"},{"value":"RESPONDED_BY"},{"value":"REQUIRES_TELEMETRY"},{"value":"DERIVED_FROM"},{"value":"SUPPORTED_BY"},
+    {"value":"SUPERSEDES"},{"value":"SUPERSEDED_BY"},{"value":"VERSION_OF"},{"value":"VALIDATED_BY"},{"value":"HAS_TELEMETRY_PROVIDER"},{"value":"HAS_TELEMETRY_SOURCE"}
   ]
 }

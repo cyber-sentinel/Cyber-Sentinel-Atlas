@@ -1,10 +1,10 @@
 {
-  "registry": "entity-types",
-  "version": "1.0.0",
-  "values": [
-    "platform", "product", "technology", "telemetry-provider", "telemetry-source",
-    "event", "audit-record", "audit-action", "operation", "activity", "finding", "flow-record",
-    "field", "artifact", "behavior", "attack-technique", "attack-tactic", "d3fend-technique", "car-analytic",
-    "detection", "hunt", "investigation-procedure", "response-action", "defensive-control", "tool"
+  "registry_version":"1.0.0",
+  "registry":"entity-types",
+  "values":[
+    {"value":"platform"},{"value":"product"},{"value":"technology"},{"value":"telemetry-provider"},{"value":"telemetry-source"},
+    {"value":"event"},{"value":"audit-record"},{"value":"audit-action"},{"value":"operation"},{"value":"activity"},{"value":"finding"},{"value":"flow-record"},
+    {"value":"field"},{"value":"artifact"},{"value":"behavior"},{"value":"attack-technique"},{"value":"attack-tactic"},{"value":"d3fend-technique"},{"value":"car-analytic"},
+    {"value":"detection"},{"value":"hunt"},{"value":"investigation-procedure"},{"value":"response-action"},{"value":"defensive-control"},{"value":"tool"}
   ]
 }
