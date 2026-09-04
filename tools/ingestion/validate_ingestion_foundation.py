@@ -8,6 +8,7 @@ import hashlib
 import ipaddress
 import json
 import re
+import subprocess
 import sys
 
 from jsonschema import Draft202012Validator, FormatChecker
@@ -415,6 +416,38 @@ def _format_schema_errors(name, validator, record):
     return [f"{name}: {e.message}" for e in validator.iter_errors(record)]
 
 
+def git_tracked_paths(root: Path | None = None):
+    root = Path(root or ROOT)
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(root), "ls-files", "-z"],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return [PurePosixPath(p) for p in result.stdout.decode("utf-8").split("\0") if p]
+
+
+def repository_hygiene_errors(tracked_paths):
+    errors = []
+    temp_suffixes = (".tmp", ".bak", ".orig", ".rej", ".pyc", "~")
+    sensitive_suffixes = {".pem", ".key", ".pfx", ".p12"}
+    sensitive_names = {".env", "id_rsa", "id_ed25519", ".secrets"}
+    for raw_path in tracked_paths:
+        path = PurePosixPath(str(raw_path).replace("\\", "/"))
+        lowered_parts = {part.lower() for part in path.parts}
+        lower_name = path.name.lower()
+        if "__pycache__" in lowered_parts or ".pytest_cache" in lowered_parts:
+            errors.append(f"tracked temporary/generated artifact detected: {path.as_posix()}")
+        if lower_name.endswith(temp_suffixes):
+            errors.append(f"tracked temporary/checkpoint file detected: {path.as_posix()}")
+        if path.suffix.lower() in sensitive_suffixes or lower_name in sensitive_names:
+            errors.append(f"tracked sensitive filename detected: {path.as_posix()}")
+    return errors
+
+
 def validate_repository(root: Path | None = None):
     global ROOT, INGESTION_SCHEMA_DIR, CANONICAL_SCHEMA_DIR, FIXTURE_DIR, BUNDLE_PATH, REGISTRY_DIR
     if root is not None:
@@ -576,20 +609,11 @@ def validate_repository(root: Path | None = None):
         if artifacts["acquisition-run.json"]["acquisition_run_id"] not in build["acquisition_run_ids"] or parser_run["parser_run_id"] not in build["parser_run_ids"] or norm["normalization_run_id"] not in build["normalization_run_ids"] or inventory["inventory_id"] not in build["inventory_definition_ids"]:
             errors.append("CanonicalBuildManifest stage linkage incomplete")
 
-    temp_suffixes = (".tmp", ".bak", ".orig", ".rej", ".pyc", "~")
-    sensitive_suffixes = {".pem", ".key", ".pfx", ".p12"}
-    sensitive_names = {".env", "id_rsa", "id_ed25519", ".secrets"}
-    for path in ROOT.rglob("*"):
-        if ".git" in path.parts:
-            continue
-        if path.is_dir() and path.name in {"__pycache__", ".pytest_cache"}:
-            errors.append(f"temporary/generated directory detected: {path.relative_to(ROOT)}")
-        if not path.is_file():
-            continue
-        if path.name.lower().endswith(temp_suffixes):
-            errors.append(f"temporary/checkpoint file detected: {path.relative_to(ROOT)}")
-        if path.suffix.lower() in sensitive_suffixes or path.name.lower() in sensitive_names:
-            errors.append(f"sensitive filename detected: {path.relative_to(ROOT)}")
+    tracked_paths = git_tracked_paths(ROOT)
+    if tracked_paths is None:
+        errors.append("repository hygiene validation requires readable Git tracked-path context")
+    else:
+        errors.extend(repository_hygiene_errors(tracked_paths))
     for path in FIXTURE_DIR.rglob("*"):
         if path.is_file() and path.stat().st_size > 131072:
             errors.append(f"Phase 5.3 fixture unexpectedly large: {path.relative_to(ROOT)}")
