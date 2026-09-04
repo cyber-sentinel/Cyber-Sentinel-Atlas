@@ -213,6 +213,32 @@ class Phase53SecurityInvariantTests(unittest.TestCase):
         run["metrics"].update({"success_count": 0, "not_modified_count": 1, "bytes_received": 0})
         self.assertTrue(any("fake new snapshot" in e for e in iv.acquisition_semantic_errors(connector, run)))
 
+    def test_43_untracked_runtime_bytecode_does_not_fail_validator(self):
+        runtime_dir = ROOT / "tools" / "__pycache__"
+        probe = runtime_dir / "phase53_runtime_probe.pyc"
+        runtime_dir.mkdir(parents=True, exist_ok=True)
+        probe.write_bytes(b"synthetic-runtime-bytecode")
+        try:
+            self.assertEqual(iv.validate_repository(ROOT), [])
+        finally:
+            probe.unlink(missing_ok=True)
+            try:
+                runtime_dir.rmdir()
+            except OSError:
+                pass
+
+    def test_44_tracked_pycache_artifact_rejected(self):
+        errors = iv.repository_hygiene_errors(["tools/__pycache__/validator.cpython-313.pyc"])
+        self.assertTrue(any("tracked temporary/generated" in e for e in errors), errors)
+
+    def test_45_tracked_standalone_pyc_rejected(self):
+        errors = iv.repository_hygiene_errors(["tools/generated.pyc"])
+        self.assertTrue(any("tracked temporary/checkpoint" in e for e in errors), errors)
+
+    def test_46_tracked_temp_checkpoint_artifact_rejected(self):
+        errors = iv.repository_hygiene_errors(["fixtures/phase-5.3/checkpoint.tmp", "docs/state.bak"])
+        self.assertEqual(sum("tracked temporary/checkpoint" in e for e in errors), 2, errors)
+
 
 if __name__ == "__main__":
     unittest.main()
