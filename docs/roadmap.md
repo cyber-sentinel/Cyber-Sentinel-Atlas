@@ -39,24 +39,41 @@ Completed synchronization:
 
 ## Phase 5.2 — Canonical Data Model
 
-Status: **NOT STARTED**
+Feature-branch status: **READY FOR ARCHITECTURE REVIEW — REVISION 2**
 
-Starts only after separate explicit Architecture Authority approval.
+Authoritative `main` status: **NOT STARTED / NOT MERGED**
 
-- production schemas;
+Phase 5.2 scope:
+
+- production JSON Schema Draft 2020-12 contracts;
+- seven first-class Atlas record families;
 - canonical identifier conventions;
 - native identifier model;
 - aliases and scoped search identifiers;
 - telemetry provider/source/record taxonomy;
-- claim model;
-- relationship model;
+- claim and evidence model;
+- relationship model and typed referential integrity;
 - lifecycle/applicability model;
-- source registry schema;
-- coverage snapshot model;
-- validation records;
-- migration/version strategy.
+- SourceRecord / source registry schema basis;
+- CoverageSnapshot model with explicit numerator basis;
+- ValidationRecord and VersionRecord;
+- controlled registries;
+- schema versioning and migration strategy;
+- explicit Phase 5.1 → v1 migration inventory;
+- cross-domain schema fixtures;
+- deterministic canonical validation and invariant tests.
+
+Schema v1 canonical URI base:
+
+```text
+https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/
+```
+
+Phase 5.1 legacy schemas remain preserved. Phase 5.2 does not authorize production ingestion or implementation of Desktop/Web/storage/search/graph/Detection IR.
 
 ## Phase 5.3 — Source & Ingestion Core
+
+Status: **NOT STARTED**
 
 Initial authoritative sources:
 
@@ -94,6 +111,8 @@ No upstream source may directly mutate the production/public Atlas dataset.
 
 ## Phase 5.4 — Deterministic Search Core
 
+Status: **NOT STARTED**
+
 - exact resolver;
 - lexical index;
 - structured filters;
@@ -105,6 +124,8 @@ No upstream source may directly mutate the production/public Atlas dataset.
 Exact identifier matches must precede semantic retrieval.
 
 ## Phase 5.5 — Offline Pack Runtime / Shared Core
+
+Status: **NOT STARTED**
 
 - pack manifest;
 - signed/checksummed updates;
@@ -120,6 +141,8 @@ Exact identifier matches must precede semantic retrieval.
 Exact pack names remain an open decision.
 
 ## Phase 5.6 — Windows Desktop MVP
+
+Status: **NOT STARTED**
 
 First full end-user interface.
 
@@ -140,6 +163,8 @@ Technology stack selection requires an implementation spike and dedicated ADR.
 
 ## Phase 5.7 — Web / PWA
 
+Status: **NOT STARTED**
+
 Build on the same canonical model and shared runtime/contracts.
 
 - global search;
@@ -151,6 +176,8 @@ Build on the same canonical model and shared runtime/contracts.
 
 ## Phase 5.8 — API / CLI
 
+Status: **NOT STARTED**
+
 - versioned read API;
 - search;
 - graph;
@@ -159,6 +186,8 @@ Build on the same canonical model and shared runtime/contracts.
 - official `atlas` CLI.
 
 ## Phase 5.9 — Grounded AI
+
+Status: **NOT STARTED**
 
 Only after deterministic retrieval and provenance are mature:
 
@@ -171,6 +200,8 @@ Only after deterministic retrieval and provenance are mature:
 AI does not become the canonical source of truth.
 
 ## Phase 5.10 — Public Preview Readiness
+
+Status: **NOT STARTED**
 
 - security review;
 - licensing/source redistribution review;

@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "entity",
+  "id": "atlas:activity:kubernetes.audit:create.pods.exec",
+  "record_revision": 1,
+  "created_at": "2026-09-04T04:00:00Z",
+  "updated_at": "2026-09-04T04:00:00Z",
+  "curation_status": "published",
+  "entity_type": "activity",
+  "namespace": "kubernetes.audit",
+  "canonical_key": "create.pods.exec",
+  "title": "Kubernetes Audit Create pods/exec",
+  "lifecycle": {"state":"current"},
+  "native_identifiers": [{"type":"kubernetes_resource_action","value":"create pods/exec","case_sensitive":true,"primary":true,"namespace":"kubernetes.audit","components":{"verb":"create","resource":"pods","subresource":"exec"}}],
+  "aliases": [{"value":"pods/exec","kind":"common","case_sensitive":true,"scope":{"namespace":"kubernetes.audit"}},{"value":"create pods/exec","kind":"provider-qualified","case_sensitive":true,"scope":{"namespace":"kubernetes.audit"}}]
+}

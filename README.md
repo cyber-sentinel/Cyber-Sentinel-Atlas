@@ -4,7 +4,8 @@
 
 Cyber-Sentinel-Atlas is the signature product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed knowledge system.
 
-> Status: **Phase 5.1 — Product Foundation COMPLETE; Stage 1 — Governance / Architecture Sync COMPLETE; Phase 5.2 NOT STARTED**
+> Branch status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 Canonical Data Model READY FOR ARCHITECTURE REVIEW — REVISION 2**
+> Authoritative `main`: Phase 5.2 remains **NOT STARTED** until PR #4 is explicitly approved and merged.
 > Visibility: **Private during active development**
 
 ## Product Thesis
@@ -45,7 +46,7 @@ Atlas is **not**:
 
 Atlas is designed as a **Cyber Defense Knowledge Graph + Analyst Workbench + Offline Knowledge Platform + Detection Engineering Platform**.
 
-## Interface Sequence
+## Architecture Sequence
 
 ```text
 Canonical Data Model
@@ -67,6 +68,28 @@ Grounded AI
 
 The official user-facing CLI command is `atlas`.
 
+## Phase 5.2 Canonical Model
+
+The schema contract under architecture review is **1.0.0**, using JSON Schema Draft 2020-12.
+
+Record families:
+
+- EntityRecord
+- ClaimRecord
+- RelationshipRecord
+- SourceRecord
+- ValidationRecord
+- VersionRecord
+- CoverageSnapshot
+
+Canonical schema URI base:
+
+```text
+https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/
+```
+
+The permanent canonical semantic validator is `tools/validate_phase52.py`. Permanent model tests are `tests/test_phase52_model.py` and `tests/test_phase52_invariants.py`.
+
 ## Initial MVP Domain
 
 The first usable MVP intentionally starts narrow:
@@ -83,7 +106,7 @@ The first usable MVP intentionally starts narrow:
 - fast exact/lexical search
 - offline-first local dataset
 
-The architecture is intentionally extensible to Linux, macOS, Exchange, SharePoint, Microsoft 365, Azure, AWS, Google Cloud, Docker, Kubernetes, DevOps/CI-CD, databases, LOLBAS, GTFOBins, DFIR, incident response, and cyber deception.
+The architecture is intentionally extensible to Linux, macOS, Exchange, SharePoint, Microsoft 365, Azure, AWS, Google Cloud, Docker, Kubernetes, DevOps/CI-CD, databases, LOLBAS, GTFOBins, DFIR, incident response, and cyber deception. Cross-domain Phase 5.2 fixtures validate the universal model only; they do not authorize production ingestion.
 
 ## Ecosystem
 
@@ -99,19 +122,32 @@ DefenseOps content enters Atlas only through versioned ingestion, provenance, va
 
 ## Foundation Documents
 
+### Product Foundation
+
 - [Project State](docs/project-state.md)
 - [Product Vision](docs/product/product-vision.md)
 - [Product Principles](docs/product/product-principles.md)
 - [Personas](docs/product/personas.md)
 - [Competitive Positioning](docs/product/competitive-positioning.md)
+
+### Architecture
+
 - [System Context](docs/architecture/system-context.md)
+- [Canonical Data Model v1](docs/architecture/canonical-data-model-v1.md)
+- [Schema Versioning & Migration](docs/architecture/schema-versioning-and-migration.md)
 - [Knowledge Graph Model](docs/architecture/knowledge-graph-model.md)
+- [Canonical Identifier Architecture](docs/architecture/canonical-identifier-architecture.md)
 - [Source & Provenance Model](docs/architecture/source-provenance-model.md)
 - [Search Architecture](docs/architecture/search-architecture.md)
 - [AI / RAG Architecture](docs/architecture/ai-rag-architecture.md)
 - [Offline-first Architecture](docs/architecture/offline-first-architecture.md)
 - [API / CLI Architecture](docs/architecture/api-cli-architecture.md)
 - [Security Architecture](docs/architecture/security-architecture.md)
+- [Coverage Model](docs/architecture/coverage-model.md)
+- [Telemetry Lifecycle](docs/architecture/telemetry-lifecycle.md)
+
+### Product Delivery
+
 - [UX Information Architecture](docs/ux/ux-information-architecture.md)
 - [MVP Scope](docs/mvp/mvp-scope.md)
 - [MVP Release Gates](docs/mvp/release-gates.md)

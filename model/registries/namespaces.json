@@ -1,0 +1,11 @@
+{
+  "registry_version":"1.0.0",
+  "registry":"namespaces",
+  "values":[
+    {"value":"atlas.claim"},{"value":"atlas.graph"},{"value":"atlas.validation"},{"value":"atlas.version"},{"value":"atlas.coverage"},{"value":"atlas.source"},{"value":"atlas.schema"},
+    {"value":"microsoft.windows"},{"value":"microsoft.windows.security"},{"value":"microsoft.sysmon"},{"value":"linux"},{"value":"linux.audit"},
+    {"value":"mitre.attack"},{"value":"mitre.d3fend"},{"value":"mitre.car"},{"value":"aws"},{"value":"aws.cloudtrail"},{"value":"aws.cloudtrail.iam"},
+    {"value":"microsoft.azure"},{"value":"microsoft.azure.activity"},{"value":"gcp"},{"value":"gcp.audit"},{"value":"kubernetes"},{"value":"kubernetes.audit"},
+    {"value":"docker"},{"value":"docker.events"},{"value":"mongodb"},{"value":"mongodb.audit"},{"value":"lolbas"},{"value":"gtfobins"},{"value":"defenseops"}
+  ]
+}
