@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "entity",
+  "id": "atlas:event:microsoft.sysmon:1",
+  "record_revision": 1,
+  "created_at": "2026-09-04T04:00:00Z",
+  "updated_at": "2026-09-04T04:00:00Z",
+  "curation_status": "published",
+  "entity_type": "event",
+  "namespace": "microsoft.sysmon",
+  "canonical_key": "1",
+  "title": "Sysmon Event 1",
+  "lifecycle": {"state":"current"},
+  "native_identifiers": [{"type":"event_id","value":"1","case_sensitive":false,"primary":true,"namespace":"microsoft.sysmon"}],
+  "aliases": [{"value":"1","kind":"native","case_sensitive":false,"scope":{"namespace":"microsoft.sysmon"}},{"value":"Sysmon 1","kind":"provider-qualified","case_sensitive":false,"scope":{"namespace":"microsoft.sysmon"}},{"value":"atlas:event:sysmon:1","kind":"legacy-canonical-id","case_sensitive":true,"scope":{"namespace":"microsoft.sysmon"}}]
+}

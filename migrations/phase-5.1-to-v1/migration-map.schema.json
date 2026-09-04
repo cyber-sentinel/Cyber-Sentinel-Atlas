@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://cyber-sentinel.dev/migrations/phase-5.1-to-v1/migration-map.schema.json",
+  "title":"Phase 5.1 to v1 Migration Map",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["migration_version","from","to_schema_version","deprecated_status_auto_migration","notes","mappings"],
+  "properties":{
+    "migration_version":{"type":"string","pattern":"^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "from":{"const":"phase-5.1-foundation"},
+    "to_schema_version":{"const":"1.0.0"},
+    "deprecated_status_auto_migration":{"const":false},
+    "notes":{"type":"array","items":{"type":"string"},"minItems":1},
+    "mappings":{"type":"array","minItems":3,"items":{"type":"object","additionalProperties":false,"required":["old_id","new_id","migration_type","reason","review_status"],"properties":{"old_id":{"type":"string","minLength":1},"new_id":{"type":"string","pattern":"^atlas:[a-z0-9-]+:[a-z0-9-]+(?:\\.[a-z0-9-]+)*:[a-z0-9._-]+$"},"migration_type":{"type":"string","enum":["legacy-canonical-id-alias","identity-split","manual-review"]},"reason":{"type":"string","minLength":1},"review_status":{"type":"string","enum":["pending","reviewed","approved","rejected"]}}}}
+  }
+}

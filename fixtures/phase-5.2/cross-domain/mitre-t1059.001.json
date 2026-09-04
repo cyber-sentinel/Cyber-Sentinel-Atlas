@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "entity",
+  "id": "atlas:attack-technique:mitre.attack:t1059.001",
+  "record_revision": 1,
+  "created_at": "2026-09-04T04:00:00Z",
+  "updated_at": "2026-09-04T04:00:00Z",
+  "curation_status": "published",
+  "entity_type": "attack-technique",
+  "namespace": "mitre.attack",
+  "canonical_key": "t1059.001",
+  "title": "MITRE ATT&CK T1059.001",
+  "lifecycle": {"state":"current"},
+  "native_identifiers": [{"type":"attack_id","value":"T1059.001","case_sensitive":true,"primary":true,"namespace":"mitre.attack"}],
+  "aliases": [{"value":"T1059.001","kind":"native","case_sensitive":true,"scope":{"namespace":"mitre.attack"}},{"value":"atlas:attack:T1059.001","kind":"legacy-canonical-id","case_sensitive":true,"scope":{"namespace":"mitre.attack"}}]
+}

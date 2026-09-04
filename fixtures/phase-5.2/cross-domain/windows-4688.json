@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "entity",
+  "id": "atlas:event:microsoft.windows.security:4688",
+  "record_revision": 1,
+  "created_at": "2026-09-04T04:00:00Z",
+  "updated_at": "2026-09-04T04:00:00Z",
+  "curation_status": "published",
+  "entity_type": "event",
+  "namespace": "microsoft.windows.security",
+  "canonical_key": "4688",
+  "title": "Windows Security Event 4688",
+  "lifecycle": {"state":"current"},
+  "native_identifiers": [{"type":"event_id","value":"4688","case_sensitive":false,"primary":true,"namespace":"microsoft.windows.security"}],
+  "aliases": [{"value":"4688","kind":"native","case_sensitive":false,"scope":{"namespace":"microsoft.windows.security"}},{"value":"Event ID 4688","kind":"provider-qualified","case_sensitive":false,"scope":{"namespace":"microsoft.windows.security"}},{"value":"atlas:event:windows-security:4688","kind":"legacy-canonical-id","case_sensitive":true,"scope":{"namespace":"microsoft.windows.security"}}]
+}

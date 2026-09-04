@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "entity",
+  "id": "atlas:activity:docker.events:container.exec-start",
+  "record_revision": 1,
+  "created_at": "2026-09-04T04:00:00Z",
+  "updated_at": "2026-09-04T04:00:00Z",
+  "curation_status": "published",
+  "entity_type": "activity",
+  "namespace": "docker.events",
+  "canonical_key": "container.exec-start",
+  "title": "Docker Container exec-start Activity",
+  "lifecycle": {"state":"current"},
+  "native_identifiers": [{"type":"docker_action","value":"exec_start","case_sensitive":true,"primary":true,"namespace":"docker.events","components":{"object_type":"container"}}],
+  "aliases": [{"value":"exec-start","kind":"common","case_sensitive":true,"scope":{"namespace":"docker.events"}},{"value":"exec_start","kind":"native","case_sensitive":true,"scope":{"namespace":"docker.events"}}]
+}

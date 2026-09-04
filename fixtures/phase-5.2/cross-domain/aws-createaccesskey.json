@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "entity",
+  "id": "atlas:operation:aws.cloudtrail.iam:createaccesskey",
+  "record_revision": 1,
+  "created_at": "2026-09-04T04:00:00Z",
+  "updated_at": "2026-09-04T04:00:00Z",
+  "curation_status": "published",
+  "entity_type": "operation",
+  "namespace": "aws.cloudtrail.iam",
+  "canonical_key": "createaccesskey",
+  "title": "AWS CloudTrail IAM CreateAccessKey",
+  "lifecycle": {"state": "current"},
+  "native_identifiers": [{"type":"aws_event_name","value":"CreateAccessKey","case_sensitive":true,"primary":true,"namespace":"aws.cloudtrail.iam"}],
+  "aliases": [{"value":"CreateAccessKey","kind":"native","case_sensitive":true,"scope":{"namespace":"aws.cloudtrail.iam"}}]
+}
