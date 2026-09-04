@@ -12,9 +12,11 @@ Accepted architecture includes ADR-0001 through ADR-0010.
 
 ## Phase 5.2 — Canonical Data Model
 
-Status on feature branch: **IN PROGRESS**
+Status on feature branch: **READY FOR ARCHITECTURE REVIEW**
 
-Implementation scope on the feature branch:
+Status on authoritative `main`: **NOT STARTED / NOT MERGED**
+
+Implemented scope in PR #4:
 
 - production JSON Schema Draft 2020-12 contracts;
 - AtlasRecord root union;
