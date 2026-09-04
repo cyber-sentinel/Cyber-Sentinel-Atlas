@@ -105,13 +105,13 @@ class Phase53SecurityInvariantTests(unittest.TestCase):
         self.schema_rejects("raw-snapshot.json", "raw-snapshot.schema.json", lambda x: x.__setitem__("raw_content_digest", "sha256-invalid"))
 
     def test_23_snapshot_without_acquisition_run_detected(self):
-        self.repo_rejects(lambda b: b["artifacts"]["raw-snapshot"].__setitem__("acquisition_run_id", "atlas:acquisition-run:atlas.ingestion:missing"), "RawSnapshot acquisition run does not resolve")
+        self.repo_rejects(lambda b: b["artifacts"]["raw-snapshot"].__setitem__("acquisition_run_id", "atlas:acquisition-run:atlas.ingestion:missing"), "RawSnapshot.acquisition_run_id does not resolve AcquisitionRun")
 
     def test_24_psr_without_snapshot_linkage_detected(self):
-        self.repo_rejects(lambda b: b["artifacts"]["parsed-source-record"].__setitem__("source_snapshot_id", "atlas:raw-snapshot:atlas.ingestion:missing"), "parser/PSR snapshot linkage broken")
+        self.repo_rejects(lambda b: b["artifacts"]["parsed-source-record"].__setitem__("source_snapshot_id", "atlas:raw-snapshot:atlas.ingestion:missing"), "ParsedSourceRecord source_snapshot_id does not resolve")
 
     def test_25_psr_without_parser_linkage_detected(self):
-        self.repo_rejects(lambda b: b["artifacts"]["parsed-source-record"].__setitem__("parser_id", "atlas:parser:atlas.ingestion:missing"), "parser definition linkage broken")
+        self.repo_rejects(lambda b: b["artifacts"]["parsed-source-record"].__setitem__("parser_id", "atlas:parser:atlas.ingestion:missing"), "ParsedSourceRecord parser_id/version do not resolve ParserDefinition")
 
     def test_26_normalization_without_mapping_digest_rejected(self):
         self.schema_rejects("normalization-run.json", "normalization-run.schema.json", lambda x: x["mapping_profile"].pop("digest"))
