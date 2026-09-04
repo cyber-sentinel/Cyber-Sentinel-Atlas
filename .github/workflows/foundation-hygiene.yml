@@ -7,6 +7,7 @@ on:
       - main
       - "product/**"
       - "architecture/**"
+      - "feature/**"
 
 permissions:
   contents: read
@@ -17,6 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Validate Phase 5.1 foundation
         run: python tools/validate_foundation.py
@@ -24,14 +27,20 @@ jobs:
       - name: Validate Stage 1 architecture sync
         run: python tools/validate_stage1_sync.py
 
-      - name: Install Phase 5.2 validation dependencies
+      - name: Install validation dependencies
         run: python -m pip install --disable-pip-version-check -r tools/requirements-validation.txt
 
       - name: Validate Phase 5.2 canonical data model
         run: python tools/validate_phase52.py
 
       - name: Run Phase 5.2 model and invariant tests
-        run: python -m unittest discover -s tests -v
+        run: python -m unittest discover -s tests -p "test_phase52*.py" -v
+
+      - name: Validate Phase 5.3.1 ingestion foundation
+        run: python tools/ingestion/validate_ingestion_foundation.py
+
+      - name: Run Phase 5.3.1 ingestion contract and security tests
+        run: python -m unittest discover -s tests/phase53 -p "test_*.py" -v
 
       - name: Check canonical schema URI policy
         shell: bash
@@ -42,11 +51,41 @@ jobs:
             exit 1
           fi
 
+      - name: Check ingestion schema URI policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          base = "https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/ingestion/v1/"
+          root = Path("schemas/ingestion/v1")
+          for path in sorted(root.rglob("*.json")):
+              data = json.loads(path.read_text(encoding="utf-8"))
+              expected = base + path.relative_to(root).as_posix()
+              if data.get("$id") != expected:
+                  raise SystemExit(f"{path}: unexpected $id {data.get('$id')!r}; expected {expected!r}")
+          print("Ingestion schema URI policy passed.")
+          PY
+
+      - name: Confirm canonical schemas v1 are unmodified
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git show-ref --verify --quiet refs/remotes/origin/main; then
+            changed="$(git diff --name-only origin/main...HEAD -- schemas/v1 || true)"
+            if [ -n "$changed" ]; then
+              echo "Canonical schemas/v1 changed during Phase 5.3.1:"
+              echo "$changed"
+              exit 1
+            fi
+          fi
+
       - name: Check temporary and checkpoint artifacts
         shell: bash
         run: |
           set -euo pipefail
-          bad_files="$(git ls-files | grep -Ei '(\.tmp$|TEMP|checkpoint|persistence|pending|should-not-exist|atomic-remediation|temporary-cleanup|\.revision2-)' || true)"
+          bad_files="$(git ls-files | grep -Ei '(\.tmp$|\.bak$|\.orig$|\.rej$|\.pyc$|__pycache__|\.pytest_cache|TEMP|checkpoint|persistence|pending|should-not-exist|atomic-remediation|temporary-cleanup|\.revision2-)' || true)"
           if [ -n "$bad_files" ]; then
             echo "Temporary/checkpoint artifacts detected:"
             echo "$bad_files"
@@ -57,7 +96,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if find . -type f \( -name "*.pem" -o -name "*.key" -o -name "*.pfx" -o -name ".env" \) | grep -q .; then
+          if find . -type f \( -name "*.pem" -o -name "*.key" -o -name "*.pfx" -o -name "*.p12" -o -name ".env" -o -name "id_rsa" -o -name "id_ed25519" \) | grep -q .; then
             echo "Potential secret-bearing file detected."
             exit 1
           fi
+
+      - name: Check fixture manifest secret surface
+        run: |
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          spec = importlib.util.spec_from_file_location("iv", Path("tools/ingestion/validate_ingestion_foundation.py"))
+          iv = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(iv)
+          errors = iv.validate_json_secret_surface(iv.load_fixture_bundle())
+          if errors:
+              raise SystemExit("\n".join(errors))
+          print("Phase 5.3 fixture secret regression scan passed.")
+          PY
