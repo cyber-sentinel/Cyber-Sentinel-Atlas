@@ -120,7 +120,7 @@ class Phase52CanonicalModelTests(unittest.TestCase):
         a["aliases"].append({"value":"ambiguous-fixture","kind":"common","case_sensitive":False})
         b["aliases"].append({"value":"ambiguous-fixture","kind":"common","case_sensitive":False})
         errors=model.validate_semantics([(Path("<a>"),a),(Path("<b>"),b)],self.registries)
-        self.assertTrue(any("ambiguous alias without scope" in e for e in errors))
+        self.assertTrue(any("ambiguous alias overlapping scope" in e for e in errors))
 
     def test_exact_resolution_cases(self):
         self.assertEqual([], model.validate_exact_resolution(self.records))
