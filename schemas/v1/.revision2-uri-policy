@@ -1,2 +1,0 @@
-Canonical schema URI base for v1: https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/
-This transient marker is used during Phase 5.2 Revision 2 remediation and is removed in the final status-sync commit.

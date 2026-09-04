@@ -1,1 +1,0 @@
-Revision 2 remediation persistence checkpoints created before atomic schema/test/document updates. These temporary checkpoint files are removed before the final Architecture Authority review state.

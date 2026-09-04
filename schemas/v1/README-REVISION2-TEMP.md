@@ -1,1 +1,0 @@
-Revision 2 schema contract migration is being persisted incrementally. This temporary file will be replaced/removed by the final Revision 2 status-sync commit after all v1 schemas, tests, docs, and CI gates are green.
