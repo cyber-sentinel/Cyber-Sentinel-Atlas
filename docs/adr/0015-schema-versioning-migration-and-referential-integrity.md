@@ -13,4 +13,4 @@ Canonical schema URI base for v1 is:
 
 `https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/`
 
-The earlier `https://cyber-sentinel.dev/...` base was not retained because project control could not be verified at the v1 merge gate. All `$id` and internal `$ref` values are required to match the project-controlled repository URI policy. The `/schemas/v1/` repository path is stable for schema major v1; breaking schema changes require a new major schema path/version, and changing this URI policy later requires an explicit migration/ADR decision.
+All `$id` and internal `$ref` values are required to match the project-controlled repository URI policy. The `/schemas/v1/` repository path is stable for schema major v1; breaking schema changes require a new major schema path/version, and changing this URI policy later requires an explicit migration/ADR decision.

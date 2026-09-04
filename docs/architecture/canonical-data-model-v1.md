@@ -1,6 +1,6 @@
 # Canonical Data Model v1
 
-Schema contract: **1.0.0** — Phase 5.2 Revision 2 under architecture review.
+Schema contract: **1.0.0** — Phase 5.2 under architecture review.
 
 AtlasRecord discriminates seven first-class record families: EntityRecord, ClaimRecord, RelationshipRecord, SourceRecord, ValidationRecord, VersionRecord, and CoverageSnapshot. The model implements ADR-0001 through ADR-0015 without selecting storage, graph, search, Desktop, Detection IR, pack-format or signing technology.
 
@@ -8,7 +8,7 @@ AtlasRecord discriminates seven first-class record families: EntityRecord, Claim
 
 Canonical `$id` base: `https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/`
 
-Each schema `$id` equals this base plus its path relative to `schemas/v1/`; internal `$ref` values use the same base. This replaces the prior unverified `cyber-sentinel.dev` namespace.
+Each schema `$id` equals this base plus its path relative to `schemas/v1/`; internal `$ref` values use the same base.
 
 ## Common envelope and extensions
 
@@ -31,7 +31,7 @@ telemetry-source --EMITS--> event|audit-record|audit-action|operation|activity|f
 telemetry-record --HAS_FIELD--> field
 ```
 
-`RUNS_ON` requires EntityRecord endpoints and an architecturally sensible platform/product/technology target.
+`RUNS_ON` requires EntityRecord endpoints.
 
 ## Claim/relationship provenance
 

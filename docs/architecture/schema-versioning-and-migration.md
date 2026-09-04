@@ -6,7 +6,7 @@ Atlas separates canonical `schema_version`, `record_revision`, registry version,
 
 ## Canonical schema URI
 
-Version 1 schema identifiers use `https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/`. The validator derives the expected `$id` from repository-relative schema paths and rejects non-canonical internal `$ref` values. The previous `cyber-sentinel.dev` URI base is not part of the v1 release contract because project control was not verified.
+Version 1 schema identifiers use `https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/`. The validator derives the expected `$id` from repository-relative schema paths and rejects non-canonical internal `$ref` values.
 
 The repository path `/schemas/v1/` is stable for schema major v1. Breaking structural/semantic changes require a new major schema path/version, and changing this URI policy later requires an explicit migration/ADR decision.
 
