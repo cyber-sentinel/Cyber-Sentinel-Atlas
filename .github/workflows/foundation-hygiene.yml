@@ -24,6 +24,15 @@ jobs:
       - name: Validate Stage 1 architecture sync
         run: python tools/validate_stage1_sync.py
 
+      - name: Install Phase 5.2 validation dependencies
+        run: python -m pip install --disable-pip-version-check -r tools/requirements-validation.txt
+
+      - name: Validate Phase 5.2 canonical data model
+        run: python tools/validate_phase52.py
+
+      - name: Run Phase 5.2 model tests
+        run: python -m unittest discover -s tests -v
+
       - name: Check sensitive filenames
         shell: bash
         run: |

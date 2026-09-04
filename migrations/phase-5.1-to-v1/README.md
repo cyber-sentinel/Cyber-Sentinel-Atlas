@@ -20,4 +20,4 @@ They are provisional foundation schemas and are not silently overwritten.
 
 The machine-readable map is `migration-map.json`.
 
-It covers the minimum approved examples and one DefenseOps canonical-key normalization example.
+It covers the minimum approved examples authorized for Phase 5.2 migration.
