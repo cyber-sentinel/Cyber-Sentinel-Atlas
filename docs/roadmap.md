@@ -39,7 +39,7 @@ Completed synchronization:
 
 ## Phase 5.2 — Canonical Data Model
 
-Feature-branch status: **IN PROGRESS — FINALIZATION**
+Feature-branch status: **READY FOR ARCHITECTURE REVIEW — REVISION 2**
 
 Authoritative `main` status: **NOT STARTED / NOT MERGED**
 

@@ -16,10 +16,10 @@
 
 - Phase 5.1 — Product Foundation: **COMPLETE**
 - Stage 1 — Governance / Architecture Sync: **COMPLETE**
-- Phase 5.2 — Canonical Data Model: **IN PROGRESS — FINALIZATION**
+- Phase 5.2 — Canonical Data Model: **READY FOR ARCHITECTURE REVIEW — REVISION 2**
 - Phase 5.3 — Source & Ingestion Core: **NOT STARTED**
 
-Phase 5.2 remains non-authoritative on `main` until Architecture Authority explicitly approves PR #4 for merge. Phase 5.3 must not start during this finalization.
+Phase 5.2 remains non-authoritative on `main` until Architecture Authority explicitly approves PR #4 for merge. Phase 5.3 must not start before a separate authorization.
 
 ## Product Definition
 
@@ -188,13 +188,13 @@ Tauri, Rust, SQLite, React, and TypeScript remain candidates only.
 
 ## Active Architecture Issues
 
-No blocking architecture conflict is known. Architecture Authority review remediation R-001 through R-012 has been implemented; final consolidation and CI are in progress.
+No blocking architecture conflict is known. Architecture Authority remediation R-001 through R-012 and final consolidation are implemented on PR #4. Final Architecture Authority approval is pending.
 
 Any new implementation issue requiring a change to accepted architecture must be raised as `ARCHITECTURE ISSUE` before changing the model.
 
 ## Data / Coverage Status
 
-- Phase 5.2 schema v1.0.0: implemented on feature branch, pending final architecture review
+- Phase 5.2 schema v1.0.0: implemented on feature branch, pending final architecture approval
 - Source registry production ingestion: not started
 - Controlled registries for schema validation: implemented on feature branch
 - Telemetry Coverage snapshots: schema/fixture implemented; production measurements not started
@@ -236,5 +236,5 @@ Validation covers typed referential integrity, structural telemetry-spine typing
 - Architecture Sync Status: **GREEN**
 - Approved Phase 5.2 baseline: `main@47e3a2b70e337c477dbf395192cd9a4e84b6050a`
 - Previous reviewed Phase 5.2 head: `10d222a01f320915a339e13dded572974b12e408`
-- Phase 5.2 Architecture Review: **FINALIZATION IN PROGRESS**
+- Phase 5.2 Architecture Review: **PENDING FINAL ARCHITECTURE AUTHORITY APPROVAL**
 - PR #4: **OPEN / NOT MERGED**
