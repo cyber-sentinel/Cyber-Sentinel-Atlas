@@ -1,0 +1,67 @@
+from __future__ import annotations
+
+from pathlib import Path
+import importlib.util
+import unittest
+
+ROOT = Path(__file__).resolve().parents[2]
+SPEC = importlib.util.spec_from_file_location(
+    "phase_policy",
+    ROOT / "tools" / "ingestion" / "validate_ingestion_authorization.py",
+)
+phase_policy = importlib.util.module_from_spec(SPEC)
+assert SPEC.loader
+SPEC.loader.exec_module(phase_policy)
+
+
+class IngestionAuthorizationTests(unittest.TestCase):
+    def authorized_paths(self):
+        return sorted(phase_policy.AUTHORIZED_IMPLEMENTATIONS)
+
+    def test_01_current_phase_532_allowlist_is_exact(self):
+        expected = {
+            "ingestion/connectors/mitre-attack-enterprise.json",
+            "ingestion/parsers/mitre-attack-stix21.definition.json",
+            "ingestion/parsers/mitre_attack_stix.py",
+            "ingestion/normalizers/mitre-attack-enterprise.definition.json",
+            "ingestion/normalizers/mitre_attack.py",
+        }
+        self.assertEqual(expected, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS))
+        self.assertEqual({"phase-5.3.2"}, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS.values()))
+
+    def test_02_exact_authorized_set_is_accepted(self):
+        self.assertEqual([], phase_policy.implementation_authorization_errors(self.authorized_paths()))
+
+    def test_03_unknown_connector_fails_closed(self):
+        tracked = self.authorized_paths() + ["ingestion/connectors/unapproved.json"]
+        errors = phase_policy.implementation_authorization_errors(tracked)
+        self.assertTrue(any("undeclared ingestion implementation" in error for error in errors))
+
+    def test_04_unknown_parser_fails_closed(self):
+        tracked = self.authorized_paths() + ["ingestion/parsers/unapproved.py"]
+        errors = phase_policy.implementation_authorization_errors(tracked)
+        self.assertTrue(any("undeclared ingestion implementation" in error for error in errors))
+
+    def test_05_unknown_normalizer_fails_closed(self):
+        tracked = self.authorized_paths() + ["ingestion/normalizers/unapproved.py"]
+        errors = phase_policy.implementation_authorization_errors(tracked)
+        self.assertTrue(any("undeclared ingestion implementation" in error for error in errors))
+
+    def test_06_missing_authorized_asset_fails_closed(self):
+        tracked = self.authorized_paths()[1:]
+        errors = phase_policy.implementation_authorization_errors(tracked)
+        self.assertTrue(any("authorized implementation missing" in error for error in errors))
+
+    def test_07_readmes_and_other_ingestion_areas_do_not_expand_authority(self):
+        tracked = self.authorized_paths() + [
+            "ingestion/connectors/README.md",
+            "ingestion/parsers/README.md",
+            "ingestion/normalizers/README.md",
+            "ingestion/mappings/mitre-attack-enterprise-v1.json",
+            "ingestion/source-profiles/mitre-attack-enterprise.source.json",
+        ]
+        self.assertEqual([], phase_policy.implementation_authorization_errors(tracked))
+
+
+if __name__ == "__main__":
+    unittest.main()

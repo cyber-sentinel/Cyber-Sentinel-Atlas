@@ -11,6 +11,14 @@ iv = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader
 SPEC.loader.exec_module(iv)
 
+POLICY_SPEC = importlib.util.spec_from_file_location(
+    "phase_policy",
+    ROOT / "tools" / "ingestion" / "validate_ingestion_authorization.py",
+)
+phase_policy = importlib.util.module_from_spec(POLICY_SPEC)
+assert POLICY_SPEC.loader
+POLICY_SPEC.loader.exec_module(phase_policy)
+
 
 class Phase53SecurityInvariantTests(unittest.TestCase):
     @classmethod
@@ -219,7 +227,7 @@ class Phase53SecurityInvariantTests(unittest.TestCase):
         runtime_dir.mkdir(parents=True, exist_ok=True)
         probe.write_bytes(b"synthetic-runtime-bytecode")
         try:
-            self.assertEqual(iv.validate_repository(ROOT), [])
+            self.assertEqual(phase_policy.validate_repository(ROOT), [])
         finally:
             probe.unlink(missing_ok=True)
             try:

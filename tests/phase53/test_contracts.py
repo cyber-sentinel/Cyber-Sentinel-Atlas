@@ -10,6 +10,11 @@ iv = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader
 SPEC.loader.exec_module(iv)
 
+POLICY_SPEC = importlib.util.spec_from_file_location("phase_policy", ROOT / "tools" / "ingestion" / "validate_ingestion_authorization.py")
+phase_policy = importlib.util.module_from_spec(POLICY_SPEC)
+assert POLICY_SPEC.loader
+POLICY_SPEC.loader.exec_module(phase_policy)
+
 
 class Phase53ContractTests(unittest.TestCase):
     @classmethod
@@ -67,7 +72,7 @@ class Phase53ContractTests(unittest.TestCase):
         self.assert_schema_valid("canonical-build-manifest.json", "canonical-build-manifest.schema.json")
 
     def test_15_full_foundation_validator(self):
-        self.assertEqual([], iv.validate_repository(ROOT))
+        self.assertEqual([], phase_policy.validate_repository(ROOT))
 
     def test_16_required_optional_acquisition_semantics(self):
         connector = self.artifacts["connector-definition.json"]
