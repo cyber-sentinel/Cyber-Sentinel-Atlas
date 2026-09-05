@@ -1,0 +1,42 @@
+{
+  "export_format_version": "1.0.0",
+  "provider": "Microsoft-Windows-Security-Auditing",
+  "provider_guid": "54849625-5478-4994-a5ba-3e3b0328c30d",
+  "log_links": [
+    {"log_name": "Security", "display_name": "Security", "is_imported": false}
+  ],
+  "events": [
+    {
+      "event_id": "4688",
+      "version": "1",
+      "log_name": "Security",
+      "level": {"value": "0", "name": "win:LogAlways"},
+      "opcode": {"value": "0", "name": "win:Info"},
+      "task": {"value": "13312"},
+      "keywords": [{"value": "-9214364837600034816"}],
+      "template": "<template xmlns='http://schemas.microsoft.com/win/2004/08/events'><data name='SubjectUserSid' inType='win:SID'/><data name='NewProcessId' inType='win:Pointer'/><data name='NewProcessName' inType='win:UnicodeString'/></template>"
+    },
+    {
+      "event_id": "4688",
+      "version": "2",
+      "log_name": "Security",
+      "level": {"value": "0", "name": "win:LogAlways"},
+      "opcode": {"value": "0", "name": "win:Info"},
+      "task": {"value": "13312"},
+      "keywords": [{"value": "-9214364837600034816"}],
+      "template": "<template xmlns='http://schemas.microsoft.com/win/2004/08/events'><data name='SubjectUserSid' inType='win:SID'/><data name='NewProcessId' inType='win:Pointer'/><data name='NewProcessName' inType='win:UnicodeString'/><data name='CommandLine' inType='win:UnicodeString'/></template>"
+    },
+    {
+      "event_id": "592",
+      "version": "0",
+      "log_name": "Security",
+      "level": {"value": "0"},
+      "opcode": {"value": "0"},
+      "task": {"value": "0"},
+      "keywords": [],
+      "template": "<template xmlns='http://schemas.microsoft.com/win/2004/08/events'><data name='ImageFileName' inType='win:UnicodeString'/></template>"
+    }
+  ],
+  "structural_only": true,
+  "descriptions_included": false
+}
