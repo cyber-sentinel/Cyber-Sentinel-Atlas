@@ -1,0 +1,19 @@
+{
+  "profile_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+  "release_version": "15.21",
+  "document_date": "2026-06-17",
+  "upstream_repository": "MicrosoftDocs/sysinternals",
+  "upstream_commit_sha": "8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6",
+  "document_path": "sysinternals/downloads/sysmon.md",
+  "document_git_blob_sha1": "3272fa16dcec7b1a1adba24e4f5f2fb7e95a9aa5",
+  "document_url": "https://raw.githubusercontent.com/MicrosoftDocs/sysinternals/8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6/sysinternals/downloads/sysmon.md",
+  "learn_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+  "license_url": "https://github.com/MicrosoftDocs/sysinternals/blob/8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6/LICENSE",
+  "expected_documented_event_ids": [
+    "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+    "21", "22", "23", "24", "25", "26", "27", "28", "29", "255"
+  ],
+  "pinning_policy": "Release ingestion uses the exact sysmon.md blob at the explicit upstream commit. Floating branches are discovery-only. The documented event list is documentation coverage, not the authoritative telemetry denominator."
+}
