@@ -1,0 +1,27 @@
+{
+  "profile_id": "atlas:mapping-profile:atlas.ingestion:microsoft-sysmon-schema-v1",
+  "profile_version": "1.0.0",
+  "normalizer_id": "atlas:normalizer:atlas.ingestion:microsoft-sysmon-schema",
+  "normalizer_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:microsoft-sysmon-schema-export",
+  "source_version": "sysmon-15.21-schema-4.91",
+  "canonical_schema_version": "1.0.0",
+  "namespace": "microsoft.sysmon",
+  "provider": "Microsoft-Windows-Sysmon",
+  "channel": "Microsoft-Windows-Sysmon/Operational",
+  "product": "Sysmon",
+  "platform": "Windows",
+  "sysmon_version": "15.21",
+  "current_schema_version": "4.91",
+  "identity_rule": {
+    "native_type": "sysmon-schema-event",
+    "native_identifier_type": "event_id",
+    "entity_type": "event",
+    "canonical_key": "numeric-event-id"
+  },
+  "lifecycle_rule": {
+    "schema_inventory_observation": "do-not-set-global-lifecycle"
+  },
+  "unsupported_native_types": "preserve-in-psr-and-report",
+  "profile_digest": "sha256-3812a8ac36557035c88ad84a7c81f40d63a01b60c86f924ff129b62eb848776b"
+}
