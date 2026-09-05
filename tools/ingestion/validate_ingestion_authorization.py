@@ -41,6 +41,14 @@ AUTHORIZED_IMPLEMENTATIONS = {
     "ingestion/parsers/microsoft_windows_provider_metadata.py": "phase-5.3.3",
     "ingestion/normalizers/microsoft-windows-provider-metadata.definition.json": "phase-5.3.3",
     "ingestion/normalizers/microsoft_windows_provider_metadata.py": "phase-5.3.3",
+    "ingestion/connectors/mitre-d3fend-ontology.json": "phase-5.3.4",
+    "ingestion/parsers/mitre-d3fend-turtle.definition.json": "phase-5.3.4",
+    "ingestion/parsers/mitre_d3fend_turtle.py": "phase-5.3.4",
+    "ingestion/connectors/mitre-car-sample.json": "phase-5.3.4",
+    "ingestion/parsers/mitre-car-yaml.definition.json": "phase-5.3.4",
+    "ingestion/parsers/mitre_car_yaml.py": "phase-5.3.4",
+    "ingestion/parsers/defenseops-export.definition.json": "phase-5.3.4",
+    "ingestion/parsers/defenseops_export.py": "phase-5.3.4",
 }
 
 BLANKET_DENIAL_PREFIX = "broad/live ingestion implementation is not authorized: "
@@ -109,7 +117,7 @@ def main() -> int:
         return 1
 
     print("Atlas ingestion foundation + phase-aware implementation authorization passed.")
-    print("Authorized implementation slices: Phase 5.3.2 MITRE ATT&CK canary and Phase 5.3.3 Sysmon/Windows documentation, controlled provider/schema parsing, and canonical identity-shell normalization.")
+    print("Authorized implementation slices: Phase 5.3.2 ATT&CK, Phase 5.3.3 Windows/Sysmon, and Phase 5.3.4 D3FEND/CAR/DefenseOps source-contract implementations.")
     return 0
 
 
