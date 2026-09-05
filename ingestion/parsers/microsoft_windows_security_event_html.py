@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 
 PARSER_ID = "atlas:parser:atlas.ingestion:microsoft-windows-security-event-html"
-PARSER_VERSION = "1.0.0"
+PARSER_VERSION = "1.0.1"
 PSR_VERSION = "1.0.0"
 
 EVENT_HEADING_RE = re.compile(r"\b(?P<event_id>[0-9]+)\(S\):\s*(?P<title>[^\n]+?)(?:\s*\(Windows[^\n)]*\))?\s*$", re.I | re.M)
@@ -114,6 +114,19 @@ def _event_versions(visible: str) -> list[str]:
     return unique
 
 
+def _event_heading(visible: str) -> tuple[str, str, int]:
+    matches = list(EVENT_HEADING_RE.finditer(visible))
+    headings: list[tuple[str, str]] = []
+    for match in matches:
+        value = (match.group("event_id"), match.group("title").strip())
+        if value not in headings:
+            headings.append(value)
+    if len(headings) != 1:
+        raise ValueError(f"expected one unique Windows Security event heading, found {headings!r}")
+    event_id, title = headings[0]
+    return event_id, title.rstrip("."), len(matches)
+
+
 def parse_html(
     raw_html: str,
     *,
@@ -126,13 +139,7 @@ def parse_html(
     visible = _visible_text(raw_html)
     unescaped = html.unescape(raw_html)
 
-    headings = list(EVENT_HEADING_RE.finditer(visible))
-    if len(headings) != 1:
-        found = [(m.group("event_id"), m.group("title")) for m in headings]
-        raise ValueError(f"expected one Windows Security event heading, found {found!r}")
-    heading = headings[0]
-    event_id = heading.group("event_id")
-    title = heading.group("title").strip().rstrip(".")
+    event_id, title, heading_match_count = _event_heading(visible)
 
     xml_event_id = _single(EVENT_ID_XML_RE, unescaped, "EventID in Event XML")
     if event_id != xml_event_id:
@@ -205,6 +212,13 @@ def parse_html(
             "record_digest": record_digest,
         },
     )
+    diagnostics = [
+        "Parser extracts source-native structural facts only; explanatory Microsoft Learn prose remains in the immutable RawSnapshot and is not copied into PSR."
+    ]
+    if heading_match_count > 1:
+        diagnostics.append(
+            f"Microsoft Learn rendered {heading_match_count} identical Event {event_id} headings; parser deduplicated identical headings after verifying a single unique identity/title."
+        )
     return [
         {
             "psr_version": psr_version,
@@ -220,9 +234,7 @@ def parse_html(
             "unknown_fields": {},
             "locator": locator,
             "record_digest": record_digest,
-            "diagnostics": [
-                "Parser extracts source-native structural facts only; explanatory Microsoft Learn prose remains in the immutable RawSnapshot and is not copied into PSR."
-            ],
+            "diagnostics": diagnostics,
         }
     ]
 
