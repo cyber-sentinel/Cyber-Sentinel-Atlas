@@ -106,12 +106,11 @@ def parse_bundle(
             native_identifiers.append({"type": "attack_id", "value": external_id, "namespace": "mitre.attack"})
 
         locator = {"json_pointer": f"/objects/{index}"}
-        semantic = {
-            "source_id": source_id,
-            "source_snapshot_id": source_snapshot_id,
-            "parser_id": parser_id,
-            "parser_version": parser_version,
-            "psr_version": psr_version,
+
+        # Phase 5.3.1 defines record_digest over source-native parsed content only.
+        # Retrieval/parser context is bound by parsed_record_id, not duplicated into
+        # the semantic record digest.
+        record_payload = {
             "native_type": native_type,
             "native_key": native_key,
             "native_identifiers": native_identifiers,
@@ -119,14 +118,16 @@ def parse_bundle(
             "unknown_fields": unknown,
             "locator": locator,
         }
-        record_digest = sha256_digest(semantic)
+        record_digest = sha256_digest(record_payload)
         parsed_record_id = stable_artifact_id(
             "parsed-source-record",
             {
                 "source_snapshot_id": source_snapshot_id,
                 "parser_id": parser_id,
                 "parser_version": parser_version,
-                "locator": locator,
+                "psr_version": psr_version,
+                "native_type": native_type,
+                "native_key": native_key,
                 "record_digest": record_digest,
             },
         )
