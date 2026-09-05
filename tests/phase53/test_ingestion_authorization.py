@@ -30,6 +30,8 @@ class IngestionAuthorizationTests(unittest.TestCase):
             "ingestion/connectors/microsoft-sysmon-docs.json",
             "ingestion/parsers/microsoft-sysmon-markdown.definition.json",
             "ingestion/parsers/microsoft_sysmon_markdown.py",
+            "ingestion/parsers/microsoft-sysmon-schema.definition.json",
+            "ingestion/parsers/microsoft_sysmon_schema.py",
             "ingestion/normalizers/microsoft-sysmon-docs.definition.json",
             "ingestion/normalizers/microsoft_sysmon_docs.py",
             "ingestion/connectors/microsoft-windows-security-event-4688-doc.json",
@@ -80,6 +82,7 @@ class IngestionAuthorizationTests(unittest.TestCase):
             "ingestion/source-profiles/microsoft-sysmon-docs.source.json",
             "ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.source.json",
             "ingestion/source-profiles/microsoft-windows-provider-metadata.source.json",
+            "ingestion/source-profiles/microsoft-sysmon-schema-export.source.json",
             "ingestion/inventories/sysmon-docs-15.21.documentation.json",
         ]
         self.assertEqual([], phase_policy.implementation_authorization_errors(tracked))
