@@ -127,3 +127,71 @@ jobs:
 
       - name: Run Phase 5.3.3 live Windows 4688 documentation canary
         run: python tools/ingestion/run_windows_4688_docs_live_canary.py
+
+  phase533-reference-export-once:
+    if: >-
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/feature/phase-5.3.3-windows-sysmon-encyclopedia' &&
+      contains(github.event.head_commit.message, '[reference-export]')
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout controlled feature head
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Install validation dependencies
+        shell: pwsh
+        run: python -m pip install --disable-pip-version-check -r tools/requirements-validation.txt
+
+      - name: Collect real reference-host exports
+        shell: pwsh
+        run: |
+          ./tools/reference-host/collect_windows_sysmon_reference.ps1 `
+            -OutputDirectory "${{ github.workspace }}/reference-output" `
+            -ExpectedSysmonVersion "15.21"
+
+      - name: Validate real Windows provider export through PSR parser
+        shell: pwsh
+        run: |
+          $psr = Join-Path $env:RUNNER_TEMP 'windows-provider.psr.json'
+          python ingestion/parsers/microsoft_windows_provider_metadata.py `
+            "${{ github.workspace }}/reference-output/windows-security-provider.json" `
+            --source-id "atlas:source:atlas.source:microsoft-windows-provider-metadata" `
+            --snapshot-id "atlas:raw-snapshot:atlas.ingestion:reference-host-validation" `
+            --output $psr
+          python -c "import json,sys; d=json.load(open(sys.argv[1],encoding='utf-8')); r=d['records']; ids=sorted({int(x['native_fields']['event_id']) for x in r}); print(f'Windows ProviderMetadata PSR: records={len(r)} unique_event_ids={len(ids)} min={min(ids)} max={max(ids)} has_4688={4688 in ids} has_592={592 in ids} digest={d[\"representation_digest\"]}'); assert 4688 in ids" $psr
+
+      - name: Summarize real Sysmon schema output
+        shell: pwsh
+        run: |
+          python -c "import pathlib,re,xml.etree.ElementTree as ET; p=pathlib.Path(r'${{ github.workspace }}/reference-output/sysmon-schema.txt'); t=p.read_text(encoding='utf-8',errors='strict'); chunks=re.findall(r'<Sysmon\b.*?</Sysmon>',t,re.S); print(f'Sysmon schema summary: bytes={p.stat().st_size} xml_documents={len(chunks)} schema_versions={[ET.fromstring(x).attrib.get(\"schemaversion\") for x in chunks]}'); assert chunks"
+
+      - name: Print provenance descriptor summary
+        shell: pwsh
+        run: |
+          python -c "import json,pathlib; root=pathlib.Path(r'${{ github.workspace }}/reference-output'); [(lambda d: print(f'{p.name}: source_version={d[\"source_version\"]} env={d[\"reference_environment\"][\"product\"]} {d[\"reference_environment\"][\"version\"]} build={d[\"reference_environment\"][\"build\"]} collector={d[\"collector\"][\"tool_name\"]} {d[\"collector\"][\"tool_version\"]} artifact_sha={d[\"artifact\"][\"sha256\"]}'))(json.loads(p.read_text(encoding='utf-8'))) for p in sorted(root.glob('*.descriptor.json'))]"
+
+      - name: Enforce artifact upload boundary
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $files = @(Get-ChildItem -LiteralPath "${{ github.workspace }}/reference-output" -File)
+          if ($files.Count -ne 4) { throw "Expected exactly four reference-export files, found $($files.Count)" }
+          $forbidden = @('.exe', '.dll', '.sys', '.msi', '.cab', '.zip', '.pfx', '.p12', '.pem', '.key')
+          foreach ($file in $files) {
+            if ($forbidden -contains $file.Extension.ToLowerInvariant()) {
+              throw "Forbidden binary/secret-bearing artifact in reference output: $($file.Name)"
+            }
+          }
+          python -c "import importlib.util,json,pathlib; p=pathlib.Path('tools/ingestion/validate_ingestion_foundation.py'); s=importlib.util.spec_from_file_location('iv',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); v=m.ingestion_validator('extensions/reference-export.schema.json'); files=sorted(pathlib.Path('reference-output').glob('*.descriptor.json')); assert len(files)==2; desc=[json.loads(f.read_text(encoding='utf-8')) for f in files]; errs=[e.message for d in desc for e in v.iter_errors(d)]; assert not errs, errs; assert all(d['fixture_only'] is False for d in desc); assert all(d['controls']['operator_review_required'] is True for d in desc); assert all(d['controls']['upstream_binary_executed_by_atlas_core'] is False for d in desc); print('Real ReferenceExport upload boundary validation passed.')"
+
+      - name: Upload operator-review reference export
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-5.3.3-real-reference-export-${{ github.run_id }}
+          path: reference-output/**
+          if-no-files-found: error
+          retention-days: 14
