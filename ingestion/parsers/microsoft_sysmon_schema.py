@@ -19,6 +19,7 @@ MAX_FIELDS_PER_EVENT = 4096
 
 MANIFEST_RE = re.compile(r"<manifest\b.*?</manifest>", re.IGNORECASE | re.DOTALL)
 SCHEMA_VERSION_RE = re.compile(r"^[0-9]+(?:\.[0-9]+)+$")
+BINARY_VERSION_RE = re.compile(r"^[0-9]+(?:\.[0-9]+)?$")
 NUMERIC_RE = re.compile(r"^[0-9]+$")
 FORBIDDEN_XML_RE = re.compile(r"<!\s*(?:DOCTYPE|ENTITY)\b", re.IGNORECASE)
 
@@ -100,8 +101,8 @@ def parse_text(
         seen_schema_versions.add(schema_version)
 
         binary_version = _required_attr(root.attrib, "binaryversion", f"manifest[{manifest_index}]")
-        if not NUMERIC_RE.fullmatch(binary_version):
-            raise ValueError(f"manifest[{manifest_index}] has nonnumeric binaryversion: {binary_version!r}")
+        if not BINARY_VERSION_RE.fullmatch(binary_version):
+            raise ValueError(f"manifest[{manifest_index}] has invalid binaryversion: {binary_version!r}")
         manifest_unknown = _unknown_attributes(root.attrib, MANIFEST_ATTRS)
 
         events_parent = root.find("./events")
