@@ -1,0 +1,30 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "parser_id": "atlas:parser:atlas.ingestion:microsoft-windows-provider-metadata",
+  "parser_version": "1.0.0",
+  "status": "active",
+  "purpose": "Parse an immutable controlled-reference-host ProviderMetadata.Events JSON export into source-native Windows event/version PSR records without canonical identity selection.",
+  "supported_media_types": ["application/json"],
+  "unknown_field_policy": "preserve-and-report",
+  "security_policy": {
+    "network_access": false,
+    "dns_access": false,
+    "http_access": false,
+    "git_access": false,
+    "source_execution": false,
+    "javascript_execution": false,
+    "xml_external_entities": false,
+    "dtd_external_resolution": false,
+    "macros": false,
+    "ai_enabled": false,
+    "filesystem_mode": "restricted",
+    "input_mode": "read-only",
+    "output_mode": "designated-only",
+    "resource_limits": {
+      "cpu_seconds": 60,
+      "memory_bytes": 536870912,
+      "wall_seconds": 120,
+      "max_output_records": 20000
+    }
+  }
+}
