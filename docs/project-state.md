@@ -4,9 +4,10 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Authoritative Branch: `main`
-- Current Main SHA: `84d125c61051442c509a701c2d6bc6ffb85a9090`
-- Last Reviewed Main SHA: `84d125c61051442c509a701c2d6bc6ffb85a9090`
-- Last Architecture-Reviewed Main SHA: `84d125c61051442c509a701c2d6bc6ffb85a9090`
+- Live Main SHA: resolve from the GitHub `main` branch tip; this PR-only status document does not self-reference a future status-sync merge commit.
+- Phase 5.3 Completion Main SHA: `7270ba54dbcceb3460e922e82bb3fb20bf149f29`
+- Last Reviewed Main SHA: `7270ba54dbcceb3460e922e82bb3fb20bf149f29`
+- Last Architecture-Reviewed Main SHA: `7270ba54dbcceb3460e922e82bb3fb20bf149f29`
 - Current Version: `0.1.0-foundation.1`
 - Canonical Schema Version: `1.0.0`
 - Canonical Schema URI Base: `https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/`
@@ -20,14 +21,15 @@
 - Phase 5.1 — Product Foundation: **COMPLETE**
 - Stage 1 — Governance / Architecture Sync: **COMPLETE**
 - Phase 5.2 — Canonical Data Model: **COMPLETE**
-- Phase 5.3 — Source & Ingestion Core: **IN PROGRESS**
+- Phase 5.3 — Source & Ingestion Core: **COMPLETE / MERGED**
 - Phase 5.3.1 — Ingestion Foundation / Contracts: **COMPLETE / MERGED**
 - Phase 5.3.2 — MITRE ATT&CK Structured-Source Canary: **COMPLETE / MERGED**
 - Phase 5.3.3 — Windows Security + Sysmon Encyclopedia Pipeline: **COMPLETE / MERGED**
-- Phase 5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates: **NEXT**
-- Phase 5.4 — Deterministic Search Core: **NOT STARTED**
+- Phase 5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates: **COMPLETE / MERGED**
+- Phase 5.4 — Deterministic Search Core: **NEXT / ARCHITECTURE GATE**
+- Phase 5.5 — Offline Pack Runtime / Shared Core: **NOT STARTED**
 
-Phase 5.2 canonical schema v1.0.0 remains authoritative and unchanged. Phase 5.3 uses a separate ingestion/control-plane schema stream. Phase 5.3 terminates at `PACK_READY`; signed content-pack runtime, archive format, installation and rollback remain Phase 5.5 concerns.
+Phase 5.2 canonical schema v1.0.0 remains authoritative and unchanged. Phase 5.3 uses a separate ingestion/control-plane schema stream and terminates at `PACK_READY`. Signed content-pack runtime, archive format, installation, activation and rollback remain Phase 5.5 concerns.
 
 ## Product Definition
 
@@ -88,7 +90,7 @@ Atlas is not an Event-ID-only wiki. Event ID is one native identifier type insid
 - ADR-0019 — Validation, Review and Pack-Ready Promotion
 - ADR-0020 — Encyclopedia Identifier Search/Browse Data Contract
 
-ADR-0001 through ADR-0015 remain authoritative for the Canonical Model. ADR-0016 through ADR-0020 define the Phase 5.3 ingestion/control-plane, deterministic transformation, inventory, promotion and Encyclopedia contracts without adding an eighth `AtlasRecord` family.
+ADR-0001 through ADR-0015 remain authoritative for the Canonical Model. ADR-0016 through ADR-0020 define the Phase 5.3 ingestion/control-plane, deterministic transformation, inventory, promotion and Encyclopedia contracts without adding an eighth `AtlasRecord` family. ADR-0020 defines search/browse behavior requirements but does not select the Phase 5.4 search engine.
 
 ## Phase 5.3.1 — Ingestion Foundation
 
@@ -195,43 +197,61 @@ Sysmon:
 
 Phase 5.3.3 validates a production-like Encyclopedia ingestion acceptance domain. It is not a signed content pack, does not implement search, and does not claim global Windows/Sysmon historical completeness.
 
-## Phase 5.3.4 — Next Slice
+## Phase 5.3.4 — D3FEND/CAR + DefenseOps + Final Promotion
 
-Status: **NEXT / NOT YET MERGED**
+Status: **COMPLETE / MERGED**
 
-Architecture baseline already approved for:
+- Pull Request: `#11`
+- Final Reviewed Head: `58b15b0e001427ea7ff8b67b20100f4f4d1e3eee`
+- Merge Commit: `7270ba54dbcceb3460e922e82bb3fb20bf149f29`
+- Reviewed Head Phase 5.3.4 Canaries: run `33977305362` — **SUCCESS**
+- Reviewed Head Foundation Hygiene: run `33977305407` — **SUCCESS**
+- Post-Merge Main Phase 5.3.4 Canaries: run `33977610961` — **SUCCESS**
+- Post-Merge Main Foundation Hygiene: run `33977610969` — **SUCCESS**
 
-1. D3FEND official-source ingestion with strict snapshot/version/digest binding and fail-closed structural drift handling. The upstream D3FEND API is treated as change-prone/alpha; no floating source may silently modify canonical output.
-2. MITRE CAR official structured repository ingestion, preferring structured YAML and explicit commit/release pinning.
-3. DefenseOps explicit validated export contract. DefenseOps is an approved engineering source but its origin alone never makes content authoritative.
-4. Final Phase 5.3 validation/review/promotion scenarios through G1–G15 and immutable `PACK_READY` promotion semantics.
-5. Last Known Good preservation on FAILED / QUARANTINED / REJECTED paths.
-6. Detection IR remains outside Phase 5.3 and open.
+Delivered:
 
-Minimum DefenseOps export metadata contract must include, as applicable:
+- D3FEND SourceRecord/release/connector pinned to ontology version `1.6.0` and official TTL SHA-256 `sha256-4909a5bb66b75d2c359624398848936fb56a6b246bcd5cfcd277977a1277753a`;
+- deterministic D3FEND Turtle parser, PSR and canonical normalizer;
+- RDF blank-node unknown structures preserved as bounded deterministic rooted representations; cycles or oversized structures fail closed rather than emitting unstable blank-node identities;
+- live D3FEND canary: 3,862,115 bytes, 272 PSR records and 544 canonical candidate records from the pinned official source;
+- CAR official structured-source canary pinned to commit `1b922fe1527d956e222a99473472e594f10f610b` and sample Git blob `b0f899e2875d4469ac58838dcb77db59e4feee96`;
+- CAR live canary for `CAR-2016-03-001`, producing two canonical candidate records;
+- explicit DefenseOps validated-export schema and parser/normalizer boundary pinned to DefenseOps commit `daa879b5eede5f09651468c16ed3acc50596b2fc` (`v0.1.0`);
+- DefenseOps remains Tier-B engineering provenance, never an automatic authoritative source;
+- DefenseOps repository-level licensing remains `unknown` and G14 fails closed unless adequate item licensing is verified;
+- final deterministic G1–G15 promotion scenarios;
+- non-waivable G14 failure behavior;
+- high-risk four-eyes approval semantics;
+- stale review/digest bindings rejected;
+- FAILED / QUARANTINED / REJECTED paths preserve Last Known Good;
+- fixture-only `PACK_READY` success semantics without claiming SIGNED / RELEASED / INSTALLED state;
+- no canonical `schemas/v1` changes.
 
-- repository/commit SHA;
-- content ID and content type;
-- native backend / format;
-- source/provenance references;
-- validation/review status;
-- applicability;
-- telemetry requirements;
-- licensing metadata.
+Phase 5.3 is therefore complete. No production content pack has been signed, released or installed.
 
-## Search / Encyclopedia Boundary
+## Phase 5.4 — Deterministic Search Core Architecture Gate
 
-Phase 5.3 preserves data required for Phase 5.4 but does not implement the search engine.
+Status: **NEXT**
 
-Required Phase 5.4 behavior remains:
+Phase 5.4 must implement deterministic search behavior over Phase 5.2 canonical records and Phase 5.3-preserved native identifier/context metadata without modifying canonical identity semantics.
+
+Required behavior already accepted through ADR-0020 and the Encyclopedia contract:
 
 - exact native identifier lookup first;
-- bare numeric identifiers resolve within provider/namespace context and disambiguate collisions;
-- scoped identifiers such as `sysmon 1` are first-class;
-- legacy/retired telemetry remains searchable;
-- numeric Event ID browse uses numeric ordering only where the identifier registry defines numeric semantics;
-- documentation completeness remains independent from telemetry inventory completeness;
-- user-facing search does not require knowledge of canonical IDs.
+- bare numeric identifiers such as `4688` attempt exact identifier resolution before lexical/semantic retrieval;
+- namespace/provider collisions produce a deterministic disambiguation set, never an arbitrary winner;
+- scoped searches such as `sysmon 1`, `windows 4688` and provider-qualified identifiers are first-class;
+- scoped aliases are resolved after exact native identifiers and never replace canonical identity;
+- legacy/deprecated/retired telemetry remains searchable and browseable;
+- numeric Event ID browse uses derived numeric ordering only when the identifier registry declares numeric semantics; no `numeric_sort_value` is added to canonical records;
+- global search and provider catalog browse remain distinct product paths;
+- user-facing search never requires knowledge of Atlas canonical IDs;
+- ranking precedence is Exact Identifier → Scoped Identifier → Alias → Lexical → Semantic;
+- semantic retrieval is optional/later and may not override exact deterministic resolution;
+- search/index projection data is derived and non-canonical.
+
+Exact search/index engine selection remains open and requires Phase 5.4 spike/ADR evidence rather than premature stack freeze.
 
 ## Content Pack Status
 
@@ -249,9 +269,8 @@ No production content pack has been released or installed.
 - Detection Intermediate Representation
 - Exact content-pack naming convention and format
 - Portable Windows packaging implementation
-- Exact final DefenseOps → Atlas export implementation details within the approved Phase 5.3.4 contract
 - Code signing / pack signing implementation and key management
-- Exact search engine implementation
+- Exact deterministic/lexical search engine implementation
 - Exact parser sandbox technology
 - Secret-provider implementation
 - Reviewer identity/workflow implementation
@@ -261,9 +280,9 @@ Tauri, Rust, SQLite, React, and TypeScript remain candidates only.
 
 ## Active Architecture Issues
 
-No blocking architecture conflict is known at the completion of Phase 5.3.3.
+No blocking architecture conflict is known at Phase 5.3 completion.
 
-Known implementation/security consideration: the acquisition implementation validates official hosts, TLS, redirect policy, pinned resources, size and content identity. A stronger address-pinned transport may be evaluated for the future generic acquisition engine to eliminate DNS-resolution TOCTOU/rebinding edge cases.
+Known implementation/security consideration: acquisition validates official hosts, TLS, redirect policy, pinned resources, size and content identity. A stronger address-pinned transport may be evaluated for a future generic acquisition engine to reduce DNS-resolution TOCTOU/rebinding edge cases.
 
 Any implementation issue requiring a change to accepted architecture must be raised as `ARCHITECTURE ISSUE` before changing the model.
 
@@ -275,10 +294,11 @@ Any implementation issue requiring a change to accepted architecture must be rai
 - Windows/Sysmon product-acceptance ingestion pipeline: complete
 - Windows current provider denominator for the declared reference scope: 423 unique Event IDs
 - Sysmon current schema denominator for the declared 15.21 / schema 4.91 scope: 30 Event IDs
+- D3FEND 1.6.0 pinned ingestion canary: complete
+- CAR commit-pinned structured-source canary: complete
+- DefenseOps validated-export ingestion contract: complete; production publication remains license/review gated
 - Documentation Coverage and Telemetry Coverage remain independent
 - Production Detection Coverage measurements: not started
-- D3FEND/CAR ingestion: Phase 5.3.4 / next
-- DefenseOps ingestion contract implementation: Phase 5.3.4 / next
 
 Telemetry Coverage and Detection Coverage remain separate first-class measurements and must declare scope, version and denominator.
 
@@ -316,7 +336,16 @@ Phase 5.3.3 Windows/Sysmon validation includes:
 - Encyclopedia acceptance tests;
 - three-layer inventory diff tests.
 
-Post-merge `main@84d125c61051442c509a701c2d6bc6ffb85a9090` passed Foundation Hygiene run `33973584356`.
+Phase 5.3.4 validation includes:
+
+- `tools/ingestion/validate_phase534.py`;
+- `tests/phase53/test_phase534.py`;
+- `tools/ingestion/run_d3fend_live_canary.py`;
+- `tools/ingestion/run_car_live_canary.py`;
+- dedicated `Phase 5.3.4 Canaries` workflow;
+- full Foundation Hygiene regression suite.
+
+Post-merge `main@7270ba54dbcceb3460e922e82bb3fb20bf149f29` passed Foundation Hygiene run `33977610969` and Phase 5.3.4 Canaries run `33977610961`.
 
 ## Known Risks / Blockers
 
@@ -325,7 +354,7 @@ Post-merge `main@84d125c61051442c509a701c2d6bc6ffb85a9090` passed Foundation Hyg
 - Pack-signing/key-management design remains open.
 - Parser sandbox technology remains open.
 - Formal cross-language canonical JSON/hash standard remains open if later runtime languages require it; do not assume RFC 8785/JCS today.
-- Phase 5.3.4 still must complete D3FEND/CAR/DefenseOps ingestion and final promotion scenarios before Phase 5.3 can be declared complete.
+- Phase 5.4 must preserve deterministic exact identifier semantics and disambiguation before any semantic retrieval is introduced.
 
 ## Last Architecture Sync
 
@@ -334,11 +363,13 @@ Post-merge `main@84d125c61051442c509a701c2d6bc6ffb85a9090` passed Foundation Hyg
 - Architecture Sync Status: **GREEN**
 - Stage 1: **APPROVED AND MERGED**
 - Phase 5.2: **APPROVED AND MERGED**
-- Phase 5.3 Architecture: **APPROVED**
+- Phase 5.3 Architecture: **APPROVED AND COMPLETE**
 - Phase 5.3.1: **COMPLETE / MERGED**
 - Phase 5.3.2: **COMPLETE / MERGED**
 - Phase 5.3.3: **COMPLETE / MERGED**
-- Phase 5.3.3 PR: `#8`
-- Phase 5.3.3 Merge Commit: `84d125c61051442c509a701c2d6bc6ffb85a9090`
-- Phase 5.3.3 Post-Merge Main CI: **GREEN** — run `33973584356`
-- Next Slice: **Phase 5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates**
+- Phase 5.3.4: **COMPLETE / MERGED**
+- Phase 5.3.4 PR: `#11`
+- Phase 5.3.4 Merge Commit: `7270ba54dbcceb3460e922e82bb3fb20bf149f29`
+- Phase 5.3.4 Post-Merge Foundation Hygiene: **GREEN** — run `33977610969`
+- Phase 5.3.4 Post-Merge Canaries: **GREEN** — run `33977610961`
+- Next Phase: **Phase 5.4 — Deterministic Search Core Architecture Gate**
