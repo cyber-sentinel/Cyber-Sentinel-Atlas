@@ -34,6 +34,24 @@ jobs:
             -OutputDirectory "${{ github.workspace }}/reference-output" `
             -ExpectedSysmonVersion "${{ inputs.expected_sysmon_version }}"
 
+      - name: Validate Windows provider export through deterministic PSR parser
+        shell: pwsh
+        run: |
+          $psr = Join-Path $env:RUNNER_TEMP 'windows-provider.psr.json'
+          python ingestion/parsers/microsoft_windows_provider_metadata.py `
+            "${{ github.workspace }}/reference-output/windows-security-provider.json" `
+            --source-id "atlas:source:atlas.source:microsoft-windows-provider-metadata" `
+            --snapshot-id "atlas:raw-snapshot:atlas.ingestion:reference-host-validation" `
+            --output $psr
+          python -c "import json,sys; d=json.load(open(sys.argv[1],encoding='utf-8')); r=d['records']; ids={x['native_fields']['event_id'] for x in r}; print('Windows provider PSR records={} has_4688={}'.format(len(r),'4688' in ids)); assert '4688' in ids" $psr
+
+      - name: Validate Sysmon schema export through deterministic PSR parser
+        shell: pwsh
+        run: |
+          python tools/ingestion/validate_sysmon_schema_reference.py `
+            "${{ github.workspace }}/reference-output/sysmon-schema.txt" `
+            --required-event-id 1
+
       - name: Validate output boundary before upload
         shell: pwsh
         run: |
