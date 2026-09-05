@@ -18,16 +18,25 @@ class IngestionAuthorizationTests(unittest.TestCase):
     def authorized_paths(self):
         return sorted(phase_policy.AUTHORIZED_IMPLEMENTATIONS)
 
-    def test_01_current_phase_532_allowlist_is_exact(self):
-        expected = {
+    def test_01_current_authorization_allowlist_is_exact(self):
+        phase532 = {
             "ingestion/connectors/mitre-attack-enterprise.json",
             "ingestion/parsers/mitre-attack-stix21.definition.json",
             "ingestion/parsers/mitre_attack_stix.py",
             "ingestion/normalizers/mitre-attack-enterprise.definition.json",
             "ingestion/normalizers/mitre_attack.py",
         }
-        self.assertEqual(expected, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS))
-        self.assertEqual({"phase-5.3.2"}, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS.values()))
+        phase533 = {
+            "ingestion/connectors/microsoft-sysmon-docs.json",
+            "ingestion/parsers/microsoft-sysmon-markdown.definition.json",
+            "ingestion/parsers/microsoft_sysmon_markdown.py",
+            "ingestion/normalizers/microsoft-sysmon-docs.definition.json",
+            "ingestion/normalizers/microsoft_sysmon_docs.py",
+        }
+        self.assertEqual(phase532 | phase533, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS))
+        self.assertEqual(phase532, {p for p, phase in phase_policy.AUTHORIZED_IMPLEMENTATIONS.items() if phase == "phase-5.3.2"})
+        self.assertEqual(phase533, {p for p, phase in phase_policy.AUTHORIZED_IMPLEMENTATIONS.items() if phase == "phase-5.3.3"})
+        self.assertEqual({"phase-5.3.2", "phase-5.3.3"}, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS.values()))
 
     def test_02_exact_authorized_set_is_accepted(self):
         self.assertEqual([], phase_policy.implementation_authorization_errors(self.authorized_paths()))
@@ -58,7 +67,10 @@ class IngestionAuthorizationTests(unittest.TestCase):
             "ingestion/parsers/README.md",
             "ingestion/normalizers/README.md",
             "ingestion/mappings/mitre-attack-enterprise-v1.json",
+            "ingestion/mappings/microsoft-sysmon-docs-v1.json",
             "ingestion/source-profiles/mitre-attack-enterprise.source.json",
+            "ingestion/source-profiles/microsoft-sysmon-docs.source.json",
+            "ingestion/inventories/sysmon-docs-15.21.documentation.json",
         ]
         self.assertEqual([], phase_policy.implementation_authorization_errors(tracked))
 
