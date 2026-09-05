@@ -230,3 +230,4 @@ DefenseOps content enters Atlas only through versioned ingestion, provenance, va
 ---
 
 **Maintainer:** Ali RahimDabagh
+**GitHub:** `cyber-sentinel`
