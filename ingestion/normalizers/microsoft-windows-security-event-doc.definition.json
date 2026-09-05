@@ -1,0 +1,12 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "normalizer_id": "atlas:normalizer:atlas.ingestion:microsoft-windows-security-event-doc",
+  "normalizer_version": "1.0.0",
+  "status": "active",
+  "purpose": "Normalize source-native Microsoft Windows Security event documentation into canonical Event entities while keeping documentation evidence distinct from provider-inventory lifecycle/completeness evidence.",
+  "psr_version": "1.0.0",
+  "canonical_schema_version": "1.0.0",
+  "identity_outcomes": ["CREATE", "MATCH", "AMBIGUOUS"],
+  "network_access": false,
+  "ai_enabled": false
+}
