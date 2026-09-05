@@ -1,0 +1,40 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-4688-doc-learn-page-2022-01-24",
+  "inventory_kind": "documentation",
+  "declared_scope": "Microsoft Learn Event 4688 documentation page pinned to source profile learn-page-2022-01-24",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-security-auditing-4688-doc"
+  ],
+  "inventory_method": "documentation-index",
+  "inventory_source_version": "learn-page-2022-01-24",
+  "expected_identity_count": 1,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "channel": "Security",
+    "product": "Windows Security Auditing",
+    "platform": "Windows",
+    "page_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4688",
+    "page_last_updated": "2022-01-24",
+    "expected_identities": [
+      {"event_id": "4688"}
+    ],
+    "documented_event_versions": ["0", "1", "2"],
+    "minimum_os": "Windows Server 2008, Windows Vista",
+    "completeness_semantics": "single authoritative documentation-page scope only; this is not the Windows provider telemetry denominator"
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-082d36d826006c7217c352c978d352a1aa20453a5294cd81e548458df5d4cd20"
+}
