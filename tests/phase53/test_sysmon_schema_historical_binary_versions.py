@@ -55,6 +55,40 @@ class SysmonHistoricalBinaryVersionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "invalid binaryversion"):
             parser.parse_text(text, source_id=SOURCE_ID, source_snapshot_id=SNAPSHOT_ID)
 
+    def test_historical_hex_event_id_is_preserved_losslessly_with_numeric_derivation(self):
+        text = """
+<manifest schemaversion="4.32" binaryversion="9.20">
+  <events>
+    <event name="SYSMONEVENT_LEGACY_INTERNAL" value="0xf002" level="Informational" template="Legacy Internal" version="1">
+      <data name="UtcTime" inType="win:UnicodeString" />
+    </event>
+  </events>
+</manifest>
+"""
+        records = parser.parse_text(text, source_id=SOURCE_ID, source_snapshot_id=SNAPSHOT_ID)
+        self.assertEqual(1, len(records))
+        record = records[0]
+        self.assertEqual("0xf002", record["native_fields"]["event_id"])
+        self.assertEqual(0xF002, record["native_fields"]["event_id_numeric_value"])
+        self.assertEqual("0xf002", record["native_identifiers"][0]["value"])
+        self.assertIn("event-id:0xf002", record["native_key"])
+
+    def test_decimal_and_hex_spellings_of_same_event_id_cannot_duplicate_within_schema(self):
+        text = """
+<manifest schemaversion="4.32" binaryversion="9.20">
+  <events>
+    <event name="HEX" value="0xf002" level="Informational" template="Hex" version="1">
+      <data name="UtcTime" inType="win:UnicodeString" />
+    </event>
+    <event name="DECIMAL" value="61442" level="Informational" template="Decimal" version="1">
+      <data name="UtcTime" inType="win:UnicodeString" />
+    </event>
+  </events>
+</manifest>
+"""
+        with self.assertRaisesRegex(ValueError, "duplicate Sysmon Event ID"):
+            parser.parse_text(text, source_id=SOURCE_ID, source_snapshot_id=SNAPSHOT_ID)
+
 
 if __name__ == "__main__":
     unittest.main()
