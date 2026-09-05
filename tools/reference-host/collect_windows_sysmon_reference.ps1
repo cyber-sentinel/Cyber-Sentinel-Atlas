@@ -62,9 +62,94 @@ function New-ReferenceEnvironment {
     }
 }
 
+function Convert-EventMetadataNamedValue {
+    param($Value)
+    if ($null -eq $Value) { return $null }
+    $result = [ordered]@{}
+    foreach ($name in @('Value', 'Name', 'DisplayName')) {
+        if ($Value.PSObject.Properties.Name -contains $name -and $null -ne $Value.$name) {
+            $key = $name.Substring(0, 1).ToLowerInvariant() + $name.Substring(1)
+            $result[$key] = [string]$Value.$name
+        }
+    }
+    if ($result.Count -eq 0) {
+        $result['value'] = [string]$Value
+    }
+    return $result
+}
+
+function Export-WindowsProviderMetadata {
+    param(
+        [Parameter(Mandatory = $true)][string]$ProviderName,
+        [Parameter(Mandatory = $true)][string]$RequiredChannel,
+        [Parameter(Mandatory = $true)][string]$OutputPath
+    )
+
+    $providerMetadata = [System.Diagnostics.Eventing.Reader.ProviderMetadata]::new($ProviderName)
+    try {
+        $logLinks = @(
+            $providerMetadata.LogLinks |
+                ForEach-Object {
+                    [ordered]@{
+                        log_name = [string]$_.LogName
+                        display_name = if ($null -ne $_.DisplayName) { [string]$_.DisplayName } else { $null }
+                        is_imported = [bool]$_.IsImported
+                    }
+                } |
+                Sort-Object log_name
+        )
+        if (-not ($logLinks | Where-Object { $_.log_name -eq $RequiredChannel })) {
+            throw "Provider $ProviderName does not expose required channel $RequiredChannel in ProviderMetadata.LogLinks"
+        }
+
+        $events = @(
+            $providerMetadata.Events |
+                ForEach-Object {
+                    $keywordValues = @(
+                        $_.Keywords |
+                            Where-Object { $null -ne $_ } |
+                            ForEach-Object { Convert-EventMetadataNamedValue $_ }
+                    )
+                    [ordered]@{
+                        event_id = [string]$_.Id
+                        version = if ($null -ne $_.Version) { [string]$_.Version } else { '0' }
+                        log_name = if ($null -ne $_.LogLink) { [string]$_.LogLink.LogName } else { $null }
+                        level = Convert-EventMetadataNamedValue $_.Level
+                        opcode = Convert-EventMetadataNamedValue $_.Opcode
+                        task = Convert-EventMetadataNamedValue $_.Task
+                        keywords = $keywordValues
+                        template = if ($null -ne $_.Template) { [string]$_.Template } else { $null }
+                    }
+                } |
+                Sort-Object @{ Expression = { [long]$_.event_id } }, @{ Expression = { [int]$_.version } }
+        )
+        if ($events.Count -eq 0) {
+            throw "ProviderMetadata.Events returned no events for $ProviderName"
+        }
+        if (-not ($events | Where-Object { $_.log_name -eq $RequiredChannel })) {
+            throw "ProviderMetadata.Events did not contain any event linked to $RequiredChannel"
+        }
+
+        $export = [ordered]@{
+            export_format_version = '1.0.0'
+            provider = $ProviderName
+            provider_guid = $providerMetadata.Id.ToString()
+            log_links = $logLinks
+            events = $events
+            structural_only = $true
+            descriptions_included = $false
+        }
+        Write-Utf8NoBom -Path $OutputPath -Content (($export | ConvertTo-Json -Depth 15) + "`n")
+        return $events.Count
+    }
+    finally {
+        $providerMetadata.Dispose()
+    }
+}
+
 function Write-Metadata {
     param(
-        [Parameter(Mandatory = $true)][hashtable]$Metadata,
+        [Parameter(Mandatory = $true)][System.Collections.IDictionary]$Metadata,
         [Parameter(Mandatory = $true)][string]$Path
     )
     $json = $Metadata | ConvertTo-Json -Depth 10
@@ -80,24 +165,15 @@ try {
     $environment = New-ReferenceEnvironment
     $collectedAt = [DateTimeOffset]::UtcNow.ToString('yyyy-MM-ddTHH:mm:ssZ')
 
-    # Windows Security provider metadata. This is a first-party OS metadata export;
-    # it executes outside Atlas core on the controlled reference host.
-    $wevtutil = Join-Path $env:SystemRoot 'System32\wevtutil.exe'
-    if (-not (Test-Path -LiteralPath $wevtutil -PathType Leaf)) {
-        throw "wevtutil.exe not found at expected path: $wevtutil"
-    }
-    $wevtSignature = Assert-MicrosoftSignature -Path $wevtutil -Label 'wevtutil.exe'
-    $wevtVersion = (Get-Item -LiteralPath $wevtutil).VersionInfo.FileVersion
-    $windowsRawPath = Join-Path $resolvedOutput 'windows-security-provider.xml'
-    $windowsOutput = & $wevtutil gp $WindowsProvider /ge:true /f:xml 2>&1
-    if ($LASTEXITCODE -ne 0) {
-        throw "wevtutil provider export failed with exit code $LASTEXITCODE"
-    }
-    $windowsText = ($windowsOutput | ForEach-Object { [string]$_ }) -join "`n"
-    if ([string]::IsNullOrWhiteSpace($windowsText) -or $windowsText -notmatch [regex]::Escape($WindowsProvider)) {
-        throw 'wevtutil provider export did not contain the expected publisher identity'
-    }
-    Write-Utf8NoBom -Path $windowsRawPath -Content ($windowsText + "`n")
+    # Windows Security provider metadata is collected through Microsoft's documented
+    # System.Diagnostics.Eventing.Reader.ProviderMetadata API. This code executes only
+    # on the controlled reference host, never inside Atlas ingestion core.
+    $windowsRawPath = Join-Path $resolvedOutput 'windows-security-provider.json'
+    $windowsEventCount = Export-WindowsProviderMetadata `
+        -ProviderName $WindowsProvider `
+        -RequiredChannel $WindowsChannel `
+        -OutputPath $windowsRawPath
+    $eventLogAssemblyVersion = [System.Diagnostics.Eventing.Reader.ProviderMetadata].Assembly.GetName().Version.ToString()
 
     $windowsMetadataPath = Join-Path $work 'windows-security-provider.metadata.json'
     $windowsMetadata = [ordered]@{
@@ -106,23 +182,20 @@ try {
         source_id = 'atlas:source:atlas.source:microsoft-windows-provider-metadata'
         source_version = "windows-build-$($environment.build)"
         export_type = 'windows-event-provider-metadata'
-        collection_method = 'wevtutil-gp-ge'
+        collection_method = 'windows-event-log-api'
         reference_environment = $environment
         collector = [ordered]@{
-            tool_name = 'wevtutil'
+            tool_name = 'System.Diagnostics.Eventing.Reader.ProviderMetadata'
             tool_publisher = 'Microsoft'
-            tool_version = [string]$wevtVersion
-            command_shape = 'wevtutil gp Microsoft-Windows-Security-Auditing /ge:true /f:xml'
-            binary_sha256 = Get-Sha256Digest -Path $wevtutil
-            signature_status = [string]$wevtSignature.Status
-            signer_subject = [string]$wevtSignature.SignerCertificate.Subject
+            tool_version = $eventLogAssemblyVersion
+            command_shape = 'ProviderMetadata(Microsoft-Windows-Security-Auditing).Events'
         }
         collected_at = $collectedAt
         scope = [ordered]@{
             provider = $WindowsProvider
             channels = @($WindowsChannel)
             native_identifier_types = @('event_id')
-            notes = 'Reference-host provider metadata denominator candidate; requires parser validation and operator review before authoritative inventory promotion.'
+            notes = "Structured first-party provider metadata export containing $windowsEventCount event/version definitions; denominator candidate requires deterministic import and operator review."
         }
         controls = [ordered]@{
             collected_outside_atlas_core = $true
@@ -135,14 +208,15 @@ try {
         fixture_only = $false
         diagnostics = @(
             'Collected on a controlled Windows reference host; this artifact is not automatically authoritative or PACK_READY.',
-            'Exact Windows product/build, architecture, locale, collector version, signature and binary digest are bound into the descriptor.'
+            'ProviderMetadata.Events is exported structurally without localized event descriptions; exact Windows build, architecture and locale are bound into the descriptor.',
+            'The reference-host transformer is repository-controlled and the resulting JSON is immutable and SHA-256 bound before Atlas import.'
         )
     }
     Write-Metadata -Metadata $windowsMetadata -Path $windowsMetadataPath
     python tools/ingestion/build_reference_export_descriptor.py `
         --metadata $windowsMetadataPath `
         --artifact $windowsRawPath `
-        --media-type application/xml `
+        --media-type application/json `
         --encoding utf-8 `
         --output (Join-Path $resolvedOutput 'windows-security-provider.descriptor.json')
     if ($LASTEXITCODE -ne 0) { throw 'Windows ReferenceExport descriptor build failed' }
@@ -234,7 +308,7 @@ try {
         'sysmon-schema.descriptor.json',
         'sysmon-schema.txt',
         'windows-security-provider.descriptor.json',
-        'windows-security-provider.xml'
+        'windows-security-provider.json'
     )
     if ((Compare-Object -ReferenceObject $expectedFiles -DifferenceObject $outputFiles).Count -ne 0) {
         throw "Reference output contains an unexpected file set: $($outputFiles -join ', ')"
