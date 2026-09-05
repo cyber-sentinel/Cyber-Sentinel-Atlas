@@ -353,7 +353,11 @@ try {
         'windows-security-provider.descriptor.json',
         'windows-security-provider.json'
     )
-    if ((Compare-Object -ReferenceObject $expectedFiles -DifferenceObject $outputFiles).Count -ne 0) {
+    # Compare-Object returns $null for an exact match and a scalar for a single
+    # difference. Under StrictMode, neither reliably exposes .Count, so force the
+    # result into an array before cardinality evaluation.
+    $fileSetDiff = @(Compare-Object -ReferenceObject $expectedFiles -DifferenceObject $outputFiles)
+    if ($fileSetDiff.Count -ne 0) {
         throw "Reference output contains an unexpected file set: $($outputFiles -join ', ')"
     }
 
