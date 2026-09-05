@@ -5,15 +5,17 @@ import argparse
 import hashlib
 import json
 import re
+from collections import deque
 from pathlib import Path
 
-from rdflib import BNode, Graph, Namespace, RDF, RDFS
+from rdflib import BNode, Graph, Namespace, RDF, RDFS, URIRef
 from rdflib.compare import to_canonical_graph
 
 PARSER_ID = "atlas:parser:atlas.ingestion:mitre-d3fend-turtle"
 PARSER_VERSION = "1.0.0"
 PSR_VERSION = "1.0.0"
 MAX_INPUT_BYTES = 32 * 1024 * 1024
+MAX_BLANK_NODE_SUBGRAPH_TRIPLES = 256
 D3FEND_ID_RE = re.compile(r"^D3-[A-Z0-9]+$")
 D3F = Namespace("http://d3fend.mitre.org/ontologies/d3fend.owl#")
 KNOWN_PREDICATES = {RDF.type, RDFS.label, D3F["d3fend-id"], D3F.definition}
@@ -50,22 +52,57 @@ def _collect_subject_ids(graph: Graph) -> dict[str, list]:
     return subject_ids
 
 
-def _requires_blank_node_canonicalization(graph: Graph, subject_ids: dict[str, list]) -> bool:
-    """Canonicalize only when blank-node identity can affect emitted PSR fields.
+def _canonical_blank_node_value(graph: Graph, root: BNode) -> dict:
+    """Preserve an unknown blank-node value as a bounded canonical local subgraph.
 
-    Full RDF canonicalization over the complete D3FEND ontology is expensive and is
-    unnecessary when all emitted subjects and their direct predicate objects are
-    stable IRIs/literals. Unrelated blank nodes cannot influence the output because
-    the parser emits only records rooted at subjects carrying a valid d3fend-id.
+    D3FEND uses OWL/RDF structures that may contain blank nodes. Canonicalizing the
+    complete ontology is unnecessarily expensive. Only the blank-node component
+    that can affect an emitted unknown field is extracted, bounded, canonicalized,
+    and preserved. The immutable RawSnapshot remains the byte-exact source record.
     """
-    for subjects in subject_ids.values():
-        for subject in subjects:
-            if isinstance(subject, BNode):
-                return True
-            for _predicate, obj in graph.predicate_objects(subject):
-                if isinstance(obj, BNode):
-                    return True
-    return False
+    subgraph = Graph()
+    queue: deque[BNode] = deque([root])
+    seen: set[BNode] = set()
+
+    while queue:
+        node = queue.popleft()
+        if node in seen:
+            continue
+        seen.add(node)
+
+        for triple in graph.triples((node, None, None)):
+            subgraph.add(triple)
+            obj = triple[2]
+            if isinstance(obj, BNode) and obj not in seen:
+                queue.append(obj)
+            if len(subgraph) > MAX_BLANK_NODE_SUBGRAPH_TRIPLES:
+                raise ValueError("D3FEND blank-node subgraph exceeds bounded parser limit")
+
+        for triple in graph.triples((None, None, node)):
+            subgraph.add(triple)
+            subject = triple[0]
+            if isinstance(subject, BNode) and subject not in seen:
+                queue.append(subject)
+            if len(subgraph) > MAX_BLANK_NODE_SUBGRAPH_TRIPLES:
+                raise ValueError("D3FEND blank-node subgraph exceeds bounded parser limit")
+
+    canonical = to_canonical_graph(subgraph)
+    triples = sorted(
+        " ".join(term.n3() for term in triple) + " ."
+        for triple in canonical
+    )
+    return {
+        "term_type": "blank-node-subgraph",
+        "triple_count": len(triples),
+        "canonical_triples": triples,
+        "subgraph_digest": sha256_digest(triples),
+    }
+
+
+def _stable_unknown_value(graph: Graph, value):
+    if isinstance(value, BNode):
+        return _canonical_blank_node_value(graph, value)
+    return str(value)
 
 
 def parse_bytes(
@@ -98,19 +135,15 @@ def parse_bytes(
     if not subject_ids:
         raise ValueError("D3FEND ontology contains no defensive technique identifiers")
 
-    # Preserve deterministic blank-node handling without canonicalizing the entire
-    # ontology when blank nodes are irrelevant to the emitted records. This keeps
-    # the official live canary bounded while retaining fail-safe determinism.
-    if _requires_blank_node_canonicalization(graph, subject_ids):
-        graph = to_canonical_graph(graph)
-        subject_ids = _collect_subject_ids(graph)
-
     records: list[dict] = []
     for identifier in sorted(subject_ids):
         subjects = subject_ids[identifier]
         if len({str(subject) for subject in subjects}) != 1:
             raise ValueError(f"ambiguous D3FEND identifier {identifier}: multiple subjects")
         subject = subjects[0]
+        if not isinstance(subject, URIRef):
+            raise ValueError(f"D3FEND {identifier}: identified technique subject must be a stable named IRI")
+
         labels = _values(graph, subject, RDFS.label)
         definitions = _values(graph, subject, D3F.definition)
         if len(labels) != 1:
@@ -119,12 +152,17 @@ def parse_bytes(
             raise ValueError(f"D3FEND {identifier}: multiple definitions are structurally ambiguous")
 
         types = _values(graph, subject, RDF.type)
-        unknown: dict[str, list[str]] = {}
+        unknown: dict[str, list] = {}
         for predicate, obj in graph.predicate_objects(subject):
             if predicate in KNOWN_PREDICATES:
                 continue
-            unknown.setdefault(str(predicate), []).append(str(obj))
-        unknown = {key: sorted(set(values)) for key, values in sorted(unknown.items())}
+            unknown.setdefault(str(predicate), []).append(_stable_unknown_value(graph, obj))
+        for key, values in list(unknown.items()):
+            # Canonical JSON is used as the sort/dedup key because preserved blank
+            # node subgraphs are structured JSON objects, not unstable RDF labels.
+            keyed = {canonical_json(value): value for value in values}
+            unknown[key] = [keyed[k] for k in sorted(keyed)]
+        unknown = {key: unknown[key] for key in sorted(unknown)}
 
         native_key = str(subject)
         native_identifiers = [
@@ -163,6 +201,12 @@ def parse_bytes(
         diagnostics = []
         if unknown:
             diagnostics.append("unknown direct ontology predicates preserved for drift review")
+        if any(
+            isinstance(value, dict) and value.get("term_type") == "blank-node-subgraph"
+            for values in unknown.values()
+            for value in values
+        ):
+            diagnostics.append("blank-node unknowns preserved as bounded canonical local subgraphs")
         records.append(
             {
                 "psr_version": PSR_VERSION,
