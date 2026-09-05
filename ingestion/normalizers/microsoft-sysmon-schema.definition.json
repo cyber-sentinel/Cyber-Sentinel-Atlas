@@ -1,0 +1,12 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "normalizer_id": "atlas:normalizer:atlas.ingestion:microsoft-sysmon-schema",
+  "normalizer_version": "1.0.0",
+  "status": "active",
+  "purpose": "Normalize the exact current Sysmon schema from a controlled `sysmon -s all` PSR into canonical Event identity shells while retaining historical schema PSR separately and not inferring global lifecycle from schema observation alone.",
+  "psr_version": "1.0.0",
+  "canonical_schema_version": "1.0.0",
+  "identity_outcomes": ["CREATE", "MATCH", "AMBIGUOUS"],
+  "network_access": false,
+  "ai_enabled": false
+}
