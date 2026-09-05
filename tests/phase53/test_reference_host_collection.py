@@ -147,6 +147,12 @@ class ReferenceHostCollectionTests(unittest.TestCase):
         self.assertIn("ProviderMetadata.Events returned no events", text)
         self.assertIn("does not expose required channel", text)
 
+    def test_09_reference_output_comparison_is_array_safe_under_strict_mode(self):
+        text = (ROOT / "tools/reference-host/collect_windows_sysmon_reference.ps1").read_text(encoding="utf-8")
+        self.assertIn("$fileSetDiff = @(Compare-Object", text)
+        self.assertIn("if ($fileSetDiff.Count -ne 0)", text)
+        self.assertNotIn("(Compare-Object -ReferenceObject $expectedFiles -DifferenceObject $outputFiles).Count", text)
+
 
 if __name__ == "__main__":
     unittest.main()
