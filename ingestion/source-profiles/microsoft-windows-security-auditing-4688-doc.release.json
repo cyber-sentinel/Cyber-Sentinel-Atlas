@@ -1,0 +1,13 @@
+{
+  "profile_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-4688-doc",
+  "source_version": "learn-page-2022-01-24",
+  "page_last_updated": "2022-01-24",
+  "page_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4688",
+  "expected_event_id": "4688",
+  "expected_provider": "Microsoft-Windows-Security-Auditing",
+  "expected_channel": "Security",
+  "expected_event_versions": ["0", "1", "2"],
+  "expected_minimum_os": "Windows Server 2008, Windows Vista",
+  "change_policy": "The Microsoft Learn page is a mutable authoritative documentation resource. Every acquisition creates an immutable RawSnapshot. Semantic drift in Event ID, provider, channel, documented versions, or structural field inventory fails closed and requires human review. The page is not the telemetry completeness denominator."
+}

@@ -1,0 +1,60 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_diff_id": "atlas:inventory-diff:atlas.ingestion:phase-5.3.3-sysmon-schema-initial",
+  "inventory_id": "atlas:inventory:atlas.ingestion:sysmon-schema-15.21-4.91",
+  "raw": {
+    "baseline_ref": "lkg:none:sysmon-schema-export",
+    "baseline_digest": "sha256-4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "candidate_ref": "atlas:reference-export:atlas.ingestion:sha256-75e036fd3d75d29913f25f0e65d17ed8fa97c658c76e1b6da8f0fbdcd520569c",
+    "candidate_digest": "sha256-e77df2e8d893af1ce1fb3fe7560f2a94f2d0658e2c8f0ea34cd9dac1678fef46",
+    "before_count": 0,
+    "after_count": 1,
+    "changes": [
+      {
+        "identity": "reference-export",
+        "classification": "ADDED",
+        "details": "Initial controlled Sysmon 15.21 schema reference-export baseline."
+      }
+    ]
+  },
+  "parsed": {
+    "baseline_ref": "lkg:none:sysmon-schema-psr",
+    "baseline_digest": "sha256-4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "candidate_ref": "psr:sysmon-15.21-all-schemas",
+    "candidate_digest": "sha256-c197671929ae30b6311b6d427a7c0f0248c6353944845ad87a977c8088347c22",
+    "before_count": 0,
+    "after_count": 587,
+    "changes": [
+      {
+        "identity": "schema-event-records",
+        "classification": "ADDED",
+        "details": "587 source-native event records parsed across 24 historical/current schema manifests."
+      }
+    ]
+  },
+  "canonical": {
+    "baseline_ref": "lkg:none:sysmon-current-schema-identities",
+    "baseline_digest": "sha256-4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "candidate_ref": "identity-set:sysmon-15.21-schema-4.91",
+    "candidate_digest": "sha256-24a25c4401496e5015c564983c37aae397fffd9862648b915bd370bc9b0ae50b",
+    "before_count": 0,
+    "after_count": 30,
+    "changes": [
+      {
+        "identity": "current-schema-event-id-identities",
+        "classification": "ADDED",
+        "details": "30 unique Event ID identities established for Sysmon 15.21 current schema 4.91."
+      }
+    ]
+  },
+  "guardrail_evaluation": {
+    "shrink_explained": true,
+    "growth_explained": true,
+    "blocked": false,
+    "findings": [
+      "Initial baseline creation explains growth from zero; historical schema identities remain evidence and current-schema absence is not automatic removal."
+    ]
+  },
+  "not_observed_is_removed": false,
+  "diff_digest": "sha256-54de2f8abe9cfd23bbf49a19bc5cd770456b441eaf27dc3b59f0b0839fbec4a8"
+}

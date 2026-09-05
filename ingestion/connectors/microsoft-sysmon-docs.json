@@ -1,0 +1,54 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "connector_id": "atlas:connector:atlas.ingestion:microsoft-sysmon-docs",
+  "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+  "connector_version": "1.0.0",
+  "status": "active",
+  "purpose": "Acquire the exact commit-pinned Microsoft Sysinternals Sysmon 15.21 Markdown documentation for deterministic event-heading ingestion.",
+  "transport": "https",
+  "acquisition_strategy": "single-document",
+  "targets": [
+    {
+      "target_key": "sysmon-markdown",
+      "required": true,
+      "resource_uri": "https://raw.githubusercontent.com/MicrosoftDocs/sysinternals/8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6/sysinternals/downloads/sysmon.md",
+      "allowed_path_prefixes": [
+        "/MicrosoftDocs/sysinternals/8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6/sysinternals/downloads/"
+      ],
+      "discovery": {"dynamic": false, "max_resources": 1, "max_depth": 0}
+    }
+  ],
+  "parser_binding": {
+    "parser_id": "atlas:parser:atlas.ingestion:microsoft-sysmon-markdown",
+    "parser_version": "1.0.0"
+  },
+  "refresh_policy_ref": "source:freshness_policy",
+  "change_detection_policy_ref": "source:change_detection_policy",
+  "security_policy": {
+    "tls_verify": true,
+    "allowed_hosts": ["raw.githubusercontent.com"],
+    "redirect_limit": 0,
+    "block_private_destinations": true,
+    "max_response_bytes": 2097152,
+    "max_decompressed_bytes": 2097152,
+    "max_archive_entries": 1,
+    "max_compression_ratio": 10,
+    "connect_timeout_seconds": 10,
+    "read_timeout_seconds": 60,
+    "archive_safety": {
+      "reject_path_traversal": true,
+      "reject_absolute_paths": true,
+      "reject_symlink_escape": true,
+      "reject_device_files": true
+    },
+    "uri_sanitization": {"reject_userinfo": true, "reject_signed_query": true},
+    "git_safety": {
+      "submodules": false,
+      "hooks": false,
+      "credential_helpers": false,
+      "execute_source": false,
+      "follow_symlinks": false
+    }
+  },
+  "retention_policy": {"basis": "source-record", "source_policy_field": "redistribution.policy"}
+}

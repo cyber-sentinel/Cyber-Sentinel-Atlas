@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "source",
+  "id": "atlas:source:atlas.source:microsoft-windows-provider-metadata",
+  "record_revision": 2,
+  "created_at": "2026-09-05T04:15:00Z",
+  "updated_at": "2026-09-05T07:57:00Z",
+  "curation_status": "draft",
+  "namespace": "atlas.source",
+  "canonical_key": "microsoft-windows-provider-metadata",
+  "title": "Microsoft Windows Event Provider Metadata (controlled reference export)",
+  "publisher": "Microsoft",
+  "source_class": "tier-a-authoritative",
+  "canonical_urls": [
+    "https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.eventing.reader.providermetadata",
+    "https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.eventing.reader.providermetadata.events",
+    "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil"
+  ],
+  "official_status": "official",
+  "license": {"status": "unknown"},
+  "redistribution": {
+    "policy": "restricted",
+    "notes": "Raw reference-host exports are not redistributed by default. Atlas retains only policy-approved artifacts and derived facts with provenance."
+  },
+  "freshness_policy": {
+    "expected_update_cadence": "build-scoped",
+    "stale_after_days": 365
+  },
+  "change_detection_policy": {
+    "strategy": "version",
+    "notes": "Provider metadata is compared only within an explicitly declared Windows product/version/build/provider/channel scope. Primary collection uses the documented System.Diagnostics.Eventing.Reader.ProviderMetadata.Events API; wevtutil remains an approved first-party corroboration path."
+  }
+}

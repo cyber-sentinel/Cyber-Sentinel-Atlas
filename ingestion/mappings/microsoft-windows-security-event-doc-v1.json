@@ -1,0 +1,25 @@
+{
+  "profile_id": "atlas:mapping-profile:atlas.ingestion:microsoft-windows-security-event-doc-v1",
+  "profile_version": "1.0.0",
+  "normalizer_id": "atlas:normalizer:atlas.ingestion:microsoft-windows-security-event-doc",
+  "normalizer_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-4688-doc",
+  "source_version": "learn-page-2022-01-24",
+  "canonical_schema_version": "1.0.0",
+  "namespace": "microsoft.windows.security",
+  "provider": "Microsoft-Windows-Security-Auditing",
+  "channel": "Security",
+  "product": "Windows Security Auditing",
+  "platform": "Windows",
+  "identity_rule": {
+    "native_type": "windows-security-event-documentation",
+    "native_identifier_type": "event_id",
+    "entity_type": "event",
+    "canonical_key": "event_id"
+  },
+  "lifecycle_rule": {
+    "documentation_only": "unset-until-provider-inventory-evidence"
+  },
+  "unsupported_native_types": "preserve-in-psr-and-report",
+  "profile_digest": "sha256-043f95af88c6af39366db2a3898aea9e89e0f556cfe24d8d613f1bd34231668a"
+}

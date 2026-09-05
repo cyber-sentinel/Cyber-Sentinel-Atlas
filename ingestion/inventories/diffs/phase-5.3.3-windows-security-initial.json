@@ -1,0 +1,60 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_diff_id": "atlas:inventory-diff:atlas.ingestion:phase-5.3.3-windows-security-initial",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-auditing-provider-26100.33296",
+  "raw": {
+    "baseline_ref": "lkg:none:windows-security-auditing-provider",
+    "baseline_digest": "sha256-4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "candidate_ref": "atlas:reference-export:atlas.ingestion:sha256-e6c5759c1670caa4fe399067264151eefb2d80f211fdae9e919b035374fdd9ae",
+    "candidate_digest": "sha256-06569f12a802f0d8a14ceeec23865520af23fa4f240c0421fff3117ccffd7d68",
+    "before_count": 0,
+    "after_count": 1,
+    "changes": [
+      {
+        "identity": "reference-export",
+        "classification": "ADDED",
+        "details": "Initial controlled reference-export baseline for the declared Windows provider/build scope."
+      }
+    ]
+  },
+  "parsed": {
+    "baseline_ref": "lkg:none:windows-security-provider-psr",
+    "baseline_digest": "sha256-4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "candidate_ref": "psr:windows-security-provider:26100.33296",
+    "candidate_digest": "sha256-ef6bf952ef92518ce433f643a9666a50d7824c57b8ec6c5405475864845ac839",
+    "before_count": 0,
+    "after_count": 488,
+    "changes": [
+      {
+        "identity": "provider-event-version-definitions",
+        "classification": "ADDED",
+        "details": "488 source-native provider event/version definitions established by deterministic PSR."
+      }
+    ]
+  },
+  "canonical": {
+    "baseline_ref": "lkg:none:windows-security-auditing-identities",
+    "baseline_digest": "sha256-4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "candidate_ref": "identity-set:windows-security-auditing-provider-26100.33296",
+    "candidate_digest": "sha256-4baa01f29f4ca4075426f50513f4ead6a503143d497690dd9b42cafd51d5d54b",
+    "before_count": 0,
+    "after_count": 423,
+    "changes": [
+      {
+        "identity": "provider-event-id-identities",
+        "classification": "ADDED",
+        "details": "423 unique Event ID identities established for the declared provider/channel/build denominator."
+      }
+    ]
+  },
+  "guardrail_evaluation": {
+    "shrink_explained": true,
+    "growth_explained": true,
+    "blocked": false,
+    "findings": [
+      "Initial baseline creation explains growth from zero; future diffs use the pinned inventory guardrails and may not infer removal from non-observation."
+    ]
+  },
+  "not_observed_is_removed": false,
+  "diff_digest": "sha256-b66b0009d2e8f3324a20443b031fa63f59a677502d1963972e57412dfa568bec"
+}

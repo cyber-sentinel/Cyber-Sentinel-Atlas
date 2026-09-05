@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "source",
+  "id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+  "record_revision": 1,
+  "created_at": "2026-09-05T04:15:00Z",
+  "updated_at": "2026-09-05T04:30:00Z",
+  "curation_status": "draft",
+  "namespace": "atlas.source",
+  "canonical_key": "microsoft-sysmon-docs",
+  "title": "Microsoft Sysinternals Sysmon Documentation",
+  "publisher": "Microsoft Sysinternals",
+  "source_class": "tier-a-authoritative",
+  "canonical_urls": [
+    "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+    "https://github.com/MicrosoftDocs/sysinternals",
+    "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/sysmon"
+  ],
+  "official_status": "official",
+  "license": {
+    "status": "verified",
+    "identifier": "CC-BY-4.0",
+    "url": "https://github.com/MicrosoftDocs/sysinternals/blob/8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6/LICENSE"
+  },
+  "redistribution": {
+    "policy": "allowed",
+    "notes": "The official MicrosoftDocs/sysinternals repository is licensed CC-BY-4.0. Atlas still commits only minimal synthetic fixtures and derived source-backed facts; the full documentation corpus is acquired transiently for deterministic ingestion."
+  },
+  "freshness_policy": {
+    "expected_update_cadence": "release-driven",
+    "stale_after_days": 180
+  },
+  "change_detection_policy": {
+    "strategy": "version",
+    "notes": "Production ingestion pins an explicit MicrosoftDocs/sysinternals commit and sysmon.md blob. Sysmon documentation/release metadata remains independent from controlled schema exports."
+  }
+}

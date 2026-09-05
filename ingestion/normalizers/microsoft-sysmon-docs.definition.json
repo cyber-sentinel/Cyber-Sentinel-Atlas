@@ -1,0 +1,12 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "normalizer_id": "atlas:normalizer:atlas.ingestion:microsoft-sysmon-docs",
+  "normalizer_version": "1.0.0",
+  "status": "active",
+  "purpose": "Normalize source-native Sysmon documentation event headings into canonical Sysmon Event entities while keeping documentation evidence distinct from provider/schema lifecycle evidence.",
+  "psr_version": "1.0.0",
+  "canonical_schema_version": "1.0.0",
+  "identity_outcomes": ["CREATE", "MATCH", "AMBIGUOUS"],
+  "network_access": false,
+  "ai_enabled": false
+}

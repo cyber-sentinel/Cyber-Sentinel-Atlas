@@ -43,6 +43,9 @@ jobs:
       - name: Validate Phase 5.3.2 ATT&CK offline canary
         run: python tools/ingestion/validate_attack_canary.py
 
+      - name: Validate Phase 5.3.3 Windows/Sysmon inventory reconciliation
+        run: python tools/ingestion/validate_windows_sysmon_inventories.py
+
       - name: Run Phase 5.3 ingestion contract, security, and canary tests
         run: python -m unittest discover -s tests/phase53 -p "test_*.py" -v
 
@@ -121,3 +124,84 @@ jobs:
 
       - name: Run Phase 5.3.2 pinned live ATT&CK canary
         run: python tools/ingestion/run_attack_live_canary.py
+
+      - name: Run Phase 5.3.3 pinned live Sysmon documentation canary
+        run: python tools/ingestion/run_sysmon_docs_live_canary.py
+
+      - name: Run Phase 5.3.3 live Windows 4688 documentation canary
+        run: python tools/ingestion/run_windows_4688_docs_live_canary.py
+
+  phase533-reference-export-once:
+    if: >-
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/feature/phase-5.3.3-windows-sysmon-encyclopedia' &&
+      contains(github.event.head_commit.message, '[reference-export]')
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout controlled feature head
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Install validation dependencies
+        shell: pwsh
+        run: python -m pip install --disable-pip-version-check -r tools/requirements-validation.txt
+
+      - name: Collect real reference-host exports
+        shell: pwsh
+        run: |
+          ./tools/reference-host/collect_windows_sysmon_reference.ps1 `
+            -OutputDirectory "${{ github.workspace }}/reference-output" `
+            -ExpectedSysmonVersion "15.21"
+
+      - name: Validate real Windows provider export through PSR parser
+        shell: pwsh
+        run: |
+          $psr = Join-Path $env:RUNNER_TEMP 'windows-provider.psr.json'
+          python ingestion/parsers/microsoft_windows_provider_metadata.py `
+            "${{ github.workspace }}/reference-output/windows-security-provider.json" `
+            --source-id "atlas:source:atlas.source:microsoft-windows-provider-metadata" `
+            --snapshot-id "atlas:raw-snapshot:atlas.ingestion:reference-host-validation" `
+            --output $psr
+          python -c "import json,sys; d=json.load(open(sys.argv[1],encoding='utf-8')); r=d['records']; ids=sorted({int(x['native_fields']['event_id']) for x in r}); digest=d['representation_digest']; print('Windows ProviderMetadata PSR: records={} unique_event_ids={} min={} max={} has_4688={} has_592={} digest={}'.format(len(r),len(ids),min(ids),max(ids),4688 in ids,592 in ids,digest)); assert 4688 in ids" $psr
+
+      - name: Validate real Sysmon 15.21 schema through PSR parser
+        shell: pwsh
+        run: |
+          python tools/ingestion/validate_sysmon_schema_reference.py `
+            "${{ github.workspace }}/reference-output/sysmon-schema.txt" `
+            --expected-schema-count 24 `
+            --expected-current-schema 4.91 `
+            --expected-current-event-count 30 `
+            --required-event-id 1 `
+            --required-event-id 255
+
+      - name: Print provenance descriptor summary
+        shell: pwsh
+        run: |
+          python -c "import json,pathlib; root=pathlib.Path(r'${{ github.workspace }}/reference-output'); files=sorted(root.glob('*.descriptor.json')); desc=[(p,json.loads(p.read_text(encoding='utf-8'))) for p,d in []]"
+          python -c "import json,pathlib; root=pathlib.Path(r'${{ github.workspace }}/reference-output'); files=sorted(root.glob('*.descriptor.json')); desc=[(p,json.loads(p.read_text(encoding='utf-8'))) for p in files]; [print('{}: source_version={} env={} {} build={} collector={} {} artifact_sha={}'.format(p.name,d['source_version'],d['reference_environment']['product'],d['reference_environment']['version'],d['reference_environment']['build'],d['collector']['tool_name'],d['collector']['tool_version'],d['artifact']['sha256'])) for p,d in desc]"
+
+      - name: Enforce artifact upload boundary
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $files = @(Get-ChildItem -LiteralPath "${{ github.workspace }}/reference-output" -File)
+          if ($files.Count -ne 4) { throw "Expected exactly four reference-export files, found $($files.Count)" }
+          $forbidden = @('.exe', '.dll', '.sys', '.msi', '.cab', '.zip', '.pfx', '.p12', '.pem', '.key')
+          foreach ($file in $files) {
+            if ($forbidden -contains $file.Extension.ToLowerInvariant()) {
+              throw "Forbidden binary/secret-bearing artifact in reference output: $($file.Name)"
+            }
+          }
+          python -c "import importlib.util,json,pathlib; p=pathlib.Path('tools/ingestion/validate_ingestion_foundation.py'); s=importlib.util.spec_from_file_location('iv',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); v=m.ingestion_validator('extensions/reference-export.schema.json'); files=sorted(pathlib.Path('reference-output').glob('*.descriptor.json')); assert len(files)==2; desc=[json.loads(f.read_text(encoding='utf-8')) for f in files]; errs=[e.message for d in desc for e in v.iter_errors(d)]; assert not errs, errs; assert all(d['fixture_only'] is False for d in desc); assert all(d['controls']['operator_review_required'] is True for d in desc); assert all(d['controls']['upstream_binary_executed_by_atlas_core'] is False for d in desc); print('Real ReferenceExport upload boundary validation passed.')"
+
+      - name: Upload operator-review reference export
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-5.3.3-real-reference-export-${{ github.run_id }}
+          path: reference-output/**
+          if-no-files-found: error
+          retention-days: 14

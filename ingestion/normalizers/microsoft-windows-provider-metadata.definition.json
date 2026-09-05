@@ -1,0 +1,12 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "normalizer_id": "atlas:normalizer:atlas.ingestion:microsoft-windows-provider-metadata",
+  "normalizer_version": "1.0.0",
+  "status": "active",
+  "purpose": "Normalize controlled Windows Security provider-metadata PSR into canonical Event identity shells for the exact declared provider/channel/build scope without treating inventory observation as a global lifecycle claim.",
+  "psr_version": "1.0.0",
+  "canonical_schema_version": "1.0.0",
+  "identity_outcomes": ["CREATE", "MATCH", "AMBIGUOUS"],
+  "network_access": false,
+  "ai_enabled": false
+}

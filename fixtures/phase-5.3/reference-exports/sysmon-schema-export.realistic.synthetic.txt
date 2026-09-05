@@ -1,0 +1,37 @@
+System Monitor v15.21 - Synthetic schema fixture for Atlas tests
+This file is synthetic and contains no upstream Sysmon schema corpus.
+
+<manifest schemaversion="4.91" binaryversion="18">
+  <configuration>
+    <options />
+  </configuration>
+  <events>
+    <event name="SYSMONEVENT_ERROR" value="255" level="Error" template="Error report" version="3">
+      <data name="UtcTime" inType="win:UnicodeString" outType="xs:string" />
+      <data name="ID" inType="win:UnicodeString" outType="xs:string" />
+      <data name="Description" inType="win:UnicodeString" outType="xs:string" />
+    </event>
+    <event name="SYSMONEVENT_CREATE_PROCESS" value="1" level="Informational" template="Process Create" rulename="ProcessCreate" ruledefault="include" version="5">
+      <data name="RuleName" inType="win:UnicodeString" outType="xs:string" />
+      <data name="UtcTime" inType="win:UnicodeString" outType="xs:string" />
+      <data name="ProcessGuid" inType="win:GUID" />
+      <data name="ProcessId" inType="win:UInt32" outType="win:PID" />
+      <data name="Image" inType="win:UnicodeString" outType="xs:string" />
+      <data name="CommandLine" inType="win:UnicodeString" outType="xs:string" />
+    </event>
+  </events>
+</manifest>
+
+<manifest schemaversion="4.90" binaryversion="18">
+  <configuration>
+    <options />
+  </configuration>
+  <events>
+    <event name="SYSMONEVENT_CREATE_PROCESS" value="1" level="Informational" template="Process Create" rulename="ProcessCreate" ruledefault="include" version="4">
+      <data name="UtcTime" inType="win:UnicodeString" outType="xs:string" />
+      <data name="ProcessGuid" inType="win:GUID" />
+      <data name="ProcessId" inType="win:UInt32" outType="win:PID" />
+      <data name="Image" inType="win:UnicodeString" outType="xs:string" />
+    </event>
+  </events>
+</manifest>
