@@ -37,6 +37,8 @@ class IngestionAuthorizationTests(unittest.TestCase):
             "ingestion/parsers/microsoft_windows_security_event_html.py",
             "ingestion/normalizers/microsoft-windows-security-event-doc.definition.json",
             "ingestion/normalizers/microsoft_windows_security_event_doc.py",
+            "ingestion/parsers/microsoft-windows-provider-metadata.definition.json",
+            "ingestion/parsers/microsoft_windows_provider_metadata.py",
         }
         self.assertEqual(phase532 | phase533, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS))
         self.assertEqual(phase532, {p for p, phase in phase_policy.AUTHORIZED_IMPLEMENTATIONS.items() if phase == "phase-5.3.2"})
@@ -77,6 +79,7 @@ class IngestionAuthorizationTests(unittest.TestCase):
             "ingestion/source-profiles/mitre-attack-enterprise.source.json",
             "ingestion/source-profiles/microsoft-sysmon-docs.source.json",
             "ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.source.json",
+            "ingestion/source-profiles/microsoft-windows-provider-metadata.source.json",
             "ingestion/inventories/sysmon-docs-15.21.documentation.json",
         ]
         self.assertEqual([], phase_policy.implementation_authorization_errors(tracked))
