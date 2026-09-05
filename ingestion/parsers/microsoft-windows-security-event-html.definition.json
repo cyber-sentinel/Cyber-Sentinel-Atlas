@@ -1,7 +1,7 @@
 {
   "ingestion_contract_version": "1.0.0",
   "parser_id": "atlas:parser:atlas.ingestion:microsoft-windows-security-event-html",
-  "parser_version": "1.0.0",
+  "parser_version": "1.0.1",
   "status": "active",
   "purpose": "Parse a local immutable Microsoft Learn Windows Security event HTML snapshot into source-native structural event documentation facts without semantic normalization or source execution.",
   "supported_media_types": ["text/html"],
