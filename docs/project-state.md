@@ -4,7 +4,9 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Authoritative Branch: `main`
-- Current Reviewed Main SHA: `84d125c61051442c509a701c2d6bc6ffb85a9090`
+- Current Main SHA: `84d125c61051442c509a701c2d6bc6ffb85a9090`
+- Last Reviewed Main SHA: `84d125c61051442c509a701c2d6bc6ffb85a9090`
+- Last Architecture-Reviewed Main SHA: `84d125c61051442c509a701c2d6bc6ffb85a9090`
 - Current Version: `0.1.0-foundation.1`
 - Canonical Schema Version: `1.0.0`
 - Canonical Schema URI Base: `https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/`
