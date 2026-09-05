@@ -83,6 +83,8 @@ class Windows4688DocsIngestionTests(unittest.TestCase):
     def test_04_parser_and_normalizer_definition_schemas(self):
         self.assertTrue(foundation.ingestion_validator("parser-definition.schema.json").is_valid(self.parser_def))
         self.assertTrue(foundation.ingestion_validator("normalizer-definition.schema.json").is_valid(self.normalizer_def))
+        self.assertEqual(parser.PARSER_ID, self.parser_def["parser_id"])
+        self.assertEqual(parser.PARSER_VERSION, self.parser_def["parser_version"])
 
     def test_05_mapping_profile_digest(self):
         self.assertEqual(self.mapping["profile_digest"], normalizer.mapping_profile_digest(self.mapping))
@@ -140,6 +142,18 @@ class Windows4688DocsIngestionTests(unittest.TestCase):
         self.assertNotEqual(self.fixture, tampered)
         with self.assertRaises(ValueError):
             self.parse(tampered)
+
+    def test_10a_identical_duplicate_rendered_heading_is_deduplicated(self):
+        duplicate = self.fixture + "\n<h2>4688(S): A new process has been created.</h2>\n"
+        records = self.parse(duplicate)
+        self.assertEqual(1, len(records))
+        self.assertEqual("4688", records[0]["native_fields"]["event_id"])
+        self.assertTrue(any("deduplicated identical headings" in item for item in records[0]["diagnostics"]))
+
+    def test_10b_conflicting_duplicate_heading_fails_closed(self):
+        conflicting = self.fixture + "\n<h2>9999(S): A conflicting event heading.</h2>\n"
+        with self.assertRaises(ValueError):
+            self.parse(conflicting)
 
     def test_11_missing_event_versions_section_fails_closed(self):
         tampered = self.fixture.replace("Event Versions:", "Synthetic Version List:")
