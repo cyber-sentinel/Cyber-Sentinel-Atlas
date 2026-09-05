@@ -15,5 +15,5 @@
   },
   "description_claim_predicate": "analytic.description",
   "confidence_policy": "Official source provenance is preserved but does not automatically make imported claim confidence authoritative.",
-  "profile_digest": "sha256-e8e5769ae9813daa4f6a32496341eae8647a766894f05f33d457f17fb409aa28"
+  "profile_digest": "sha256-645fcc11ba8d009e44ed5f99fa47374b865375dce3c3742b273b3a279646df6c"
 }
