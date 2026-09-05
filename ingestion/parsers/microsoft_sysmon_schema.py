@@ -20,6 +20,8 @@ MAX_FIELDS_PER_EVENT = 4096
 MANIFEST_RE = re.compile(r"<manifest\b.*?</manifest>", re.IGNORECASE | re.DOTALL)
 SCHEMA_VERSION_RE = re.compile(r"^[0-9]+(?:\.[0-9]+)+$")
 BINARY_VERSION_RE = re.compile(r"^[0-9]+(?:\.[0-9]+)?$")
+DECIMAL_EVENT_ID_RE = re.compile(r"^[0-9]+$")
+HEX_EVENT_ID_RE = re.compile(r"^0[xX][0-9a-fA-F]+$")
 NUMERIC_RE = re.compile(r"^[0-9]+$")
 FORBIDDEN_XML_RE = re.compile(r"<!\s*(?:DOCTYPE|ENTITY)\b", re.IGNORECASE)
 
@@ -50,6 +52,18 @@ def _version_key(value: str) -> tuple[int, ...]:
     if not SCHEMA_VERSION_RE.fullmatch(value):
         raise ValueError(f"invalid Sysmon schema version: {value!r}")
     return tuple(int(part) for part in value.split("."))
+
+
+def _event_id_numeric_value(value: str) -> int:
+    if DECIMAL_EVENT_ID_RE.fullmatch(value):
+        return int(value, 10)
+    if HEX_EVENT_ID_RE.fullmatch(value):
+        return int(value[2:], 16)
+    raise ValueError(f"invalid Sysmon event ID: {value!r}")
+
+
+def _event_id_sort_key(value: str) -> tuple[int, str]:
+    return (_event_id_numeric_value(value), value.lower())
 
 
 def _unknown_attributes(attributes: dict[str, str], known: set[str]) -> dict[str, str]:
@@ -116,7 +130,11 @@ def parse_text(
                 f"Sysmon schema {schema_version} exceeds event limit: {len(event_elements)} > {MAX_EVENTS_PER_MANIFEST}"
             )
 
-        seen_event_ids: set[str] = set()
+        # The upstream historical schema includes hexadecimal event values such as
+        # 0xf002. Preserve the exact source string in PSR, but detect duplicate
+        # identities by numeric value so decimal/hex spellings cannot bypass the
+        # uniqueness invariant within one schema version.
+        seen_event_numeric_ids: set[int] = set()
         for event_index, event in enumerate(event_elements):
             context = f"schema {schema_version} event[{event_index}]"
             event_id = _required_attr(event.attrib, "value", context)
@@ -125,13 +143,15 @@ def parse_text(
             level = _required_attr(event.attrib, "level", context)
             template = _required_attr(event.attrib, "template", context)
 
-            if not NUMERIC_RE.fullmatch(event_id):
-                raise ValueError(f"{context} has nonnumeric event ID: {event_id!r}")
+            try:
+                event_numeric_id = _event_id_numeric_value(event_id)
+            except ValueError as exc:
+                raise ValueError(f"{context} has invalid event ID: {event_id!r}") from exc
             if not NUMERIC_RE.fullmatch(event_version):
                 raise ValueError(f"{context} has nonnumeric event version: {event_version!r}")
-            if event_id in seen_event_ids:
+            if event_numeric_id in seen_event_numeric_ids:
                 raise ValueError(f"duplicate Sysmon Event ID {event_id} within schema {schema_version}")
-            seen_event_ids.add(event_id)
+            seen_event_numeric_ids.add(event_numeric_id)
 
             data_elements = list(event.findall("./data"))
             if len(data_elements) > MAX_FIELDS_PER_EVENT:
@@ -195,6 +215,7 @@ def parse_text(
                 "schema_version": schema_version,
                 "binary_version": binary_version,
                 "event_id": event_id,
+                "event_id_numeric_value": event_numeric_id,
                 "event_version": event_version,
                 "event_name": event_name,
                 "level": level,
@@ -253,7 +274,7 @@ def parse_text(
     records.sort(
         key=lambda record: (
             _version_key(record["native_fields"]["schema_version"]),
-            int(record["native_fields"]["event_id"]),
+            _event_id_sort_key(record["native_fields"]["event_id"]),
             int(record["native_fields"]["event_version"]),
             record["parsed_record_id"],
         )
