@@ -1,0 +1,1 @@
+{"channels":["Security"],"events":[{"event_id":"4688","keywords":"0x8020000000000000","opcode":0,"task":13312,"template_fields":["SubjectUserSid","NewProcessId","NewProcessName"],"version":2}],"fixture_notice":"SANITIZED SYNTHETIC REFERENCE EXPORT — not a real Windows provider export","provider":"Synthetic-Windows-Security-Auditing"}
