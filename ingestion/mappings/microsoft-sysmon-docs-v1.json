@@ -1,0 +1,23 @@
+{
+  "profile_id": "atlas:mapping-profile:atlas.ingestion:microsoft-sysmon-docs-v1",
+  "profile_version": "1.0.0",
+  "normalizer_id": "atlas:normalizer:atlas.ingestion:microsoft-sysmon-docs",
+  "normalizer_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+  "source_version": "15.21",
+  "canonical_schema_version": "1.0.0",
+  "namespace": "microsoft.sysmon",
+  "provider": "Microsoft-Windows-Sysmon",
+  "channel": "Microsoft-Windows-Sysmon/Operational",
+  "product": "Sysmon",
+  "platform": "Windows",
+  "identity_rule": {
+    "native_type": "sysmon-event-heading",
+    "native_identifier_type": "event_id",
+    "entity_type": "event",
+    "canonical_key": "event_id"
+  },
+  "lifecycle_rule": {"listed_in_pinned_release": "current"},
+  "unsupported_native_types": "preserve-in-psr-and-report",
+  "profile_digest": "sha256-61048fd5a54b41fab10f83acecc107e4ed7f57990f94bae653d08785f414c0cf"
+}
