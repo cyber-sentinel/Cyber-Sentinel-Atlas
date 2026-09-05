@@ -77,9 +77,9 @@ Phase 5.3 transforms controlled source acquisitions into reviewed canonical cand
 
 ### Phase 5.3.1 — Ingestion Foundation / Contracts
 
-Status: **IMPLEMENTATION COMPLETE — PENDING ARCHITECTURE REVIEW**
+Status: **COMPLETE / MERGED**
 
-Implemented on the Phase 5.3.1 feature branch:
+Delivered:
 
 - independent Ingestion Contract Version 1.0.0 under `schemas/ingestion/v1/`;
 - SourceConnectorDefinition and acquisition/run contracts;
@@ -90,29 +90,68 @@ Implemented on the Phase 5.3.1 feature branch:
 - G1–G15 BuildValidationReport contract;
 - digest-bound ReviewDecision and CanonicalBuildManifest contracts;
 - public-source acquisition security boundaries;
-- synthetic deterministic fixtures only;
+- synthetic deterministic fixtures;
 - permanent ingestion validator and invariant/security tests;
 - ADR-0016 through ADR-0020.
 
-No live upstream source ingestion is part of Slice 5.3.1.
-
 ### Phase 5.3.2 — MITRE ATT&CK Structured-Source Canary
 
-Status: **NOT STARTED**
+Status: **COMPLETE / MERGED**
 
-Requires separate Architecture Authority authorization. No ATT&CK STIX acquisition or normalization has started.
+PR: `#6`
+
+Merge commit: `baaf72a8f7596f701bb49af6cad02460064e416f`
+
+Delivered:
+
+- official Enterprise ATT&CK release `19.2` pinned to upstream commit `6cda5ad8462c79e14fbb872f4e09059b18e0cfc4`;
+- exact HTTPS source/release binding and fail-closed implementation authorization;
+- deterministic STIX 2.1 parser and source-native PSR;
+- deterministic normalizer and versioned mapping profile;
+- unknown-field preservation and drift diagnostics;
+- ambiguous identity quarantine;
+- ATT&CK lifecycle mapping without disappearance-as-removal semantics;
+- Phase 5.3.1-compatible PSR and RawSnapshot identities;
+- small deterministic repository fixture;
+- transient full-source live CI canary without committing the upstream corpus;
+- canonical schema v1 preserved unchanged.
+
+Post-merge main CI is green, including the full pinned live ATT&CK canary.
+
+Phase 5.3.2 proves the ingestion architecture; it is not a released content pack and does not declare global ATT&CK completeness.
 
 ### Phase 5.3.3 — Windows Security + Sysmon Encyclopedia Pipeline
 
-Status: **NOT STARTED**
+Status: **NOT STARTED / NEXT**
 
-Requires separate Architecture Authority authorization. No Windows provider/documentation or Sysmon live ingestion has started.
+Objectives:
+
+- establish Windows Security documentation source profiles and controlled provider-inventory import contracts;
+- establish Sysmon canonical documentation/schema source profiles;
+- ingest provider/channel/product/version/build-scoped inventory without running upstream binaries inside Atlas ingestion core;
+- produce production-like Windows Security and Sysmon canonical candidate records with claim-level provenance;
+- preserve exact Event ID, provider, channel, version/applicability, lifecycle, field metadata and documentation status;
+- prove exact native-ID readiness for `4688`, scoped `sysmon 1`, legacy identities such as `592` when authoritative evidence is available, and same-number provider collisions;
+- separate documentation completeness from telemetry/provider inventory completeness;
+- preserve `NOT_OBSERVED != REMOVED` and all historical telemetry identities;
+- create a declared completeness denominator for the selected Windows/Sysmon acceptance scopes;
+- feed Phase 5.4 without requiring source re-scraping.
+
+Important boundary: provider/reference-host exports are controlled out-of-band artifacts. Atlas core does not execute Windows, Sysmon, provider DLLs, manifests, scripts, macros or downloaded binaries to generate inventory.
 
 ### Phase 5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates
 
 Status: **NOT STARTED**
 
-Requires separate Architecture Authority authorization. No D3FEND, CAR or DefenseOps ingestion has started.
+Planned:
+
+- D3FEND drift-aware official-source connector;
+- CAR official structured repository ingestion;
+- DefenseOps validated engineering export ingestion contract;
+- source/provenance/licensing/review gates;
+- final Phase 5.3 PACK_READY promotion scenarios.
+
+Detection IR remains outside Phase 5.3 and open.
 
 Approved controlled flow:
 
@@ -152,7 +191,8 @@ Status: **NOT STARTED**
 - graph traversal;
 - ranking;
 - benchmarks;
-- universal identifier resolution.
+- universal identifier resolution;
+- numeric provider-scoped Event ID browsing.
 
 Exact identifier matches must precede semantic retrieval. Phase 5.3 preserves lossless native identifier/context data but does not implement search projections.
 

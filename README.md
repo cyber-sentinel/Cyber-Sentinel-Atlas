@@ -4,7 +4,7 @@
 
 Cyber-Sentinel-Atlas is the signature product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed knowledge system.
 
-> Status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 COMPLETE; Phase 5.3 IN PROGRESS; Phase 5.3.1 IMPLEMENTATION COMPLETE — PENDING ARCHITECTURE REVIEW**
+> Status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 COMPLETE; Phase 5.3 IN PROGRESS; Phase 5.3.1 COMPLETE; Phase 5.3.2 COMPLETE; Phase 5.3.3 NEXT**
 > Visibility: **Private during active development**
 
 ## Product Thesis
@@ -91,7 +91,7 @@ The permanent canonical semantic validator is `tools/validate_phase52.py`. Perma
 
 ## Phase 5.3 Source & Ingestion Core
 
-Phase 5.3 is **IN PROGRESS**. Slice 5.3.1 establishes the ingestion/control-plane contract without live upstream ingestion.
+Phase 5.3 is **IN PROGRESS**. Slice 5.3.1 established the ingestion/control-plane contracts. Slice 5.3.2 proved those contracts against a pinned, official MITRE ATT&CK Enterprise STIX source with both deterministic fixture replay and a transient full-source live CI canary.
 
 Ingestion Contract Version: **1.0.0**
 
@@ -115,7 +115,24 @@ PACK_READY
 
 `PACK_READY` is the successful terminal Phase 5.3 state and is not equivalent to signed, released or installed content. The canonical seven-family `AtlasRecord` model remains unchanged.
 
-Phase 5.3.2, 5.3.3 and 5.3.4 remain **NOT STARTED** and require separate Architecture Authority authorization.
+### Completed slices
+
+- **5.3.1 — Ingestion Foundation / Contracts: COMPLETE**
+- **5.3.2 — MITRE ATT&CK Structured-Source Canary: COMPLETE**
+  - Enterprise ATT&CK release `19.2` pinned to upstream commit `6cda5ad8462c79e14fbb872f4e09059b18e0cfc4`;
+  - deterministic STIX 2.1 Parser → PSR → Normalizer pipeline;
+  - phase-aware, fail-closed authorization of real ingestion implementations;
+  - unknown structured fields preserved and reported;
+  - ambiguous identity quarantined;
+  - exact Phase 5.3.1 PSR and RawSnapshot identity contracts enforced;
+  - full upstream corpus retrieved transiently in CI and not committed.
+
+### Next slice
+
+- **5.3.3 — Windows Security + Sysmon Encyclopedia Pipeline: NOT STARTED / NEXT**
+- **5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates: NOT STARTED**
+
+Phase 5.3.2 is an ingestion canary, not a released content pack. Content-pack signing, archive format, installation and rollback remain Phase 5.5 responsibilities.
 
 ## Initial MVP Domain
 
@@ -173,6 +190,7 @@ DefenseOps content enters Atlas only through versioned ingestion, provenance, va
 - [Security Architecture](docs/architecture/security-architecture.md)
 - [Coverage Model](docs/architecture/coverage-model.md)
 - [Telemetry Lifecycle](docs/architecture/telemetry-lifecycle.md)
+- [Phase 5.3.2 ATT&CK Canary](docs/architecture/phase-5.3.2-attack-canary.md)
 
 ### Product Delivery
 
