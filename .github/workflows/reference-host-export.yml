@@ -1,0 +1,59 @@
+name: Controlled Reference Host Export
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_sysmon_version:
+        description: "Expected Microsoft Sysinternals Sysmon major.minor release; fail closed on drift"
+        required: true
+        default: "15.21"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  collect-reference-exports:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Install descriptor validation dependency
+        shell: pwsh
+        run: python -m pip install --disable-pip-version-check -r tools/requirements-validation.txt
+
+      - name: Collect controlled Windows and Sysmon reference exports
+        shell: pwsh
+        run: |
+          ./tools/reference-host/collect_windows_sysmon_reference.ps1 `
+            -OutputDirectory "${{ github.workspace }}/reference-output" `
+            -ExpectedSysmonVersion "${{ inputs.expected_sysmon_version }}"
+
+      - name: Validate output boundary before upload
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $files = @(Get-ChildItem -LiteralPath "${{ github.workspace }}/reference-output" -File)
+          if ($files.Count -ne 4) {
+            throw "Expected exactly four reference-export files, found $($files.Count)"
+          }
+          $forbidden = @('.exe', '.dll', '.sys', '.msi', '.cab', '.zip', '.pfx', '.p12', '.pem', '.key')
+          foreach ($file in $files) {
+            if ($forbidden -contains $file.Extension.ToLowerInvariant()) {
+              throw "Forbidden binary/secret-bearing artifact in reference output: $($file.Name)"
+            }
+          }
+          python -c "import importlib.util,json,pathlib; p=pathlib.Path('tools/ingestion/validate_ingestion_foundation.py'); s=importlib.util.spec_from_file_location('iv',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); v=m.ingestion_validator('extensions/reference-export.schema.json'); files=sorted(pathlib.Path('reference-output').glob('*.descriptor.json')); assert len(files)==2; desc=[json.loads(f.read_text(encoding='utf-8')) for f in files]; errs=[e.message for d in desc for e in v.iter_errors(d)]; assert not errs, errs; assert all(d['fixture_only'] is False for d in desc); assert all(d['controls']['operator_review_required'] is True for d in desc); assert all(d['controls']['upstream_binary_executed_by_atlas_core'] is False for d in desc); print('Controlled ReferenceExport upload boundary validation passed.')"
+
+      - name: Upload operator-review reference export
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-5.3.3-reference-export-${{ github.run_id }}
+          path: reference-output/**
+          if-no-files-found: error
+          retention-days: 14
