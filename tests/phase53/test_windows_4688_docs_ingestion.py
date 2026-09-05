@@ -136,7 +136,8 @@ class Windows4688DocsIngestionTests(unittest.TestCase):
         self.assertNotEqual(first[0]["parsed_record_id"], second[0]["parsed_record_id"])
 
     def test_10_heading_xml_event_id_mismatch_fails_closed(self):
-        tampered = self.fixture.replace("<EventID&gt;4688", "<EventID&gt;9999")
+        tampered = self.fixture.replace("&lt;EventID&gt;4688", "&lt;EventID&gt;9999")
+        self.assertNotEqual(self.fixture, tampered)
         with self.assertRaises(ValueError):
             self.parse(tampered)
 
