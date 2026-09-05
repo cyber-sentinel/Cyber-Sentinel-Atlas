@@ -144,7 +144,7 @@ class Windows4688DocsIngestionTests(unittest.TestCase):
             self.parse(tampered)
 
     def test_10a_identical_duplicate_rendered_heading_is_deduplicated(self):
-        duplicate = self.fixture + "\n<h2>4688(S): A new process has been created.</h2>\n"
+        duplicate = self.fixture + "\n<h2>4688(S): Synthetic process creation event.</h2>\n"
         records = self.parse(duplicate)
         self.assertEqual(1, len(records))
         self.assertEqual("4688", records[0]["native_fields"]["event_id"])
