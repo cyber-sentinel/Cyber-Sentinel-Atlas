@@ -165,9 +165,6 @@ try {
     $environment = New-ReferenceEnvironment
     $collectedAt = [DateTimeOffset]::UtcNow.ToString('yyyy-MM-ddTHH:mm:ssZ')
 
-    # Windows Security provider metadata is collected through Microsoft's documented
-    # System.Diagnostics.Eventing.Reader.ProviderMetadata API. This code executes only
-    # on the controlled reference host, never inside Atlas ingestion core.
     $windowsRawPath = Join-Path $resolvedOutput 'windows-security-provider.json'
     $windowsEventCount = Export-WindowsProviderMetadata `
         -ProviderName $WindowsProvider `
@@ -222,9 +219,6 @@ try {
         --output (Join-Path $resolvedOutput 'windows-security-provider.descriptor.json')
     if ($LASTEXITCODE -ne 0) { throw 'Windows ReferenceExport descriptor build failed' }
 
-    # Sysmon schema collection. The archive is downloaded only on the reference host,
-    # validated for Microsoft Authenticode and expected version, then deleted. No binary
-    # is copied into the uploaded Atlas reference-export artifact.
     $sysmonZip = Join-Path $work 'Sysmon.zip'
     $sysmonDir = Join-Path $work 'sysmon'
     Invoke-WebRequest -Uri $SysmonDistributionUri -OutFile $sysmonZip -MaximumRedirection 3
@@ -255,6 +249,10 @@ try {
         $sysmonText -notmatch 'schemaversion=' -or
         $sysmonText -notmatch '<event '
     ) {
+        $previewLength = [Math]::Min(4000, $sysmonText.Length)
+        $preview = if ($previewLength -gt 0) { $sysmonText.Substring(0, $previewLength) } else { '<empty>' }
+        $preview = $preview.Replace("`r", '\r').Replace("`n", '\n')
+        Write-Warning "Sysmon schema validation failed. version=$sysmonVersion chars=$($sysmonText.Length) bounded_preview=$preview"
         throw 'Sysmon schema export did not contain the expected manifest/event schema structure'
     }
     Write-Utf8NoBom -Path $sysmonRawPath -Content ($sysmonText + "`n")
