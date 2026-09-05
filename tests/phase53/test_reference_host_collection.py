@@ -155,6 +155,12 @@ class ReferenceHostCollectionTests(unittest.TestCase):
         self.assertIn("if ($fileSetDiff.Count -ne 0)", text)
         self.assertNotIn("(Compare-Object -ReferenceObject $expectedFiles -DifferenceObject $outputFiles).Count", text)
 
+    def test_10_windows_reference_validation_avoids_powershell_python_quote_escaping(self):
+        text = (ROOT / ".github/workflows/foundation-hygiene.yml").read_text(encoding="utf-8")
+        self.assertIn("digest=d['representation_digest']", text)
+        self.assertNotIn('d[\\"representation_digest\\"]', text)
+        self.assertNotIn('d[\\"reference_environment\\"]', text)
+
 
 if __name__ == "__main__":
     unittest.main()
