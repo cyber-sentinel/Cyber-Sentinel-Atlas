@@ -1,0 +1,19 @@
+{
+  "profile_id": "atlas:mapping-profile:atlas.ingestion:mitre-d3fend-v1",
+  "profile_version": "1.0.0",
+  "normalizer_id": "atlas:normalizer:atlas.ingestion:mitre-d3fend",
+  "normalizer_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:mitre-d3fend-ontology",
+  "source_version": "1.6.0",
+  "canonical_schema_version": "1.0.0",
+  "namespace": "mitre.d3fend",
+  "identity_rule": {
+    "native_type": "d3fend-defensive-technique",
+    "native_identifier_type": "d3fend_id",
+    "entity_type": "defensive-technique",
+    "canonical_key": "lowercase-d3fend-id"
+  },
+  "definition_claim_predicate": "defensive-technique.definition",
+  "confidence_policy": "Tier-A source origin does not by itself produce authoritative claim confidence; direct structured definitions enter as high confidence until review policy promotes them.",
+  "profile_digest": "sha256-0d51e2392a8564ed065b245c4d8d227ff9629077c4e219770da1ab23ff405a39"
+}
