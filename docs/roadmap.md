@@ -67,7 +67,7 @@ Schema v1 canonical URI base:
 https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/
 ```
 
-Phase 5.1 legacy schemas remain preserved. Phase 5.2 does not authorize production ingestion or implementation of Desktop/Web/storage/search/graph/Detection IR.
+Phase 5.1 legacy schemas remain preserved. Phase 5.2 does not authorize implementation of Desktop/Web/storage/search/graph/Detection IR.
 
 ## Phase 5.3 — Source & Ingestion Core
 
@@ -116,42 +116,62 @@ Delivered:
 - transient full-source live CI canary without committing the upstream corpus;
 - canonical schema v1 preserved unchanged.
 
-Post-merge main CI is green, including the full pinned live ATT&CK canary.
-
 Phase 5.3.2 proves the ingestion architecture; it is not a released content pack and does not declare global ATT&CK completeness.
 
 ### Phase 5.3.3 — Windows Security + Sysmon Encyclopedia Pipeline
 
-Status: **NOT STARTED / NEXT**
+Status: **COMPLETE / MERGED**
 
-Objectives:
+PR: `#8`
 
-- establish Windows Security documentation source profiles and controlled provider-inventory import contracts;
-- establish Sysmon canonical documentation/schema source profiles;
-- ingest provider/channel/product/version/build-scoped inventory without running upstream binaries inside Atlas ingestion core;
-- produce production-like Windows Security and Sysmon canonical candidate records with claim-level provenance;
-- preserve exact Event ID, provider, channel, version/applicability, lifecycle, field metadata and documentation status;
-- prove exact native-ID readiness for `4688`, scoped `sysmon 1`, legacy identities such as `592` when authoritative evidence is available, and same-number provider collisions;
-- separate documentation completeness from telemetry/provider inventory completeness;
-- preserve `NOT_OBSERVED != REMOVED` and all historical telemetry identities;
-- create a declared completeness denominator for the selected Windows/Sysmon acceptance scopes;
-- feed Phase 5.4 without requiring source re-scraping.
+Merge commit: `84d125c61051442c509a701c2d6bc6ffb85a9090`
 
-Important boundary: provider/reference-host exports are controlled out-of-band artifacts. Atlas core does not execute Windows, Sysmon, provider DLLs, manifests, scripts, macros or downloaded binaries to generate inventory.
+Post-merge main CI: Foundation Hygiene run `33973584356` — **SUCCESS**.
+
+Delivered:
+
+- separate Windows documentation and provider-inventory authority dimensions;
+- separate Sysmon documentation and schema-export authority dimensions;
+- controlled out-of-band ReferenceExport contract; Atlas core does not execute Windows/Sysmon binaries to generate inventory;
+- real controlled Windows Server 2025 Datacenter 24H2 build `26100.33296` provider export;
+- Windows provider inventory with 488 event/version definitions and 423 unique Event IDs;
+- Event `4688` observed in the declared current provider scope; historical `592` not observed and explicitly preserved as an independent legacy identity;
+- real Sysmon `15.21` `-s all` schema export with 24 schema manifests, 587 parsed event records, current schema `4.91`, and 30 current Event IDs (`1`..`29`, `255`);
+- deterministic Windows provider and Sysmon schema parsers;
+- deterministic structural normalizers producing canonical identity shells without inferring unsupported global lifecycle;
+- lossless handling of historical Sysmon decimal binary versions and hexadecimal Event IDs;
+- documentation/provider/schema reconciliation with independent completeness denominators;
+- `NOT_OBSERVED != REMOVED` enforced;
+- provider-scoped Event-ID identity and collision safety preserved;
+- production-like deterministic acceptance cases for `4688`, independent legacy `592`, and `sysmon 1`;
+- initial three-layer Raw / Parsed / Canonical inventory diffs for declared Windows/Sysmon scopes;
+- live ATT&CK, Sysmon documentation and Windows 4688 documentation CI canaries all green;
+- canonical `schemas/v1` preserved unchanged.
+
+Phase 5.3.3 validates the Encyclopedia ingestion acceptance domain. It is not a released/signed content pack and does not claim global Windows/Sysmon historical completeness.
 
 ### Phase 5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates
 
-Status: **NOT STARTED**
+Status: **NEXT / AUTHORIZED ARCHITECTURE BASELINE**
 
-Planned:
+Objectives:
 
-- D3FEND drift-aware official-source connector;
-- CAR official structured repository ingestion;
+- D3FEND drift-aware official-source connector and deterministic ingestion path;
+- CAR official structured repository ingestion pinned to an explicit commit/release;
 - DefenseOps validated engineering export ingestion contract;
-- source/provenance/licensing/review gates;
-- final Phase 5.3 PACK_READY promotion scenarios.
+- provenance, source-tier, licensing, applicability and telemetry-requirement binding for DefenseOps-derived content;
+- strict rule that DefenseOps origin does not automatically imply authoritative canonical truth;
+- final G1–G15 validation and human-review promotion scenarios;
+- immutable candidate/review/promotion artifacts;
+- successful Phase 5.3 terminal state `PACK_READY` without implementing signed pack runtime;
+- failed/quarantined/rejected builds preserve Last Known Good;
+- no Detection IR implementation in this slice.
 
-Detection IR remains outside Phase 5.3 and open.
+Source priorities:
+
+1. D3FEND official source/API snapshots with fail-closed drift handling because the upstream API is alpha/change-prone;
+2. MITRE CAR official structured repository, preferring structured YAML and commit pinning;
+3. DefenseOps explicit export contract carrying commit SHA, content ID/type, backend/format, source references, validation/review state, applicability, telemetry requirements and license metadata.
 
 Approved controlled flow:
 
