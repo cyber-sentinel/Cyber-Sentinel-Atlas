@@ -1,0 +1,50 @@
+{
+  "reference_export_id": "atlas:reference-export:atlas.ingestion:sha256-4113e496ab946e0d959860b83c106b095c275a942e5cf71389584c2a777dd492",
+  "ingestion_contract_version": "1.0.0",
+  "reference_export_contract_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:microsoft-windows-provider-metadata",
+  "source_version": "fixture-build-1",
+  "export_type": "windows-event-provider-metadata",
+  "collection_method": "wevtutil-gp-ge",
+  "reference_environment": {
+    "platform": "windows",
+    "product": "Synthetic Windows Reference Environment",
+    "version": "fixture",
+    "build": "fixture-build-1",
+    "architecture": "x64",
+    "locale": "en-US"
+  },
+  "collector": {
+    "tool_name": "wevtutil",
+    "tool_publisher": "Microsoft",
+    "tool_version": "reference-host",
+    "command_shape": "wevtutil gp <Publisher> /ge:true /f:xml"
+  },
+  "collected_at": "2026-09-05T04:15:00Z",
+  "scope": {
+    "provider": "Synthetic-Windows-Security-Auditing",
+    "channels": ["Security"],
+    "native_identifier_types": ["event_id"],
+    "notes": "Synthetic fixture validates the controlled reference-export contract only."
+  },
+  "artifact": {
+    "logical_name": "windows-security-provider-export.synthetic.json",
+    "media_type": "application/json",
+    "encoding": "utf-8",
+    "byte_length": 338,
+    "sha256": "sha256-e4f89a334e9892de94fe3c7449ac9c35ca6f2ab36b21429825ada5e10394ece0",
+    "blob_ref": "blob:sha256-e4f89a334e9892de94fe3c7449ac9c35ca6f2ab36b21429825ada5e10394ece0"
+  },
+  "controls": {
+    "collected_outside_atlas_core": true,
+    "upstream_binary_executed_by_atlas_core": false,
+    "immutable_after_ingest": true,
+    "source_execution_isolated": true,
+    "operator_review_required": true
+  },
+  "retention_mode": "full",
+  "fixture_only": true,
+  "diagnostics": [
+    "Synthetic fixture only; it is not an authoritative Windows provider inventory and cannot establish coverage completeness."
+  ]
+}
