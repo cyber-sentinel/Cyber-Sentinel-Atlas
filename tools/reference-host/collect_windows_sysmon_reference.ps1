@@ -174,6 +174,7 @@ try {
         -RequiredChannel $WindowsChannel `
         -OutputPath $windowsRawPath
     $eventLogAssemblyVersion = [System.Diagnostics.Eventing.Reader.ProviderMetadata].Assembly.GetName().Version.ToString()
+    Write-Host "Windows ProviderMetadata event/version definitions: $windowsEventCount"
 
     $windowsMetadataPath = Join-Path $work 'windows-security-provider.metadata.json'
     $windowsMetadata = [ordered]@{
@@ -248,10 +249,16 @@ try {
         throw "Sysmon schema export failed with exit code $LASTEXITCODE"
     }
     $sysmonText = ($sysmonOutput | ForEach-Object { [string]$_ }) -join "`n"
-    if ([string]::IsNullOrWhiteSpace($sysmonText) -or $sysmonText -notmatch '<Sysmon') {
-        throw 'Sysmon schema export did not contain an expected Sysmon schema element'
+    if (
+        [string]::IsNullOrWhiteSpace($sysmonText) -or
+        $sysmonText -notmatch '<manifest' -or
+        $sysmonText -notmatch 'schemaversion=' -or
+        $sysmonText -notmatch '<event '
+    ) {
+        throw 'Sysmon schema export did not contain the expected manifest/event schema structure'
     }
     Write-Utf8NoBom -Path $sysmonRawPath -Content ($sysmonText + "`n")
+    Write-Host "Sysmon schema export bytes: $((Get-Item -LiteralPath $sysmonRawPath).Length)"
 
     $sysmonMetadataPath = Join-Path $work 'sysmon-schema.metadata.json'
     $sysmonMetadata = [ordered]@{
