@@ -1,0 +1,50 @@
+{
+  "reference_export_id": "atlas:reference-export:atlas.ingestion:sha256-38689498d53953bfc1355ce1b73a71e26906f009bbb6df946a57429299086a98",
+  "ingestion_contract_version": "1.0.0",
+  "reference_export_contract_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:microsoft-sysmon-schema-export",
+  "source_version": "sysmon-15.21-fixture",
+  "export_type": "sysmon-schema",
+  "collection_method": "sysmon-s-all",
+  "reference_environment": {
+    "platform": "windows",
+    "product": "Synthetic Windows Reference Environment",
+    "version": "fixture",
+    "build": "fixture-build-1",
+    "architecture": "x64",
+    "locale": "en-US"
+  },
+  "collector": {
+    "tool_name": "Sysmon",
+    "tool_publisher": "Microsoft Sysinternals",
+    "tool_version": "15.21",
+    "command_shape": "sysmon -s all"
+  },
+  "collected_at": "2026-09-05T04:15:00Z",
+  "scope": {
+    "provider": "Microsoft-Windows-Sysmon",
+    "channels": ["Microsoft-Windows-Sysmon/Operational"],
+    "native_identifier_types": ["event_id"],
+    "notes": "Synthetic schema fragment validates the controlled reference-export contract only."
+  },
+  "artifact": {
+    "logical_name": "sysmon-schema-export.synthetic.xml",
+    "media_type": "application/xml",
+    "encoding": "utf-8",
+    "byte_length": 155,
+    "sha256": "sha256-293d7436f03655fff2095f315b74839c2d32a125fcdcd06063953b8ec43ca35d",
+    "blob_ref": "blob:sha256-293d7436f03655fff2095f315b74839c2d32a125fcdcd06063953b8ec43ca35d"
+  },
+  "controls": {
+    "collected_outside_atlas_core": true,
+    "upstream_binary_executed_by_atlas_core": false,
+    "immutable_after_ingest": true,
+    "source_execution_isolated": true,
+    "operator_review_required": true
+  },
+  "retention_mode": "full",
+  "fixture_only": true,
+  "diagnostics": [
+    "Synthetic fixture only; it is not an authoritative Sysmon schema export and cannot establish release completeness."
+  ]
+}
