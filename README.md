@@ -4,7 +4,7 @@
 
 Cyber-Sentinel-Atlas is the signature product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed knowledge system.
 
-> Status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 COMPLETE; Phase 5.3 IN PROGRESS; Phase 5.3.1 COMPLETE; Phase 5.3.2 COMPLETE; Phase 5.3.3 COMPLETE; Phase 5.3.4 NEXT**
+> Status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 COMPLETE; Phase 5.3 COMPLETE; Phase 5.3.1–5.3.4 COMPLETE; Phase 5.4 NEXT**
 > Visibility: **Private during active development**
 
 ## Product Thesis
@@ -91,7 +91,7 @@ The permanent canonical semantic validator is `tools/validate_phase52.py`. Perma
 
 ## Phase 5.3 Source & Ingestion Core
 
-Phase 5.3 is **IN PROGRESS**. Slice 5.3.1 established the ingestion/control-plane contracts. Slice 5.3.2 proved those contracts against a pinned, official MITRE ATT&CK Enterprise STIX source. Slice 5.3.3 proved the Windows Security + Sysmon Encyclopedia product-acceptance pipeline against real controlled reference-host exports and independent documentation/provider/schema authority dimensions.
+Phase 5.3 is **COMPLETE / MERGED**. It established the independent ingestion/control plane, proved deterministic ingestion against ATT&CK, Windows Security, Sysmon, D3FEND and CAR, defined the controlled DefenseOps export boundary, and closed the immutable validation/review/promotion path through `PACK_READY`.
 
 Ingestion Contract Version: **1.0.0**
 
@@ -117,8 +117,8 @@ PACK_READY
 
 ### Completed slices
 
-- **5.3.1 — Ingestion Foundation / Contracts: COMPLETE**
-- **5.3.2 — MITRE ATT&CK Structured-Source Canary: COMPLETE**
+- **5.3.1 — Ingestion Foundation / Contracts: COMPLETE / MERGED**
+- **5.3.2 — MITRE ATT&CK Structured-Source Canary: COMPLETE / MERGED**
   - Enterprise ATT&CK release `19.2` pinned to upstream commit `6cda5ad8462c79e14fbb872f4e09059b18e0cfc4`;
   - deterministic STIX 2.1 Parser → PSR → Normalizer pipeline;
   - phase-aware, fail-closed authorization of real ingestion implementations;
@@ -137,12 +137,23 @@ PACK_READY
   - `4688`, independent legacy `592`, and `sysmon 1` acceptance semantics are preserved without identity collapse;
   - three-layer Raw / Parsed / Canonical inventory diff and reconciliation gates are validated;
   - canonical `schemas/v1` remained unchanged.
+- **5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates: COMPLETE / MERGED**
+  - PR `#11`, merge commit `7270ba54dbcceb3460e922e82bb3fb20bf149f29`;
+  - post-merge Foundation Hygiene run `33977610969`: SUCCESS;
+  - post-merge Phase 5.3.4 Canaries run `33977610961`: SUCCESS;
+  - D3FEND ontology `1.6.0` pinned to exact official SHA-256 `4909a5bb66b75d2c359624398848936fb56a6b246bcd5cfcd277977a1277753a`;
+  - D3FEND live canary produced 272 PSR records and 544 canonical candidate records from the pinned source;
+  - CAR sample `CAR-2016-03-001` is pinned to repository commit `1b922fe1527d956e222a99473472e594f10f610b` and Git blob `b0f899e2875d4469ac58838dcb77db59e4feee96`;
+  - DefenseOps ingestion is an explicit commit-bound validated-export contract; repository origin does not confer canonical authority;
+  - DefenseOps repository licensing remains fail-closed when unknown and G14 is non-waivable;
+  - G1–G15, four-eyes high-risk review, stale-review rejection, immutable digest binding and Last Known Good preservation are validated;
+  - canonical `schemas/v1` remained unchanged.
 
-### Next slice
+### Next phase
 
-- **5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates: NEXT**
+- **5.4 — Deterministic Search Core: NEXT / ARCHITECTURE GATE**
 
-Phase 5.3.3 is not a released content pack. Content-pack signing, archive format, installation and rollback remain Phase 5.5 responsibilities.
+Phase 5.3 is not a released content pack. Content-pack signing, archive format, installation and rollback remain Phase 5.5 responsibilities.
 
 ## Initial MVP Domain
 
@@ -202,6 +213,7 @@ DefenseOps content enters Atlas only through versioned ingestion, provenance, va
 - [Telemetry Lifecycle](docs/architecture/telemetry-lifecycle.md)
 - [Phase 5.3.2 ATT&CK Canary](docs/architecture/phase-5.3.2-attack-canary.md)
 - [Phase 5.3.3 Windows/Sysmon Encyclopedia](docs/architecture/phase-5.3.3-windows-sysmon-encyclopedia.md)
+- [Phase 5.3.4 D3FEND/CAR/DefenseOps Promotion](docs/architecture/phase-5.3.4-d3fend-car-defenseops-promotion.md)
 
 ### Product Delivery
 
@@ -218,4 +230,3 @@ DefenseOps content enters Atlas only through versioned ingestion, provenance, va
 ---
 
 **Maintainer:** Ali RahimDabagh
-**GitHub:** `cyber-sentinel`
