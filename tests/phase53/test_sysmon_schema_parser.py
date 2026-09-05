@@ -55,6 +55,7 @@ class SysmonSchemaParserTests(unittest.TestCase):
         )
         self.assertEqual("18", current["native_fields"]["binary_version"])
         self.assertEqual("5", current["native_fields"]["event_version"])
+        self.assertEqual(1, current["native_fields"]["event_id_numeric_value"])
         self.assertEqual("SYSMONEVENT_CREATE_PROCESS", current["native_fields"]["event_name"])
         self.assertEqual("Process Create", current["native_fields"]["template"])
         self.assertEqual("ProcessCreate", current["native_fields"]["rule_name"])
@@ -129,13 +130,13 @@ class SysmonSchemaParserTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "duplicate field 'CommandLine'"):
             self.parse(text)
 
-    def test_09_malformed_xml_and_nonnumeric_identifiers_fail_closed(self):
+    def test_09_malformed_xml_and_invalid_identifiers_fail_closed(self):
         malformed = '<manifest schemaversion="4.91" binaryversion="18"><events><event value="1"></events></manifest>'
         with self.assertRaises(ValueError):
             self.parse(malformed)
 
         bad_event = self.fixture_text().replace('value="255"', 'value="not-numeric"', 1)
-        with self.assertRaisesRegex(ValueError, "nonnumeric event ID"):
+        with self.assertRaisesRegex(ValueError, "invalid event ID"):
             self.parse(bad_event)
 
         bad_version = self.fixture_text().replace('version="3"', 'version="v3"', 1)
