@@ -4,17 +4,20 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Authoritative Branch: `main`
-- Phase 5.2 Source Branch: `architecture/phase-5.2-canonical-data-model` (retained after merge)
+- Current Main SHA: `baaf72a8f7596f701bb49af6cad02460064e416f`
+- Last Architecture-Reviewed Main SHA: `baaf72a8f7596f701bb49af6cad02460064e416f`
 - Phase 5.2 Pull Request: `#4 — Implement Phase 5.2 canonical data model — MERGED`
-- Phase 5.3.1 Feature Branch: `feature/phase-5.3.1-ingestion-foundation`
-- Phase 5.3.1 Approved Baseline Main SHA: `095a33bc55bca92fff9d9004b91c82f64209529e`
+- Phase 5.3.1: **COMPLETE / MERGED**
+- Phase 5.3.2 Pull Request: `#6 — Phase 5.3.2 — MITRE ATT&CK deterministic ingestion canary — MERGED`
+- Phase 5.3.2 Merge Commit: `baaf72a8f7596f701bb49af6cad02460064e416f`
+- Phase 5.3.2 Post-Merge Main CI: **GREEN** — Foundation Hygiene run `33943405943`
 - Current Version: `0.1.0-foundation.1`
 - Canonical Schema Version: `1.0.0`
 - Canonical Schema URI Base: `https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/`
 - Ingestion Contract Version: `1.0.0`
 - Ingestion Schema URI Base: `https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/ingestion/v1/`
-- Last Reviewed Main SHA: `095a33bc55bca92fff9d9004b91c82f64209529e`
 - Repository Visibility: Private during active development
+- Branch Protection: unavailable/not enabled on the current private-repository plan; procedural PR + CI + architecture-review gates remain mandatory.
 
 ## Current Phase
 
@@ -22,12 +25,12 @@
 - Stage 1 — Governance / Architecture Sync: **COMPLETE**
 - Phase 5.2 — Canonical Data Model: **COMPLETE**
 - Phase 5.3 — Source & Ingestion Core: **IN PROGRESS**
-- Phase 5.3.1 — Ingestion Foundation / Contracts: **IMPLEMENTATION COMPLETE — PENDING ARCHITECTURE REVIEW**
-- Phase 5.3.2 — MITRE ATT&CK Structured-Source Canary: **NOT STARTED**
-- Phase 5.3.3 — Windows Security + Sysmon Encyclopedia Pipeline: **NOT STARTED**
+- Phase 5.3.1 — Ingestion Foundation / Contracts: **COMPLETE / MERGED**
+- Phase 5.3.2 — MITRE ATT&CK Structured-Source Canary: **COMPLETE / MERGED**
+- Phase 5.3.3 — Windows Security + Sysmon Encyclopedia Pipeline: **NOT STARTED / NEXT**
 - Phase 5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates: **NOT STARTED**
 
-Phase 5.2 schema v1.0.0 remains authoritative. Phase 5.3.1 adds a separate ingestion/control-plane schema stream and does not modify the Canonical Knowledge Model. Later Phase 5.3 slices require separate Architecture Authority authorization.
+Phase 5.2 canonical schema v1.0.0 remains authoritative and unchanged. Phase 5.3 uses a separate ingestion/control-plane schema stream. Phase 5.3 terminates at `PACK_READY`; signed content-pack runtime, archive format, installation and rollback remain Phase 5.5 concerns.
 
 ## Product Definition
 
@@ -38,7 +41,7 @@ Cyber-Sentinel-Atlas is a universal cybersecurity telemetry, detection, and thre
 - an Offline Knowledge Platform;
 - a Detection Engineering Platform.
 
-Atlas is not an Event-ID-only wiki. Event ID is one identifier type inside a universal telemetry model.
+Atlas is not an Event-ID-only wiki. Event ID is one native identifier type inside a universal telemetry model.
 
 ## Approved Core Principles
 
@@ -47,21 +50,21 @@ Atlas is not an Event-ID-only wiki. Event ID is one identifier type inside a uni
 - Vendor-neutral
 - Analyst-first
 - Knowledge Graph based
-- Exact search before semantic search
+- Exact identifier lookup before lexical/semantic retrieval
 - Claim-level provenance
 - No technical claim without source
 - No AI answer without inspectable evidence
 - No direct upstream-to-production content update
 - Versioned content
-- Signed/checksummed offline packs
+- Signed/checksummed offline packs in Phase 5.5
 - Rollback-safe updates
-- Canonical identifiers
+- Canonical identifiers distinct from native identifiers
 - Legacy + Current telemetry preservation
 - Old Event IDs are preserved
-- Modern/Legacy relationships are explicit
+- Modern/Legacy relationships are explicit and evidence-backed
 - Universal telemetry model, not Windows-only
-- Event ID is only one identifier type
-- Content completeness must be measurable
+- Event ID is not globally unique
+- Content completeness is scope/version/denominator-bound
 - Telemetry Coverage and Detection Coverage are separate metrics
 - Universal architecture with an intentionally narrow MVP
 
@@ -88,7 +91,72 @@ Atlas is not an Event-ID-only wiki. Event ID is one identifier type inside a uni
 - [ADR-0019 — Validation, Review and Pack-Ready Promotion](adr/0019-validation-review-pack-ready-promotion.md)
 - [ADR-0020 — Encyclopedia Identifier Search/Browse Data Contract](adr/0020-encyclopedia-identifier-search-browse-data-contract.md)
 
-ADR-0001 through ADR-0015 remain intact and authoritative for the foundation and Canonical Model. ADR-0016 through ADR-0020 define the accepted Phase 5.3 control-plane, deterministic transformation, inventory, promotion and Encyclopedia data-contract decisions without overriding the Canonical Model.
+ADR-0001 through ADR-0015 remain authoritative for the Canonical Model. ADR-0016 through ADR-0020 define the Phase 5.3 ingestion/control-plane, deterministic transformation, inventory, promotion and Encyclopedia contracts without adding an eighth `AtlasRecord` family.
+
+## Phase 5.3.1 — Ingestion Foundation
+
+Phase 5.3.1 is complete and merged. It established:
+
+- `schemas/ingestion/v1/` as the independent Ingestion Contract schema authority;
+- SourceConnectorDefinition, AcquisitionRun and RawSnapshot contracts;
+- ParserDefinition, ParserRun and ParsedSourceRecord/PSR contracts;
+- NormalizerDefinition, NormalizationRun and NormalizationLineage contracts;
+- AuthoritativeInventoryDefinition and three-layer InventoryDiff;
+- BuildValidationReport for G1 through G15;
+- digest-bound ReviewDecision and CanonicalBuildManifest;
+- public-source fail-closed acquisition controls;
+- parser/normalizer deterministic no-network/no-AI boundaries;
+- cross-corpus source-snapshot resolution;
+- candidate/review/diff digest binding;
+- `PACK_READY` as the terminal successful Phase 5.3 boundary;
+- sanitized deterministic fixtures and permanent validation tests.
+
+The ingestion artifact corpus is not part of the `AtlasRecord` union. The seven Phase 5.2 canonical families remain unchanged.
+
+## Phase 5.3.2 — MITRE ATT&CK Structured-Source Canary
+
+Phase 5.3.2 is complete and merged through PR #6.
+
+Pinned source contract:
+
+- official repository: `mitre-attack/attack-stix-data`;
+- domain: Enterprise ATT&CK;
+- release: `19.2`;
+- upstream commit: `6cda5ad8462c79e14fbb872f4e09059b18e0cfc4`;
+- bundle: `enterprise-attack/enterprise-attack-19.2.json`;
+- full upstream bundle is acquired transiently for the live CI canary and is not committed to Atlas.
+
+Delivered controls:
+
+- SourceRecord + release pin + exact HTTPS connector;
+- phase-aware exact-path authorization for real connector/parser/normalizer implementations;
+- deterministic STIX 2.1 parser into PSR;
+- deterministic ATT&CK normalizer and versioned mapping profile;
+- unknown structured fields preserved-and-reported;
+- identity ambiguity quarantined;
+- lifecycle mapping for explicit ATT&CK revoked/deprecated flags; absence never means removal;
+- Tier-A origin does not auto-promote unreviewed claims to `authoritative`;
+- PSR `record_digest` and `parsed_record_id` conform exactly to the merged Phase 5.3.1 executable contract;
+- live RawSnapshot ID conforms exactly to the merged Phase 5.3.1 identity contract;
+- offline canary tests plus full pinned live-source CI canary;
+- no canonical `schemas/v1` changes.
+
+Phase 5.3.2 is an ingestion-framework canary, not a released content pack and not a claim of global ATT&CK completeness.
+
+## Phase 5.3.3 — Next Acceptance Domain
+
+Next authorized implementation target is the Windows Security + Sysmon Encyclopedia pipeline. The slice must preserve these boundaries:
+
+- Windows authoritative documentation and provider inventory are independent source dimensions;
+- completeness is declared only against an authoritative provider/channel/product-version/build denominator;
+- missing documentation is not missing telemetry;
+- Event ID alone is never global identity;
+- exact native identifier lookup for values such as `4688`, scoped lookup such as `sysmon 1`, legacy telemetry such as `592`, and provider collisions must remain representable;
+- legacy/current telemetry is preserved; `NOT_OBSERVED != REMOVED`;
+- Atlas core never downloads or executes Windows/Sysmon binaries to generate provider inventory;
+- controlled out-of-band reference-host exports may be ingested only as immutable, hashed, provenance-bearing artifacts;
+- Sysmon canonical documentation source is Microsoft Sysinternals;
+- Phase 5.3 prepares search-ready metadata; actual deterministic resolver/index remains Phase 5.4.
 
 ## Current MVP Scope
 
@@ -115,100 +183,13 @@ Product focus:
 - Windows Desktop as the first full end-user interface;
 - Web/PWA afterward using the same shared contracts.
 
-Phase 5.2 cross-domain records and Phase 5.3.1 ingestion records are sanitized architecture/test fixtures only. They are not production ingestion.
-
-## Phase 5.3.1 Ingestion Foundation
-
-The Phase 5.3.1 implementation establishes:
-
-- `schemas/ingestion/v1/` as the independent ingestion-contract schema authority;
-- SourceConnectorDefinition, AcquisitionRun and RawSnapshot contracts;
-- ParserDefinition, ParserRun and ParsedSourceRecord/PSR contracts;
-- NormalizerDefinition, NormalizationRun and NormalizationLineage contracts;
-- AuthoritativeInventoryDefinition and three-layer InventoryDiff;
-- BuildValidationReport for G1 through G15;
-- digest-bound ReviewDecision and CanonicalBuildManifest;
-- public-source fail-closed acquisition controls;
-- parser/normalizer deterministic no-network/no-AI boundaries;
-- cross-corpus source-snapshot resolution;
-- exact candidate/review/diff digest binding;
-- `PACK_READY` as the terminal successful Phase 5.3 boundary;
-- synthetic, deterministic, non-secret fixtures;
-- permanent validator `tools/ingestion/validate_ingestion_foundation.py`;
-- permanent tests under `tests/phase53/`.
-
-The ingestion artifact corpus is not part of the `AtlasRecord` union. The seven Phase 5.2 canonical families remain unchanged.
-
-## Deferred Scope
-
-The architecture must support future Linux, Azure, AWS, GCP, Docker, Kubernetes, DevOps/CI-CD, databases, Exchange, SharePoint, Microsoft 365, LOLBAS, GTFOBins, broader DFIR/IR, and additional detection backends.
-
-Broad production content ingestion remains deferred. Phase 5.3.1 specifically does not authorize live ATT&CK, Windows, Sysmon, D3FEND, CAR or DefenseOps ingestion.
-
-## Current Interface Sequence
-
-```text
-Canonical Data Model
-        ↓
-Source / Ingestion Core
-        ↓
-Deterministic Search Core
-        ↓
-Offline Pack Runtime / Shared Core
-        ↓
-Windows Desktop MVP
-        ↓
-Web / PWA
-        ↓
-API / CLI
-        ↓
-Grounded AI
-```
-
-The user-facing CLI command is `atlas`.
-
-## Canonical Source Policy
-
-Authoritative sources take precedence over secondary/community references.
-
-Canonical sources include:
-
-- Sysmon: https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
-- Microsoft Sysinternals: https://learn.microsoft.com/en-us/sysinternals/
-- MITRE ATT&CK: official MITRE ATT&CK sources
-- MITRE D3FEND: official MITRE D3FEND sources
-- MITRE CAR: official MITRE CAR sources
-- Other products/projects: official vendor documentation or official project repository
-
-UltimateWindowsSecurity and similar sources may be used for research/reference but do not override authoritative upstream sources.
-
-No production source registry is populated by Phase 5.3.1.
-
 ## Content Pack Status
 
 Architecture requirement: versioned, schema-versioned, source-versioned, provenance-bearing, checksummed, signed, compatibility-aware, freshness-aware, coverage-aware, validation-aware, rollback-safe packs.
 
 Phase 5.3 ends at `PACK_READY`; it does not implement the signed pack runtime. Exact final pack naming, archive format, signing implementation and key management remain **OPEN**.
 
-No production content packs have been released or installed by Phase 5.3.1.
-
-## Technology Decisions — Accepted
-
-- Canonical security model is vendor-neutral.
-- Material claims use claim-level provenance.
-- Offline operation is first-class.
-- Shared canonical contracts must serve all interfaces.
-- Windows Desktop is the first full end-user interface.
-- Web/PWA follows the shared core/Desktop MVP.
-- Official Atlas CLI command: `atlas`.
-- DefenseOps is the approved defensive engineering source for Atlas.
-- Cyber-Sentinel-Forge is retired as an independent Atlas architecture/product component.
-- Historical Forge material must not be deleted automatically.
-- Phase 5.2 canonical records use JSON Schema Draft 2020-12.
-- Schema v1 canonical URI base is the repository-controlled GitHub raw `/schemas/v1/` path.
-- Phase 5.3.1 ingestion contracts use an independent repository-controlled `/schemas/ingestion/v1/` path.
-- Ingestion artifacts do not become canonical `AtlasRecord` records.
-- Public ingestion is fail-closed and deterministic core transformation is network-free/AI-free.
+No production content pack has been released or installed by Phase 5.3.2.
 
 ## Technology Decisions — Open
 
@@ -218,33 +199,36 @@ No production content packs have been released or installed by Phase 5.3.1.
 - Detection Intermediate Representation
 - Exact content-pack naming convention and format
 - Portable Windows packaging implementation
-- Exact DefenseOps → Atlas ingestion contract
+- Exact DefenseOps → Atlas ingestion contract details for Phase 5.3.4
 - Code signing / pack signing implementation and key management
 - Exact search engine implementation
 - Exact parser sandbox technology
 - Secret-provider implementation
 - Reviewer identity/workflow implementation
+- Formal cross-language canonical serialization/hashing profile if required beyond the current deterministic Python contract
 
 Tauri, Rust, SQLite, React, and TypeScript remain candidates only.
 
 ## Active Architecture Issues
 
-No blocking architecture conflict is known. Phase 5.3 architecture is approved and Slice 5.3.1 implementation is pending Architecture Authority PR review.
+No blocking architecture conflict is known.
 
-Any new implementation issue requiring a change to accepted architecture must be raised as `ARCHITECTURE ISSUE` before changing the model.
+Known implementation/security consideration: the Phase 5.3.2 CI downloader validates the exact official host, TLS, zero redirects, pinned commit resource, size and Git blob identity. A stronger address-pinned transport may be evaluated for the future generic acquisition engine to eliminate DNS-resolution TOCTOU/rebinding edge cases.
+
+Any implementation issue requiring a change to accepted architecture must be raised as `ARCHITECTURE ISSUE` before changing the model.
 
 ## Data / Coverage Status
 
 - Phase 5.2 schema v1.0.0: authoritative on `main`
-- Phase 5.3.1 ingestion contract v1.0.0: implementation complete on feature branch, pending review/merge
-- Source registry production ingestion: not started
-- Controlled registries for schema validation: implemented on `main`
+- Phase 5.3 ingestion contract v1.0.0: authoritative on `main`
+- Phase 5.3.2 ATT&CK structured-source canary: complete
+- ATT&CK full source corpus: tested transiently in CI; not released as an Atlas content pack
+- Windows/Sysmon authoritative production-like Encyclopedia corpus: not started
+- Controlled registries for schema validation: implemented
 - Telemetry Coverage snapshots: schema/fixture implemented; production measurements not started
 - Detection Coverage snapshots: schema supported; production measurements not started
-- Production telemetry inventory: not ingested
-- Cross-domain Phase 5.2 fixtures: Windows, Sysmon, Linux, AWS, Azure, GCP, Kubernetes, Docker, MongoDB, MITRE
-- Phase 5.3.1 fixtures: sanitized synthetic contract/search-readiness fixtures only
-- DefenseOps ingestion contract: open decision / Phase 5.3.4 not started
+- Production Windows telemetry inventory: not ingested
+- DefenseOps ingestion contract: Phase 5.3.4 / not started
 
 Telemetry Coverage and Detection Coverage remain separate first-class measurements and must declare scope, version and denominator.
 
@@ -256,35 +240,41 @@ Phase 5.2 permanent validation source of truth:
 - `tests/test_phase52_model.py`
 - `tests/test_phase52_invariants.py`
 
-Phase 5.3.1 permanent validation source of truth:
+Phase 5.3 foundation validation:
 
 - `tools/ingestion/validate_ingestion_foundation.py`
+- `tools/ingestion/validate_ingestion_authorization.py`
 - `tests/phase53/test_contracts.py`
 - `tests/phase53/test_security_invariants.py`
+- `tests/phase53/test_ingestion_authorization.py`
 
-Phase 5.3.1 validation covers ingestion schema/URI authority, no-eighth-family protection, secrets/URI/SSRF/archive/Git controls, deterministic snapshot/PSR/lineage identities, mapping/registry/schema pinning, cross-corpus source-snapshot resolution, inventory guardrails, G1–G15 representation, review digest binding, PACK_READY promotion, Last Known Good preservation, numeric native-ID context preservation, legacy identity separation and fixture/repository hygiene.
+Phase 5.3.2 ATT&CK validation:
+
+- `tools/ingestion/validate_attack_canary.py`
+- `tools/ingestion/run_attack_live_canary.py`
+- `tests/phase53/test_attack_canary.py`
+
+Post-merge `main@baaf72a8f7596f701bb49af6cad02460064e416f` passed Foundation Hygiene run `33943405943`, including the full pinned live ATT&CK canary.
 
 ## Known Risks / Blockers
 
-- Phase 5.1 JSON schemas remain provisional/legacy foundation contracts and are preserved during migration review.
-- Exact storage/graph/search implementation is intentionally open.
-- Pack-signing/key-management design is open.
-- Parser sandbox technology is open.
-- Production ingestion has not started.
-- Phase 5.3.2, 5.3.3 and 5.3.4 require separate Architecture Authority authorization.
+- Branch protection is not enabled on the current private repository; procedural PR/CI/architecture gates are mandatory.
+- Exact storage/graph/search implementation remains intentionally open.
+- Pack-signing/key-management design remains open.
+- Parser sandbox technology remains open.
+- Formal cross-language canonical JSON/hash standard remains open if later runtime languages require it; do not assume RFC 8785/JCS today.
+- Windows/Sysmon production-like Encyclopedia ingestion has not started.
 
 ## Last Architecture Sync
 
-- Architecture Sync Date: 2026-09-04
+- Architecture Sync Date: 2026-09-05
 - Architecture Authority: Atlas Architecture / Product / Data / Security Design workspace
-- Stage 1 Decision: **APPROVED AND MERGED**
-- Stage 1 baseline remains represented by ADR-0001 through ADR-0010.
-- Architecture Sync Status: **GREEN**
-- Approved Phase 5.2 baseline: `main@47e3a2b70e337c477dbf395192cd9a4e84b6050a`
-- Approved Phase 5.2 head: `99704f607f3a40bb783587e31c919eb86b29d9cd`
-- Phase 5.2 Architecture Decision: **APPROVED AND MERGED**
-- PR #4: **MERGED**
-- Phase 5.2 merge commit: `89868a0bece363ba5d5a74d435880b4a1de03751`
-- Phase 5.3 Architecture Decision: **APPROVED**
-- Phase 5.3.1 Implementation Authorization Baseline: `main@095a33bc55bca92fff9d9004b91c82f64209529e`
-- Phase 5.3.1 Status: **IMPLEMENTATION COMPLETE — PENDING ARCHITECTURE REVIEW**
+- Stage 1: **APPROVED AND MERGED**
+- Phase 5.2: **APPROVED AND MERGED**
+- Phase 5.3 Architecture: **APPROVED**
+- Phase 5.3.1: **COMPLETE / MERGED**
+- Phase 5.3.2: **COMPLETE / MERGED**
+- Phase 5.3.2 PR: `#6`
+- Phase 5.3.2 Merge Commit: `baaf72a8f7596f701bb49af6cad02460064e416f`
+- Phase 5.3.2 Post-Merge CI: **GREEN**
+- Next Slice: **Phase 5.3.3 — Windows Security + Sysmon Encyclopedia Pipeline**
