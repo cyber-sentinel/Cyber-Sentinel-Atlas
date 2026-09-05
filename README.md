@@ -4,7 +4,7 @@
 
 Cyber-Sentinel-Atlas is the signature product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed knowledge system.
 
-> Status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 COMPLETE; Phase 5.3 IN PROGRESS; Phase 5.3.1 COMPLETE; Phase 5.3.2 COMPLETE; Phase 5.3.3 NEXT**
+> Status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 COMPLETE; Phase 5.3 IN PROGRESS; Phase 5.3.1 COMPLETE; Phase 5.3.2 COMPLETE; Phase 5.3.3 COMPLETE; Phase 5.3.4 NEXT**
 > Visibility: **Private during active development**
 
 ## Product Thesis
@@ -91,7 +91,7 @@ The permanent canonical semantic validator is `tools/validate_phase52.py`. Perma
 
 ## Phase 5.3 Source & Ingestion Core
 
-Phase 5.3 is **IN PROGRESS**. Slice 5.3.1 established the ingestion/control-plane contracts. Slice 5.3.2 proved those contracts against a pinned, official MITRE ATT&CK Enterprise STIX source with both deterministic fixture replay and a transient full-source live CI canary.
+Phase 5.3 is **IN PROGRESS**. Slice 5.3.1 established the ingestion/control-plane contracts. Slice 5.3.2 proved those contracts against a pinned, official MITRE ATT&CK Enterprise STIX source. Slice 5.3.3 proved the Windows Security + Sysmon Encyclopedia product-acceptance pipeline against real controlled reference-host exports and independent documentation/provider/schema authority dimensions.
 
 Ingestion Contract Version: **1.0.0**
 
@@ -126,13 +126,23 @@ PACK_READY
   - ambiguous identity quarantined;
   - exact Phase 5.3.1 PSR and RawSnapshot identity contracts enforced;
   - full upstream corpus retrieved transiently in CI and not committed.
+- **5.3.3 — Windows Security + Sysmon Encyclopedia Pipeline: COMPLETE / MERGED**
+  - PR `#8`, merge commit `84d125c61051442c509a701c2d6bc6ffb85a9090`;
+  - post-merge Foundation Hygiene run `33973584356`: SUCCESS;
+  - Windows Server 2025 Datacenter 24H2 build `26100.33296` provider inventory: 488 event/version definitions and 423 unique Event IDs;
+  - Sysmon `15.21` schema export: 24 schema manifests, 587 parsed event records, current schema `4.91`, 30 current Event IDs;
+  - real controlled reference-host export pipeline remains out-of-band from Atlas core;
+  - Windows documentation vs provider inventory and Sysmon documentation vs schema inventory remain independent authority dimensions;
+  - deterministic structural normalizers create canonical identity shells without inferring unsupported global lifecycle;
+  - `4688`, independent legacy `592`, and `sysmon 1` acceptance semantics are preserved without identity collapse;
+  - three-layer Raw / Parsed / Canonical inventory diff and reconciliation gates are validated;
+  - canonical `schemas/v1` remained unchanged.
 
 ### Next slice
 
-- **5.3.3 — Windows Security + Sysmon Encyclopedia Pipeline: NOT STARTED / NEXT**
-- **5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates: NOT STARTED**
+- **5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates: NEXT**
 
-Phase 5.3.2 is an ingestion canary, not a released content pack. Content-pack signing, archive format, installation and rollback remain Phase 5.5 responsibilities.
+Phase 5.3.3 is not a released content pack. Content-pack signing, archive format, installation and rollback remain Phase 5.5 responsibilities.
 
 ## Initial MVP Domain
 
@@ -191,6 +201,7 @@ DefenseOps content enters Atlas only through versioned ingestion, provenance, va
 - [Coverage Model](docs/architecture/coverage-model.md)
 - [Telemetry Lifecycle](docs/architecture/telemetry-lifecycle.md)
 - [Phase 5.3.2 ATT&CK Canary](docs/architecture/phase-5.3.2-attack-canary.md)
+- [Phase 5.3.3 Windows/Sysmon Encyclopedia](docs/architecture/phase-5.3.3-windows-sysmon-encyclopedia.md)
 
 ### Product Delivery
 
