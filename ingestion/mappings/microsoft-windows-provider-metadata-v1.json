@@ -1,0 +1,27 @@
+{
+  "profile_id": "atlas:mapping-profile:atlas.ingestion:microsoft-windows-provider-metadata-v1",
+  "profile_version": "1.0.0",
+  "normalizer_id": "atlas:normalizer:atlas.ingestion:microsoft-windows-provider-metadata",
+  "normalizer_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:microsoft-windows-provider-metadata",
+  "source_version": "windows-build-26100.33296",
+  "canonical_schema_version": "1.0.0",
+  "namespace": "microsoft.windows.security",
+  "provider": "Microsoft-Windows-Security-Auditing",
+  "channel": "Security",
+  "product": "Windows Server 2025 Datacenter",
+  "platform": "Windows",
+  "windows_version": "24H2",
+  "windows_build": "26100.33296",
+  "identity_rule": {
+    "native_type": "windows-event-provider-definition",
+    "native_identifier_type": "event_id",
+    "entity_type": "event",
+    "canonical_key": "event_id"
+  },
+  "lifecycle_rule": {
+    "provider_inventory_observation": "do-not-set-global-lifecycle"
+  },
+  "unsupported_native_types": "preserve-in-psr-and-report",
+  "profile_digest": "sha256-56b31ce9b61b0eb742b3ceba1ad3c9e5907523e1f93cb1d9dfd0afe7e61cf0c6"
+}
