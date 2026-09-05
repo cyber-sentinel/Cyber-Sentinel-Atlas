@@ -195,7 +195,6 @@ def main() -> int:
         "upstream_validators": {
             "publisher_version": release["release_version"],
             "git_commit": release["upstream_commit_sha"],
-            "git_blob": release["document_git_blob_sha1"],
         },
         "transport_metadata": headers,
         "retention_mode": "transient",
