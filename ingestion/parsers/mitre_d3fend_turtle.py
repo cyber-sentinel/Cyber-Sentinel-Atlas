@@ -5,17 +5,15 @@ import argparse
 import hashlib
 import json
 import re
-from collections import deque
 from pathlib import Path
 
 from rdflib import BNode, Graph, Namespace, RDF, RDFS, URIRef
-from rdflib.compare import to_canonical_graph
 
 PARSER_ID = "atlas:parser:atlas.ingestion:mitre-d3fend-turtle"
 PARSER_VERSION = "1.0.0"
 PSR_VERSION = "1.0.0"
 MAX_INPUT_BYTES = 32 * 1024 * 1024
-MAX_BLANK_NODE_SUBGRAPH_TRIPLES = 256
+MAX_BLANK_NODE_SUBGRAPH_EDGES = 256
 D3FEND_ID_RE = re.compile(r"^D3-[A-Z0-9]+$")
 D3F = Namespace("http://d3fend.mitre.org/ontologies/d3fend.owl#")
 KNOWN_PREDICATES = {RDF.type, RDFS.label, D3F["d3fend-id"], D3F.definition}
@@ -52,56 +50,61 @@ def _collect_subject_ids(graph: Graph) -> dict[str, list]:
     return subject_ids
 
 
-def _canonical_blank_node_value(graph: Graph, root: BNode) -> dict:
-    """Preserve an unknown blank-node value as a bounded canonical local subgraph.
+def _stable_blank_node_value(
+    graph: Graph,
+    root: BNode,
+    *,
+    cache: dict[BNode, dict],
+    stack: set[BNode] | None = None,
+    budget: dict[str, int] | None = None,
+) -> dict:
+    """Represent a rooted blank-node structure deterministically without RDF-global canonicalization.
 
-    D3FEND uses OWL/RDF structures that may contain blank nodes. Canonicalizing the
-    complete ontology is unnecessarily expensive. Only the blank-node component
-    that can affect an emitted unknown field is extracted, bounded, canonicalized,
-    and preserved. The immutable RawSnapshot remains the byte-exact source record.
+    D3FEND may attach OWL restriction/list structures as blank-node values. Their
+    parser-assigned labels are unstable, so Atlas preserves the source-native
+    structure as sorted nested predicate/value data. Cycles and oversized rooted
+    structures fail closed rather than leaking unstable blank-node identifiers.
     """
-    subgraph = Graph()
-    queue: deque[BNode] = deque([root])
-    seen: set[BNode] = set()
+    if root in cache:
+        return cache[root]
+    stack = set() if stack is None else stack
+    budget = {"edges": 0} if budget is None else budget
+    if root in stack:
+        raise ValueError("D3FEND blank-node structure contains a cycle; deterministic preservation failed closed")
+    stack.add(root)
 
-    while queue:
-        node = queue.popleft()
-        if node in seen:
-            continue
-        seen.add(node)
+    properties: dict[str, list] = {}
+    triples = list(graph.predicate_objects(root))
+    triples.sort(key=lambda item: (str(item[0]), str(item[1]) if not isinstance(item[1], BNode) else ""))
+    for predicate, obj in triples:
+        budget["edges"] += 1
+        if budget["edges"] > MAX_BLANK_NODE_SUBGRAPH_EDGES:
+            raise ValueError("D3FEND blank-node structure exceeds bounded parser limit")
+        value = (
+            _stable_blank_node_value(graph, obj, cache=cache, stack=stack, budget=budget)
+            if isinstance(obj, BNode)
+            else str(obj)
+        )
+        properties.setdefault(str(predicate), []).append(value)
 
-        for triple in graph.triples((node, None, None)):
-            subgraph.add(triple)
-            obj = triple[2]
-            if isinstance(obj, BNode) and obj not in seen:
-                queue.append(obj)
-            if len(subgraph) > MAX_BLANK_NODE_SUBGRAPH_TRIPLES:
-                raise ValueError("D3FEND blank-node subgraph exceeds bounded parser limit")
+    for key, values in list(properties.items()):
+        keyed = {canonical_json(value): value for value in values}
+        properties[key] = [keyed[k] for k in sorted(keyed)]
+    properties = {key: properties[key] for key in sorted(properties)}
+    stack.remove(root)
 
-        for triple in graph.triples((None, None, node)):
-            subgraph.add(triple)
-            subject = triple[0]
-            if isinstance(subject, BNode) and subject not in seen:
-                queue.append(subject)
-            if len(subgraph) > MAX_BLANK_NODE_SUBGRAPH_TRIPLES:
-                raise ValueError("D3FEND blank-node subgraph exceeds bounded parser limit")
-
-    canonical = to_canonical_graph(subgraph)
-    triples = sorted(
-        " ".join(term.n3() for term in triple) + " ."
-        for triple in canonical
-    )
-    return {
-        "term_type": "blank-node-subgraph",
-        "triple_count": len(triples),
-        "canonical_triples": triples,
-        "subgraph_digest": sha256_digest(triples),
+    result = {
+        "term_type": "blank-node-structure",
+        "properties": properties,
+        "subgraph_digest": sha256_digest(properties),
     }
+    cache[root] = result
+    return result
 
 
-def _stable_unknown_value(graph: Graph, value):
+def _stable_unknown_value(graph: Graph, value, *, blank_cache: dict[BNode, dict]):
     if isinstance(value, BNode):
-        return _canonical_blank_node_value(graph, value)
+        return _stable_blank_node_value(graph, value, cache=blank_cache)
     return str(value)
 
 
@@ -136,6 +139,7 @@ def parse_bytes(
         raise ValueError("D3FEND ontology contains no defensive technique identifiers")
 
     records: list[dict] = []
+    blank_cache: dict[BNode, dict] = {}
     for identifier in sorted(subject_ids):
         subjects = subject_ids[identifier]
         if len({str(subject) for subject in subjects}) != 1:
@@ -156,10 +160,10 @@ def parse_bytes(
         for predicate, obj in graph.predicate_objects(subject):
             if predicate in KNOWN_PREDICATES:
                 continue
-            unknown.setdefault(str(predicate), []).append(_stable_unknown_value(graph, obj))
+            unknown.setdefault(str(predicate), []).append(
+                _stable_unknown_value(graph, obj, blank_cache=blank_cache)
+            )
         for key, values in list(unknown.items()):
-            # Canonical JSON is used as the sort/dedup key because preserved blank
-            # node subgraphs are structured JSON objects, not unstable RDF labels.
             keyed = {canonical_json(value): value for value in values}
             unknown[key] = [keyed[k] for k in sorted(keyed)]
         unknown = {key: unknown[key] for key in sorted(unknown)}
@@ -202,11 +206,11 @@ def parse_bytes(
         if unknown:
             diagnostics.append("unknown direct ontology predicates preserved for drift review")
         if any(
-            isinstance(value, dict) and value.get("term_type") == "blank-node-subgraph"
+            isinstance(value, dict) and value.get("term_type") == "blank-node-structure"
             for values in unknown.values()
             for value in values
         ):
-            diagnostics.append("blank-node unknowns preserved as bounded canonical local subgraphs")
+            diagnostics.append("blank-node unknowns preserved as bounded deterministic rooted structures")
         records.append(
             {
                 "psr_version": PSR_VERSION,
