@@ -42,7 +42,7 @@ class WindowsSysmonStructuralNormalizerTests(unittest.TestCase):
         cls.sysmon_mapping = load("ingestion/mappings/microsoft-sysmon-schema-v1.json")
         cls.windows_definition = load("ingestion/normalizers/microsoft-windows-provider-metadata.definition.json")
         cls.sysmon_definition = load("ingestion/normalizers/microsoft-sysmon-schema.definition.json")
-        cls.windows_fixture = load("fixtures/phase-5.3/reference-exports/windows-security-provider-export.synthetic.json")
+        cls.windows_fixture = load("fixtures/phase-5.3/reference-exports/windows-security-provider-export.realistic.synthetic.json")
         cls.sysmon_fixture = (ROOT / "fixtures/phase-5.3/reference-exports/sysmon-schema-export.realistic.synthetic.txt").read_text(encoding="utf-8")
 
     def windows_psr(self):
@@ -101,6 +101,7 @@ class WindowsSysmonStructuralNormalizerTests(unittest.TestCase):
         self.assertEqual("Microsoft-Windows-Security-Auditing", event["native_identifiers"][0]["context"]["provider"])
         self.assertNotIn("lifecycle", event)
         self.assertEqual("observed", event["native_identifiers"][0]["components"]["provider_inventory_status"])
+        self.assertEqual(["1", "2"], event["native_identifiers"][0]["components"]["observed_event_versions"])
 
     def test_04_windows_provider_normalization_is_deterministic_and_lineage_valid(self):
         first = self.normalize_windows()
