@@ -164,10 +164,16 @@ jobs:
             --output $psr
           python -c "import json,sys; d=json.load(open(sys.argv[1],encoding='utf-8')); r=d['records']; ids=sorted({int(x['native_fields']['event_id']) for x in r}); digest=d['representation_digest']; print('Windows ProviderMetadata PSR: records={} unique_event_ids={} min={} max={} has_4688={} has_592={} digest={}'.format(len(r),len(ids),min(ids),max(ids),4688 in ids,592 in ids,digest)); assert 4688 in ids" $psr
 
-      - name: Summarize real Sysmon schema output
+      - name: Validate real Sysmon 15.21 schema through PSR parser
         shell: pwsh
         run: |
-          python -c "import pathlib,re,xml.etree.ElementTree as ET; p=pathlib.Path(r'${{ github.workspace }}/reference-output/sysmon-schema.txt'); t=p.read_text(encoding='utf-8',errors='strict'); chunks=re.findall(r'<manifest\b.*?</manifest>',t,re.S|re.I); roots=[ET.fromstring(x) for x in chunks]; versions=[x.attrib.get('schemaversion') for x in roots]; event_counts=[len(x.findall('./events/event')) for x in roots]; print(f'Sysmon schema summary: bytes={p.stat().st_size} xml_documents={len(chunks)} schema_versions={versions} event_counts={event_counts}'); assert chunks and all(event_counts)"
+          python tools/ingestion/validate_sysmon_schema_reference.py `
+            "${{ github.workspace }}/reference-output/sysmon-schema.txt" `
+            --expected-schema-count 24 `
+            --expected-current-schema 4.91 `
+            --expected-current-event-count 30 `
+            --required-event-id 1 `
+            --required-event-id 255
 
       - name: Print provenance descriptor summary
         shell: pwsh
