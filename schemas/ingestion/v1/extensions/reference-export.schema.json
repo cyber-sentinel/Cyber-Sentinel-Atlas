@@ -67,7 +67,13 @@
         "tool_name": {"type": "string", "minLength": 1},
         "tool_publisher": {"type": "string", "minLength": 1},
         "tool_version": {"type": "string", "minLength": 1},
-        "command_shape": {"type": "string", "minLength": 1}
+        "command_shape": {"type": "string", "minLength": 1},
+        "binary_sha256": {
+          "$ref": "https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/ingestion/v1/defs/common.schema.json#/$defs/sha256_digest"
+        },
+        "distribution_uri": {"type": "string", "format": "uri", "minLength": 1},
+        "signature_status": {"type": "string", "minLength": 1},
+        "signer_subject": {"type": "string", "minLength": 1}
       }
     },
     "collected_at": {
