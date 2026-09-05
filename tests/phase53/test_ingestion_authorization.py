@@ -34,6 +34,8 @@ class IngestionAuthorizationTests(unittest.TestCase):
             "ingestion/parsers/microsoft_sysmon_schema.py",
             "ingestion/normalizers/microsoft-sysmon-docs.definition.json",
             "ingestion/normalizers/microsoft_sysmon_docs.py",
+            "ingestion/normalizers/microsoft-sysmon-schema.definition.json",
+            "ingestion/normalizers/microsoft_sysmon_schema.py",
             "ingestion/connectors/microsoft-windows-security-event-4688-doc.json",
             "ingestion/parsers/microsoft-windows-security-event-html.definition.json",
             "ingestion/parsers/microsoft_windows_security_event_html.py",
@@ -41,6 +43,8 @@ class IngestionAuthorizationTests(unittest.TestCase):
             "ingestion/normalizers/microsoft_windows_security_event_doc.py",
             "ingestion/parsers/microsoft-windows-provider-metadata.definition.json",
             "ingestion/parsers/microsoft_windows_provider_metadata.py",
+            "ingestion/normalizers/microsoft-windows-provider-metadata.definition.json",
+            "ingestion/normalizers/microsoft_windows_provider_metadata.py",
         }
         self.assertEqual(phase532 | phase533, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS))
         self.assertEqual(phase532, {p for p, phase in phase_policy.AUTHORIZED_IMPLEMENTATIONS.items() if phase == "phase-5.3.2"})
@@ -77,7 +81,9 @@ class IngestionAuthorizationTests(unittest.TestCase):
             "ingestion/normalizers/README.md",
             "ingestion/mappings/mitre-attack-enterprise-v1.json",
             "ingestion/mappings/microsoft-sysmon-docs-v1.json",
+            "ingestion/mappings/microsoft-sysmon-schema-v1.json",
             "ingestion/mappings/microsoft-windows-security-event-doc-v1.json",
+            "ingestion/mappings/microsoft-windows-provider-metadata-v1.json",
             "ingestion/source-profiles/mitre-attack-enterprise.source.json",
             "ingestion/source-profiles/microsoft-sysmon-docs.source.json",
             "ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.source.json",
