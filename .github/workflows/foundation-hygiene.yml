@@ -167,7 +167,7 @@ jobs:
       - name: Summarize real Sysmon schema output
         shell: pwsh
         run: |
-          python -c "import pathlib,re,xml.etree.ElementTree as ET; p=pathlib.Path(r'${{ github.workspace }}/reference-output/sysmon-schema.txt'); t=p.read_text(encoding='utf-8',errors='strict'); chunks=re.findall(r'<Sysmon\b.*?</Sysmon>',t,re.S); print(f'Sysmon schema summary: bytes={p.stat().st_size} xml_documents={len(chunks)} schema_versions={[ET.fromstring(x).attrib.get(\"schemaversion\") for x in chunks]}'); assert chunks"
+          python -c "import pathlib,re,xml.etree.ElementTree as ET; p=pathlib.Path(r'${{ github.workspace }}/reference-output/sysmon-schema.txt'); t=p.read_text(encoding='utf-8',errors='strict'); chunks=re.findall(r'<manifest\b.*?</manifest>',t,re.S|re.I); roots=[ET.fromstring(x) for x in chunks]; versions=[x.attrib.get('schemaversion') for x in roots]; event_counts=[len(x.findall('./events/event')) for x in roots]; print(f'Sysmon schema summary: bytes={p.stat().st_size} xml_documents={len(chunks)} schema_versions={versions} event_counts={event_counts}'); assert chunks and all(event_counts)"
 
       - name: Print provenance descriptor summary
         shell: pwsh
