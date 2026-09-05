@@ -1,0 +1,27 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "defenseops_export_contract_version": "1.0.0",
+  "export_id": "atlas:defenseops-export:atlas.ingestion:synthetic-v1",
+  "source_id": "atlas:source:atlas.source:cyber-sentinel-defenseops",
+  "repository": "cyber-sentinel/Cyber-Sentinel-DefenseOps",
+  "commit_sha": "daa879b5eede5f09651468c16ed3acc50596b2fc",
+  "release_version": "0.1.0",
+  "generated_at": "2026-09-05T15:30:00Z",
+  "records": [
+    {
+      "content_id": "det-win-synthetic-001",
+      "content_type": "detection",
+      "path": "detections/windows/synthetic.yml",
+      "content_sha256": "sha256-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "native_backend": "Sigma",
+      "native_format": "yaml",
+      "source_refs": ["atlas:event:microsoft.windows.security:4688"],
+      "validation": {"quality_level": "Q2", "review_status": "validated", "validated_at": "2026-09-05T15:20:00Z", "evidence_refs": ["synthetic-validation-evidence"]},
+      "applicability": {"platforms": ["Windows"], "products": ["Windows Security"]},
+      "telemetry_requirements": [{"provider": "Microsoft-Windows-Security-Auditing", "record_or_signal": "Event ID 4688", "atlas_ref": "atlas:event:microsoft.windows.security:4688"}],
+      "license": {"status": "unknown", "notes": "Synthetic fixture intentionally exercises G14 fail-closed behavior."}
+    }
+  ],
+  "fixture_only": true,
+  "export_digest": "sha256-19dfe1d1cb40eaf6e70703e34388552cb46bb8015e6c0489ac4780e3deeeb391"
+}

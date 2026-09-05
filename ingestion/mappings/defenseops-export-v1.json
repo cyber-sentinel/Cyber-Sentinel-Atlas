@@ -1,0 +1,21 @@
+{
+  "profile_id": "atlas:mapping-profile:atlas.ingestion:defenseops-export-v1",
+  "profile_version": "1.0.0",
+  "normalizer_id": "atlas:normalizer:atlas.ingestion:defenseops-export",
+  "normalizer_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:cyber-sentinel-defenseops",
+  "source_version": "commit:daa879b5eede5f09651468c16ed3acc50596b2fc",
+  "canonical_schema_version": "1.0.0",
+  "namespace": "defenseops",
+  "identity_rule": {
+    "native_identifier_type": "defenseops_content_id",
+    "entity_type_from": "content_type",
+    "canonical_key": "lowercase-content-id"
+  },
+  "promotion_policy": {
+    "source_origin_is_authority": false,
+    "validated_review_required": true,
+    "verified_license_required_for_g14": true
+  },
+  "profile_digest": "sha256-979338b8a3a06a1a955cbd7ab2b3656ba18642ae6244c9edec09f1fb9e45a74c"
+}

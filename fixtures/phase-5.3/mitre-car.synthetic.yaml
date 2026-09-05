@@ -1,0 +1,14 @@
+title: Synthetic Host Discovery Analytic
+submission_date: 2026-09-05
+information_domain: Host
+platforms:
+  - Windows
+subtypes:
+  - Process
+analytic_types:
+  - TTP
+contributors:
+  - Synthetic Fixture
+id: CAR-2099-01-001
+description: Synthetic test description for deterministic Atlas ingestion validation.
+future_field: preserve-me

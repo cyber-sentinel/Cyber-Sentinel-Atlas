@@ -1,0 +1,19 @@
+{
+  "profile_id": "atlas:mapping-profile:atlas.ingestion:mitre-car-v1",
+  "profile_version": "1.0.0",
+  "normalizer_id": "atlas:normalizer:atlas.ingestion:mitre-car",
+  "normalizer_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:mitre-car",
+  "source_version": "commit:1b922fe1527d956e222a99473472e594f10f610b",
+  "canonical_schema_version": "1.0.0",
+  "namespace": "mitre.car",
+  "identity_rule": {
+    "native_type": "mitre-car-analytic",
+    "native_identifier_type": "car_id",
+    "entity_type": "analytic",
+    "canonical_key": "lowercase-car-id"
+  },
+  "description_claim_predicate": "analytic.description",
+  "confidence_policy": "Official source provenance is preserved but does not automatically make imported claim confidence authoritative.",
+  "profile_digest": "sha256-645fcc11ba8d009e44ed5f99fa47374b865375dce3c3742b273b3a279646df6c"
+}
