@@ -108,10 +108,13 @@ class ReferenceHostCollectionTests(unittest.TestCase):
         for suffix in (".exe", ".dll", ".sys", ".msi", ".cab", ".zip", ".pfx", ".pem", ".key"):
             self.assertIn(suffix, text)
 
-    def test_05_collector_uses_first_party_commands_and_official_sysmon_distribution(self):
+    def test_05_collector_uses_first_party_windows_api_and_official_sysmon_distribution(self):
         text = (ROOT / "tools/reference-host/collect_windows_sysmon_reference.ps1").read_text(encoding="utf-8")
         self.assertIn("Microsoft-Windows-Security-Auditing", text)
-        self.assertIn("gp $WindowsProvider /ge:true /f:xml", text)
+        self.assertIn("System.Diagnostics.Eventing.Reader.ProviderMetadata", text)
+        self.assertIn("$providerMetadata.Events", text)
+        self.assertIn("collection_method = 'windows-event-log-api'", text)
+        self.assertIn("descriptions_included = $false", text)
         self.assertIn("https://download.sysinternals.com/files/Sysmon.zip", text)
         self.assertIn("Get-AuthenticodeSignature", text)
         self.assertIn("Sysmon version drift", text)
@@ -125,6 +128,7 @@ class ReferenceHostCollectionTests(unittest.TestCase):
         self.assertIn("$sysmonZip = Join-Path $work", text)
         self.assertIn("$sysmonDir = Join-Path $work", text)
         self.assertIn("$sysmonRawPath = Join-Path $resolvedOutput 'sysmon-schema.txt'", text)
+        self.assertIn("$windowsRawPath = Join-Path $resolvedOutput 'windows-security-provider.json'", text)
         self.assertIn("Remove-Item -LiteralPath $work -Recurse -Force", text)
         self.assertNotIn("Copy-Item $sysmonExe", text)
 
@@ -134,6 +138,14 @@ class ReferenceHostCollectionTests(unittest.TestCase):
         for key in ("binary_sha256", "distribution_uri", "signature_status", "signer_subject"):
             self.assertIn(key, collector["properties"])
             self.assertNotIn(key, collector["required"])
+
+    def test_08_windows_reference_export_uses_structural_provider_metadata_contract(self):
+        text = (ROOT / "tools/reference-host/collect_windows_sysmon_reference.ps1").read_text(encoding="utf-8")
+        for field in ("event_id", "version", "log_name", "level", "opcode", "task", "keywords", "template"):
+            self.assertIn(field, text)
+        self.assertIn("Sort-Object @{ Expression = { [long]$_.event_id } }", text)
+        self.assertIn("ProviderMetadata.Events returned no events", text)
+        self.assertIn("does not expose required channel", text)
 
 
 if __name__ == "__main__":
