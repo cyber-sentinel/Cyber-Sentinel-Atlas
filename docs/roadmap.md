@@ -71,7 +71,7 @@ Phase 5.1 legacy schemas remain preserved. Phase 5.2 does not authorize implemen
 
 ## Phase 5.3 — Source & Ingestion Core
 
-Status: **IN PROGRESS**
+Status: **COMPLETE / MERGED**
 
 Phase 5.3 transforms controlled source acquisitions into reviewed canonical candidate builds and terminates at `PACK_READY`. It does not implement signed pack runtime, client installation, runtime rollback, final pack signing, archive-format or key-management decisions.
 
@@ -152,69 +152,78 @@ Phase 5.3.3 validates the Encyclopedia ingestion acceptance domain. It is not a 
 
 ### Phase 5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates
 
-Status: **NEXT / AUTHORIZED ARCHITECTURE BASELINE**
+Status: **COMPLETE / MERGED**
 
-Objectives:
+PR: `#11`
 
-- D3FEND drift-aware official-source connector and deterministic ingestion path;
-- CAR official structured repository ingestion pinned to an explicit commit/release;
-- DefenseOps validated engineering export ingestion contract;
-- provenance, source-tier, licensing, applicability and telemetry-requirement binding for DefenseOps-derived content;
+Final reviewed head: `58b15b0e001427ea7ff8b67b20100f4f4d1e3eee`
+
+Merge commit: `7270ba54dbcceb3460e922e82bb3fb20bf149f29`
+
+Post-merge main validation:
+
+- Foundation Hygiene run `33977610969` — **SUCCESS**;
+- Phase 5.3.4 Canaries run `33977610961` — **SUCCESS**.
+
+Delivered:
+
+- D3FEND official-source connector and deterministic ingestion path pinned to ontology `1.6.0` and exact official SHA-256 `sha256-4909a5bb66b75d2c359624398848936fb56a6b246bcd5cfcd277977a1277753a`;
+- bounded deterministic preservation of relevant RDF blank-node structures with cycle/size fail-closed behavior;
+- D3FEND live canary over the pinned official source: 3,862,115 bytes, 272 PSR records, 544 canonical candidate records;
+- CAR official structured repository canary pinned to commit `1b922fe1527d956e222a99473472e594f10f610b` and sample Git blob `b0f899e2875d4469ac58838dcb77db59e4feee96`;
+- CAR live canary for `CAR-2016-03-001` producing two canonical candidate records;
+- DefenseOps explicit validated engineering export schema/parser/normalizer contract pinned to commit `daa879b5eede5f09651468c16ed3acc50596b2fc` (`v0.1.0`);
+- provenance, source-tier, validation, applicability, telemetry-requirement and licensing metadata boundary for DefenseOps-derived content;
 - strict rule that DefenseOps origin does not automatically imply authoritative canonical truth;
-- final G1–G15 validation and human-review promotion scenarios;
-- immutable candidate/review/promotion artifacts;
-- successful Phase 5.3 terminal state `PACK_READY` without implementing signed pack runtime;
+- repository-level DefenseOps license state intentionally remains unknown, with G14 publication fail-closed;
+- final deterministic G1–G15 validation and human-review promotion scenarios;
+- immutable candidate/review/promotion digest bindings;
+- high-risk four-eyes approval semantics;
+- stale-review rejection;
+- successful fixture-only Phase 5.3 terminal `PACK_READY` state without implementing signed pack runtime;
 - failed/quarantined/rejected builds preserve Last Known Good;
-- no Detection IR implementation in this slice.
+- no Detection IR implementation;
+- canonical `schemas/v1` preserved unchanged.
 
-Source priorities:
-
-1. D3FEND official source/API snapshots with fail-closed drift handling because the upstream API is alpha/change-prone;
-2. MITRE CAR official structured repository, preferring structured YAML and commit pinning;
-3. DefenseOps explicit export contract carrying commit SHA, content ID/type, backend/format, source references, validation/review state, applicability, telemetry requirements and license metadata.
-
-Approved controlled flow:
-
-```text
-SourceRecord / Source Control
-        ↓
-SourceConnectorDefinition
-        ↓
-AcquisitionRun
-        ↓
-RawSnapshot
-        ↓
-ParserRun / Parsed Source Representation
-        ↓
-Normalizer / NormalizationLineage
-        ↓
-Canonical Candidate Build
-        ↓
-Authoritative Inventory / Inventory Diff
-        ↓
-Validation G1–G15
-        ↓
-Human Review
-        ↓
-PACK_READY
-```
-
-No upstream source may directly mutate the production/public Atlas dataset.
+Phase 5.3 is complete. No upstream source directly mutates the production/public Atlas dataset, and no signed content pack has been released or installed.
 
 ## Phase 5.4 — Deterministic Search Core
 
-Status: **NOT STARTED**
+Status: **NEXT / ARCHITECTURE GATE**
 
-- exact resolver;
-- lexical index;
-- structured filters;
-- graph traversal;
-- ranking;
-- benchmarks;
-- universal identifier resolution;
-- numeric provider-scoped Event ID browsing.
+Architecture gate objectives:
 
-Exact identifier matches must precede semantic retrieval. Phase 5.3 preserves lossless native identifier/context data but does not implement search projections.
+- deterministic identifier parser/resolver contracts;
+- exact native identifier lookup before lexical or semantic retrieval;
+- provider/namespace-scoped collision disambiguation;
+- scoped aliases after exact identifier resolution;
+- lexical index and deterministic ranking;
+- structured filters and provider catalogs;
+- graph traversal/search pivots;
+- legacy/current lifecycle browsing;
+- numeric provider-scoped Event ID ordering where the registry declares numeric semantics;
+- reproducible benchmarks and acceptance corpus;
+- derived search projections kept separate from canonical knowledge records.
+
+Required precedence:
+
+```text
+Exact Native Identifier
+        ↓
+Scoped Identifier
+        ↓
+Scoped Alias
+        ↓
+Lexical Match
+        ↓
+Semantic Retrieval (optional/later)
+```
+
+Examples that must be accepted by the product contract include `4688`, `sysmon 1`, `windows 4688`, `T1059`, `kubectl exec`, `CreateAccessKey`, `FileAccessed`, `EXECVE`, and `exec_start`.
+
+A bare numeric query must never select an arbitrary provider when multiple namespaces collide. It must return a deterministic disambiguation set unless scope resolves the identity uniquely.
+
+The search engine/storage/index implementation remains an open technology decision. No engine is frozen until the Phase 5.4 implementation spike and ADR compare candidates against deterministic behavior, offline deployment, performance, footprint, indexing, migration and portability requirements.
 
 ## Phase 5.5 — Offline Pack Runtime / Shared Core
 
