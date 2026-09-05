@@ -148,6 +148,8 @@ class ReferenceHostCollectionTests(unittest.TestCase):
         self.assertIn("does not expose required channel", text)
 
     def test_09_reference_output_comparison_is_array_safe_under_strict_mode(self):
+        # Regression: Compare-Object may yield $null or a scalar, both unsafe for
+        # direct .Count access under Set-StrictMode -Version Latest.
         text = (ROOT / "tools/reference-host/collect_windows_sysmon_reference.ps1").read_text(encoding="utf-8")
         self.assertIn("$fileSetDiff = @(Compare-Object", text)
         self.assertIn("if ($fileSetDiff.Count -ne 0)", text)
