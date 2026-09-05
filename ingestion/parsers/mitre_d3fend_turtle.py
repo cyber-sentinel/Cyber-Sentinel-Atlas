@@ -7,7 +7,7 @@ import json
 import re
 from pathlib import Path
 
-from rdflib import Graph, Namespace, RDF, RDFS
+from rdflib import BNode, Graph, Namespace, RDF, RDFS
 from rdflib.compare import to_canonical_graph
 
 PARSER_ID = "atlas:parser:atlas.ingestion:mitre-d3fend-turtle"
@@ -41,6 +41,33 @@ def _values(graph: Graph, subject, predicate) -> list[str]:
     return sorted({str(value) for value in graph.objects(subject, predicate)})
 
 
+def _collect_subject_ids(graph: Graph) -> dict[str, list]:
+    subject_ids: dict[str, list] = {}
+    for subject, value in graph.subject_objects(D3F["d3fend-id"]):
+        identifier = str(value)
+        if D3FEND_ID_RE.fullmatch(identifier):
+            subject_ids.setdefault(identifier, []).append(subject)
+    return subject_ids
+
+
+def _requires_blank_node_canonicalization(graph: Graph, subject_ids: dict[str, list]) -> bool:
+    """Canonicalize only when blank-node identity can affect emitted PSR fields.
+
+    Full RDF canonicalization over the complete D3FEND ontology is expensive and is
+    unnecessary when all emitted subjects and their direct predicate objects are
+    stable IRIs/literals. Unrelated blank nodes cannot influence the output because
+    the parser emits only records rooted at subjects carrying a valid d3fend-id.
+    """
+    for subjects in subject_ids.values():
+        for subject in subjects:
+            if isinstance(subject, BNode):
+                return True
+            for _predicate, obj in graph.predicate_objects(subject):
+                if isinstance(obj, BNode):
+                    return True
+    return False
+
+
 def parse_bytes(
     raw: bytes,
     *,
@@ -66,16 +93,17 @@ def parse_bytes(
         graph.parse(data=text, format="turtle")
     except Exception as exc:
         raise ValueError(f"invalid D3FEND Turtle: {exc}") from exc
-    graph = to_canonical_graph(graph)
 
-    subject_ids: dict[str, list] = {}
-    for subject, value in graph.subject_objects(D3F["d3fend-id"]):
-        identifier = str(value)
-        if D3FEND_ID_RE.fullmatch(identifier):
-            subject_ids.setdefault(identifier, []).append(subject)
-
+    subject_ids = _collect_subject_ids(graph)
     if not subject_ids:
         raise ValueError("D3FEND ontology contains no defensive technique identifiers")
+
+    # Preserve deterministic blank-node handling without canonicalizing the entire
+    # ontology when blank nodes are irrelevant to the emitted records. This keeps
+    # the official live canary bounded while retaining fail-safe determinism.
+    if _requires_blank_node_canonicalization(graph, subject_ids):
+        graph = to_canonical_graph(graph)
+        subject_ids = _collect_subject_ids(graph)
 
     records: list[dict] = []
     for identifier in sorted(subject_ids):
