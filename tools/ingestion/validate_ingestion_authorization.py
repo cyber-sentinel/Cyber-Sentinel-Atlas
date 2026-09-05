@@ -26,6 +26,8 @@ AUTHORIZED_IMPLEMENTATIONS = {
     "ingestion/connectors/microsoft-sysmon-docs.json": "phase-5.3.3",
     "ingestion/parsers/microsoft-sysmon-markdown.definition.json": "phase-5.3.3",
     "ingestion/parsers/microsoft_sysmon_markdown.py": "phase-5.3.3",
+    "ingestion/parsers/microsoft-sysmon-schema.definition.json": "phase-5.3.3",
+    "ingestion/parsers/microsoft_sysmon_schema.py": "phase-5.3.3",
     "ingestion/normalizers/microsoft-sysmon-docs.definition.json": "phase-5.3.3",
     "ingestion/normalizers/microsoft_sysmon_docs.py": "phase-5.3.3",
     "ingestion/connectors/microsoft-windows-security-event-4688-doc.json": "phase-5.3.3",
@@ -103,7 +105,7 @@ def main() -> int:
         return 1
 
     print("Atlas ingestion foundation + phase-aware implementation authorization passed.")
-    print("Authorized implementation slices: Phase 5.3.2 MITRE ATT&CK canary and Phase 5.3.3 Sysmon/Windows documentation plus controlled Windows provider metadata parsing.")
+    print("Authorized implementation slices: Phase 5.3.2 MITRE ATT&CK canary and Phase 5.3.3 Sysmon/Windows documentation plus controlled Windows provider and Sysmon schema parsing.")
     return 0
 
 
