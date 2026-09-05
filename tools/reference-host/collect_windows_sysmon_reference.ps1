@@ -147,6 +147,47 @@ function Export-WindowsProviderMetadata {
     }
 }
 
+function Invoke-SysmonSchemaText {
+    param([Parameter(Mandatory = $true)][string]$ExecutablePath)
+
+    # Sysmon 15.21 emits its schema stream as UTF-16LE. PowerShell's native command
+    # capture can preserve each NUL byte as a literal U+0000, so the controlled
+    # reference host uses ProcessStartInfo with an explicit UTF-16LE decoder instead
+    # of mutating the captured text by stripping NULs.
+    $psi = [System.Diagnostics.ProcessStartInfo]::new()
+    $psi.FileName = $ExecutablePath
+    $psi.UseShellExecute = $false
+    $psi.CreateNoWindow = $true
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.StandardOutputEncoding = [System.Text.Encoding]::Unicode
+    $psi.StandardErrorEncoding = [System.Text.Encoding]::Unicode
+    [void]$psi.ArgumentList.Add('-accepteula')
+    [void]$psi.ArgumentList.Add('-s')
+    [void]$psi.ArgumentList.Add('all')
+
+    $process = [System.Diagnostics.Process]::new()
+    $process.StartInfo = $psi
+    if (-not $process.Start()) {
+        throw 'Failed to start Sysmon schema export process'
+    }
+    try {
+        $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+        $stderrTask = $process.StandardError.ReadToEndAsync()
+        $process.WaitForExit()
+        $stdout = $stdoutTask.GetAwaiter().GetResult()
+        $stderr = $stderrTask.GetAwaiter().GetResult()
+        if ($process.ExitCode -ne 0) {
+            throw "Sysmon schema export failed with exit code $($process.ExitCode): $stderr"
+        }
+        $combined = @($stdout, $stderr) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+        return ($combined -join "`n")
+    }
+    finally {
+        $process.Dispose()
+    }
+}
+
 function Write-Metadata {
     param(
         [Parameter(Mandatory = $true)][System.Collections.IDictionary]$Metadata,
@@ -238,11 +279,7 @@ try {
     }
 
     $sysmonRawPath = Join-Path $resolvedOutput 'sysmon-schema.txt'
-    $sysmonOutput = & $sysmonExe -accepteula -s all 2>&1
-    if ($LASTEXITCODE -ne 0) {
-        throw "Sysmon schema export failed with exit code $LASTEXITCODE"
-    }
-    $sysmonText = ($sysmonOutput | ForEach-Object { [string]$_ }) -join "`n"
+    $sysmonText = Invoke-SysmonSchemaText -ExecutablePath $sysmonExe
     if (
         [string]::IsNullOrWhiteSpace($sysmonText) -or
         $sysmonText -notmatch '<manifest' -or
@@ -252,7 +289,7 @@ try {
         $previewLength = [Math]::Min(4000, $sysmonText.Length)
         $preview = if ($previewLength -gt 0) { $sysmonText.Substring(0, $previewLength) } else { '<empty>' }
         $preview = $preview.Replace("`r", '\r').Replace("`n", '\n')
-        Write-Warning "Sysmon schema validation failed. version=$sysmonVersion chars=$($sysmonText.Length) bounded_preview=$preview"
+        Write-Warning "Sysmon schema validation failed after UTF-16LE decoding. version=$sysmonVersion chars=$($sysmonText.Length) bounded_preview=$preview"
         throw 'Sysmon schema export did not contain the expected manifest/event schema structure'
     }
     Write-Utf8NoBom -Path $sysmonRawPath -Content ($sysmonText + "`n")
@@ -296,7 +333,8 @@ try {
         diagnostics = @(
             'Sysmon is downloaded from the official Microsoft Sysinternals distribution only on the controlled reference host.',
             'The downloaded archive and executable are not uploaded or committed; only schema output and its provenance descriptor leave the reference host.',
-            'Version, Authenticode signer and collector binary SHA-256 are validated and bound into the descriptor.'
+            'Version, Authenticode signer and collector binary SHA-256 are validated and bound into the descriptor.',
+            'Sysmon schema stdout/stderr is decoded explicitly as UTF-16LE before deterministic UTF-8 artifact serialization.'
         )
     }
     Write-Metadata -Metadata $sysmonMetadata -Path $sysmonMetadataPath
