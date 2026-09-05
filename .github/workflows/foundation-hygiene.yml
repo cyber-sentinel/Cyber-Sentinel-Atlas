@@ -124,3 +124,6 @@ jobs:
 
       - name: Run Phase 5.3.3 pinned live Sysmon documentation canary
         run: python tools/ingestion/run_sysmon_docs_live_canary.py
+
+      - name: Run Phase 5.3.3 live Windows 4688 documentation canary
+        run: python tools/ingestion/run_windows_4688_docs_live_canary.py
