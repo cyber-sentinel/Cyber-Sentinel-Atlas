@@ -23,6 +23,11 @@ AUTHORIZED_IMPLEMENTATIONS = {
     "ingestion/parsers/mitre_attack_stix.py": "phase-5.3.2",
     "ingestion/normalizers/mitre-attack-enterprise.definition.json": "phase-5.3.2",
     "ingestion/normalizers/mitre_attack.py": "phase-5.3.2",
+    "ingestion/connectors/microsoft-sysmon-docs.json": "phase-5.3.3",
+    "ingestion/parsers/microsoft-sysmon-markdown.definition.json": "phase-5.3.3",
+    "ingestion/parsers/microsoft_sysmon_markdown.py": "phase-5.3.3",
+    "ingestion/normalizers/microsoft-sysmon-docs.definition.json": "phase-5.3.3",
+    "ingestion/normalizers/microsoft_sysmon_docs.py": "phase-5.3.3",
 }
 
 BLANKET_DENIAL_PREFIX = "broad/live ingestion implementation is not authorized: "
@@ -91,7 +96,7 @@ def main() -> int:
         return 1
 
     print("Atlas ingestion foundation + phase-aware implementation authorization passed.")
-    print("Authorized live implementation slice: Phase 5.3.2 MITRE ATT&CK canary only.")
+    print("Authorized implementation slices: Phase 5.3.2 MITRE ATT&CK canary and Phase 5.3.3 Sysmon documentation path only.")
     return 0
 
 
