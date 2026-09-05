@@ -32,6 +32,11 @@ class IngestionAuthorizationTests(unittest.TestCase):
             "ingestion/parsers/microsoft_sysmon_markdown.py",
             "ingestion/normalizers/microsoft-sysmon-docs.definition.json",
             "ingestion/normalizers/microsoft_sysmon_docs.py",
+            "ingestion/connectors/microsoft-windows-security-event-4688-doc.json",
+            "ingestion/parsers/microsoft-windows-security-event-html.definition.json",
+            "ingestion/parsers/microsoft_windows_security_event_html.py",
+            "ingestion/normalizers/microsoft-windows-security-event-doc.definition.json",
+            "ingestion/normalizers/microsoft_windows_security_event_doc.py",
         }
         self.assertEqual(phase532 | phase533, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS))
         self.assertEqual(phase532, {p for p, phase in phase_policy.AUTHORIZED_IMPLEMENTATIONS.items() if phase == "phase-5.3.2"})
@@ -68,8 +73,10 @@ class IngestionAuthorizationTests(unittest.TestCase):
             "ingestion/normalizers/README.md",
             "ingestion/mappings/mitre-attack-enterprise-v1.json",
             "ingestion/mappings/microsoft-sysmon-docs-v1.json",
+            "ingestion/mappings/microsoft-windows-security-event-doc-v1.json",
             "ingestion/source-profiles/mitre-attack-enterprise.source.json",
             "ingestion/source-profiles/microsoft-sysmon-docs.source.json",
+            "ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.source.json",
             "ingestion/inventories/sysmon-docs-15.21.documentation.json",
         ]
         self.assertEqual([], phase_policy.implementation_authorization_errors(tracked))
