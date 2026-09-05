@@ -33,6 +33,8 @@ AUTHORIZED_IMPLEMENTATIONS = {
     "ingestion/parsers/microsoft_windows_security_event_html.py": "phase-5.3.3",
     "ingestion/normalizers/microsoft-windows-security-event-doc.definition.json": "phase-5.3.3",
     "ingestion/normalizers/microsoft_windows_security_event_doc.py": "phase-5.3.3",
+    "ingestion/parsers/microsoft-windows-provider-metadata.definition.json": "phase-5.3.3",
+    "ingestion/parsers/microsoft_windows_provider_metadata.py": "phase-5.3.3",
 }
 
 BLANKET_DENIAL_PREFIX = "broad/live ingestion implementation is not authorized: "
@@ -101,7 +103,7 @@ def main() -> int:
         return 1
 
     print("Atlas ingestion foundation + phase-aware implementation authorization passed.")
-    print("Authorized implementation slices: Phase 5.3.2 MITRE ATT&CK canary and Phase 5.3.3 Sysmon + Windows Security documentation paths only.")
+    print("Authorized implementation slices: Phase 5.3.2 MITRE ATT&CK canary and Phase 5.3.3 Sysmon/Windows documentation plus controlled Windows provider metadata parsing.")
     return 0
 
 
