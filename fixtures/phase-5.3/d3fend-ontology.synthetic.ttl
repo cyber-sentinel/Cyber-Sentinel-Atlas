@@ -1,0 +1,15 @@
+@prefix d3f: <http://d3fend.mitre.org/ontologies/d3fend.owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+# Synthetic structural fixture only. It is not copied D3FEND prose.
+d3f:SyntheticProcessSpawnAnalysis a owl:Class ;
+    rdfs:label "Synthetic Process Spawn Analysis" ;
+    d3f:d3fend-id "D3-PSA" ;
+    d3f:definition "Synthetic definition for deterministic Atlas parser testing." ;
+    d3f:synthetic-extra "preserve-me" .
+
+d3f:SyntheticProcessLineageAnalysis a owl:Class ;
+    rdfs:label "Synthetic Process Lineage Analysis" ;
+    d3f:d3fend-id "D3-PLA" ;
+    d3f:definition "Another synthetic definition for deterministic Atlas parser testing." .
