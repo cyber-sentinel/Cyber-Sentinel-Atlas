@@ -1,0 +1,37 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:sysmon-docs-15.21",
+  "inventory_kind": "documentation",
+  "declared_scope": "Microsoft Sysinternals Sysmon 15.21 documented Event ID headings in the pinned official sysmon.md document",
+  "source_ids": ["atlas:source:atlas.source:microsoft-sysmon-docs"],
+  "inventory_method": "git-tree",
+  "inventory_source_version": "15.21@8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6",
+  "expected_identity_count": 30,
+  "identity_dimensions": ["provider", "channel", "native-id", "product", "version"],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Sysmon",
+    "channel": "Microsoft-Windows-Sysmon/Operational",
+    "product": "Sysmon",
+    "platform": "Windows",
+    "release_version": "15.21",
+    "upstream_repository": "MicrosoftDocs/sysinternals",
+    "upstream_commit_sha": "8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6",
+    "document_path": "sysinternals/downloads/sysmon.md",
+    "document_git_blob_sha1": "3272fa16dcec7b1a1adba24e4f5f2fb7e95a9aa5",
+    "expected_identities": [
+      {"event_id": "1"}, {"event_id": "2"}, {"event_id": "3"}, {"event_id": "4"}, {"event_id": "5"},
+      {"event_id": "6"}, {"event_id": "7"}, {"event_id": "8"}, {"event_id": "9"}, {"event_id": "10"},
+      {"event_id": "11"}, {"event_id": "12"}, {"event_id": "13"}, {"event_id": "14"}, {"event_id": "15"},
+      {"event_id": "16"}, {"event_id": "17"}, {"event_id": "18"}, {"event_id": "19"}, {"event_id": "20"},
+      {"event_id": "21"}, {"event_id": "22"}, {"event_id": "23"}, {"event_id": "24"}, {"event_id": "25"},
+      {"event_id": "26"}, {"event_id": "27"}, {"event_id": "28"}, {"event_id": "29"}, {"event_id": "255"}
+    ],
+    "completeness_semantics": "documentation-only; not the Sysmon emitted/provider telemetry denominator"
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-af6fd53790c447bc0f6b3deaa2b2b95ed09c67e6565292a8b228aa3ebca53d68"
+}
