@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "source",
+  "id": "atlas:source:atlas.source:microsoft-sysmon-schema-export",
+  "record_revision": 1,
+  "created_at": "2026-09-05T04:15:00Z",
+  "updated_at": "2026-09-05T04:15:00Z",
+  "curation_status": "draft",
+  "namespace": "atlas.source",
+  "canonical_key": "microsoft-sysmon-schema-export",
+  "title": "Microsoft Sysmon Schema Export (controlled reference environment)",
+  "publisher": "Microsoft Sysinternals",
+  "source_class": "tier-a-authoritative",
+  "canonical_urls": [
+    "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+    "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/sysmon"
+  ],
+  "official_status": "official",
+  "license": {"status": "unknown"},
+  "redistribution": {
+    "policy": "restricted",
+    "notes": "Schema exports are collected out-of-band on a controlled reference host, hashed, provenance-bound, and not committed as full raw corpora by default."
+  },
+  "freshness_policy": {
+    "expected_update_cadence": "release-driven",
+    "stale_after_days": 180
+  },
+  "change_detection_policy": {
+    "strategy": "version",
+    "notes": "Comparisons are pinned to an explicit Sysmon version and schema-export method."
+  }
+}
