@@ -46,10 +46,21 @@ class IngestionAuthorizationTests(unittest.TestCase):
             "ingestion/normalizers/microsoft-windows-provider-metadata.definition.json",
             "ingestion/normalizers/microsoft_windows_provider_metadata.py",
         }
-        self.assertEqual(phase532 | phase533, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS))
+        phase534 = {
+            "ingestion/connectors/mitre-d3fend-ontology.json",
+            "ingestion/parsers/mitre-d3fend-turtle.definition.json",
+            "ingestion/parsers/mitre_d3fend_turtle.py",
+            "ingestion/connectors/mitre-car-sample.json",
+            "ingestion/parsers/mitre-car-yaml.definition.json",
+            "ingestion/parsers/mitre_car_yaml.py",
+            "ingestion/parsers/defenseops-export.definition.json",
+            "ingestion/parsers/defenseops_export.py",
+        }
+        self.assertEqual(phase532 | phase533 | phase534, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS))
         self.assertEqual(phase532, {p for p, phase in phase_policy.AUTHORIZED_IMPLEMENTATIONS.items() if phase == "phase-5.3.2"})
         self.assertEqual(phase533, {p for p, phase in phase_policy.AUTHORIZED_IMPLEMENTATIONS.items() if phase == "phase-5.3.3"})
-        self.assertEqual({"phase-5.3.2", "phase-5.3.3"}, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS.values()))
+        self.assertEqual(phase534, {p for p, phase in phase_policy.AUTHORIZED_IMPLEMENTATIONS.items() if phase == "phase-5.3.4"})
+        self.assertEqual({"phase-5.3.2", "phase-5.3.3", "phase-5.3.4"}, set(phase_policy.AUTHORIZED_IMPLEMENTATIONS.values()))
 
     def test_02_exact_authorized_set_is_accepted(self):
         self.assertEqual([], phase_policy.implementation_authorization_errors(self.authorized_paths()))
@@ -89,6 +100,9 @@ class IngestionAuthorizationTests(unittest.TestCase):
             "ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.source.json",
             "ingestion/source-profiles/microsoft-windows-provider-metadata.source.json",
             "ingestion/source-profiles/microsoft-sysmon-schema-export.source.json",
+            "ingestion/source-profiles/mitre-d3fend-ontology.source.json",
+            "ingestion/source-profiles/mitre-car.source.json",
+            "ingestion/source-profiles/cyber-sentinel-defenseops.source.json",
             "ingestion/inventories/sysmon-docs-15.21.documentation.json",
         ]
         self.assertEqual([], phase_policy.implementation_authorization_errors(tracked))
