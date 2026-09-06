@@ -61,7 +61,7 @@ jobs:
         uses: actions/setup-go@v6
         with:
           go-version: "1.25.0"
-          cache-dependency-path: benchmarks/shared-core/phase553/go/go.sum
+          cache-dependency-path: benchmarks/shared-core/phase553/go/go.mod
 
       - name: Set up Rust finalist
         shell: bash
@@ -86,15 +86,18 @@ jobs:
           --workspace "${{ env.PHASE553_WORKSPACE }}"
           --output "${{ env.PHASE553_EVIDENCE }}/python-${{ runner.os }}.json"
 
+      # Bootstrap the missing committed lock once and publish it as evidence. After
+      # the exact generated go.sum is committed, this step is tightened back to a
+      # no-mutation locked build before Phase 5.5.3 evidence is frozen.
       - name: Resolve and build Go finalist
         working-directory: benchmarks/shared-core/phase553/go
         shell: bash
         run: |
-          go mod download
+          go mod tidy
           go mod verify
-          git diff --exit-code -- go.mod go.sum
-          go test ./...
           mkdir -p ../../../..//${PHASE553_EVIDENCE}
+          cp go.sum ../../../..//${PHASE553_EVIDENCE}/go.sum
+          go test ./...
           if [ "${RUNNER_OS}" = "Windows" ]; then
             go build -trimpath -o ../../../..//${PHASE553_EVIDENCE}/atlas-phase553-go.exe .
           else
