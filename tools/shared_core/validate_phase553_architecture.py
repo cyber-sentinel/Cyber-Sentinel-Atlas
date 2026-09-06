@@ -66,7 +66,11 @@ def main() -> int:
     state_closed = "Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in state
     require(state_pre or state_closed, "project-state missing valid Phase 5.5.3 lifecycle state")
     if state_closed:
-        require("Phase 5.5.4 — Production Go Shared Core: **NEXT**" in state, "closed Phase 5.5.3 must advance to Phase 5.5.4")
+        phase554_valid = (
+            "Phase 5.5.4 — Production Go Shared Core: **NEXT**" in state
+            or "Phase 5.5.4 — Production Go Shared Core: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**" in state
+        )
+        require(phase554_valid, "closed Phase 5.5.3 must advance to a valid Phase 5.5.4 lifecycle state")
 
     for phrase in (
         "## Phase 5.4 — Deterministic Search Core",
@@ -79,14 +83,18 @@ def main() -> int:
     roadmap_closed = "### Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024\n\nStatus: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in roadmap
     require(roadmap_pre or roadmap_closed, "roadmap missing valid Phase 5.5.3 lifecycle state")
     if roadmap_closed:
-        require("### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **NEXT**" in roadmap, "roadmap must advance to Phase 5.5.4 after selection closure")
+        phase554_valid = (
+            "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **NEXT**" in roadmap
+            or "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**" in roadmap
+        )
+        require(phase554_valid, "roadmap must advance to a valid Phase 5.5.4 lifecycle state after selection closure")
 
     pre_selection_status = "Production Shared Core technology spike / ADR: **NEXT**" in current
     post_selection_status = (
         "Production Shared Core implementation family: **Go**" in current
         and "Phase 5.5.4" in current
         and "Production Go Shared Core" in current
-        and "NEXT" in current
+        and ("NEXT" in current or "ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED" in current)
     )
     require(pre_selection_status or post_selection_status, "current-status must describe the Shared Core selection/implementation boundary")
 
