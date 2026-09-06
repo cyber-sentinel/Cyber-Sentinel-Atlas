@@ -1,8 +1,8 @@
 # Phase 5.5.3 — Shared Core Selection Review
 
-Status: **EVIDENCE COMPLETE / PROPOSED DECISION — GO / ARCHITECTURE AUTHORITY PENDING**
+Status: **ACCEPTED — GO SELECTED / MERGE AUTHORIZED**
 
-This review closes the executable evidence portion of Phase 5.5.3. It does not itself accept ADR-0024 or authorize merge to `main`.
+This review closes the executable evidence and architecture-selection portion of Phase 5.5.3. Architecture Authority approved ADR-0024 on 2026-09-06 under the standing project authorization.
 
 ## Evidence boundary
 
@@ -29,7 +29,7 @@ Machine-readable aggregation is committed at `benchmarks/shared-core/phase553/se
 
 | Candidate | Linux | Windows | Weighted total | Review result |
 | --- | --- | --- | ---: | --- |
-| Go | G-SC1..G-SC8 pass | G-SC1..G-SC8 pass | **96** | **proposed winner** |
+| Go | G-SC1..G-SC8 pass | G-SC1..G-SC8 pass | **96** | **selected winner** |
 | Python control | G-SC1..G-SC8 pass | G-SC1..G-SC8 pass | 85 | retain as semantic/control oracle |
 | Rust | mandatory trust/runtime gates incomplete | complete runnable candidate evidence absent | not ranked | disqualified by hard-gate policy |
 
@@ -61,16 +61,16 @@ These figures characterize the controlled Phase 5.5.3 fixture and CI environment
 
 ## Serialization review
 
-The existing Atlas deterministic JSON protocol profile is not generally byte-equivalent to RFC 8785/JCS. Therefore Phase 5.5.3 proposes **no digest migration**.
+The existing Atlas deterministic JSON protocol profile is not generally byte-equivalent to RFC 8785/JCS. Therefore Phase 5.5.3 makes **no digest migration**.
 
 - Atlas ordering contrast digest: `sha256-86f7643502ce36621ae93769d7af762ff9c2f90e8c207fcb36f38c2cc6650c72`.
 - JCS ordering contrast digest: `sha256-e809e2d586f904340931323f0da13a22ddd4c10e5ead816b900f6d5c6bcd3e9f`.
 
 The existing Atlas serialization vectors remain the protocol conformance boundary. Any future serialization migration requires its own accepted ADR and compatibility/migration evidence.
 
-## Proposed Shared Core boundary
+## Accepted Shared Core boundary
 
-If ADR-0024 is accepted, Go owns the production implementation of the **Shared Core**, while accepted contracts remain authoritative and language-neutral.
+ADR-0024 selects Go to own the production implementation of the **Shared Core**, while accepted contracts remain authoritative and language-neutral.
 
 ```text
 Verified Atlas Pack / Canonical + SPC
@@ -123,6 +123,6 @@ Reopen the Shared Core technology ADR if a mandatory conformance property cannot
 
 ## Architecture review conclusion
 
-The evidence supports **Go** as the Phase 5.5.3 proposed production Shared Core winner. The proposal is evidence-driven: Go is the only non-control executable finalist that passed every mandatory gate on both target operating systems and it ranked first among eligible candidates.
+The evidence supports and Architecture Authority approved **Go** as the Phase 5.5.3 production Shared Core winner on 2026-09-06. The decision is evidence-driven: Go is the only non-control executable finalist that passed every mandatory gate on both target operating systems and it ranked first among eligible candidates.
 
-ADR-0024 remains **Proposed** until explicit Architecture Authority approval. Merge to `main` remains a separate material action and must use the normal Merge Commit governance path.
+ADR-0024 is **Accepted**. Merge to `main` is authorized through the normal Merge Commit governance path using the exact reviewed head.
