@@ -2,14 +2,14 @@
 
 **Status:** Proposed — Architecture Authority decision required
 **Decision scope:** Phase 5.4.2 → Phase 5.4.3
-**Evidence run:** `34017974268`
-**Evidence head:** `58c67165bb5a104318595eee1fe6c3d984e1b9b2`
+**Evidence run:** `34018323174`
+**Evidence head:** `b7e110567f6345c70cbd455b97dba64481f84894`
 
 ## Context
 
 Phase 5.4.1 froze the engine-neutral Search Projection Corpus, bounded query contract, exact/scoped identifier resolver, deterministic collision disambiguation, alias precedence and numeric browse semantics. Phase 5.4.2 must select an embedded deterministic/lexical search engine before the production Phase 5.4.3 implementation.
 
-The accepted architecture requires at least SQLite + FTS5 and Tantivy to be evaluated on Linux and Windows. Raw user queries may not be passed to backend query parsers or interpolated into backend DSLs. Atlas also requires a deterministic total order when more candidates share a lexical score than fit inside `TOP_K`.
+The accepted architecture requires at least SQLite + FTS5 and Tantivy to be evaluated on Linux and Windows. Raw user queries may not be passed to backend query parsers or interpolated into backend DSLs. Atlas also requires a deterministic total order whenever more candidates share a lexical score or numeric browse key than fit inside `TOP_K`.
 
 ## Candidates
 
@@ -60,7 +60,8 @@ The hardened benchmark used:
 - Linux and Windows GitHub-hosted runners;
 - process-warm queries; OS page cache not explicitly flushed;
 - exact lookup, lexical retrieval, provider filtering, numeric Event ID browse and deterministic high-fanout Top-K;
-- permanent Unicode/query-bound/security tests before benchmark execution.
+- permanent Unicode/query-bound/security tests before benchmark execution;
+- explicit permanent tests proving deterministic numeric browse at a duplicate-value Top-K cutoff.
 
 Benchmark corpus digest:
 
@@ -70,44 +71,46 @@ Query-suite version/digest:
 
 `1.1.0` / `sha256-45a0f9b5837dce8803000072ba3e628f8229c6c83d5d2433ead2592c8a3355ae`
 
-Cross-platform evidence run: `34017974268`.
+Cross-platform evidence run: `34018323174`.
 
-- Linux artifact `9984519791`, digest `sha256:e5b04c5508318a77f2c5ce8840acd3918d25a3b7b8ecab120d9bf17ef86b742d`;
-- Windows artifact `9984523082`, digest `sha256:698047d925a1affcc0327cac046be28fbef1acded3c7ed66c4e442e686088861`.
+- Linux artifact `9984630110`, digest `sha256:e5d8609f64728348ae91f9a38728921071e1bb223f1a8686b38e5268cd9c40f6`;
+- Windows artifact `9984633555`, digest `sha256:e6b027575862dd2dfb0405133892d1c64392bdca6b6b47aa44f7585b10050cc9`.
 
-Both candidates passed correctness, repeated-order determinism and the permanent Phase 5.4.2 security tests on both operating systems.
+Both candidates passed correctness, repeated-order determinism, lexical cutoff-tie behavior, numeric browse cutoff-tie behavior and the permanent Phase 5.4.2 security tests on both operating systems.
 
 ### Linux evidence
 
 | Dimension | SQLite + FTS5 | Tantivy |
 |---|---:|---:|
-| Build time | 0.528914 s | 0.540916 s |
-| Search artifact size | 18,739,200 B | 2,804,504 B |
-| Exact 4688 P95 | 0.0053 ms | 0.0156 ms |
-| PowerShell lexical P95 | 0.0393 ms | 0.0189 ms |
-| Process-creation lexical P95 | 0.0338 ms | 0.0345 ms |
-| Provider-filtered lexical P95 | 0.0277 ms | 0.0359 ms |
-| High-fanout deterministic Top-K P95 | 5.7825 ms | 15.0820 ms |
-| Numeric Event-ID browse P95 | 0.0055 ms | 0.1051 ms |
+| Build time | 0.472286 s | 0.268639 s |
+| Search artifact size | 18,739,200 B | 2,745,183 B |
+| Exact 4688 P95 | 0.0196 ms | 0.0158 ms |
+| PowerShell lexical P95 | 0.0939 ms | 0.0477 ms |
+| Process-creation lexical P95 | 0.0918 ms | 0.0691 ms |
+| Provider-filtered lexical P95 | 0.0746 ms | 0.0622 ms |
+| High-fanout deterministic Top-K P95 | 12.3888 ms | 28.2506 ms |
+| Numeric Event-ID browse P95 | 0.0138 ms | 0.1700 ms |
 
 ### Windows evidence
 
 | Dimension | SQLite + FTS5 | Tantivy |
 |---|---:|---:|
-| Build time | 0.784214 s | 0.593015 s |
-| Search artifact size | 18,739,200 B | 2,830,980 B |
-| Exact 4688 P95 | 0.0572 ms | 0.0434 ms |
-| PowerShell lexical P95 | 0.1813 ms | 0.0518 ms |
-| Process-creation lexical P95 | 0.1915 ms | 0.0791 ms |
-| Provider-filtered lexical P95 | 0.1806 ms | 0.1060 ms |
-| High-fanout deterministic Top-K P95 | 15.2803 ms | 44.7416 ms |
-| Numeric Event-ID browse P95 | 0.1036 ms | 0.3651 ms |
+| Build time | 0.599467 s | 0.623498 s |
+| Search artifact size | 18,739,200 B | 2,892,936 B |
+| Exact 4688 P95 | 0.0314 ms | 0.0267 ms |
+| PowerShell lexical P95 | 0.1120 ms | 0.0248 ms |
+| Process-creation lexical P95 | 0.1137 ms | 0.0624 ms |
+| Provider-filtered lexical P95 | 0.1090 ms | 0.0429 ms |
+| High-fanout deterministic Top-K P95 | 15.8578 ms | 34.8627 ms |
+| Numeric Event-ID browse P95 | 0.0592 ms | 0.1964 ms |
 
 Both candidates remain comfortably inside Atlas MVP targets of <100 ms for exact local resolution and <300 ms for normal local lexical search at the tested scale.
 
-Tantivy remains faster on most sparse lexical cases and produces a search artifact approximately 6.6x smaller. SQLite is faster for provider-scoped numeric browsing and, under the reference implementation that proves Atlas' total-order semantics, faster for the high-fanout equal-score case on both operating systems.
+Tantivy remains faster on most sparse lexical cases and produces a search artifact approximately 6.5–6.8x smaller. SQLite is faster for provider-scoped numeric browsing and, under the reference implementation that proves Atlas' total-order semantics, faster for the high-fanout equal-score case on both operating systems.
 
 The high-fanout Tantivy number must be interpreted correctly: the spike intentionally collects the bounded candidate set before applying the final Atlas tie-break rather than trusting a backend-selected Top-K subset. Phase 5.4.3 could implement a more efficient Tantivy collector if Tantivy were selected, but it would still need to prove identical deterministic output.
+
+Likewise, the Tantivy numeric-browse reference path collects the bounded matching set before applying `(numeric_event_id, target_id)` ordering so duplicate numeric values cannot produce an arbitrary cutoff subset. This is a correctness reference implementation, not a claim that a production Tantivy collector could not be optimized.
 
 ## Architecture Evaluation
 
@@ -138,6 +141,8 @@ SQLite expresses relevance plus canonical target-ID tie ordering directly in one
 **SQLite advantage.**
 
 Atlas requires deterministic provider catalogs, filters, lifecycle/version browsing and numeric Event-ID ordering. These are relational/indexed-data operations naturally supported by SQLite without a second query/index model. The hardened benchmark again showed lower numeric browse latency for SQLite on both operating systems.
+
+The final spike additionally proves that duplicate numeric values at the `TOP_K` cutoff use canonical target ID as the deterministic secondary key. SQLite expresses this directly with `ORDER BY numeric_event_id, target_id`; the Tantivy reference adapter requires explicit candidate collection and Atlas-side ordering to prove equivalent semantics.
 
 ### Offline deployment and Windows portability
 
@@ -180,6 +185,7 @@ Use:
 - B-tree indexes for exact identifiers, scope/filter facets, lifecycle/version filters and numeric Event-ID catalog ordering;
 - FTS5 for bounded lexical retrieval over derived SearchDocument fields;
 - deterministic Atlas tie-break logic with canonical target ID as the final total-order key;
+- explicit `(numeric_event_id, target_id)` ordering for numeric browse;
 - an immutable/version-bound derived search database that can always be rebuilt from the Search Projection Corpus;
 - fail-closed index/corpus metadata validation before activation.
 
@@ -219,6 +225,7 @@ The implementation following this ADR must:
 - bind all structured filter values as SQL parameters;
 - preserve exact/scoped resolution before lexical retrieval;
 - guarantee deterministic Top-K selection under relevance-score ties;
+- guarantee deterministic numeric browse under duplicate numeric values and cutoff ties;
 - keep semantic/vector retrieval outside this decision;
 - treat the search database as disposable derived state, never canonical truth.
 
