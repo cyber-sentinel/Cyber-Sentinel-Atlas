@@ -16,6 +16,7 @@ class TantivyAdapter:
         self.tantivy = tantivy
         self.path = root / "tantivy-index"
         self.path.mkdir()
+        self.document_count = len(docs)
         start = time.perf_counter()
         builder = tantivy.SchemaBuilder()
         builder.add_text_field("target_id", stored=True, tokenizer_name="raw", index_option="basic")
@@ -96,7 +97,13 @@ class TantivyAdapter:
         if provider:
             provider_query = self.tantivy.Query.term_query(self.schema, "provider", provider, "basic")
             query = self._and([query, provider_query])
-        return self._ids(self.searcher.search(query, TOP_K))
+
+        # The spike must prove Atlas' total-order tie contract, not merely Tantivy's
+        # native Top-K selection. Retrieve the bounded benchmark corpus and apply the
+        # engine-neutral target_id tie-break before truncating to Atlas TOP_K.
+        # Phase 5.4.3 may replace this reference strategy with a more efficient
+        # production collector, but it must preserve identical deterministic output.
+        return self._ids(self.searcher.search(query, self.document_count))
 
     def numeric_browse(self, provider):
         provider_query = self.tantivy.Query.term_query(self.schema, "provider", provider, "basic")
