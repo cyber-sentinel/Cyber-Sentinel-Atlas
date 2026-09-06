@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[3]
 FIXTURE = ROOT / "fixtures" / "phase-5.4.1" / "acceptance-corpus.json"
 REFERENCE_SEARCH = ROOT / "tools" / "search" / "reference_search.py"
 QUERY_SUITE = Path(__file__).with_name("query-suite.json")
+MAX_QUERY_SCALARS = 512
 MAX_LEXICAL_TERMS = 32
 TOP_K = 10
 
@@ -59,8 +60,23 @@ def latency_summary(samples: Sequence[float]) -> dict[str, float]:
     }
 
 
-def tokenize_lexical(value: str) -> list[str]:
+def normalize_bounded_query(value: str) -> str:
+    if not isinstance(value, str):
+        raise TypeError("lexical query must be a string")
+    if any(0xD800 <= ord(ch) <= 0xDFFF for ch in value):
+        raise ValueError("lexical query contains a non-scalar Unicode surrogate")
+    if len(value) > MAX_QUERY_SCALARS:
+        raise ValueError(f"lexical query exceeds {MAX_QUERY_SCALARS} Unicode scalar values")
     normalized = unicodedata.normalize("NFKC", value)
+    if any(0xD800 <= ord(ch) <= 0xDFFF for ch in normalized):
+        raise ValueError("normalized lexical query contains a non-scalar Unicode surrogate")
+    if len(normalized) > MAX_QUERY_SCALARS:
+        raise ValueError(f"normalized lexical query exceeds {MAX_QUERY_SCALARS} Unicode scalar values")
+    return normalized
+
+
+def tokenize_lexical(value: str) -> list[str]:
+    normalized = normalize_bounded_query(value)
     terms = [x.casefold() for x in re.findall(r"\w+", normalized, re.UNICODE) if x]
     if len(terms) > MAX_LEXICAL_TERMS:
         raise ValueError(f"lexical request exceeds {MAX_LEXICAL_TERMS} terms")
@@ -124,12 +140,16 @@ def expand_documents(base: Sequence[BenchDoc], total: int) -> list[BenchDoc]:
     result = list(base)
     for i in range(total - len(base)):
         seed = base[i % len(base)]
+        fanout_term = " benchmarkfanout" if i % 5 == 0 else ""
         result.append(BenchDoc(
             f"atlas:benchmark-noise:{i:08d}",
             f"Benchmark Noise Document {i}",
-            f"noise-{i}",
+            f"noise-{i} sourcegroup-{i % 257}",
             "",
-            f"Deterministic synthetic corpus scale record {i} telemetry security indexing retrieval benchmark",
+            (
+                f"Deterministic synthetic corpus scale record {i} telemetry security indexing retrieval "
+                f"fieldgroup-{i % 1021} operationgroup-{i % 4093} uniquetoken-{i:08x}{fanout_term}"
+            ),
             seed.namespace,
             seed.platform,
             seed.product,
