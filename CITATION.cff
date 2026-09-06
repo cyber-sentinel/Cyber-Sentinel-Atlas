@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use Cyber-Sentinel-Atlas in research, training, engineering, or documentation, please cite the project and its maintainer."
+title: "Cyber-Sentinel-Atlas"
+type: software
+authors:
+  - family-names: "RahimDabagh"
+    given-names: "Ali"
+repository-code: "https://github.com/cyber-sentinel/Cyber-Sentinel-Atlas"
+version: "0.1.0-foundation.1"

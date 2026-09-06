@@ -1,0 +1,16 @@
+# Cyber-Sentinel-Atlas CODEOWNERS
+#
+# The official repository is maintainer-controlled. CODEOWNERS requests review;
+# enforcement also depends on repository/ruleset capabilities and plan settings.
+
+* @cyber-sentinel
+
+# Material architecture, security and data-contract surfaces remain explicitly owned.
+/docs/adr/ @cyber-sentinel
+/docs/architecture/ @cyber-sentinel
+/docs/governance/ @cyber-sentinel
+/schemas/ @cyber-sentinel
+/model/registries/ @cyber-sentinel
+/ingestion/ @cyber-sentinel
+/tools/ @cyber-sentinel
+/.github/ @cyber-sentinel
