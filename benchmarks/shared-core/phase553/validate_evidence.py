@@ -12,6 +12,7 @@ REQUIRED_BINDINGS = {
     "search_index_sha256",
     "serialization_sha256",
 }
+CANDIDATE_ORDER = ("python-control", "go", "rust")
 
 
 def load(path: Path) -> dict:
@@ -22,6 +23,10 @@ def load(path: Path) -> dict:
         raise RuntimeError(f"candidate gate set mismatch: {path}")
     if not REQUIRED_BINDINGS.issubset(value.get("bindings", {})):
         raise RuntimeError(f"candidate binding set incomplete: {path}")
+    claimed = bool(value.get("eligible"))
+    derived = all(bool(value["gates"][gate]) for gate in sorted(REQUIRED_GATES))
+    if claimed != derived:
+        raise RuntimeError(f"candidate eligibility is inconsistent with hard gates: {path}")
     return value
 
 
@@ -48,19 +53,26 @@ def main() -> int:
         if evidence["gates"]["G-SC3"] and (exact >= 100.0 or lexical >= 300.0):
             raise RuntimeError(f"{name} claims G-SC3 pass outside latency gates")
 
+    # Python is the semantic oracle and Go is the selected executable production
+    # finalist for this spike iteration: either failing a mandatory gate must fail CI.
+    # Rust is evaluated neutrally: a build/runtime/conformance failure is recorded as
+    # disqualifying evidence rather than being pre-programmed into this validator.
     if not candidates["python-control"]["eligible"]:
         raise RuntimeError("Python semantic control unexpectedly failed a mandatory gate")
     if not candidates["go"]["eligible"]:
         raise RuntimeError("Go finalist failed a mandatory gate")
-    if candidates["rust"]["eligible"]:
-        raise RuntimeError("Rust must not be eligible without Atlas POUF/state hard-gate evidence")
-    if candidates["rust"]["gates"]["G-SC5"]:
-        raise RuntimeError("Rust incorrectly claims TUF/POUF hard-gate success")
 
-    # Scoring applies only to hard-gate-eligible candidates. Values are deliberately
-    # conservative and must be justified by the machine evidence plus the committed
-    # upstream-screening notes before ADR-0024 can become Accepted.
-    scores = {
+    eligible = [name for name in CANDIDATE_ORDER if candidates[name]["eligible"]]
+    disqualified = {
+        name: [gate for gate, passed in candidates[name]["gates"].items() if not passed]
+        for name in CANDIDATE_ORDER
+        if not candidates[name]["eligible"]
+    }
+
+    # These are provisional architecture-policy scores, not the final ADR decision.
+    # Final selection evidence must bind these judgments to cross-platform measured
+    # footprint/performance and authoritative upstream facts.
+    score_profiles = {
         "python-control": {
             "contract_security": 30,
             "tuf_pack_trust": 18,
@@ -79,19 +91,28 @@ def main() -> int:
             "interface_integration": 9,
             "maintainability_supply_chain": 4,
         },
+        "rust": {
+            "contract_security": 30,
+            "tuf_pack_trust": 18,
+            "sqlite_search": 15,
+            "durability_portability": 9,
+            "footprint": 10,
+            "interface_integration": 9,
+            "maintainability_supply_chain": 4,
+        },
     }
+    scores = {name: score_profiles[name] for name in eligible}
     totals = {name: sum(parts.values()) for name, parts in scores.items()}
     summary = {
-        "summary_schema_version": "1.0.0",
-        "eligible_candidates": ["python-control", "go"],
-        "disqualified_candidates": {
-            "rust": [gate for gate, passed in candidates["rust"]["gates"].items() if not passed]
-        },
+        "summary_schema_version": "1.1.0",
+        "eligible_candidates": eligible,
+        "disqualified_candidates": disqualified,
         "bindings": baseline_bindings,
         "scores": scores,
         "score_totals": totals,
         "provisional_rank": sorted(totals, key=lambda name: (-totals[name], name)),
         "decision_state": "cross-platform-evidence-pending-until-linux-and-windows-artifacts-are-compared",
+        "scoring_state": "provisional-policy-profile-final-adr-requires-evidence-bound-rationale",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
