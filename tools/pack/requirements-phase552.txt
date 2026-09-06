@@ -1,0 +1,4 @@
+jsonschema==4.25.1
+pytest==8.4.2
+securesystemslib[crypto]==1.4.0
+tuf==7.0.0
