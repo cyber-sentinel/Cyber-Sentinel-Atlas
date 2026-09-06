@@ -30,13 +30,22 @@ def valid_inventory() -> dict:
     return load_json(FIXTURES / "valid-source-license-inventory.json")
 
 
+def valid_inventory_bytes() -> bytes:
+    return (FIXTURES / "valid-source-license-inventory.json").read_bytes()
+
+
 def test_pack_schemas_are_valid_draft_2020_12() -> None:
     Draft202012Validator.check_schema(load_json(PACK_SCHEMA))
     Draft202012Validator.check_schema(load_json(LICENSE_SCHEMA))
 
 
 def test_valid_fixture_pair_passes_publication_gate() -> None:
-    validate_contract_pair(valid_manifest(), valid_inventory(), publication=True)
+    validate_contract_pair(
+        valid_manifest(),
+        valid_inventory(),
+        inventory_bytes=valid_inventory_bytes(),
+        publication=True,
+    )
 
 
 @pytest.mark.parametrize(
@@ -88,6 +97,39 @@ def test_canonical_records_cannot_be_declared_derived() -> None:
         validate_manifest(manifest)
 
 
+def test_manifest_timestamp_requires_canonical_utc_form() -> None:
+    manifest = valid_manifest()
+    manifest["created_at"] = "2026-09-06 09:30:00"
+    with pytest.raises(PackContractError):
+        validate_manifest(manifest)
+
+
+def test_invalid_calendar_timestamp_fails_closed() -> None:
+    inventory = valid_inventory()
+    inventory["entries"][0]["reviewed_at"] = "2026-02-31T09:30:00Z"
+    with pytest.raises(PackContractError):
+        validate_source_license_inventory(inventory, publication=True)
+
+
+def test_non_https_license_evidence_fails_closed() -> None:
+    inventory = valid_inventory()
+    inventory["entries"][0]["evidence_url"] = "http://example.invalid/license"
+    with pytest.raises(PackContractError, match="HTTPS"):
+        validate_source_license_inventory(inventory, publication=True)
+
+
+def test_url_credentials_and_fragments_fail_closed() -> None:
+    inventory = valid_inventory()
+    inventory["entries"][0]["upstream_url"] = "https://user:secret@example.invalid/source"
+    with pytest.raises(PackContractError, match="credentials"):
+        validate_source_license_inventory(inventory, publication=True)
+
+    inventory = valid_inventory()
+    inventory["entries"][0]["evidence_url"] = "https://example.invalid/license#fragment"
+    with pytest.raises(PackContractError, match="fragment"):
+        validate_source_license_inventory(inventory, publication=True)
+
+
 def test_included_source_with_unknown_license_fails_closed() -> None:
     inventory = valid_inventory()
     inventory["entries"][0]["license_status"] = "unknown"
@@ -114,7 +156,23 @@ def test_manifest_inventory_identity_mismatch_fails_closed() -> None:
     inventory = valid_inventory()
     inventory["pack_version"] = "1.0.1-test.1"
     with pytest.raises(PackContractError, match="pack_version mismatch"):
-        validate_contract_pair(valid_manifest(), inventory, publication=True)
+        validate_contract_pair(
+            valid_manifest(),
+            inventory,
+            inventory_bytes=valid_inventory_bytes(),
+            publication=True,
+        )
+
+
+def test_inventory_exact_byte_digest_mismatch_fails_closed() -> None:
+    tampered_bytes = valid_inventory_bytes() + b" "
+    with pytest.raises(PackContractError, match="byte digest mismatch"):
+        validate_contract_pair(
+            valid_manifest(),
+            valid_inventory(),
+            inventory_bytes=tampered_bytes,
+            publication=True,
+        )
 
 
 def test_schema_rejects_unexpected_manifest_properties() -> None:
