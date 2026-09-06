@@ -48,6 +48,14 @@ class Phase543SQLiteSearchTests(unittest.TestCase):
         self.assertEqual("1.0.0", manifest["index_schema_version"])
         self.assertEqual(self.bundle["bundle_digest"], manifest["bundle_digest"])
         self.assertEqual(str(len(self.bundle["documents"])), manifest["document_count"])
+        self.assertTrue(manifest["logical_content_digest"].startswith("sha256-"))
+
+    def test_runtime_requires_external_expected_spc_binding(self):
+        self.core.close()
+        with self.assertRaises(TypeError):
+            search.SQLiteSearchCore.open(self.path)
+        with self.assertRaises(search.SearchIndexValidationError):
+            search.SQLiteSearchCore.open(self.path, expected_bundle=None)
 
     def test_required_exact_resolution_cases_match_reference_contract(self):
         queries = [
@@ -127,6 +135,19 @@ class Phase543SQLiteSearchTests(unittest.TestCase):
         conn = sqlite3.connect(self.path)
         conn.execute("UPDATE metadata SET value=? WHERE key='bundle_digest'", ("sha256-stale",))
         conn.commit()
+        conn.close()
+        with self.assertRaises(search.SearchIndexValidationError):
+            search.SQLiteSearchCore.open(self.path, expected_bundle=self.bundle)
+
+    def test_logical_content_tamper_fails_closed_even_when_sqlite_is_valid(self):
+        self.core.close()
+        conn = sqlite3.connect(self.path)
+        conn.execute(
+            "UPDATE documents SET title=? WHERE target_id=?",
+            ("Tampered Title", "atlas:attack-technique:mitre.attack:t1059.001"),
+        )
+        conn.commit()
+        self.assertEqual("ok", conn.execute("PRAGMA quick_check").fetchone()[0])
         conn.close()
         with self.assertRaises(search.SearchIndexValidationError):
             search.SQLiteSearchCore.open(self.path, expected_bundle=self.bundle)
