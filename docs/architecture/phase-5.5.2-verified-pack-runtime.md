@@ -1,8 +1,14 @@
 # Phase 5.5.2 — Verified Pack Runtime
 
-Status: **IMPLEMENTATION IN PROGRESS**
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
 Baseline main: `a21b619c605e94c6bd9896e639acd574fe969b12`
+
+Feature head: `7d97434fad8749a5fc791ae1a0543760a9f74fd0`
+
+Merge commit: `9a8f9f30a937d546ed08a205d19998bbbd1ed0d9`
+
+PR: `#20` — Phase 5.5.2: Verified Pack Runtime
 
 ## Purpose
 
@@ -16,6 +22,7 @@ The implementation is intentionally a **Python reference/runtime implementation*
 untrusted .atlaspack
   -> bounded archive preflight
   -> safe extraction into private staging
+  -> persistent trusted-time rollback guard
   -> offline TUF refresh/verification using trusted bootstrap root
   -> TUF-verified Pack Manifest target
   -> TUF-verified Source/License Inventory target
@@ -49,13 +56,15 @@ Archive extraction is fail-closed and permits only `metadata/` and `targets/` na
 - excessive entry count, per-file size, aggregate size and compression ratio;
 - active-code extensions under target payloads.
 
+The final cross-platform hardening also compares `ZipInfo.orig_filename` with the parser-exposed `ZipInfo.filename`. If the host ZIP parser sanitizes or mutates a wire-level member name before validation — including Windows backslash normalization or NUL truncation behavior — Atlas rejects the member rather than validating the repaired representation.
+
 The safety envelope is represented by a versioned/configurable runtime dataclass. The defaults are reference defaults, not a future product-capacity commitment.
 
 ### TUF layer
 
 The verifier uses `python-tuf` `ngclient.Updater` with exact direct dependency pin `tuf==7.0.0`. A custom local-only fetcher serves only files from the extracted pack; no network fetch is possible through the Atlas verifier.
 
-The bootstrap root is supplied out-of-band by the caller. The writable TUF metadata cache is durable runtime state and is kept across installations so python-tuf can enforce metadata rollback/freshness rules across pack attempts.
+The bootstrap root is supplied out-of-band by the caller. The writable TUF metadata cache is durable runtime state and is kept across installations so python-tuf can enforce metadata rollback/freshness rules across pack attempts. The permanent regression suite explicitly proves that after a newer signed metadata version has been trusted, replaying the previously valid older metadata fails closed.
 
 The local fetcher supports TUF consistent-snapshot requests while keeping the `.atlaspack` logical layout readable. It may map version-prefixed metadata and hash-prefixed target requests only to the corresponding local file; python-tuf still performs the signed version/hash/length verification.
 
@@ -71,6 +80,8 @@ After TUF authenticates control targets, Atlas additionally enforces:
 - top-level canonical/SPC digest fields matching those artifacts;
 - no undeclared files under `targets/`;
 - runtime compatibility via strict SemVer precedence.
+
+Activation has no inspection/non-publication mode. Untrusted transport activation always performs publication-grade licensing and trust checks; inspection remains a separate verification boundary.
 
 ### Canonical/search health
 
@@ -90,7 +101,11 @@ Runtime state is stored atomically as JSON and includes:
 
 TUF metadata rollback state remains in python-tuf's durable metadata cache.
 
+A separate `trusted-time.json` persists the highest observed UTC wall-clock value. The runtime uses a zero-tolerance rollback profile for the reference implementation: an observed time lower than the durable floor fails closed, and a missing trusted-time file while other durable trust state exists is treated as administrative recovery rather than silently recreating trust state.
+
 A process lock is acquired with exclusive-create semantics. A stale lock is a fail-closed administrative recovery condition; it is never silently removed by the runtime.
+
+Runtime state and generation metadata use strict structures and exact digest/identifier formats; corrupt, unexpected or ambiguous state is rejected rather than repaired automatically.
 
 For Atlas pack-version rollback protection:
 
@@ -133,19 +148,41 @@ Phase 5.5.2 does not freeze:
 - remote repository distribution/CDN topology;
 - semantic/vector model distribution.
 
-## Exit criteria
+## Closure evidence
 
-Phase 5.5.2 can close only when the exact reviewed head demonstrates on Linux and Windows:
+The exact reviewed feature head was `7d97434fad8749a5fc791ae1a0543760a9f74fd0`. PR-triggered CI passed on that exact head before merge:
+
+- Phase 5.5.2 Verified Pack Runtime — Linux + Windows: **PASS**;
+- Phase 5.5.1 Pack Trust Contracts regression: **PASS**;
+- Foundation Hygiene: **PASS**;
+- canonical `schemas/v1/` unchanged: **PASS**.
+
+PR #20 was merged using a Merge Commit with expected-head protection. The resulting `main` commit is `9a8f9f30a937d546ed08a205d19998bbbd1ed0d9`, whose parents are the prior `main` and the exact reviewed feature head.
+
+Post-merge workflows on that exact `main` commit also passed:
+
+- Phase 5.5.2 Verified Pack Runtime: **PASS**;
+- Phase 5.5.1 Pack Trust Contracts: **PASS**;
+- Foundation Hygiene: **PASS**;
+- Phase 5.3.4 source canaries: **PASS**.
+
+## Exit criteria result
+
+Phase 5.5.2 is closed. The merged implementation demonstrates on Linux and Windows:
 
 - secure archive extraction positive and adversarial cases;
 - TUF valid pack verification;
-- TUF signature/hash/freshness failure cases;
+- TUF signature/hash/freshness and persistent metadata rollback failure cases;
 - offline/no-network fetch enforcement;
 - exact control/artifact binding;
 - canonical schema validation;
 - search-index validation and deterministic rebuild fallback;
 - pack-version rollback/version-reuse protection;
+- trusted wall-clock rollback/state-loss protection;
 - atomic activation/LKG rollback behavior;
 - builder round-trip verification;
+- parser-sanitization rejection for non-canonical archive member names;
 - no `schemas/v1/` change;
 - no production private key or secret committed to the repository.
+
+The remaining Phase 5.5 material architecture work is the production Shared Core technology spike and ADR; Phase 5.5.2 itself does not select that technology.
