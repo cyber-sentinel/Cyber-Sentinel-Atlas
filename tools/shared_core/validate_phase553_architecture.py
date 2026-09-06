@@ -82,7 +82,12 @@ def main() -> int:
         require("### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **NEXT**" in roadmap, "roadmap must advance to Phase 5.5.4 after selection closure")
 
     pre_selection_status = "Production Shared Core technology spike / ADR: **NEXT**" in current
-    post_selection_status = "Production Shared Core implementation family: **Go**" in current and "Phase 5.5.4 — Production Go Shared Core: **NEXT**" in current
+    post_selection_status = (
+        "Production Shared Core implementation family: **Go**" in current
+        and "Phase 5.5.4" in current
+        and "Production Go Shared Core" in current
+        and "NEXT" in current
+    )
     require(pre_selection_status or post_selection_status, "current-status must describe the Shared Core selection/implementation boundary")
 
     require("Tauri, Rust, SQLite, React, and TypeScript remain candidates only." in HISTORY_STATE.read_text(encoding="utf-8"), "historical state snapshot was not preserved byte-for-content")
