@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/search/v1/alias-projection.schema.json",
+  "title": "Atlas AliasProjection v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["search_contract_version", "target_id", "value", "kind", "scope", "case_sensitive", "normalization", "derivation"],
+  "properties": {
+    "search_contract_version": {"const": "1.0.0"},
+    "target_id": {"type": "string", "pattern": "^atlas:"},
+    "value": {"type": "string", "minLength": 1},
+    "kind": {"type": "string", "minLength": 1},
+    "scope": {"type": "object", "additionalProperties": {"type": ["string", "null"]}},
+    "case_sensitive": {"type": "boolean"},
+    "normalization": {"enum": ["identity", "unicode-nfkc-casefold"]},
+    "derivation": {"type": "string", "minLength": 1}
+  }
+}

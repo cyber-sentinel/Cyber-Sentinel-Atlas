@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/search/v1/query-request.schema.json",
+  "title": "Atlas SearchRequest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["search_contract_version", "original_query", "normalized_query", "terms", "filters", "scope_hints", "graph_depth"],
+  "properties": {
+    "search_contract_version": {"const": "1.0.0"},
+    "original_query": {"type": "string", "maxLength": 512},
+    "normalized_query": {"type": "string", "maxLength": 512},
+    "terms": {"type": "array", "maxItems": 32, "items": {"type": "string", "minLength": 1}},
+    "filters": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "value"],
+        "properties": {
+          "key": {"enum": ["platform", "product", "provider", "channel", "namespace", "type", "lifecycle", "version"]},
+          "value": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "scope_hints": {"type": "object", "additionalProperties": {"type": "string"}},
+    "identifier_type_hint": {"type": ["string", "null"]},
+    "identifier_value_hint": {"type": ["string", "null"]},
+    "graph_depth": {"type": "integer", "minimum": 0, "maximum": 2}
+  }
+}

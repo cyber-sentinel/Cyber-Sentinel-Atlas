@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/search/v1/identifier-projection.schema.json",
+  "title": "Atlas IdentifierProjection v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["search_contract_version", "target_id", "identifier_type", "value", "namespace", "case_sensitive", "normalization", "primary", "numeric_semantics"],
+  "properties": {
+    "search_contract_version": {"const": "1.0.0"},
+    "target_id": {"type": "string", "pattern": "^atlas:"},
+    "identifier_type": {"type": "string", "minLength": 1},
+    "value": {"type": "string", "minLength": 1},
+    "namespace": {"type": "string", "minLength": 1},
+    "scope": {
+      "type": "object",
+      "additionalProperties": {"type": ["string", "null"]}
+    },
+    "case_sensitive": {"type": "boolean"},
+    "normalization": {"enum": ["identity", "unicode-nfkc-casefold"]},
+    "primary": {"type": "boolean"},
+    "numeric_semantics": {"type": "boolean"},
+    "derived_numeric_value": {"type": "integer", "minimum": 0}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"numeric_semantics": {"const": true}}, "required": ["numeric_semantics"]},
+      "then": {"required": ["derived_numeric_value"]},
+      "else": {"not": {"required": ["derived_numeric_value"]}}
+    }
+  ]
+}

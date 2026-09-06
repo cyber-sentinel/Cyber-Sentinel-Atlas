@@ -49,6 +49,12 @@ jobs:
       - name: Run Phase 5.3 ingestion contract, security, and canary tests
         run: python -m unittest discover -s tests/phase53 -p "test_*.py" -v
 
+      - name: Validate Phase 5.4.1 search contracts and reference resolver
+        run: python tools/search/validate_phase541.py
+
+      - name: Run Phase 5.4 search tests
+        run: python -m unittest discover -s tests/phase54 -p "test_*.py" -v
+
       - name: Check canonical schema URI policy
         shell: bash
         run: |
@@ -75,6 +81,23 @@ jobs:
           print("Ingestion schema URI policy passed.")
           PY
 
+      - name: Check search schema URI policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          base = "https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/search/v1/"
+          root = Path("schemas/search/v1")
+          for path in sorted(root.rglob("*.json")):
+              data = json.loads(path.read_text(encoding="utf-8"))
+              expected = base + path.relative_to(root).as_posix()
+              if data.get("$id") != expected:
+                  raise SystemExit(f"{path}: unexpected $id {data.get('$id')!r}; expected {expected!r}")
+          print("Search schema URI policy passed.")
+          PY
+
       - name: Confirm canonical schemas v1 are unmodified
         shell: bash
         run: |
@@ -82,7 +105,7 @@ jobs:
           if git show-ref --verify --quiet refs/remotes/origin/main; then
             changed="$(git diff --name-only origin/main...HEAD -- schemas/v1 || true)"
             if [ -n "$changed" ]; then
-              echo "Canonical schemas/v1 changed during Phase 5.3:"
+              echo "Canonical schemas/v1 changed without an approved canonical-model decision:"
               echo "$changed"
               exit 1
             fi
@@ -181,7 +204,6 @@ jobs:
       - name: Print provenance descriptor summary
         shell: pwsh
         run: |
-          python -c "import json,pathlib; root=pathlib.Path(r'${{ github.workspace }}/reference-output'); files=sorted(root.glob('*.descriptor.json')); desc=[(p,json.loads(p.read_text(encoding='utf-8'))) for p,d in []]"
           python -c "import json,pathlib; root=pathlib.Path(r'${{ github.workspace }}/reference-output'); files=sorted(root.glob('*.descriptor.json')); desc=[(p,json.loads(p.read_text(encoding='utf-8'))) for p in files]; [print('{}: source_version={} env={} {} build={} collector={} {} artifact_sha={}'.format(p.name,d['source_version'],d['reference_environment']['product'],d['reference_environment']['version'],d['reference_environment']['build'],d['collector']['tool_name'],d['collector']['tool_version'],d['artifact']['sha256'])) for p,d in desc]"
 
       - name: Enforce artifact upload boundary

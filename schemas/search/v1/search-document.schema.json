@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/search/v1/search-document.schema.json",
+  "title": "Atlas SearchDocument v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["search_contract_version", "target_id", "entity_type", "title", "scope", "lifecycle", "lexical_fields", "projection_digest"],
+  "properties": {
+    "search_contract_version": {"const": "1.0.0"},
+    "target_id": {"type": "string", "pattern": "^atlas:"},
+    "entity_type": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "scope": {"$ref": "#/$defs/scope"},
+    "lifecycle": {"type": ["string", "null"]},
+    "lexical_fields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "aliases", "native_identifiers", "description"],
+      "properties": {
+        "title": {"type": "string"},
+        "aliases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "native_identifiers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "description": {"type": "string"}
+      }
+    },
+    "projection_digest": {"type": "string", "pattern": "^sha256-[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "namespace": {"type": ["string", "null"]},
+        "platform": {"type": ["string", "null"]},
+        "product": {"type": ["string", "null"]},
+        "provider": {"type": ["string", "null"]},
+        "channel": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

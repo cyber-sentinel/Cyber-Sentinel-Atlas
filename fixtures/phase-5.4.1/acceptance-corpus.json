@@ -1,0 +1,129 @@
+{
+  "fixture_only": true,
+  "fixture_version": "1.0.0",
+  "canonical_corpus_id": "atlas:test-corpus:phase-5.4.1-acceptance",
+  "canonical_schema_version": "1.0.0",
+  "records": [
+    {
+      "id": "atlas:event:microsoft.windows.security:4688",
+      "entity_type": "event",
+      "title": "Windows Security Event 4688",
+      "namespace": "microsoft.windows.security",
+      "scope": {"platform":"windows","product":"windows-security","provider":"microsoft-windows-security-auditing","channel":"security"},
+      "lifecycle": "current",
+      "description": "A new process has been created.",
+      "native_identifiers": [{"type":"event_id","value":"4688","case_sensitive":false,"primary":true,"namespace":"microsoft.windows.security","numeric_semantics":true}],
+      "aliases": [{"value":"Event ID 4688","kind":"provider-qualified","case_sensitive":false,"scope":{"namespace":"microsoft.windows.security"}}]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:592",
+      "entity_type": "event",
+      "title": "Legacy Windows Security Event 592",
+      "namespace": "microsoft.windows.security",
+      "scope": {"platform":"windows","product":"windows-security","provider":"microsoft-windows-security-auditing","channel":"security"},
+      "lifecycle": "legacy",
+      "description": "Historical process creation telemetry preserved independently from Event 4688.",
+      "native_identifiers": [{"type":"event_id","value":"592","case_sensitive":false,"primary":true,"namespace":"microsoft.windows.security","numeric_semantics":true}],
+      "aliases": []
+    },
+    {
+      "id": "atlas:event:microsoft.sysmon:1",
+      "entity_type": "event",
+      "title": "Sysmon Event 1 Process Create",
+      "namespace": "microsoft.sysmon",
+      "scope": {"platform":"windows","product":"sysmon","provider":"microsoft-windows-sysmon","channel":"microsoft-windows-sysmon/operational"},
+      "lifecycle": "current",
+      "description": "Sysmon process creation event.",
+      "native_identifiers": [{"type":"event_id","value":"1","case_sensitive":false,"primary":true,"namespace":"microsoft.sysmon","numeric_semantics":true}],
+      "aliases": [{"value":"Sysmon 1","kind":"provider-qualified","case_sensitive":false,"scope":{"namespace":"microsoft.sysmon"}}]
+    },
+    {
+      "id": "atlas:event:synthetic.test.provider:1",
+      "entity_type": "event",
+      "title": "Synthetic Collision Event 1",
+      "namespace": "synthetic.test.provider",
+      "scope": {"platform":"synthetic","product":"collision-fixture","provider":"synthetic-provider","channel":"test"},
+      "lifecycle": "current",
+      "description": "Fixture-only Event ID collision used to enforce deterministic ambiguity handling.",
+      "native_identifiers": [{"type":"event_id","value":"1","case_sensitive":false,"primary":true,"namespace":"synthetic.test.provider","numeric_semantics":true}],
+      "aliases": []
+    },
+    {
+      "id": "atlas:attack-technique:mitre.attack:t1059",
+      "entity_type": "attack-technique",
+      "title": "Command and Scripting Interpreter",
+      "namespace": "mitre.attack",
+      "scope": {"platform":"cross-platform","product":"mitre-attack","provider":"mitre","channel":null},
+      "lifecycle": "current",
+      "description": "ATT&CK technique T1059.",
+      "native_identifiers": [{"type":"attack_id","value":"T1059","case_sensitive":false,"primary":true,"namespace":"mitre.attack","numeric_semantics":false}],
+      "aliases": []
+    },
+    {
+      "id": "atlas:attack-technique:mitre.attack:t1059.001",
+      "entity_type": "attack-technique",
+      "title": "PowerShell",
+      "namespace": "mitre.attack",
+      "scope": {"platform":"cross-platform","product":"mitre-attack","provider":"mitre","channel":null},
+      "lifecycle": "current",
+      "description": "ATT&CK sub-technique T1059.001.",
+      "native_identifiers": [{"type":"attack_id","value":"T1059.001","case_sensitive":false,"primary":true,"namespace":"mitre.attack","numeric_semantics":false}],
+      "aliases": []
+    },
+    {
+      "id": "atlas:operation:aws.cloudtrail.iam:createaccesskey",
+      "entity_type": "operation",
+      "title": "AWS CloudTrail IAM CreateAccessKey",
+      "namespace": "aws.cloudtrail.iam",
+      "scope": {"platform":"aws","product":"cloudtrail","provider":"aws-iam","channel":"management-events"},
+      "lifecycle": "current",
+      "description": "AWS IAM CreateAccessKey operation.",
+      "native_identifiers": [{"type":"aws_event_name","value":"CreateAccessKey","case_sensitive":true,"primary":true,"namespace":"aws.cloudtrail.iam","numeric_semantics":false}],
+      "aliases": []
+    },
+    {
+      "id": "atlas:audit-record:linux.audit:execve",
+      "entity_type": "audit-record",
+      "title": "Linux Audit EXECVE",
+      "namespace": "linux.audit",
+      "scope": {"platform":"linux","product":"auditd","provider":"linux-audit","channel":"audit"},
+      "lifecycle": "current",
+      "description": "Linux audit EXECVE record type.",
+      "native_identifiers": [{"type":"audit_type","value":"EXECVE","case_sensitive":true,"primary":true,"namespace":"linux.audit","numeric_semantics":false}],
+      "aliases": []
+    },
+    {
+      "id": "atlas:activity:docker.events:container.exec-start",
+      "entity_type": "activity",
+      "title": "Docker Container Exec Start",
+      "namespace": "docker.events",
+      "scope": {"platform":"container","product":"docker","provider":"docker-events","channel":"events"},
+      "lifecycle": "current",
+      "description": "Docker exec_start activity.",
+      "native_identifiers": [{"type":"docker_action","value":"exec_start","case_sensitive":true,"primary":true,"namespace":"docker.events","numeric_semantics":false}],
+      "aliases": [{"value":"docker exec start","kind":"human-readable","case_sensitive":false,"scope":{"namespace":"docker.events"}}]
+    },
+    {
+      "id": "atlas:activity:kubernetes.audit:create.pods.exec",
+      "entity_type": "activity",
+      "title": "Kubernetes Pod Exec",
+      "namespace": "kubernetes.audit",
+      "scope": {"platform":"kubernetes","product":"kubernetes","provider":"kubernetes-audit","channel":"audit"},
+      "lifecycle": "current",
+      "description": "Kubernetes pods/exec audit activity.",
+      "native_identifiers": [{"type":"kubernetes_activity","value":"create.pods.exec","case_sensitive":false,"primary":true,"namespace":"kubernetes.audit","numeric_semantics":false}],
+      "aliases": [{"value":"kubectl exec","kind":"tool-activity","case_sensitive":false,"scope":{"namespace":"kubernetes.audit"}}]
+    },
+    {
+      "id": "atlas:activity:microsoft.m365.audit:fileaccessed",
+      "entity_type": "activity",
+      "title": "Microsoft 365 FileAccessed",
+      "namespace": "microsoft.m365.audit",
+      "scope": {"platform":"microsoft-365","product":"unified-audit-log","provider":"microsoft-365","channel":"audit"},
+      "lifecycle": "current",
+      "description": "Fixture for Microsoft 365 FileAccessed activity lookup.",
+      "native_identifiers": [{"type":"operation_name","value":"FileAccessed","case_sensitive":true,"primary":true,"namespace":"microsoft.m365.audit","numeric_semantics":false}],
+      "aliases": []
+    }
+  ]
+}
