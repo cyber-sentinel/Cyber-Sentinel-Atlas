@@ -70,6 +70,16 @@ class TantivyAdapter:
         query = self.tantivy.Query.term_query(self.schema, "target_id", target_id, "basic")
         return self._ids(self.searcher.search(query, TOP_K))
 
+    def _or(self, queries):
+        return self.tantivy.Query.boolean_query([
+            (self.tantivy.Occur.Should, query) for query in queries
+        ])
+
+    def _and(self, queries):
+        return self.tantivy.Query.boolean_query([
+            (self.tantivy.Occur.Must, query) for query in queries
+        ])
+
     def _lexical_query(self, text):
         terms = tokenize_lexical(text)
         if not terms:
@@ -79,22 +89,19 @@ class TantivyAdapter:
             for term in terms
             for field in ("title", "aliases", "native_ids", "body")
         ]
-        query = queries[0]
-        if len(queries) > 1:
-            query = query.or_should_match(*queries[1:])
-        return query
+        return self._or(queries)
 
     def lexical(self, text, provider=None):
         query = self._lexical_query(text)
         if provider:
             provider_query = self.tantivy.Query.term_query(self.schema, "provider", provider, "basic")
-            query = query.and_must_match(provider_query)
+            query = self._and([query, provider_query])
         return self._ids(self.searcher.search(query, TOP_K))
 
     def numeric_browse(self, provider):
         provider_query = self.tantivy.Query.term_query(self.schema, "provider", provider, "basic")
         numeric_exists = self.tantivy.Query.exists_query("numeric_event_id")
-        query = provider_query.and_must_match(numeric_exists)
+        query = self._and([provider_query, numeric_exists])
         result = self.searcher.search(
             query,
             TOP_K,
