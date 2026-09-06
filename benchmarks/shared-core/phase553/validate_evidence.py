@@ -30,11 +30,33 @@ def load(path: Path) -> dict:
     return value
 
 
+def load_serialization(path: Path, expected_digest: str) -> dict:
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if value.get("evidence_schema_version") != "1.0.0":
+        raise RuntimeError("unsupported serialization-comparison evidence schema")
+    protocol = value.get("protocol_vector", {})
+    contrast = value.get("ordering_contrast", {})
+    if protocol.get("atlas_sha256") != expected_digest:
+        raise RuntimeError("serialization comparison is not bound to candidate digest evidence")
+    if protocol.get("bytes_equal") is not True:
+        raise RuntimeError("frozen protocol vector unexpectedly diverges from bounded JCS comparison")
+    if contrast.get("bytes_equal") is not False:
+        raise RuntimeError("serialization comparison failed to prove general profile distinction")
+    if value.get("general_profile_equivalent_to_jcs") is not False:
+        raise RuntimeError("general Atlas/JCS equivalence must not be claimed")
+    if value.get("existing_digest_migration") is not False:
+        raise RuntimeError("Phase 5.5.3 must not migrate existing digest identities")
+    if value.get("decision_for_phase_5_5_3") != "retain-existing-atlas-deterministic-json-profile":
+        raise RuntimeError("serialization profile decision is not fail-closed")
+    return value
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--python", type=Path, required=True)
     parser.add_argument("--go", type=Path, required=True)
     parser.add_argument("--rust", type=Path, required=True)
+    parser.add_argument("--serialization", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
 
@@ -44,6 +66,9 @@ def main() -> int:
         "rust": load(args.rust),
     }
     baseline_bindings = candidates["python-control"]["bindings"]
+    serialization = load_serialization(
+        args.serialization, baseline_bindings["serialization_sha256"]
+    )
     for name, evidence in candidates.items():
         for key in REQUIRED_BINDINGS:
             if evidence["bindings"][key] != baseline_bindings[key]:
@@ -53,10 +78,9 @@ def main() -> int:
         if evidence["gates"]["G-SC3"] and (exact >= 100.0 or lexical >= 300.0):
             raise RuntimeError(f"{name} claims G-SC3 pass outside latency gates")
 
-    # Python is the semantic oracle and Go is the selected executable production
-    # finalist for this spike iteration: either failing a mandatory gate must fail CI.
-    # Rust is evaluated neutrally: a build/runtime/conformance failure is recorded as
-    # disqualifying evidence rather than being pre-programmed into this validator.
+    # Python is the semantic oracle and Go is the executable production finalist for
+    # this spike iteration. Rust is evaluated neutrally: failure becomes evidence,
+    # never an expected outcome baked into the validator.
     if not candidates["python-control"]["eligible"]:
         raise RuntimeError("Python semantic control unexpectedly failed a mandatory gate")
     if not candidates["go"]["eligible"]:
@@ -69,9 +93,8 @@ def main() -> int:
         if not candidates[name]["eligible"]
     }
 
-    # These are provisional architecture-policy scores, not the final ADR decision.
-    # Final selection evidence must bind these judgments to cross-platform measured
-    # footprint/performance and authoritative upstream facts.
+    # Provisional policy weights only. Final ADR rationale must bind them to the
+    # cross-platform measured evidence and exact dependency/runtime facts.
     score_profiles = {
         "python-control": {
             "contract_security": 30,
@@ -104,10 +127,17 @@ def main() -> int:
     scores = {name: score_profiles[name] for name in eligible}
     totals = {name: sum(parts.values()) for name, parts in scores.items()}
     summary = {
-        "summary_schema_version": "1.1.0",
+        "summary_schema_version": "1.2.0",
         "eligible_candidates": eligible,
         "disqualified_candidates": disqualified,
         "bindings": baseline_bindings,
+        "serialization_profile": {
+            "general_profile_equivalent_to_jcs": serialization["general_profile_equivalent_to_jcs"],
+            "existing_digest_migration": serialization["existing_digest_migration"],
+            "decision_for_phase_5_5_3": serialization["decision_for_phase_5_5_3"],
+            "ordering_contrast_atlas_sha256": serialization["ordering_contrast"]["atlas_sha256"],
+            "ordering_contrast_jcs_sha256": serialization["ordering_contrast"]["jcs_sha256"],
+        },
         "scores": scores,
         "score_totals": totals,
         "provisional_rank": sorted(totals, key=lambda name: (-totals[name], name)),
