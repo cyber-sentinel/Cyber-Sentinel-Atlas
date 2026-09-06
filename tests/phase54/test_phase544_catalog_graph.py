@@ -124,13 +124,21 @@ class Phase544CatalogGraphTests(unittest.TestCase):
         self.assertNotIn("atlas:activity:synthetic.graph:a", ids)
 
     def test_graph_cannot_outrank_search_stage(self):
-        composed = self.runtime.resolve_with_graph("Synthetic Graph Node A", graph_depth=2)
-        self.assertEqual("lexical", composed["search"]["match_stage"])
+        composed = self.runtime.resolve_with_graph(
+            "atlas:activity:synthetic.graph:a", graph_depth=2
+        )
+        self.assertEqual("canonical_identifier", composed["search"]["match_stage"])
         self.assertEqual(
             ["atlas:activity:synthetic.graph:a"],
             self.target_ids(composed["search"]["matches"]),
         )
-        self.assertTrue(composed["graph_pivots"])
+        self.assertEqual(
+            [
+                "atlas:activity:synthetic.graph:c",
+                "atlas:activity:synthetic.graph:b",
+            ],
+            self.target_ids(composed["graph_pivots"]),
+        )
 
     def test_graph_and_catalog_inputs_fail_closed(self):
         with self.assertRaises(catalog_graph.contract.QueryValidationError):
