@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static closure validator for the Phase 5.5.3 Shared Core architecture gate."""
+"""Static closure validator for the Phase 5.5.3 Shared Core architecture/selection boundary."""
 from __future__ import annotations
 
 import json
@@ -32,7 +32,7 @@ def main() -> int:
     current = CURRENT.read_text(encoding="utf-8")
     plan = json.loads(PLAN.read_text(encoding="utf-8"))
 
-    require("Status: **ARCHITECTURE GATE / SPIKE AUTHORIZED**" in arch, "Phase 5.5.3 architecture status missing")
+    require("Status: **ARCHITECTURE GATE / SPIKE AUTHORIZED**" in arch, "Phase 5.5.3 architecture authorization artifact drifted")
     proposed = "**Status:** Proposed" in adr
     accepted = "**Status:** Accepted" in adr
     require(proposed ^ accepted, "ADR-0024 must be exactly Proposed or Accepted")
@@ -57,23 +57,37 @@ def main() -> int:
     for phrase in (
         "Phase 5.4 — Deterministic Search Core: **COMPLETE / MERGED**",
         "Phase 5.5.2 — Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**",
-        "Phase 5.5.3 — Production Shared Core Technology Spike: **ARCHITECTURE GATE / SPIKE AUTHORIZED**",
         "Architecture Sync Status: **GREEN**",
         "ADR-0024 — Production Shared Core Technology Selection",
     ):
         require(phrase in state, f"project-state missing current architecture phrase: {phrase}")
 
+    state_pre = "Phase 5.5.3 — Production Shared Core Technology Spike: **ARCHITECTURE GATE / SPIKE AUTHORIZED**" in state
+    state_closed = "Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in state
+    require(state_pre or state_closed, "project-state missing valid Phase 5.5.3 lifecycle state")
+    if state_closed:
+        require("Phase 5.5.4 — Production Go Shared Core: **NEXT**" in state, "closed Phase 5.5.3 must advance to Phase 5.5.4")
+
     for phrase in (
         "## Phase 5.4 — Deterministic Search Core",
         "Status: **COMPLETE / MERGED**",
-        "### Phase 5.5.3 — Production Shared Core Technology Spike",
-        "Status: **ARCHITECTURE GATE / SPIKE AUTHORIZED**",
         "## Phase 5.6 — Windows Desktop MVP",
     ):
         require(phrase in roadmap, f"roadmap missing current phase invariant: {phrase}")
 
+    roadmap_pre = "### Phase 5.5.3 — Production Shared Core Technology Spike\n\nStatus: **ARCHITECTURE GATE / SPIKE AUTHORIZED**" in roadmap
+    roadmap_closed = "### Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024\n\nStatus: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in roadmap
+    require(roadmap_pre or roadmap_closed, "roadmap missing valid Phase 5.5.3 lifecycle state")
+    if roadmap_closed:
+        require("### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **NEXT**" in roadmap, "roadmap must advance to Phase 5.5.4 after selection closure")
+
     pre_selection_status = "Production Shared Core technology spike / ADR: **NEXT**" in current
-    post_selection_status = "Go" in current and ("Shared Core" in current or "5.5.3" in current)
+    post_selection_status = (
+        "Production Shared Core implementation family: **Go**" in current
+        and "Phase 5.5.4" in current
+        and "Production Go Shared Core" in current
+        and "NEXT" in current
+    )
     require(pre_selection_status or post_selection_status, "current-status must describe the Shared Core selection/implementation boundary")
 
     require("Tauri, Rust, SQLite, React, and TypeScript remain candidates only." in HISTORY_STATE.read_text(encoding="utf-8"), "historical state snapshot was not preserved byte-for-content")

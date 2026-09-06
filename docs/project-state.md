@@ -5,14 +5,16 @@
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Authoritative Branch: `main`
 - Live Main SHA: resolve from the GitHub `main` branch tip.
-- Last Reviewed Main SHA: `d2c837b0740b52aeca9dd579c32911e01c8c6ecc`
-- Last Architecture-Reviewed Main SHA: `d2c837b0740b52aeca9dd579c32911e01c8c6ecc`
+- Last Reviewed Main SHA: `bbb462b11de460216acb80116146f651ac2ef1ca`
+- Last Architecture-Reviewed Main SHA: `bbb462b11de460216acb80116146f651ac2ef1ca`
 - Current Version: `0.1.0-foundation.1`
 - Canonical Schema Version: `1.0.0`
 - Ingestion Contract Version: `1.0.0`
 - Search Contract Version: `1.0.0`
 - Search Engine: SQLite + FTS5 — ADR-0022 Accepted
 - Content Pack Trust Model: TUF — ADR-0023 Accepted
+- Production Shared Core: Go — ADR-0024 Accepted
+- Python Role: semantic/conformance oracle during production Go port
 - Repository Visibility: Private during active development
 - Branch Protection: unavailable/not enabled on the current private-repository plan; procedural PR + CI + architecture-review gates remain mandatory.
 
@@ -28,14 +30,15 @@ Detailed current status is maintained in [`docs/current-status.md`](current-stat
 - Phase 5.5 — Offline Pack Runtime / Shared Core: **IN PROGRESS**
 - Phase 5.5.1 — Pack Trust Contracts + ADR-0023: **COMPLETE / MERGED**
 - Phase 5.5.2 — Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**
-- Phase 5.5.3 — Production Shared Core Technology Spike: **ARCHITECTURE GATE / SPIKE AUTHORIZED**
+- Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+- Phase 5.5.4 — Production Go Shared Core: **NEXT**
 - Phase 5.6 — Windows Desktop MVP: **NOT STARTED**
 - Phase 5.7 — Web / PWA: **NOT STARTED**
 - Phase 5.8 — API / CLI: **NOT STARTED**
 - Phase 5.9 — Grounded AI: **NOT STARTED**
 - Phase 5.10 — Public Preview Readiness: **NOT STARTED**
 
-The Phase 5.5.3 numbering is introduced by the current architecture gate. It was not a previously frozen roadmap subphase.
+The Phase 5.5.3 and 5.5.4 numbering was introduced at the Shared Core architecture boundary and is now part of the active roadmap.
 
 ## Frozen Architecture
 
@@ -48,44 +51,43 @@ The following remain authoritative:
 - deterministic exact identifier resolution before lexical retrieval;
 - SQLite + FTS5 for the derived deterministic search artifact;
 - TUF-based signed content-pack trust, verification and rollback boundary;
+- Go as the production Shared Core implementation family;
+- the existing Atlas deterministic JSON serialization/digest profile; no implicit JCS migration;
+- Python as the semantic/conformance oracle during the Go production port;
 - offline-first operation, inspectable provenance and Last Known Good preservation;
 - shared contracts across Desktop, Web/PWA, API and CLI;
 - official CLI command: `atlas`.
 
-## Phase 5.5.2 Closure
+## Phase 5.5.3 Closure
 
-Phase 5.5.2 merged via PR #20 at merge commit `9a8f9f30a937d546ed08a205d19998bbbd1ed0d9` and is post-merge verified. It delivered:
+Phase 5.5.3 merged via PR #23 at Merge Commit `bbb462b11de460216acb80116146f651ac2ef1ca` and is post-merge verified.
 
-- bounded fail-closed `.atlaspack` extraction;
-- parser-sanitization rejection for non-canonical ZIP wire names;
-- offline TUF verification with caller-supplied bootstrap trust and durable metadata rollback state;
-- exact manifest/license/artifact byte binding;
-- canonical AtlasRecord validation;
-- verified SPC plus SQLite/FTS5 validation/rebuild fallback;
-- strict runtime compatibility and SemVer/highest-seen rollback protection;
-- persistent trusted-time rollback/state-loss guard;
-- immutable generation staging, atomic activation, health checks, LKG preservation and rollback;
-- deterministic verified pack building without production private-key handling;
-- Linux/Windows adversarial and regression CI;
+The evidence-driven decision accepted ADR-0024 and selected Go because it was the only non-control finalist to pass every mandatory G-SC1..G-SC8 gate on both Linux and Windows. The accepted baseline includes:
+
+- Go toolchain family evidenced with `go1.25.0`;
+- `go-tuf/v2 v2.4.2`;
+- `modernc.org/sqlite v1.58.0`;
+- normalized dependency graph including `golang.org/x/text v0.36.0`;
+- SQLite/FTS5 parity with the accepted Phase 5.4 search contracts;
+- TUF/POUF, offline, archive, durable state, trusted-time and LKG/rollback parity with Phase 5.5.1/5.5.2;
+- cross-language deterministic JSON vectors preserved without digest migration;
 - no change to canonical `schemas/v1/`.
 
-The post-merge documentation synchronization was merged via PR #21 at `d2c837b0740b52aeca9dd579c32911e01c8c6ecc`.
+Python control remains an eligible reference implementation and conformance oracle. Rust was not selected because the current mandatory trust/runtime evidence envelope was incomplete or failed; that result is scoped to Phase 5.5.3 rather than a general language judgment.
 
-## Phase 5.5.3 Architecture Gate
+## Phase 5.5.4 Production Boundary
 
-The next material decision is the production Shared Core implementation/runtime. The spike must compare candidates against the already accepted Atlas contracts rather than redefining them.
+Phase 5.5.4 is the next implementation slice. It will convert the accepted Go spike evidence into production Shared Core code while keeping all canonical/search/pack contracts authoritative.
 
-Architecture screening covers Rust, Go, Python control, TypeScript/Node.js and .NET/C#. The initial executable finalists are Rust, Go and Python control, subject to hard pass/fail gates for:
+Required production closure includes:
 
-- canonical and cross-language digest fidelity;
-- exact Phase 5.4 search semantic parity;
-- SQLite + FTS5 behavior;
-- TUF / Atlas POUF v1 interoperability;
-- durable Windows/Linux state and rollback semantics;
-- offline/no-network trust boundary;
-- reproducible cross-platform builds and machine-readable evidence.
-
-`ADR-0024 — Production Shared Core Technology Selection` remains Proposed until the executable evidence is complete. No production Shared Core language/runtime is frozen by the architecture-gate PR.
+- canonical/read-model validation against the seven-family schema;
+- deterministic SQLite/FTS5 exact, lexical, catalog and bounded graph behavior;
+- Atlas TUF POUF v1 verification and verified-pack consumption;
+- durable install/activation/highest-seen/trusted-time/LKG rollback behavior;
+- locked Go dependencies, clean builds, SBOM and vulnerability evidence;
+- Linux/Windows conformance against the Python oracle;
+- a stable versioned local interface boundary suitable for Windows Desktop and later adapters without freezing the Desktop UI framework.
 
 ## Accepted ADRs
 
@@ -112,14 +114,11 @@ Architecture screening covers Rust, Go, Python control, TypeScript/Node.js and .
 - ADR-0021 — Search Projection and Exact Resolver Contract
 - ADR-0022 — Search Engine Selection
 - ADR-0023 — Secure Content Pack Trust and Update Model
-
-Proposed:
-
 - ADR-0024 — Production Shared Core Technology Selection
 
 ## Technology Decisions Still Open
 
-- production Shared Core implementation language/runtime — Phase 5.5.3;
+- stable Shared Core local interface/IPC transport for Desktop and later adapters — Phase 5.5.4;
 - Windows Desktop implementation stack;
 - broader local application storage beyond the accepted derived search artifact;
 - graph persistence/index implementation;
@@ -141,6 +140,7 @@ Proposed:
 - Phase 5.4: **APPROVED AND COMPLETE**
 - Phase 5.5.1: **APPROVED AND COMPLETE**
 - Phase 5.5.2: **APPROVED, MERGED AND POST-MERGE VERIFIED**
-- Phase 5.5.3: **ARCHITECTURE SPIKE AUTHORIZED; TECHNOLOGY NOT YET SELECTED**
+- Phase 5.5.3: **APPROVED, GO SELECTED, MERGED AND POST-MERGE VERIFIED**
+- Phase 5.5.4: **NEXT — PRODUCTION GO SHARED CORE**
 
-No blocking architecture conflict is known at this boundary. A technology candidate that cannot reproduce Atlas security/search/pack contracts is disqualified rather than accommodated by changing those contracts.
+No blocking architecture conflict is known at this boundary. Production Go code must conform to the accepted Atlas security/search/pack contracts; it may not redefine those contracts to simplify the port.

@@ -92,37 +92,42 @@ Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
 Delivered secure `.atlaspack` extraction, offline TUF verification, exact artifact/control binding, canonical validation, deterministic search-index validation/rebuild, trusted-time and version rollback guards, immutable generations, atomic active/LKG state and rollback, deterministic verified pack building, and Linux/Windows adversarial CI.
 
-### Phase 5.5.3 — Production Shared Core Technology Spike
+### Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024
 
-Status: **ARCHITECTURE GATE / SPIKE AUTHORIZED**
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
-This subphase is introduced at the current architecture boundary; it was not previously frozen.
+Evidence-driven technology selection completed on Linux and Windows. ADR-0024 selected Go as the production Shared Core implementation family after Go passed all mandatory G-SC1..G-SC8 gates on both operating systems and ranked first among eligible candidates. Python remains the semantic/conformance oracle during the production port. The existing Atlas deterministic JSON profile remains frozen and no JCS digest migration occurred.
 
-Purpose:
+The accepted evidence baseline includes `go-tuf/v2 v2.4.2`, `modernc.org/sqlite v1.58.0` and the normalized Go dependency graph including `golang.org/x/text v0.36.0`.
 
-- select the production Shared Core implementation/runtime only after reproducible evidence;
-- preserve all Phase 5.4 search and Phase 5.5 trust/runtime contracts;
-- compare Rust, Go, Python control, TypeScript/Node.js and .NET/C# architecturally;
-- execute the initial finalist spike for Rust, Go and Python control;
-- prove Windows/Linux search, TUF/POUF, atomic-state, rollback, offline and cross-language digest semantics;
-- generate machine-readable benchmark/security evidence;
-- accept ADR-0024 only after all mandatory gates pass.
+This decision does not select the Desktop UI framework, IPC/ABI transport, broader application storage, graph database, HSM/KMS provider, application updater/CDN, Detection IR, semantic/vector retrieval or Grounded AI runtime.
 
-No Desktop UI framework, graph database, HSM/KMS provider, broader application storage, binary updater or CDN topology is selected by the Phase 5.5.3 architecture gate.
+### Phase 5.5.4 — Production Go Shared Core
 
-### Phase 5.5 production implementation after ADR-0024
+Status: **NEXT**
 
-Status: **BLOCKED ON PHASE 5.5.3 EVIDENCE / ADR-0024**
+Implement the accepted Shared Core contracts as production Go code rather than spike/benchmark code.
 
-After ADR-0024 selects the production Shared Core, a dedicated implementation slice will port/implement the accepted contracts without reopening canonical/search/pack semantics.
+Mandatory scope:
+
+- preserve the seven-family canonical/read-model and deterministic Atlas serialization/digest profile;
+- implement Phase 5.4 exact-before-lexical SQLite/FTS5 search, catalogs and bounded graph reads without semantic fallback;
+- implement ADR-0023 / Atlas TUF POUF v1 verification and verified-pack consumption;
+- preserve strict `.atlaspack` archive rules, offline/no-network operation, immutable generations, highest-seen/trusted-time guards, atomic activation and Last Known Good rollback;
+- retain Python reference/control conformance fixtures until the production Go implementation proves parity;
+- lock dependencies and produce clean-build, SBOM and vulnerability evidence;
+- pass Linux and Windows correctness/security/reproducibility CI;
+- define a stable versioned local boundary usable by Windows Desktop and later adapters while keeping the Desktop UI framework independent from Go internals.
+
+The preferred integration direction is a typed local process boundary rather than a fragile language FFI/ABI, unless executable evidence proves another boundary safer. The interface decision must remain bounded, versioned, local-only by default and incapable of arbitrary command execution.
 
 ## Phase 5.6 — Windows Desktop MVP
 
-Status: **NOT STARTED / BLOCKED ON SHARED CORE SELECTION**
+Status: **NOT STARTED / BLOCKED ON PRODUCTION SHARED CORE**
 
-First full end-user interface. Requirements include fast offline exact/lexical lookup, canonical data, relationship navigation, provenance visibility, signed pack updates, safe rollback and portable Windows mode evaluation.
+First full end-user interface. Requirements include fast offline exact/lexical lookup, canonical data, relationship navigation, provenance visibility, verified pack updates, safe rollback and portable Windows mode evaluation.
 
-Desktop technology requires its own evidence/ADR and is not implied by the Shared Core selection.
+Desktop technology requires its own evidence/ADR and is not implied by the Go Shared Core selection.
 
 ## Phase 5.7 — Web / PWA
 

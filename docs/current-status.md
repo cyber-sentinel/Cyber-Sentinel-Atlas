@@ -6,12 +6,14 @@ Status timestamp: 2026-09-06
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Authoritative branch: `main`
-- Phase 5.5.2 completion main SHA: `9a8f9f30a937d546ed08a205d19998bbbd1ed0d9`
+- Phase 5.5.3 selection completion main SHA: `bbb462b11de460216acb80116146f651ac2ef1ca`
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
 - Search contract version: `1.0.0`
 - Search engine: SQLite + FTS5, accepted by ADR-0022
 - Content-pack trust model: TUF-based, accepted by ADR-0023
+- Production Shared Core implementation family: **Go**, accepted by ADR-0024
+- Python implementation role: semantic/conformance oracle during the production Go port
 - Repository visibility: private during active development
 - Public project license: not yet adopted; see `docs/governance/licensing-and-contributions.md`
 
@@ -33,67 +35,48 @@ Git history and the live `main` branch tip remain the final repository authority
 - Phase 5.4.3 — Production SQLite/FTS5 Search Core: **COMPLETE / MERGED**
 - Phase 5.4.4 — Catalog, Graph Pivots, Benchmarks and Closure: **COMPLETE / MERGED**
 - Phase 5.5.1 — Pack Trust Contracts + ADR-0023: **COMPLETE / MERGED**
-- Phase 5.5.2 — Verified Pack Runtime: **COMPLETE / MERGED**
+- Phase 5.5.2 — Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+- Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
-## Phase 5.4 closure
+## Phase 5.5.3 closure
 
-Phase 5.4 provides:
+Phase 5.5.3 selected Go only after executable cross-platform evidence. The accepted evidence boundary proved:
 
-- registry-aware exact canonical/native/scoped identifier resolution;
-- deterministic ambiguity handling;
-- scoped alias resolution after exact identity;
-- production SQLite + FTS5 lexical retrieval;
-- typed/bound structured filters;
-- provider/source catalogs;
-- provider-scoped numeric Event ID browse;
-- lifecycle/version browse with legacy preservation;
-- bounded graph pivots over disposable SPC EdgeProjections without selecting a graph database;
-- corpus/index binding, corruption/staleness fail-closed behavior and Last Known Good rebuild safety;
-- permanent Linux/Windows acceptance, security and performance regression CI.
+- Go passes mandatory G-SC1 through G-SC8 on Linux and Windows;
+- Python control also passes and remains the semantic/conformance oracle;
+- Rust is not selected because the Phase 5.5.3 mandatory trust/runtime evidence envelope was incomplete or failed; this is not a general rejection of Rust;
+- `go-tuf/v2 v2.4.2` is the evidenced TUF client baseline;
+- `modernc.org/sqlite v1.58.0` is the evidenced CGo-free SQLite baseline;
+- the normalized Go dependency graph includes `golang.org/x/text v0.36.0` for the accepted Unicode behavior;
+- SQLite/FTS5 exact and lexical behavior stays subordinate to the already accepted Phase 5.4 contracts;
+- existing Atlas deterministic JSON bytes remain the protocol serialization profile; there is no RFC 8785/JCS digest migration;
+- canonical `schemas/v1/` remains unchanged;
+- Desktop UI technology, IPC transport/ABI, broader persistence, graph database, HSM/KMS, updater/CDN, Detection IR and Grounded AI remain separate decisions.
 
-No semantic/vector retrieval, Grounded AI, graph database, Desktop stack, signed pack runtime or Detection IR was frozen by Phase 5.4.
+PR #23 merged the accepted ADR-0024 through Merge Commit `bbb462b11de460216acb80116146f651ac2ef1ca`. Post-merge Foundation Hygiene, Shared Core Architecture, Linux/Windows Shared Core Spike and Phase 5.3.4 canaries all passed on that merge boundary.
 
-## Phase 5.5 progress
+## Active next implementation slice
 
-Phase 5.5.1 and Phase 5.5.2 now provide the content-pack trust and verified-runtime boundary:
+**Phase 5.5.4 — Production Go Shared Core: NEXT**
 
-- versioned Pack Manifest and Source/License Inventory contracts;
-- TUF-based cryptographic trust with caller-supplied bootstrap root and durable metadata rollback state;
-- fail-closed `.atlaspack` archive validation and bounded manual extraction;
-- exact-byte control/artifact integrity binding;
-- canonical AtlasRecord validation against repository-local `schemas/v1`;
-- SPC validation and deterministic SQLite/FTS5 rebuild fallback from verified content;
-- strict runtime compatibility and pack-version rollback/version-reuse protection;
-- persistent trusted wall-clock rollback detection;
-- immutable generation staging, atomic activation, health checks, Last Known Good preservation and automatic rollback;
-- deterministic verified pack transport building without production signing-key handling;
-- Linux/Windows adversarial and regression CI;
-- parser-sanitization protection for non-canonical ZIP member names on cross-platform runtimes.
+Phase 5.5.4 will implement the accepted Shared Core contracts as production Go code rather than benchmark/spike code. It must preserve:
 
-The canonical seven-family model remains unchanged. The verified pack runtime is still a Python reference/runtime implementation and does not select the future production Shared Core language.
+- exactly seven canonical AtlasRecord families and existing canonical/native identifier semantics;
+- the Atlas deterministic JSON serialization/digest profile and frozen cross-language vectors;
+- Phase 5.4 exact-before-lexical SQLite/FTS5 behavior, deterministic ambiguity/order, bounded filters and bounded graph reads;
+- ADR-0023 TUF/POUF v1, `.atlaspack`, offline verification, strict archive handling, immutable generation, trusted-time/highest-seen state, atomic activation and Last Known Good rollback semantics;
+- no hidden network fallback and no pack-provided executable code;
+- Linux/Windows reproducibility, locked dependencies, SBOM/vulnerability evidence and clean-build CI.
 
-## Active next architecture gate
-
-**Phase 5.5 — Production Shared Core technology spike / ADR: NEXT**
-
-The remaining Phase 5.5 material decision is the production Shared Core technology boundary. Before implementation is frozen, the next architecture slice must compare candidate implementation/runtime approaches against the already accepted contracts and demonstrate reproducible evidence for:
-
-- deterministic canonical/pack/search behavior across supported operating systems;
-- SQLite + FTS5 integration and exact Phase 5.4 search semantics;
-- TUF/pack verification interoperability without weakening ADR-0023;
-- atomic filesystem, locking, durable-state and rollback semantics;
-- suitability for the Windows Desktop MVP while preserving reusable contracts for Web/PWA, API and CLI;
-- implementation security, dependency/supply-chain surface, binary/runtime footprint and maintainability;
-- cross-language serialization/digest compatibility where applicable.
-
-No production Shared Core language/runtime, HSM/KMS provider, Desktop framework, remote distribution topology or application binary updater is selected by the Phase 5.5.2 merge.
+The production slice must also define a stable versioned local interface boundary for Desktop and later adapters without freezing the Desktop UI stack. A local process boundary is preferred over a fragile language FFI/ABI unless executable evidence demonstrates a safer alternative.
 
 ## Remaining roadmap
 
 - Phase 5.5 — Offline Pack Runtime / Shared Core: **IN PROGRESS**
-  - Pack Trust Contracts: **COMPLETE / MERGED**
-  - Verified Pack Runtime: **COMPLETE / MERGED**
-  - Production Shared Core technology spike / ADR: **NEXT**
+  - 5.5.1 Pack Trust Contracts: **COMPLETE / MERGED**
+  - 5.5.2 Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+  - 5.5.3 Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+  - 5.5.4 Production Go Shared Core: **NEXT**
 - Phase 5.6 — Windows Desktop MVP
 - Phase 5.7 — Web / PWA
 - Phase 5.8 — API / CLI (`atlas`)
@@ -102,4 +85,4 @@ No production Shared Core language/runtime, HSM/KMS provider, Desktop framework,
 
 ## Governance
 
-All official changes remain branch → PR → CI → architecture/security review → expected-head Merge Commit → post-merge verification. The maintainer is the final authority for the official repository. Third-party licensing and public contributor-rights review remain fail-closed before Public Preview.
+All official changes remain branch → PR → CI → architecture/security review → expected-head Merge Commit → post-merge verification. The maintainer remains the final authority for the official repository. Third-party licensing and public contributor-rights review remain fail-closed before Public Preview.
