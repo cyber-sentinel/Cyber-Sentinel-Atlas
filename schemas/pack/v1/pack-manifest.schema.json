@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyber-sentinel.net/schemas/pack/v1/pack-manifest.schema.json",
+  "title": "Atlas Pack Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pack_format_version",
+    "pack_id",
+    "pack_version",
+    "created_at",
+    "canonical_schema_version",
+    "ingestion_contract_version",
+    "search_contract_version",
+    "minimum_runtime_version",
+    "canonical_records_digest",
+    "spc_digest",
+    "source_license_inventory",
+    "artifacts"
+  ],
+  "properties": {
+    "pack_format_version": {"const": "1.0.0"},
+    "pack_id": {
+      "type": "string",
+      "pattern": "^atlas:pack:[a-z0-9][a-z0-9._-]{0,127}$"
+    },
+    "pack_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "canonical_schema_version": {"type": "string", "minLength": 1, "maxLength": 64},
+    "ingestion_contract_version": {"type": "string", "minLength": 1, "maxLength": 64},
+    "search_contract_version": {"type": "string", "minLength": 1, "maxLength": 64},
+    "minimum_runtime_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "canonical_records_digest": {"$ref": "#/$defs/digest"},
+    "spc_digest": {"$ref": "#/$defs/digest"},
+    "source_license_inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "digest"],
+      "properties": {
+        "path": {"const": "atlas/source-license-inventory.json"},
+        "digest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4096,
+      "items": {"$ref": "#/$defs/artifact"}
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256-[0-9a-f]{64}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "kind", "digest", "length", "derived"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^(content|search)/[A-Za-z0-9._/-]+$"
+        },
+        "kind": {
+          "enum": [
+            "canonical-records",
+            "coverage",
+            "provenance",
+            "spc",
+            "search-index",
+            "auxiliary-data"
+          ]
+        },
+        "digest": {"$ref": "#/$defs/digest"},
+        "length": {"type": "integer", "minimum": 0, "maximum": 2147483648},
+        "derived": {"type": "boolean"}
+      }
+    }
+  }
+}

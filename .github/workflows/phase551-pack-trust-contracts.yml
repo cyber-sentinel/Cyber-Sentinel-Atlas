@@ -1,0 +1,68 @@
+name: Phase 5.5.1 Pack Trust Contracts
+
+on:
+  pull_request:
+    paths:
+      - ".gitattributes"
+      - "docs/adr/0023-secure-content-pack-trust-and-update-model.md"
+      - "docs/architecture/atlas-tuf-pouf-v1.md"
+      - "docs/architecture/phase-5.5.1-pack-trust-contracts.md"
+      - "schemas/pack/**"
+      - "tools/pack/**"
+      - "tests/phase55/**"
+      - "tests/fixtures/phase55/**"
+      - ".github/workflows/phase551-pack-trust-contracts.yml"
+  push:
+    branches:
+      - main
+      - "feature/**"
+    paths:
+      - ".gitattributes"
+      - "docs/adr/0023-secure-content-pack-trust-and-update-model.md"
+      - "docs/architecture/atlas-tuf-pouf-v1.md"
+      - "docs/architecture/phase-5.5.1-pack-trust-contracts.md"
+      - "schemas/pack/**"
+      - "tools/pack/**"
+      - "tests/phase55/**"
+      - "tests/fixtures/phase55/**"
+      - ".github/workflows/phase551-pack-trust-contracts.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  pack-contracts:
+    name: pack-contracts (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned validation dependencies
+        run: python -m pip install --disable-pip-version-check pytest==8.4.2 jsonschema==4.25.1
+
+      - name: Compile pack validation modules
+        run: python -m py_compile tools/pack/contract.py tools/pack/validate_phase551.py
+
+      - name: Run Phase 5.5.1 contract and security tests
+        run: python -m pytest -q tests/phase55/test_phase551_pack_contracts.py
+
+      - name: Run Phase 5.5.1 closure validator
+        run: python tools/pack/validate_phase551.py
+
+      - name: Confirm canonical schemas v1 are unchanged from main
+        if: github.ref != 'refs/heads/main'
+        run: git diff --exit-code origin/main...HEAD -- schemas/v1

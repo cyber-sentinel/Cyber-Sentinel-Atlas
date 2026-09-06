@@ -1,0 +1,3 @@
+# Phase 5.5 byte-bound trust fixtures must be identical across Git checkouts.
+# Force LF so Windows checkout cannot rewrite target bytes before SHA-256 validation.
+tests/fixtures/phase55/*.json text eol=lf
