@@ -102,7 +102,7 @@ class Phase542SpikeContractTests(unittest.TestCase):
                     adapter.lexical("benchmarkfanout"),
                     [f"atlas:benchmark-noise:{i:08d}" for i in range(0, 50, 5)],
                 )
-                self.assertEqual(adapter.lexical('" OR provider:*'), ["atlas:benchmark-noise:00000000"] if False else [])
+                self.assertEqual(adapter.lexical('" OR provider:*'), [])
             finally:
                 adapter.close()
 
