@@ -1,6 +1,6 @@
 # Phase 5.4 — Deterministic Search Core
 
-Status: **PROPOSED — ARCHITECTURE GATE**
+Status: **APPROVED — PHASE 5.4 ACTIVE**
 
 Baseline main SHA: `dc1062718951034fdf4ef6c6adc152eb10ed5445`
 
