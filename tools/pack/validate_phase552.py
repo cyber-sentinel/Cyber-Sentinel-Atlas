@@ -1,10 +1,11 @@
 """Static closure validator for the Phase 5.5.2 verified pack runtime."""
 from __future__ import annotations
 
-import re
+import ast
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+SELF = Path(__file__).resolve()
 
 REQUIRED = (
     ROOT / "docs" / "adr" / "0023-secure-content-pack-trust-and-update-model.md",
@@ -33,6 +34,15 @@ PRIVATE_KEY_MARKERS = (
 def require(condition: bool, message: str) -> None:
     if not condition:
         raise RuntimeError(message)
+
+
+def _called_attribute_names(source: str) -> set[str]:
+    tree = ast.parse(source)
+    names: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+            names.add(node.func.attr)
+    return names
 
 
 def main() -> int:
@@ -66,7 +76,8 @@ def main() -> int:
     )
 
     archive = REQUIRED[3].read_text(encoding="utf-8")
-    require("extractall(" not in archive and ".extract(" not in archive, "unsafe ZipFile extraction helper detected")
+    unsafe_zip_calls = _called_attribute_names(archive) & {"extract", "extractall"}
+    require(not unsafe_zip_calls, f"unsafe ZipFile extraction helper detected: {sorted(unsafe_zip_calls)}")
     require("max_compression_ratio" in archive, "archive compression-ratio bound missing")
     require("WINDOWS_REPARSE_POINT" in archive, "Windows reparse-point guard missing")
 
@@ -84,7 +95,7 @@ def main() -> int:
 
     builder = REQUIRED[6].read_text(encoding="utf-8")
     require("CryptoSigner" not in builder, "production builder must not handle signing keys")
-    require(".sign(" not in builder, "production builder must not sign TUF metadata")
+    require("sign" not in _called_attribute_names(builder), "production builder must not sign TUF metadata")
     require("ZIP_STORED" in builder, "deterministic stored transport profile missing")
     require("safe_extract_atlaspack" in builder, "builder round-trip safe extraction missing")
     require("verify_pack_directory" in builder, "builder round-trip trust verification missing")
@@ -98,6 +109,8 @@ def main() -> int:
     ]
     for directory in inspected_roots:
         for path in sorted(directory.rglob("*")):
+            if path.resolve() == SELF:
+                continue
             if not path.is_file() or path.suffix.lower() in {".pyc", ".zip", ".sqlite", ".sqlite3"}:
                 continue
             try:
