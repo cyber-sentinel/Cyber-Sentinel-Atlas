@@ -109,9 +109,14 @@ class TantivyAdapter:
         provider_query = self.tantivy.Query.term_query(self.schema, "provider", provider, "basic")
         numeric_exists = self.tantivy.Query.exists_query("numeric_event_id")
         query = self._and([provider_query, numeric_exists])
+
+        # Numeric browse has the same cutoff-tie requirement as lexical search: if
+        # multiple canonical targets share a numeric value at the TOP_K boundary,
+        # a backend-selected subset cannot define Atlas ordering. Collect the bounded
+        # matching set, then apply the contract's (numeric value, target_id) total order.
         result = self.searcher.search(
             query,
-            TOP_K,
+            self.document_count,
             order_by_field="numeric_event_id",
             order=self.tantivy.Order.Asc,
         )
