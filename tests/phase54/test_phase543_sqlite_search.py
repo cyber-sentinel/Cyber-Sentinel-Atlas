@@ -104,7 +104,7 @@ class Phase543SQLiteSearchTests(unittest.TestCase):
         ]
         for case in cases:
             with self.subTest(case=case):
-                with self.assertRaises(reference.QueryValidationError):
+                with self.assertRaises(search.contract.QueryValidationError):
                     case()
 
     def test_fts_injection_like_text_is_data(self):
