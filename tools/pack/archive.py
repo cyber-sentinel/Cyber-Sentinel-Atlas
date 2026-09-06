@@ -159,9 +159,19 @@ def _preflight(
     directories = 0
 
     for info in infos:
+        # CPython's ZIP parser may sanitize the raw member name (for example,
+        # backslashes are converted to forward slashes on Windows and NUL can
+        # truncate a name). Atlas validates the wire-level name, not a parser-
+        # repaired representation. Any parser mutation is therefore fail-closed.
+        original_name = getattr(info, "orig_filename", info.filename)
+        if original_name != info.filename:
+            raise PackArchiveError(
+                f"ZIP parser sanitized a non-canonical archive member name: {original_name!r}"
+            )
+
         _validate_entry_type(info)
         raw, parts = validate_archive_member_name(
-            info.filename, is_directory=info.is_dir(), limits=limits
+            original_name, is_directory=info.is_dir(), limits=limits
         )
         collision_key = unicodedata.normalize("NFC", raw).casefold()
         if collision_key in seen:
