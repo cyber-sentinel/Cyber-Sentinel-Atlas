@@ -11,7 +11,7 @@
   "spc_digest": "sha256-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
   "source_license_inventory": {
     "path": "atlas/source-license-inventory.json",
-    "digest": "sha256-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    "digest": "sha256-2af6a546a3b2bb1ace22ae291612f6689a1669fdbbf56860952a7712c22ff45a"
   },
   "artifacts": [
     {
