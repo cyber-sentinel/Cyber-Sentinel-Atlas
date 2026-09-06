@@ -1,7 +1,7 @@
 # ADR-0021 — Search Projection and Exact Resolver Contract
 
-**Status:** Proposed
-**Decision:** Pending Architecture Gate Approval
+**Status:** Accepted
+**Decision:** 2026-09-06 — approved by Atlas Architecture Authority
 
 ## Context
 
@@ -70,7 +70,7 @@ The projection build must bind to at least:
 - canonical corpus digest;
 - canonical schema version;
 - registry bundle version/digest;
-- projection profile version/digest;
+- projection-profile version/digest;
 - index adapter identifier/version when an engine-backed index is built.
 
 The initial Phase 5.4 projection objects are:
