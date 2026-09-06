@@ -1,0 +1,100 @@
+name: Phase 5.5.2 Verified Pack Runtime
+
+on:
+  pull_request:
+    paths:
+      - "docs/adr/0023-secure-content-pack-trust-and-update-model.md"
+      - "docs/architecture/phase-5.5.2-verified-pack-runtime.md"
+      - "tools/pack/**"
+      - "tests/phase55/**"
+      - ".gitattributes"
+      - ".github/workflows/phase552-verified-pack-runtime.yml"
+  push:
+    branches:
+      - main
+      - "feature/**"
+    paths:
+      - "docs/adr/0023-secure-content-pack-trust-and-update-model.md"
+      - "docs/architecture/phase-5.5.2-verified-pack-runtime.md"
+      - "tools/pack/**"
+      - "tests/phase55/**"
+      - ".gitattributes"
+      - ".github/workflows/phase552-verified-pack-runtime.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verified-pack-runtime:
+    name: verified-pack-runtime (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: .
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install exact Phase 5.5.2 dependencies
+        run: python -m pip install --disable-pip-version-check -r tools/pack/requirements-phase552.txt
+
+      - name: Assert exact trust dependency versions
+        run: >-
+          python -c "import importlib.metadata as m;
+          assert m.version('tuf') == '7.0.0', m.version('tuf');
+          assert m.version('securesystemslib') == '1.4.0', m.version('securesystemslib');
+          assert m.version('jsonschema') == '4.25.1', m.version('jsonschema');
+          assert m.version('pytest') == '8.4.2', m.version('pytest')"
+
+      - name: Assert SQLite FTS5 availability
+        run: >-
+          python -c "import sqlite3;
+          c=sqlite3.connect(':memory:');
+          c.execute('CREATE VIRTUAL TABLE probe USING fts5(value)');
+          c.close()"
+
+      - name: Compile Phase 5.5 runtime modules
+        run: >-
+          python -m py_compile
+          tools/pack/contract.py
+          tools/pack/archive.py
+          tools/pack/tuf_runtime.py
+          tools/pack/versioning.py
+          tools/pack/activation.py
+          tools/pack/builder.py
+          tools/pack/validate_phase551.py
+          tools/pack/validate_phase552.py
+          tests/phase55/phase552_helpers.py
+
+      - name: Run Phase 5.5.1 regression tests
+        run: python -m pytest -q tests/phase55/test_phase551_pack_contracts.py
+
+      - name: Run Phase 5.5.2 security and runtime tests
+        run: >-
+          python -m pytest -q
+          tests/phase55/test_phase552_archive.py
+          tests/phase55/test_phase552_tuf_runtime.py
+          tests/phase55/test_phase552_activation.py
+          tests/phase55/test_phase552_builder.py
+
+      - name: Run Phase 5.5.1 closure validator
+        run: python tools/pack/validate_phase551.py
+
+      - name: Run Phase 5.5.2 static closure validator
+        run: python tools/pack/validate_phase552.py
+
+      - name: Confirm canonical schemas v1 are unchanged from main
+        if: github.ref != 'refs/heads/main'
+        run: git diff --exit-code origin/main...HEAD -- schemas/v1
