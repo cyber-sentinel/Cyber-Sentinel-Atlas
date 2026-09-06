@@ -4,7 +4,6 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-import shutil
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any, Iterator
@@ -24,11 +23,11 @@ from tools.pack.contract import (
     validate_contract_pair,
 )
 from tools.pack.versioning import VersionError, require_runtime_compatible
-from tools.search.reference_search import build_projection_bundle, validate_projection_bundle
 from tools.search.sqlite_search import (
     SQLiteSearchCore,
     SearchIndexValidationError,
     build_index,
+    validate_projection_bundle,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -212,12 +211,10 @@ def _download_verified_target(
 
 def _canonical_schema_validator() -> Draft202012Validator:
     registry = Registry()
-    schemas: dict[str, dict[str, Any]] = {}
     for path in sorted(CANONICAL_SCHEMA_ROOT.rglob("*.json")):
         schema = json.loads(path.read_text(encoding="utf-8"))
         uri = schema.get("$id")
         if isinstance(uri, str):
-            schemas[uri] = schema
             registry = registry.with_resource(uri, Resource.from_contents(schema))
     root_schema = json.loads(
         (CANONICAL_SCHEMA_ROOT / "atlas-record.schema.json").read_text(encoding="utf-8")
