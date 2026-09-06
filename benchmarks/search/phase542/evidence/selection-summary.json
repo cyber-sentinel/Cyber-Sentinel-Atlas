@@ -1,14 +1,16 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "phase": "5.4.2",
-  "source_run_id": 34013740514,
-  "head_sha": "1ff6f0b32d9500523c01d0da7e97859995a48f96",
+  "source_run_id": 34017974268,
+  "head_sha": "58c67165bb5a104318595eee1fe6c3d984e1b9b2",
   "corpus": {
     "document_count": 20000,
-    "benchmark_corpus_digest": "sha256-bf2e69c262b94b0ddecd71e4c5b041a6b83e33aa2fd9e437e1d87475646d8f08",
+    "benchmark_corpus_digest": "sha256-5cb1431b21eb9519f5e590ee5e7f2eb0720cb662fc70b6b2baf54996f0bc8f04",
     "phase541_projection_digest": "sha256-61a7a9b46a070e279046230f593826d676adabd91b3384a085c8b19fa571af93",
-    "query_suite_digest": "sha256-0b21343d840f8dd0cfec4e3add58e732f6dddb29a3f4ccac365b9bfbabe75167",
-    "iterations_per_case": 40
+    "query_suite_digest": "sha256-45a0f9b5837dce8803000072ba3e628f8229c6c83d5d2433ead2592c8a3355ae",
+    "query_suite_version": "1.1.0",
+    "iterations_per_case": 40,
+    "high_fanout_modulus": 5
   },
   "platforms": {
     "linux": {
@@ -16,41 +18,43 @@
         "cache_condition": "process-warm repeated queries; OS page cache not flushed; build/open measured separately",
         "cpu_count": 2,
         "machine": "x86_64",
-        "memory_bytes": 8323973120,
+        "memory_bytes": 8322936832,
         "os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
         "processor": "x86_64",
         "python": "3.12.14"
       },
-      "result_digest": "sha256-b2edde9c751d25f9f97f5d9de572d561ad4d6c63b94b59a56a462d43be393bc8",
+      "result_digest": "sha256-118ec960ba72c7fc4d1b4a6b1feaee0ac1fd734e83536bd6e20f03cf444380fc",
       "candidates": {
         "sqlite-fts5": {
           "engine_version": "3.45.1",
-          "build_seconds": 0.212216,
-          "index_bytes": 14041088,
+          "build_seconds": 0.528914,
+          "index_bytes": 18739200,
           "p95_ms": {
-            "exact-sysmon-1": 0.0305,
-            "exact-windows-4688": 0.0274,
-            "filtered-windows-process": 0.101,
-            "lexical-create-access-key": 0.0773,
-            "lexical-kubectl-exec": 0.1198,
-            "lexical-powershell": 0.0927,
-            "lexical-process-creation": 0.1416,
-            "numeric-windows-provider": 0.0203
+            "exact-sysmon-1": 0.0052,
+            "exact-windows-4688": 0.0053,
+            "filtered-windows-process": 0.0277,
+            "lexical-create-access-key": 0.0186,
+            "lexical-high-fanout-deterministic-ties": 5.7825,
+            "lexical-kubectl-exec": 0.0297,
+            "lexical-powershell": 0.0393,
+            "lexical-process-creation": 0.0338,
+            "numeric-windows-provider": 0.0055
           }
         },
         "tantivy": {
           "engine_version": "tantivy v0.26.0, index_format v7",
-          "build_seconds": 0.289738,
-          "index_bytes": 1824178,
+          "build_seconds": 0.540916,
+          "index_bytes": 2804504,
           "p95_ms": {
-            "exact-sysmon-1": 0.019,
-            "exact-windows-4688": 0.0261,
-            "filtered-windows-process": 0.0984,
-            "lexical-create-access-key": 0.0337,
-            "lexical-kubectl-exec": 0.1159,
-            "lexical-powershell": 0.037,
-            "lexical-process-creation": 0.0961,
-            "numeric-windows-provider": 0.2993
+            "exact-sysmon-1": 0.0072,
+            "exact-windows-4688": 0.0156,
+            "filtered-windows-process": 0.0359,
+            "lexical-create-access-key": 0.0219,
+            "lexical-high-fanout-deterministic-ties": 15.082,
+            "lexical-kubectl-exec": 0.0421,
+            "lexical-powershell": 0.0189,
+            "lexical-process-creation": 0.0345,
+            "numeric-windows-provider": 0.1051
           }
         }
       }
@@ -62,39 +66,41 @@
         "machine": "AMD64",
         "memory_bytes": null,
         "os": "Windows-2025Server-10.0.26100-SP0",
-        "processor": "Intel64 Family 6 Model 207 Stepping 2, GenuineIntel",
+        "processor": "AMD64 Family 25 Model 1 Stepping 1, AuthenticAMD",
         "python": "3.12.10"
       },
-      "result_digest": "sha256-667e2268da16f66adbbe00193d9ca09f053034685b62fed39d7b94434724778c",
+      "result_digest": "sha256-a8f3e49c2699faf7adaadd1929fdbc180a180c5f5e6ff647dcb7add135520a87",
       "candidates": {
         "sqlite-fts5": {
           "engine_version": "3.49.1",
-          "build_seconds": 0.736707,
-          "index_bytes": 14041088,
+          "build_seconds": 0.784214,
+          "index_bytes": 18739200,
           "p95_ms": {
-            "exact-sysmon-1": 0.0394,
-            "exact-windows-4688": 0.0369,
-            "filtered-windows-process": 0.1019,
-            "lexical-create-access-key": 0.0521,
-            "lexical-kubectl-exec": 0.0799,
-            "lexical-powershell": 0.087,
-            "lexical-process-creation": 0.0771,
-            "numeric-windows-provider": 0.0336
+            "exact-sysmon-1": 0.0535,
+            "exact-windows-4688": 0.0572,
+            "filtered-windows-process": 0.1806,
+            "lexical-create-access-key": 0.1633,
+            "lexical-high-fanout-deterministic-ties": 15.2803,
+            "lexical-kubectl-exec": 0.2083,
+            "lexical-powershell": 0.1813,
+            "lexical-process-creation": 0.1915,
+            "numeric-windows-provider": 0.1036
           }
         },
         "tantivy": {
           "engine_version": "tantivy v0.26.0, index_format v7",
-          "build_seconds": 0.460229,
-          "index_bytes": 1911052,
+          "build_seconds": 0.593015,
+          "index_bytes": 2830980,
           "p95_ms": {
-            "exact-sysmon-1": 0.0126,
-            "exact-windows-4688": 0.0177,
-            "filtered-windows-process": 0.0546,
-            "lexical-create-access-key": 0.0292,
-            "lexical-kubectl-exec": 0.0468,
-            "lexical-powershell": 0.0412,
-            "lexical-process-creation": 0.0519,
-            "numeric-windows-provider": 0.1547
+            "exact-sysmon-1": 0.014,
+            "exact-windows-4688": 0.0434,
+            "filtered-windows-process": 0.106,
+            "lexical-create-access-key": 0.0471,
+            "lexical-high-fanout-deterministic-ties": 44.7416,
+            "lexical-kubectl-exec": 0.0783,
+            "lexical-powershell": 0.0518,
+            "lexical-process-creation": 0.0791,
+            "numeric-windows-provider": 0.3651
           }
         }
       }
@@ -102,12 +108,12 @@
   },
   "artifact_evidence": {
     "linux": {
-      "artifact_id": 9983256708,
-      "artifact_digest": "sha256:3e23ad342670f453eb91f93bdb68187fa75922f899d090e6a064cf2b4445907f"
+      "artifact_id": 9984519791,
+      "artifact_digest": "sha256:e5b04c5508318a77f2c5ce8840acd3918d25a3b7b8ecab120d9bf17ef86b742d"
     },
     "windows": {
-      "artifact_id": 9983260818,
-      "artifact_digest": "sha256:5990ce8b8b4fcc110fcd30fdd92ca64aa6988662a66a0c327e67cf43524b6e5b"
+      "artifact_id": 9984523082,
+      "artifact_digest": "sha256:698047d925a1affcc0327cac046be28fbef1acded3c7ed66c4e442e686088861"
     }
   }
 }
