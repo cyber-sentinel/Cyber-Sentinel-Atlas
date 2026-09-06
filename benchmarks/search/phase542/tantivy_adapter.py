@@ -43,7 +43,7 @@ class TantivyAdapter:
             }
             if doc.numeric_event_id is not None:
                 values["numeric_event_id"] = doc.numeric_event_id
-            writer.add_document(tantivy.Document(**values))
+            writer.add_document(tantivy.Document.from_dict(values, self.schema))
         writer.commit()
         writer.wait_merging_threads()
         self.index.reload()
