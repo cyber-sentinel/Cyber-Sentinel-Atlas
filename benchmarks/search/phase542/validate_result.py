@@ -5,6 +5,18 @@ import argparse
 import json
 from pathlib import Path
 
+REQUIRED_METRICS = {
+    "exact-windows-4688",
+    "exact-sysmon-1",
+    "lexical-powershell",
+    "lexical-process-creation",
+    "lexical-kubectl-exec",
+    "lexical-create-access-key",
+    "lexical-high-fanout-deterministic-ties",
+    "filtered-windows-process",
+    "numeric-windows-provider",
+}
+
 
 def main() -> int:
     parser = argparse.ArgumentParser()
@@ -16,12 +28,15 @@ def main() -> int:
     assert data["benchmark_contract_version"] == "1.0.0"
     assert data["phase"] == "5.4.2"
     assert data["corpus"]["document_count"] == args.expected_docs
+    assert data["corpus"]["high_fanout_modulus"] == 5
+    assert data["query_suite"]["version"] == "1.1.0"
     assert set(data["candidates"]) == {"sqlite-fts5", "tantivy"}
     assert not data["errors"], data["errors"]
     for candidate in data["candidates"].values():
         assert candidate["build_seconds"] > 0
         assert candidate["index_bytes"] > 0
-        assert candidate["metrics"]
+        assert REQUIRED_METRICS.issubset(candidate["metrics"])
+        assert all(metric["deterministic"] for metric in candidate["metrics"].values())
     print("Phase 5.4.2 benchmark result envelope passed.")
     return 0
 
