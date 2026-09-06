@@ -114,6 +114,7 @@ func main() {
 		fatalf("canonical JSON probe: %v", err)
 	}
 	serializationOK := base64.StdEncoding.EncodeToString(compact) == expected.CompactJSONBase64 && sha256Prefixed(compact) == expected.CompactJSONSHA256
+	unicodeCasefoldOK := fold("Straße") == "strasse" && fold("Σ") == fold("ς") && fold("K") == "k"
 
 	searchEvidence, sqliteInfo, _, exactP95, lexicalP95, err := runSearchProbe(
 		filepath.Join(*workspace, "search", "atlas-search.sqlite3"), expected,
@@ -151,10 +152,16 @@ func main() {
 		fatalf("read search index: %v", err)
 	}
 	bindingOK := sha256Prefixed(indexBytes) == expected.SearchIndexSHA256
+
+	goSumDigest := "unavailable"
+	if goSumBytes, readErr := os.ReadFile(filepath.Join("benchmarks", "shared-core", "phase553", "go", "go.sum")); readErr == nil {
+		goSumDigest = sha256Prefixed(goSumBytes)
+	}
+
 	gates := map[string]bool{
-		"G-SC1": searchOK && bindingOK,
+		"G-SC1": searchOK && bindingOK && unicodeCasefoldOK,
 		"G-SC2": serializationOK,
-		"G-SC3": searchOK && exactP95 < 100.0 && lexicalP95 < 300.0,
+		"G-SC3": searchOK && unicodeCasefoldOK && exactP95 < 100.0 && lexicalP95 < 300.0,
 		"G-SC4": searchOK && ftsOK && bindingOK,
 		"G-SC5": packOK,
 		"G-SC6": stateOK,
@@ -179,12 +186,14 @@ func main() {
 			"fts5":                   ftsOK,
 			"fts5_readonly_workload": ftsOK,
 			"fts5_ddl_probe":         rawDDLProbe,
+			"unicode_nfkc_casefold":  unicodeCasefoldOK,
 			"compiler":               runtime.Compiler,
 		},
 		Dependencies: map[string]string{
 			"go-tuf":          "v2.4.2",
 			"modernc-sqlite": "v1.58.0",
 			"x-text":          "v0.28.0",
+			"go-sum-sha256":   goSumDigest,
 		},
 		Bindings: map[string]string{
 			"spc_bundle_digest":    expected.SPCBundleDigest,
@@ -210,14 +219,15 @@ func main() {
 	fmt.Printf("{\"candidate\":\"go\",\"eligible\":%t,\"timestamp\":%q}\n", eligible, time.Now().UTC().Format(time.RFC3339))
 	if !eligible {
 		diagnostic := map[string]any{
-			"binding_ok":       bindingOK,
-			"fts5_ok":          ftsOK,
-			"fts5_ddl_probe":   rawDDLProbe,
-			"gates":            gates,
-			"pack":             packEvidence,
-			"search":           evidence.Search,
-			"serialization_ok": serializationOK,
-			"state":            stateEvidence,
+			"binding_ok":         bindingOK,
+			"fts5_ok":            ftsOK,
+			"fts5_ddl_probe":     rawDDLProbe,
+			"gates":              gates,
+			"pack":               packEvidence,
+			"search":             evidence.Search,
+			"serialization_ok":   serializationOK,
+			"state":              stateEvidence,
+			"unicode_casefold_ok": unicodeCasefoldOK,
 		}
 		data, marshalErr := json.Marshal(diagnostic)
 		if marshalErr == nil {
