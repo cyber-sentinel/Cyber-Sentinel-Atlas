@@ -20,12 +20,32 @@ type QueryExpectation struct {
 	Status  string   `json:"status"`
 }
 
+type SearchStressExpectation struct {
+	IndexSHA256             string   `json:"index_sha256"`
+	BundleDigest            string   `json:"bundle_digest"`
+	LexicalQuery            string   `json:"lexical_query"`
+	LexicalExpectedTargets  []string `json:"lexical_expected_targets"`
+	NumericNamespace        string   `json:"numeric_namespace"`
+	NumericIdentifierType   string   `json:"numeric_identifier_type"`
+	NumericLimit            int      `json:"numeric_limit"`
+	NumericExpectedTargets  []string `json:"numeric_expected_targets"`
+	FanoutDocumentCount     int      `json:"fanout_document_count"`
+	NumericDuplicateCount   int      `json:"numeric_duplicate_count"`
+}
+
+type ArchiveCasesExpectation struct {
+	Valid  string            `json:"valid"`
+	Reject map[string]string `json:"reject"`
+}
+
 type Expected struct {
 	EvidenceSchemaVersion string                      `json:"evidence_schema_version"`
 	Queries               []string                    `json:"queries"`
 	QueryExpectations     map[string]QueryExpectation `json:"query_expectations"`
 	SPCBundleDigest       string                      `json:"spc_bundle_digest"`
 	SearchIndexSHA256     string                      `json:"search_index_sha256"`
+	SearchStress          SearchStressExpectation     `json:"search_stress"`
+	ArchiveCases          ArchiveCasesExpectation     `json:"archive_cases"`
 	SerializationVector   any                         `json:"serialization_vector"`
 	CompactJSONBase64     string                      `json:"compact_json_base64"`
 	CompactJSONSHA256     string                      `json:"compact_json_sha256"`
@@ -51,6 +71,7 @@ type CandidateEvidence struct {
 	Canonical             map[string]any    `json:"canonical"`
 	Search                map[string]any    `json:"search"`
 	Pack                  map[string]any    `json:"pack"`
+	Archive               map[string]any    `json:"archive"`
 	State                 map[string]any    `json:"state"`
 	KnownLimitations      []string          `json:"known_limitations"`
 }
@@ -128,11 +149,6 @@ func main() {
 	if err != nil {
 		fatalf("search probe: %v", err)
 	}
-
-	// A successful lexical workload against documents_fts proves that the runtime
-	// actually provides FTS5. The older DDL probe runs after PRAGMA query_only=ON and
-	// therefore reports false even on a working FTS5 runtime because CREATE VIRTUAL
-	// TABLE is intentionally blocked. Keep that raw probe only as diagnostic evidence.
 	searchOK := true
 	ftsOK := false
 	for _, queryEvidence := range searchEvidence {
@@ -143,11 +159,19 @@ func main() {
 	}
 	rawDDLProbe, _ := sqliteInfo["fts5"].(bool)
 
+	stressEvidence, stressOK, err := runSearchStressProbe(*workspace, expected)
+	if err != nil {
+		fatalf("search stress probe: %v", err)
+	}
+
 	packEvidence, packOK, err := runTUFProbe(*workspace, expected)
 	if err != nil {
 		fatalf("TUF probe infrastructure failure: %v", err)
 	}
-
+	archiveEvidence, archiveOK, err := runArchiveProbe(*workspace, expected)
+	if err != nil {
+		fatalf("archive safety probe infrastructure failure: %v", err)
+	}
 	stateEvidence, stateOK, err := runStateProbe(filepath.Join(*workspace, "go-state-probe"))
 	if err != nil {
 		fatalf("state probe infrastructure failure: %v", err)
@@ -172,11 +196,11 @@ func main() {
 	gates := map[string]bool{
 		"G-SC1": canonicalOK && searchOK && bindingOK && unicodeCasefoldOK,
 		"G-SC2": serializationOK,
-		"G-SC3": searchOK && unicodeCasefoldOK && exactP95 < 100.0 && lexicalP95 < 300.0,
-		"G-SC4": searchOK && ftsOK && bindingOK,
+		"G-SC3": searchOK && stressOK && unicodeCasefoldOK && exactP95 < 100.0 && lexicalP95 < 300.0,
+		"G-SC4": searchOK && stressOK && ftsOK && bindingOK,
 		"G-SC5": packOK,
 		"G-SC6": stateOK,
-		"G-SC7": packOK && stateOK,
+		"G-SC7": packOK && archiveOK && stateOK,
 		"G-SC8": dependencySelectionOK,
 	}
 	eligible := true
@@ -201,10 +225,10 @@ func main() {
 			"compiler":               runtime.Compiler,
 		},
 		Dependencies: map[string]string{
-			"go-tuf":                  goTUFVersion,
-			"modernc-sqlite":          moderncVersion,
-			"x-text":                  xTextVersion,
-			"go-sum-sha256":           goSumDigest,
+			"go-tuf":                   goTUFVersion,
+			"modernc-sqlite":           moderncVersion,
+			"x-text":                   xTextVersion,
+			"go-sum-sha256":            goSumDigest,
 			"selected-modules-present": fmt.Sprintf("%t", dependencySelectionOK),
 		},
 		Bindings: map[string]string{
@@ -217,13 +241,15 @@ func main() {
 			"queries":        searchEvidence,
 			"exact_p95_ms":   exactP95,
 			"lexical_p95_ms": lexicalP95,
+			"stress":         stressEvidence,
 		},
-		Pack:  packEvidence,
-		State: stateEvidence,
+		Pack:    packEvidence,
+		Archive: archiveEvidence,
+		State:   stateEvidence,
 		KnownLimitations: []string{
 			"The seven-family Go probe validates the frozen common envelope plus representative Entity lifecycle/native-ID and Claim provenance invariants; authoritative JSON Schema validation remains owned by the canonical ingestion/pack validators and is not redefined by the spike.",
 			"The spike consumes the already-approved SQLite artifact and ports the frozen resolver contract; it does not freeze Desktop IPC or UI technology.",
-			"Go filesystem durability evidence uses fsync on written files plus atomic rename; directory-sync support is platform-dependent and is recorded by the state probe.",
+			"Archive evidence is fail-closed preflight/read validation only; pack contents are never executed and production extraction remains subject to the frozen Phase 5.5.2 staging contract.",
 		},
 	}
 
@@ -233,17 +259,19 @@ func main() {
 	fmt.Printf("{\"candidate\":\"go\",\"eligible\":%t,\"timestamp\":%q}\n", eligible, time.Now().UTC().Format(time.RFC3339))
 	if !eligible {
 		diagnostic := map[string]any{
-			"binding_ok":            bindingOK,
-			"canonical_ok":          canonicalOK,
-			"dependency_selection":  selectedModules,
-			"fts5_ok":               ftsOK,
-			"fts5_ddl_probe":        rawDDLProbe,
-			"gates":                 gates,
-			"pack":                  packEvidence,
-			"search":                evidence.Search,
-			"serialization_ok":      serializationOK,
-			"state":                 stateEvidence,
-			"unicode_casefold_ok":   unicodeCasefoldOK,
+			"archive":                archiveEvidence,
+			"binding_ok":             bindingOK,
+			"canonical_ok":           canonicalOK,
+			"dependency_selection":   selectedModules,
+			"fts5_ok":                ftsOK,
+			"fts5_ddl_probe":         rawDDLProbe,
+			"gates":                  gates,
+			"pack":                   packEvidence,
+			"search":                 evidence.Search,
+			"serialization_ok":       serializationOK,
+			"state":                  stateEvidence,
+			"stress_ok":              stressOK,
+			"unicode_casefold_ok":    unicodeCasefoldOK,
 		}
 		data, marshalErr := json.Marshal(diagnostic)
 		if marshalErr == nil {
