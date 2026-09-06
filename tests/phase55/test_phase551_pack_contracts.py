@@ -39,6 +39,12 @@ def test_pack_schemas_are_valid_draft_2020_12() -> None:
     Draft202012Validator.check_schema(load_json(LICENSE_SCHEMA))
 
 
+def test_byte_bound_fixture_is_lf_stable_on_all_platforms() -> None:
+    raw = valid_inventory_bytes()
+    assert b"\r\n" not in raw
+    assert raw.endswith(b"\n")
+
+
 def test_valid_fixture_pair_passes_publication_gate() -> None:
     validate_contract_pair(
         valid_manifest(),
