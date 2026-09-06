@@ -5,8 +5,8 @@
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Authoritative Branch: `main`
 - Live Main SHA: resolve from the GitHub `main` branch tip.
-- Last Reviewed Main SHA: `bbb462b11de460216acb80116146f651ac2ef1ca`
-- Last Architecture-Reviewed Main SHA: `bbb462b11de460216acb80116146f651ac2ef1ca`
+- Last Reviewed Main SHA: `94f3136687f8e9765c0343b938a1049436878783`
+- Last Architecture-Reviewed Main SHA: `94f3136687f8e9765c0343b938a1049436878783`
 - Current Version: `0.1.0-foundation.1`
 - Canonical Schema Version: `1.0.0`
 - Ingestion Contract Version: `1.0.0`
@@ -14,6 +14,7 @@
 - Search Engine: SQLite + FTS5 — ADR-0022 Accepted
 - Content Pack Trust Model: TUF — ADR-0023 Accepted
 - Production Shared Core: Go — ADR-0024 Accepted
+- Shared Core Local Interface: child-process stdio protocol — ADR-0025 Accepted
 - Python Role: semantic/conformance oracle during production Go port
 - Repository Visibility: Private during active development
 - Branch Protection: unavailable/not enabled on the current private-repository plan; procedural PR + CI + architecture-review gates remain mandatory.
@@ -31,8 +32,8 @@ Detailed current status is maintained in [`docs/current-status.md`](current-stat
 - Phase 5.5.1 — Pack Trust Contracts + ADR-0023: **COMPLETE / MERGED**
 - Phase 5.5.2 — Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 - Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**
-- Phase 5.5.4 — Production Go Shared Core: **NEXT**
-- Phase 5.6 — Windows Desktop MVP: **NOT STARTED**
+- Phase 5.5.4 — Production Go Shared Core: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**
+- Phase 5.6 — Windows Desktop MVP: **NOT STARTED / BLOCKED ON PRODUCTION SHARED CORE**
 - Phase 5.7 — Web / PWA: **NOT STARTED**
 - Phase 5.8 — API / CLI: **NOT STARTED**
 - Phase 5.9 — Grounded AI: **NOT STARTED**
@@ -54,13 +55,14 @@ The following remain authoritative:
 - Go as the production Shared Core implementation family;
 - the existing Atlas deterministic JSON serialization/digest profile; no implicit JCS migration;
 - Python as the semantic/conformance oracle during the Go production port;
+- ADR-0025 child-process stdio protocol as the local Desktop-facing Shared Core boundary;
 - offline-first operation, inspectable provenance and Last Known Good preservation;
 - shared contracts across Desktop, Web/PWA, API and CLI;
 - official CLI command: `atlas`.
 
 ## Phase 5.5.3 Closure
 
-Phase 5.5.3 merged via PR #23 at Merge Commit `bbb462b11de460216acb80116146f651ac2ef1ca` and is post-merge verified.
+Phase 5.5.3 merged via PR #23 at Merge Commit `bbb462b11de460216acb80116146f651ac2ef1ca` and is post-merge verified. PR #24 synchronized the resulting status boundary at `94f3136687f8e9765c0343b938a1049436878783`.
 
 The evidence-driven decision accepted ADR-0024 and selected Go because it was the only non-control finalist to pass every mandatory G-SC1..G-SC8 gate on both Linux and Windows. The accepted baseline includes:
 
@@ -77,7 +79,9 @@ Python control remains an eligible reference implementation and conformance orac
 
 ## Phase 5.5.4 Production Boundary
 
-Phase 5.5.4 is the next implementation slice. It will convert the accepted Go spike evidence into production Shared Core code while keeping all canonical/search/pack contracts authoritative.
+Phase 5.5.4 is implementation-authorized. It converts the accepted Go spike evidence into production Shared Core code while keeping all canonical/search/pack contracts authoritative.
+
+ADR-0025 freezes the local integration boundary as `atlas-core --serve-stdio` with 4-byte big-endian length-prefixed UTF-8 JSON frames, strict `atlas-core` protocol `1.0.0` handshake, bounded request/response sizes, strict parsing, one request at a time per child process, method allowlisting and no default local network listener.
 
 Required production closure includes:
 
@@ -87,7 +91,9 @@ Required production closure includes:
 - durable install/activation/highest-seen/trusted-time/LKG rollback behavior;
 - locked Go dependencies, clean builds, SBOM and vulnerability evidence;
 - Linux/Windows conformance against the Python oracle;
-- a stable versioned local interface boundary suitable for Windows Desktop and later adapters without freezing the Desktop UI framework.
+- stable versioned local protocol conformance without freezing the Desktop UI framework.
+
+Execution is structured as 5.5.4A protocol/core skeleton, 5.5.4B canonical/search/graph parity, 5.5.4C pack trust/durable state, and 5.5.4D supply-chain/cross-platform closure.
 
 ## Accepted ADRs
 
@@ -115,10 +121,10 @@ Required production closure includes:
 - ADR-0022 — Search Engine Selection
 - ADR-0023 — Secure Content Pack Trust and Update Model
 - ADR-0024 — Production Shared Core Technology Selection
+- ADR-0025 — Shared Core Local Interface Boundary
 
 ## Technology Decisions Still Open
 
-- stable Shared Core local interface/IPC transport for Desktop and later adapters — Phase 5.5.4;
 - Windows Desktop implementation stack;
 - broader local application storage beyond the accepted derived search artifact;
 - graph persistence/index implementation;
@@ -141,6 +147,6 @@ Required production closure includes:
 - Phase 5.5.1: **APPROVED AND COMPLETE**
 - Phase 5.5.2: **APPROVED, MERGED AND POST-MERGE VERIFIED**
 - Phase 5.5.3: **APPROVED, GO SELECTED, MERGED AND POST-MERGE VERIFIED**
-- Phase 5.5.4: **NEXT — PRODUCTION GO SHARED CORE**
+- Phase 5.5.4: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED — ADR-0025**
 
-No blocking architecture conflict is known at this boundary. Production Go code must conform to the accepted Atlas security/search/pack contracts; it may not redefine those contracts to simplify the port.
+No blocking architecture conflict is known at this boundary. Production Go code must conform to the accepted Atlas security/search/pack/protocol contracts; it may not redefine those contracts to simplify the port.
