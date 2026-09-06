@@ -8,9 +8,12 @@ from __future__ import annotations
 
 import argparse
 import base64
+import copy
 import hashlib
 import json
 import shutil
+import stat
+import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -57,6 +60,10 @@ def sha256_prefixed(data: bytes) -> str:
     return "sha256-" + hashlib.sha256(data).hexdigest()
 
 
+def digest_value(value: object) -> str:
+    return sha256_prefixed(compact_json_bytes(value))
+
+
 def copy_repo(source: Path, destination: Path) -> None:
     if destination.exists():
         shutil.rmtree(destination)
@@ -77,6 +84,156 @@ def mutate_targets_signature(path: Path) -> None:
 
 def targets_for(result: dict) -> list[str]:
     return [str(item["target_id"]) for item in result.get("matches", [])]
+
+
+def projection_doc(target_id: str, title: str, description: str) -> dict:
+    doc = {
+        "target_id": target_id,
+        "entity_type": "benchmark",
+        "title": title,
+        "lifecycle": "current",
+        "scope": {
+            "namespace": "atlas.benchmark",
+            "platform": "benchmark",
+            "product": "phase553",
+            "provider": "atlas",
+            "channel": "stress",
+        },
+        "lexical_fields": {"description": description},
+    }
+    doc["projection_digest"] = digest_value(doc)
+    return doc
+
+
+def build_stress_search_fixture(spc: dict, output: Path) -> dict:
+    """Build high-fanout and duplicate-numeric cutoff evidence on production schema."""
+    stress = copy.deepcopy(spc)
+    stress.pop("bundle_digest", None)
+    binding = dict(stress["build_binding"])
+    binding["canonical_corpus_id"] = "phase-5.5.3-synthetic-search-stress"
+    binding["canonical_corpus_digest"] = digest_value(
+        {"purpose": "high-fanout-and-numeric-cutoff", "version": "1.0.0"}
+    )
+    binding["projection_profile_version"] = "phase-5.5.3-stress-v1"
+    binding["projection_profile_digest"] = digest_value(
+        {"profile": "phase-5.5.3-stress-v1"}
+    )
+    stress["build_binding"] = binding
+
+    fanout_ids = [f"atlas:benchmark-fanout:{i:08d}" for i in range(80)]
+    numeric_ids = [f"atlas:benchmark-numeric:{i:08d}" for i in range(30)]
+    for target_id in fanout_ids:
+        stress["documents"].append(
+            projection_doc(target_id, "Benchmark Fanout", "benchmarkfanout")
+        )
+    for target_id in numeric_ids:
+        stress["documents"].append(
+            projection_doc(target_id, "Benchmark Numeric Tie", "numeric deterministic cutoff")
+        )
+        stress["identifiers"].append(
+            {
+                "target_id": target_id,
+                "identifier_type": "event_id",
+                "value": "1",
+                "namespace": "atlas.benchmark.numeric",
+                "case_sensitive": False,
+                "primary": True,
+                "numeric_semantics": True,
+                "derived_numeric_value": 1,
+            }
+        )
+
+    stress["documents"] = sorted(stress["documents"], key=lambda item: item["target_id"])
+    stress["identifiers"] = sorted(
+        stress["identifiers"],
+        key=lambda item: (
+            item["target_id"], item["identifier_type"], item["namespace"], item["value"]
+        ),
+    )
+    stress["bundle_digest"] = digest_value(stress)
+    path = output / "stress-search.sqlite3"
+    build_index(stress, path)
+    with SQLiteSearchCore.open(path, expected_bundle=stress) as core:
+        lexical = core.resolve("benchmarkfanout", limit=20)
+        numeric = core.numeric_browse(
+            namespace="atlas.benchmark.numeric", identifier_type="event_id", limit=10
+        )
+    expected_lexical = fanout_ids[:20]
+    expected_numeric = numeric_ids[:10]
+    if targets_for(lexical) != expected_lexical:
+        raise RuntimeError("Python production oracle failed high-fanout stress ordering")
+    if [row["target_id"] for row in numeric] != expected_numeric:
+        raise RuntimeError("Python production oracle failed duplicate numeric cutoff ordering")
+    return {
+        "index_sha256": sha256_prefixed(path.read_bytes()),
+        "bundle_digest": stress["bundle_digest"],
+        "lexical_query": "benchmarkfanout",
+        "lexical_expected_targets": expected_lexical,
+        "numeric_namespace": "atlas.benchmark.numeric",
+        "numeric_identifier_type": "event_id",
+        "numeric_limit": 10,
+        "numeric_expected_targets": expected_numeric,
+        "fanout_document_count": len(fanout_ids),
+        "numeric_duplicate_count": len(numeric_ids),
+    }
+
+
+def zip_tree(source: Path, destination: Path) -> None:
+    with zipfile.ZipFile(destination, "w", compression=zipfile.ZIP_STORED) as archive:
+        for path in sorted(p for p in source.rglob("*") if p.is_file()):
+            archive.write(path, path.relative_to(source).as_posix())
+
+
+def minimal_archive_entries() -> list[tuple[str, bytes]]:
+    return [
+        ("metadata/root.json", b"{}"),
+        ("metadata/timestamp.json", b"{}"),
+        ("metadata/snapshot.json", b"{}"),
+        ("metadata/targets.json", b"{}"),
+        ("targets/atlas/pack-manifest.json", b"{}"),
+    ]
+
+
+def write_case(path: Path, entries: list[tuple[str, bytes]], *, compression=zipfile.ZIP_STORED) -> None:
+    with zipfile.ZipFile(path, "w", compression=compression) as archive:
+        for name, data in entries:
+            archive.writestr(name, data)
+
+
+def build_archive_cases(valid_repo: Path, output: Path) -> dict:
+    cases = output / "archive-cases"
+    cases.mkdir()
+    zip_tree(valid_repo, cases / "valid.atlaspack")
+    base = minimal_archive_entries()
+    write_case(cases / "traversal.atlaspack", base + [("../targets/content/evil.json", b"x")])
+    write_case(cases / "non-nfc.atlaspack", base + [("targets/content/cafe\u0301.json", b"x")])
+    write_case(
+        cases / "case-collision.atlaspack",
+        base + [("targets/content/Records.json", b"a"), ("targets/content/records.json", b"b")],
+    )
+    write_case(cases / "active-code.atlaspack", base + [("targets/content/run.ps1", b"x")])
+    write_case(cases / "unsupported-compression.atlaspack", base, compression=zipfile.ZIP_BZIP2)
+
+    symlink_path = cases / "symlink.atlaspack"
+    with zipfile.ZipFile(symlink_path, "w", compression=zipfile.ZIP_STORED) as archive:
+        for name, data in base:
+            archive.writestr(name, data)
+        info = zipfile.ZipInfo("targets/content/link.json")
+        info.create_system = 3
+        info.external_attr = (stat.S_IFLNK | 0o777) << 16
+        archive.writestr(info, b"target")
+
+    return {
+        "valid": "archive-cases/valid.atlaspack",
+        "reject": {
+            "traversal": "archive-cases/traversal.atlaspack",
+            "non_nfc": "archive-cases/non-nfc.atlaspack",
+            "case_collision": "archive-cases/case-collision.atlaspack",
+            "active_code": "archive-cases/active-code.atlaspack",
+            "symlink": "archive-cases/symlink.atlaspack",
+            "unsupported_compression": "archive-cases/unsupported-compression.atlaspack",
+        },
+    }
 
 
 def main() -> int:
@@ -140,17 +297,15 @@ def main() -> int:
         production = {query: core.resolve(query) for query in REQUIRED_QUERIES}
         sqlite_manifest = core.manifest()
 
-    # Phase 5.4.1 freezes exact/scoped/alias identity semantics. Its lexical
-    # containment implementation is explicitly a reference path, not the production
-    # lexical engine. Phase 5.4.3 SQLite/FTS5 is therefore the authoritative oracle
-    # for lexical result sets/ranking in this cross-language spike. Exact stages must
-    # still match the Phase 5.4.1 resolver byte-for-byte at the target-set boundary.
     for query in REQUIRED_QUERIES:
         if production[query]["match_stage"] in EXACT_CONTRACT_STAGES:
             if targets_for(reference[query]) != targets_for(production[query]):
                 raise RuntimeError(
                     f"reference/production exact search mismatch for {query!r}"
                 )
+
+    stress = build_stress_search_fixture(spc, search_dir)
+    archive_cases = build_archive_cases(out / "valid", out)
 
     vector = {
         "a": "<>&",
@@ -183,6 +338,8 @@ def main() -> int:
         "spc_bundle_digest": spc["bundle_digest"],
         "search_index_sha256": sha256_prefixed(index_path.read_bytes()),
         "sqlite_manifest": sqlite_manifest,
+        "search_stress": stress,
+        "archive_cases": archive_cases,
         "serialization_vector": vector,
         "compact_json_base64": base64.b64encode(vector_compact).decode("ascii"),
         "compact_json_sha256": sha256_prefixed(vector_compact),
@@ -197,8 +354,6 @@ def main() -> int:
         encoding="utf-8",
     )
 
-    # The private signers live only in helper objects above. Remove generator working
-    # trees after all public metadata/targets have been copied.
     shutil.rmtree(generated)
     print(json.dumps({"workspace": str(out), "spc": spc["bundle_digest"]}, sort_keys=True))
     return 0
