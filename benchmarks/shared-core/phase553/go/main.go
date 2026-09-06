@@ -41,17 +41,18 @@ type QueryEvidence struct {
 }
 
 type CandidateEvidence struct {
-	EvidenceSchemaVersion string                   `json:"evidence_schema_version"`
-	Candidate             string                   `json:"candidate"`
-	Eligible              bool                     `json:"eligible"`
-	Gates                 map[string]bool          `json:"gates"`
-	Runtime               map[string]any           `json:"runtime"`
-	Dependencies          map[string]string        `json:"dependencies"`
-	Bindings              map[string]string        `json:"bindings"`
-	Search                map[string]any           `json:"search"`
-	Pack                  map[string]any           `json:"pack"`
-	State                 map[string]any           `json:"state"`
-	KnownLimitations      []string                 `json:"known_limitations"`
+	EvidenceSchemaVersion string            `json:"evidence_schema_version"`
+	Candidate             string            `json:"candidate"`
+	Eligible              bool              `json:"eligible"`
+	Gates                 map[string]bool   `json:"gates"`
+	Runtime               map[string]any    `json:"runtime"`
+	Dependencies          map[string]string `json:"dependencies"`
+	Bindings              map[string]string `json:"bindings"`
+	Canonical             map[string]any    `json:"canonical"`
+	Search                map[string]any    `json:"search"`
+	Pack                  map[string]any    `json:"pack"`
+	State                 map[string]any    `json:"state"`
+	KnownLimitations      []string          `json:"known_limitations"`
 }
 
 func sha256Prefixed(data []byte) string {
@@ -116,6 +117,11 @@ func main() {
 	serializationOK := base64.StdEncoding.EncodeToString(compact) == expected.CompactJSONBase64 && sha256Prefixed(compact) == expected.CompactJSONSHA256
 	unicodeCasefoldOK := fold("Straße") == "strasse" && fold("Σ") == fold("ς") && fold("K") == "k"
 
+	canonicalEvidence, canonicalOK, err := runCanonicalContractProbe(".")
+	if err != nil {
+		fatalf("canonical contract probe: %v", err)
+	}
+
 	searchEvidence, sqliteInfo, _, exactP95, lexicalP95, err := runSearchProbe(
 		filepath.Join(*workspace, "search", "atlas-search.sqlite3"), expected,
 	)
@@ -157,16 +163,21 @@ func main() {
 	if goSumBytes, readErr := os.ReadFile(filepath.Join("benchmarks", "shared-core", "phase553", "go", "go.sum")); readErr == nil {
 		goSumDigest = sha256Prefixed(goSumBytes)
 	}
+	selectedModules := selectedModuleVersions()
+	goTUFVersion := selectedModules["github.com/theupdateframework/go-tuf/v2"]
+	moderncVersion := selectedModules["modernc.org/sqlite"]
+	xTextVersion := selectedModules["golang.org/x/text"]
+	dependencySelectionOK := goTUFVersion == "v2.4.2" && moderncVersion == "v1.58.0" && xTextVersion != ""
 
 	gates := map[string]bool{
-		"G-SC1": searchOK && bindingOK && unicodeCasefoldOK,
+		"G-SC1": canonicalOK && searchOK && bindingOK && unicodeCasefoldOK,
 		"G-SC2": serializationOK,
 		"G-SC3": searchOK && unicodeCasefoldOK && exactP95 < 100.0 && lexicalP95 < 300.0,
 		"G-SC4": searchOK && ftsOK && bindingOK,
 		"G-SC5": packOK,
 		"G-SC6": stateOK,
 		"G-SC7": packOK && stateOK,
-		"G-SC8": true,
+		"G-SC8": dependencySelectionOK,
 	}
 	eligible := true
 	for _, value := range gates {
@@ -190,16 +201,18 @@ func main() {
 			"compiler":               runtime.Compiler,
 		},
 		Dependencies: map[string]string{
-			"go-tuf":          "v2.4.2",
-			"modernc-sqlite": "v1.58.0",
-			"x-text":          "v0.28.0",
-			"go-sum-sha256":   goSumDigest,
+			"go-tuf":                  goTUFVersion,
+			"modernc-sqlite":          moderncVersion,
+			"x-text":                  xTextVersion,
+			"go-sum-sha256":           goSumDigest,
+			"selected-modules-present": fmt.Sprintf("%t", dependencySelectionOK),
 		},
 		Bindings: map[string]string{
 			"spc_bundle_digest":    expected.SPCBundleDigest,
 			"search_index_sha256":  expected.SearchIndexSHA256,
 			"serialization_sha256": expected.CompactJSONSHA256,
 		},
+		Canonical: canonicalEvidence,
 		Search: map[string]any{
 			"queries":        searchEvidence,
 			"exact_p95_ms":   exactP95,
@@ -208,6 +221,7 @@ func main() {
 		Pack:  packEvidence,
 		State: stateEvidence,
 		KnownLimitations: []string{
+			"The seven-family Go probe validates the frozen common envelope plus representative Entity lifecycle/native-ID and Claim provenance invariants; authoritative JSON Schema validation remains owned by the canonical ingestion/pack validators and is not redefined by the spike.",
 			"The spike consumes the already-approved SQLite artifact and ports the frozen resolver contract; it does not freeze Desktop IPC or UI technology.",
 			"Go filesystem durability evidence uses fsync on written files plus atomic rename; directory-sync support is platform-dependent and is recorded by the state probe.",
 		},
@@ -219,15 +233,17 @@ func main() {
 	fmt.Printf("{\"candidate\":\"go\",\"eligible\":%t,\"timestamp\":%q}\n", eligible, time.Now().UTC().Format(time.RFC3339))
 	if !eligible {
 		diagnostic := map[string]any{
-			"binding_ok":         bindingOK,
-			"fts5_ok":            ftsOK,
-			"fts5_ddl_probe":     rawDDLProbe,
-			"gates":              gates,
-			"pack":               packEvidence,
-			"search":             evidence.Search,
-			"serialization_ok":   serializationOK,
-			"state":              stateEvidence,
-			"unicode_casefold_ok": unicodeCasefoldOK,
+			"binding_ok":            bindingOK,
+			"canonical_ok":          canonicalOK,
+			"dependency_selection":  selectedModules,
+			"fts5_ok":               ftsOK,
+			"fts5_ddl_probe":        rawDDLProbe,
+			"gates":                 gates,
+			"pack":                  packEvidence,
+			"search":                evidence.Search,
+			"serialization_ok":      serializationOK,
+			"state":                 stateEvidence,
+			"unicode_casefold_ok":   unicodeCasefoldOK,
 		}
 		data, marshalErr := json.Marshal(diagnostic)
 		if marshalErr == nil {
