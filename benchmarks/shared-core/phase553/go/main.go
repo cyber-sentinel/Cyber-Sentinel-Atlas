@@ -115,12 +115,26 @@ func main() {
 	}
 	serializationOK := base64.StdEncoding.EncodeToString(compact) == expected.CompactJSONBase64 && sha256Prefixed(compact) == expected.CompactJSONSHA256
 
-	searchEvidence, sqliteInfo, searchOK, exactP95, lexicalP95, err := runSearchProbe(
+	searchEvidence, sqliteInfo, _, exactP95, lexicalP95, err := runSearchProbe(
 		filepath.Join(*workspace, "search", "atlas-search.sqlite3"), expected,
 	)
 	if err != nil {
 		fatalf("search probe: %v", err)
 	}
+
+	// A successful lexical workload against documents_fts proves that the runtime
+	// actually provides FTS5. The older DDL probe runs after PRAGMA query_only=ON and
+	// therefore reports false even on a working FTS5 runtime because CREATE VIRTUAL
+	// TABLE is intentionally blocked. Keep that raw probe only as diagnostic evidence.
+	searchOK := true
+	ftsOK := false
+	for _, queryEvidence := range searchEvidence {
+		searchOK = searchOK && queryEvidence.Pass
+		if queryEvidence.Stage == "lexical" && queryEvidence.Pass {
+			ftsOK = true
+		}
+	}
+	rawDDLProbe, _ := sqliteInfo["fts5"].(bool)
 
 	packEvidence, packOK, err := runTUFProbe(*workspace, expected)
 	if err != nil {
@@ -137,7 +151,6 @@ func main() {
 		fatalf("read search index: %v", err)
 	}
 	bindingOK := sha256Prefixed(indexBytes) == expected.SearchIndexSHA256
-	ftsOK, _ := sqliteInfo["fts5"].(bool)
 	gates := map[string]bool{
 		"G-SC1": searchOK && bindingOK,
 		"G-SC2": serializationOK,
@@ -159,12 +172,14 @@ func main() {
 		Eligible:              eligible,
 		Gates:                 gates,
 		Runtime: map[string]any{
-			"go":       runtime.Version(),
-			"os":       runtime.GOOS,
-			"arch":     runtime.GOARCH,
-			"sqlite":   sqliteInfo["version"],
-			"fts5":     ftsOK,
-			"compiler": runtime.Compiler,
+			"go":                     runtime.Version(),
+			"os":                     runtime.GOOS,
+			"arch":                   runtime.GOARCH,
+			"sqlite":                 sqliteInfo["version"],
+			"fts5":                   ftsOK,
+			"fts5_readonly_workload": ftsOK,
+			"fts5_ddl_probe":         rawDDLProbe,
+			"compiler":               runtime.Compiler,
 		},
 		Dependencies: map[string]string{
 			"go-tuf":          "v2.4.2",
@@ -195,13 +210,14 @@ func main() {
 	fmt.Printf("{\"candidate\":\"go\",\"eligible\":%t,\"timestamp\":%q}\n", eligible, time.Now().UTC().Format(time.RFC3339))
 	if !eligible {
 		diagnostic := map[string]any{
-			"binding_ok":      bindingOK,
-			"fts5_ok":         ftsOK,
-			"gates":           gates,
-			"pack":            packEvidence,
-			"search":          evidence.Search,
+			"binding_ok":       bindingOK,
+			"fts5_ok":          ftsOK,
+			"fts5_ddl_probe":   rawDDLProbe,
+			"gates":            gates,
+			"pack":             packEvidence,
+			"search":           evidence.Search,
 			"serialization_ok": serializationOK,
-			"state":           stateEvidence,
+			"state":            stateEvidence,
 		}
 		data, marshalErr := json.Marshal(diagnostic)
 		if marshalErr == nil {
