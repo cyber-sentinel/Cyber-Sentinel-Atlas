@@ -86,14 +86,12 @@ jobs:
           --workspace "${{ env.PHASE553_WORKSPACE }}"
           --output "${{ env.PHASE553_EVIDENCE }}/python-${{ runner.os }}.json"
 
-      # Evidence-normalization pass: materialize the exact module graph selected by
-      # Go 1.25, publish go.mod/go.sum into the CI artifact, then commit that graph
-      # and return this step to a no-mutation build before architecture approval.
       - name: Resolve and build Go finalist
         working-directory: benchmarks/shared-core/phase553/go
         shell: bash
         run: |
           go mod tidy
+          git diff --exit-code -- go.mod go.sum
           go mod verify
           mkdir -p ../../../..//${PHASE553_EVIDENCE}
           cp go.mod ../../../..//${PHASE553_EVIDENCE}/go.mod
