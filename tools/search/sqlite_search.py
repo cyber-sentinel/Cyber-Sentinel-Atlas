@@ -431,7 +431,8 @@ def build_index(bundle: Mapping[str, Any], output_path: Path) -> dict[str, str]:
         conn.close()
         conn = None
 
-        with temp_path.open("rb") as handle:
+        # r+b is required for a valid fsync file descriptor on Windows runners.
+        with temp_path.open("r+b") as handle:
             os.fsync(handle.fileno())
         os.replace(temp_path, output_path)
         return metadata
