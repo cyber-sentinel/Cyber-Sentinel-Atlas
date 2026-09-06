@@ -36,7 +36,7 @@ PACK_READY
   -> LKG
 ```
 
-Phase 5.5.1 implements and tests the bolded contract boundaries up to Atlas validation. Full archive extraction, TUF repository generation/verification, durable runtime state and atomic installation belong to Phase 5.5.2.
+Phase 5.5.1 implements and tests the declarative contract boundaries through Atlas validation. Full archive extraction, TUF repository generation/verification, durable runtime state and atomic installation belong to Phase 5.5.2.
 
 ## Authority boundaries
 
@@ -44,13 +44,19 @@ Canonical Atlas records remain authoritative. SPC and SQLite search artifacts ar
 
 No new AtlasRecord family is introduced. `schemas/v1/` remains untouched.
 
+## Control-target binding
+
+`atlas/source-license-inventory.json` is a mandatory control target. Pack Manifest v1 records its SHA-256 digest, and Atlas contract validation compares that declaration with the **exact UTF-8 target bytes**. Parsing the same semantic JSON with different or tampered bytes does not satisfy this binding. Phase 5.5.2 additionally verifies the same target through TUF target metadata before contract validation.
+
 ## Publication gate
 
 A public/releasable pack fails closed when any included third-party source has licensing state other than `verified-redistributable`, or when required source/license evidence is missing. Reference-only sources can remain in provenance/reference metadata but cannot be represented as redistributed content.
 
+Source review timestamps use canonical UTC `YYYY-MM-DDTHH:MM:SSZ`. Upstream and license-evidence references accepted by this contract are absolute HTTPS URLs without embedded credentials or fragments.
+
 ## Security controls
 
-Contract validation rejects unsafe target paths, active-code extensions, duplicate artifact paths, manifest/inventory identity mismatch and publication-ineligible included sources.
+Contract validation rejects unsafe target paths, active-code extensions, duplicate/case-colliding artifact paths, Windows-reserved names, non-canonical timestamps, unsafe evidence URLs, manifest/inventory identity mismatch, exact-byte inventory digest mismatch and publication-ineligible included sources.
 
 Phase 5.5.2 must additionally enforce ZIP-entry type/size/count/ratio bounds, TUF threshold/freshness/rollback verification and immutable activation.
 
@@ -60,8 +66,8 @@ Phase 5.5.1 is complete only when:
 
 - ADR-0023 is accepted and present;
 - both v1 schemas validate themselves;
-- positive fixtures validate;
-- negative fixtures/tests cover path traversal, Windows-reserved names, executable payloads, duplicate target paths, identity mismatch and licensing fail-closed behavior;
+- positive fixtures validate, including exact-byte control-target binding;
+- negative fixtures/tests cover path traversal, Windows-reserved names, executable payloads, duplicate target paths, metadata-format violations, digest/identity mismatch and licensing fail-closed behavior;
 - Linux and Windows CI pass on the exact reviewed head;
 - no `schemas/v1/` file changes;
 - PR diff remains limited to Phase 5.5.1 contracts/tests/docs/CI.
