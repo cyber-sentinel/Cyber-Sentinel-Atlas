@@ -119,6 +119,12 @@ jobs:
             "benchmarks/shared-core/phase553/rust/target/release/atlas-phase553-rust" --workspace "${PHASE553_WORKSPACE}" --output "${PHASE553_EVIDENCE}/rust-${RUNNER_OS}.json"
           fi
 
+      - name: Capture footprint and lockfile evidence
+        run: >-
+          python benchmarks/shared-core/phase553/augment_footprint.py
+          --evidence "${{ env.PHASE553_EVIDENCE }}"
+          --runner-os "${{ runner.os }}"
+
       - name: Validate candidate hard gates and provisional ranking
         run: >-
           python benchmarks/shared-core/phase553/validate_evidence.py
