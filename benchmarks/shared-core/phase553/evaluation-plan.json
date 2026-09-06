@@ -1,0 +1,88 @@
+{
+  "plan_version": "1.0.0",
+  "phase": "5.5.3",
+  "title": "Production Shared Core Technology Spike",
+  "baseline_main": "d2c837b0740b52aeca9dd579c32911e01c8c6ecc",
+  "decision_adr": "ADR-0024",
+  "production_selection_frozen": false,
+  "screening_candidates": [
+    "rust",
+    "go",
+    "python-control",
+    "typescript-node",
+    "dotnet-csharp"
+  ],
+  "initial_executable_finalists": [
+    "rust",
+    "go",
+    "python-control"
+  ],
+  "hard_gates": [
+    "G-SC1-canonical-contract-fidelity",
+    "G-SC2-cross-language-byte-digest-interoperability",
+    "G-SC3-search-semantic-parity",
+    "G-SC4-sqlite-fts5-parity",
+    "G-SC5-tuf-pouf-v1-interoperability",
+    "G-SC6-durable-filesystem-rollback-semantics",
+    "G-SC7-offline-security-boundary",
+    "G-SC8-cross-platform-build-reproducibility"
+  ],
+  "score_weights": {
+    "contract_security_fidelity": 30,
+    "tuf_pack_trust_maturity_fit": 20,
+    "sqlite_fts5_performance_operational_fit": 15,
+    "windows_linux_durability_portability": 10,
+    "binary_runtime_dependency_footprint": 10,
+    "desktop_api_cli_integration_fit": 10,
+    "maintainability_ecosystem_supply_chain": 5
+  },
+  "required_operating_systems": [
+    "windows-latest",
+    "ubuntu-latest"
+  ],
+  "search_performance_gates_ms": {
+    "exact_p95_lt": 100,
+    "lexical_p95_lt": 300
+  },
+  "required_queries": [
+    "4688",
+    "Event ID 4688",
+    "windows 4688",
+    "sysmon 1",
+    "1",
+    "592",
+    "T1059",
+    "T1059.001",
+    "CreateAccessKey",
+    "EXECVE",
+    "exec_start",
+    "kubectl exec",
+    "FileAccessed"
+  ],
+  "required_state_scenarios": [
+    "activate-a-lkg-a",
+    "activate-b-lkg-b",
+    "replay-a-rejected",
+    "same-version-different-manifest-rejected",
+    "post-health-failure-restores-lkg-b",
+    "clock-rollback-rejected",
+    "durable-trust-state-loss-requires-administrative-recovery"
+  ],
+  "serialization_gate": {
+    "existing_atlas_profile_must_be_measured": true,
+    "standards_candidate": "RFC-8785-JCS",
+    "migration_allowed_in_spike": false,
+    "separate_accepted_decision_required_for_migration": true
+  },
+  "prohibited_implicit_decisions": [
+    "desktop-ui-framework",
+    "graph-database",
+    "broader-application-storage",
+    "hsm-kms-provider",
+    "application-binary-updater",
+    "remote-distribution-topology",
+    "detection-ir",
+    "semantic-vector-retrieval",
+    "grounded-ai-runtime"
+  ]
+}
