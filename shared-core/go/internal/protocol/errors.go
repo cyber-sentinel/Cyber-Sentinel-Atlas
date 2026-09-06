@@ -12,8 +12,9 @@ const (
 )
 
 type ErrorBody struct {
-	Code    string `json:"code"`
-	Message string `json:"message"`
+	Code      string `json:"code"`
+	Message   string `json:"message"`
+	Retryable bool   `json:"retryable"`
 }
 
 type Response struct {
@@ -28,5 +29,5 @@ func success(id string, result any) Response {
 }
 
 func failure(id, code, message string) Response {
-	return Response{ID: id, OK: false, Error: &ErrorBody{Code: code, Message: message}}
+	return Response{ID: id, OK: false, Error: &ErrorBody{Code: code, Message: message, Retryable: false}}
 }
