@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Atlas Phase 5.4.3 production deterministic search core on SQLite + FTS5.
 
-The SQLite database built here is disposable derived state. Canonical records and the
-Search Projection Corpus remain authoritative. The runtime opens only a verified,
-version-bound index and fails closed on corruption or binding mismatch.
+The SQLite database is disposable derived state. Canonical records and the Search
+Projection Corpus (SPC) remain authoritative. Runtime activation always requires the
+expected SPC and fails closed on schema, binding, logical-content, or SQLite integrity
+mismatch.
 """
 from __future__ import annotations
 
@@ -41,7 +42,9 @@ class SearchIndexValidationError(SearchIndexError):
 
 
 def _canonical_json(value: Any) -> bytes:
-    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return json.dumps(
+        value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
 
 
 def _digest(value: Any) -> str:
@@ -72,7 +75,7 @@ def _fts_tokens(text: str) -> list[str]:
 
 
 def _fts_expression(tokens: Sequence[str]) -> str:
-    # Caller text never reaches MATCH directly. Only bounded tokenizer output is quoted.
+    # Caller text never reaches MATCH. Only bounded tokenizer output is quoted.
     return " OR ".join('"' + token.replace('"', '""') + '"' for token in tokens)
 
 
@@ -130,9 +133,15 @@ def validate_projection_bundle(bundle: Mapping[str, Any]) -> None:
         claimed_doc = doc.get("projection_digest")
         unsigned_doc = {key: value for key, value in doc.items() if key != "projection_digest"}
         if not isinstance(claimed_doc, str) or _digest(unsigned_doc) != claimed_doc:
-            raise SearchIndexValidationError(f"SearchDocument digest mismatch: {doc.get('target_id')}")
+            raise SearchIndexValidationError(
+                f"SearchDocument digest mismatch: {doc.get('target_id')}"
+            )
 
-    for collection_name, collection in (("identifier", identifiers), ("alias", aliases), ("filter", filters)):
+    for collection_name, collection in (
+        ("identifier", identifiers),
+        ("alias", aliases),
+        ("filter", filters),
+    ):
         for row in collection:
             if row.get("target_id") not in target_set:
                 raise SearchIndexValidationError(
@@ -140,9 +149,9 @@ def validate_projection_bundle(bundle: Mapping[str, Any]) -> None:
                 )
 
 
-def _metadata_for_bundle(bundle: Mapping[str, Any]) -> dict[str, str]:
+def _base_metadata_for_bundle(bundle: Mapping[str, Any]) -> dict[str, str]:
     binding = bundle["build_binding"]
-    metadata = {
+    return {
         "index_schema_version": INDEX_SCHEMA_VERSION,
         "index_adapter_id": INDEX_ADAPTER_ID,
         "index_adapter_version": INDEX_ADAPTER_VERSION,
@@ -161,8 +170,6 @@ def _metadata_for_bundle(bundle: Mapping[str, Any]) -> dict[str, str]:
         "alias_count": str(len(bundle["aliases"])),
         "filter_projection_count": str(len(bundle["filters"])),
     }
-    metadata["manifest_digest"] = _digest(metadata)
-    return metadata
 
 
 def _probe_fts5(conn: sqlite3.Connection) -> None:
@@ -173,13 +180,228 @@ def _probe_fts5(conn: sqlite3.Connection) -> None:
         raise SearchIndexValidationError("SQLite runtime does not provide FTS5") from exc
 
 
+def _rows(conn: sqlite3.Connection, sql: str) -> list[list[Any]]:
+    return [list(row) for row in conn.execute(sql).fetchall()]
+
+
+def _logical_content_digest(conn: sqlite3.Connection) -> str:
+    """Digest all logical rows used by exact, facet, numeric and lexical retrieval."""
+    payload = {
+        "documents": _rows(
+            conn,
+            """SELECT target_id,entity_type,title,title_norm,namespace,platform,product,
+                      provider,channel,lifecycle,description
+               FROM documents ORDER BY target_id""",
+        ),
+        "identifiers": _rows(
+            conn,
+            """SELECT target_id,identifier_type,value,match_value,namespace,
+                      case_sensitive,primary_flag,numeric_semantics,derived_numeric_value
+               FROM identifiers
+               ORDER BY target_id,identifier_type,namespace,value""",
+        ),
+        "aliases": _rows(
+            conn,
+            """SELECT target_id,value,match_value,kind,case_sensitive,scope_json
+               FROM aliases ORDER BY target_id,value,kind""",
+        ),
+        "facets": _rows(
+            conn,
+            """SELECT target_id,facet_key,facet_value,facet_value_norm
+               FROM facets ORDER BY target_id,facet_key,facet_value""",
+        ),
+        "fts": _rows(
+            conn,
+            """SELECT target_id,title,aliases,native_identifiers,description
+               FROM documents_fts ORDER BY target_id""",
+        ),
+    }
+    return _digest(payload)
+
+
+def _create_schema(conn: sqlite3.Connection) -> None:
+    conn.executescript(
+        """
+        CREATE TABLE metadata(
+            key TEXT PRIMARY KEY,
+            value TEXT NOT NULL
+        ) WITHOUT ROWID;
+
+        CREATE TABLE documents(
+            target_id TEXT PRIMARY KEY,
+            entity_type TEXT NOT NULL,
+            title TEXT NOT NULL,
+            title_norm TEXT NOT NULL,
+            namespace TEXT,
+            platform TEXT,
+            product TEXT,
+            provider TEXT,
+            channel TEXT,
+            lifecycle TEXT,
+            description TEXT NOT NULL
+        ) WITHOUT ROWID;
+
+        CREATE TABLE identifiers(
+            target_id TEXT NOT NULL REFERENCES documents(target_id),
+            identifier_type TEXT NOT NULL,
+            value TEXT NOT NULL,
+            match_value TEXT NOT NULL,
+            namespace TEXT NOT NULL,
+            case_sensitive INTEGER NOT NULL CHECK(case_sensitive IN (0,1)),
+            primary_flag INTEGER NOT NULL CHECK(primary_flag IN (0,1)),
+            numeric_semantics INTEGER NOT NULL CHECK(numeric_semantics IN (0,1)),
+            derived_numeric_value INTEGER,
+            PRIMARY KEY(target_id, identifier_type, value, namespace)
+        ) WITHOUT ROWID;
+
+        CREATE TABLE aliases(
+            target_id TEXT NOT NULL REFERENCES documents(target_id),
+            value TEXT NOT NULL,
+            match_value TEXT NOT NULL,
+            kind TEXT NOT NULL,
+            case_sensitive INTEGER NOT NULL CHECK(case_sensitive IN (0,1)),
+            scope_json TEXT NOT NULL,
+            PRIMARY KEY(target_id, value, kind)
+        ) WITHOUT ROWID;
+
+        CREATE TABLE facets(
+            target_id TEXT NOT NULL REFERENCES documents(target_id),
+            facet_key TEXT NOT NULL,
+            facet_value TEXT NOT NULL,
+            facet_value_norm TEXT NOT NULL,
+            PRIMARY KEY(target_id, facet_key, facet_value)
+        ) WITHOUT ROWID;
+
+        CREATE INDEX idx_ident_match
+            ON identifiers(match_value,case_sensitive,identifier_type,namespace,target_id);
+        CREATE INDEX idx_ident_numeric
+            ON identifiers(namespace,identifier_type,derived_numeric_value,target_id)
+            WHERE numeric_semantics=1 AND derived_numeric_value IS NOT NULL;
+        CREATE INDEX idx_alias_match ON aliases(match_value,case_sensitive,target_id);
+        CREATE INDEX idx_facet_lookup ON facets(facet_key,facet_value_norm,target_id);
+        CREATE INDEX idx_document_scope
+            ON documents(platform,product,provider,channel,lifecycle,entity_type,namespace,target_id);
+
+        CREATE VIRTUAL TABLE documents_fts USING fts5(
+            target_id UNINDEXED,
+            title,
+            aliases,
+            native_identifiers,
+            description,
+            tokenize='unicode61 remove_diacritics 2'
+        );
+        """
+    )
+
+
+def _populate(conn: sqlite3.Connection, bundle: Mapping[str, Any]) -> None:
+    docs_by_id = {doc["target_id"]: doc for doc in bundle["documents"]}
+    aliases_by_id: dict[str, list[str]] = {target_id: [] for target_id in docs_by_id}
+    native_by_id: dict[str, list[str]] = {target_id: [] for target_id in docs_by_id}
+    for row in bundle["aliases"]:
+        aliases_by_id[row["target_id"]].append(row["value"])
+    for row in bundle["identifiers"]:
+        native_by_id[row["target_id"]].append(row["value"])
+
+    for target_id in sorted(docs_by_id):
+        doc = docs_by_id[target_id]
+        scope = doc.get("scope") or {}
+        lexical = doc.get("lexical_fields") or {}
+        title = str(doc["title"])
+        description = str(lexical.get("description") or "")
+        conn.execute(
+            "INSERT INTO documents VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+            (
+                target_id,
+                str(doc["entity_type"]),
+                title,
+                _fold(title),
+                scope.get("namespace"),
+                scope.get("platform"),
+                scope.get("product"),
+                scope.get("provider"),
+                scope.get("channel"),
+                doc.get("lifecycle"),
+                description,
+            ),
+        )
+        conn.execute(
+            "INSERT INTO documents_fts VALUES(?,?,?,?,?)",
+            (
+                target_id,
+                title,
+                "\n".join(sorted(set(aliases_by_id[target_id]))),
+                "\n".join(sorted(set(native_by_id[target_id]))),
+                description,
+            ),
+        )
+
+    for row in sorted(
+        bundle["identifiers"],
+        key=lambda item: (
+            item["target_id"], item["identifier_type"], item["namespace"], item["value"]
+        ),
+    ):
+        value = str(row["value"])
+        case_sensitive = bool(row["case_sensitive"])
+        conn.execute(
+            "INSERT INTO identifiers VALUES(?,?,?,?,?,?,?,?,?)",
+            (
+                row["target_id"],
+                row["identifier_type"],
+                value,
+                _nfkc(value) if case_sensitive else _fold(value),
+                row["namespace"],
+                int(case_sensitive),
+                int(bool(row.get("primary"))),
+                int(bool(row.get("numeric_semantics"))),
+                row.get("derived_numeric_value"),
+            ),
+        )
+
+    for row in sorted(
+        bundle["aliases"],
+        key=lambda item: (item["target_id"], _fold(item["value"]), item["kind"]),
+    ):
+        value = str(row["value"])
+        case_sensitive = bool(row["case_sensitive"])
+        conn.execute(
+            "INSERT INTO aliases VALUES(?,?,?,?,?,?)",
+            (
+                row["target_id"],
+                value,
+                _nfkc(value) if case_sensitive else _fold(value),
+                str(row.get("kind") or "alias"),
+                int(case_sensitive),
+                json.dumps(
+                    row.get("scope") or {},
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ),
+            ),
+        )
+
+    facet_rows: list[tuple[str, str, str, str]] = []
+    for projection in bundle["filters"]:
+        target_id = projection["target_id"]
+        for key, value in sorted((projection.get("facets") or {}).items()):
+            if value is None:
+                continue
+            text = str(value)
+            facet_rows.append((target_id, str(key), text, _fold(text)))
+    conn.executemany(
+        "INSERT INTO facets(target_id,facet_key,facet_value,facet_value_norm) VALUES(?,?,?,?)",
+        sorted(facet_rows),
+    )
+
+
 def build_index(bundle: Mapping[str, Any], output_path: Path) -> dict[str, str]:
-    """Build and atomically publish a deterministic derived search database."""
+    """Build, integrity-bind, and atomically publish a derived SQLite search index."""
     validate_projection_bundle(bundle)
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = output_path.with_name(f".{output_path.name}.{uuid.uuid4().hex}.tmp")
-    metadata = _metadata_for_bundle(bundle)
 
     conn: sqlite3.Connection | None = None
     try:
@@ -189,179 +411,23 @@ def build_index(bundle: Mapping[str, Any], output_path: Path) -> dict[str, str]:
         conn.execute("PRAGMA foreign_keys=ON")
         conn.execute("PRAGMA page_size=4096")
         _probe_fts5(conn)
-        conn.executescript(
-            """
-            CREATE TABLE metadata(
-                key TEXT PRIMARY KEY,
-                value TEXT NOT NULL
-            ) WITHOUT ROWID;
+        _create_schema(conn)
+        _populate(conn, bundle)
 
-            CREATE TABLE documents(
-                target_id TEXT PRIMARY KEY,
-                entity_type TEXT NOT NULL,
-                title TEXT NOT NULL,
-                title_norm TEXT NOT NULL,
-                namespace TEXT,
-                platform TEXT,
-                product TEXT,
-                provider TEXT,
-                channel TEXT,
-                lifecycle TEXT,
-                description TEXT NOT NULL
-            ) WITHOUT ROWID;
-
-            CREATE TABLE identifiers(
-                target_id TEXT NOT NULL REFERENCES documents(target_id),
-                identifier_type TEXT NOT NULL,
-                value TEXT NOT NULL,
-                match_value TEXT NOT NULL,
-                namespace TEXT NOT NULL,
-                case_sensitive INTEGER NOT NULL CHECK(case_sensitive IN (0,1)),
-                primary_flag INTEGER NOT NULL CHECK(primary_flag IN (0,1)),
-                numeric_semantics INTEGER NOT NULL CHECK(numeric_semantics IN (0,1)),
-                derived_numeric_value INTEGER,
-                PRIMARY KEY(target_id, identifier_type, value, namespace)
-            ) WITHOUT ROWID;
-
-            CREATE TABLE aliases(
-                target_id TEXT NOT NULL REFERENCES documents(target_id),
-                value TEXT NOT NULL,
-                match_value TEXT NOT NULL,
-                kind TEXT NOT NULL,
-                case_sensitive INTEGER NOT NULL CHECK(case_sensitive IN (0,1)),
-                scope_json TEXT NOT NULL,
-                PRIMARY KEY(target_id, value, kind)
-            ) WITHOUT ROWID;
-
-            CREATE TABLE facets(
-                target_id TEXT NOT NULL REFERENCES documents(target_id),
-                facet_key TEXT NOT NULL,
-                facet_value TEXT NOT NULL,
-                facet_value_norm TEXT NOT NULL,
-                PRIMARY KEY(target_id, facet_key, facet_value)
-            ) WITHOUT ROWID;
-
-            CREATE INDEX idx_ident_match
-                ON identifiers(match_value, case_sensitive, identifier_type, namespace, target_id);
-            CREATE INDEX idx_ident_numeric
-                ON identifiers(namespace, identifier_type, derived_numeric_value, target_id)
-                WHERE numeric_semantics=1 AND derived_numeric_value IS NOT NULL;
-            CREATE INDEX idx_alias_match ON aliases(match_value, case_sensitive, target_id);
-            CREATE INDEX idx_facet_lookup ON facets(facet_key, facet_value_norm, target_id);
-            CREATE INDEX idx_document_scope
-                ON documents(platform, product, provider, channel, lifecycle, entity_type, namespace, target_id);
-
-            CREATE VIRTUAL TABLE documents_fts USING fts5(
-                target_id UNINDEXED,
-                title,
-                aliases,
-                native_identifiers,
-                description,
-                tokenize='unicode61 remove_diacritics 2'
-            );
-            """
-        )
-
+        metadata = _base_metadata_for_bundle(bundle)
+        metadata["logical_content_digest"] = _logical_content_digest(conn)
+        metadata["manifest_digest"] = _digest(metadata)
         conn.executemany(
             "INSERT INTO metadata(key,value) VALUES(?,?)",
             sorted(metadata.items()),
         )
-
-        docs_by_id = {doc["target_id"]: doc for doc in bundle["documents"]}
-        aliases_by_id: dict[str, list[str]] = {target_id: [] for target_id in docs_by_id}
-        native_by_id: dict[str, list[str]] = {target_id: [] for target_id in docs_by_id}
-        for row in bundle["aliases"]:
-            aliases_by_id[row["target_id"]].append(row["value"])
-        for row in bundle["identifiers"]:
-            native_by_id[row["target_id"]].append(row["value"])
-
-        for target_id in sorted(docs_by_id):
-            doc = docs_by_id[target_id]
-            scope = doc.get("scope") or {}
-            lexical = doc.get("lexical_fields") or {}
-            title = str(doc["title"])
-            description = str(lexical.get("description") or "")
-            conn.execute(
-                "INSERT INTO documents VALUES(?,?,?,?,?,?,?,?,?,?,?)",
-                (
-                    target_id,
-                    str(doc["entity_type"]),
-                    title,
-                    _fold(title),
-                    scope.get("namespace"),
-                    scope.get("platform"),
-                    scope.get("product"),
-                    scope.get("provider"),
-                    scope.get("channel"),
-                    doc.get("lifecycle"),
-                    description,
-                ),
-            )
-            conn.execute(
-                "INSERT INTO documents_fts VALUES(?,?,?,?,?)",
-                (
-                    target_id,
-                    title,
-                    "\n".join(sorted(set(aliases_by_id[target_id]))),
-                    "\n".join(sorted(set(native_by_id[target_id]))),
-                    description,
-                ),
-            )
-
-        for row in sorted(
-            bundle["identifiers"],
-            key=lambda item: (item["target_id"], item["identifier_type"], item["namespace"], item["value"]),
-        ):
-            value = str(row["value"])
-            case_sensitive = bool(row["case_sensitive"])
-            conn.execute(
-                "INSERT INTO identifiers VALUES(?,?,?,?,?,?,?,?,?)",
-                (
-                    row["target_id"],
-                    row["identifier_type"],
-                    value,
-                    _nfkc(value) if case_sensitive else _fold(value),
-                    row["namespace"],
-                    int(case_sensitive),
-                    int(bool(row.get("primary"))),
-                    int(bool(row.get("numeric_semantics"))),
-                    row.get("derived_numeric_value"),
-                ),
-            )
-
-        for row in sorted(bundle["aliases"], key=lambda item: (item["target_id"], _fold(item["value"]), item["kind"])):
-            value = str(row["value"])
-            case_sensitive = bool(row["case_sensitive"])
-            conn.execute(
-                "INSERT INTO aliases VALUES(?,?,?,?,?,?)",
-                (
-                    row["target_id"],
-                    value,
-                    _nfkc(value) if case_sensitive else _fold(value),
-                    str(row.get("kind") or "alias"),
-                    int(case_sensitive),
-                    json.dumps(row.get("scope") or {}, ensure_ascii=False, sort_keys=True, separators=(",", ":")),
-                ),
-            )
-
-        facet_rows: list[tuple[str, str, str, str]] = []
-        for projection in bundle["filters"]:
-            target_id = projection["target_id"]
-            facets = projection.get("facets") or {}
-            for key, value in sorted(facets.items()):
-                if value is None:
-                    continue
-                text = str(value)
-                facet_rows.append((target_id, str(key), text, _fold(text)))
-        conn.executemany(
-            "INSERT INTO facets(target_id,facet_key,facet_value,facet_value_norm) VALUES(?,?,?,?)",
-            sorted(facet_rows),
-        )
-
         conn.commit()
+
         quick = conn.execute("PRAGMA quick_check").fetchone()
         if not quick or quick[0] != "ok":
             raise SearchIndexValidationError(f"new SQLite index failed quick_check: {quick!r}")
+        if _logical_content_digest(conn) != metadata["logical_content_digest"]:
+            raise SearchIndexValidationError("new SQLite index logical-content digest mismatch")
         conn.close()
         conn = None
 
@@ -369,6 +435,8 @@ def build_index(bundle: Mapping[str, Any], output_path: Path) -> dict[str, str]:
             os.fsync(handle.fileno())
         os.replace(temp_path, output_path)
         return metadata
+    except SearchIndexValidationError:
+        raise
     except (sqlite3.DatabaseError, OSError) as exc:
         raise SearchIndexError(f"failed to build SQLite search index: {exc}") from exc
     finally:
@@ -388,7 +456,8 @@ def _metadata_dict(conn: sqlite3.Connection) -> dict[str, str]:
     return {str(row[0]): str(row[1]) for row in rows}
 
 
-def _verify_metadata(metadata: Mapping[str, str], expected_bundle: Mapping[str, Any] | None) -> None:
+def _verify_metadata(metadata: Mapping[str, str], expected_bundle: Mapping[str, Any]) -> None:
+    validate_projection_bundle(expected_bundle)
     required = {
         "index_schema_version": INDEX_SCHEMA_VERSION,
         "index_adapter_id": INDEX_ADAPTER_ID,
@@ -400,34 +469,47 @@ def _verify_metadata(metadata: Mapping[str, str], expected_bundle: Mapping[str, 
             raise SearchIndexValidationError(
                 f"search index metadata mismatch for {key}: {metadata.get(key)!r} != {expected!r}"
             )
+
+    logical_digest = metadata.get("logical_content_digest")
+    if not logical_digest:
+        raise SearchIndexValidationError("search index lacks logical_content_digest")
     manifest_digest = metadata.get("manifest_digest")
     unsigned = {key: value for key, value in metadata.items() if key != "manifest_digest"}
     if not manifest_digest or _digest(unsigned) != manifest_digest:
         raise SearchIndexValidationError("search index manifest digest mismatch")
 
-    if expected_bundle is not None:
-        validate_projection_bundle(expected_bundle)
-        expected_meta = _metadata_for_bundle(expected_bundle)
-        binding_keys = {
-            "bundle_digest",
-            "canonical_corpus_id",
-            "canonical_corpus_digest",
-            "canonical_schema_version",
-            "registry_bundle_version",
-            "registry_bundle_digest",
-            "projection_profile_version",
-            "projection_profile_digest",
-            "document_count",
-            "identifier_count",
-            "alias_count",
-            "filter_projection_count",
-        }
-        for key in sorted(binding_keys):
-            if metadata.get(key) != expected_meta.get(key):
-                raise SearchIndexValidationError(f"search index is stale or misbound: {key}")
+    expected_meta = _base_metadata_for_bundle(expected_bundle)
+    binding_keys = {
+        "bundle_digest",
+        "canonical_corpus_id",
+        "canonical_corpus_digest",
+        "canonical_schema_version",
+        "registry_bundle_version",
+        "registry_bundle_digest",
+        "projection_profile_version",
+        "projection_profile_digest",
+        "document_count",
+        "identifier_count",
+        "alias_count",
+        "filter_projection_count",
+    }
+    for key in sorted(binding_keys):
+        if metadata.get(key) != expected_meta.get(key):
+            raise SearchIndexValidationError(f"search index is stale or misbound: {key}")
 
 
-def _scope_clause(scope_hints: Mapping[str, str], document_alias: str = "d") -> tuple[str, list[str]]:
+def _verify_logical_content(conn: sqlite3.Connection, metadata: Mapping[str, str]) -> None:
+    try:
+        actual = _logical_content_digest(conn)
+    except sqlite3.DatabaseError as exc:
+        raise SearchIndexValidationError("search index logical content is unreadable") from exc
+    if actual != metadata.get("logical_content_digest"):
+        raise SearchIndexValidationError("search index logical-content digest mismatch")
+
+
+def _scope_clause(
+    scope_hints: Mapping[str, str], document_alias: str = "d"
+) -> tuple[str, list[str]]:
     clauses: list[str] = []
     params: list[str] = []
     for key, value in sorted(scope_hints.items()):
@@ -452,8 +534,11 @@ class SQLiteSearchCore:
         cls,
         path: Path,
         *,
-        expected_bundle: Mapping[str, Any] | None = None,
+        expected_bundle: Mapping[str, Any],
     ) -> "SQLiteSearchCore":
+        """Open only when the caller supplies the expected authoritative SPC binding."""
+        if expected_bundle is None:
+            raise SearchIndexValidationError("expected SPC binding is required")
         path = Path(path)
         if not path.is_file():
             raise SearchIndexValidationError(f"search index does not exist: {path}")
@@ -468,14 +553,28 @@ class SQLiteSearchCore:
                 raise SearchIndexValidationError(f"SQLite quick_check failed: {quick!r}")
             metadata = _metadata_dict(conn)
             _verify_metadata(metadata, expected_bundle)
-            required_tables = {"documents", "documents_fts", "identifiers", "aliases", "facets", "metadata"}
+            required_tables = {
+                "documents",
+                "documents_fts",
+                "identifiers",
+                "aliases",
+                "facets",
+                "metadata",
+            }
             actual_tables = {
                 str(row[0])
-                for row in conn.execute("SELECT name FROM sqlite_master WHERE type IN ('table','view')").fetchall()
+                for row in conn.execute(
+                    "SELECT name FROM sqlite_master WHERE type IN ('table','view')"
+                ).fetchall()
             }
             if not required_tables.issubset(actual_tables):
                 raise SearchIndexValidationError("search index schema is incomplete")
+            _verify_logical_content(conn, metadata)
             return cls(path, conn, metadata)
+        except SearchIndexValidationError:
+            if conn is not None:
+                conn.close()
+            raise
         except sqlite3.DatabaseError as exc:
             if conn is not None:
                 conn.close()
@@ -497,7 +596,9 @@ class SQLiteSearchCore:
     def manifest(self) -> dict[str, str]:
         return dict(self.metadata)
 
-    def _row_match(self, row: sqlite3.Row, matched_value: str, reason: str) -> dict[str, Any]:
+    def _row_match(
+        self, row: sqlite3.Row, matched_value: str, reason: str
+    ) -> dict[str, Any]:
         return {
             "target_id": row["target_id"],
             "title": row["title"],
@@ -515,10 +616,7 @@ class SQLiteSearchCore:
         }
 
     def _envelope(
-        self,
-        query: str,
-        stage: str,
-        matches: Iterable[dict[str, Any]],
+        self, query: str, stage: str, matches: Iterable[dict[str, Any]]
     ) -> dict[str, Any]:
         rows = list(matches)
         status = "no_match" if not rows else "direct" if len(rows) == 1 else "disambiguation"
@@ -564,9 +662,18 @@ class SQLiteSearchCore:
                 str(row["target_id"]),
             ),
         )
-        return [self._row_match(row, matched_by_target[row["target_id"]], reason) for row in rows]
+        return [
+            self._row_match(row, matched_by_target[row["target_id"]], reason)
+            for row in rows
+        ]
 
-    def resolve(self, query: str, *, graph_depth: int = 1, limit: int = DEFAULT_TOP_K) -> dict[str, Any]:
+    def resolve(
+        self,
+        query: str,
+        *,
+        graph_depth: int = 1,
+        limit: int = DEFAULT_TOP_K,
+    ) -> dict[str, Any]:
         limit = _validate_limit(limit)
         request = contract.parse_query(query, graph_depth=graph_depth)
         normalized = request["normalized_query"]
@@ -574,8 +681,7 @@ class SQLiteSearchCore:
             return self._envelope(query, "none", [])
 
         canonical = self.conn.execute(
-            "SELECT target_id FROM documents WHERE target_id=?",
-            (normalized,),
+            "SELECT target_id FROM documents WHERE target_id=?", (normalized,)
         ).fetchall()
         if canonical:
             pairs = [(str(row[0]), normalized) for row in canonical]
@@ -609,7 +715,9 @@ class SQLiteSearchCore:
                 return self._envelope(
                     query,
                     stage,
-                    self._select_documents_for_targets(pairs, "registry-aware exact native identifier"),
+                    self._select_documents_for_targets(
+                        pairs, "registry-aware exact native identifier"
+                    ),
                 )
 
         alias_scope_sql, alias_scope_params = _scope_clause(request["scope_hints"])
@@ -645,7 +753,7 @@ class SQLiteSearchCore:
             JOIN documents d ON d.target_id=documents_fts.target_id
             WHERE documents_fts MATCH ?
         """
-        params = [expression]
+        params: list[Any] = [expression]
         if scope_sql:
             sql += " AND " + scope_sql
             params.extend(scope_params)
@@ -704,17 +812,27 @@ def _bundle_from_fixture(path: Path) -> dict[str, Any]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Atlas Phase 5.4.3 SQLite + FTS5 production search core")
+    parser = argparse.ArgumentParser(
+        description="Atlas Phase 5.4.3 SQLite + FTS5 production search core"
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     build = sub.add_parser("build", help="build an atomic derived SQLite search index")
-    build.add_argument("--fixture", type=Path, default=Path("fixtures/phase-5.4.1/acceptance-corpus.json"))
+    build.add_argument(
+        "--fixture",
+        type=Path,
+        default=Path("fixtures/phase-5.4.1/acceptance-corpus.json"),
+    )
     build.add_argument("--output", type=Path, required=True)
 
     query = sub.add_parser("query", help="query a verified SQLite search index")
     query.add_argument("query")
     query.add_argument("--index", type=Path, required=True)
-    query.add_argument("--fixture", type=Path, default=Path("fixtures/phase-5.4.1/acceptance-corpus.json"))
+    query.add_argument(
+        "--fixture",
+        type=Path,
+        default=Path("fixtures/phase-5.4.1/acceptance-corpus.json"),
+    )
     query.add_argument("--limit", type=int, default=DEFAULT_TOP_K)
 
     args = parser.parse_args()
