@@ -13,7 +13,9 @@ import (
 	"time"
 )
 
-var semverRE = regexp.MustCompile(`^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$`)
+// Match the frozen Atlas strict SemVer profile in tools/pack/versioning.py:
+// MAJOR.MINOR.PATCH with an optional prerelease and no build metadata.
+var semverRE = regexp.MustCompile(`^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$`)
 
 type highestSeen struct {
 	Version        string `json:"version"`
@@ -21,28 +23,106 @@ type highestSeen struct {
 }
 
 type runtimeState struct {
-	StateVersion    int                    `json:"state_version"`
-	ActiveGeneration string                `json:"active_generation,omitempty"`
-	LKGGeneration    string                `json:"lkg_generation,omitempty"`
+	StateVersion     int                    `json:"state_version"`
+	ActiveGeneration string                 `json:"active_generation,omitempty"`
+	LKGGeneration    string                 `json:"lkg_generation,omitempty"`
 	HighestSeenPacks map[string]highestSeen `json:"highest_seen_packs"`
-	HighestUTC        string                `json:"highest_observed_utc"`
+	HighestUTC       string                 `json:"highest_observed_utc"`
+}
+
+type parsedSemver struct {
+	core       [3]int
+	prerelease []string
+}
+
+func parseSemver(value string) (parsedSemver, error) {
+	match := semverRE.FindStringSubmatch(value)
+	if match == nil {
+		return parsedSemver{}, fmt.Errorf("invalid strict SemVer: %q", value)
+	}
+	var parsed parsedSemver
+	for i := 0; i < 3; i++ {
+		n, err := strconv.Atoi(match[i+1])
+		if err != nil {
+			return parsedSemver{}, fmt.Errorf("invalid strict SemVer: %q", value)
+		}
+		parsed.core[i] = n
+	}
+	if match[4] != "" {
+		parsed.prerelease = strings.Split(match[4], ".")
+		for _, token := range parsed.prerelease {
+			if token == "" {
+				return parsedSemver{}, fmt.Errorf("invalid strict SemVer prerelease: %q", value)
+			}
+			if _, err := strconv.Atoi(token); err == nil && len(token) > 1 && token[0] == '0' {
+				return parsedSemver{}, fmt.Errorf("numeric prerelease identifier has leading zero: %q", value)
+			}
+		}
+	}
+	return parsed, nil
 }
 
 func compareSemver(left, right string) (int, error) {
-	lm := semverRE.FindStringSubmatch(left)
-	rm := semverRE.FindStringSubmatch(right)
-	if lm == nil || rm == nil {
-		return 0, fmt.Errorf("invalid SemVer")
+	l, err := parseSemver(left)
+	if err != nil {
+		return 0, err
 	}
-	for i := 1; i <= 3; i++ {
-		lv, _ := strconv.Atoi(lm[i])
-		rv, _ := strconv.Atoi(rm[i])
-		if lv < rv {
+	r, err := parseSemver(right)
+	if err != nil {
+		return 0, err
+	}
+	for i := 0; i < 3; i++ {
+		if l.core[i] < r.core[i] {
 			return -1, nil
 		}
-		if lv > rv {
+		if l.core[i] > r.core[i] {
 			return 1, nil
 		}
+	}
+	if len(l.prerelease) == 0 && len(r.prerelease) == 0 {
+		return 0, nil
+	}
+	if len(l.prerelease) == 0 {
+		return 1, nil
+	}
+	if len(r.prerelease) == 0 {
+		return -1, nil
+	}
+	limit := len(l.prerelease)
+	if len(r.prerelease) < limit {
+		limit = len(r.prerelease)
+	}
+	for i := 0; i < limit; i++ {
+		lt, rt := l.prerelease[i], r.prerelease[i]
+		if lt == rt {
+			continue
+		}
+		ln, lerr := strconv.Atoi(lt)
+		rn, rerr := strconv.Atoi(rt)
+		lnum, rnum := lerr == nil, rerr == nil
+		switch {
+		case lnum && rnum:
+			if ln < rn {
+				return -1, nil
+			}
+			return 1, nil
+		case lnum != rnum:
+			if lnum {
+				return -1, nil
+			}
+			return 1, nil
+		default:
+			if lt < rt {
+				return -1, nil
+			}
+			return 1, nil
+		}
+	}
+	if len(l.prerelease) < len(r.prerelease) {
+		return -1, nil
+	}
+	if len(l.prerelease) > len(r.prerelease) {
+		return 1, nil
 	}
 	return 0, nil
 }
@@ -117,6 +197,10 @@ func generationID(manifestDigest string) string {
 }
 
 func observePack(state *runtimeState, packID, version, manifestDigest string) error {
+	// Validate every observed version, including the first one.
+	if _, err := parseSemver(version); err != nil {
+		return err
+	}
 	previous, exists := state.HighestSeenPacks[packID]
 	if exists {
 		cmp, err := compareSemver(version, previous.Version)
@@ -199,6 +283,20 @@ func runStateProbe(root string) (map[string]any, bool, error) {
 	healthRollback := activate(&state, genC, false) != nil && state.ActiveGeneration == genB && state.LKGGeneration == genB
 	clockRollback := observeTime(&state, baseTime.Add(-time.Second)) != nil
 
+	// Exercise the strict prerelease precedence frozen by the Python runtime:
+	// alpha.1 < alpha.beta < beta < release. Build metadata and leading-zero
+	// numeric prerelease identifiers are intentionally rejected by Atlas.
+	preState := runtimeState{StateVersion: 1, HighestSeenPacks: map[string]highestSeen{}}
+	prePack := "atlas:pack:phase553-semver"
+	pre1 := observePack(&preState, prePack, "2.0.0-alpha.1", manifestA) == nil
+	pre2 := observePack(&preState, prePack, "2.0.0-alpha.beta", manifestB) == nil
+	pre3 := observePack(&preState, prePack, "2.0.0-beta", manifestC) == nil
+	pre4 := observePack(&preState, prePack, "2.0.0", manifestA) == nil
+	preReplay := observePack(&preState, prePack, "2.0.0-beta", manifestC) != nil
+	leadingZeroRejected := observePack(&preState, prePack+":bad-zero", "2.0.0-alpha.01", manifestA) != nil
+	buildMetadataRejected := observePack(&preState, prePack+":bad-build", "2.0.0+build.1", manifestA) != nil
+	semverPrecedence := pre1 && pre2 && pre3 && pre4 && preReplay && leadingZeroRejected && buildMetadataRejected
+
 	statePath := filepath.Join(root, "state", "runtime-state.json")
 	dirSynced, err := durableWrite(statePath, state)
 	if err != nil {
@@ -234,6 +332,7 @@ func runStateProbe(root string) (map[string]any, bool, error) {
 		"same_version_different_manifest_rejected": sameVersionDifferent,
 		"health_failure_restores_lkg_B": healthRollback,
 		"clock_rollback_rejected": clockRollback,
+		"strict_semver_prerelease_precedence": semverPrecedence,
 		"durable_state_reload": stateReload,
 		"crash_orphan_does_not_replace_state": crashRecovery,
 		"trusted_time_state_loss_requires_admin": trustedTimeStateLoss,
