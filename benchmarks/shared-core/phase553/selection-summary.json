@@ -1,0 +1,150 @@
+{
+  "summary_schema_version": "1.0.0",
+  "decision_state": "proposed-awaiting-architecture-authority",
+  "proposed_winner": "go",
+  "evidence": {
+    "branch": "feature/phase-5.5.3-shared-core-spike",
+    "executable_evidence_head_sha": "8ff9e687a23b280ccb8e957ffc55555b4288199c",
+    "workflow_run_id": 34039331139,
+    "workflow_name": "Phase 5.5.3 Shared Core Spike",
+    "workflow_conclusion": "success",
+    "foundation_hygiene_run_id": 34039331185,
+    "foundation_hygiene_conclusion": "success",
+    "linux_artifact": {
+      "id": 9991212307,
+      "digest": "sha256:94b6fa7c0a812ffad4c05e6467fc3d61c413ea29949713e167baaa34e3d9b596"
+    },
+    "windows_artifact": {
+      "id": 9991210708,
+      "digest": "sha256:a9c2428c52a7a7a82fd93c832fe7e5c4f7becf7265b981629a8d3843a4cb2219"
+    },
+    "spc_bundle_digest": "sha256-61a7a9b46a070e279046230f593826d676adabd91b3384a085c8b19fa571af93",
+    "serialization_vector_digest": "sha256-e4aa5c02c3c5c6291c09f2202cea9bcb92aa0c06900181e742af7da666633569"
+  },
+  "cross_platform_result": {
+    "eligible_candidates": [
+      "python-control",
+      "go"
+    ],
+    "provisional_rank_on_linux": [
+      "go",
+      "python-control"
+    ],
+    "provisional_rank_on_windows": [
+      "go",
+      "python-control"
+    ],
+    "score_totals": {
+      "go": 96,
+      "python-control": 85
+    },
+    "rust": {
+      "eligible": false,
+      "linux_failed_gates": [
+        "G-SC5",
+        "G-SC6",
+        "G-SC7"
+      ],
+      "windows_failed_gates": [
+        "G-SC1",
+        "G-SC2",
+        "G-SC3",
+        "G-SC4",
+        "G-SC5",
+        "G-SC6",
+        "G-SC7",
+        "G-SC8"
+      ]
+    }
+  },
+  "go": {
+    "eligible_linux": true,
+    "eligible_windows": true,
+    "mandatory_gates_linux": {
+      "G-SC1": true,
+      "G-SC2": true,
+      "G-SC3": true,
+      "G-SC4": true,
+      "G-SC5": true,
+      "G-SC6": true,
+      "G-SC7": true,
+      "G-SC8": true
+    },
+    "mandatory_gates_windows": {
+      "G-SC1": true,
+      "G-SC2": true,
+      "G-SC3": true,
+      "G-SC4": true,
+      "G-SC5": true,
+      "G-SC6": true,
+      "G-SC7": true,
+      "G-SC8": true
+    },
+    "toolchain": "go1.25.0",
+    "dependencies": {
+      "go_tuf": "v2.4.2",
+      "modernc_sqlite": "v1.58.0",
+      "golang_x_text": "v0.36.0"
+    },
+    "sqlite": {
+      "linux": "3.53.4",
+      "windows": "3.53.4",
+      "fts5_linux": true,
+      "fts5_windows": true
+    },
+    "search_latency_p95_ms": {
+      "linux_exact": 0.123895,
+      "linux_lexical": 0.378843,
+      "windows_exact": 1.5867,
+      "windows_lexical": 1.521
+    },
+    "compiled_binary_bytes": {
+      "linux": 19023793,
+      "windows": 19431424
+    },
+    "durable_replace_primitive": {
+      "linux": "rename(2)+directory-fsync",
+      "windows": "MoveFileExW(REPLACE_EXISTING|WRITE_THROUGH)"
+    }
+  },
+  "serialization": {
+    "decision_for_phase_5_5_3": "retain-existing-atlas-deterministic-json-profile",
+    "existing_digest_migration": false,
+    "general_profile_equivalent_to_rfc8785_jcs": false,
+    "atlas_ordering_contrast_digest": "sha256-86f7643502ce36621ae93769d7af762ff9c2f90e8c207fcb36f38c2cc6650c72",
+    "jcs_ordering_contrast_digest": "sha256-e809e2d586f904340931323f0da13a22ddd4c10e5ead816b900f6d5c6bcd3e9f"
+  },
+  "decision_scope": {
+    "freezes_if_accepted": [
+      "Go as the production Shared Core implementation family",
+      "go-tuf/v2 v2.4.2 as the evidenced TUF client baseline",
+      "modernc.org/sqlite v1.58.0 as the evidenced CGo-free SQLite baseline",
+      "Atlas deterministic JSON profile remains the protocol serialization profile for this phase"
+    ],
+    "does_not_freeze": [
+      "Desktop UI framework",
+      "Desktop IPC transport or ABI",
+      "broader application storage",
+      "graph database or graph persistence",
+      "HSM/KMS/signing provider",
+      "application updater or CDN topology",
+      "Detection IR",
+      "semantic/vector retrieval",
+      "Grounded AI runtime"
+    ]
+  },
+  "rejected_alternatives": {
+    "python-control": "Eligible and retained as the semantic/conformance oracle, but scored lower for production packaging, embedding, footprint and interface integration.",
+    "rust": "Not selected in this phase because mandatory trust/runtime and cross-platform gates were incomplete or failed; this is not a general rejection of Rust.",
+    "typescript_node": "Screened but not promoted to the executable finalist set after an eligible non-control candidate passed every hard gate and ranked first.",
+    "dotnet_csharp": "Screened but not promoted to the executable finalist set after an eligible non-control candidate passed every hard gate and ranked first."
+  },
+  "revisit_triggers": [
+    "A mandatory security or conformance property cannot be maintained in the Go production implementation.",
+    "Required TUF behavior exceeds the selected go-tuf profile.",
+    "Windows Desktop embedding, portable mode, or stable interface exposure becomes materially infeasible.",
+    "Corpus or pack scale invalidates measured performance or footprint assumptions.",
+    "Future API, CLI, or Web reuse requires a boundary the selected core cannot expose safely.",
+    "A selected dependency becomes unmaintained or has an unmitigable security issue."
+  ]
+}
