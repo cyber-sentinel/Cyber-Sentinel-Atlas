@@ -51,7 +51,12 @@ def main() -> int:
 
     manifest = load_json(REQUIRED_FILES[5])
     inventory = load_json(REQUIRED_FILES[6])
-    validate_contract_pair(manifest, inventory, publication=True)
+    validate_contract_pair(
+        manifest,
+        inventory,
+        inventory_bytes=REQUIRED_FILES[6].read_bytes(),
+        publication=True,
+    )
 
     # Phase 5.5.1 is a parallel pack schema family. It must never masquerade as
     # another canonical AtlasRecord family under schemas/v1.
