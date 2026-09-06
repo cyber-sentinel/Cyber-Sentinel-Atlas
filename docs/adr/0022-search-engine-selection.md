@@ -1,6 +1,6 @@
 # ADR-0022 — Deterministic Search Engine Selection
 
-**Status:** Proposed — Architecture Authority decision required
+**Status:** Accepted — Architecture Authority approved 2026-09-06
 **Decision scope:** Phase 5.4.2 → Phase 5.4.3
 **Evidence run:** `34018323174`
 **Evidence head:** `b7e110567f6345c70cbd455b97dba64481f84894`
@@ -176,7 +176,7 @@ Atlas still has an open broader embedded-storage decision. Its Shared Core/Deskt
 
 This ADR does **not** freeze the final canonical-content database, graph persistence model, Desktop framework or implementation language.
 
-## Proposed Decision
+## Decision
 
 **Select SQLite + FTS5 as the Phase 5.4 production deterministic/lexical search engine.**
 
@@ -191,7 +191,7 @@ Use:
 
 Retain Tantivy as a documented alternative if future corpus scale, ranking requirements, index footprint or benchmark evidence shows that SQLite FTS5 no longer satisfies product constraints.
 
-## Why SQLite Is Proposed Despite Tantivy's Sparse-Lexical and Footprint Advantages
+## Why SQLite Is Selected Despite Tantivy's Sparse-Lexical and Footprint Advantages
 
 The measured Tantivy advantages are real and must not be discarded: it is generally faster for sparse lexical search and materially smaller on disk.
 
@@ -229,7 +229,7 @@ The implementation following this ADR must:
 - keep semantic/vector retrieval outside this decision;
 - treat the search database as disposable derived state, never canonical truth.
 
-## Consequences If Accepted
+## Consequences
 
 - Phase 5.4.3 implements the production exact/filter/numeric/FTS5 core against the Phase 5.4.1 contracts;
 - SQLite search schema/version becomes an explicit derived-index compatibility contract;
@@ -241,4 +241,4 @@ The implementation following this ADR must:
 
 ## Decision Gate
 
-This ADR remains **Proposed** until Architecture Authority explicitly accepts the engine selection. No Phase 5.4.3 production engine implementation may treat SQLite + FTS5 as frozen while this ADR remains Proposed.
+Accepted by Architecture Authority on 2026-09-06. SQLite + FTS5 is frozen for the Phase 5.4.3 production search implementation. Any future engine change requires a new ADR and reproducible benchmark evidence under the documented revisit triggers.
