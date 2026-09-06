@@ -1,8 +1,8 @@
 # ADR-0022 — Deterministic Search Engine Selection
 
-**Status:** Proposed — Architecture Authority decision required  
-**Decision scope:** Phase 5.4.2 → Phase 5.4.3  
-**Evidence run:** `34013740514`  
+**Status:** Proposed — Architecture Authority decision required
+**Decision scope:** Phase 5.4.2 → Phase 5.4.3
+**Evidence run:** `34013740514`
 **Evidence head:** `1ff6f0b32d9500523c01d0da7e97859995a48f96`
 
 ## Context
