@@ -5,18 +5,18 @@ import json
 from pathlib import Path
 
 import pytest
+from jsonschema import Draft202012Validator
 
 from tools.pack.contract import (
-    PackContractError,
-    PACK_SCHEMA,
     LICENSE_SCHEMA,
+    PACK_SCHEMA,
+    PackContractError,
     load_json,
     validate_contract_pair,
     validate_manifest,
     validate_safe_target_path,
     validate_source_license_inventory,
 )
-from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = ROOT / "tests" / "fixtures" / "phase55"
@@ -68,7 +68,7 @@ def test_path_outside_pack_payload_namespace_fails_closed() -> None:
 def test_duplicate_case_colliding_artifacts_fail_closed() -> None:
     manifest = valid_manifest()
     duplicate = copy.deepcopy(manifest["artifacts"][0])
-    duplicate["path"] = "CONTENT/canonical-records.jsonl"
+    duplicate["path"] = "content/Canonical-records.jsonl"
     manifest["artifacts"].append(duplicate)
     with pytest.raises(PackContractError, match="duplicate/case-colliding"):
         validate_manifest(manifest)
