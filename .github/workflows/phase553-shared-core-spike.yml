@@ -86,9 +86,6 @@ jobs:
           --workspace "${{ env.PHASE553_WORKSPACE }}"
           --output "${{ env.PHASE553_EVIDENCE }}/python-${{ runner.os }}.json"
 
-      # Bootstrap the missing committed lock once and publish it as evidence. After
-      # the exact generated go.sum is committed, this step is tightened back to a
-      # no-mutation locked build before Phase 5.5.3 evidence is frozen.
       - name: Resolve and build Go finalist
         working-directory: benchmarks/shared-core/phase553/go
         shell: bash
@@ -113,12 +110,21 @@ jobs:
             "${PHASE553_EVIDENCE}/atlas-phase553-go" --workspace "${PHASE553_WORKSPACE}" --output "${PHASE553_EVIDENCE}/go-${RUNNER_OS}.json"
           fi
 
+      # Temporary evidence-bootstrap path: Linux already demonstrated that this
+      # finalist can build and execute, but Cargo.lock was not committed. Generate
+      # the exact lockfile once and publish it in the evidence artifact so it can be
+      # committed, then return this workflow to a strict --locked/no-mutation build.
       - name: Resolve and build Rust finalist
         id: rust_build
         continue-on-error: true
         working-directory: benchmarks/shared-core/phase553/rust
         shell: bash
         run: |
+          if [ ! -f Cargo.lock ]; then
+            cargo generate-lockfile
+          fi
+          mkdir -p ../../../..//${PHASE553_EVIDENCE}
+          cp Cargo.lock ../../../..//${PHASE553_EVIDENCE}/rust-Cargo.lock
           cargo metadata --locked --no-deps --format-version 1 > /dev/null
           cargo build --locked --release
 
