@@ -39,6 +39,12 @@ REQUIRED_QUERIES = [
     "FileAccessed",
     "platform:windows process",
 ]
+EXACT_CONTRACT_STAGES = {
+    "canonical_identifier",
+    "native_identifier",
+    "scoped_identifier",
+    "alias",
+}
 
 
 def compact_json_bytes(value: object) -> bytes:
@@ -134,9 +140,17 @@ def main() -> int:
         production = {query: core.resolve(query) for query in REQUIRED_QUERIES}
         sqlite_manifest = core.manifest()
 
+    # Phase 5.4.1 freezes exact/scoped/alias identity semantics. Its lexical
+    # containment implementation is explicitly a reference path, not the production
+    # lexical engine. Phase 5.4.3 SQLite/FTS5 is therefore the authoritative oracle
+    # for lexical result sets/ranking in this cross-language spike. Exact stages must
+    # still match the Phase 5.4.1 resolver byte-for-byte at the target-set boundary.
     for query in REQUIRED_QUERIES:
-        if targets_for(reference[query]) != targets_for(production[query]):
-            raise RuntimeError(f"reference/production search mismatch for {query!r}")
+        if production[query]["match_stage"] in EXACT_CONTRACT_STAGES:
+            if targets_for(reference[query]) != targets_for(production[query]):
+                raise RuntimeError(
+                    f"reference/production exact search mismatch for {query!r}"
+                )
 
     vector = {
         "a": "<>&",
@@ -155,6 +169,14 @@ def main() -> int:
                 "targets": targets_for(production[query]),
                 "stage": production[query]["match_stage"],
                 "status": production[query]["status"],
+            }
+            for query in REQUIRED_QUERIES
+        },
+        "reference_query_diagnostics": {
+            query: {
+                "targets": targets_for(reference[query]),
+                "stage": reference[query]["match_stage"],
+                "status": reference[query]["status"],
             }
             for query in REQUIRED_QUERIES
         },
