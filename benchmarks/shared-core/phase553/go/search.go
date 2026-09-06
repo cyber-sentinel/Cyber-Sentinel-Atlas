@@ -9,6 +9,7 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"golang.org/x/text/cases"
 	"golang.org/x/text/unicode/norm"
 	_ "modernc.org/sqlite"
 )
@@ -20,6 +21,7 @@ const (
 )
 
 var lexicalTokenRE = regexp.MustCompile(`[\p{L}\p{N}_]+`)
+var unicodeCaseFolder = cases.Fold()
 
 type parsedQuery struct {
 	Normalized         string
@@ -36,7 +38,8 @@ type resolved struct {
 }
 
 func fold(value string) string {
-	return strings.ToLower(norm.NFKC.String(value))
+	// Phase 5.4 freezes Unicode NFKC + full casefold semantics, not simple lowercase.
+	return unicodeCaseFolder.String(norm.NFKC.String(value))
 }
 
 func parseQuery(query string) (parsedQuery, error) {
@@ -127,6 +130,11 @@ func statusFor(targets []string) string {
 	return "disambiguation"
 }
 
+type stableTargetRow struct {
+	id   string
+	keys [7]string
+}
+
 func stableTargets(db *sql.DB, pairs map[string]string) ([]string, error) {
 	if len(pairs) == 0 {
 		return nil, nil
@@ -142,28 +150,47 @@ func stableTargets(db *sql.DB, pairs map[string]string) ([]string, error) {
 	}
 	query := fmt.Sprintf(`
 		SELECT d.target_id,
-		       lower(COALESCE(d.platform,'')), lower(COALESCE(d.product,'')),
-		       lower(COALESCE(d.provider,'')), lower(COALESCE(d.channel,'')),
-		       lower(COALESCE(pi.identifier_type,'')), lower(COALESCE(pi.value,'')),
-		       lower(COALESCE(d.lifecycle,''))
+		       COALESCE(d.platform,''), COALESCE(d.product,''),
+		       COALESCE(d.provider,''), COALESCE(d.channel,''),
+		       COALESCE(pi.identifier_type,''), COALESCE(pi.value,''),
+		       COALESCE(d.lifecycle,'')
 		FROM documents d
 		LEFT JOIN identifiers pi ON pi.target_id=d.target_id AND pi.primary_flag=1
-		WHERE d.target_id IN (%s)
-		ORDER BY 2,3,4,5,6,7,8,d.target_id`, placeholders)
+		WHERE d.target_id IN (%s)`, placeholders)
 	rows, err := db.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	ordered := []string{}
+	items := []stableTargetRow{}
 	for rows.Next() {
-		var id, a, b, c, d, e, f, g string
-		if err := rows.Scan(&id, &a, &b, &c, &d, &e, &f, &g); err != nil {
+		var item stableTargetRow
+		if err := rows.Scan(
+			&item.id,
+			&item.keys[0], &item.keys[1], &item.keys[2], &item.keys[3],
+			&item.keys[4], &item.keys[5], &item.keys[6],
+		); err != nil {
 			return nil, err
 		}
-		ordered = append(ordered, id)
+		items = append(items, item)
 	}
-	return ordered, rows.Err()
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	sort.Slice(items, func(i, j int) bool {
+		for k := range items[i].keys {
+			left, right := fold(items[i].keys[k]), fold(items[j].keys[k])
+			if left != right {
+				return left < right
+			}
+		}
+		return items[i].id < items[j].id
+	})
+	ordered := make([]string, 0, len(items))
+	for _, item := range items {
+		ordered = append(ordered, item.id)
+	}
+	return ordered, nil
 }
 
 func resolveQuery(db *sql.DB, query string) (resolved, error) {
@@ -320,9 +347,11 @@ func runSearchProbe(indexPath string, expected Expected) (map[string]QueryEviden
 	if err := db.QueryRow("SELECT sqlite_version()").Scan(&version); err != nil {
 		return nil, nil, false, 0, 0, err
 	}
-	fts5 := false
+	// Diagnostic only. query_only intentionally blocks this DDL; the caller proves
+	// actual FTS5 support with a successful read-only lexical MATCH workload.
+	fts5DDLProbe := false
 	if _, err := db.Exec("CREATE VIRTUAL TABLE temp.__atlas_fts_probe USING fts5(value)"); err == nil {
-		fts5 = true
+		fts5DDLProbe = true
 		_, _ = db.Exec("DROP TABLE temp.__atlas_fts_probe")
 	}
 
@@ -342,7 +371,7 @@ func runSearchProbe(indexPath string, expected Expected) (map[string]QueryEviden
 			samples = append(samples, float64(time.Since(started).Nanoseconds())/1_000_000.0)
 			if i == 0 {
 				baseline = current
-			} else if strings.Join(current.Targets, "\x00") != strings.Join(baseline.Targets, "\x00") || current.Stage != baseline.Stage {
+			} else if strings.Join(current.Targets, "\x00") != strings.Join(baseline.Targets, "\x00") || current.Stage != baseline.Stage || current.Status != baseline.Status {
 				allOK = false
 			}
 		}
@@ -357,5 +386,5 @@ func runSearchProbe(indexPath string, expected Expected) (map[string]QueryEviden
 		results[query] = QueryEvidence{Pass: pass, Targets: baseline.Targets, Stage: baseline.Stage, Status: baseline.Status, P95MS: percentile(samples, 0.95)}
 	}
 
-	return results, map[string]any{"version": version, "fts5": fts5}, allOK && fts5, percentile(exactSamples, 0.95), percentile(lexicalSamples, 0.95), nil
+	return results, map[string]any{"version": version, "fts5": fts5DDLProbe}, allOK, percentile(exactSamples, 0.95), percentile(lexicalSamples, 0.95), nil
 }
