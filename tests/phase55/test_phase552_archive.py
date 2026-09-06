@@ -11,6 +11,7 @@ from tools.pack.archive import (
     PackSafetyLimits,
     _validate_entry_type,
     safe_extract_atlaspack,
+    validate_archive_member_name,
 )
 
 
@@ -46,7 +47,6 @@ def test_safe_extract_valid_layout(tmp_path: Path) -> None:
         "targets/content/../evil.json",
         "/targets/content/a.json",
         "C:/targets/content/a.json",
-        "targets\\content\\a.json",
         "targets/content/CON.json",
         "targets/content/name. ",
         "outside/content/a.json",
@@ -59,6 +59,36 @@ def test_safe_extract_valid_layout(tmp_path: Path) -> None:
 def test_unsafe_archive_names_fail_closed(tmp_path: Path, unsafe_name: str) -> None:
     pack = tmp_path / "unsafe.atlaspack"
     write_zip(pack, minimal_entries() + [(unsafe_name, b"x")])
+    with pytest.raises(PackArchiveError):
+        safe_extract_atlaspack(pack, tmp_path / "out")
+
+
+def test_backslash_path_is_rejected_by_name_validator() -> None:
+    with pytest.raises(PackArchiveError):
+        validate_archive_member_name(
+            "targets\\content\\a.json",
+            is_directory=False,
+            limits=PackSafetyLimits(),
+        )
+
+
+def test_raw_backslash_zip_member_fails_closed_cross_platform(tmp_path: Path) -> None:
+    """Create malformed ZIP bytes instead of relying on host ZipFile writer behavior.
+
+    Python's ZIP writer can normalize separators on Windows. Replacing an equal-length
+    filename in both local and central directory records produces the actual malicious
+    wire representation that the extractor must reject on every platform.
+    """
+    pack = tmp_path / "raw-backslash.atlaspack"
+    canonical_name = b"targets/content/a.json"
+    malicious_name = b"targets\\content\\a.json"
+    assert len(canonical_name) == len(malicious_name)
+    write_zip(pack, minimal_entries() + [(canonical_name.decode("ascii"), b"x")])
+    raw = pack.read_bytes()
+    assert raw.count(canonical_name) >= 2
+    raw = raw.replace(canonical_name, malicious_name)
+    pack.write_bytes(raw)
+    assert malicious_name in pack.read_bytes()
     with pytest.raises(PackArchiveError):
         safe_extract_atlaspack(pack, tmp_path / "out")
 
