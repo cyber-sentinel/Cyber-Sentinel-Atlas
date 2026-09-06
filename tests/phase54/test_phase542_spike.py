@@ -5,6 +5,7 @@ import json
 import sys
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -73,6 +74,28 @@ class Phase542SpikeContractTests(unittest.TestCase):
         self.assertGreater(len({item.body for item in noise}), 200)
         self.assertGreater(sum("benchmarkfanout" in item.body for item in noise), 40)
 
+    def _numeric_tie_documents(self):
+        base, _ = self.bench.load_base_documents()
+        seed = base[0]
+        return [
+            replace(
+                seed,
+                target_id=f"atlas:benchmark-numeric-tie:{i:02d}",
+                title=f"Numeric tie {i}",
+                aliases="",
+                native_ids="1",
+                body="numeric tie fixture",
+                namespace="synthetic.numeric.tie",
+                platform="synthetic",
+                product="numeric-tie-fixture",
+                provider="numeric-tie-provider",
+                channel="test",
+                lifecycle="current",
+                numeric_event_id=1,
+            )
+            for i in range(20)
+        ]
+
     def test_sqlite_smoke_acceptance(self):
         base, _ = self.bench.load_base_documents()
         docs = self.bench.expand_documents(base, 500)
@@ -106,6 +129,17 @@ class Phase542SpikeContractTests(unittest.TestCase):
             finally:
                 adapter.close()
 
+    def test_sqlite_numeric_browse_cutoff_ties_total_order(self):
+        docs = self._numeric_tie_documents()
+        expected = [(1, f"atlas:benchmark-numeric-tie:{i:02d}") for i in range(10)]
+        with tempfile.TemporaryDirectory() as tmp:
+            adapter = self.bench.SQLiteAdapter(Path(tmp), docs)
+            try:
+                self.assertEqual(adapter.numeric_browse("numeric-tie-provider"), expected)
+                self.assertEqual(adapter.numeric_browse("numeric-tie-provider"), expected)
+            finally:
+                adapter.close()
+
     @unittest.skipUnless(importlib.util.find_spec("tantivy") is not None, "tantivy binding not installed")
     def test_tantivy_high_fanout_total_order(self):
         base, _ = self.bench.load_base_documents()
@@ -118,6 +152,18 @@ class Phase542SpikeContractTests(unittest.TestCase):
                 second = adapter.lexical("benchmarkfanout")
                 self.assertEqual(first, expected)
                 self.assertEqual(second, expected)
+            finally:
+                adapter.close()
+
+    @unittest.skipUnless(importlib.util.find_spec("tantivy") is not None, "tantivy binding not installed")
+    def test_tantivy_numeric_browse_cutoff_ties_total_order(self):
+        docs = self._numeric_tie_documents()
+        expected = [(1, f"atlas:benchmark-numeric-tie:{i:02d}") for i in range(10)]
+        with tempfile.TemporaryDirectory() as tmp:
+            adapter = self.bench.TantivyAdapter(Path(tmp), docs)
+            try:
+                self.assertEqual(adapter.numeric_browse("numeric-tie-provider"), expected)
+                self.assertEqual(adapter.numeric_browse("numeric-tie-provider"), expected)
             finally:
                 adapter.close()
 
