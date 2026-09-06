@@ -50,6 +50,9 @@ jobs:
       - name: Install pinned Tantivy Python binding
         run: python -m pip install --disable-pip-version-check "tantivy==0.26.0"
 
+      - name: Run Phase 5.4.2 permanent contract and security tests
+        run: python -m unittest discover -s tests/phase54 -p "test_phase542_spike.py" -v
+
       - name: Run equivalent SQLite FTS5 and Tantivy spike
         run: python benchmarks/search/phase542/benchmark.py --docs 20000 --iterations 40 --output "benchmark-output/phase542-${{ runner.os }}.json"
 
