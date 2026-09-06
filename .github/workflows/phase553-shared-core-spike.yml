@@ -61,7 +61,7 @@ jobs:
         uses: actions/setup-go@v6
         with:
           go-version: "1.25.0"
-          cache-dependency-path: benchmarks/shared-core/phase553/go/go.mod
+          cache-dependency-path: benchmarks/shared-core/phase553/go/go.sum
 
       - name: Set up Rust finalist
         shell: bash
@@ -74,6 +74,12 @@ jobs:
       - name: Build ephemeral shared fixture corpus
         run: python benchmarks/shared-core/phase553/prepare_fixture.py --output "${{ env.PHASE553_WORKSPACE }}"
 
+      - name: Compare Atlas serialization profile with RFC 8785 ordering
+        run: >-
+          python benchmarks/shared-core/phase553/serialization_profile.py
+          --workspace "${{ env.PHASE553_WORKSPACE }}"
+          --output "${{ env.PHASE553_EVIDENCE }}/serialization-${{ runner.os }}.json"
+
       - name: Run Python semantic control
         run: >-
           python benchmarks/shared-core/phase553/python_control.py
@@ -84,8 +90,9 @@ jobs:
         working-directory: benchmarks/shared-core/phase553/go
         shell: bash
         run: |
-          go mod tidy
+          go mod download
           go mod verify
+          git diff --exit-code -- go.mod go.sum
           go test ./...
           mkdir -p ../../../..//${PHASE553_EVIDENCE}
           if [ "${RUNNER_OS}" = "Windows" ]; then
@@ -104,13 +111,18 @@ jobs:
           fi
 
       - name: Resolve and build Rust finalist
+        id: rust_build
+        continue-on-error: true
         working-directory: benchmarks/shared-core/phase553/rust
         shell: bash
         run: |
-          cargo generate-lockfile
+          cargo metadata --locked --no-deps --format-version 1 > /dev/null
           cargo build --locked --release
 
       - name: Run Rust finalist
+        id: rust_run
+        if: steps.rust_build.outcome == 'success'
+        continue-on-error: true
         shell: bash
         run: |
           if [ "${RUNNER_OS}" = "Windows" ]; then
@@ -118,6 +130,17 @@ jobs:
           else
             "benchmarks/shared-core/phase553/rust/target/release/atlas-phase553-rust" --workspace "${PHASE553_WORKSPACE}" --output "${PHASE553_EVIDENCE}/rust-${RUNNER_OS}.json"
           fi
+
+      - name: Record Rust finalist disqualification evidence
+        if: steps.rust_build.outcome == 'failure' || steps.rust_run.outcome == 'failure'
+        run: >-
+          python benchmarks/shared-core/phase553/record_candidate_failure.py
+          --workspace "${{ env.PHASE553_WORKSPACE }}"
+          --output "${{ env.PHASE553_EVIDENCE }}/rust-${{ runner.os }}.json"
+          --candidate rust
+          --runner-os "${{ runner.os }}"
+          --stage "build=${{ steps.rust_build.outcome }},run=${{ steps.rust_run.outcome }}"
+          --reason "Rust finalist failed to build or run reproducibly on ${{ runner.os }}; the exact CI job log is authoritative failure evidence."
 
       - name: Capture footprint and lockfile evidence
         run: >-
@@ -131,6 +154,7 @@ jobs:
           --python "${{ env.PHASE553_EVIDENCE }}/python-${{ runner.os }}.json"
           --go "${{ env.PHASE553_EVIDENCE }}/go-${{ runner.os }}.json"
           --rust "${{ env.PHASE553_EVIDENCE }}/rust-${{ runner.os }}.json"
+          --serialization "${{ env.PHASE553_EVIDENCE }}/serialization-${{ runner.os }}.json"
           --output "${{ env.PHASE553_EVIDENCE }}/summary-${{ runner.os }}.json"
 
       - name: Confirm canonical schemas v1 remain unchanged
