@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -154,35 +155,14 @@ func validateAtlasContractRecord(record map[string]any) error {
 	return nil
 }
 
-func loadCanonicalRecord(path string) (map[string]any, error) {
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return nil, err
-	}
-	decoder := json.NewDecoder(bytesReader(data))
+func decodeCanonicalRecord(data []byte) (map[string]any, error) {
+	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.UseNumber()
 	var record map[string]any
 	if err := decoder.Decode(&record); err != nil {
 		return nil, err
 	}
 	return record, nil
-}
-
-// bytesReader keeps number decoding exact without adding another dependency.
-type byteSliceReader struct {
-	data []byte
-	off  int
-}
-
-func bytesReader(data []byte) *byteSliceReader { return &byteSliceReader{data: data} }
-
-func (r *byteSliceReader) Read(p []byte) (int, error) {
-	if r.off >= len(r.data) {
-		return 0, os.ErrClosed
-	}
-	n := copy(p, r.data[r.off:])
-	r.off += n
-	return n, nil
 }
 
 func runCanonicalContractProbe(repoRoot string) (map[string]any, bool, error) {
@@ -194,10 +174,8 @@ func runCanonicalContractProbe(repoRoot string) (map[string]any, bool, error) {
 		if err != nil {
 			return nil, false, fmt.Errorf("read %s: %w", relative, err)
 		}
-		var record map[string]any
-		decoder := json.NewDecoder(bytesReader(data))
-		decoder.UseNumber()
-		if err := decoder.Decode(&record); err != nil {
+		record, err := decodeCanonicalRecord(data)
+		if err != nil {
 			return nil, false, fmt.Errorf("parse %s: %w", relative, err)
 		}
 		if err := validateAtlasContractRecord(record); err != nil {
@@ -234,11 +212,11 @@ func runCanonicalContractProbe(repoRoot string) (map[string]any, bool, error) {
 
 	pass := allSeven && unknownFamilyRejected && invalidIDRejected
 	return map[string]any{
-		"pass":                     pass,
-		"seven_families_present":   allSeven,
-		"unknown_family_rejected":  unknownFamilyRejected,
-		"invalid_id_rejected":      invalidIDRejected,
-		"family_fixture_sha256":    fixtureDigests,
+		"pass":                       pass,
+		"seven_families_present":     allSeven,
+		"unknown_family_rejected":    unknownFamilyRejected,
+		"invalid_id_rejected":        invalidIDRejected,
+		"family_fixture_sha256":      fixtureDigests,
 		"entity_lifecycle_native_id": families["entity"],
 		"claim_provenance_evidence":  families["claim"],
 	}, pass, nil
