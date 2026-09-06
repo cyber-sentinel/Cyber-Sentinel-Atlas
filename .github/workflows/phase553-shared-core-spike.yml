@@ -66,8 +66,8 @@ jobs:
       - name: Set up Rust finalist
         shell: bash
         run: |
-          rustup toolchain install 1.88.0 --profile minimal
-          rustup default 1.88.0
+          rustup toolchain install 1.95.0 --profile minimal
+          rustup default 1.95.0
           rustc --version
           cargo --version
 
@@ -144,3 +144,4 @@ jobs:
           name: phase553-shared-core-${{ runner.os }}
           path: .phase553-evidence/
           if-no-files-found: warn
+          include-hidden-files: true
