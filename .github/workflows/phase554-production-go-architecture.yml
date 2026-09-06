@@ -1,0 +1,57 @@
+name: Phase 5.5.4 Production Go Architecture
+
+on:
+  push:
+    branches:
+      - architecture/phase-5.5.4-shared-core-interface
+      - main
+    paths:
+      - 'docs/architecture/phase-5.5.4-production-go-shared-core.md'
+      - 'docs/adr/0025-shared-core-local-interface-boundary.md'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - 'docs/current-status.md'
+      - 'tools/shared_core/validate_phase554_architecture.py'
+      - '.github/workflows/phase554-production-go-architecture.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/architecture/phase-5.5.4-production-go-shared-core.md'
+      - 'docs/adr/0025-shared-core-local-interface-boundary.md'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - 'docs/current-status.md'
+      - 'tools/shared_core/validate_phase554_architecture.py'
+      - '.github/workflows/phase554-production-go-architecture.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  architecture-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Validate Phase 5.5.4 architecture gate
+        run: python tools/shared_core/validate_phase554_architecture.py
+      - name: Preserve canonical schema v1
+        shell: bash
+        run: |
+          git diff --exit-code origin/main...HEAD -- schemas/v1 || {
+            echo 'Phase 5.5.4 architecture gate must not modify canonical schemas/v1.' >&2
+            exit 1
+          }
+      - name: Preserve production implementation separation
+        shell: bash
+        run: |
+          if git diff --name-only origin/main...HEAD | grep -q '^shared-core/go/'; then
+            echo 'Architecture PR must not contain Phase 5.5.4 production implementation code.' >&2
+            exit 1
+          fi

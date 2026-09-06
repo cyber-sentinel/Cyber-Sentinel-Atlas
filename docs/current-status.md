@@ -7,12 +7,14 @@ Status timestamp: 2026-09-06
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Authoritative branch: `main`
 - Phase 5.5.3 selection completion main SHA: `bbb462b11de460216acb80116146f651ac2ef1ca`
+- Phase 5.5.4 architecture baseline main SHA: `94f3136687f8e9765c0343b938a1049436878783`
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
 - Search contract version: `1.0.0`
 - Search engine: SQLite + FTS5, accepted by ADR-0022
 - Content-pack trust model: TUF-based, accepted by ADR-0023
 - Production Shared Core implementation family: **Go**, accepted by ADR-0024
+- Production Shared Core local interface: **child-process stdio protocol**, accepted by ADR-0025
 - Python implementation role: semantic/conformance oracle during the production Go port
 - Repository visibility: private during active development
 - Public project license: not yet adopted; see `docs/governance/licensing-and-contributions.md`
@@ -51,15 +53,19 @@ Phase 5.5.3 selected Go only after executable cross-platform evidence. The accep
 - SQLite/FTS5 exact and lexical behavior stays subordinate to the already accepted Phase 5.4 contracts;
 - existing Atlas deterministic JSON bytes remain the protocol serialization profile; there is no RFC 8785/JCS digest migration;
 - canonical `schemas/v1/` remains unchanged;
-- Desktop UI technology, IPC transport/ABI, broader persistence, graph database, HSM/KMS, updater/CDN, Detection IR and Grounded AI remain separate decisions.
+- Desktop UI technology, broader persistence, graph database, HSM/KMS, updater/CDN, Detection IR and Grounded AI remain separate decisions.
 
-PR #23 merged the accepted ADR-0024 through Merge Commit `bbb462b11de460216acb80116146f651ac2ef1ca`. Post-merge Foundation Hygiene, Shared Core Architecture, Linux/Windows Shared Core Spike and Phase 5.3.4 canaries all passed on that merge boundary.
+PR #23 merged the accepted ADR-0024 through Merge Commit `bbb462b11de460216acb80116146f651ac2ef1ca`. PR #24 then synchronized the authoritative status on `main@94f3136687f8e9765c0343b938a1049436878783`; Foundation Hygiene, Phase 5.5.3 Architecture, Governance Hygiene and Phase 5.3.4 canaries passed on that status boundary.
 
-## Active next implementation slice
+## Active implementation slice
 
-**Phase 5.5.4 — Production Go Shared Core: NEXT**
+**Phase 5.5.4 — Production Go Shared Core: ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**
 
-Phase 5.5.4 will implement the accepted Shared Core contracts as production Go code rather than benchmark/spike code. It must preserve:
+ADR-0025 freezes the local Desktop-facing Shared Core boundary as a versioned child-process stdio protocol implemented by `atlas-core --serve-stdio` rather than Go FFI or a default local HTTP/TCP listener.
+
+Protocol v1 uses a 4-byte unsigned big-endian length prefix followed by UTF-8 JSON. It requires an exact `atlas-core` protocol `1.0.0` handshake, one request at a time per child process, compiled method allowlists, protocol-only stdout, diagnostic-only stderr, maximum 1 MiB requests, maximum 8 MiB responses, duplicate-key rejection, bounded nesting depth, strict UTF-8/JSON validation and no hidden network fallback.
+
+Phase 5.5.4 implements the accepted Shared Core contracts as production Go code outside benchmark directories. It must preserve:
 
 - exactly seven canonical AtlasRecord families and existing canonical/native identifier semantics;
 - the Atlas deterministic JSON serialization/digest profile and frozen cross-language vectors;
@@ -68,7 +74,12 @@ Phase 5.5.4 will implement the accepted Shared Core contracts as production Go c
 - no hidden network fallback and no pack-provided executable code;
 - Linux/Windows reproducibility, locked dependencies, SBOM/vulnerability evidence and clean-build CI.
 
-The production slice must also define a stable versioned local interface boundary for Desktop and later adapters without freezing the Desktop UI stack. A local process boundary is preferred over a fragile language FFI/ABI unless executable evidence demonstrates a safer alternative.
+Execution structure:
+
+1. 5.5.4A — core skeleton + protocol;
+2. 5.5.4B — canonical + SQLite/FTS5 search + graph parity;
+3. 5.5.4C — TUF/pack trust + durable state/LKG;
+4. 5.5.4D — supply-chain, cross-platform conformance and closure.
 
 ## Remaining roadmap
 
@@ -76,7 +87,7 @@ The production slice must also define a stable versioned local interface boundar
   - 5.5.1 Pack Trust Contracts: **COMPLETE / MERGED**
   - 5.5.2 Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**
   - 5.5.3 Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**
-  - 5.5.4 Production Go Shared Core: **NEXT**
+  - 5.5.4 Production Go Shared Core: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**
 - Phase 5.6 — Windows Desktop MVP
 - Phase 5.7 — Web / PWA
 - Phase 5.8 — API / CLI (`atlas`)
@@ -85,4 +96,4 @@ The production slice must also define a stable versioned local interface boundar
 
 ## Governance
 
-All official changes remain branch → PR → CI → architecture/security review → expected-head Merge Commit → post-merge verification. The maintainer remains the final authority for the official repository. Third-party licensing and public contributor-rights review remain fail-closed before Public Preview.
+All official changes remain branch → PR → CI → architecture/security review → expected-head Merge Commit → post-merge verification. The standing Architecture Authority authorization permits autonomous progression through the accepted roadmap while these evidence and merge controls remain mandatory. Third-party licensing and public contributor-rights review remain fail-closed before Public Preview.
