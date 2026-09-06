@@ -148,28 +148,34 @@ func durableWrite(path string, value any) (bool, error) {
 		}
 	}()
 	if _, err := file.Write(data); err != nil {
-		file.Close()
+		_ = file.Close()
 		return false, err
 	}
 	if err := file.Sync(); err != nil {
-		file.Close()
+		_ = file.Close()
 		return false, err
 	}
 	if err := file.Close(); err != nil {
 		return false, err
 	}
-	if err := os.Rename(temp, path); err != nil {
+	durable, err := atomicReplaceDurable(temp, path)
+	if err != nil {
 		return false, err
 	}
 	cleanup = false
-	dirSynced := false
-	if dir, err := os.Open(filepath.Dir(path)); err == nil {
-		if err := dir.Sync(); err == nil {
-			dirSynced = true
-		}
-		_ = dir.Close()
+	return durable, nil
+}
+
+func loadRuntimeState(path string) (runtimeState, []byte, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return runtimeState{}, nil, err
 	}
-	return dirSynced, nil
+	var state runtimeState
+	if err := json.Unmarshal(data, &state); err != nil {
+		return runtimeState{}, nil, err
+	}
+	return state, data, nil
 }
 
 func acquireExclusiveLock(path string) (*os.File, error) {
@@ -181,11 +187,11 @@ func acquireExclusiveLock(path string) (*os.File, error) {
 		return nil, err
 	}
 	if _, err := fmt.Fprintf(file, "pid=%d\n", os.Getpid()); err != nil {
-		file.Close()
+		_ = file.Close()
 		return nil, err
 	}
 	if err := file.Sync(); err != nil {
-		file.Close()
+		_ = file.Close()
 		return nil, err
 	}
 	return file, nil
@@ -197,7 +203,6 @@ func generationID(manifestDigest string) string {
 }
 
 func observePack(state *runtimeState, packID, version, manifestDigest string) error {
-	// Validate every observed version, including the first one.
 	if _, err := parseSemver(version); err != nil {
 		return err
 	}
@@ -218,18 +223,22 @@ func observePack(state *runtimeState, packID, version, manifestDigest string) er
 	return nil
 }
 
-func activate(state *runtimeState, generation string, healthOK bool) error {
-	previous := state.ActiveGeneration
-	if !healthOK {
-		if previous != "" {
-			state.ActiveGeneration = previous
-			state.LKGGeneration = previous
-		}
-		return fmt.Errorf("health check failed; LKG restored")
-	}
+// Activation is deliberately two-phase. The candidate generation becomes active
+// first while LKG remains unchanged; only a passing health check promotes it to LKG.
+func beginActivation(state *runtimeState, generation string) {
 	state.ActiveGeneration = generation
-	state.LKGGeneration = generation
-	return nil
+}
+
+func finishActivationHealth(state *runtimeState, healthy bool) error {
+	if healthy {
+		state.LKGGeneration = state.ActiveGeneration
+		return nil
+	}
+	if state.LKGGeneration == "" {
+		return fmt.Errorf("health check failed and no LKG exists")
+	}
+	state.ActiveGeneration = state.LKGGeneration
+	return fmt.Errorf("health check failed; LKG restored")
 }
 
 func observeTime(state *runtimeState, observed time.Time) error {
@@ -262,6 +271,7 @@ func runStateProbe(root string) (map[string]any, bool, error) {
 	_ = lock.Close()
 	_ = os.Remove(lockPath)
 
+	statePath := filepath.Join(root, "state", "runtime-state.json")
 	state := runtimeState{StateVersion: 1, HighestSeenPacks: map[string]highestSeen{}}
 	baseTime := time.Date(2026, 9, 6, 12, 0, 0, 0, time.UTC)
 	timeOK := observeTime(&state, baseTime) == nil
@@ -270,22 +280,66 @@ func runStateProbe(root string) (map[string]any, bool, error) {
 	manifestB := "sha256-" + strings.Repeat("b", 64)
 	manifestC := "sha256-" + strings.Repeat("c", 64)
 	packID := "atlas:pack:phase553-state"
+	genA, genB, genC := generationID(manifestA), generationID(manifestB), generationID(manifestC)
+	generationIdentity := genA != genB && genB != genC && generationID(manifestA) == genA
+
+	durabilityChecks := []bool{}
+	persist := func() (runtimeState, error) {
+		durable, err := durableWrite(statePath, state)
+		if err != nil {
+			return runtimeState{}, err
+		}
+		durabilityChecks = append(durabilityChecks, durable)
+		reloaded, _, err := loadRuntimeState(statePath)
+		return reloaded, err
+	}
+
 	installA := observePack(&state, packID, "1.0.0", manifestA) == nil
-	genA := generationID(manifestA)
-	activateA := activate(&state, genA, true) == nil && state.ActiveGeneration == genA && state.LKGGeneration == genA
+	beginActivation(&state, genA)
+	reloaded, err := persist()
+	if err != nil {
+		return nil, false, err
+	}
+	candidateAPersisted := reloaded.ActiveGeneration == genA && reloaded.LKGGeneration == ""
+	activateAHealth := finishActivationHealth(&state, true) == nil
+	reloaded, err = persist()
+	if err != nil {
+		return nil, false, err
+	}
+	activateA := activateAHealth && reloaded.ActiveGeneration == genA && reloaded.LKGGeneration == genA
+
 	installB := observePack(&state, packID, "1.1.0", manifestB) == nil
-	genB := generationID(manifestB)
-	activateB := activate(&state, genB, true) == nil && state.ActiveGeneration == genB && state.LKGGeneration == genB
+	beginActivation(&state, genB)
+	reloaded, err = persist()
+	if err != nil {
+		return nil, false, err
+	}
+	candidateBPersisted := reloaded.ActiveGeneration == genB && reloaded.LKGGeneration == genA
+	activateBHealth := finishActivationHealth(&state, true) == nil
+	reloaded, err = persist()
+	if err != nil {
+		return nil, false, err
+	}
+	activateB := activateBHealth && reloaded.ActiveGeneration == genB && reloaded.LKGGeneration == genB
+
 	replayA := observePack(&state, packID, "1.0.0", manifestA) != nil
 	sameVersionDifferent := observePack(&state, packID, "1.1.0", manifestC) != nil
-	_ = observePack(&state, packID, "1.2.0", manifestC)
-	genC := generationID(manifestC)
-	healthRollback := activate(&state, genC, false) != nil && state.ActiveGeneration == genB && state.LKGGeneration == genB
+	installC := observePack(&state, packID, "1.2.0", manifestC) == nil
+	beginActivation(&state, genC)
+	reloaded, err = persist()
+	if err != nil {
+		return nil, false, err
+	}
+	candidateCPersisted := reloaded.ActiveGeneration == genC && reloaded.LKGGeneration == genB
+	healthFailure := finishActivationHealth(&state, false) != nil
+	reloaded, err = persist()
+	if err != nil {
+		return nil, false, err
+	}
+	healthRollback := healthFailure && reloaded.ActiveGeneration == genB && reloaded.LKGGeneration == genB
+	highestPreserved := reloaded.HighestSeenPacks[packID].Version == "1.2.0" && reloaded.HighestSeenPacks[packID].ManifestDigest == manifestC
 	clockRollback := observeTime(&state, baseTime.Add(-time.Second)) != nil
 
-	// Exercise the strict prerelease precedence frozen by the Python runtime:
-	// alpha.1 < alpha.beta < beta < release. Build metadata and leading-zero
-	// numeric prerelease identifiers are intentionally rejected by Atlas.
 	preState := runtimeState{StateVersion: 1, HighestSeenPacks: map[string]highestSeen{}}
 	prePack := "atlas:pack:phase553-semver"
 	pre1 := observePack(&preState, prePack, "2.0.0-alpha.1", manifestA) == nil
@@ -297,44 +351,58 @@ func runStateProbe(root string) (map[string]any, bool, error) {
 	buildMetadataRejected := observePack(&preState, prePack+":bad-build", "2.0.0+build.1", manifestA) != nil
 	semverPrecedence := pre1 && pre2 && pre3 && pre4 && preReplay && leadingZeroRejected && buildMetadataRejected
 
-	statePath := filepath.Join(root, "state", "runtime-state.json")
-	dirSynced, err := durableWrite(statePath, state)
+	persistedState, persistedBytes, err := loadRuntimeState(statePath)
 	if err != nil {
 		return nil, false, err
 	}
-	persisted, err := os.ReadFile(statePath)
-	if err != nil {
-		return nil, false, err
-	}
-	var reloaded runtimeState
-	stateReload := json.Unmarshal(persisted, &reloaded) == nil && reloaded.ActiveGeneration == genB
+	stateReload := persistedState.ActiveGeneration == genB && persistedState.LKGGeneration == genB && highestPreserved
 
-	// Simulate an interrupted future write: an orphan temp must not alter the
-	// authoritative state file.
+	// Simulate a crash after a future state temp file was fully written+fsynced but
+	// before atomic replacement. The authoritative file must remain the old complete
+	// generation; a restart must never consume the orphan temp as state.
+	future := persistedState
+	future.ActiveGeneration = "interrupted-generation"
+	futureBytes, _ := json.Marshal(future)
 	orphan := filepath.Join(filepath.Dir(statePath), ".runtime-state.json.crash.tmp")
-	_ = os.WriteFile(orphan, []byte("partial"), 0o600)
-	afterCrash, err := os.ReadFile(statePath)
-	crashRecovery := err == nil && string(afterCrash) == string(persisted)
+	orphanFile, orphanErr := os.OpenFile(orphan, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	if orphanErr == nil {
+		_, orphanErr = orphanFile.Write(append(futureBytes, '\n'))
+		if orphanErr == nil {
+			orphanErr = orphanFile.Sync()
+		}
+		_ = orphanFile.Close()
+	}
+	afterCrash, readErr := os.ReadFile(statePath)
+	crashRecovery := orphanErr == nil && readErr == nil && string(afterCrash) == string(persistedBytes)
 	_ = os.Remove(orphan)
 
-	// Missing trusted-time while durable runtime state exists is an explicit
-	// administrative recovery condition, not an automatic reset.
-	trustedTimeStateLoss := reloaded.HighestUTC != "" && len(reloaded.HighestSeenPacks) > 0
+	trustedTimeStateLoss := persistedState.HighestUTC != "" && len(persistedState.HighestSeenPacks) > 0
+	replacementDurability := len(durabilityChecks) >= 6
+	for _, ok := range durabilityChecks {
+		replacementDurability = replacementDurability && ok
+	}
 
 	cases := map[string]bool{
 		"exclusive_install_lock": exclusiveLock,
 		"trusted_time_initial": timeOK,
+		"immutable_generation_identity": generationIdentity,
 		"install_A": installA,
+		"candidate_A_persisted_before_health": candidateAPersisted,
 		"activate_A_lkg_A": activateA,
 		"install_B": installB,
+		"candidate_B_persisted_before_health": candidateBPersisted,
 		"activate_B_lkg_B": activateB,
 		"replay_A_rejected": replayA,
 		"same_version_different_manifest_rejected": sameVersionDifferent,
+		"install_C": installC,
+		"candidate_C_was_active_before_health": candidateCPersisted,
 		"health_failure_restores_lkg_B": healthRollback,
+		"highest_seen_survives_health_rollback": highestPreserved,
 		"clock_rollback_rejected": clockRollback,
 		"strict_semver_prerelease_precedence": semverPrecedence,
+		"existing_file_atomic_replacements_durable": replacementDurability,
 		"durable_state_reload": stateReload,
-		"crash_orphan_does_not_replace_state": crashRecovery,
+		"crash_before_replace_keeps_authoritative_state": crashRecovery,
 		"trusted_time_state_loss_requires_admin": trustedTimeStateLoss,
 	}
 	all := true
@@ -344,8 +412,10 @@ func runStateProbe(root string) (map[string]any, bool, error) {
 	return map[string]any{
 		"cases": cases,
 		"file_fsync": true,
-		"directory_fsync_supported": dirSynced,
-		"atomic_replace": true,
+		"atomic_replace": replacementDurability,
+		"replacement_durability_supported": replacementDurability,
+		"replacement_primitive": atomicReplacePrimitive(),
+		"replacement_count": len(durabilityChecks),
 		"state_path": statePath,
 	}, all, nil
 }
