@@ -29,11 +29,17 @@ from tantivy_adapter import TantivyAdapter
 def time_call(fn: Callable[[], Any], iterations: int):
     samples = []
     result = None
-    for _ in range(iterations):
+    first_result = None
+    deterministic = True
+    for iteration in range(iterations):
         started = time.perf_counter_ns()
         result = fn()
         samples.append((time.perf_counter_ns() - started) / 1_000_000)
-    return samples, result
+        if iteration == 0:
+            first_result = result
+        elif result != first_result:
+            deterministic = False
+    return samples, result, deterministic
 
 
 def run_suite(adapter, suite, iterations):
@@ -49,17 +55,25 @@ def run_suite(adapter, suite, iterations):
                 operation = lambda c=case: adapter.numeric_browse(c["provider"])
             else:
                 raise ValueError(f"unsupported kind {case['kind']}")
-            samples, result = time_call(operation, iterations)
+            samples, result, deterministic = time_call(operation, iterations)
+            if not deterministic:
+                errors.append(f"{adapter.engine_id}:{case['id']}: repeated result set/order was nondeterministic")
             flattened = [x[1] if isinstance(x, tuple) else x for x in result]
             for expected in case.get("expected_contains", []):
                 if expected not in flattened:
                     errors.append(f"{adapter.engine_id}:{case['id']}: expected {expected} in {flattened}")
+            expected_result = case.get("expected_result")
+            if expected_result is not None and result != expected_result:
+                errors.append(
+                    f"{adapter.engine_id}:{case['id']}: exact result mismatch expected={expected_result} actual={result}"
+                )
             prefix = case.get("expected_numeric_prefix")
             if prefix is not None and [x[0] for x in result[:len(prefix)]] != prefix:
                 errors.append(f"{adapter.engine_id}:{case['id']}: numeric prefix mismatch")
             metrics[case["id"]] = {
                 "kind": case["kind"],
                 "latency": latency_summary(samples),
+                "deterministic": deterministic,
                 "result": result,
             }
         except Exception as exc:
@@ -90,6 +104,7 @@ def main():
             "document_count": len(docs),
             "base_acceptance_document_count": len(base),
             "synthetic_noise_document_count": len(docs) - len(base),
+            "high_fanout_modulus": 5,
         },
         "query_suite": {
             "path": "benchmarks/search/phase542/query-suite.json",
