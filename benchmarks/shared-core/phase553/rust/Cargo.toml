@@ -1,0 +1,18 @@
+[package]
+name = "atlas-phase553-rust"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95.0"
+publish = false
+
+[dependencies]
+base64 = "=0.22.1"
+rusqlite = { version = "=0.40.1", features = ["bundled"] }
+serde = { version = "=1.0.228", features = ["derive"] }
+serde_json = "=1.0.145"
+sha2 = "=0.10.9"
+# Upstream develop declares 0.3.0-beta15, but that prerelease is not published
+# on crates.io. Pin the exact upstream commit so the screening evidence exercises
+# the current beta implementation reproducibly without pretending it is a release.
+tuf = { git = "https://github.com/theupdateframework/rust-tuf.git", rev = "219ca7d05818d5dd44ec4e32ab47c5ce64a7bf44" }
+unicode-normalization = "=0.1.24"

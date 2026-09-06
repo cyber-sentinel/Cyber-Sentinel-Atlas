@@ -33,13 +33,21 @@ def main() -> int:
     plan = json.loads(PLAN.read_text(encoding="utf-8"))
 
     require("Status: **ARCHITECTURE GATE / SPIKE AUTHORIZED**" in arch, "Phase 5.5.3 architecture status missing")
-    require("**Status:** Proposed" in adr, "ADR-0024 must remain Proposed during architecture gate")
+    proposed = "**Status:** Proposed" in adr
+    accepted = "**Status:** Accepted" in adr
+    require(proposed ^ accepted, "ADR-0024 must be exactly Proposed or Accepted")
+    if accepted:
+        require("**Select Go as the production Atlas Shared Core implementation family.**" in adr, "accepted ADR-0024 must select Go")
+        require("Accepted by Architecture Authority" in adr, "accepted ADR-0024 must record Architecture Authority acceptance")
+    else:
+        require("Go proposed" in adr or "Decision to be made" in adr, "Proposed ADR-0024 must preserve an explicit pending decision")
+
     require("No candidate may gain points by changing a frozen contract." in arch, "contract-fidelity invariant missing")
     require("No serialization/hashing migration occurs in Phase 5.5.3" in arch, "serialization migration guard missing")
 
     require(plan.get("plan_version") == "1.0.0", "unexpected Phase 5.5.3 evaluation plan version")
     require(plan.get("phase") == "5.5.3", "evaluation plan phase mismatch")
-    require(plan.get("production_selection_frozen") is False, "architecture gate must not freeze production selection")
+    require(plan.get("production_selection_frozen") is False, "evaluation plan must remain a pre-selection evidence contract")
     require(sum(plan.get("score_weights", {}).values()) == 100, "Shared Core decision weights must total 100")
     require(set(plan.get("initial_executable_finalists", [])) == {"rust", "go", "python-control"}, "initial executable finalist set drifted")
     require(len(plan.get("hard_gates", [])) == 8, "all eight Shared Core hard gates are required")
@@ -64,7 +72,10 @@ def main() -> int:
     ):
         require(phrase in roadmap, f"roadmap missing current phase invariant: {phrase}")
 
-    require("Production Shared Core technology spike / ADR: **NEXT**" in current, "current-status must preserve the pre-selection next gate")
+    pre_selection_status = "Production Shared Core technology spike / ADR: **NEXT**" in current
+    post_selection_status = "Go" in current and ("Shared Core" in current or "5.5.3" in current)
+    require(pre_selection_status or post_selection_status, "current-status must describe the Shared Core selection/implementation boundary")
+
     require("Tauri, Rust, SQLite, React, and TypeScript remain candidates only." in HISTORY_STATE.read_text(encoding="utf-8"), "historical state snapshot was not preserved byte-for-content")
     require("Status: **NOT STARTED**" in HISTORY_ROADMAP.read_text(encoding="utf-8"), "historical roadmap snapshot was not preserved")
 
@@ -72,7 +83,7 @@ def main() -> int:
     require(canonical.is_dir(), "canonical schemas/v1 missing")
     require(not (canonical / "shared-core.schema.json").exists(), "Shared Core architecture leaked into canonical schema family")
 
-    print("Phase 5.5.3 Shared Core architecture gate: PASS")
+    print(f"Phase 5.5.3 Shared Core architecture gate: PASS ({'Accepted' if accepted else 'Proposed'})")
     return 0
 
 
