@@ -100,13 +100,15 @@ Evidence-driven technology selection completed on Linux and Windows. ADR-0024 se
 
 The accepted evidence baseline includes `go-tuf/v2 v2.4.2`, `modernc.org/sqlite v1.58.0` and the normalized Go dependency graph including `golang.org/x/text v0.36.0`.
 
-This decision does not select the Desktop UI framework, IPC/ABI transport, broader application storage, graph database, HSM/KMS provider, application updater/CDN, Detection IR, semantic/vector retrieval or Grounded AI runtime.
+This decision does not select the Desktop UI framework, broader application storage, graph database, HSM/KMS provider, application updater/CDN, Detection IR, semantic/vector retrieval or Grounded AI runtime.
 
 ### Phase 5.5.4 — Production Go Shared Core
 
-Status: **NEXT**
+Status: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**
 
 Implement the accepted Shared Core contracts as production Go code rather than spike/benchmark code.
+
+ADR-0025 freezes the local integration boundary as a typed child-process stdio protocol implemented by `atlas-core --serve-stdio`. The v1 protocol uses a 4-byte unsigned big-endian payload length followed by UTF-8 JSON, exact protocol handshake/versioning, strict bounded parsing, one request at a time per child process, compiled method allowlists, protocol-only stdout and no default local HTTP/TCP listener or hidden network fallback.
 
 Mandatory scope:
 
@@ -117,9 +119,14 @@ Mandatory scope:
 - retain Python reference/control conformance fixtures until the production Go implementation proves parity;
 - lock dependencies and produce clean-build, SBOM and vulnerability evidence;
 - pass Linux and Windows correctness/security/reproducibility CI;
-- define a stable versioned local boundary usable by Windows Desktop and later adapters while keeping the Desktop UI framework independent from Go internals.
+- keep the Windows Desktop UI framework independent from Go internals.
 
-The preferred integration direction is a typed local process boundary rather than a fragile language FFI/ABI, unless executable evidence proves another boundary safer. The interface decision must remain bounded, versioned, local-only by default and incapable of arbitrary command execution.
+Execution slices:
+
+- **5.5.4A — Core skeleton + protocol:** Go module, `atlas-core`, framing/parser/handshake/error model, `core.status`, Linux/Windows adversarial protocol tests and deterministic build metadata.
+- **5.5.4B — Canonical + search + graph:** canonical loader, deterministic serialization vectors, SQLite/FTS5 resolver/search/catalog/graph parity and performance regression gates.
+- **5.5.4C — Pack trust + durable state:** go-tuf POUF v1 verification, archive/manifest/license validation, immutable generations, highest-seen/trusted-time state, activation/LKG/health rollback and filesystem adversarial tests.
+- **5.5.4D — Supply-chain / closure:** reproducible Linux/Windows builds, SBOM, Go vulnerability evidence, dependency/license inventory, full Python-oracle conformance, binary/IPC measurements and closure status sync.
 
 ## Phase 5.6 — Windows Desktop MVP
 
@@ -127,7 +134,7 @@ Status: **NOT STARTED / BLOCKED ON PRODUCTION SHARED CORE**
 
 First full end-user interface. Requirements include fast offline exact/lexical lookup, canonical data, relationship navigation, provenance visibility, verified pack updates, safe rollback and portable Windows mode evaluation.
 
-Desktop technology requires its own evidence/ADR and is not implied by the Go Shared Core selection.
+Desktop technology requires its own evidence/ADR and is not implied by the Go Shared Core selection or ADR-0025 local protocol choice.
 
 ## Phase 5.7 — Web / PWA
 
