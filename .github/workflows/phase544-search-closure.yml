@@ -1,0 +1,75 @@
+name: Phase 5.4.4 Search Closure
+
+on:
+  pull_request:
+    paths:
+      - "tools/search/**"
+      - "tests/phase54/**"
+      - "fixtures/phase-5.4.4/**"
+      - "benchmarks/search/phase544/**"
+      - "model/registries/relationship-types.json"
+      - "schemas/search/v1/**"
+      - "docs/architecture/phase-5.4.4-catalog-graph-closure.md"
+      - ".github/workflows/phase544-search-closure.yml"
+  push:
+    branches:
+      - main
+      - "feature/**"
+    paths:
+      - "tools/search/**"
+      - "tests/phase54/**"
+      - "fixtures/phase-5.4.4/**"
+      - "benchmarks/search/phase544/**"
+      - "model/registries/relationship-types.json"
+      - "schemas/search/v1/**"
+      - "docs/architecture/phase-5.4.4-catalog-graph-closure.md"
+      - ".github/workflows/phase544-search-closure.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  search-closure:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install validation dependencies
+        run: python -m pip install --disable-pip-version-check -r tools/requirements-validation.txt
+
+      - name: Validate frozen Phase 5.4.1 contracts
+        run: python tools/search/validate_phase541.py
+
+      - name: Validate production Phase 5.4.3 core
+        run: python tools/search/validate_phase543.py
+
+      - name: Validate Phase 5.4.4 catalog and graph closure
+        run: python tools/search/validate_phase544.py
+
+      - name: Run permanent Phase 5.4 tests
+        run: python -m unittest discover -s tests/phase54 -p "test_*.py" -v
+
+      - name: Run production regression benchmark
+        run: python benchmarks/search/phase544/benchmark.py --docs 20000 --iterations 40 --output phase544-benchmark.json
+
+      - name: Upload Phase 5.4.4 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-5.4.4-search-closure-${{ runner.os }}-${{ github.run_id }}
+          path: phase544-benchmark.json
+          if-no-files-found: error
+          retention-days: 30
