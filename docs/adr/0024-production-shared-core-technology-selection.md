@@ -1,6 +1,6 @@
 # ADR-0024 — Production Shared Core Technology Selection
 
-**Status:** Proposed — evidence complete; Go proposed; Architecture Authority approval pending
+**Status:** Accepted — Architecture Authority approved 2026-09-06
 
 ## Context
 
@@ -115,11 +115,11 @@ Only hard-gate-eligible candidates are ranked.
 
 The score is subordinate to hard gates and does not override contract fidelity.
 
-## Proposed decision
+## Decision
 
 **Select Go as the production Atlas Shared Core implementation family.**
 
-If accepted by Architecture Authority, the evidenced baseline is:
+The accepted evidenced baseline is:
 
 - Go as the production Shared Core language/runtime family;
 - `go-tuf/v2 v2.4.2` as the TUF client baseline;
@@ -132,13 +132,13 @@ If accepted by Architecture Authority, the evidenced baseline is:
 
 This is a Shared Core implementation decision, not a Desktop-stack decision. A subsequent production implementation slice must define a stable process/API/IPC boundary without assuming that Go requires or forbids Tauri, Electron, .NET, React, or another UI stack.
 
-## Why Go is proposed
+## Why Go is selected
 
 Go is the only non-control finalist that passed all eight mandatory gates on both target operating systems and then ranked first among eligible candidates. It preserves the frozen canonical, search, pack-trust, offline and durable rollback semantics while providing a compiled cross-platform artifact and a CGo-free SQLite path suitable for a reusable local core.
 
-The proposed selection is based on measured Atlas-specific evidence, not on a general language preference. Rust's smaller binary and fast search do not compensate for failed mandatory trust/runtime gates. Python's semantic fidelity is retained as the control, but its production packaging and integration characteristics score lower for the intended reusable Shared Core role.
+The selection is based on measured Atlas-specific evidence, not on a general language preference. Rust's smaller binary and fast search do not compensate for failed mandatory trust/runtime gates. Python's semantic fidelity is retained as the control, but its production packaging and integration characteristics score lower for the intended reusable Shared Core role.
 
-## Consequences if accepted
+## Consequences
 
 - production Shared Core implementation work may begin in a new implementation slice/branch after this ADR is merged;
 - Go production code must pass the same cross-language semantic, search, TUF, archive/offline and durable-state conformance fixtures before replacing any Python reference path;
@@ -150,7 +150,7 @@ The proposed selection is based on measured Atlas-specific evidence, not on a ge
 
 ## Rejected / deferred alternatives
 
-- **Python:** eligible and retained as semantic/conformance oracle; not proposed for the production core because packaging, embedding/footprint and interface-integration costs scored materially worse.
+- **Python:** eligible and retained as semantic/conformance oracle; not selected for the production core because packaging, embedding/footprint and interface-integration costs scored materially worse.
 - **Rust:** not selected in this phase because mandatory trust/runtime and Windows reproducibility evidence was incomplete or failed. Reconsideration is allowed if the same G-SC1..G-SC8 envelope later passes reproducibly.
 - **TypeScript/Node.js:** screened but not promoted after an eligible non-control finalist passed all hard gates and ranked first; further executable work would add scope without a material decision benefit.
 - **.NET/C#:** screened but not promoted for the same reason; remains a possible Desktop/UI-side technology because this ADR does not select the UI stack.
@@ -166,6 +166,6 @@ Reopen this technology decision if:
 - future API/CLI/Web reuse requires a boundary the selected core cannot expose safely;
 - a selected dependency becomes unmaintained or suffers a security issue that cannot be mitigated within the selected stack.
 
-## Architecture Authority gate
+## Architecture Authority acceptance
 
-This ADR remains **Proposed**. The evidence supports Go as the proposed winner, but no production Shared Core language/runtime is frozen until Architecture Authority explicitly approves this ADR and the corresponding Phase 5.5.3 implementation PR is merged through the normal governance process.
+Accepted by Architecture Authority on 2026-09-06 under the standing project authorization. Go is frozen as the Phase 5.5 production Shared Core implementation family subject to the documented revisit triggers. Any future technology change requires a new ADR and reproducible evidence.
