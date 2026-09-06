@@ -53,19 +53,12 @@ func TestStrictJSONProfile(t *testing.T) {
 		data []byte
 		want error
 	}{
-		{"duplicate envelope", []byte(`{"id":"1"}`), ErrDuplicateKey},
-		{"duplicate nested", []byte(`{"id":"1"}`), ErrDuplicateKey},
-		{"bom", append([]byte{0xEF, 0xBB, 0xBF}, []byte(`{"x":1}`)...), ErrUTF8BOM},
+		{"duplicate envelope", []byte("{\"id\":\"1\",\"id\":\"2\",\"method\":\"x\",\"params\":{}}"), ErrDuplicateKey},
+		{"duplicate nested", []byte("{\"id\":\"1\",\"method\":\"x\",\"params\":{\"a\":{\"k\":1,\"k\":2}}}"), ErrDuplicateKey},
+		{"bom", append([]byte{0xEF, 0xBB, 0xBF}, []byte("{\"x\":1}")...), ErrUTF8BOM},
 		{"invalid utf8", []byte{0xff, 0xfe}, ErrInvalidUTF8},
-		{"trailing value", []byte(`{"x":1} {"y":2}`), ErrTrailingJSON},
+		{"trailing value", []byte("{\"x\":1} {\"y\":2}"), ErrTrailingJSON},
 	}
-	// Replace escaped literals above with byte strings to make the intended duplicate
-	// fixtures visually unambiguous to gofmt and reviewers.
-	cases[0].data = []byte("{\"id\":\"1\",\"id\":\"2\",\"method\":\"x\",\"params\":{}}")
-	cases[1].data = []byte("{\"id\":\"1\",\"method\":\"x\",\"params\":{\"a\":{\"k\":1,\"k\":2}}}")
-	cases[2].data = append([]byte{0xEF, 0xBB, 0xBF}, []byte("{\"x\":1}")...)
-	cases[4].data = []byte("{\"x\":1} {\"y\":2}")
-
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			if err := ValidateJSON(tc.data); !errors.Is(err, tc.want) {
@@ -73,6 +66,21 @@ func TestStrictJSONProfile(t *testing.T) {
 			}
 		})
 	}
+}
+
+func FuzzValidateJSONNeverPanics(f *testing.F) {
+	for _, seed := range [][]byte{
+		[]byte("{}"),
+		[]byte("[]"),
+		[]byte("{\"a\":[1,2,3]}"),
+		[]byte("{\"a\":1,\"a\":2}"),
+		{0xff, 0xfe, 0xfd},
+	} {
+		f.Add(seed)
+	}
+	f.Fuzz(func(t *testing.T, data []byte) {
+		_ = ValidateJSON(data)
+	})
 }
 
 func TestDecodeRequestEnvelopeBounds(t *testing.T) {
@@ -122,6 +130,31 @@ func TestSessionHandshakeAndStatus(t *testing.T) {
 	}
 }
 
+func TestErrorEnvelopeIncludesRetryableFalse(t *testing.T) {
+	input := &bytes.Buffer{}
+	writeRequest(t, input, "{\"id\":\"1\",\"method\":\"core.status\",\"params\":{}}")
+	output := &bytes.Buffer{}
+	if err := (Server{}).Serve(input, output); err != nil {
+		t.Fatalf("serve: %v", err)
+	}
+	payload, err := ReadFrame(output, MaxResponsePayload)
+	if err != nil {
+		t.Fatalf("read error response: %v", err)
+	}
+	var envelope map[string]any
+	if err := json.Unmarshal(payload, &envelope); err != nil {
+		t.Fatalf("decode error response: %v", err)
+	}
+	errBody, ok := envelope["error"].(map[string]any)
+	if !ok {
+		t.Fatalf("missing error object: %#v", envelope)
+	}
+	retryable, exists := errBody["retryable"]
+	if !exists || retryable != false {
+		t.Fatalf("error envelope must contain retryable=false: %#v", errBody)
+	}
+}
+
 func TestSessionEnforcesHandshakeAndMethodAllowlist(t *testing.T) {
 	server := Server{Build: BuildInfo{Version: "v", Commit: "c"}}
 
@@ -133,6 +166,17 @@ func TestSessionEnforcesHandshakeAndMethodAllowlist(t *testing.T) {
 	badVersion := runSingleRequest(t, server, "{\"id\":\"1\",\"method\":\"core.handshake\",\"params\":{\"protocol\":\"atlas-core\",\"version\":\"0.9.0\",\"client_name\":\"test\",\"client_version\":\"1\",\"session_nonce\":\"n\"}}")
 	if badVersion.OK || badVersion.Error == nil || badVersion.Error.Code != CodeUnsupportedVersion {
 		t.Fatalf("expected unsupported version, got %+v", badVersion)
+	}
+
+	longNonce := strings.Repeat("n", MaxNonceRunes+1)
+	raw, _ := json.Marshal(map[string]any{
+		"id": "1", "method": "core.handshake", "params": map[string]any{
+			"protocol": "atlas-core", "version": "1.0.0", "client_name": "test", "client_version": "1", "session_nonce": longNonce,
+		},
+	})
+	tooLong := runSingleRequest(t, server, string(raw))
+	if tooLong.OK || tooLong.Error == nil || tooLong.Error.Code != CodeInvalidRequest {
+		t.Fatalf("overlong nonce must fail, got %+v", tooLong)
 	}
 
 	input := &bytes.Buffer{}
