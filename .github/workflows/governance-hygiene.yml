@@ -1,0 +1,59 @@
+name: Governance Hygiene
+
+on:
+  pull_request:
+    paths:
+      - ".github/CODEOWNERS"
+      - "CONTRIBUTING.md"
+      - "SECURITY.md"
+      - "THIRD_PARTY_NOTICES.md"
+      - "CITATION.cff"
+      - "TRADEMARKS.md"
+      - "docs/governance/**"
+      - "docs/current-status.md"
+      - "LICENSE"
+      - "LICENSE.txt"
+      - "LICENSE.md"
+      - "COPYING"
+      - "tools/validate_governance.py"
+      - ".github/workflows/governance-hygiene.yml"
+  push:
+    branches:
+      - main
+      - "feature/**"
+      - "chore/**"
+    paths:
+      - ".github/CODEOWNERS"
+      - "CONTRIBUTING.md"
+      - "SECURITY.md"
+      - "THIRD_PARTY_NOTICES.md"
+      - "CITATION.cff"
+      - "TRADEMARKS.md"
+      - "docs/governance/**"
+      - "docs/current-status.md"
+      - "LICENSE"
+      - "LICENSE.txt"
+      - "LICENSE.md"
+      - "COPYING"
+      - "tools/validate_governance.py"
+      - ".github/workflows/governance-hygiene.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-governance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Validate governance controls
+        run: python tools/validate_governance.py
