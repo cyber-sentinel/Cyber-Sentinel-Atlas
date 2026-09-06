@@ -31,18 +31,20 @@ class Phase542SpikeContractTests(unittest.TestCase):
         cls.suite = json.loads(SUITE.read_text(encoding="utf-8"))
 
     def test_query_suite_is_versioned_and_unique(self):
-        self.assertEqual(self.suite["version"], "1.0.0")
+        self.assertEqual(self.suite["version"], "1.1.0")
         ids = [item["id"] for item in self.suite["cases"]]
         self.assertEqual(len(ids), len(set(ids)))
         self.assertTrue({"exact", "lexical", "numeric_browse"}.issuperset(
             {item["kind"] for item in self.suite["cases"]}
         ))
+        self.assertIn("lexical-high-fanout-deterministic-ties", ids)
 
     def test_tantivy_uses_programmatic_queries(self):
         source = TANTIVY.read_text(encoding="utf-8")
         self.assertNotIn(".parse_query(", source)
         self.assertIn("Query.term_query", source)
         self.assertIn("Query.exists_query", source)
+        self.assertIn("self.document_count", source)
 
     def test_lexical_tokenizer_neutralizes_backend_syntax(self):
         tokens = self.bench._tokenize_lexical('PowerShell" OR provider:*')
@@ -54,12 +56,22 @@ class Phase542SpikeContractTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.bench._tokenize_lexical(" ".join(f"t{i}" for i in range(33)))
 
-    def test_noise_has_no_native_identifiers(self):
+    def test_lexical_query_scalar_and_unicode_bounds(self):
+        self.assertEqual(self.bench._tokenize_lexical("A" * 512), ["a" * 512])
+        with self.assertRaises(ValueError):
+            self.bench._tokenize_lexical("A" * 513)
+        with self.assertRaises(ValueError):
+            self.bench._tokenize_lexical("\ud800")
+
+    def test_noise_has_no_native_identifiers_and_varied_text(self):
         base, _ = self.bench.load_base_documents()
         expanded = self.bench.expand_documents(base, 250)
+        noise = expanded[len(base):]
         self.assertEqual(expanded[:len(base)], base)
-        self.assertTrue(all(item.native_ids == "" for item in expanded[len(base):]))
+        self.assertTrue(all(item.native_ids == "" for item in noise))
         self.assertEqual(len({item.target_id for item in expanded}), 250)
+        self.assertGreater(len({item.body for item in noise}), 200)
+        self.assertGreater(sum("benchmarkfanout" in item.body for item in noise), 40)
 
     def test_sqlite_smoke_acceptance(self):
         base, _ = self.bench.load_base_documents()
@@ -86,6 +98,26 @@ class Phase542SpikeContractTests(unittest.TestCase):
                         (4688, "atlas:event:microsoft.windows.security:4688"),
                     ],
                 )
+                self.assertEqual(
+                    adapter.lexical("benchmarkfanout"),
+                    [f"atlas:benchmark-noise:{i:08d}" for i in range(0, 50, 5)],
+                )
+                self.assertEqual(adapter.lexical('" OR provider:*'), ["atlas:benchmark-noise:00000000"] if False else [])
+            finally:
+                adapter.close()
+
+    @unittest.skipUnless(importlib.util.find_spec("tantivy") is not None, "tantivy binding not installed")
+    def test_tantivy_high_fanout_total_order(self):
+        base, _ = self.bench.load_base_documents()
+        docs = self.bench.expand_documents(base, 500)
+        with tempfile.TemporaryDirectory() as tmp:
+            adapter = self.bench.TantivyAdapter(Path(tmp), docs)
+            try:
+                expected = [f"atlas:benchmark-noise:{i:08d}" for i in range(0, 50, 5)]
+                first = adapter.lexical("benchmarkfanout")
+                second = adapter.lexical("benchmarkfanout")
+                self.assertEqual(first, expected)
+                self.assertEqual(second, expected)
             finally:
                 adapter.close()
 
