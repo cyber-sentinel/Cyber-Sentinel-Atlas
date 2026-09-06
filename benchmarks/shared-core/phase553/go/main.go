@@ -159,11 +159,11 @@ func main() {
 		Eligible:              eligible,
 		Gates:                 gates,
 		Runtime: map[string]any{
-			"go":      runtime.Version(),
-			"os":      runtime.GOOS,
-			"arch":    runtime.GOARCH,
-			"sqlite":  sqliteInfo["version"],
-			"fts5":    ftsOK,
+			"go":       runtime.Version(),
+			"os":       runtime.GOOS,
+			"arch":     runtime.GOARCH,
+			"sqlite":   sqliteInfo["version"],
+			"fts5":     ftsOK,
 			"compiler": runtime.Compiler,
 		},
 		Dependencies: map[string]string{
@@ -172,17 +172,17 @@ func main() {
 			"x-text":          "v0.28.0",
 		},
 		Bindings: map[string]string{
-			"spc_bundle_digest":   expected.SPCBundleDigest,
-			"search_index_sha256": expected.SearchIndexSHA256,
+			"spc_bundle_digest":    expected.SPCBundleDigest,
+			"search_index_sha256":  expected.SearchIndexSHA256,
 			"serialization_sha256": expected.CompactJSONSHA256,
 		},
 		Search: map[string]any{
-			"queries":         searchEvidence,
-			"exact_p95_ms":    exactP95,
-			"lexical_p95_ms":  lexicalP95,
+			"queries":        searchEvidence,
+			"exact_p95_ms":   exactP95,
+			"lexical_p95_ms": lexicalP95,
 		},
-		Pack:             packEvidence,
-		State:            stateEvidence,
+		Pack:  packEvidence,
+		State: stateEvidence,
 		KnownLimitations: []string{
 			"The spike consumes the already-approved SQLite artifact and ports the frozen resolver contract; it does not freeze Desktop IPC or UI technology.",
 			"Go filesystem durability evidence uses fsync on written files plus atomic rename; directory-sync support is platform-dependent and is recorded by the state probe.",
@@ -194,6 +194,19 @@ func main() {
 	}
 	fmt.Printf("{\"candidate\":\"go\",\"eligible\":%t,\"timestamp\":%q}\n", eligible, time.Now().UTC().Format(time.RFC3339))
 	if !eligible {
+		diagnostic := map[string]any{
+			"binding_ok":      bindingOK,
+			"fts5_ok":         ftsOK,
+			"gates":           gates,
+			"pack":            packEvidence,
+			"search":          evidence.Search,
+			"serialization_ok": serializationOK,
+			"state":           stateEvidence,
+		}
+		data, marshalErr := json.Marshal(diagnostic)
+		if marshalErr == nil {
+			fmt.Fprintln(os.Stderr, string(data))
+		}
 		os.Exit(1)
 	}
 }
