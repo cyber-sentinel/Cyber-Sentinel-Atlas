@@ -9,7 +9,7 @@
     "search_contract_version": {"const": "1.0.0"},
     "query": {"type": "string"},
     "status": {"enum": ["direct", "disambiguation", "no_match"]},
-    "match_stage": {"enum": ["canonical_identifier", "native_identifier", "scoped_identifier", "alias", "lexical_reference", "none"]},
+    "match_stage": {"enum": ["canonical_identifier", "native_identifier", "scoped_identifier", "alias", "lexical_reference", "lexical", "none"]},
     "matches": {
       "type": "array",
       "items": {

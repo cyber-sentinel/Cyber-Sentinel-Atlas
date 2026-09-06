@@ -1,0 +1,73 @@
+name: Phase 5.4.3 Production Search Core
+
+on:
+  pull_request:
+    paths:
+      - "tools/search/**"
+      - "tests/phase54/**"
+      - "schemas/search/v1/**"
+      - "docs/architecture/phase-5.4.3-production-search-core.md"
+      - "docs/adr/0022-search-engine-selection.md"
+      - ".github/workflows/phase543-production-search-core.yml"
+  push:
+    branches:
+      - main
+      - "feature/**"
+    paths:
+      - "tools/search/**"
+      - "tests/phase54/**"
+      - "schemas/search/v1/**"
+      - "docs/architecture/phase-5.4.3-production-search-core.md"
+      - "docs/adr/0022-search-engine-selection.md"
+      - ".github/workflows/phase543-production-search-core.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  production-search-core:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install validation dependencies
+        run: python -m pip install --disable-pip-version-check -r tools/requirements-validation.txt
+
+      - name: Validate Phase 5.4.1 frozen contracts
+        run: python tools/search/validate_phase541.py
+
+      - name: Validate Phase 5.4.3 production SQLite core
+        run: python tools/search/validate_phase543.py
+
+      - name: Run permanent Phase 5.4 tests
+        run: python -m unittest discover -s tests/phase54 -p "test_*.py" -v
+
+      - name: Build fixture-only production index evidence
+        run: python tools/search/sqlite_search.py build --output phase543-fixture-index.sqlite3 > phase543-index-manifest.json
+
+      - name: Query fixture-only production index evidence
+        run: python tools/search/sqlite_search.py query PowerShell --index phase543-fixture-index.sqlite3 > phase543-query-evidence.json
+
+      - name: Upload production search evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-5.4.3-production-search-${{ runner.os }}-${{ github.run_id }}
+          path: |
+            phase543-index-manifest.json
+            phase543-query-evidence.json
+          if-no-files-found: error
+          retention-days: 30
