@@ -61,7 +61,7 @@ jobs:
         uses: actions/setup-go@v6
         with:
           go-version: "1.25.0"
-          cache-dependency-path: benchmarks/shared-core/phase553/go/go.mod
+          cache-dependency-path: benchmarks/shared-core/phase553/go/go.sum
 
       - name: Set up Rust finalist
         shell: bash
@@ -90,8 +90,9 @@ jobs:
         working-directory: benchmarks/shared-core/phase553/go
         shell: bash
         run: |
-          go mod tidy
+          go mod download
           go mod verify
+          git diff --exit-code -- go.mod go.sum
           mkdir -p ../../../..//${PHASE553_EVIDENCE}
           cp go.sum ../../../..//${PHASE553_EVIDENCE}/go.sum
           go test ./...
@@ -110,10 +111,11 @@ jobs:
             "${PHASE553_EVIDENCE}/atlas-phase553-go" --workspace "${PHASE553_WORKSPACE}" --output "${PHASE553_EVIDENCE}/go-${RUNNER_OS}.json"
           fi
 
-      # Temporary evidence-bootstrap path: Linux already demonstrated that this
-      # finalist can build and execute, but Cargo.lock was not committed. Generate
-      # the exact lockfile once and publish it in the evidence artifact so it can be
-      # committed, then return this workflow to a strict --locked/no-mutation build.
+      # Rust is a screening finalist, not the selected production stack. Its exact
+      # dependency graph is captured as an evidence artifact when resolution succeeds.
+      # The git dependency is commit-pinned; Windows checkout portability failures and
+      # any Atlas trust/state hard-gate failures are recorded as disqualifying evidence
+      # rather than weakening the Go/Python mandatory CI path.
       - name: Resolve and build Rust finalist
         id: rust_build
         continue-on-error: true
