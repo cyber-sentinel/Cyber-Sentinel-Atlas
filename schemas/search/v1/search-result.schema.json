@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/search/v1/search-result.schema.json",
+  "title": "Atlas SearchResultEnvelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["search_contract_version", "query", "status", "match_stage", "matches"],
+  "properties": {
+    "search_contract_version": {"const": "1.0.0"},
+    "query": {"type": "string"},
+    "status": {"enum": ["direct", "disambiguation", "no_match"]},
+    "match_stage": {"enum": ["canonical_identifier", "native_identifier", "scoped_identifier", "alias", "lexical_reference", "none"]},
+    "matches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target_id", "title", "entity_type", "scope", "lifecycle", "matched_value", "match_reason"],
+        "properties": {
+          "target_id": {"type": "string", "pattern": "^atlas:"},
+          "title": {"type": "string"},
+          "entity_type": {"type": "string"},
+          "scope": {"type": "object", "additionalProperties": {"type": ["string", "null"]}},
+          "lifecycle": {"type": ["string", "null"]},
+          "matched_value": {"type": "string"},
+          "match_reason": {"type": "string"},
+          "reference_score": {"type": "integer", "minimum": 0}
+        }
+      }
+    }
+  }
+}

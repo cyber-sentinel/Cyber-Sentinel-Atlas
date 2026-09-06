@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/search/v1/search-projection-bundle.schema.json",
+  "title": "Atlas Search Projection Corpus Bundle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["search_contract_version", "build_binding", "documents", "identifiers", "aliases", "filters", "edges", "bundle_digest"],
+  "properties": {
+    "search_contract_version": {"const": "1.0.0"},
+    "build_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_corpus_id", "canonical_corpus_digest", "canonical_schema_version", "registry_bundle_version", "registry_bundle_digest", "projection_profile_version", "projection_profile_digest"],
+      "properties": {
+        "canonical_corpus_id": {"type": "string", "minLength": 1},
+        "canonical_corpus_digest": {"type": "string", "pattern": "^sha256-[0-9a-f]{64}$"},
+        "canonical_schema_version": {"type": "string", "minLength": 1},
+        "registry_bundle_version": {"type": "string", "minLength": 1},
+        "registry_bundle_digest": {"type": "string", "pattern": "^sha256-[0-9a-f]{64}$"},
+        "projection_profile_version": {"type": "string", "minLength": 1},
+        "projection_profile_digest": {"type": "string", "pattern": "^sha256-[0-9a-f]{64}$"},
+        "index_adapter_id": {"type": "string"},
+        "index_adapter_version": {"type": "string"}
+      }
+    },
+    "documents": {"type": "array", "items": {"$ref": "search-document.schema.json"}},
+    "identifiers": {"type": "array", "items": {"$ref": "identifier-projection.schema.json"}},
+    "aliases": {"type": "array", "items": {"$ref": "alias-projection.schema.json"}},
+    "filters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target_id", "facets"],
+        "properties": {
+          "target_id": {"type": "string", "pattern": "^atlas:"},
+          "facets": {"type": "object", "additionalProperties": {"type": ["string", "null"]}}
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "relationship_type", "target_id"],
+        "properties": {
+          "source_id": {"type": "string", "pattern": "^atlas:"},
+          "relationship_type": {"type": "string", "minLength": 1},
+          "target_id": {"type": "string", "pattern": "^atlas:"}
+        }
+      }
+    },
+    "bundle_digest": {"type": "string", "pattern": "^sha256-[0-9a-f]{64}$"}
+  }
+}
