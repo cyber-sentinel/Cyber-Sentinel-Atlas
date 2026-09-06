@@ -1,0 +1,52 @@
+name: Phase 5.5.4A Go Protocol Core
+
+on:
+  push:
+    branches:
+      - feature/phase-5.5.4a-go-protocol-core
+      - main
+    paths:
+      - 'shared-core/go/**'
+      - '.github/workflows/phase554a-go-protocol-core.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'shared-core/go/**'
+      - '.github/workflows/phase554a-go-protocol-core.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  protocol-core:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: shared-core/go
+    env:
+      CGO_ENABLED: '0'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.0'
+          cache-dependency-path: shared-core/go/go.sum
+      - name: Verify module graph
+        run: go mod verify
+      - name: Run protocol tests
+        run: go test ./...
+      - name: Run Go vet
+        run: go vet ./...
+      - name: Build atlas-core
+        run: go build -trimpath -buildvcs=false ./cmd/atlas-core
+      - name: Confirm benchmark code is not a production dependency
+        run: go list -deps ./...
+      - name: Confirm module remains dependency-minimal in 5.5.4A
+        run: go list -m all
