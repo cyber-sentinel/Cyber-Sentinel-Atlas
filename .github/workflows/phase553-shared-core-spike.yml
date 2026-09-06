@@ -1,0 +1,139 @@
+name: Phase 5.5.3 Shared Core Spike
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/shared-core/phase553/**"
+      - "docs/adr/0024-production-shared-core-technology-selection.md"
+      - "docs/architecture/phase-5.5.3-shared-core-technology-spike.md"
+      - ".github/workflows/phase553-shared-core-spike.yml"
+  push:
+    branches:
+      - main
+      - "feature/**"
+    paths:
+      - "benchmarks/shared-core/phase553/**"
+      - "docs/adr/0024-production-shared-core-technology-selection.md"
+      - "docs/architecture/phase-5.5.3-shared-core-technology-spike.md"
+      - ".github/workflows/phase553-shared-core-spike.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  finalist-spike:
+    name: finalist-spike (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: .
+      PYTHONUTF8: "1"
+      PHASE553_WORKSPACE: .phase553-workspace
+      PHASE553_EVIDENCE: .phase553-evidence
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python control
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install exact Python control dependencies
+        run: python -m pip install --disable-pip-version-check -r tools/pack/requirements-phase552.txt
+
+      - name: Assert exact Python trust dependencies
+        run: >-
+          python -c "import importlib.metadata as m;
+          assert m.version('tuf') == '7.0.0';
+          assert m.version('securesystemslib') == '1.4.0';
+          assert m.version('jsonschema') == '4.25.1';
+          assert m.version('pytest') == '8.4.2'"
+
+      - name: Set up Go finalist
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.25.0"
+          cache-dependency-path: benchmarks/shared-core/phase553/go/go.mod
+
+      - name: Set up Rust finalist
+        shell: bash
+        run: |
+          rustup toolchain install 1.88.0 --profile minimal
+          rustup default 1.88.0
+          rustc --version
+          cargo --version
+
+      - name: Build ephemeral shared fixture corpus
+        run: python benchmarks/shared-core/phase553/prepare_fixture.py --output "${{ env.PHASE553_WORKSPACE }}"
+
+      - name: Run Python semantic control
+        run: >-
+          python benchmarks/shared-core/phase553/python_control.py
+          --workspace "${{ env.PHASE553_WORKSPACE }}"
+          --output "${{ env.PHASE553_EVIDENCE }}/python-${{ runner.os }}.json"
+
+      - name: Resolve and build Go finalist
+        working-directory: benchmarks/shared-core/phase553/go
+        shell: bash
+        run: |
+          go mod tidy
+          go mod verify
+          go test ./...
+          mkdir -p ../../../..//${PHASE553_EVIDENCE}
+          if [ "${RUNNER_OS}" = "Windows" ]; then
+            go build -trimpath -o ../../../..//${PHASE553_EVIDENCE}/atlas-phase553-go.exe .
+          else
+            go build -trimpath -o ../../../..//${PHASE553_EVIDENCE}/atlas-phase553-go .
+          fi
+
+      - name: Run Go finalist
+        shell: bash
+        run: |
+          if [ "${RUNNER_OS}" = "Windows" ]; then
+            "${PHASE553_EVIDENCE}/atlas-phase553-go.exe" --workspace "${PHASE553_WORKSPACE}" --output "${PHASE553_EVIDENCE}/go-${RUNNER_OS}.json"
+          else
+            "${PHASE553_EVIDENCE}/atlas-phase553-go" --workspace "${PHASE553_WORKSPACE}" --output "${PHASE553_EVIDENCE}/go-${RUNNER_OS}.json"
+          fi
+
+      - name: Resolve and build Rust finalist
+        working-directory: benchmarks/shared-core/phase553/rust
+        shell: bash
+        run: |
+          cargo generate-lockfile
+          cargo build --locked --release
+
+      - name: Run Rust finalist
+        shell: bash
+        run: |
+          if [ "${RUNNER_OS}" = "Windows" ]; then
+            "benchmarks/shared-core/phase553/rust/target/release/atlas-phase553-rust.exe" --workspace "${PHASE553_WORKSPACE}" --output "${PHASE553_EVIDENCE}/rust-${RUNNER_OS}.json"
+          else
+            "benchmarks/shared-core/phase553/rust/target/release/atlas-phase553-rust" --workspace "${PHASE553_WORKSPACE}" --output "${PHASE553_EVIDENCE}/rust-${RUNNER_OS}.json"
+          fi
+
+      - name: Validate candidate hard gates and provisional ranking
+        run: >-
+          python benchmarks/shared-core/phase553/validate_evidence.py
+          --python "${{ env.PHASE553_EVIDENCE }}/python-${{ runner.os }}.json"
+          --go "${{ env.PHASE553_EVIDENCE }}/go-${{ runner.os }}.json"
+          --rust "${{ env.PHASE553_EVIDENCE }}/rust-${{ runner.os }}.json"
+          --output "${{ env.PHASE553_EVIDENCE }}/summary-${{ runner.os }}.json"
+
+      - name: Confirm canonical schemas v1 remain unchanged
+        if: github.ref != 'refs/heads/main'
+        run: git diff --exit-code origin/main...HEAD -- schemas/v1
+
+      - name: Upload Phase 5.5.3 evidence
+        uses: actions/upload-artifact@v6
+        with:
+          name: phase553-shared-core-${{ runner.os }}
+          path: .phase553-evidence/
+          if-no-files-found: error
