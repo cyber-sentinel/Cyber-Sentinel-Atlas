@@ -41,6 +41,9 @@ class SignedRepoFixture:
     manifest: dict[str, Any]
     inventory: dict[str, Any]
     spc_bundle: dict[str, Any]
+    # Ephemeral private signers are retained only by the in-memory test object so tests
+    # can publish newer metadata with the same trust root. They are never serialized.
+    signers: dict[str, CryptoSigner]
 
 
 def canonical_json_bytes(value: Any) -> bytes:
@@ -196,7 +199,7 @@ def make_signed_repository(
     md_timestamp = Metadata(Timestamp(expires=expiry))
     md_root.signed.consistent_snapshot = True
 
-    signers = {}
+    signers: dict[str, CryptoSigner] = {}
     for role in TOP_LEVEL_ROLE_NAMES:
         signer = CryptoSigner.generate_ed25519()
         md_root.signed.add_key(signer.public_key, role)
@@ -235,7 +238,37 @@ def make_signed_repository(
         manifest=manifest,
         inventory=inventory,
         spc_bundle=spc_bundle,
+        signers=signers,
     )
+
+
+def bump_repository_metadata(fixture: SignedRepoFixture) -> None:
+    """Publish targets/snapshot/timestamp version+1 using the same in-memory trust keys."""
+    metadata_dir = fixture.root / "metadata"
+    serializer = JSONSerializer()
+
+    md_targets = Metadata.from_bytes((metadata_dir / "targets.json").read_bytes())
+    md_targets.signed.version += 1
+    md_targets.sign(fixture.signers[Targets.type])
+    targets_metadata = md_targets.to_bytes(serializer)
+    (metadata_dir / "targets.json").write_bytes(targets_metadata)
+
+    md_snapshot = Metadata.from_bytes((metadata_dir / "snapshot.json").read_bytes())
+    md_snapshot.signed.version += 1
+    md_snapshot.signed.meta["targets.json"] = _metafile(
+        targets_metadata, md_targets.signed.version
+    )
+    md_snapshot.sign(fixture.signers[Snapshot.type])
+    snapshot_metadata = md_snapshot.to_bytes(serializer)
+    (metadata_dir / "snapshot.json").write_bytes(snapshot_metadata)
+
+    md_timestamp = Metadata.from_bytes((metadata_dir / "timestamp.json").read_bytes())
+    md_timestamp.signed.version += 1
+    md_timestamp.signed.snapshot_meta = _metafile(
+        snapshot_metadata, md_snapshot.signed.version
+    )
+    md_timestamp.sign(fixture.signers[Timestamp.type])
+    (metadata_dir / "timestamp.json").write_bytes(md_timestamp.to_bytes(serializer))
 
 
 def tamper_json_signature(path: Path) -> None:
