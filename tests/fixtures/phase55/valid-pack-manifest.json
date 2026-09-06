@@ -1,0 +1,39 @@
+{
+  "pack_format_version": "1.0.0",
+  "pack_id": "atlas:pack:phase55-fixture",
+  "pack_version": "1.0.0-test.1",
+  "created_at": "2026-09-06T09:30:00Z",
+  "canonical_schema_version": "1.0.0",
+  "ingestion_contract_version": "1.0.0",
+  "search_contract_version": "1.0.0",
+  "minimum_runtime_version": "0.1.0",
+  "canonical_records_digest": "sha256-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "spc_digest": "sha256-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "source_license_inventory": {
+    "path": "atlas/source-license-inventory.json",
+    "digest": "sha256-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "artifacts": [
+    {
+      "path": "content/canonical-records.jsonl",
+      "kind": "canonical-records",
+      "digest": "sha256-dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "length": 1024,
+      "derived": false
+    },
+    {
+      "path": "search/spc.json",
+      "kind": "spc",
+      "digest": "sha256-eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "length": 512,
+      "derived": true
+    },
+    {
+      "path": "search/atlas-search.sqlite3",
+      "kind": "search-index",
+      "digest": "sha256-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "length": 4096,
+      "derived": true
+    }
+  ]
+}
