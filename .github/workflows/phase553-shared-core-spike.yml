@@ -132,8 +132,9 @@ jobs:
         run: git diff --exit-code origin/main...HEAD -- schemas/v1
 
       - name: Upload Phase 5.5.3 evidence
+        if: always()
         uses: actions/upload-artifact@v6
         with:
           name: phase553-shared-core-${{ runner.os }}
           path: .phase553-evidence/
-          if-no-files-found: error
+          if-no-files-found: warn
