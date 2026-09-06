@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "cases": [
     {
       "id": "exact-windows-4688",
@@ -39,6 +39,23 @@
       "kind": "lexical",
       "query": "CreateAccessKey",
       "expected_contains": ["atlas:operation:aws.cloudtrail.iam:createaccesskey"]
+    },
+    {
+      "id": "lexical-high-fanout-deterministic-ties",
+      "kind": "lexical",
+      "query": "benchmarkfanout",
+      "expected_result": [
+        "atlas:benchmark-noise:00000000",
+        "atlas:benchmark-noise:00000005",
+        "atlas:benchmark-noise:00000010",
+        "atlas:benchmark-noise:00000015",
+        "atlas:benchmark-noise:00000020",
+        "atlas:benchmark-noise:00000025",
+        "atlas:benchmark-noise:00000030",
+        "atlas:benchmark-noise:00000035",
+        "atlas:benchmark-noise:00000040",
+        "atlas:benchmark-noise:00000045"
+      ]
     },
     {
       "id": "filtered-windows-process",
