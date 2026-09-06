@@ -1,0 +1,68 @@
+name: Phase 5.4.2 Search Engine Spike
+
+on:
+  pull_request:
+    paths:
+      - "benchmarks/search/phase542/**"
+      - "fixtures/phase-5.4.1/**"
+      - "tools/search/**"
+      - "tests/phase54/**"
+      - "docs/architecture/phase-5.4.2-search-engine-spike.md"
+      - "docs/adr/0022-search-engine-selection.md"
+      - ".github/workflows/phase542-search-engine-spike.yml"
+  push:
+    branches:
+      - main
+      - "feature/phase-5.4.2-search-engine-spike"
+    paths:
+      - "benchmarks/search/phase542/**"
+      - "fixtures/phase-5.4.1/**"
+      - "tools/search/**"
+      - "tests/phase54/**"
+      - "docs/architecture/phase-5.4.2-search-engine-spike.md"
+      - "docs/adr/0022-search-engine-selection.md"
+      - ".github/workflows/phase542-search-engine-spike.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  engine-spike:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned Tantivy Python binding
+        run: python -m pip install --disable-pip-version-check "tantivy==0.26.0"
+
+      - name: Run Phase 5.4.2 permanent contract and security tests
+        run: python -m unittest discover -s tests/phase54 -p "test_phase542_spike.py" -v
+
+      - name: Run equivalent SQLite FTS5 and Tantivy spike
+        run: python benchmarks/search/phase542/benchmark.py --docs 20000 --iterations 40 --output "benchmark-output/phase542-${{ runner.os }}.json"
+
+      - name: Validate benchmark result envelope
+        run: python benchmarks/search/phase542/validate_result.py "benchmark-output/phase542-${{ runner.os }}.json" --expected-docs 20000
+
+      - name: Upload benchmark evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-5.4.2-search-engine-spike-${{ runner.os }}-${{ github.run_id }}
+          path: benchmark-output/*.json
+          if-no-files-found: error
+          retention-days: 30

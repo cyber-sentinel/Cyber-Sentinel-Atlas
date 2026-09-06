@@ -1,0 +1,78 @@
+{
+  "version": "1.1.0",
+  "cases": [
+    {
+      "id": "exact-windows-4688",
+      "kind": "exact",
+      "target_id": "atlas:event:microsoft.windows.security:4688",
+      "expected_contains": ["atlas:event:microsoft.windows.security:4688"]
+    },
+    {
+      "id": "exact-sysmon-1",
+      "kind": "exact",
+      "target_id": "atlas:event:microsoft.sysmon:1",
+      "expected_contains": ["atlas:event:microsoft.sysmon:1"]
+    },
+    {
+      "id": "lexical-powershell",
+      "kind": "lexical",
+      "query": "PowerShell",
+      "expected_contains": ["atlas:attack-technique:mitre.attack:t1059.001"]
+    },
+    {
+      "id": "lexical-process-creation",
+      "kind": "lexical",
+      "query": "process creation",
+      "expected_contains": [
+        "atlas:event:microsoft.windows.security:4688",
+        "atlas:event:microsoft.sysmon:1"
+      ]
+    },
+    {
+      "id": "lexical-kubectl-exec",
+      "kind": "lexical",
+      "query": "kubectl exec",
+      "expected_contains": ["atlas:activity:kubernetes.audit:create.pods.exec"]
+    },
+    {
+      "id": "lexical-create-access-key",
+      "kind": "lexical",
+      "query": "CreateAccessKey",
+      "expected_contains": ["atlas:operation:aws.cloudtrail.iam:createaccesskey"]
+    },
+    {
+      "id": "lexical-high-fanout-deterministic-ties",
+      "kind": "lexical",
+      "query": "benchmarkfanout",
+      "expected_result": [
+        "atlas:benchmark-noise:00000000",
+        "atlas:benchmark-noise:00000005",
+        "atlas:benchmark-noise:00000010",
+        "atlas:benchmark-noise:00000015",
+        "atlas:benchmark-noise:00000020",
+        "atlas:benchmark-noise:00000025",
+        "atlas:benchmark-noise:00000030",
+        "atlas:benchmark-noise:00000035",
+        "atlas:benchmark-noise:00000040",
+        "atlas:benchmark-noise:00000045"
+      ]
+    },
+    {
+      "id": "filtered-windows-process",
+      "kind": "lexical",
+      "query": "process",
+      "provider": "microsoft-windows-security-auditing",
+      "expected_contains": ["atlas:event:microsoft.windows.security:4688"]
+    },
+    {
+      "id": "numeric-windows-provider",
+      "kind": "numeric_browse",
+      "provider": "microsoft-windows-security-auditing",
+      "expected_contains": [
+        "atlas:event:microsoft.windows.security:592",
+        "atlas:event:microsoft.windows.security:4688"
+      ],
+      "expected_numeric_prefix": [592, 4688]
+    }
+  ]
+}

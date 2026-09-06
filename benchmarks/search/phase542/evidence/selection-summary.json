@@ -1,0 +1,127 @@
+{
+  "version": "1.2.0",
+  "phase": "5.4.2",
+  "source_run_id": 34018323174,
+  "head_sha": "b7e110567f6345c70cbd455b97dba64481f84894",
+  "corpus": {
+    "document_count": 20000,
+    "benchmark_corpus_digest": "sha256-5cb1431b21eb9519f5e590ee5e7f2eb0720cb662fc70b6b2baf54996f0bc8f04",
+    "phase541_projection_digest": "sha256-61a7a9b46a070e279046230f593826d676adabd91b3384a085c8b19fa571af93",
+    "query_suite_digest": "sha256-45a0f9b5837dce8803000072ba3e628f8229c6c83d5d2433ead2592c8a3355ae",
+    "query_suite_version": "1.1.0",
+    "iterations_per_case": 40,
+    "high_fanout_modulus": 5
+  },
+  "contract_guards": {
+    "lexical_cutoff_ties": "verified",
+    "numeric_browse_cutoff_ties": "verified by permanent cross-platform tests",
+    "malformed_unicode_surrogates": "rejected",
+    "max_query_scalars": 512,
+    "max_lexical_terms": 32,
+    "raw_backend_query_parser_exposure": false
+  },
+  "platforms": {
+    "linux": {
+      "environment": {
+        "cache_condition": "process-warm repeated queries; OS page cache not flushed; build/open measured separately",
+        "cpu_count": 2,
+        "machine": "x86_64",
+        "memory_bytes": 8323973120,
+        "os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "processor": "x86_64",
+        "python": "3.12.14"
+      },
+      "result_digest": "sha256-2e5c0371dd68231de2de999ad302a8c889f9d66e8146c65de4ffd0303a359b5b",
+      "candidates": {
+        "sqlite-fts5": {
+          "engine_version": "3.45.1",
+          "build_seconds": 0.472286,
+          "index_bytes": 18739200,
+          "p95_ms": {
+            "exact-sysmon-1": 0.0130,
+            "exact-windows-4688": 0.0196,
+            "filtered-windows-process": 0.0746,
+            "lexical-create-access-key": 0.0604,
+            "lexical-high-fanout-deterministic-ties": 12.3888,
+            "lexical-kubectl-exec": 0.1012,
+            "lexical-powershell": 0.0939,
+            "lexical-process-creation": 0.0918,
+            "numeric-windows-provider": 0.0138
+          }
+        },
+        "tantivy": {
+          "engine_version": "tantivy v0.26.0, index_format v7",
+          "build_seconds": 0.268639,
+          "index_bytes": 2745183,
+          "p95_ms": {
+            "exact-sysmon-1": 0.0125,
+            "exact-windows-4688": 0.0158,
+            "filtered-windows-process": 0.0622,
+            "lexical-create-access-key": 0.0352,
+            "lexical-high-fanout-deterministic-ties": 28.2506,
+            "lexical-kubectl-exec": 0.0714,
+            "lexical-powershell": 0.0477,
+            "lexical-process-creation": 0.0691,
+            "numeric-windows-provider": 0.1700
+          }
+        }
+      }
+    },
+    "windows": {
+      "environment": {
+        "cache_condition": "process-warm repeated queries; OS page cache not flushed; build/open measured separately",
+        "cpu_count": 2,
+        "machine": "AMD64",
+        "memory_bytes": null,
+        "os": "Windows-2025Server-10.0.26100-SP0",
+        "processor": "Intel64 Family 6 Model 207 Stepping 2, GenuineIntel",
+        "python": "3.12.10"
+      },
+      "result_digest": "sha256-31c3ff65cf9e92ab3b8681710c6fffa0984f08fd519ab7a02ef70959b917e514",
+      "candidates": {
+        "sqlite-fts5": {
+          "engine_version": "3.49.1",
+          "build_seconds": 0.599467,
+          "index_bytes": 18739200,
+          "p95_ms": {
+            "exact-sysmon-1": 0.0356,
+            "exact-windows-4688": 0.0314,
+            "filtered-windows-process": 0.1090,
+            "lexical-create-access-key": 0.0883,
+            "lexical-high-fanout-deterministic-ties": 15.8578,
+            "lexical-kubectl-exec": 0.0816,
+            "lexical-powershell": 0.1120,
+            "lexical-process-creation": 0.1137,
+            "numeric-windows-provider": 0.0592
+          }
+        },
+        "tantivy": {
+          "engine_version": "tantivy v0.26.0, index_format v7",
+          "build_seconds": 0.623498,
+          "index_bytes": 2892936,
+          "p95_ms": {
+            "exact-sysmon-1": 0.0127,
+            "exact-windows-4688": 0.0267,
+            "filtered-windows-process": 0.0429,
+            "lexical-create-access-key": 0.0308,
+            "lexical-high-fanout-deterministic-ties": 34.8627,
+            "lexical-kubectl-exec": 0.0503,
+            "lexical-powershell": 0.0248,
+            "lexical-process-creation": 0.0624,
+            "numeric-windows-provider": 0.1964
+          }
+        }
+      }
+    }
+  },
+  "artifact_evidence": {
+    "linux": {
+      "artifact_id": 9984630110,
+      "artifact_digest": "sha256:e5d8609f64728348ae91f9a38728921071e1bb223f1a8686b38e5268cd9c40f6"
+    },
+    "windows": {
+      "artifact_id": 9984633555,
+      "artifact_digest": "sha256:e6b027575862dd2dfb0405133892d1c64392bdca6b6b47aa44f7585b10050cc9"
+    }
+  }
+}
