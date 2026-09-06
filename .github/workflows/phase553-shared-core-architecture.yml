@@ -1,0 +1,52 @@
+name: Phase 5.5.3 Shared Core Architecture
+
+on:
+  push:
+    branches:
+      - architecture/phase-5.5.3-shared-core-spike
+      - main
+    paths:
+      - 'docs/architecture/phase-5.5.3-shared-core-technology-spike.md'
+      - 'docs/adr/0024-production-shared-core-technology-selection.md'
+      - 'benchmarks/shared-core/phase553/**'
+      - 'tools/shared_core/**'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - 'docs/history/**'
+      - '.github/workflows/phase553-shared-core-architecture.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/architecture/phase-5.5.3-shared-core-technology-spike.md'
+      - 'docs/adr/0024-production-shared-core-technology-selection.md'
+      - 'benchmarks/shared-core/phase553/**'
+      - 'tools/shared_core/**'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - 'docs/history/**'
+      - '.github/workflows/phase553-shared-core-architecture.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  architecture-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Validate Phase 5.5.3 architecture gate
+        run: python tools/shared_core/validate_phase553_architecture.py
+      - name: Preserve canonical schema v1
+        shell: bash
+        run: |
+          git diff --exit-code origin/main...HEAD -- schemas/v1 || {
+            echo 'Phase 5.5.3 architecture gate must not modify canonical schemas/v1.' >&2
+            exit 1
+          }
