@@ -3,6 +3,7 @@ name: Phase 5.5.1 Pack Trust Contracts
 on:
   pull_request:
     paths:
+      - ".gitattributes"
       - "docs/adr/0023-secure-content-pack-trust-and-update-model.md"
       - "docs/architecture/atlas-tuf-pouf-v1.md"
       - "docs/architecture/phase-5.5.1-pack-trust-contracts.md"
@@ -16,6 +17,7 @@ on:
       - main
       - "feature/**"
     paths:
+      - ".gitattributes"
       - "docs/adr/0023-secure-content-pack-trust-and-update-model.md"
       - "docs/architecture/atlas-tuf-pouf-v1.md"
       - "docs/architecture/phase-5.5.1-pack-trust-contracts.md"
