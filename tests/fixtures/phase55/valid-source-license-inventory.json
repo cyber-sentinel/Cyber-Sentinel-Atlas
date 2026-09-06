@@ -1,0 +1,21 @@
+{
+  "inventory_version": "1.0.0",
+  "pack_id": "atlas:pack:phase55-fixture",
+  "pack_version": "1.0.0-test.1",
+  "entries": [
+    {
+      "source_id": "fixture:first-party",
+      "source_name": "Atlas Phase 5.5 test fixture",
+      "upstream_url": "https://example.invalid/atlas-fixture",
+      "source_version_or_commit": "fixture-v1",
+      "content_digest": "sha256-1111111111111111111111111111111111111111111111111111111111111111",
+      "redistribution_scope": "included",
+      "license_status": "verified-redistributable",
+      "license_identifier": "TEST-FIXTURE-ONLY",
+      "notice_required": false,
+      "attribution": "Synthetic non-production fixture generated for Cyber-Sentinel-Atlas tests.",
+      "evidence_url": "https://example.invalid/atlas-fixture/license",
+      "reviewed_at": "2026-09-06T09:30:00Z"
+    }
+  ]
+}
