@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -7,6 +8,7 @@ import pytest
 from tuf.api.exceptions import DownloadHTTPError
 
 from tests.phase55.phase552_helpers import (
+    bump_repository_metadata,
     make_signed_repository,
     tamper_json_signature,
 )
@@ -70,6 +72,39 @@ def test_expired_metadata_fails_closed(tmp_path: Path) -> None:
     )
     with pytest.raises(PackVerificationError, match="TUF verification failed"):
         verify_fixture(fixture, tmp_path / "runtime")
+
+
+def test_persistent_tuf_cache_rejects_metadata_rollback(tmp_path: Path) -> None:
+    fixture = make_signed_repository(tmp_path / "repo")
+    old_repo = tmp_path / "old-repository-copy"
+    shutil.copytree(fixture.root, old_repo)
+    cache = tmp_path / "durable-tuf-cache"
+
+    # Establish trusted metadata version 1.
+    verify_pack_directory(
+        fixture.root,
+        bootstrap_root=fixture.bootstrap_root,
+        metadata_cache_dir=cache,
+        verified_targets_dir=tmp_path / "verified-v1",
+    )
+
+    # Publish and trust version 2 with the exact same root keys/targets.
+    bump_repository_metadata(fixture)
+    verify_pack_directory(
+        fixture.root,
+        bootstrap_root=fixture.bootstrap_root,
+        metadata_cache_dir=cache,
+        verified_targets_dir=tmp_path / "verified-v2",
+    )
+
+    # Replaying the previously valid signed version 1 metadata must now fail closed.
+    with pytest.raises(PackVerificationError, match="TUF verification failed"):
+        verify_pack_directory(
+            old_repo,
+            bootstrap_root=fixture.bootstrap_root,
+            metadata_cache_dir=cache,
+            verified_targets_dir=tmp_path / "verified-replay",
+        )
 
 
 def test_tuf_authorized_but_manifest_undeclared_target_is_rejected(tmp_path: Path) -> None:
