@@ -4,11 +4,12 @@ const (
 	ProtocolName    = "atlas-core"
 	ProtocolVersion = "1.0.0"
 
-	CodeInvalidRequest     = "INVALID_REQUEST"
-	CodeHandshakeRequired  = "HANDSHAKE_REQUIRED"
-	CodeUnsupportedVersion = "UNSUPPORTED_VERSION"
-	CodeMethodNotFound     = "METHOD_NOT_FOUND"
-	CodeInternalError      = "INTERNAL_ERROR"
+	CodeInvalidFrame       = "ATLAS_PROTOCOL_INVALID_FRAME"
+	CodeUnsupportedVersion = "ATLAS_PROTOCOL_UNSUPPORTED_VERSION"
+	CodeHandshakeRequired  = "ATLAS_PROTOCOL_HANDSHAKE_REQUIRED"
+	CodeInvalidRequest     = "ATLAS_PROTOCOL_INVALID_REQUEST"
+	CodeMethodNotFound     = "ATLAS_METHOD_NOT_FOUND"
+	CodeInternalError      = "ATLAS_INTERNAL_FAILURE"
 )
 
 type ErrorBody struct {
