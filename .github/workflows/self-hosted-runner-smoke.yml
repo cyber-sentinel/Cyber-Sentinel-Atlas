@@ -1,0 +1,102 @@
+name: Self-hosted Runner Smoke
+
+on:
+  push:
+    branches:
+      - ops/self-hosted-runner-foundation
+    paths:
+      - '.github/workflows/self-hosted-runner-smoke.yml'
+      - 'scripts/ci/**'
+      - 'docs/operations/self-hosted-runners.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux-smoke:
+    runs-on: [self-hosted, linux, x64, atlas-ci, atlas-linux]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Verify Linux runner identity and baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "host=$(hostname)"
+          echo "user=$(id -un)"
+          test "$(id -u)" -ne 0
+          git --version
+          python3 --version
+          python3 -c "import sqlite3; print('sqlite=' + sqlite3.sqlite_version)"
+          uname -a
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.0'
+          cache: false
+
+      - name: Verify Go toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          go version
+          go env GOOS GOARCH
+
+      - name: Verify disposable workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          p="${RUNNER_TEMP}/atlas-self-hosted-smoke.txt"
+          printf 'atlas-ci-smoke\n' > "$p"
+          grep -qx 'atlas-ci-smoke' "$p"
+          rm -f "$p"
+
+  windows-smoke:
+    runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Verify Windows runner identity and baseline
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Write-Host "host=$env:COMPUTERNAME"
+          Write-Host "identity=$([System.Security.Principal.WindowsIdentity]::GetCurrent().Name)"
+          git --version
+          python --version
+          python -c "import sqlite3; print('sqlite=' + sqlite3.sqlite_version)"
+          [Environment]::OSVersion.VersionString
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.0'
+          cache: false
+
+      - name: Verify Go toolchain
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          go version
+          go env GOOS GOARCH
+
+      - name: Verify disposable workspace
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $p = Join-Path $env:RUNNER_TEMP 'atlas-self-hosted-smoke.txt'
+          Set-Content -LiteralPath $p -Value 'atlas-ci-smoke' -NoNewline
+          if ((Get-Content -LiteralPath $p -Raw) -ne 'atlas-ci-smoke') { throw 'runner temp write/read mismatch' }
+          Remove-Item -LiteralPath $p -Force
