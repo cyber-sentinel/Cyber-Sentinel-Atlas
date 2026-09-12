@@ -95,7 +95,7 @@ class ReferenceHostCollectionTests(unittest.TestCase):
         self.assertNotIn("\n  push:", text)
         self.assertIn("contents: read", text)
         self.assertIn("persist-credentials: false", text)
-        self.assertIn("runs-on: windows-latest", text)
+        self.assertIn("runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]", text)
         self.assertNotIn("git push", text.lower())
         self.assertNotIn("git commit", text.lower())
 
