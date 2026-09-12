@@ -33,10 +33,16 @@ fi
 
 install -d -m 0750 -o "${RUNNER_USER}" -g "${RUNNER_USER}" "${RUNNER_ROOT}"
 
+if [[ -e "${RUNNER_ROOT}/config.sh" ]]; then
+  echo "ERROR: ${RUNNER_ROOT} already contains a runner installation. Decommission it before re-bootstrap." >&2
+  exit 1
+fi
+
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "${tmpdir}"' EXIT
 
 curl --fail --location --proto '=https' --tlsv1.2 \
+  --retry 8 --retry-delay 3 --retry-all-errors --connect-timeout 20 \
   --output "${tmpdir}/${RUNNER_ARCHIVE}" \
   "${RUNNER_URL}"
 
