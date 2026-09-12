@@ -16,7 +16,7 @@ permissions:
   contents: read
 jobs:
   validate-phase534:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, atlas-ci, atlas-linux]
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
