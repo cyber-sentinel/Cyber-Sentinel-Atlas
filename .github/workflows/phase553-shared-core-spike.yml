@@ -46,10 +46,26 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Set up Python control
+      - name: Set up Python control (Linux)
+        if: runner.os != 'Windows'
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+
+      - name: Prepare Python 3.12 control venv (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
+          if ($version -ne '3.12') { throw "Python 3.12 required; found $version" }
+          $venv = Join-Path $env:RUNNER_TEMP 'atlas-python-venv'
+          if (Test-Path $venv) { Remove-Item $venv -Recurse -Force }
+          python -m venv $venv
+          $scripts = Join-Path $venv 'Scripts'
+          $scripts | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          "VIRTUAL_ENV=$venv" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          & (Join-Path $scripts 'python.exe') --version
 
       - name: Install exact Python control dependencies
         run: python -m pip install --disable-pip-version-check -r tools/pack/requirements-phase552.txt
@@ -69,6 +85,8 @@ jobs:
           cache-dependency-path: benchmarks/shared-core/phase553/go/go.sum
 
       - name: Set up Rust finalist
+        id: rust_setup
+        continue-on-error: true
         shell: bash
         run: |
           rustup toolchain install 1.95.0 --profile minimal
@@ -117,13 +135,12 @@ jobs:
             "${PHASE553_EVIDENCE}/atlas-phase553-go" --workspace "${PHASE553_WORKSPACE}" --output "${PHASE553_EVIDENCE}/go-${RUNNER_OS}.json"
           fi
 
-      # Rust is a screening finalist, not the selected production stack. Its exact
-      # dependency graph is captured as an evidence artifact when resolution succeeds.
-      # The git dependency is commit-pinned; Windows checkout portability failures and
-      # any Atlas trust/state hard-gate failures are recorded as disqualifying evidence
-      # rather than weakening the Go/Python mandatory CI path.
+      # Rust remains a screening finalist. A missing self-hosted Rust toolchain or
+      # candidate build/runtime failure is recorded as explicit disqualification
+      # evidence and must not weaken the mandatory Go/Python evidence path.
       - name: Resolve and build Rust finalist
         id: rust_build
+        if: steps.rust_setup.outcome == 'success'
         continue-on-error: true
         working-directory: benchmarks/shared-core/phase553/rust
         shell: bash
@@ -138,7 +155,7 @@ jobs:
 
       - name: Run Rust finalist
         id: rust_run
-        if: steps.rust_build.outcome == 'success'
+        if: steps.rust_setup.outcome == 'success' && steps.rust_build.outcome == 'success'
         continue-on-error: true
         shell: bash
         run: |
@@ -149,15 +166,15 @@ jobs:
           fi
 
       - name: Record Rust finalist disqualification evidence
-        if: steps.rust_build.outcome == 'failure' || steps.rust_run.outcome == 'failure'
+        if: always() && (steps.rust_setup.outcome != 'success' || steps.rust_build.outcome != 'success' || steps.rust_run.outcome != 'success')
         run: >-
           python benchmarks/shared-core/phase553/record_candidate_failure.py
           --workspace "${{ env.PHASE553_WORKSPACE }}"
           --output "${{ env.PHASE553_EVIDENCE }}/rust-${{ runner.os }}.json"
           --candidate rust
           --runner-os "${{ runner.os }}"
-          --stage "build=${{ steps.rust_build.outcome }},run=${{ steps.rust_run.outcome }}"
-          --reason "Rust finalist failed to build or run reproducibly on ${{ runner.os }}; the exact CI job log is authoritative failure evidence."
+          --stage "setup=${{ steps.rust_setup.outcome }},build=${{ steps.rust_build.outcome }},run=${{ steps.rust_run.outcome }}"
+          --reason "Rust finalist could not complete reproducibly on ${{ runner.os }}; the exact CI job log is authoritative failure evidence."
 
       - name: Capture footprint and lockfile evidence
         run: >-
