@@ -25,7 +25,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y --no-install-recommends \
   ca-certificates curl git jq tar gzip unzip \
-  python3 python3-venv python3-pip sqlite3 build-essential
+  python3 python-is-python3 python3-venv python3-pip sqlite3 build-essential
 
 if ! id "${RUNNER_USER}" >/dev/null 2>&1; then
   useradd --create-home --shell /bin/bash "${RUNNER_USER}"
