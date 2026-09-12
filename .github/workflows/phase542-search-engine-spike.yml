@@ -47,10 +47,26 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Set up Python
+      - name: Set up Python (Linux)
+        if: runner.os != 'Windows'
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+
+      - name: Prepare Python 3.12 venv (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
+          if ($version -ne '3.12') { throw "Python 3.12 required; found $version" }
+          $venv = Join-Path $env:RUNNER_TEMP 'atlas-python-venv'
+          if (Test-Path $venv) { Remove-Item $venv -Recurse -Force }
+          python -m venv $venv
+          $scripts = Join-Path $venv 'Scripts'
+          $scripts | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          "VIRTUAL_ENV=$venv" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          & (Join-Path $scripts 'python.exe') --version
 
       - name: Install pinned Tantivy Python binding
         run: python -m pip install --disable-pip-version-check "tantivy==0.26.0"
