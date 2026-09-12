@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   validate-foundation:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, atlas-ci, atlas-linux]
     timeout-minutes: 20
     steps:
       - name: Checkout
@@ -159,7 +159,7 @@ jobs:
       github.event_name == 'push' &&
       github.ref == 'refs/heads/feature/phase-5.3.3-windows-sysmon-encyclopedia' &&
       contains(github.event.head_commit.message, '[reference-export]')
-    runs-on: windows-latest
+    runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]
     timeout-minutes: 15
     steps:
       - name: Checkout controlled feature head
