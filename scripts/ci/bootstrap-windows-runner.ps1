@@ -34,7 +34,26 @@ New-Item -ItemType Directory -Path $tempRoot -Force | Out-Null
 
 try {
     $archivePath = Join-Path $tempRoot $RunnerArchive
-    Invoke-WebRequest -Uri $RunnerUrl -OutFile $archivePath -UseBasicParsing
+
+    $downloaded = $false
+    for ($attempt = 1; $attempt -le 5; $attempt++) {
+        try {
+            Remove-Item -LiteralPath $archivePath -Force -ErrorAction SilentlyContinue
+            Write-Host "Downloading GitHub Actions Runner (attempt $attempt/5)..."
+            Invoke-WebRequest -Uri $RunnerUrl -OutFile $archivePath -UseBasicParsing
+            $downloaded = $true
+            break
+        }
+        catch {
+            if ($attempt -eq 5) { throw }
+            Write-Warning "Runner download attempt $attempt failed: $($_.Exception.Message)"
+            Start-Sleep -Seconds (3 * $attempt)
+        }
+    }
+
+    if (-not $downloaded -or -not (Test-Path -LiteralPath $archivePath)) {
+        throw 'Runner archive download did not complete.'
+    }
 
     $actualHash = (Get-FileHash -LiteralPath $archivePath -Algorithm SHA256).Hash.ToLowerInvariant()
     if ($actualHash -ne $RunnerSha256) {
