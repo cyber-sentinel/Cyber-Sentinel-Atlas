@@ -133,6 +133,7 @@ func stageGeneration(verified *VerifiedPack, runtimeRoot string) (string, error)
 	} else if !errors.Is(err, os.ErrNotExist) {
 		return "", err
 	}
+
 	staging, err := os.MkdirTemp(generations, "."+generationID+".*.staging")
 	if err != nil {
 		return "", err
@@ -143,6 +144,7 @@ func stageGeneration(verified *VerifiedPack, runtimeRoot string) (string, error)
 			_ = os.RemoveAll(staging)
 		}
 	}()
+
 	required := []string{"atlas/pack-manifest.json", "atlas/source-license-inventory.json"}
 	for _, artifact := range verified.Manifest.Artifacts {
 		required = append(required, artifact.Path)
@@ -159,18 +161,19 @@ func stageGeneration(verified *VerifiedPack, runtimeRoot string) (string, error)
 			return "", err
 		}
 	}
+
 	derived := filepath.Join(staging, "derived", "search", "atlas-search.sqlite3")
 	if err := copyFileExact(verified.RuntimeSearchIndex, derived); err != nil {
 		return "", err
 	}
 	metadata := GenerationMetadata{
 		GenerationMetadataVersion: GenerationVersion,
-		GenerationID: generationID,
-		PackID: verified.PackID,
-		PackVersion: verified.PackVersion,
-		ManifestDigest: verified.ManifestDigest,
-		RuntimeSearchIndex: "derived/search/atlas-search.sqlite3",
-		SearchIndexRebuilt: verified.UsedRebuiltSearchIndex,
+		GenerationID:              generationID,
+		PackID:                    verified.PackID,
+		PackVersion:               verified.PackVersion,
+		ManifestDigest:            verified.ManifestDigest,
+		RuntimeSearchIndex:        "derived/search/atlas-search.sqlite3",
+		SearchIndexRebuilt:        verified.UsedRebuiltSearchIndex,
 	}
 	if err := validateGenerationMetadata(metadata); err != nil {
 		return "", err
@@ -179,8 +182,12 @@ func stageGeneration(verified *VerifiedPack, runtimeRoot string) (string, error)
 		return "", err
 	}
 	makeTreeReadOnly(staging)
-	if err := os.Rename(staging, final); err != nil {
+	durable, err := atomicReplaceDurable(staging, final)
+	if err != nil {
 		return "", err
+	}
+	if !durable {
+		return "", fmt.Errorf("generation publication did not provide durable semantics")
 	}
 	cleanup = false
 	return final, nil
@@ -209,6 +216,7 @@ func healthGeneration(generation string) error {
 	if sha256Prefixed(manifestBytes) != metadata.ManifestDigest || manifest.PackID != metadata.PackID || manifest.PackVersion != metadata.PackVersion {
 		return fmt.Errorf("installed generation manifest identity mismatch")
 	}
+
 	var spcData, canonicalData []byte
 	for _, artifact := range manifest.Artifacts {
 		parts, err := safeRelative(artifact.Path)
@@ -276,10 +284,7 @@ func recordRollback(runtimeRoot string, payload map[string]any) error {
 	return durableWriteJSON(filepath.Join(reports, fmt.Sprintf("%d.json", time.Now().UnixNano())), payload)
 }
 
-func InstallVerifiedGeneration(verified *VerifiedPack, runtimeRoot string, preHealth, postHealth HealthCheck) (string, error) {
-	if err := PrepareRuntimeRoot(runtimeRoot); err != nil {
-		return "", err
-	}
+func installVerifiedGenerationLocked(verified *VerifiedPack, runtimeRoot string, preHealth, postHealth HealthCheck) (string, error) {
 	state, err := LoadRuntimeState(runtimeRoot)
 	if err != nil {
 		return "", err
@@ -308,6 +313,8 @@ func InstallVerifiedGeneration(verified *VerifiedPack, runtimeRoot string, preHe
 			return "", err
 		}
 	}
+
+	// Trust advancement is durably committed before the active pointer moves.
 	if err := WriteRuntimeState(runtimeRoot, state); err != nil {
 		return "", err
 	}
@@ -316,6 +323,7 @@ func InstallVerifiedGeneration(verified *VerifiedPack, runtimeRoot string, preHe
 	if err := WriteRuntimeState(runtimeRoot, state); err != nil {
 		return "", err
 	}
+
 	active, healthErr := ResolveActiveGeneration(runtimeRoot)
 	if healthErr == nil {
 		healthErr = healthGeneration(active)
@@ -338,20 +346,35 @@ func InstallVerifiedGeneration(verified *VerifiedPack, runtimeRoot string, preHe
 		if err := WriteRuntimeState(runtimeRoot, rollback); err != nil {
 			return "", fmt.Errorf("post-activation health failed and rollback state write failed: %w", err)
 		}
-		_ = recordRollback(runtimeRoot, map[string]any{
-			"pack_id": verified.PackID,
-			"pack_version": verified.PackVersion,
-			"failed_generation": generationID,
+		if err := recordRollback(runtimeRoot, map[string]any{
+			"pack_id":             verified.PackID,
+			"pack_version":        verified.PackVersion,
+			"failed_generation":   generationID,
 			"restored_generation": rollback.ActiveGeneration,
-			"reason": healthErr.Error(),
-		})
+			"reason":              healthErr.Error(),
+		}); err != nil {
+			return "", fmt.Errorf("post-activation health failed; state restored but rollback evidence write failed: %w", err)
+		}
 		return "", fmt.Errorf("post-activation health failed; LKG restored: %w", healthErr)
 	}
+
 	state.LKGGeneration = &generationID
 	if err := WriteRuntimeState(runtimeRoot, state); err != nil {
 		return "", err
 	}
 	return generationID, nil
+}
+
+func InstallVerifiedGeneration(verified *VerifiedPack, runtimeRoot string, preHealth, postHealth HealthCheck) (string, error) {
+	if err := PrepareRuntimeRoot(runtimeRoot); err != nil {
+		return "", err
+	}
+	lock, err := AcquireRuntimeLock(runtimeRoot, time.Now().UTC())
+	if err != nil {
+		return "", err
+	}
+	defer lock.Close()
+	return installVerifiedGenerationLocked(verified, runtimeRoot, preHealth, postHealth)
 }
 
 func InstallAtlaspack(archivePath string, bootstrapRoot []byte, runtimeRoot, currentRuntimeVersion string, limits SafetyLimits, preHealth, postHealth HealthCheck) (string, error) {
@@ -383,7 +406,7 @@ func InstallAtlaspack(archivePath string, bootstrapRoot []byte, runtimeRoot, cur
 	if err != nil {
 		return "", err
 	}
-	return InstallVerifiedGeneration(verified, runtimeRoot, preHealth, postHealth)
+	return installVerifiedGenerationLocked(verified, runtimeRoot, preHealth, postHealth)
 }
 
 func MarshalRuntimeState(runtimeRoot string) ([]byte, error) {
