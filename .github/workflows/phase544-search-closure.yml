@@ -37,9 +37,11 @@ jobs:
         include:
           - os: ubuntu-latest
             runner: atlas-linux
+            runner_os: linux
           - os: windows-latest
             runner: atlas-windows
-    runs-on: [self-hosted, atlas-ci, "${{ matrix.runner }}"]
+            runner_os: windows
+    runs-on: [self-hosted, "${{ matrix.runner_os }}", x64, atlas-ci, "${{ matrix.runner }}"]
     timeout-minutes: 20
     steps:
       - name: Checkout
