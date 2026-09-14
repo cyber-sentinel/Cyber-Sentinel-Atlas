@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"net/url"
 	"path/filepath"
+	"runtime"
+	"strings"
 
 	_ "modernc.org/sqlite"
 )
@@ -19,6 +21,14 @@ type Core struct {
 	bundle   *Bundle
 }
 
+func sqliteReadOnlyDSN(absolute string) string {
+	uriPath := filepath.ToSlash(absolute)
+	if runtime.GOOS == "windows" && !strings.HasPrefix(uriPath, "/") {
+		uriPath = "/" + uriPath
+	}
+	return (&url.URL{Scheme: "file", Path: uriPath, RawQuery: "mode=ro&immutable=1"}).String()
+}
+
 func Open(path string, expected *Bundle) (*Core, error) {
 	if err := ValidateBundle(expected); err != nil {
 		return nil, err
@@ -27,7 +37,7 @@ func Open(path string, expected *Bundle) (*Core, error) {
 	if err != nil {
 		return nil, fmt.Errorf("resolve search index path: %w", err)
 	}
-	dsn := (&url.URL{Scheme: "file", Path: filepath.ToSlash(absolute), RawQuery: "mode=ro&immutable=1"}).String()
+	dsn := sqliteReadOnlyDSN(absolute)
 	db, err := sql.Open("sqlite", dsn)
 	if err != nil {
 		return nil, fmt.Errorf("open SQLite search index: %w", err)
