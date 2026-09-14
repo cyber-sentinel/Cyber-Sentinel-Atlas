@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   collect-reference-exports:
-    runs-on: windows-latest
+    runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]
     timeout-minutes: 15
     steps:
       - name: Checkout
