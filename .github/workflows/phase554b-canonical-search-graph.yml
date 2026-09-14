@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feature/phase-5.5.4b-canonical-search-graph
+      - feature/phase-5.5.4c-pack-trust-state
       - main
     paths:
       - 'shared-core/go/**'
