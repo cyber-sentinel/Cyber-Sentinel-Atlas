@@ -7,17 +7,14 @@ import (
 	"path/filepath"
 )
 
-func atomicReplaceDurable(temp, target string) (bool, error) {
+func atomicReplaceDurable(temp, target string) error {
 	if err := os.Rename(temp, target); err != nil {
-		return false, err
+		return err
 	}
 	dir, err := os.Open(filepath.Dir(target))
 	if err != nil {
-		return false, err
+		return err
 	}
 	defer dir.Close()
-	if err := dir.Sync(); err != nil {
-		return false, err
-	}
-	return true, nil
+	return dir.Sync()
 }
