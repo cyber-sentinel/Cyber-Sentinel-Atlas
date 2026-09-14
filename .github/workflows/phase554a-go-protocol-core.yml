@@ -24,7 +24,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+        include:
+          - os: ubuntu-latest
+            runner: atlas-linux
+            runner_os: linux
+          - os: windows-latest
+            runner: atlas-windows
+            runner_os: windows
+    runs-on: [self-hosted, "${{ matrix.runner_os }}", x64, atlas-ci, "${{ matrix.runner }}"]
     defaults:
       run:
         working-directory: shared-core/go
