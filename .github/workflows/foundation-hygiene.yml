@@ -14,13 +14,18 @@ permissions:
 
 jobs:
   validate-foundation:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, atlas-ci, atlas-linux]
     timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
 
       - name: Validate Phase 5.1 foundation
         run: python tools/validate_foundation.py
@@ -159,7 +164,7 @@ jobs:
       github.event_name == 'push' &&
       github.ref == 'refs/heads/feature/phase-5.3.3-windows-sysmon-encyclopedia' &&
       contains(github.event.head_commit.message, '[reference-export]')
-    runs-on: windows-latest
+    runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]
     timeout-minutes: 15
     steps:
       - name: Checkout controlled feature head
