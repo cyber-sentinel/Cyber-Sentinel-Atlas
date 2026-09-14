@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/app"
 	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/protocol"
 )
 
@@ -18,7 +19,10 @@ func main() {
 		os.Exit(2)
 	}
 
-	server := protocol.Server{Build: protocol.BuildInfo{Version: coreVersion, Commit: coreCommit}}
+	server := protocol.Server{
+		Build:      protocol.BuildInfo{Version: coreVersion, Commit: coreCommit},
+		Operations: app.NewUnconfigured(),
+	}
 	if err := server.Serve(os.Stdin, os.Stdout); err != nil {
 		fmt.Fprintf(os.Stderr, "atlas-core protocol session terminated: %v\n", err)
 		os.Exit(1)

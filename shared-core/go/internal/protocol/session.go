@@ -13,15 +13,24 @@ const (
 	MaxNonceRunes       = 256
 )
 
-var capabilities = []string{"core.handshake", "core.status"}
+var coreCapabilities = []string{"core.handshake", "core.status"}
+var operationalCapabilities = []string{"search.query", "record.get", "catalog.list", "graph.expand", "pack.status"}
+var operationalAllowlist = map[string]struct{}{
+	"search.query": {}, "record.get": {}, "catalog.list": {}, "graph.expand": {}, "pack.status": {},
+}
 
 type BuildInfo struct {
 	Version string
 	Commit  string
 }
 
+type OperationHandler interface {
+	Handle(method string, params json.RawMessage) (any, *OperationError)
+}
+
 type Server struct {
-	Build BuildInfo
+	Build      BuildInfo
+	Operations OperationHandler
 }
 
 type sessionState struct {
@@ -57,6 +66,14 @@ type statusResult struct {
 }
 
 type emptyParams struct{}
+
+func (s Server) capabilities() []string {
+	out := append([]string(nil), coreCapabilities...)
+	if s.Operations != nil {
+		out = append(out, operationalCapabilities...)
+	}
+	return out
+}
 
 func (s Server) Serve(in io.Reader, out io.Writer) error {
 	state := &sessionState{}
@@ -106,12 +123,19 @@ func (s Server) handle(payload []byte, state *sessionState) Response {
 			Version:         ProtocolVersion,
 			CoreVersion:     safeBuildField(s.Build.Version, "dev"),
 			CoreCommit:      safeBuildField(s.Build.Commit, "unknown"),
-			Capabilities:    append([]string(nil), capabilities...),
+			Capabilities:    s.capabilities(),
 			OfflineCapable:  true,
 			NetworkListener: false,
 		})
 	default:
-		return failure(req.ID, CodeMethodNotFound, "method is not available in this core build")
+		if _, ok := operationalAllowlist[req.Method]; !ok || s.Operations == nil {
+			return failure(req.ID, CodeMethodNotFound, "method is not available in this core build")
+		}
+		result, operationError := s.Operations.Handle(req.Method, req.Params)
+		if operationError != nil {
+			return failureWithRetry(req.ID, operationError.Code, operationError.Message, operationError.Retryable)
+		}
+		return success(req.ID, result)
 	}
 }
 
@@ -137,7 +161,7 @@ func (s Server) handleHandshake(req Request, state *sessionState) Response {
 		CoreVersion:  safeBuildField(s.Build.Version, "dev"),
 		CoreCommit:   safeBuildField(s.Build.Commit, "unknown"),
 		SessionNonce: params.SessionNonce,
-		Capabilities: append([]string(nil), capabilities...),
+		Capabilities: s.capabilities(),
 	})
 }
 
