@@ -38,12 +38,12 @@ type handshakeParams struct {
 }
 
 type handshakeResult struct {
-	Protocol      string   `json:"protocol"`
-	Version       string   `json:"version"`
-	CoreVersion   string   `json:"core_version"`
-	CoreCommit    string   `json:"core_commit"`
-	SessionNonce  string   `json:"session_nonce"`
-	Capabilities  []string `json:"capabilities"`
+	Protocol     string   `json:"protocol"`
+	Version      string   `json:"version"`
+	CoreVersion  string   `json:"core_version"`
+	CoreCommit   string   `json:"core_commit"`
+	SessionNonce string   `json:"session_nonce"`
+	Capabilities []string `json:"capabilities"`
 }
 
 type statusResult struct {
