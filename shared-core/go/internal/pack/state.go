@@ -202,12 +202,8 @@ func durableWriteJSON(path string, value any) error {
 	if err := file.Close(); err != nil {
 		return err
 	}
-	durable, err := atomicReplaceDurable(temp, path)
-	if err != nil {
+	if err := atomicReplaceDurable(temp, path); err != nil {
 		return err
-	}
-	if !durable {
-		return fmt.Errorf("state replacement did not provide durable semantics")
 	}
 	cleanup = false
 	return nil
