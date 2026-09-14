@@ -15,11 +15,11 @@ const (
 )
 
 var (
-	ErrInvalidUTF8    = errors.New("payload is not valid UTF-8")
-	ErrUTF8BOM        = errors.New("UTF-8 BOM is not permitted")
-	ErrDuplicateKey   = errors.New("duplicate JSON object member")
-	ErrJSONDepth      = errors.New("JSON nesting depth exceeds limit")
-	ErrTrailingJSON   = errors.New("trailing data after JSON value")
+	ErrInvalidUTF8     = errors.New("payload is not valid UTF-8")
+	ErrUTF8BOM         = errors.New("UTF-8 BOM is not permitted")
+	ErrDuplicateKey    = errors.New("duplicate JSON object member")
+	ErrJSONDepth       = errors.New("JSON nesting depth exceeds limit")
+	ErrTrailingJSON    = errors.New("trailing data after JSON value")
 	ErrInvalidEnvelope = errors.New("invalid request envelope")
 )
 
