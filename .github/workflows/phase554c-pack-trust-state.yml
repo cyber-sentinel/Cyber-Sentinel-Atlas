@@ -1,25 +1,29 @@
-name: Phase 5.5.4B Canonical Search Graph
+name: Phase 5.5.4C Pack Trust State
 
 on:
   push:
     branches:
-      - feature/phase-5.5.4b-canonical-search-graph
+      - feature/phase-5.5.4c-pack-trust-state
       - main
     paths:
       - 'shared-core/go/**'
-      - '.github/workflows/phase554b-canonical-search-graph.yml'
+      - 'tools/pack/**'
+      - 'tests/phase55/**'
+      - '.github/workflows/phase554c-pack-trust-state.yml'
   pull_request:
     branches:
       - main
     paths:
       - 'shared-core/go/**'
-      - '.github/workflows/phase554b-canonical-search-graph.yml'
+      - 'tools/pack/**'
+      - 'tests/phase55/**'
+      - '.github/workflows/phase554c-pack-trust-state.yml'
 
 permissions:
   contents: read
 
 jobs:
-  canonical-search-graph:
+  pack-trust-state:
     strategy:
       fail-fast: false
       matrix:
@@ -58,17 +62,38 @@ jobs:
           $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
           if ($version -ne '3.12') { throw "Python 3.12 required; found $version" }
           python --version
+      - name: Prepare Phase 5.5.2 Python oracle (Linux)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          set -euo pipefail
+          venv="$RUNNER_TEMP/atlas-phase554c-venv"
+          python -m venv "$venv"
+          "$venv/bin/python" -m pip install --disable-pip-version-check -r ../../tools/pack/requirements-phase552.txt
+          echo "ATLAS_PHASE554C_PYTHON=$venv/bin/python" >> "$GITHUB_ENV"
+      - name: Prepare Phase 5.5.2 Python oracle (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $venv = Join-Path $env:RUNNER_TEMP 'atlas-phase554c-venv'
+          python -m venv $venv
+          $python = Join-Path $venv 'Scripts\python.exe'
+          & $python -m pip install --disable-pip-version-check -r ../../tools/pack/requirements-phase552.txt
+          "ATLAS_PHASE554C_PYTHON=$python" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Verify module graph
         run: go mod verify
+      - name: Enforce accepted Phase 5.5.4 production dependency boundary
+        run: >-
+          python -c "import subprocess; rows=subprocess.check_output(['go','list','-m','all'], text=True).splitlines(); mods={p[0]:p[1] for p in (r.split() for r in rows) if len(p)>1}; assert mods.get('github.com/theupdateframework/go-tuf/v2')=='v2.4.2',mods.get('github.com/theupdateframework/go-tuf/v2'); assert mods.get('modernc.org/sqlite')=='v1.58.0',mods.get('modernc.org/sqlite'); assert mods.get('golang.org/x/text')=='v0.36.0',mods.get('golang.org/x/text')"
       - name: Enforce gofmt
         run: go fmt ./... && git diff --exit-code -- .
       - name: Reject benchmark runtime imports
         run: python -c "from pathlib import Path; bad=[str(p) for p in Path('.').rglob('*.go') if 'benchmarks/shared-core/phase553' in p.read_text(encoding='utf-8')]; assert not bad, bad"
-      - name: Enforce accepted production dependency boundary
-        run: >-
-          python -c "import subprocess; rows=subprocess.check_output(['go','list','-m','all'], text=True).splitlines(); mods={p[0]:p[1] for p in (r.split() for r in rows) if len(p)>1}; assert mods.get('modernc.org/sqlite')=='v1.58.0',mods.get('modernc.org/sqlite'); assert mods.get('golang.org/x/text')=='v0.36.0',mods.get('golang.org/x/text'); tuf=mods.get('github.com/theupdateframework/go-tuf/v2'); assert tuf in (None,'v2.4.2'),tuf"
-      - name: Run production canonical/search/graph and Python-oracle parity tests
+      - name: Run production Go unit and regression tests
         run: go test ./... -count=1
+      - name: Run Phase 5.5.4C Python-oracle adversarial integration
+        run: go test -tags=phase554c_integration ./internal/pack -count=1
       - name: Run Go vet
         run: go vet ./...
       - name: Build deterministic atlas-core pair
