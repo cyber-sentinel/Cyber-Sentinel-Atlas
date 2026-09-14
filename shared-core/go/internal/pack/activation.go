@@ -182,12 +182,8 @@ func stageGeneration(verified *VerifiedPack, runtimeRoot string) (string, error)
 		return "", err
 	}
 	makeTreeReadOnly(staging)
-	durable, err := atomicReplaceDurable(staging, final)
-	if err != nil {
+	if err := atomicReplaceDurable(staging, final); err != nil {
 		return "", err
-	}
-	if !durable {
-		return "", fmt.Errorf("generation publication did not provide durable semantics")
 	}
 	cleanup = false
 	return final, nil
