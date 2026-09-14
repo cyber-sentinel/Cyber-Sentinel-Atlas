@@ -18,14 +18,14 @@ var (
 	moveFileExW      = kernel32MoveFile.NewProc("MoveFileExW")
 )
 
-func atomicReplaceDurable(temp, target string) error {
+func atomicReplaceDurable(temp, target string) (bool, error) {
 	from, err := syscall.UTF16PtrFromString(temp)
 	if err != nil {
-		return err
+		return false, err
 	}
 	to, err := syscall.UTF16PtrFromString(target)
 	if err != nil {
-		return err
+		return false, err
 	}
 	result, _, callErr := moveFileExW.Call(
 		uintptr(unsafe.Pointer(from)),
@@ -34,9 +34,9 @@ func atomicReplaceDurable(temp, target string) error {
 	)
 	if result == 0 {
 		if callErr != syscall.Errno(0) {
-			return callErr
+			return false, callErr
 		}
-		return fmt.Errorf("MoveFileExW failed without Win32 error")
+		return false, fmt.Errorf("MoveFileExW failed without Win32 error")
 	}
-	return nil
+	return true, nil
 }
