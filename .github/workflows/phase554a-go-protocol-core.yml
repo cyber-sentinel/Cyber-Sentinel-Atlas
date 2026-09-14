@@ -1,0 +1,80 @@
+name: Phase 5.5.4A Go Protocol Core
+
+on:
+  push:
+    branches:
+      - feature/phase-5.5.4a-go-protocol-core
+      - main
+    paths:
+      - 'shared-core/go/**'
+      - '.github/workflows/phase554a-go-protocol-core.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'shared-core/go/**'
+      - '.github/workflows/phase554a-go-protocol-core.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  protocol-core:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            runner: atlas-linux
+            runner_os: linux
+          - os: windows-latest
+            runner: atlas-windows
+            runner_os: windows
+    runs-on: [self-hosted, "${{ matrix.runner_os }}", x64, atlas-ci, "${{ matrix.runner }}"]
+    defaults:
+      run:
+        working-directory: shared-core/go
+    env:
+      CGO_ENABLED: '0'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.0'
+          cache-dependency-path: shared-core/go/go.sum
+      - name: Set up Python (Linux)
+        if: runner.os != 'Windows'
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Verify Python 3.12 (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
+          if ($version -ne '3.12') { throw "Python 3.12 required; found $version" }
+          python --version
+      - name: Verify module graph
+        run: go mod verify
+      - name: Enforce gofmt
+        run: go fmt ./... && git diff --exit-code -- .
+      - name: Reject benchmark runtime imports
+        run: python -c "from pathlib import Path; bad=[str(p) for p in Path('.').rglob('*.go') if 'benchmarks/shared-core/phase553' in p.read_text(encoding='utf-8')]; assert not bad, bad"
+      - name: Run protocol tests and fuzz seed corpus
+        run: go test ./...
+      - name: Run Go vet
+        run: go vet ./...
+      - name: Build deterministic atlas-core pair
+        run: >-
+          go build -trimpath -buildvcs=false -ldflags "-X main.coreCommit=${{ github.sha }} -X main.coreVersion=0.1.0-dev" -o atlas-core-a ./cmd/atlas-core &&
+          go build -trimpath -buildvcs=false -ldflags "-X main.coreCommit=${{ github.sha }} -X main.coreVersion=0.1.0-dev" -o atlas-core-b ./cmd/atlas-core
+      - name: Verify same-input binary reproducibility
+        run: python -c "import hashlib; a=hashlib.sha256(open('atlas-core-a','rb').read()).hexdigest(); b=hashlib.sha256(open('atlas-core-b','rb').read()).hexdigest(); assert a==b,(a,b); print(a)"
+      - name: Record production dependency graph
+        run: go list -deps ./...
+      - name: Confirm module remains dependency-minimal in 5.5.4A
+        run: go list -m all
