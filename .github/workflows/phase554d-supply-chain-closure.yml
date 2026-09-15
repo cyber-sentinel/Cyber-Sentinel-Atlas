@@ -250,8 +250,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          go run golang.org/x/vuln/cmd/govulncheck@v1.8.0 -json ./... \
-            > "../../$PHASE554D_EVIDENCE/govulncheck.json"
+          out="../../$PHASE554D_EVIDENCE"
+          scanner="golang.org/x/vuln/cmd/govulncheck@v1.7.0"
+          # JSON is evidence only: govulncheck intentionally exits 0 for JSON
+          # even when vulnerabilities are detected. The second invocation is
+          # the actual fail-closed gate and its exit status is preserved by
+          # pipefail while tee records the human-readable evidence.
+          go run "$scanner" -json ./... \
+            > "$out/govulncheck.json" \
+            2> "$out/govulncheck-json.stderr.txt"
+          go run "$scanner" ./... 2>&1 | tee "$out/govulncheck.txt"
 
       - name: Measure binary footprint and stdio startup/IPC
         shell: bash
