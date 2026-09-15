@@ -8,9 +8,9 @@ Cyber-Sentinel-Atlas is the **KNOW** layer and knowledge/investigation product o
 
 > **Development:** Active
 > **Foundation state:** Phase 5.1 COMPLETE; Stage 1 COMPLETE
-> **Current delivery boundary:** Phase 5.5 — Offline Pack Runtime / Shared Core
-> **Completed:** Phases 5.1–5.4, Phase 5.5.1–5.5.3, and Phase 5.5.4A–5.5.4B
-> **Next implementation slice:** Phase 5.5.4C — production pack trust + durable state
+> **Current delivery boundary:** Phase 5.6 — Windows Desktop MVP
+> **Completed:** Phases 5.1–5.5, including Phase 5.5.4A–5.5.4D production Go Shared Core closure
+> **Next implementation slice:** Phase 5.6 — Windows Desktop MVP
 > **Visibility:** Private during active development
 > **Version:** `0.1.0-foundation.1`
 
@@ -79,7 +79,7 @@ The current implementation boundary includes the following accepted decisions:
 - **Content-pack trust:** TUF-based trust and update model with offline verification and Last Known Good preservation;
 - **Pack format/runtime:** verified `.atlaspack` handling, immutable generations, rollback guards, and atomic activation semantics;
 - **Production Shared Core:** Go;
-- **Reference/conformance role:** Python remains the semantic and cross-language conformance oracle during the production Go port;
+- **Reference/conformance role:** Python remains the semantic and cross-language conformance oracle for Shared Core conformance;
 - **Local Shared Core boundary:** `atlas-core --serve-stdio` using a versioned, bounded, length-prefixed UTF-8 JSON protocol;
 - **Network posture:** no default local HTTP/TCP listener and no hidden network fallback;
 - **Official user-facing CLI command:** `atlas`.
@@ -158,7 +158,7 @@ Search indexes are derived artifacts and never become the canonical source of tr
 
 ## Verified Offline Packs & Shared Core
 
-Phase 5.5 introduced the verified offline pack and Shared Core boundary.
+Phase 5.5 established and closed the verified offline pack and production Shared Core boundary.
 
 Completed capabilities include:
 
@@ -171,9 +171,11 @@ Completed capabilities include:
 - atomic activation and Last Known Good rollback;
 - deterministic verified-pack building;
 - Go production protocol core (`5.5.4A`);
-- Go canonical, SQLite/FTS5 search, catalog, and bounded graph parity (`5.5.4B`).
+- Go canonical, SQLite/FTS5 search, catalog, and bounded graph parity (`5.5.4B`);
+- Go TUF/pack trust, durable state, activation and LKG parity (`5.5.4C`);
+- Linux/Windows supply-chain closure, reproducible-build evidence, SBOM/vulnerability checks, dependency hardening and Python-oracle conformance (`5.5.4D`).
 
-The next implementation slice, **5.5.4C**, ports production pack trust and durable state into the Go Shared Core. Supply-chain and cross-platform closure follow in **5.5.4D**.
+Phase 5.5.4D merged through PR #35 at `00a27df6b28b034fecc3905865e0aac200e5aa87`, closing the production Go Shared Core implementation sequence. The next delivery boundary is **Phase 5.6 — Windows Desktop MVP**; its UI technology remains a separate evidence/ADR decision and is not implied by the Go Shared Core.
 
 ## Initial MVP Domain
 
@@ -245,15 +247,15 @@ Skills does not replace Atlas product contracts or DefenseOps engineering artifa
 5.2  Canonical Data Model                      COMPLETE
 5.3  Source & Ingestion Core                   COMPLETE
 5.4  Deterministic Search Core                 COMPLETE
-5.5  Offline Pack Runtime / Shared Core         IN PROGRESS
+5.5  Offline Pack Runtime / Shared Core         COMPLETE
      5.5.1 Pack Trust Contracts                COMPLETE
      5.5.2 Verified Pack Runtime               COMPLETE
      5.5.3 Shared Core Technology Selection    COMPLETE
      5.5.4A Go Protocol Core                   COMPLETE
      5.5.4B Canonical / Search / Graph Core    COMPLETE
-     5.5.4C Pack Trust / Durable State         NEXT
-     5.5.4D Supply-chain / Closure             PLANNED
-5.6  Windows Desktop MVP                       NOT STARTED
+     5.5.4C Pack Trust / Durable State         COMPLETE
+     5.5.4D Supply-chain / Closure             COMPLETE
+5.6  Windows Desktop MVP                       NEXT
 5.7  Web / PWA                                 NOT STARTED
 5.8  API / CLI                                 NOT STARTED
 5.9  Grounded AI                               NOT STARTED
