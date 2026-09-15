@@ -69,6 +69,7 @@ def main() -> int:
         phase554_valid = (
             "Phase 5.5.4 — Production Go Shared Core: **NEXT**" in state
             or "Phase 5.5.4 — Production Go Shared Core: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**" in state
+            or "Phase 5.5.4 — Production Go Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in state
         )
         require(phase554_valid, "closed Phase 5.5.3 must advance to a valid Phase 5.5.4 lifecycle state")
 
@@ -86,6 +87,7 @@ def main() -> int:
         phase554_valid = (
             "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **NEXT**" in roadmap
             or "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**" in roadmap
+            or "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in roadmap
         )
         require(phase554_valid, "roadmap must advance to a valid Phase 5.5.4 lifecycle state after selection closure")
 
@@ -94,7 +96,11 @@ def main() -> int:
         "Production Shared Core implementation family: **Go**" in current
         and "Phase 5.5.4" in current
         and "Production Go Shared Core" in current
-        and ("NEXT" in current or "ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED" in current)
+        and (
+            "NEXT" in current
+            or "ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED" in current
+            or "COMPLETE / MERGED / POST-MERGE VERIFIED" in current
+        )
     )
     require(pre_selection_status or post_selection_status, "current-status must describe the Shared Core selection/implementation boundary")
 
