@@ -43,7 +43,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-go@v6
         with:
-          go-version: '1.25.0'
+          go-version: '1.25.13'
           cache-dependency-path: shared-core/go/go.sum
       - name: Set up Python (Linux)
         if: runner.os != 'Windows'
