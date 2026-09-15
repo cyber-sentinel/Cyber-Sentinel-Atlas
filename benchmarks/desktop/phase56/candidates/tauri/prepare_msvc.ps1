@@ -27,6 +27,76 @@ function Import-CmdEnvironment {
     }
 }
 
+function Install-PinnedLlvmTools {
+    $version = '22.1.8'
+    $expectedSha256 = 'd96c2cc1736f4eb7fa43cb9bbdf56d93551a9ae0a9aadb9c99c3c3b2b712a234'
+    $archiveName = "clang+llvm-$version-x86_64-pc-windows-msvc.tar.xz"
+    $archiveUrlName = "clang%2Bllvm-$version-x86_64-pc-windows-msvc.tar.xz"
+    $url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/$archiveUrlName"
+    $root = Join-Path $env:RUNNER_TEMP "llvm-$version-phase561"
+    $archive = Join-Path $env:RUNNER_TEMP $archiveName
+    $topDirectory = "clang+llvm-$version-x86_64-pc-windows-msvc"
+
+    Remove-Item -Recurse -Force $root -ErrorAction SilentlyContinue
+    Remove-Item -Force $archive -ErrorAction SilentlyContinue
+    New-Item -ItemType Directory -Force -Path $root | Out-Null
+
+    Invoke-WebRequest -Uri $url -OutFile $archive
+    $actualSha256 = (Get-FileHash -Algorithm SHA256 $archive).Hash.ToLowerInvariant()
+    if ($actualSha256 -ne $expectedSha256) {
+        throw "LLVM archive SHA-256 mismatch: expected $expectedSha256, got $actualSha256"
+    }
+
+    $tar = Get-Command tar.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+    if (-not $tar) {
+        throw 'tar.exe is required to extract the checksum-verified LLVM .tar.xz archive.'
+    }
+
+    # Extract only the executable toolchain and Clang resource directory. This keeps
+    # the fallback runner-local and avoids installing or registering LLVM system-wide.
+    & $tar.Source -xf $archive -C $root "$topDirectory/bin" "$topDirectory/lib/clang"
+    $extractExitCode = $LASTEXITCODE
+    if ($extractExitCode -ne 0) {
+        throw "LLVM archive extraction failed with exit code $extractExitCode"
+    }
+
+    $binDirectory = Join-Path $root "$topDirectory\bin"
+    $requiredTools = @('lld-link.exe', 'clang-cl.exe', 'llvm-lib.exe', 'llvm-rc.exe')
+    foreach ($toolName in $requiredTools) {
+        $toolPath = Join-Path $binDirectory $toolName
+        if (-not (Test-Path $toolPath -PathType Leaf)) {
+            throw "checksum-verified LLVM archive is missing required tool: $toolName"
+        }
+    }
+
+    $env:PATH = "$binDirectory;$env:PATH"
+    $env:ATLAS_TAURI_LLVM_VERSION = $version
+    $env:ATLAS_TAURI_LLVM_SHA256 = $actualSha256
+    $env:ATLAS_TAURI_LLVM_BIN = $binDirectory
+
+    $lldOutput = @(& (Join-Path $binDirectory 'lld-link.exe') --version 2>&1)
+    $lldExitCode = $LASTEXITCODE
+    if ($lldExitCode -ne 0) {
+        throw "lld-link version query failed with exit code $lldExitCode"
+    }
+
+    $clangOutput = @(& (Join-Path $binDirectory 'clang-cl.exe') --version 2>&1)
+    $clangExitCode = $LASTEXITCODE
+    if ($clangExitCode -ne 0) {
+        throw "clang-cl version query failed with exit code $clangExitCode"
+    }
+
+    return [ordered]@{
+        version = $version
+        archive_url = $url
+        archive_sha256 = $actualSha256
+        bin_path = $binDirectory
+        lld_link_version = ([string]($lldOutput | Select-Object -First 1)).Trim()
+        clang_cl_version = ([string]($clangOutput | Select-Object -First 1)).Trim()
+        required_tools = $requiredTools
+    }
+}
+
 function Install-PinnedCargoXwin {
     $version = '0.23.0'
     $expectedSha256 = 'af084297230d9d4d6b933471d544289c09ab40906ca8acf6ca2a5a643117fff3'
@@ -84,6 +154,7 @@ $cl = Get-Command cl.exe -ErrorAction SilentlyContinue | Select-Object -First 1
 $source = 'existing-process-environment'
 $vsDevCmd = $null
 $cargoXwin = $null
+$llvmTools = $null
 $env:ATLAS_TAURI_BUILD_MODE = 'native-msvc'
 
 if (-not $link -or -not $cl) {
@@ -129,12 +200,12 @@ if (-not $link -or -not $cl) {
         }
     }
     else {
-        # Rust's MSVC target requires a linker, CRT libraries and Windows import libraries.
-        # The self-hosted NetworkService runner intentionally has no machine-level Visual
-        # C++ Build Tools. Use Tauri's documented cargo-xwin path with a checksum-pinned,
-        # user-local binary and runner-local SDK/CRT cache instead of mutating the machine.
+        # Rust's MSVC target needs the Windows CRT/SDK plus an MSVC-compatible linker.
+        # Tauri documents LLVM/lld alongside cargo-xwin for this path. Keep both
+        # dependencies checksum-pinned and runner-local instead of mutating the host.
+        $llvmTools = Install-PinnedLlvmTools
         $cargoXwin = Install-PinnedCargoXwin
-        $source = 'checksum-pinned-cargo-xwin'
+        $source = 'checksum-pinned-cargo-xwin+llvm'
     }
 }
 
@@ -142,6 +213,10 @@ Write-Host "Tauri Windows build environment source: $source"
 Write-Host "Tauri build mode: $env:ATLAS_TAURI_BUILD_MODE"
 if ($link) { Write-Host "link.exe: $($link.Source)" }
 if ($cl) { Write-Host "cl.exe: $($cl.Source)" }
+if ($llvmTools) {
+    Write-Host "LLVM: $($llvmTools.version)"
+    Write-Host "lld-link: $($llvmTools.lld_link_version)"
+}
 if ($cargoXwin) { Write-Host "cargo-xwin: $($cargoXwin.reported_version)" }
 
 if ($env:PHASE561_EVIDENCE) {
@@ -157,6 +232,7 @@ if ($env:PHASE561_EVIDENCE) {
         vc_tools_install_dir = $env:VCToolsInstallDir
         windows_sdk_dir = $env:WindowsSdkDir
         windows_sdk_version = $env:WindowsSDKVersion
+        llvm = $llvmTools
         cargo_xwin = $cargoXwin
     }
     $evidence | ConvertTo-Json -Depth 6 | Set-Content -Encoding utf8 (Join-Path $env:PHASE561_EVIDENCE 'tauri-build-environment.json')
