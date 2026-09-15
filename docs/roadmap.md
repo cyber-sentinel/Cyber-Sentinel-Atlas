@@ -78,7 +78,7 @@ Completed provider catalog browse, bounded graph pivots, lifecycle browsing and 
 
 ## Phase 5.5 — Offline Pack Runtime / Shared Core
 
-Status: **IN PROGRESS**
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
 ### Phase 5.5.1 — Pack Trust Contracts + ADR-0023
 
@@ -96,45 +96,73 @@ Delivered secure `.atlaspack` extraction, offline TUF verification, exact artifa
 
 Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
-Evidence-driven technology selection completed on Linux and Windows. ADR-0024 selected Go as the production Shared Core implementation family after Go passed all mandatory G-SC1..G-SC8 gates on both operating systems and ranked first among eligible candidates. Python remains the semantic/conformance oracle during the production port. The existing Atlas deterministic JSON profile remains frozen and no JCS digest migration occurred.
+Evidence-driven technology selection completed on Linux and Windows. ADR-0024 selected Go as the production Shared Core implementation family after Go passed all mandatory G-SC1..G-SC8 gates on both operating systems and ranked first among eligible candidates. Python remains the semantic/conformance oracle for frozen vectors. The existing Atlas deterministic JSON profile remains frozen and no JCS digest migration occurred.
 
-The accepted evidence baseline includes `go-tuf/v2 v2.4.2`, `modernc.org/sqlite v1.58.0` and the normalized Go dependency graph including `golang.org/x/text v0.36.0`.
+The accepted historical evidence baseline includes `go-tuf/v2 v2.4.2`, `modernc.org/sqlite v1.58.0` and the normalized Go dependency graph including `golang.org/x/text v0.36.0`.
 
-This decision does not select the Desktop UI framework, broader application storage, graph database, HSM/KMS provider, application updater/CDN, Detection IR, semantic/vector retrieval or Grounded AI runtime.
+This decision did not select the Desktop UI framework, broader application storage, graph database, HSM/KMS provider, application updater/CDN, Detection IR, semantic/vector retrieval or Grounded AI runtime.
 
 ### Phase 5.5.4 — Production Go Shared Core
 
-Status: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
-Implement the accepted Shared Core contracts as production Go code rather than spike/benchmark code.
+The accepted Shared Core contracts are implemented as production Go code rather than spike/benchmark code. ADR-0025 freezes the local integration boundary as a typed child-process stdio protocol implemented by `atlas-core --serve-stdio`. Protocol v1 uses a 4-byte unsigned big-endian payload length followed by UTF-8 JSON, exact protocol handshake/versioning, strict bounded parsing, one request at a time per child process, compiled method allowlists, protocol-only stdout and no default local HTTP/TCP listener or hidden network fallback.
 
-ADR-0025 freezes the local integration boundary as a typed child-process stdio protocol implemented by `atlas-core --serve-stdio`. The v1 protocol uses a 4-byte unsigned big-endian payload length followed by UTF-8 JSON, exact protocol handshake/versioning, strict bounded parsing, one request at a time per child process, compiled method allowlists, protocol-only stdout and no default local HTTP/TCP listener or hidden network fallback.
+Delivered scope:
 
-Mandatory scope:
+- preserved the seven-family canonical/read-model and deterministic Atlas serialization/digest profile;
+- implemented Phase 5.4 exact-before-lexical SQLite/FTS5 search, catalogs and bounded graph reads without semantic fallback;
+- implemented ADR-0023 / Atlas TUF POUF v1 verification and verified-pack consumption;
+- preserved strict `.atlaspack` archive rules, offline/no-network operation, immutable generations, highest-seen/trusted-time guards, atomic activation and Last Known Good rollback;
+- retained Python reference/control conformance fixtures for frozen cross-language parity;
+- locked dependencies and produced clean-build, SBOM, license and vulnerability evidence;
+- passed Linux and Windows correctness/security/reproducibility CI;
+- kept the Windows Desktop UI framework independent from Go internals.
 
-- preserve the seven-family canonical/read-model and deterministic Atlas serialization/digest profile;
-- implement Phase 5.4 exact-before-lexical SQLite/FTS5 search, catalogs and bounded graph reads without semantic fallback;
-- implement ADR-0023 / Atlas TUF POUF v1 verification and verified-pack consumption;
-- preserve strict `.atlaspack` archive rules, offline/no-network operation, immutable generations, highest-seen/trusted-time guards, atomic activation and Last Known Good rollback;
-- retain Python reference/control conformance fixtures until the production Go implementation proves parity;
-- lock dependencies and produce clean-build, SBOM and vulnerability evidence;
-- pass Linux and Windows correctness/security/reproducibility CI;
-- keep the Windows Desktop UI framework independent from Go internals.
+Execution closure:
 
-Execution slices:
-
-- **5.5.4A — Core skeleton + protocol:** Go module, `atlas-core`, framing/parser/handshake/error model, `core.status`, Linux/Windows adversarial protocol tests and deterministic build metadata.
-- **5.5.4B — Canonical + search + graph:** canonical loader, deterministic serialization vectors, SQLite/FTS5 resolver/search/catalog/graph parity and performance regression gates.
-- **5.5.4C — Pack trust + durable state:** go-tuf POUF v1 verification, archive/manifest/license validation, immutable generations, highest-seen/trusted-time state, activation/LKG/health rollback and filesystem adversarial tests.
-- **5.5.4D — Supply-chain / closure:** reproducible Linux/Windows builds, SBOM, Go vulnerability evidence, dependency/license inventory, full Python-oracle conformance, binary/IPC measurements and closure status sync.
+- **5.5.4A — Core skeleton + protocol:** complete and post-merge verified.
+- **5.5.4B — Canonical + search + graph:** complete and post-merge verified.
+- **5.5.4C — Pack trust + durable state:** complete and post-merge verified.
+- **5.5.4D — Supply-chain / closure:** complete, merged through PR #35 and post-merge verified on `main@00a27df6b28b034fecc3905865e0aac200e5aa87`.
 
 ## Phase 5.6 — Windows Desktop MVP
 
-Status: **NOT STARTED / BLOCKED ON PRODUCTION SHARED CORE**
+Status: **IN PROGRESS**
 
 First full end-user interface. Requirements include fast offline exact/lexical lookup, canonical data, relationship navigation, provenance visibility, verified pack updates, safe rollback and portable Windows mode evaluation.
 
 Desktop technology requires its own evidence/ADR and is not implied by the Go Shared Core selection or ADR-0025 local protocol choice.
+
+### Phase 5.6.0 — Spike Contract + Environment/Core-Boundary Probe
+
+Status: **COMPLETE / VERIFIED**
+
+Proved the Windows build/toolchain environment for Go 1.25.13, Python 3.12, Node 24, .NET 10 and Rust 1.95; built the production `atlas-core.exe`; completed protocol `1.0.0` handshake plus `core.status`; confirmed offline-capable state, no default network listener and no canonical schema drift; and uploaded machine-readable evidence.
+
+### Phase 5.6.1 — Executable Desktop Candidate Builds
+
+Status: **IN PROGRESS**
+
+Build minimal Tauri 2.x, Electron and .NET Windows Desktop hosts against the same frozen `atlas-core` sidecar. Every candidate must locate and validate the sidecar, spawn `atlas-core --serve-stdio`, complete handshake, call `core.status`, render returned status and terminate cleanly without implementing a parallel search/index/trust engine.
+
+### Phase 5.6.2 — Evidence Review + ADR-0026
+
+Status: **NOT STARTED**
+
+Compare mandatory gate results and weighted measurements, document rejected alternatives and accept exactly one Desktop host family.
+
+### Phase 5.6.3 — First Preview UI
+
+Status: **NOT STARTED**
+
+Implement only preview-critical surfaces: offline exact/lexical search, canonical record/detail, bounded relationship navigation, claim/source provenance, verified pack state/update, safe rollback and explicit failure/recovery states.
+
+### Phase 5.6.4 — Windows Packaging / Portable Smoke
+
+Status: **NOT STARTED**
+
+Produce the first Windows package, validate sidecar identity/location, run a clean Windows smoke test and evaluate portable mode. First Preview is not ready until this slice succeeds.
 
 ## Phase 5.7 — Web / PWA
 
