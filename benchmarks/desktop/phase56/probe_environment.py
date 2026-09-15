@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 import struct
 import subprocess
 import time
@@ -14,7 +15,18 @@ MAX_RESPONSE = 8 * 1024 * 1024
 
 
 def command_version(argv: list[str]) -> str:
-    completed = subprocess.run(argv, check=True, capture_output=True, text=True, timeout=20)
+    if not argv:
+        raise ValueError("version command must not be empty")
+
+    executable = shutil.which(argv[0])
+    if executable is None:
+        raise FileNotFoundError(f"command not found: {argv[0]}")
+
+    command = [executable, *argv[1:]]
+    if os.name == "nt" and Path(executable).suffix.lower() in {".cmd", ".bat"}:
+        command = [os.environ.get("COMSPEC", "cmd.exe"), "/d", "/c", executable, *argv[1:]]
+
+    completed = subprocess.run(command, check=True, capture_output=True, text=True, timeout=20)
     text = (completed.stdout or completed.stderr).strip()
     if not text:
         raise RuntimeError(f"no version output from {argv!r}")
