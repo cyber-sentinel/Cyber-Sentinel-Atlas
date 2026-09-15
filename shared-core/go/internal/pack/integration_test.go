@@ -114,12 +114,27 @@ func verifyArchive(t *testing.T, packPath, rootPath, work, cache string) *Verifi
 	return verified
 }
 
+func restoreTempTreePermissions(root string) {
+	_ = filepath.WalkDir(root, func(path string, entry os.DirEntry, err error) error {
+		if err != nil {
+			return nil
+		}
+		if entry.IsDir() {
+			_ = os.Chmod(path, 0o700)
+		}
+		return nil
+	})
+}
+
 func TestSignedPackVerificationActivationAndRollbackParity(t *testing.T) {
 	fixtures := buildSignedFixtures(t)
 	v1 := verifyArchive(t, fixtures.V1Pack, fixtures.V1Root, filepath.Join(t.TempDir(), "v1"), filepath.Join(t.TempDir(), "v1-cache"))
 	v2 := verifyArchive(t, fixtures.V2Pack, fixtures.V2Root, filepath.Join(t.TempDir(), "v2"), filepath.Join(t.TempDir(), "v2-cache"))
 
 	runtime := filepath.Join(t.TempDir(), "runtime")
+	t.Cleanup(func() {
+		restoreTempTreePermissions(runtime)
+	})
 	g1, err := InstallVerifiedGeneration(v1, runtime, nil, nil)
 	if err != nil {
 		t.Fatal(err)
