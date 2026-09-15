@@ -1,6 +1,6 @@
 # Cyber-Sentinel-Atlas — Current Authoritative Status
 
-Status timestamp: 2026-09-06
+Status timestamp: 2026-09-15
 
 ## Control plane
 
@@ -8,6 +8,8 @@ Status timestamp: 2026-09-06
 - Authoritative branch: `main`
 - Phase 5.5.3 selection completion main SHA: `bbb462b11de460216acb80116146f651ac2ef1ca`
 - Phase 5.5.4 architecture baseline main SHA: `94f3136687f8e9765c0343b938a1049436878783`
+- Phase 5.5.4 production closure merge SHA: `00a27df6b28b034fecc3905865e0aac200e5aa87`
+- Phase 5.5.4 closure PR: `#35`
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
 - Search contract version: `1.0.0`
@@ -15,17 +17,19 @@ Status timestamp: 2026-09-06
 - Content-pack trust model: TUF-based, accepted by ADR-0023
 - Production Shared Core implementation family: **Go**, accepted by ADR-0024
 - Production Shared Core local interface: **child-process stdio protocol**, accepted by ADR-0025
-- Python implementation role: semantic/conformance oracle during the production Go port
+- Production Go toolchain baseline after closure remediation: **Go 1.25.13**
+- Production dependency baselines relevant to Phase 5.5 closure: `go-tuf/v2 v2.4.2`, `modernc.org/sqlite v1.58.0`, `golang.org/x/text v0.39.0`
+- Python implementation role: semantic/conformance oracle retained for regression/conformance testing
 - Repository visibility: private during active development
 - Public project license: not yet adopted; see `docs/governance/licensing-and-contributions.md`
 
-Git history and the live `main` branch tip remain the final repository authority. This document records the last architecture-reviewed phase boundary and intentionally avoids predicting a future status-sync merge SHA.
+Git history and the live `main` branch tip remain the final repository authority. This document records the last verified phase boundary without predicting a future merge SHA.
 
 ## Completed phases
 
 - Phase 5.1 — Product Foundation: **COMPLETE**
 - Stage 1 — Governance / Architecture Sync: **COMPLETE**
-- Phase 5.2 — Canonical Data Model: **COMPLETE**
+- Phase 5.2 — Canonical Data Model: **COMPLETE / MERGED**
 - Phase 5.3 — Source & Ingestion Core: **COMPLETE / MERGED**
 - Phase 5.3.1 — Ingestion Foundation: **COMPLETE / MERGED**
 - Phase 5.3.2 — ATT&CK Canary: **COMPLETE / MERGED**
@@ -36,63 +40,68 @@ Git history and the live `main` branch tip remain the final repository authority
 - Phase 5.4.2 — Engine Spike + ADR-0022: **COMPLETE / MERGED**
 - Phase 5.4.3 — Production SQLite/FTS5 Search Core: **COMPLETE / MERGED**
 - Phase 5.4.4 — Catalog, Graph Pivots, Benchmarks and Closure: **COMPLETE / MERGED**
+- Phase 5.5 — Offline Pack Runtime / Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 - Phase 5.5.1 — Pack Trust Contracts + ADR-0023: **COMPLETE / MERGED**
 - Phase 5.5.2 — Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 - Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+- Phase 5.5.4 — Production Go Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+- Phase 5.5.4A — Core skeleton + protocol: **COMPLETE / MERGED / VERIFIED**
+- Phase 5.5.4B — Canonical + SQLite/FTS5 search + graph parity: **COMPLETE / MERGED / VERIFIED**
+- Phase 5.5.4C — TUF/pack trust + durable state/LKG: **COMPLETE / MERGED / VERIFIED**
+- Phase 5.5.4D — Supply-chain / cross-platform closure: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
-## Phase 5.5.3 closure
+## Phase 5.5.3 technology-selection boundary
 
-Phase 5.5.3 selected Go only after executable cross-platform evidence. The accepted evidence boundary proved:
+Phase 5.5.3 selected Go only after executable cross-platform evidence. The accepted selection baseline proved mandatory G-SC1 through G-SC8 on Linux and Windows, retained Python as the semantic/conformance oracle, kept SQLite/FTS5 subordinate to the Phase 5.4 contracts, preserved the existing Atlas deterministic JSON profile, and did not select the Desktop UI framework or other later technology decisions.
 
-- Go passes mandatory G-SC1 through G-SC8 on Linux and Windows;
-- Python control also passes and remains the semantic/conformance oracle;
-- Rust is not selected because the Phase 5.5.3 mandatory trust/runtime evidence envelope was incomplete or failed; this is not a general rejection of Rust;
-- `go-tuf/v2 v2.4.2` is the evidenced TUF client baseline;
-- `modernc.org/sqlite v1.58.0` is the evidenced CGo-free SQLite baseline;
-- the normalized Go dependency graph includes `golang.org/x/text v0.36.0` for the accepted Unicode behavior;
-- SQLite/FTS5 exact and lexical behavior stays subordinate to the already accepted Phase 5.4 contracts;
-- existing Atlas deterministic JSON bytes remain the protocol serialization profile; there is no RFC 8785/JCS digest migration;
-- canonical `schemas/v1/` remains unchanged;
-- Desktop UI technology, broader persistence, graph database, HSM/KMS, updater/CDN, Detection IR and Grounded AI remain separate decisions.
+The original Phase 5.5.3 evidence baseline used Go 1.25.0 and `golang.org/x/text v0.36.0`. Those values remain historical selection evidence only; Phase 5.5.4D subsequently patched the production baseline to Go 1.25.13 and `golang.org/x/text v0.39.0` after fail-closed vulnerability checks.
 
-PR #23 merged the accepted ADR-0024 through Merge Commit `bbb462b11de460216acb80116146f651ac2ef1ca`. PR #24 then synchronized the authoritative status on `main@94f3136687f8e9765c0343b938a1049436878783`; Foundation Hygiene, Phase 5.5.3 Architecture, Governance Hygiene and Phase 5.3.4 canaries passed on that status boundary.
+## Phase 5.5.4 production closure
+
+ADR-0025 freezes the local Desktop-facing Shared Core boundary as a versioned child-process stdio protocol implemented by `atlas-core --serve-stdio`, rather than Go FFI or a default local HTTP/TCP listener.
+
+Protocol v1 uses a 4-byte unsigned big-endian length prefix followed by UTF-8 JSON. It requires an exact `atlas-core` protocol `1.0.0` handshake, one request at a time per child process, compiled method allowlists, protocol-only stdout, diagnostic-only stderr, bounded request/response sizes, duplicate-key rejection, bounded nesting depth, strict UTF-8/JSON validation and no hidden network fallback.
+
+Phase 5.5.4 closed the production port across four slices:
+
+1. 5.5.4A — production Go core skeleton and typed stdio protocol;
+2. 5.5.4B — canonical validation plus deterministic SQLite/FTS5 exact/lexical search, catalogs and bounded graph reads;
+3. 5.5.4C — Atlas TUF POUF v1, strict `.atlaspack` handling, immutable generations, trusted-time/highest-seen guards, activation/LKG and rollback;
+4. 5.5.4D — reproducible Linux/Windows builds, CycloneDX SBOM evidence, linked-module validation, vulnerability evidence, dependency/license inventory, Python-oracle conformance and binary/IPC measurements.
+
+PR #35 merged the exact-head green closure as merge commit `00a27df6b28b034fecc3905865e0aac200e5aa87`. The production baseline was patched rather than suppressing findings: Go moved from 1.25.0 to 1.25.13 and `golang.org/x/text` from v0.36.0 to v0.39.0, while `go-tuf/v2 v2.4.2` and `modernc.org/sqlite v1.58.0` remained locked.
+
+Post-merge CI on the closure SHA passed the Phase 5.5.4A, 5.5.4B, 5.5.4C and 5.5.4D workflows. The Production Shared Core dependency of Phase 5.6 is therefore satisfied.
 
 ## Active implementation slice
 
-**Phase 5.5.4 — Production Go Shared Core: ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**
+**Phase 5.6 — Windows Desktop MVP: READY / IMPLEMENTATION ENTRY AUTHORIZED**
 
-ADR-0025 freezes the local Desktop-facing Shared Core boundary as a versioned child-process stdio protocol implemented by `atlas-core --serve-stdio` rather than Go FFI or a default local HTTP/TCP listener.
+The first slice is **Phase 5.6.1 — Desktop Technology Spike + ADR-0026**. It must select the Windows Desktop implementation stack from executable evidence rather than inherit a UI technology from Go, ADR-0024 or ADR-0025.
 
-Protocol v1 uses a 4-byte unsigned big-endian length prefix followed by UTF-8 JSON. It requires an exact `atlas-core` protocol `1.0.0` handshake, one request at a time per child process, compiled method allowlists, protocol-only stdout, diagnostic-only stderr, maximum 1 MiB requests, maximum 8 MiB responses, duplicate-key rejection, bounded nesting depth, strict UTF-8/JSON validation and no hidden network fallback.
+Mandatory 5.6.1 evidence gates include:
 
-Phase 5.5.4 implements the accepted Shared Core contracts as production Go code outside benchmark directories. It must preserve:
+- correct integration with `atlas-core --serve-stdio` using the frozen protocol boundary without FFI coupling or hidden network fallback;
+- offline startup and core user journeys without internet dependency;
+- exact/lexical search, entity detail, relationships, provenance and pack-state flows through the Shared Core rather than a parallel knowledge engine;
+- Windows install/package feasibility and portable-mode feasibility;
+- clean process lifecycle, crash containment and safe child-process termination;
+- bounded startup time and idle/runtime memory evidence on the Windows CI runner;
+- dependency/SBOM/vulnerability and license visibility;
+- code-signing and release-pipeline compatibility without prematurely selecting the final signing provider;
+- accessibility, keyboard navigation, DPI/scaling and Windows UX feasibility;
+- deterministic automated smoke testing on the self-hosted Windows runner.
 
-- exactly seven canonical AtlasRecord families and existing canonical/native identifier semantics;
-- the Atlas deterministic JSON serialization/digest profile and frozen cross-language vectors;
-- Phase 5.4 exact-before-lexical SQLite/FTS5 behavior, deterministic ambiguity/order, bounded filters and bounded graph reads;
-- ADR-0023 TUF/POUF v1, `.atlaspack`, offline verification, strict archive handling, immutable generation, trusted-time/highest-seen state, atomic activation and Last Known Good rollback semantics;
-- no hidden network fallback and no pack-provided executable code;
-- Linux/Windows reproducibility, locked dependencies, SBOM/vulnerability evidence and clean-build CI.
-
-Execution structure:
-
-1. 5.5.4A — core skeleton + protocol;
-2. 5.5.4B — canonical + SQLite/FTS5 search + graph parity;
-3. 5.5.4C — TUF/pack trust + durable state/LKG;
-4. 5.5.4D — supply-chain, cross-platform conformance and closure.
+No Desktop stack is accepted until the spike evidence and ADR-0026 pass review and CI.
 
 ## Remaining roadmap
 
-- Phase 5.5 — Offline Pack Runtime / Shared Core: **IN PROGRESS**
-  - 5.5.1 Pack Trust Contracts: **COMPLETE / MERGED**
-  - 5.5.2 Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**
-  - 5.5.3 Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**
-  - 5.5.4 Production Go Shared Core: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**
-- Phase 5.6 — Windows Desktop MVP
-- Phase 5.7 — Web / PWA
-- Phase 5.8 — API / CLI (`atlas`)
-- Phase 5.9 — Grounded AI
-- Phase 5.10 — Public Preview Readiness, licensing, security, accessibility, release and final repository hygiene
+- Phase 5.6 — Windows Desktop MVP: **READY / 5.6.1 NEXT**
+- Phase 5.6.1 — Desktop Technology Spike + ADR-0026: **AUTHORIZED / NOT YET SELECTED**
+- Phase 5.7 — Web / PWA: **NOT STARTED**
+- Phase 5.8 — API / CLI (`atlas`): **NOT STARTED**
+- Phase 5.9 — Grounded AI: **NOT STARTED**
+- Phase 5.10 — Public Preview Readiness, licensing, security, accessibility, release and final repository hygiene: **NOT STARTED**
 
 ## Governance
 
