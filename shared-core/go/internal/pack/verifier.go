@@ -40,7 +40,7 @@ type VerifiedPack struct {
 	VerifiedTargetsDir     string
 	RuntimeSearchIndex     string
 	UsedRebuiltSearchIndex bool
-	SPC                     search.Bundle
+	SPC                    search.Bundle
 }
 
 type localFetcher struct {
@@ -220,7 +220,7 @@ func signedTargetNames(repoRoot string) ([]string, error) {
 
 func verifyManifestTopology(repoRoot string, manifest *Manifest) error {
 	allowed := map[string]bool{
-		"atlas/pack-manifest.json": true,
+		"atlas/pack-manifest.json":            true,
 		"atlas/source-license-inventory.json": true,
 	}
 	for _, artifact := range manifest.Artifacts {
@@ -424,16 +424,16 @@ func VerifyPackDirectory(packRoot string, bootstrapRoot []byte, metadataCacheDir
 		rebuilt = true
 	}
 	return &VerifiedPack{
-		PackID: manifest.PackID,
-		PackVersion: manifest.PackVersion,
-		Manifest: manifest,
-		ManifestBytes: manifestBytes,
-		ManifestDigest: sha256Prefixed(manifestBytes),
-		Inventory: inventory,
-		InventoryBytes: inventoryBytes,
-		VerifiedTargetsDir: verifiedTargetsDir,
-		RuntimeSearchIndex: runtimeIndex,
+		PackID:                 manifest.PackID,
+		PackVersion:            manifest.PackVersion,
+		Manifest:               manifest,
+		ManifestBytes:          manifestBytes,
+		ManifestDigest:         sha256Prefixed(manifestBytes),
+		Inventory:              inventory,
+		InventoryBytes:         inventoryBytes,
+		VerifiedTargetsDir:     verifiedTargetsDir,
+		RuntimeSearchIndex:     runtimeIndex,
 		UsedRebuiltSearchIndex: rebuilt,
-		SPC: bundle,
+		SPC:                    bundle,
 	}, nil
 }

@@ -15,13 +15,13 @@ import (
 )
 
 type BuildBinding struct {
-	CanonicalCorpusID       string `json:"canonical_corpus_id"`
-	CanonicalCorpusDigest   string `json:"canonical_corpus_digest"`
-	CanonicalSchemaVersion  string `json:"canonical_schema_version"`
-	RegistryBundleVersion   string `json:"registry_bundle_version"`
-	RegistryBundleDigest    string `json:"registry_bundle_digest"`
+	CanonicalCorpusID        string `json:"canonical_corpus_id"`
+	CanonicalCorpusDigest    string `json:"canonical_corpus_digest"`
+	CanonicalSchemaVersion   string `json:"canonical_schema_version"`
+	RegistryBundleVersion    string `json:"registry_bundle_version"`
+	RegistryBundleDigest     string `json:"registry_bundle_digest"`
 	ProjectionProfileVersion string `json:"projection_profile_version"`
-	ProjectionProfileDigest string `json:"projection_profile_digest"`
+	ProjectionProfileDigest  string `json:"projection_profile_digest"`
 }
 
 type LexicalFields struct {
@@ -222,11 +222,11 @@ CREATE VIRTUAL TABLE documents_fts USING fts5(target_id UNINDEXED,title,aliases,
 	}
 
 	metadata := map[string]string{
-		"index_schema_version": "1.0.0",
-		"index_adapter_id": "sqlite-fts5",
-		"index_adapter_version": "1.0.0",
+		"index_schema_version":    "1.0.0",
+		"index_adapter_id":        "sqlite-fts5",
+		"index_adapter_version":   "1.0.0",
 		"search_contract_version": ContractVersion,
-		"bundle_digest": bundle.BundleDigest,
+		"bundle_digest":           bundle.BundleDigest,
 	}
 	unsigned, _ := json.Marshal(metadata)
 	sum := sha256.Sum256(unsigned)

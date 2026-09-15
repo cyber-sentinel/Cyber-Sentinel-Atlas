@@ -26,10 +26,10 @@ type HighestSeen struct {
 }
 
 type RuntimeState struct {
-	StateVersion      int                    `json:"state_version"`
+	StateVersion     int                    `json:"state_version"`
 	ActiveGeneration *string                `json:"active_generation"`
 	LKGGeneration    *string                `json:"lkg_generation"`
-	HighestSeenPacks  map[string]HighestSeen `json:"highest_seen_packs"`
+	HighestSeenPacks map[string]HighestSeen `json:"highest_seen_packs"`
 }
 
 type TrustedTimeState struct {

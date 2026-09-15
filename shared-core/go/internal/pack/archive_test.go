@@ -36,11 +36,11 @@ func writeZip(t *testing.T, path string, entries map[string][]byte, method uint1
 
 func minimalArchiveEntries() map[string][]byte {
 	return map[string][]byte{
-		"metadata/root.json":                  []byte("{}"),
-		"metadata/timestamp.json":             []byte("{}"),
-		"metadata/snapshot.json":              []byte("{}"),
-		"metadata/targets.json":               []byte("{}"),
-		"targets/atlas/pack-manifest.json":    []byte("{}"),
+		"metadata/root.json":               []byte("{}"),
+		"metadata/timestamp.json":          []byte("{}"),
+		"metadata/snapshot.json":           []byte("{}"),
+		"metadata/targets.json":            []byte("{}"),
+		"targets/atlas/pack-manifest.json": []byte("{}"),
 	}
 }
 
