@@ -47,11 +47,14 @@ type Scope struct {
 }
 
 type Document struct {
-	TargetID   string  `json:"target_id"`
-	EntityType string  `json:"entity_type"`
-	Title      string  `json:"title"`
-	Scope      Scope   `json:"scope"`
-	Lifecycle  *string `json:"lifecycle"`
+	SearchContractVersion string        `json:"search_contract_version,omitempty"`
+	TargetID              string        `json:"target_id"`
+	EntityType            string        `json:"entity_type"`
+	Title                 string        `json:"title"`
+	Scope                 Scope         `json:"scope"`
+	Lifecycle             *string       `json:"lifecycle"`
+	LexicalFields         LexicalFields `json:"lexical_fields,omitempty"`
+	ProjectionDigest      string        `json:"projection_digest,omitempty"`
 }
 
 type Edge struct {
@@ -61,10 +64,14 @@ type Edge struct {
 }
 
 type Bundle struct {
-	SearchContractVersion string     `json:"search_contract_version"`
-	Documents             []Document `json:"documents"`
-	Edges                 []Edge     `json:"edges"`
-	BundleDigest          string     `json:"bundle_digest"`
+	SearchContractVersion string             `json:"search_contract_version"`
+	BuildBinding          BuildBinding       `json:"build_binding"`
+	Documents             []Document         `json:"documents"`
+	Identifiers           []Identifier       `json:"identifiers"`
+	Aliases               []Alias            `json:"aliases"`
+	Filters               []FilterProjection `json:"filters"`
+	Edges                 []Edge             `json:"edges"`
+	BundleDigest          string             `json:"bundle_digest"`
 }
 
 type Match struct {
@@ -97,6 +104,7 @@ type FacetValue struct {
 	Value     string `json:"value"`
 	ItemCount int64  `json:"item_count"`
 }
+
 type NumericIdentifier struct {
 	TargetID            string `json:"target_id"`
 	Value               string `json:"value"`
@@ -131,6 +139,21 @@ func ValidateBundle(bundle *Bundle) error {
 			return fmt.Errorf("duplicate projected target_id: %s", doc.TargetID)
 		}
 		seen[doc.TargetID] = struct{}{}
+	}
+	for _, row := range bundle.Identifiers {
+		if _, ok := seen[row.TargetID]; !ok {
+			return fmt.Errorf("identifier references missing target: %s", row.TargetID)
+		}
+	}
+	for _, row := range bundle.Aliases {
+		if _, ok := seen[row.TargetID]; !ok {
+			return fmt.Errorf("alias references missing target: %s", row.TargetID)
+		}
+	}
+	for _, row := range bundle.Filters {
+		if _, ok := seen[row.TargetID]; !ok {
+			return fmt.Errorf("filter references missing target: %s", row.TargetID)
+		}
 	}
 	return nil
 }
