@@ -1,0 +1,158 @@
+{
+  "plan_version": "1.0.0",
+  "phase": "5.6.1",
+  "selection_status": "evidence-pending",
+  "decision_adr": "ADR-0026",
+  "issue": 37,
+  "objective": "Select the production Windows Desktop implementation stack from executable evidence without changing the frozen Shared Core boundary.",
+  "frozen_contracts": [
+    "canonical-schema-v1",
+    "search-contract-v1",
+    "pack-trust-tuf",
+    "atlas-core-stdio-protocol-1.0.0",
+    "no-hidden-network-fallback",
+    "shared-core-owns-canonical-search-pack-semantics"
+  ],
+  "candidates": [
+    {
+      "id": "tauri2",
+      "display_name": "Tauri 2",
+      "runtime_model": "Rust desktop shell + Windows WebView2 + constrained atlas-core sidecar",
+      "round1_required": true
+    },
+    {
+      "id": "electron",
+      "display_name": "Electron",
+      "runtime_model": "Chromium/Node desktop shell + isolated main-process atlas-core child adapter",
+      "round1_required": true
+    },
+    {
+      "id": "wails-stable",
+      "display_name": "Wails stable",
+      "runtime_model": "Go/WebView2 desktop shell consuming atlas-core only through stdio",
+      "round1_required": true
+    },
+    {
+      "id": "winui3",
+      "display_name": "WinUI 3 / Windows App SDK",
+      "runtime_model": ".NET/C# native Windows shell + redirected atlas-core stdin/stdout",
+      "round1_required": true
+    }
+  ],
+  "version_policy": {
+    "accepted_baseline_must_pin_exact_versions": true,
+    "latest_tags_allowed_in_accepted_baseline": false,
+    "lockfiles_required": true,
+    "toolchain_versions_recorded": true
+  },
+  "hard_gates": [
+    {
+      "id": "G-DT1",
+      "name": "protocol-boundary",
+      "requirement": "Spawn atlas-core --serve-stdio, complete exact protocol 1.0.0 framing/handshake, and use no FFI, direct Go import, localhost HTTP/TCP, named-pipe replacement, or hidden network fallback."
+    },
+    {
+      "id": "G-DT2",
+      "name": "offline-operation",
+      "requirement": "Cold start and mandatory smoke journey succeed with outbound network denied."
+    },
+    {
+      "id": "G-DT3",
+      "name": "process-safety",
+      "requirement": "Bounded startup and handshake timeout, crash detection, clean shutdown, orphan prevention, stderr separation, and malformed-frame containment."
+    },
+    {
+      "id": "G-DT4",
+      "name": "core-ownership",
+      "requirement": "Search, entity, relationship, provenance, and pack-state semantics remain exclusively owned by Shared Core."
+    },
+    {
+      "id": "G-DT5",
+      "name": "windows-packaging",
+      "requirement": "Reproducible Windows package/installer evidence and portable/folder-based deployment feasibility are demonstrated."
+    },
+    {
+      "id": "G-DT6",
+      "name": "resource-evidence",
+      "requirement": "Cold-start time, handshake time, idle working set, representative-search latency, and packaged footprint are measured on the same Windows runner class."
+    },
+    {
+      "id": "G-DT7",
+      "name": "supply-chain",
+      "requirement": "Exact dependency lock, SBOM, vulnerability evidence, and license inventory are available and fail closed for accepted production dependencies."
+    },
+    {
+      "id": "G-DT8",
+      "name": "windows-ux",
+      "requirement": "Keyboard navigation, accessibility path, DPI/scaling, and high-DPI multi-monitor feasibility are demonstrated."
+    },
+    {
+      "id": "G-DT9",
+      "name": "security-posture",
+      "requirement": "Renderer/webview privileges are minimized and process execution is constrained to the compiled atlas-core path and allowlisted arguments."
+    },
+    {
+      "id": "G-DT10",
+      "name": "automation",
+      "requirement": "Deterministic build and automatable smoke evidence runs on ATLAS-CI-WIN01 without persistent runner mutation."
+    },
+    {
+      "id": "G-DT11",
+      "name": "release-compatibility",
+      "requirement": "Authenticode/application and installer signing are technically compatible without selecting the final certificate/HSM/KMS provider."
+    },
+    {
+      "id": "G-DT12",
+      "name": "maintainability",
+      "requirement": "Implementation complexity, testability, UI iteration velocity, platform coupling, and operational maintenance are evidenced and scored."
+    }
+  ],
+  "fast_fail_gates": [
+    "G-DT1",
+    "G-DT2",
+    "G-DT3",
+    "G-DT4",
+    "G-DT7",
+    "G-DT9",
+    "G-DT10"
+  ],
+  "score_weights": {
+    "protocol_and_architecture_fidelity": 20,
+    "security_and_supply_chain": 25,
+    "offline_packaging_and_release": 15,
+    "performance_and_footprint": 15,
+    "testability_and_ci": 10,
+    "maintainability_and_iteration": 10,
+    "accessibility_and_windows_ux": 5
+  },
+  "measurement_policy": {
+    "same_atlas_core_binary_for_all_candidates": true,
+    "same_smoke_corpus_for_all_candidates": true,
+    "same_windows_runner_class": true,
+    "warmup_launches": 1,
+    "measured_launches_minimum": 5,
+    "report_median": true,
+    "report_p95_where_meaningful": true,
+    "network_denial_must_be_explicit": true
+  },
+  "execution_rounds": [
+    {
+      "id": "R1",
+      "name": "hard-gate micro-probes",
+      "candidate_count": 4,
+      "purpose": "Eliminate candidates that cannot preserve the frozen protocol, offline, process-safety, supply-chain, or automation boundaries before full UI work."
+    },
+    {
+      "id": "R2",
+      "name": "full evidence finalists",
+      "candidate_count_maximum": 2,
+      "purpose": "Build comparable minimal desktop shells and collect packaging, resource, UX, security, signing, and maintainability evidence."
+    }
+  ],
+  "acceptance": {
+    "all_hard_gates_require_resolved_evidence": true,
+    "fast_fail_gate_failure_eliminates_candidate": true,
+    "adr_must_remain_proposed_until_evidence_complete": true,
+    "architecture_authority_acceptance_required": true
+  }
+}
