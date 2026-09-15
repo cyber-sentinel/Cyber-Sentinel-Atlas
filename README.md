@@ -2,7 +2,7 @@
 
 **Provenance-First Cyber Defense Knowledge & Investigation Platform**
 
-Cyber-Sentinel-Atlas is the knowledge and investigation product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed, inspectable knowledge system.
+Cyber-Sentinel-Atlas is the **KNOW** layer and knowledge/investigation product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed, inspectable knowledge system.
 
 > **Development:** Active  
 > **Current delivery boundary:** Phase 5.5 — Offline Pack Runtime / Shared Core  
@@ -48,9 +48,12 @@ Atlas is **not**:
 - another ATT&CK browser;
 - another SIEM-specific content portal;
 - an AI chatbot without verifiable sources;
-- a replacement for the defensive-content engineering ownership of Cyber-Sentinel-DefenseOps.
+- a replacement for the defensive-content engineering ownership of Cyber-Sentinel-DefenseOps;
+- a replacement for the reusable operational procedures and playbooks owned by Cyber-Sentinel-Skills.
 
 Atlas is designed as a **Cyber Defense Knowledge Graph + Analyst Workbench + Offline Knowledge Platform**.
+
+Within the wider Cyber-Sentinel model, Atlas answers the **KNOW** question: *What do we know about what we are seeing?* DefenseOps turns that knowledge into defensive engineering, while Skills turns repeatable operating methods into reusable procedures for humans and AI agents.
 
 Validated detections, hunts, and other defensive engineering outputs can enter Atlas from DefenseOps only through explicit versioned ingestion, provenance, validation, and controlled release gates.
 
@@ -212,17 +215,71 @@ The architecture is intentionally extensible to Linux, macOS, Exchange, SharePoi
 
 Architecture support does not imply MVP ingestion of every domain.
 
-## Ecosystem
+## Cyber-Sentinel Ecosystem
+
+Cyber-Sentinel is intentionally a **contract-separated ecosystem**, not a single monolithic product. The three current project layers have distinct responsibilities:
 
 ```text
 Cyber-Sentinel
-├── DefenseOps  → defensive engineering source for validated content
-└── Atlas       → knowledge graph, search, offline runtime, analyst workspace and product interfaces
+├── Atlas       — KNOW   → Connect • Search • Investigate • Explain
+├── DefenseOps  — DEFEND → Detect • Hunt • Validate • Respond • Automate
+└── Skills      — APPLY  → Execute • Review • Reuse • Govern
 ```
 
-Cyber-Sentinel-Forge is retired as an independent Atlas architectural component. Historical Forge material, if present, is preserved or archived rather than deleted automatically.
+### Atlas — KNOW
 
-DefenseOps content is not automatically authoritative because of repository origin. Atlas accepts it only through the same provenance, validation, licensing, and controlled-release boundaries applied to other sources.
+[Cyber-Sentinel-Atlas](https://github.com/cyber-sentinel/Cyber-Sentinel-Atlas) owns governed cyber-defense knowledge, canonical relationships, deterministic retrieval, provenance, investigation context, offline knowledge delivery, and analyst-facing product interfaces.
+
+**Core question:** *What do we know about what we are seeing?*
+
+### DefenseOps — DEFEND
+
+[Cyber-Sentinel-DefenseOps](https://github.com/cyber-sentinel/Cyber-Sentinel-DefenseOps) owns defensive engineering content: detections, hunts, validation assets, response engineering, DFIR/IR material, deception-oriented content, and defensive automation.
+
+**Core question:** *What can we detect, validate, hunt, and defend?*
+
+DefenseOps may provide controlled defensive content to Atlas, but repository origin alone never grants canonical authority. Atlas applies its own ingestion, provenance, licensing, validation, promotion, and release boundaries.
+
+### Skills — APPLY
+
+[Cyber-Sentinel-Skills](https://github.com/cyber-sentinel/Cyber-Sentinel-Skills) owns reusable, vendor-neutral operational procedures and playbooks that make security tasks explicit, reviewable, attributable, repeatable, and usable by both humans and AI agents.
+
+**Core question:** *How should this security task be performed consistently?*
+
+Skills does not replace Atlas product contracts or DefenseOps engineering artifacts; it captures the repeatable operating method used to apply them consistently.
+
+### Ecosystem Operating Loop
+
+```text
+Authoritative Sources / Telemetry / Security Knowledge
+                         │
+                         ▼
+                  ATLAS — KNOW
+        Connect • Search • Investigate • Explain
+                         │
+             evidence / defensive context
+                         ▼
+               DefenseOps — DEFEND
+       Detect • Hunt • Validate • Respond • Automate
+                         │
+              repeatable operating method
+                         ▼
+                  Skills — APPLY
+          Execute • Review • Reuse • Govern
+                         │
+                         ▼
+          VALIDATE → AUTOMATE → EVOLVE
+                         │
+                         └──────────────↺
+                    feedback into knowledge,
+                 engineering and procedures
+```
+
+`VALIDATE`, `AUTOMATE`, and `EVOLVE` are ecosystem operating outcomes and feedback stages, not separate repositories. Together the model is:
+
+`KNOW → DEFEND → APPLY → VALIDATE → AUTOMATE → EVOLVE`
+
+Cyber-Sentinel-Forge is retired as an independent Atlas architectural component. Historical Forge material, if present, is preserved or archived rather than deleted automatically.
 
 ## Delivery Sequence
 
