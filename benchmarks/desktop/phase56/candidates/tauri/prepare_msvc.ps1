@@ -46,11 +46,14 @@ function Install-PinnedLlvmTools {
 
     # LLVM's official Windows package is an NSIS installer. Install silently to
     # runner.temp only; do not register a machine PATH or mutate Program Files.
-    # NSIS requires /D=<install-dir> to be the final argument.
-    & $installer '/S' "/D=$root"
-    $installExitCode = $LASTEXITCODE
-    if ($installExitCode -ne 0) {
-        throw "LLVM runner-local install failed with exit code $installExitCode"
+    # NSIS requires /D=<install-dir> to be the final argument. Start-Process is
+    # used deliberately because direct native invocation did not reliably set
+    # LASTEXITCODE for this GUI-subsystem installer under NetworkService.
+    $installProcess = Start-Process -FilePath $installer `
+        -ArgumentList @('/S', "/D=$root") `
+        -Wait -PassThru
+    if ($installProcess.ExitCode -ne 0) {
+        throw "LLVM runner-local install failed with exit code $($installProcess.ExitCode)"
     }
 
     $binDirectory = Join-Path $root 'bin'
