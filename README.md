@@ -230,30 +230,9 @@ Skills does not replace Atlas product contracts or DefenseOps engineering artifa
 
 ### Ecosystem Operating Loop
 
-```text
-Authoritative Sources / Telemetry / Security Knowledge
-                         │
-                         ▼
-                  ATLAS — KNOW
-        Connect • Search • Investigate • Explain
-                         │
-             evidence / defensive context
-                         ▼
-               DefenseOps — DEFEND
-       Detect • Hunt • Validate • Respond • Automate
-                         │
-              repeatable operating method
-                         ▼
-                  Skills — APPLY
-          Execute • Review • Reuse • Govern
-                         │
-                         ▼
-          VALIDATE → AUTOMATE → EVOLVE
-                         │
-                         └──────────────↺
-                    feedback into knowledge,
-                 engineering and procedures
-```
+<p align="center">
+  <img src="assets/azadi-tower-atlas.png" alt="Cyber-Sentinel ecosystem operating loop: KNOW, DEFEND, APPLY, VALIDATE, AUTOMATE, EVOLVE" width="100%" />
+</p>
 
 `VALIDATE`, `AUTOMATE`, and `EVOLVE` are ecosystem operating outcomes and feedback stages, not separate repositories. Together the model is:
 
