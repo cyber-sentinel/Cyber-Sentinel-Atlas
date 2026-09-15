@@ -1,7 +1,7 @@
 # Phase 5.6 — Windows Desktop Technology Spike
 
-**Status:** EXECUTION STARTED — 5.6.0 bootstrap  
-**Baseline:** `main@00a27df6b28b034fecc3905865e0aac200e5aa87`  
+**Status:** EXECUTION STARTED — 5.6.0 bootstrap
+**Baseline:** `main@00a27df6b28b034fecc3905865e0aac200e5aa87`
 **Decision target:** ADR-0026
 
 ## Purpose
