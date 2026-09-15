@@ -57,18 +57,27 @@ def main() -> int:
     for phrase in (
         "Phase 5.4 — Deterministic Search Core: **COMPLETE / MERGED**",
         "Phase 5.5.2 — Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**",
-        "Architecture Sync Status: **GREEN**",
         "ADR-0024 — Production Shared Core Technology Selection",
     ):
         require(phrase in state, f"project-state missing current architecture phrase: {phrase}")
+
+    architecture_sync_green = (
+        "Architecture Sync Status: **GREEN**" in state
+        or "Architecture Sync Status: **GREEN — PHASE 5.5 CLOSED / PHASE 5.6 ENTRY AUTHORIZED**" in state
+    )
+    require(architecture_sync_green, "project-state must preserve a GREEN architecture-sync boundary")
 
     state_pre = "Phase 5.5.3 — Production Shared Core Technology Spike: **ARCHITECTURE GATE / SPIKE AUTHORIZED**" in state
     state_closed = "Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in state
     require(state_pre or state_closed, "project-state missing valid Phase 5.5.3 lifecycle state")
     if state_closed:
-        phase554_valid = (
-            "Phase 5.5.4 — Production Go Shared Core: **NEXT**" in state
-            or "Phase 5.5.4 — Production Go Shared Core: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**" in state
+        phase554_valid = any(
+            phrase in state
+            for phrase in (
+                "Phase 5.5.4 — Production Go Shared Core: **NEXT**",
+                "Phase 5.5.4 — Production Go Shared Core: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**",
+                "Phase 5.5.4 — Production Go Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED**",
+            )
         )
         require(phase554_valid, "closed Phase 5.5.3 must advance to a valid Phase 5.5.4 lifecycle state")
 
@@ -80,22 +89,33 @@ def main() -> int:
         require(phrase in roadmap, f"roadmap missing current phase invariant: {phrase}")
 
     roadmap_pre = "### Phase 5.5.3 — Production Shared Core Technology Spike\n\nStatus: **ARCHITECTURE GATE / SPIKE AUTHORIZED**" in roadmap
-    roadmap_closed = "### Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024\n\nStatus: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in roadmap
+    roadmap_closed = (
+        "### Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024\n\nStatus: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in roadmap
+        or "### Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024\nStatus: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in roadmap
+    )
     require(roadmap_pre or roadmap_closed, "roadmap missing valid Phase 5.5.3 lifecycle state")
     if roadmap_closed:
-        phase554_valid = (
-            "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **NEXT**" in roadmap
-            or "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**" in roadmap
+        phase554_valid = any(
+            phrase in roadmap
+            for phrase in (
+                "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **NEXT**",
+                "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**",
+                "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **COMPLETE / MERGED / POST-MERGE VERIFIED**",
+                "### Phase 5.5.4 — Production Go Shared Core\nStatus: **COMPLETE / MERGED / POST-MERGE VERIFIED**",
+            )
         )
         require(phase554_valid, "roadmap must advance to a valid Phase 5.5.4 lifecycle state after selection closure")
 
     pre_selection_status = "Production Shared Core technology spike / ADR: **NEXT**" in current
-    post_selection_status = (
-        "Production Shared Core implementation family: **Go**" in current
-        and "Phase 5.5.4" in current
-        and "Production Go Shared Core" in current
-        and ("NEXT" in current or "ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED" in current)
+    phase554_boundary = any(
+        phrase in current
+        for phrase in (
+            "Phase 5.5.4 — Production Go Shared Core: **NEXT**",
+            "Phase 5.5.4 — Production Go Shared Core: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**",
+            "Phase 5.5.4 — Production Go Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED**",
+        )
     )
+    post_selection_status = "Production Shared Core implementation family: **Go**" in current and phase554_boundary
     require(pre_selection_status or post_selection_status, "current-status must describe the Shared Core selection/implementation boundary")
 
     require("Tauri, Rust, SQLite, React, and TypeScript remain candidates only." in HISTORY_STATE.read_text(encoding="utf-8"), "historical state snapshot was not preserved byte-for-content")
