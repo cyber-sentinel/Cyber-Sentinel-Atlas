@@ -175,6 +175,7 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
+          . ./benchmarks/desktop/phase56/candidates/tauri/prepare_msvc.ps1
           $Manifest = Join-Path (Get-Location) 'benchmarks\desktop\phase56\candidates\tauri\Cargo.toml'
           $env:CARGO_TARGET_DIR = Join-Path $env:RUNNER_TEMP 'atlas-tauri-phase561-target'
           Remove-Item -Recurse -Force $env:CARGO_TARGET_DIR -ErrorAction SilentlyContinue
