@@ -6,13 +6,13 @@ Foundation descriptor: **Intelligent Cyber Defense Knowledge & Investigation Pla
 
 Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed and inspectable knowledge system.
 
-> **Development:** Active  
-> **Completed foundation:** Phases 5.1–5.5 COMPLETE / MERGED / VERIFIED  
-> **Current delivery boundary:** Phase 5.6 — Windows Desktop MVP  
-> **Completed desktop slice:** Phase 5.6.0 — Desktop Spike Contract + Environment/Core-Boundary Probe  
-> **Active desktop slice:** Phase 5.6.1 — Executable Desktop Candidate Builds  
-> **Desktop framework:** Not selected yet; ADR-0026 remains pending evidence from Phase 5.6.2  
-> **Visibility:** Private during active development  
+> **Development:** Active
+> **Completed foundation:** Phases 5.1–5.5 COMPLETE / MERGED / VERIFIED
+> **Current delivery boundary:** Phase 5.6 — Windows Desktop MVP
+> **Completed desktop slice:** Phase 5.6.0 — Desktop Spike Contract + Environment/Core-Boundary Probe
+> **Active desktop slice:** Phase 5.6.1 — Executable Desktop Candidate Builds
+> **Desktop framework:** Not selected yet; ADR-0026 remains pending evidence from Phase 5.6.2
+> **Visibility:** Private during active development
 > **Release state:** Pre-preview / unreleased
 
 The live `main` branch remains the final repository authority. Detailed evidence and implementation state are maintained in [Current Status](docs/current-status.md), [Project State](docs/project-state.md), and the [Roadmap](docs/roadmap.md).
@@ -407,5 +407,6 @@ branch → pull request → CI → architecture/security review → merge → po
 
 ---
 
-**Maintainer:** Ali RahimDabagh  
+**Maintainer:** Ali RahimDabagh
+
 **GitHub:** `cyber-sentinel`
