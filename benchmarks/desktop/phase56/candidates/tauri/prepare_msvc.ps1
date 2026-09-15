@@ -29,47 +29,36 @@ function Import-CmdEnvironment {
 
 function Install-PinnedLlvmTools {
     $version = '22.1.8'
-    $expectedSha256 = 'd96c2cc1736f4eb7fa43cb9bbdf56d93551a9ae0a9aadb9c99c3c3b2b712a234'
-    $archiveName = "clang+llvm-$version-x86_64-pc-windows-msvc.tar.xz"
-    $archiveUrlName = "clang%2Bllvm-$version-x86_64-pc-windows-msvc.tar.xz"
-    $url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/$archiveUrlName"
+    $expectedSha256 = '16e5709785fef73c854646241c4a92c5cd574318d1b33c63330dd7721903e55c'
+    $installerName = "LLVM-$version-win64.exe"
+    $url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/$installerName"
     $root = Join-Path $env:RUNNER_TEMP "llvm-$version-phase561"
-    $archive = Join-Path $env:RUNNER_TEMP $archiveName
-    $topDirectory = "clang+llvm-$version-x86_64-pc-windows-msvc"
+    $installer = Join-Path $env:RUNNER_TEMP $installerName
 
     Remove-Item -Recurse -Force $root -ErrorAction SilentlyContinue
-    Remove-Item -Force $archive -ErrorAction SilentlyContinue
-    New-Item -ItemType Directory -Force -Path $root | Out-Null
+    Remove-Item -Force $installer -ErrorAction SilentlyContinue
 
-    Invoke-WebRequest -Uri $url -OutFile $archive
-    $actualSha256 = (Get-FileHash -Algorithm SHA256 $archive).Hash.ToLowerInvariant()
+    Invoke-WebRequest -Uri $url -OutFile $installer
+    $actualSha256 = (Get-FileHash -Algorithm SHA256 $installer).Hash.ToLowerInvariant()
     if ($actualSha256 -ne $expectedSha256) {
-        throw "LLVM archive SHA-256 mismatch: expected $expectedSha256, got $actualSha256"
+        throw "LLVM installer SHA-256 mismatch: expected $expectedSha256, got $actualSha256"
     }
 
-    # Do not resolve tar.exe through PATH here: Git for Windows ships GNU tar,
-    # which shells out to xz.exe and fails under the NetworkService runner when
-    # that helper is absent from PATH. Windows System32 tar is bsdtar/libarchive
-    # and handles .tar.xz directly without installing an additional decompressor.
-    $tarPath = Join-Path $env:SystemRoot 'System32\tar.exe'
-    if (-not (Test-Path $tarPath -PathType Leaf)) {
-        throw "Windows bsdtar is required at the fixed path: $tarPath"
+    # LLVM's official Windows package is an NSIS installer. Install silently to
+    # runner.temp only; do not register a machine PATH or mutate Program Files.
+    # NSIS requires /D=<install-dir> to be the final argument.
+    & $installer '/S' "/D=$root"
+    $installExitCode = $LASTEXITCODE
+    if ($installExitCode -ne 0) {
+        throw "LLVM runner-local install failed with exit code $installExitCode"
     }
 
-    # Extract only the executable toolchain and Clang resource directory. This keeps
-    # the fallback runner-local and avoids installing or registering LLVM system-wide.
-    & $tarPath -xf $archive -C $root "$topDirectory/bin" "$topDirectory/lib/clang"
-    $extractExitCode = $LASTEXITCODE
-    if ($extractExitCode -ne 0) {
-        throw "LLVM archive extraction failed with exit code $extractExitCode"
-    }
-
-    $binDirectory = Join-Path $root "$topDirectory\bin"
+    $binDirectory = Join-Path $root 'bin'
     $requiredTools = @('lld-link.exe', 'clang-cl.exe', 'llvm-lib.exe', 'llvm-rc.exe')
     foreach ($toolName in $requiredTools) {
         $toolPath = Join-Path $binDirectory $toolName
         if (-not (Test-Path $toolPath -PathType Leaf)) {
-            throw "checksum-verified LLVM archive is missing required tool: $toolName"
+            throw "checksum-verified LLVM install is missing required tool: $toolName"
         }
     }
 
@@ -92,13 +81,14 @@ function Install-PinnedLlvmTools {
 
     return [ordered]@{
         version = $version
-        archive_url = $url
-        archive_sha256 = $actualSha256
+        installer_url = $url
+        installer_sha256 = $actualSha256
+        install_root = $root
         bin_path = $binDirectory
         lld_link_version = ([string]($lldOutput | Select-Object -First 1)).Trim()
         clang_cl_version = ([string]($clangOutput | Select-Object -First 1)).Trim()
         required_tools = $requiredTools
-        extractor = $tarPath
+        install_mode = 'official-nsis-silent-runner-local'
     }
 }
 
@@ -206,8 +196,8 @@ if (-not $link -or -not $cl) {
     }
     else {
         # Rust's MSVC target needs the Windows CRT/SDK plus an MSVC-compatible linker.
-        # Tauri documents LLVM/lld alongside cargo-xwin for this path. Keep both
-        # dependencies checksum-pinned and runner-local instead of mutating the host.
+        # Keep LLVM and cargo-xwin checksum-pinned and runner-local instead of
+        # installing Visual Studio Build Tools or mutating the machine image.
         $llvmTools = Install-PinnedLlvmTools
         $cargoXwin = Install-PinnedCargoXwin
         $source = 'checksum-pinned-cargo-xwin+llvm'
