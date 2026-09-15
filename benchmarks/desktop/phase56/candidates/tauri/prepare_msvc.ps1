@@ -65,10 +65,15 @@ function Install-PinnedLlvmTools {
         }
     }
 
+    $resourceCompiler = Join-Path $binDirectory 'llvm-rc.exe'
+
     $env:PATH = "$binDirectory;$env:PATH"
+    $env:RC = $resourceCompiler
+    [Environment]::SetEnvironmentVariable('RC_x86_64-pc-windows-msvc', $resourceCompiler, 'Process')
     $env:ATLAS_TAURI_LLVM_VERSION = $version
     $env:ATLAS_TAURI_LLVM_SHA256 = $actualSha256
     $env:ATLAS_TAURI_LLVM_BIN = $binDirectory
+    $env:ATLAS_TAURI_RC = $resourceCompiler
 
     $lldOutput = @(& (Join-Path $binDirectory 'lld-link.exe') --version 2>&1)
     $lldExitCode = $LASTEXITCODE
@@ -88,6 +93,7 @@ function Install-PinnedLlvmTools {
         installer_sha256 = $actualSha256
         install_root = $root
         bin_path = $binDirectory
+        resource_compiler_path = $resourceCompiler
         lld_link_version = ([string]($lldOutput | Select-Object -First 1)).Trim()
         clang_cl_version = ([string]($clangOutput | Select-Object -First 1)).Trim()
         required_tools = $requiredTools
@@ -214,6 +220,7 @@ if ($cl) { Write-Host "cl.exe: $($cl.Source)" }
 if ($llvmTools) {
     Write-Host "LLVM: $($llvmTools.version)"
     Write-Host "lld-link: $($llvmTools.lld_link_version)"
+    Write-Host "resource compiler: $($llvmTools.resource_compiler_path)"
 }
 if ($cargoXwin) { Write-Host "cargo-xwin: $($cargoXwin.reported_version)" }
 
@@ -227,6 +234,7 @@ if ($env:PHASE561_EVIDENCE) {
         vsdevcmd = $vsDevCmd
         link_path = if ($link) { $link.Source } else { $null }
         cl_path = if ($cl) { $cl.Source } else { $null }
+        resource_compiler = $env:RC
         vc_tools_install_dir = $env:VCToolsInstallDir
         windows_sdk_dir = $env:WindowsSdkDir
         windows_sdk_version = $env:WindowsSDKVersion
