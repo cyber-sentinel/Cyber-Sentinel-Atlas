@@ -18,6 +18,17 @@ def require(condition: bool, message: str) -> None:
         raise RuntimeError(message)
 
 
+def phase554_lifecycle_valid(text: str) -> bool:
+    """Accept the original implementation-authorized boundary or a later verified closure."""
+    authorized = "ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED" in text
+    closed_state = "Phase 5.5.4 — Production Go Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in text
+    closed_roadmap = (
+        "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in text
+        or "### Phase 5.5.4 — Production Go Shared Core\nStatus: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in text
+    )
+    return authorized or closed_state or closed_roadmap
+
+
 def main() -> int:
     for path in (ADR, ARCH, STATE, ROADMAP, CURRENT):
         require(path.is_file(), f"missing Phase 5.5.4 architecture artifact: {path.relative_to(ROOT)}")
@@ -63,12 +74,15 @@ def main() -> int:
 
     for text, name in ((state, "project-state"), (roadmap, "roadmap"), (current, "current-status")):
         require("Phase 5.5.4" in text, f"{name} missing Phase 5.5.4")
-        require("ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED" in text, f"{name} must authorize Phase 5.5.4 implementation")
+        require(phase554_lifecycle_valid(text), f"{name} must preserve an authorized or verified-complete Phase 5.5.4 lifecycle state")
         require("ADR-0025" in text, f"{name} missing ADR-0025")
 
     require("Shared Core Local Interface: child-process stdio protocol — ADR-0025 Accepted" in state, "project-state interface decision missing")
     require("ADR-0025 — Shared Core Local Interface Boundary" in state, "project-state Accepted ADR list missing ADR-0025")
     require("stable Shared Core local interface/IPC transport" not in state, "accepted interface must not remain listed as open")
+
+    if "Phase 5.5.4 — Production Go Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in state:
+        require("Phase 5.6 — Windows Desktop MVP: **READY / IMPLEMENTATION ENTRY AUTHORIZED**" in state, "verified Phase 5.5.4 closure must clear the Phase 5.6 blocker")
 
     require(CANONICAL.is_dir(), "canonical schemas/v1 missing")
     require(not (CANONICAL / "shared-core.schema.json").exists(), "Shared Core implementation leaked into canonical schema family")
