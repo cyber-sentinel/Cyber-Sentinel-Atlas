@@ -257,10 +257,15 @@ func writeVerifiedTarget(root, relative string, data []byte) (string, error) {
 }
 
 func canonicalDigest(value any) (string, error) {
-	data, err := json.Marshal(value)
-	if err != nil {
+	var buf bytes.Buffer
+	encoder := json.NewEncoder(&buf)
+	encoder.SetEscapeHTML(false)
+	if err := encoder.Encode(value); err != nil {
 		return "", err
 	}
+	data := bytes.TrimSuffix(buf.Bytes(), []byte{'\n'})
+	data = bytes.ReplaceAll(data, []byte(`\u2028`), []byte("\u2028"))
+	data = bytes.ReplaceAll(data, []byte(`\u2029`), []byte("\u2029"))
 	sum := sha256.Sum256(data)
 	return "sha256-" + hex.EncodeToString(sum[:]), nil
 }
