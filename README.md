@@ -1,17 +1,26 @@
 # Cyber-Sentinel-Atlas
 
-**Intelligent Cyber Defense Knowledge & Investigation Platform**
+**Provenance-First Cyber Defense Knowledge & Investigation Platform**
 
-Cyber-Sentinel-Atlas is the signature product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed knowledge system.
+Foundation descriptor: **Intelligent Cyber Defense Knowledge & Investigation Platform**
 
-> Status: **Phase 5.1 COMPLETE; Stage 1 COMPLETE; Phase 5.2 COMPLETE; Phase 5.3 COMPLETE; Phase 5.3.1–5.3.4 COMPLETE; Phase 5.4 NEXT**
-> Visibility: **Private during active development**
+Cyber-Sentinel-Atlas is the **KNOW** layer and knowledge/investigation product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed, inspectable knowledge system.
+
+> **Development:** Active
+> **Foundation state:** Phase 5.1 COMPLETE; Stage 1 COMPLETE
+> **Current delivery boundary:** Phase 5.5 — Offline Pack Runtime / Shared Core
+> **Completed:** Phases 5.1–5.4, Phase 5.5.1–5.5.3, and Phase 5.5.4A–5.5.4B
+> **Next implementation slice:** Phase 5.5.4C — production pack trust + durable state
+> **Visibility:** Private during active development
+> **Version:** `0.1.0-foundation.1`
+
+The live `main` branch is the final repository authority. Detailed phase evidence and roadmap state are maintained in [Current Status](docs/current-status.md), [Project State](docs/project-state.md), and the [Roadmap](docs/roadmap.md).
 
 ## Product Thesis
 
 Cyber defense knowledge is fragmented across operating systems, SIEMs, EDRs, cloud platforms, container runtimes, databases, vendor documentation, detection repositories, threat intelligence, and incident-response references.
 
-Atlas makes those relationships searchable and operational:
+Atlas makes those relationships searchable and operational while keeping technical claims bound to inspectable evidence:
 
 ```text
 Platform / Technology
@@ -41,45 +50,78 @@ Atlas is **not**:
 - another detection-rule repository;
 - another ATT&CK browser;
 - another SIEM-specific content portal;
-- an AI chatbot without verifiable sources.
+- an AI chatbot without verifiable sources;
+- a replacement for the defensive-content engineering ownership of Cyber-Sentinel-DefenseOps;
+- a replacement for the reusable operational procedures and playbooks owned by Cyber-Sentinel-Skills.
 
-Atlas is designed as a **Cyber Defense Knowledge Graph + Analyst Workbench + Offline Knowledge Platform + Detection Engineering Platform**.
+Atlas is designed as a **Cyber Defense Knowledge Graph + Analyst Workbench + Offline Knowledge Platform**.
 
-## Architecture Sequence
+Within the wider Cyber-Sentinel model, Atlas answers the **KNOW** question: *What do we know about what we are seeing?* DefenseOps turns that knowledge into defensive engineering, while Skills turns repeatable operating methods into reusable procedures for humans and AI agents.
+
+Validated detections, hunts, and other defensive engineering outputs can enter Atlas from DefenseOps only through explicit versioned ingestion, provenance, validation, and controlled release gates.
+
+## Current Architecture
 
 ```text
-Canonical Data Model
+Authoritative Sources
+vendors / MITRE / controlled repositories
         ↓
-Source / Ingestion Core
+Acquisition + Raw Snapshots
         ↓
-Deterministic Search Core
+Parsing + Normalization + Lineage
         ↓
-Offline Pack Runtime / Shared Core
+Validation + Human Review
         ↓
-Windows Desktop MVP
+Canonical AtlasRecord Model
         ↓
-Web / PWA
+Deterministic Search
+SQLite + FTS5
         ↓
-API / CLI
+Verified Content Packs
+.atlaspack + TUF trust model
         ↓
-Grounded AI
+Production Shared Core
+Go / atlas-core
+        ↓
+Versioned Local Protocol
+bounded child-process stdio
+        ↓
+Windows Desktop → Web / PWA → API / CLI → Grounded AI
 ```
 
-The official user-facing CLI command is `atlas`.
+The architecture is offline-first. Deterministic exact and lexical retrieval must work without AI, and no UI, search index, upstream source, or model response becomes canonical truth.
 
-## Phase 5.2 Canonical Model
+## Accepted Architecture Decisions
 
-The authoritative schema contract is **1.0.0**, using JSON Schema Draft 2020-12.
+The current implementation boundary includes the following accepted decisions:
+
+- **Canonical schema:** Atlas schema contract `1.0.0`, JSON Schema Draft 2020-12;
+- **Canonical model:** exactly seven `AtlasRecord` families;
+- **Search contract:** deterministic exact-before-lexical retrieval with bounded ambiguity and ordering semantics;
+- **Search engine:** SQLite + FTS5;
+- **Content-pack trust:** TUF-based trust and update model with offline verification and Last Known Good preservation;
+- **Pack format/runtime:** verified `.atlaspack` handling, immutable generations, rollback guards, and atomic activation semantics;
+- **Production Shared Core:** Go;
+- **Reference/conformance role:** Python remains the semantic and cross-language conformance oracle during the production Go port;
+- **Local Shared Core boundary:** `atlas-core --serve-stdio` using a versioned, bounded, length-prefixed UTF-8 JSON protocol;
+- **Network posture:** no default local HTTP/TCP listener and no hidden network fallback;
+- **Official user-facing CLI command:** `atlas`.
+
+These decisions do **not** automatically select the Windows Desktop UI framework, broader application storage, graph database, HSM/KMS provider, application updater/CDN topology, Detection IR, semantic/vector retrieval, or Grounded AI runtime.
+
+## Canonical Model
+
+The authoritative schema contract is **1.0.0**.
 
 Record families:
 
-- EntityRecord
-- ClaimRecord
-- RelationshipRecord
-- SourceRecord
-- ValidationRecord
-- VersionRecord
-- CoverageSnapshot
+- `EntityRecord`
+- `ClaimRecord`
+- `RelationshipRecord`
+- `SourceRecord`
+- `ValidationRecord`
+- `VersionRecord`
+- `CoverageSnapshot`
 
 Canonical schema URI base:
 
@@ -87,11 +129,13 @@ Canonical schema URI base:
 https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/
 ```
 
+The current schema `$id` / `$ref` namespace is part of the accepted v1 contract. Any future public-hosting or immutable-URI migration must be explicit and version-controlled rather than silently changing canonical identity.
+
 The permanent canonical semantic validator is `tools/validate_phase52.py`. Permanent model tests are `tests/test_phase52_model.py` and `tests/test_phase52_invariants.py`.
 
-## Phase 5.3 Source & Ingestion Core
+## Source & Ingestion Core
 
-Phase 5.3 is **COMPLETE / MERGED**. It established the independent ingestion/control plane, proved deterministic ingestion against ATT&CK, Windows Security, Sysmon, D3FEND and CAR, defined the controlled DefenseOps export boundary, and closed the immutable validation/review/promotion path through `PACK_READY`.
+The ingestion/control plane has been validated against ATT&CK, Windows Security, Sysmon, D3FEND, CAR, and the controlled DefenseOps export boundary.
 
 Ingestion Contract Version: **1.0.0**
 
@@ -113,47 +157,46 @@ Inventory Diff → Validation → Human Review
 PACK_READY
 ```
 
-`PACK_READY` is the successful terminal Phase 5.3 state and is not equivalent to signed, released or installed content. The canonical seven-family `AtlasRecord` model remains unchanged.
+`PACK_READY` is a validated promotion state; it is not itself equivalent to signed, installed, or active content.
 
-### Completed slices
+The ingestion pipeline preserves source lineage, ambiguous-identity quarantine, independent authority dimensions, legacy/current lifecycle semantics, and fail-closed promotion controls without changing the seven-family canonical model.
 
-- **5.3.1 — Ingestion Foundation / Contracts: COMPLETE / MERGED**
-- **5.3.2 — MITRE ATT&CK Structured-Source Canary: COMPLETE / MERGED**
-  - Enterprise ATT&CK release `19.2` pinned to upstream commit `6cda5ad8462c79e14fbb872f4e09059b18e0cfc4`;
-  - deterministic STIX 2.1 Parser → PSR → Normalizer pipeline;
-  - phase-aware, fail-closed authorization of real ingestion implementations;
-  - unknown structured fields preserved and reported;
-  - ambiguous identity quarantined;
-  - exact Phase 5.3.1 PSR and RawSnapshot identity contracts enforced;
-  - full upstream corpus retrieved transiently in CI and not committed.
-- **5.3.3 — Windows Security + Sysmon Encyclopedia Pipeline: COMPLETE / MERGED**
-  - PR `#8`, merge commit `84d125c61051442c509a701c2d6bc6ffb85a9090`;
-  - post-merge Foundation Hygiene run `33973584356`: SUCCESS;
-  - Windows Server 2025 Datacenter 24H2 build `26100.33296` provider inventory: 488 event/version definitions and 423 unique Event IDs;
-  - Sysmon `15.21` schema export: 24 schema manifests, 587 parsed event records, current schema `4.91`, 30 current Event IDs;
-  - real controlled reference-host export pipeline remains out-of-band from Atlas core;
-  - Windows documentation vs provider inventory and Sysmon documentation vs schema inventory remain independent authority dimensions;
-  - deterministic structural normalizers create canonical identity shells without inferring unsupported global lifecycle;
-  - `4688`, independent legacy `592`, and `sysmon 1` acceptance semantics are preserved without identity collapse;
-  - three-layer Raw / Parsed / Canonical inventory diff and reconciliation gates are validated;
-  - canonical `schemas/v1` remained unchanged.
-- **5.3.4 — D3FEND/CAR + DefenseOps Contract + Final Promotion Gates: COMPLETE / MERGED**
-  - PR `#11`, merge commit `7270ba54dbcceb3460e922e82bb3fb20bf149f29`;
-  - post-merge Foundation Hygiene run `33977610969`: SUCCESS;
-  - post-merge Phase 5.3.4 Canaries run `33977610961`: SUCCESS;
-  - D3FEND ontology `1.6.0` pinned to exact official SHA-256 `4909a5bb66b75d2c359624398848936fb56a6b246bcd5cfcd277977a1277753a`;
-  - D3FEND live canary produced 272 PSR records and 544 canonical candidate records from the pinned source;
-  - CAR sample `CAR-2016-03-001` is pinned to repository commit `1b922fe1527d956e222a99473472e594f10f610b` and Git blob `b0f899e2875d4469ac58838dcb77db59e4feee96`;
-  - DefenseOps ingestion is an explicit commit-bound validated-export contract; repository origin does not confer canonical authority;
-  - DefenseOps repository licensing remains fail-closed when unknown and G14 is non-waivable;
-  - G1–G15, four-eyes high-risk review, stale-review rejection, immutable digest binding and Last Known Good preservation are validated;
-  - canonical `schemas/v1` remained unchanged.
+## Deterministic Search
 
-### Next phase
+Phase 5.4 established the production deterministic search contract and selected **SQLite + FTS5** after cross-platform evaluation.
 
-- **5.4 — Deterministic Search Core: NEXT / ARCHITECTURE GATE**
+The search layer provides:
 
-Phase 5.3 is not a released content pack. Content-pack signing, archive format, installation and rollback remain Phase 5.5 responsibilities.
+- exact identifier resolution before lexical retrieval;
+- scoped/native identifier and alias handling;
+- deterministic ambiguity and result ordering;
+- bounded filters and catalog browsing;
+- lifecycle-aware browsing;
+- bounded graph pivots;
+- corruption/staleness checks;
+- rebuildable derived search artifacts;
+- no semantic/vector fallback in the deterministic core.
+
+Search indexes are derived artifacts and never become the canonical source of truth.
+
+## Verified Offline Packs & Shared Core
+
+Phase 5.5 introduced the verified offline pack and Shared Core boundary.
+
+Completed capabilities include:
+
+- TUF-based content trust contracts;
+- secure `.atlaspack` validation and extraction rules;
+- offline verification;
+- exact manifest/artifact/control binding;
+- trusted-time and highest-seen rollback guards;
+- immutable generations;
+- atomic activation and Last Known Good rollback;
+- deterministic verified-pack building;
+- Go production protocol core (`5.5.4A`);
+- Go canonical, SQLite/FTS5 search, catalog, and bounded graph parity (`5.5.4B`).
+
+The next implementation slice, **5.5.4C**, ports production pack trust and durable state into the Go Shared Core. Supply-chain and cross-platform closure follow in **5.5.4D**.
 
 ## Initial MVP Domain
 
@@ -169,27 +212,109 @@ The first usable MVP intentionally starts narrow:
 - investigation pivots
 - official-source provenance
 - fast exact/lexical search
-- offline-first local dataset
+- verified offline local datasets
 
-The architecture is intentionally extensible to Linux, macOS, Exchange, SharePoint, Microsoft 365, Azure, AWS, Google Cloud, Docker, Kubernetes, DevOps/CI-CD, databases, LOLBAS, GTFOBins, DFIR, incident response, and cyber deception. Cross-domain Phase 5.2 fixtures validate the universal model only; they do not authorize production ingestion.
+The architecture is intentionally extensible to Linux, macOS, Exchange, SharePoint, Microsoft 365, Entra/Azure, AWS, Google Cloud, Docker, Kubernetes/OpenShift, DevOps/CI-CD, SQL/NoSQL databases, LOLBAS, GTFOBins, broader DFIR/IR, and cyber deception.
 
-## Ecosystem
+Architecture support does not imply MVP ingestion of every domain.
+
+## Cyber-Sentinel Ecosystem
+
+Cyber-Sentinel is intentionally a **contract-separated ecosystem**, not a single monolithic product. The three current project layers have distinct responsibilities:
 
 ```text
 Cyber-Sentinel
-├── DefenseOps  → approved defensive engineering source for validated content
-└── Atlas       → knowledge graph, search, offline runtime, analyst workspace and product interfaces
+├── Atlas       — KNOW   → Connect • Search • Investigate • Explain
+├── DefenseOps  — DEFEND → Detect • Hunt • Validate • Respond • Automate
+└── Skills      — APPLY  → Execute • Review • Reuse • Govern
 ```
 
-Cyber-Sentinel-Forge is retired as an independent Atlas architectural component. Historical Forge material, if present, is preserved rather than deleted automatically.
+### Atlas — KNOW
 
-DefenseOps content enters Atlas only through versioned ingestion, provenance, validation, and controlled release gates.
+[Cyber-Sentinel-Atlas](https://github.com/cyber-sentinel/Cyber-Sentinel-Atlas) owns governed cyber-defense knowledge, canonical relationships, deterministic retrieval, provenance, investigation context, offline knowledge delivery, and analyst-facing product interfaces.
 
-## Foundation Documents
+**Core question:** *What do we know about what we are seeing?*
 
-### Product Foundation
+### DefenseOps — DEFEND
 
+[Cyber-Sentinel-DefenseOps](https://github.com/cyber-sentinel/Cyber-Sentinel-DefenseOps) owns defensive engineering content: detections, hunts, validation assets, response engineering, DFIR/IR material, deception-oriented content, and defensive automation.
+
+**Core question:** *What can we detect, validate, hunt, and defend?*
+
+DefenseOps may provide controlled defensive content to Atlas, but repository origin alone never grants canonical authority. Atlas applies its own ingestion, provenance, licensing, validation, promotion, and release boundaries.
+
+### Skills — APPLY
+
+[Cyber-Sentinel-Skills](https://github.com/cyber-sentinel/Cyber-Sentinel-Skills) owns reusable, vendor-neutral operational procedures and playbooks that make security tasks explicit, reviewable, attributable, repeatable, and usable by both humans and AI agents.
+
+**Core question:** *How should this security task be performed consistently?*
+
+Skills does not replace Atlas product contracts or DefenseOps engineering artifacts; it captures the repeatable operating method used to apply them consistently.
+
+### Ecosystem Operating Loop
+
+```text
+Authoritative Sources / Telemetry / Security Knowledge
+                         │
+                         ▼
+                  ATLAS — KNOW
+        Connect • Search • Investigate • Explain
+                         │
+             evidence / defensive context
+                         ▼
+               DefenseOps — DEFEND
+       Detect • Hunt • Validate • Respond • Automate
+                         │
+              repeatable operating method
+                         ▼
+                  Skills — APPLY
+          Execute • Review • Reuse • Govern
+                         │
+                         ▼
+          VALIDATE → AUTOMATE → EVOLVE
+                         │
+                         └──────────────↺
+                    feedback into knowledge,
+                 engineering and procedures
+```
+
+`VALIDATE`, `AUTOMATE`, and `EVOLVE` are ecosystem operating outcomes and feedback stages, not separate repositories. Together the model is:
+
+`KNOW → DEFEND → APPLY → VALIDATE → AUTOMATE → EVOLVE`
+
+Cyber-Sentinel-Forge is retired as an independent Atlas architectural component. Historical Forge material, if present, is preserved or archived rather than deleted automatically.
+
+## Delivery Sequence
+
+```text
+5.1  Product Foundation                         COMPLETE
+5.2  Canonical Data Model                      COMPLETE
+5.3  Source & Ingestion Core                   COMPLETE
+5.4  Deterministic Search Core                 COMPLETE
+5.5  Offline Pack Runtime / Shared Core         IN PROGRESS
+     5.5.1 Pack Trust Contracts                COMPLETE
+     5.5.2 Verified Pack Runtime               COMPLETE
+     5.5.3 Shared Core Technology Selection    COMPLETE
+     5.5.4A Go Protocol Core                   COMPLETE
+     5.5.4B Canonical / Search / Graph Core    COMPLETE
+     5.5.4C Pack Trust / Durable State         NEXT
+     5.5.4D Supply-chain / Closure             PLANNED
+5.6  Windows Desktop MVP                       NOT STARTED
+5.7  Web / PWA                                 NOT STARTED
+5.8  API / CLI                                 NOT STARTED
+5.9  Grounded AI                               NOT STARTED
+5.10 Public Preview Readiness                  NOT STARTED
+```
+
+This summary is intentionally phase-level. Exact merge SHAs, workflow evidence, and historical phase snapshots belong in the status/history documentation rather than the repository landing page.
+
+## Documentation
+
+### Project & Product
+
+- [Current Authoritative Status](docs/current-status.md)
 - [Project State](docs/project-state.md)
+- [Roadmap](docs/roadmap.md)
 - [Product Vision](docs/product/product-vision.md)
 - [Product Principles](docs/product/product-principles.md)
 - [Personas](docs/product/personas.md)
@@ -205,23 +330,34 @@ DefenseOps content enters Atlas only through versioned ingestion, provenance, va
 - [Source & Provenance Model](docs/architecture/source-provenance-model.md)
 - [Source & Ingestion Core](docs/architecture/source-ingestion-core.md)
 - [Search Architecture](docs/architecture/search-architecture.md)
-- [AI / RAG Architecture](docs/architecture/ai-rag-architecture.md)
 - [Offline-first Architecture](docs/architecture/offline-first-architecture.md)
 - [API / CLI Architecture](docs/architecture/api-cli-architecture.md)
+- [AI / RAG Architecture](docs/architecture/ai-rag-architecture.md)
 - [Security Architecture](docs/architecture/security-architecture.md)
 - [Coverage Model](docs/architecture/coverage-model.md)
 - [Telemetry Lifecycle](docs/architecture/telemetry-lifecycle.md)
-- [Phase 5.3.2 ATT&CK Canary](docs/architecture/phase-5.3.2-attack-canary.md)
-- [Phase 5.3.3 Windows/Sysmon Encyclopedia](docs/architecture/phase-5.3.3-windows-sysmon-encyclopedia.md)
-- [Phase 5.3.4 D3FEND/CAR/DefenseOps Promotion](docs/architecture/phase-5.3.4-d3fend-car-defenseops-promotion.md)
+- [Architecture Decision Records](docs/adr/)
 
-### Product Delivery
+### Product Delivery & Governance
 
 - [UX Information Architecture](docs/ux/ux-information-architecture.md)
 - [MVP Scope](docs/mvp/mvp-scope.md)
 - [MVP Release Gates](docs/mvp/release-gates.md)
-- [Roadmap](docs/roadmap.md)
-- [Architecture Decision Records](docs/adr/)
+- [Contributing](CONTRIBUTING.md)
+- [Security Policy](SECURITY.md)
+- [Third-Party Notices](THIRD_PARTY_NOTICES.md)
+- [Trademarks](TRADEMARKS.md)
+- [Licensing & Contributions](docs/governance/licensing-and-contributions.md)
+
+## Development & Release Posture
+
+The repository remains private during active development. A public project license has not yet been adopted. Third-party licensing, redistribution rights, contributor-rights review, security review, accessibility, and signed public release processes remain fail-closed requirements before Public Preview.
+
+Official changes follow the repository governance path:
+
+```text
+branch → pull request → CI → architecture/security review → merge → post-merge verification
+```
 
 ## Core Principle
 
