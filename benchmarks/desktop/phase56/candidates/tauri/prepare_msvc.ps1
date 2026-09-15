@@ -59,10 +59,12 @@ function Install-PinnedCargoXwin {
     $env:ATLAS_TAURI_CARGO_XWIN_SHA256 = $actualSha256
     $env:ATLAS_TAURI_CARGO_XWIN_PATH = $binary.FullName
 
-    $reportedVersion = (& $binary.FullName xwin --version 2>&1 | Select-Object -First 1)
-    if ($LASTEXITCODE -ne 0) {
-        throw "cargo-xwin version query failed with exit code $LASTEXITCODE"
+    $versionOutput = @(& $binary.FullName xwin --version 2>&1)
+    $versionExitCode = $LASTEXITCODE
+    if ($versionExitCode -ne 0) {
+        throw "cargo-xwin version query failed with exit code $versionExitCode"
     }
+    $reportedVersion = ($versionOutput | Select-Object -First 1)
     if ([string]$reportedVersion -notmatch [regex]::Escape($version)) {
         throw "cargo-xwin $version required; found $reportedVersion"
     }
