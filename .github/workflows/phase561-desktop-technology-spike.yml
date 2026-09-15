@@ -1,0 +1,105 @@
+name: Phase 5.6.1 Desktop Technology Spike
+
+on:
+  push:
+    branches:
+      - feature/phase-5.6.1-desktop-technology-spike
+      - main
+    paths:
+      - 'benchmarks/desktop/phase561/**'
+      - 'docs/architecture/phase-5.6.1-windows-desktop-technology-spike.md'
+      - 'docs/adr/0026-windows-desktop-technology-selection.md'
+      - 'docs/current-status.md'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - 'tools/desktop/**'
+      - '.github/workflows/phase561-desktop-technology-spike.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'benchmarks/desktop/phase561/**'
+      - 'docs/architecture/phase-5.6.1-windows-desktop-technology-spike.md'
+      - 'docs/adr/0026-windows-desktop-technology-selection.md'
+      - 'docs/current-status.md'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - 'tools/desktop/**'
+      - '.github/workflows/phase561-desktop-technology-spike.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  architecture-contract:
+    name: architecture-contract
+    runs-on: [self-hosted, linux, x64, atlas-ci, atlas-linux]
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Validate Phase 5.6.1 architecture contract
+        run: python tools/desktop/validate_phase561_architecture.py
+
+      - name: Preserve canonical schema and Production Shared Core
+        if: github.ref != 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code origin/main...HEAD -- schemas/v1 shared-core/go || {
+            echo 'Phase 5.6.1 Desktop technology spike must not modify schemas/v1 or shared-core/go.' >&2
+            exit 1
+          }
+
+  windows-preflight:
+    name: windows-read-only-preflight
+    runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Collect read-only Windows runner capability evidence
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $out = '.phase561-evidence/preflight-windows.json'
+          ./tools/desktop/phase561_preflight.ps1 -Output $out
+          Get-Content $out
+
+      - name: Assert preflight evidence shape
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $evidence = Get-Content '.phase561-evidence/preflight-windows.json' -Raw | ConvertFrom-Json
+          if ($evidence.schema_version -ne '1.0.0') { throw 'Unexpected Phase 5.6.1 preflight schema version.' }
+          if ($evidence.phase -ne '5.6.1') { throw 'Phase mismatch in Windows preflight evidence.' }
+          if ($evidence.evidence_kind -ne 'windows-runner-read-only-preflight') { throw 'Unexpected preflight evidence kind.' }
+          if (-not $evidence.runner.name) { throw 'Runner name missing from preflight evidence.' }
+          if ($evidence.runner.os -ne 'Windows') { throw "Expected Windows runner; got $($evidence.runner.os)" }
+          if (-not $evidence.commands.git.present) { throw 'Git must be available on ATLAS-CI-WIN01.' }
+          Write-Host 'Phase 5.6.1 Windows preflight evidence shape: PASS'
+
+      - name: Upload Phase 5.6.1 preflight evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: phase561-windows-preflight
+          path: .phase561-evidence/preflight-windows.json
+          if-no-files-found: error
