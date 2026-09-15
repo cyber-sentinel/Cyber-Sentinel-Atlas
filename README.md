@@ -7,6 +7,8 @@ Foundation descriptor: **Intelligent Cyber Defense Knowledge & Investigation Pla
 Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed and inspectable knowledge system.
 
 > **Development:** Active
+> **Phase 5.1:** COMPLETE
+> **Stage 1:** COMPLETE
 > **Completed foundation:** Phases 5.1–5.5 COMPLETE / MERGED / VERIFIED
 > **Current delivery boundary:** Phase 5.6 — Windows Desktop MVP
 > **Completed desktop slice:** Phase 5.6.0 — Desktop Spike Contract + Environment/Core-Boundary Probe
