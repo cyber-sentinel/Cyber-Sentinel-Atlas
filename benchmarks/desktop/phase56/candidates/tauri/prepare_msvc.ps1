@@ -27,10 +27,36 @@ function Import-CmdEnvironment {
     }
 }
 
+function Resolve-RustLld {
+    $sysroot = (& rustc --print sysroot 2>$null | Select-Object -First 1)
+    if (-not $sysroot -or $LASTEXITCODE -ne 0) {
+        return $null
+    }
+
+    $expected = Join-Path $sysroot 'lib\rustlib\x86_64-pc-windows-msvc\bin\rust-lld.exe'
+    if (Test-Path $expected -PathType Leaf) {
+        return (Resolve-Path $expected).Path
+    }
+
+    $rustlib = Join-Path $sysroot 'lib\rustlib'
+    if (-not (Test-Path $rustlib -PathType Container)) {
+        return $null
+    }
+
+    $fallback = Get-ChildItem -Path $rustlib -Filter 'rust-lld.exe' -File -Recurse -ErrorAction SilentlyContinue |
+        Where-Object { $_.FullName -match 'x86_64-pc-windows-msvc' } |
+        Select-Object -First 1
+    if ($fallback) {
+        return $fallback.FullName
+    }
+    return $null
+}
+
 $link = Get-Command link.exe -ErrorAction SilentlyContinue | Select-Object -First 1
 $cl = Get-Command cl.exe -ErrorAction SilentlyContinue | Select-Object -First 1
 $source = 'existing-process-environment'
 $vsDevCmd = $null
+$rustLld = $null
 
 if (-not $link -or -not $cl) {
     $vswhereCandidates = @(
@@ -66,25 +92,32 @@ if (-not $link -or -not $cl) {
         }
     }
 
-    if (-not $vsDevCmd) {
-        throw 'MSVC C++ Build Tools were not found. Tauri requires a Windows linker; no machine-level installer will be invoked by this CI job.'
+    if ($vsDevCmd) {
+        Import-CmdEnvironment -BatchFile $vsDevCmd -Arguments '-no_logo -arch=x64 -host_arch=x64'
+        $link = Get-Command link.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+        $cl = Get-Command cl.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+        if (-not $link -or -not $cl) {
+            throw 'MSVC developer environment initialized but link.exe/cl.exe are still unavailable.'
+        }
     }
-
-    Import-CmdEnvironment -BatchFile $vsDevCmd -Arguments '-no_logo -arch=x64 -host_arch=x64'
-    $link = Get-Command link.exe -ErrorAction SilentlyContinue | Select-Object -First 1
-    $cl = Get-Command cl.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+    else {
+        # Self-hosted runner intentionally has no machine-level Visual C++ Build Tools.
+        # Prefer the linker shipped with the already checksum-pinned Rust toolchain rather
+        # than mutating the runner. This remains fail-closed: any missing Windows SDK or
+        # resource-tool prerequisite will surface as the next real Cargo/Tauri build error.
+        $rustLld = Resolve-RustLld
+        if (-not $rustLld) {
+            throw 'Neither MSVC C++ Build Tools nor the checksum-pinned Rust rust-lld.exe linker were found; refusing machine-level installation.'
+        }
+        $env:CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER = $rustLld
+        $source = 'checksum-pinned-rust-lld'
+    }
 }
 
-if (-not $link) {
-    throw 'MSVC developer environment initialized but link.exe is still unavailable.'
-}
-if (-not $cl) {
-    throw 'MSVC developer environment initialized but cl.exe is still unavailable.'
-}
-
-Write-Host "MSVC environment source: $source"
-Write-Host "link.exe: $($link.Source)"
-Write-Host "cl.exe: $($cl.Source)"
+Write-Host "Windows linker environment source: $source"
+if ($link) { Write-Host "link.exe: $($link.Source)" }
+if ($cl) { Write-Host "cl.exe: $($cl.Source)" }
+if ($rustLld) { Write-Host "rust-lld.exe: $rustLld" }
 
 if ($env:PHASE561_EVIDENCE) {
     New-Item -ItemType Directory -Force -Path $env:PHASE561_EVIDENCE | Out-Null
@@ -93,8 +126,10 @@ if ($env:PHASE561_EVIDENCE) {
         phase = '5.6.1'
         environment_source = $source
         vsdevcmd = $vsDevCmd
-        link_path = $link.Source
-        cl_path = $cl.Source
+        link_path = if ($link) { $link.Source } else { $null }
+        cl_path = if ($cl) { $cl.Source } else { $null }
+        rust_lld_path = $rustLld
+        cargo_target_linker = $env:CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER
         vc_tools_install_dir = $env:VCToolsInstallDir
         windows_sdk_dir = $env:WindowsSdkDir
         windows_sdk_version = $env:WindowsSDKVersion
