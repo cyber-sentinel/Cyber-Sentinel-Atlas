@@ -62,32 +62,9 @@ Validated detections, hunts, and other defensive engineering outputs can enter A
 
 ## Current Architecture
 
-```text
-Authoritative Sources
-vendors / MITRE / controlled repositories
-        ↓
-Acquisition + Raw Snapshots
-        ↓
-Parsing + Normalization + Lineage
-        ↓
-Validation + Human Review
-        ↓
-Canonical AtlasRecord Model
-        ↓
-Deterministic Search
-SQLite + FTS5
-        ↓
-Verified Content Packs
-.atlaspack + TUF trust model
-        ↓
-Production Shared Core
-Go / atlas-core
-        ↓
-Versioned Local Protocol
-bounded child-process stdio
-        ↓
-Windows Desktop → Web / PWA → API / CLI → Grounded AI
-```
+<p align="center">
+  <img src="assets/ATLAS-IR.png" alt="Cyber-Sentinel Atlas content pipeline and production architecture" width="100%" />
+</p>
 
 The architecture is offline-first. Deterministic exact and lexical retrieval must work without AI, and no UI, search index, upstream source, or model response becomes canonical truth.
 
