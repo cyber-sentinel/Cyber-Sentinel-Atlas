@@ -218,6 +218,47 @@ func signedTargetNames(repoRoot string) ([]string, error) {
 	return names, nil
 }
 
+func physicalTargetNames(repoRoot string) ([]string, error) {
+	targetRoot := filepath.Join(repoRoot, "targets")
+	names := make([]string, 0)
+	err := filepath.WalkDir(targetRoot, func(current string, entry os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if current == targetRoot {
+			return nil
+		}
+		if entry.Type()&os.ModeSymlink != 0 {
+			return fmt.Errorf("symlink is forbidden in pack targets: %s", current)
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		info, err := entry.Info()
+		if err != nil {
+			return err
+		}
+		if !info.Mode().IsRegular() {
+			return fmt.Errorf("special file is forbidden in pack targets: %s", current)
+		}
+		relative, err := filepath.Rel(targetRoot, current)
+		if err != nil {
+			return err
+		}
+		relative = filepath.ToSlash(relative)
+		if _, err := safeRelative(relative); err != nil {
+			return err
+		}
+		names = append(names, relative)
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	sort.Strings(names)
+	return names, nil
+}
+
 func verifyManifestTopology(repoRoot string, manifest *Manifest) error {
 	allowed := map[string]bool{
 		"atlas/pack-manifest.json":            true,
@@ -225,6 +266,18 @@ func verifyManifestTopology(repoRoot string, manifest *Manifest) error {
 	}
 	for _, artifact := range manifest.Artifacts {
 		allowed[artifact.Path] = true
+	}
+	physical, err := physicalTargetNames(repoRoot)
+	if err != nil {
+		return err
+	}
+	for _, name := range physical {
+		if !allowed[name] {
+			return fmt.Errorf("undeclared physical target: %s", name)
+		}
+	}
+	if len(physical) != len(allowed) {
+		return fmt.Errorf("pack target topology mismatch")
 	}
 	names, err := signedTargetNames(repoRoot)
 	if err != nil {
