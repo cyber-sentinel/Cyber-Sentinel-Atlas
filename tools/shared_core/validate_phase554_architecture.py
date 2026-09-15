@@ -18,6 +18,13 @@ def require(condition: bool, message: str) -> None:
         raise RuntimeError(message)
 
 
+def has_valid_operational_lifecycle(text: str) -> bool:
+    return (
+        "ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED" in text
+        or "COMPLETE / MERGED / POST-MERGE VERIFIED" in text
+    )
+
+
 def main() -> int:
     for path in (ADR, ARCH, STATE, ROADMAP, CURRENT):
         require(path.is_file(), f"missing Phase 5.5.4 architecture artifact: {path.relative_to(ROOT)}")
@@ -42,6 +49,7 @@ def main() -> int:
     ):
         require(phrase in adr, f"ADR-0025 invariant missing: {phrase}")
 
+    # The architecture authorization artifact is historical authority and remains unchanged after implementation closure.
     require("Status: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**" in arch, "Phase 5.5.4 architecture status drifted")
     for phrase in (
         "shared-core/go/",
@@ -63,7 +71,7 @@ def main() -> int:
 
     for text, name in ((state, "project-state"), (roadmap, "roadmap"), (current, "current-status")):
         require("Phase 5.5.4" in text, f"{name} missing Phase 5.5.4")
-        require("ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED" in text, f"{name} must authorize Phase 5.5.4 implementation")
+        require(has_valid_operational_lifecycle(text), f"{name} has invalid Phase 5.5.4 lifecycle state")
         require("ADR-0025" in text, f"{name} missing ADR-0025")
 
     require("Shared Core Local Interface: child-process stdio protocol — ADR-0025 Accepted" in state, "project-state interface decision missing")
