@@ -29,8 +29,6 @@ func TestVerifyManifestTopologyRejectsUndeclaredPhysicalTarget(t *testing.T) {
 		t.Fatal(err)
 	}
 	metadata := []byte(`{"signed":{"targets":{"atlas/pack-manifest.json":{},"atlas/source-license-inventory.json":{},"content/canonical.jsonl":{},"search/spc.json":{}}}}`)
-	metadata = []byte(`{"signed":{"targets":{}}}`)
-	metadata = []byte(`{"signed":{"targets":{"atlas/pack-manifest.json":{},"atlas/source-license-inventory.json":{},"content/canonical.jsonl":{},"search/spc.json":{}}}}`)
 	if err := os.WriteFile(filepath.Join(metadataDir, "targets.json"), metadata, 0o600); err != nil {
 		t.Fatal(err)
 	}
