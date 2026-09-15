@@ -2,13 +2,15 @@
 
 **Provenance-First Cyber Defense Knowledge & Investigation Platform**
 
+Foundation descriptor: **Intelligent Cyber Defense Knowledge & Investigation Platform**
+
 Cyber-Sentinel-Atlas is the **KNOW** layer and knowledge/investigation product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed, inspectable knowledge system.
 
-> **Development:** Active  
-> **Current delivery boundary:** Phase 5.5 — Offline Pack Runtime / Shared Core  
-> **Completed:** Phases 5.1–5.4, Phase 5.5.1–5.5.3, and Phase 5.5.4A–5.5.4B  
-> **Next implementation slice:** Phase 5.5.4C — production pack trust + durable state  
-> **Visibility:** Private during active development  
+> **Development:** Active
+> **Current delivery boundary:** Phase 5.5 — Offline Pack Runtime / Shared Core
+> **Completed:** Phases 5.1–5.4, Phase 5.5.1–5.5.3, and Phase 5.5.4A–5.5.4B
+> **Next implementation slice:** Phase 5.5.4C — production pack trust + durable state
+> **Visibility:** Private during active development
 > **Version:** `0.1.0-foundation.1`
 
 The live `main` branch is the final repository authority. Detailed phase evidence and roadmap state are maintained in [Current Status](docs/current-status.md), [Project State](docs/project-state.md), and the [Roadmap](docs/roadmap.md).
@@ -362,5 +364,5 @@ branch → pull request → CI → architecture/security review → merge → po
 
 ---
 
-**Maintainer:** Ali RahimDabagh  
+**Maintainer:** Ali RahimDabagh
 **GitHub:** `cyber-sentinel`
