@@ -72,10 +72,40 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          rustup toolchain install 1.95.0 --profile minimal
-          rustup default 1.95.0
+          $RustupVersion = '1.29.0'
+          $RustupBootstrap = Join-Path $env:RUNNER_TEMP 'rustup-bootstrap'
+          $RustupInit = Join-Path $RustupBootstrap 'rustup-init.exe'
+          $RustupChecksum = Join-Path $RustupBootstrap 'rustup-init.exe.sha256'
+          $RustupBase = "https://static.rust-lang.org/rustup/archive/$RustupVersion/x86_64-pc-windows-msvc"
+
+          New-Item -ItemType Directory -Force -Path $RustupBootstrap | Out-Null
+          Invoke-WebRequest -Uri "$RustupBase/rustup-init.exe" -OutFile $RustupInit
+          Invoke-WebRequest -Uri "$RustupBase/rustup-init.exe.sha256" -OutFile $RustupChecksum
+
+          $expected = ((Get-Content -Raw $RustupChecksum).Trim() -split '\s+')[0].ToLowerInvariant()
+          $actual = (Get-FileHash -Algorithm SHA256 $RustupInit).Hash.ToLowerInvariant()
+          if ($actual -ne $expected) {
+            throw "rustup-init SHA-256 mismatch: expected $expected, got $actual"
+          }
+
+          $env:RUSTUP_HOME = Join-Path $env:RUNNER_TEMP 'rustup-home'
+          $env:CARGO_HOME = Join-Path $env:RUNNER_TEMP 'cargo-home'
+          & $RustupInit -y --no-modify-path --profile minimal --default-toolchain 1.95.0
+          if ($LASTEXITCODE -ne 0) { throw "rustup-init failed with exit code $LASTEXITCODE" }
+
+          $CargoBin = Join-Path $env:CARGO_HOME 'bin'
+          $env:PATH = "$CargoBin;$env:PATH"
+          "RUSTUP_HOME=$env:RUSTUP_HOME" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "CARGO_HOME=$env:CARGO_HOME" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          $CargoBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+          rustup --version
           rustc --version
           cargo --version
+          $rustVersion = (rustc --version).Trim()
+          if ($rustVersion -notmatch '^rustc 1\.95\.0 ') {
+            throw "Rust 1.95.0 required; found $rustVersion"
+          }
 
       - name: Validate Phase 5.6 evaluation contract
         shell: pwsh
