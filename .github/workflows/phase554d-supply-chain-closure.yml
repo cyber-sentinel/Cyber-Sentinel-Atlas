@@ -56,7 +56,7 @@ jobs:
       CGO_ENABLED: '0'
       GOTOOLCHAIN: local
       PYTHONPATH: .
-      PHASE554D_EVIDENCE: .phase554d-evidence/${{ runner.os }}
+      PHASE554D_EVIDENCE: .phase554d-evidence/${{ matrix.runner_os }}
 
     steps:
       - name: Checkout
@@ -274,7 +274,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: phase554d-supply-chain-${{ runner.os }}
-          path: .phase554d-evidence/${{ runner.os }}/
+          name: phase554d-supply-chain-${{ matrix.runner_os }}
+          path: .phase554d-evidence/${{ matrix.runner_os }}/
           if-no-files-found: error
           include-hidden-files: true
