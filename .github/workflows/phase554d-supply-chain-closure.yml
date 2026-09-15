@@ -65,10 +65,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Set up Go 1.25.0
+      - name: Set up Go 1.25.13
         uses: actions/setup-go@v6
         with:
-          go-version: '1.25.0'
+          go-version: '1.25.13'
           cache-dependency-path: shared-core/go/go.sum
 
       - name: Set up Python 3.12 (Linux)
@@ -133,7 +133,7 @@ jobs:
           mods={p[0]:p[1] for p in (r.split() for r in rows) if len(p)>1};
           assert mods.get('github.com/theupdateframework/go-tuf/v2')=='v2.4.2',mods.get('github.com/theupdateframework/go-tuf/v2');
           assert mods.get('modernc.org/sqlite')=='v1.58.0',mods.get('modernc.org/sqlite');
-          assert mods.get('golang.org/x/text')=='v0.36.0',mods.get('golang.org/x/text')"
+          assert mods.get('golang.org/x/text')=='v0.39.0',mods.get('golang.org/x/text')"
 
       - name: Enforce gofmt
         working-directory: shared-core/go
