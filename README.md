@@ -238,8 +238,6 @@ Skills does not replace Atlas product contracts or DefenseOps engineering artifa
 
 `KNOW → DEFEND → APPLY → VALIDATE → AUTOMATE → EVOLVE`
 
-Cyber-Sentinel-Forge is retired as an independent Atlas architectural component. Historical Forge material, if present, is preserved or archived rather than deleted automatically.
-
 ## Delivery Sequence
 
 ```text
