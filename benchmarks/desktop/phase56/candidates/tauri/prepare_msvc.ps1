@@ -47,14 +47,18 @@ function Install-PinnedLlvmTools {
         throw "LLVM archive SHA-256 mismatch: expected $expectedSha256, got $actualSha256"
     }
 
-    $tar = Get-Command tar.exe -ErrorAction SilentlyContinue | Select-Object -First 1
-    if (-not $tar) {
-        throw 'tar.exe is required to extract the checksum-verified LLVM .tar.xz archive.'
+    # Do not resolve tar.exe through PATH here: Git for Windows ships GNU tar,
+    # which shells out to xz.exe and fails under the NetworkService runner when
+    # that helper is absent from PATH. Windows System32 tar is bsdtar/libarchive
+    # and handles .tar.xz directly without installing an additional decompressor.
+    $tarPath = Join-Path $env:SystemRoot 'System32\tar.exe'
+    if (-not (Test-Path $tarPath -PathType Leaf)) {
+        throw "Windows bsdtar is required at the fixed path: $tarPath"
     }
 
     # Extract only the executable toolchain and Clang resource directory. This keeps
     # the fallback runner-local and avoids installing or registering LLVM system-wide.
-    & $tar.Source -xf $archive -C $root "$topDirectory/bin" "$topDirectory/lib/clang"
+    & $tarPath -xf $archive -C $root "$topDirectory/bin" "$topDirectory/lib/clang"
     $extractExitCode = $LASTEXITCODE
     if ($extractExitCode -ne 0) {
         throw "LLVM archive extraction failed with exit code $extractExitCode"
@@ -94,6 +98,7 @@ function Install-PinnedLlvmTools {
         lld_link_version = ([string]($lldOutput | Select-Object -First 1)).Trim()
         clang_cl_version = ([string]($clangOutput | Select-Object -First 1)).Trim()
         required_tools = $requiredTools
+        extractor = $tarPath
     }
 }
 
