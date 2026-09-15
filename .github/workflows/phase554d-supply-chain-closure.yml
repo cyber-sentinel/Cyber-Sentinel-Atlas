@@ -1,0 +1,280 @@
+name: Phase 5.5.4D Supply Chain Closure
+
+on:
+  push:
+    branches:
+      - feature/phase-5.5.4d-supply-chain-closure
+      - main
+    paths:
+      - 'shared-core/go/**'
+      - 'tools/shared_core/phase554d_evidence.py'
+      - 'tools/pack/**'
+      - 'tests/phase55/**'
+      - 'docs/architecture/phase-5.5.4-production-go-shared-core.md'
+      - 'docs/current-status.md'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - '.github/workflows/phase554d-supply-chain-closure.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'shared-core/go/**'
+      - 'tools/shared_core/phase554d_evidence.py'
+      - 'tools/pack/**'
+      - 'tests/phase55/**'
+      - 'docs/architecture/phase-5.5.4-production-go-shared-core.md'
+      - 'docs/current-status.md'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - '.github/workflows/phase554d-supply-chain-closure.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  supply-chain-closure:
+    name: supply-chain-closure (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            runner: atlas-linux
+            runner_os: linux
+          - os: windows-latest
+            runner: atlas-windows
+            runner_os: windows
+    runs-on: [self-hosted, "${{ matrix.runner_os }}", x64, atlas-ci, "${{ matrix.runner }}"]
+    timeout-minutes: 35
+    env:
+      CGO_ENABLED: '0'
+      GOTOOLCHAIN: local
+      PYTHONPATH: .
+      PHASE554D_EVIDENCE: .phase554d-evidence/${{ runner.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Go 1.25.0
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.0'
+          cache-dependency-path: shared-core/go/go.sum
+
+      - name: Set up Python 3.12 (Linux)
+        if: runner.os != 'Windows'
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Prepare Python oracle venv (Linux)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          set -euo pipefail
+          venv="$RUNNER_TEMP/atlas-phase554d-venv"
+          rm -rf "$venv"
+          python -m venv "$venv"
+          echo "$venv/bin" >> "$GITHUB_PATH"
+          echo "VIRTUAL_ENV=$venv" >> "$GITHUB_ENV"
+
+      - name: Prepare Python 3.12 oracle venv (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
+          if ($version -ne '3.12') { throw "Python 3.12 required; found $version" }
+          $venv = Join-Path $env:RUNNER_TEMP 'atlas-phase554d-venv'
+          if (Test-Path $venv) { Remove-Item $venv -Recurse -Force }
+          python -m venv $venv
+          $scripts = Join-Path $venv 'Scripts'
+          $scripts | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          "VIRTUAL_ENV=$venv" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          & (Join-Path $scripts 'python.exe') --version
+
+      - name: Install exact Python oracle dependencies
+        run: python -m pip install --disable-pip-version-check -r tools/pack/requirements-phase552.txt
+
+      - name: Assert exact Python oracle dependency versions
+        run: >-
+          python -c "import importlib.metadata as m;
+          assert m.version('tuf') == '7.0.0', m.version('tuf');
+          assert m.version('securesystemslib') == '1.4.0', m.version('securesystemslib');
+          assert m.version('jsonschema') == '4.25.1', m.version('jsonschema');
+          assert m.version('pytest') == '8.4.2', m.version('pytest')"
+
+      - name: Compile Phase 5.5.4D evidence helper
+        run: python -m py_compile tools/shared_core/phase554d_evidence.py
+
+      - name: Download and verify locked Go module graph
+        working-directory: shared-core/go
+        run: go mod download && go mod verify
+
+      - name: Reject Go lock drift
+        working-directory: shared-core/go
+        run: go mod tidy && git diff --exit-code -- go.mod go.sum
+
+      - name: Enforce accepted production dependency boundary
+        working-directory: shared-core/go
+        run: >-
+          python -c "import subprocess;
+          rows=subprocess.check_output(['go','list','-m','all'], text=True).splitlines();
+          mods={p[0]:p[1] for p in (r.split() for r in rows) if len(p)>1};
+          assert mods.get('github.com/theupdateframework/go-tuf/v2')=='v2.4.2',mods.get('github.com/theupdateframework/go-tuf/v2');
+          assert mods.get('modernc.org/sqlite')=='v1.58.0',mods.get('modernc.org/sqlite');
+          assert mods.get('golang.org/x/text')=='v0.36.0',mods.get('golang.org/x/text')"
+
+      - name: Enforce gofmt
+        working-directory: shared-core/go
+        run: go fmt ./... && git diff --exit-code -- .
+
+      - name: Reject benchmark runtime imports
+        working-directory: shared-core/go
+        run: python -c "from pathlib import Path; bad=[str(p) for p in Path('.').rglob('*.go') if 'benchmarks/shared-core/phase553' in p.read_text(encoding='utf-8')]; assert not bad, bad"
+
+      - name: Run production Go regression suite
+        working-directory: shared-core/go
+        run: go test ./... -count=1
+
+      - name: Run full Python pack oracle conformance suite
+        run: python -m pytest -q tests/phase55
+
+      - name: Run cross-language TUF/archive/state adversarial conformance
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            export ATLAS_PHASE554C_PYTHON="$VIRTUAL_ENV/Scripts/python.exe"
+          else
+            export ATLAS_PHASE554C_PYTHON="$VIRTUAL_ENV/bin/python"
+          fi
+          cd shared-core/go
+          go test -tags=phase554c_integration ./internal/pack -count=1
+
+      - name: Run Go vet
+        working-directory: shared-core/go
+        run: go vet ./...
+
+      - name: Confirm canonical schemas v1 remain unchanged
+        if: github.ref != 'refs/heads/main'
+        run: git diff --exit-code origin/main...HEAD -- schemas/v1
+
+      - name: Create evidence directory
+        shell: bash
+        run: mkdir -p "$PHASE554D_EVIDENCE"
+
+      - name: Record machine-readable Go module graph
+        run: >-
+          python tools/shared_core/phase554d_evidence.py module-graph
+          --module-root shared-core/go
+          --output "$PHASE554D_EVIDENCE/module-graph.json"
+
+      - name: Clear Go build and test cache before closure build
+        working-directory: shared-core/go
+        run: go clean -cache -testcache
+
+      - name: Build deterministic atlas-core pair from clean cache
+        working-directory: shared-core/go
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="../../$PHASE554D_EVIDENCE"
+          ext=""
+          if [ "$RUNNER_OS" = "Windows" ]; then ext=".exe"; fi
+          go build -trimpath -buildvcs=false \
+            -ldflags "-X main.coreCommit=${GITHUB_SHA} -X main.coreVersion=0.1.0-dev" \
+            -o "$out/atlas-core-a$ext" ./cmd/atlas-core
+          go build -trimpath -buildvcs=false \
+            -ldflags "-X main.coreCommit=${GITHUB_SHA} -X main.coreVersion=0.1.0-dev" \
+            -o "$out/atlas-core-b$ext" ./cmd/atlas-core
+
+      - name: Verify same-input binary reproducibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - "$PHASE554D_EVIDENCE" <<'PY'
+          import hashlib
+          import pathlib
+          import sys
+
+          root = pathlib.Path(sys.argv[1])
+          a = next(root.glob("atlas-core-a*"))
+          b = next(root.glob("atlas-core-b*"))
+          ha = hashlib.sha256(a.read_bytes()).hexdigest()
+          hb = hashlib.sha256(b.read_bytes()).hexdigest()
+          if ha != hb:
+              raise SystemExit(f"binary reproducibility mismatch: {ha} != {hb}")
+          (root / "reproducibility.sha256").write_text(
+              f"{ha}  {a.name}\n{hb}  {b.name}\n",
+              encoding="utf-8",
+          )
+          print(ha)
+          PY
+
+      - name: Generate CycloneDX 1.6 SBOM
+        working-directory: shared-core/go
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="../../$PHASE554D_EVIDENCE/sbom.cdx.json"
+          go run github.com/CycloneDX/cyclonedx-gomod/cmd/cyclonedx-gomod@v1.10.0 \
+            app -json -output-version 1.6 -notimestamp -noserial \
+            -licenses -packages -std -main ./cmd/atlas-core -output "$out"
+
+      - name: Validate SBOM and record dependency/license inventory
+        run: >-
+          python tools/shared_core/phase554d_evidence.py review-sbom
+          --sbom "$PHASE554D_EVIDENCE/sbom.cdx.json"
+          --output "$PHASE554D_EVIDENCE/license-inventory.json"
+
+      - name: Run pinned Go vulnerability scan
+        working-directory: shared-core/go
+        shell: bash
+        run: |
+          set -euo pipefail
+          go run golang.org/x/vuln/cmd/govulncheck@v1.8.0 -json ./... \
+            > "../../$PHASE554D_EVIDENCE/govulncheck.json"
+
+      - name: Measure binary footprint and stdio startup/IPC
+        shell: bash
+        run: |
+          set -euo pipefail
+          ext=""
+          if [ "$RUNNER_OS" = "Windows" ]; then ext=".exe"; fi
+          python tools/shared_core/phase554d_evidence.py measure \
+            --binary "$PHASE554D_EVIDENCE/atlas-core-a$ext" \
+            --runner-os "$RUNNER_OS" \
+            --iterations 20 \
+            --output "$PHASE554D_EVIDENCE/runtime-measurements.json"
+
+      - name: Record toolchain and build metadata
+        working-directory: shared-core/go
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="../../$PHASE554D_EVIDENCE"
+          ext=""
+          if [ "$RUNNER_OS" = "Windows" ]; then ext=".exe"; fi
+          go version > "$out/go-version.txt"
+          go env GOOS GOARCH GOVERSION CGO_ENABLED GOTOOLCHAIN > "$out/go-env.txt"
+          go version -m "$out/atlas-core-a$ext" > "$out/build-info.txt"
+
+      - name: Upload Phase 5.5.4D evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: phase554d-supply-chain-${{ runner.os }}
+          path: .phase554d-evidence/${{ runner.os }}/
+          if-no-files-found: error
+          include-hidden-files: true
