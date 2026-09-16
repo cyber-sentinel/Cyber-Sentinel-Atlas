@@ -59,12 +59,19 @@ for p in Path(".").rglob("*"):
 
 readme = Path("README.md").read_text(encoding="utf-8")
 for required_phrase in (
-    "Intelligent Cyber Defense Knowledge & Investigation Platform",
+    "Provenance-First Cyber Defense Knowledge & Investigation Platform",
     "No technical claim without provenance",
-    "Private during active development",
+    "Repository visibility:** Public",
+    "Release state:** Pre-preview / unreleased",
 ):
     if required_phrase not in readme:
         errors.append(f"README missing required phrase: {required_phrase}")
+
+# The repository is public while the product remains pre-preview. Prevent the
+# historical private-development marker from silently returning and making the
+# release posture contradictory.
+if "Private during active development" in readme:
+    errors.append("README contains obsolete private-development visibility marker")
 
 all_docs = "\n".join(
     p.read_text(encoding="utf-8")
