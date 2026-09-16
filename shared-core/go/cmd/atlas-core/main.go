@@ -18,7 +18,7 @@ var (
 func openRuntimeAt(runtimeRoot string) (*app.Runtime, error) {
 	runtime, err := app.NewFromRuntimeRoot(runtimeRoot)
 	if errors.Is(err, pack.ErrNoActiveGeneration) {
-		return app.NewUnconfigured(), nil
+		return app.NewUnconfiguredAt(runtimeRoot), nil
 	}
 	if err != nil {
 		return nil, err

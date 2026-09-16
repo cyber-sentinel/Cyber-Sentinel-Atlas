@@ -19,9 +19,12 @@ type Runtime struct {
 	PackID         string
 	PackVersion    string
 	ManifestDigest string
+	RuntimeRoot    string
 }
 
 func NewUnconfigured() *Runtime { return &Runtime{} }
+
+func NewUnconfiguredAt(runtimeRoot string) *Runtime { return &Runtime{RuntimeRoot: runtimeRoot} }
 
 func New(store *canonical.Store, searchCore *search.Core, graphRuntime *graph.Runtime) *Runtime {
 	return &Runtime{Canonical: store, Search: searchCore, Graph: graphRuntime}
@@ -48,6 +51,7 @@ func NewFromRuntimeRoot(runtimeRoot string) (*Runtime, error) {
 		PackID:         model.PackID,
 		PackVersion:    model.PackVersion,
 		ManifestDigest: model.ManifestDigest,
+		RuntimeRoot:    runtimeRoot,
 	}, nil
 }
 
@@ -58,6 +62,55 @@ func (r *Runtime) Close() error {
 	err := r.Search.Close()
 	r.Search = nil
 	return err
+}
+
+func (r *Runtime) invalidateReadModel() {
+	if r == nil {
+		return
+	}
+	if r.Search != nil {
+		_ = r.Search.Close()
+	}
+	r.Canonical = nil
+	r.Search = nil
+	r.Graph = nil
+	r.GenerationID = ""
+	r.PackID = ""
+	r.PackVersion = ""
+	r.ManifestDigest = ""
+}
+
+func (r *Runtime) replaceReadModel(next *Runtime) {
+	if r == nil || next == nil {
+		return
+	}
+	oldSearch := r.Search
+	r.Canonical = next.Canonical
+	r.Search = next.Search
+	r.Graph = next.Graph
+	r.GenerationID = next.GenerationID
+	r.PackID = next.PackID
+	r.PackVersion = next.PackVersion
+	r.ManifestDigest = next.ManifestDigest
+	if next.RuntimeRoot != "" {
+		r.RuntimeRoot = next.RuntimeRoot
+	}
+	next.Search = nil
+	if oldSearch != nil {
+		_ = oldSearch.Close()
+	}
+}
+
+func (r *Runtime) reloadActive() error {
+	if r == nil || r.RuntimeRoot == "" {
+		return errors.New("pack control runtime is unavailable")
+	}
+	next, err := NewFromRuntimeRoot(r.RuntimeRoot)
+	if err != nil {
+		return err
+	}
+	r.replaceReadModel(next)
+	return nil
 }
 
 type searchParams struct {
@@ -98,12 +151,67 @@ func (r *Runtime) Handle(method string, raw json.RawMessage) (any, *protocol.Ope
 		if ready {
 			state = "read_model_ready"
 		}
-		result := map[string]any{"ready": ready, "state": state, "phase": "5.5.4B"}
+		result := map[string]any{"ready": ready, "state": state, "phase": "5.6.2"}
 		if ready && r.GenerationID != "" {
 			result["generation_id"] = r.GenerationID
 			result["pack_id"] = r.PackID
 			result["pack_version"] = r.PackVersion
 			result["manifest_digest"] = r.ManifestDigest
+		}
+		if r != nil && r.RuntimeRoot != "" {
+			control, err := pack.ControlState(r.RuntimeRoot)
+			if err != nil {
+				return nil, &protocol.OperationError{Code: protocol.CodeStateFailure, Message: "pack control state is unavailable"}
+			}
+			result["pending_update"] = control.PendingUpdate
+			result["rollback_available"] = control.RollbackAvailable
+			if control.RollbackTarget != nil {
+				result["rollback_target"] = control.RollbackTarget
+			}
+		}
+		return result, nil
+	case "pack.update":
+		var params emptyParams
+		if err := protocol.DecodeStrictParams(raw, &params); err != nil {
+			return nil, invalidRequest("pack.update params must be an empty object")
+		}
+		if r == nil || r.RuntimeRoot == "" {
+			return nil, packControlUnavailable()
+		}
+		result, err := pack.ApplyPendingUpdate(r.RuntimeRoot)
+		if err != nil {
+			return nil, classifyPackControl(err)
+		}
+		if err := r.reloadActive(); err != nil {
+			if _, rollbackErr := pack.RollbackPrevious(r.RuntimeRoot); rollbackErr == nil {
+				if restoreErr := r.reloadActive(); restoreErr == nil {
+					return nil, &protocol.OperationError{Code: protocol.CodeStateFailure, Message: "verified update could not be activated in-process; previous read model restored"}
+				}
+			}
+			r.invalidateReadModel()
+			return nil, &protocol.OperationError{Code: protocol.CodeStateFailure, Message: "verified update activated durably but in-process read model recovery failed"}
+		}
+		return result, nil
+	case "pack.rollback":
+		var params emptyParams
+		if err := protocol.DecodeStrictParams(raw, &params); err != nil {
+			return nil, invalidRequest("pack.rollback params must be an empty object")
+		}
+		if r == nil || r.RuntimeRoot == "" {
+			return nil, packControlUnavailable()
+		}
+		result, err := pack.RollbackPrevious(r.RuntimeRoot)
+		if err != nil {
+			return nil, classifyPackControl(err)
+		}
+		if err := r.reloadActive(); err != nil {
+			if _, restoreErr := pack.RollbackPrevious(r.RuntimeRoot); restoreErr == nil {
+				if reloadErr := r.reloadActive(); reloadErr == nil {
+					return nil, &protocol.OperationError{Code: protocol.CodeStateFailure, Message: "rollback target could not be activated in-process; previous read model restored"}
+				}
+			}
+			r.invalidateReadModel()
+			return nil, &protocol.OperationError{Code: protocol.CodeStateFailure, Message: "rollback changed durable state but in-process read model recovery failed"}
 		}
 		return result, nil
 	case "search.query":
@@ -197,6 +305,23 @@ func invalidRequest(message string) *protocol.OperationError {
 
 func packNotReady() *protocol.OperationError {
 	return &protocol.OperationError{Code: protocol.CodePackNotReady, Message: "verified pack read model is not activated"}
+}
+
+func packControlUnavailable() *protocol.OperationError {
+	return &protocol.OperationError{Code: protocol.CodeStateFailure, Message: "pack control runtime is unavailable"}
+}
+
+func classifyPackControl(err error) *protocol.OperationError {
+	if errors.Is(err, pack.ErrPackControlTrust) {
+		return &protocol.OperationError{Code: protocol.CodePackTrustFailure, Message: "pack update failed trust verification"}
+	}
+	if errors.Is(err, pack.ErrNoPendingUpdate) {
+		return &protocol.OperationError{Code: protocol.CodeStateFailure, Message: "no verified pack update is pending"}
+	}
+	if errors.Is(err, pack.ErrNoRollbackTarget) {
+		return &protocol.OperationError{Code: protocol.CodeStateFailure, Message: "no safe manual rollback target is available"}
+	}
+	return &protocol.OperationError{Code: protocol.CodeStateFailure, Message: "pack control operation failed"}
 }
 
 func classifyQuery(err error) *protocol.OperationError {
