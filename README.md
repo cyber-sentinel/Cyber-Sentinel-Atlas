@@ -159,7 +159,7 @@ Electron uses a committed dependency lockfile. Tauri currently builds with a pin
 
 **IN PROGRESS**
 
-The signed-pack Active Generation integration gate proves a verified pack can be installed and loaded into the production read model on Windows, including canonical data, immutable search, graph runtime and generation identity. **G-D5 is closed and verified.** Current G-D6 changes remain subject to exact-head CI before they can be treated as verified evidence.
+The signed-pack Active Generation integration gate proves a verified pack can be installed and loaded into the production read model on Windows, including canonical data, immutable search, graph runtime and generation identity. **G-D5 is closed and verified.** The current G-D6 implementation through core-controlled pending-pack consumption is green in the dedicated exact-head Active Pack Integration workflow; process-level signed round-trip and failure/recovery closure remain before the gate can be declared verified.
 
 Current mandatory-gate state:
 
@@ -170,12 +170,12 @@ Current mandatory-gate state:
 | G-D3 | Offline / no-default-listener behavior | **PARTIAL — core/TCP pass; UDP review pending** |
 | G-D4 | Deterministic sidecar location + integrity/version | **PASS** |
 | G-D5 | Active verified pack → search / record / graph / provenance read model | **PASS / VERIFIED** |
-| G-D6 | Verified pack state, update and safe manual rollback | **IN PROGRESS — core-owned primitives implemented; IPC, same-process reload and signed end-to-end closure pending** |
+| G-D6 | Verified pack state, update and safe manual rollback | **IN PROGRESS — primitives + IPC + same-process reload implemented and integration-green; process-level signed round-trip/recovery closure pending** |
 | G-D7 | Desktop security surface | **PENDING** |
 | G-D8 | Installer + portable feasibility | **PENDING** |
 | G-D9 | Comparable startup / IPC / process / memory / package measurements | **PARTIAL — common harness captured; closure pending** |
 
-G-D6 now has a core-owned primitive layer on the feature branch: the update archive is consumed only from the fixed runtime inbox (`inbox/pending.atlaspack`), verification reuses durable TUF trust state and trusted-time protections, rollback targets are recorded by the core rather than supplied by the UI, and manual rollback does not rewind `HighestSeenPacks` or durable TUF metadata. This is **not yet G-D6 closure**: stdio protocol methods, same-process read-model replacement, signed end-to-end update/rollback coverage, and failure/recovery validation still have to pass CI.
+G-D6 now has a core-owned control path on the feature branch: update input is accepted only from the fixed runtime inbox (`inbox/pending.atlaspack`); `pack.update` and `pack.rollback` are exposed through the bounded stdio protocol with empty-object parameters only; TUF verification, trusted-time state and highest-seen anti-rollback remain core-owned; rollback targets are core-recorded rather than caller-selected; successful generation changes hot-reload the read model in the same `atlas-core` process; recovery attempts fail closed; and a successfully verified pending archive is consumed without deleting a concurrently replaced pending file. These changes are green in the dedicated Windows Active Pack Integration workflow at commit `f06b38601dec3bce4683124ac4b2b659da645877`. This is **not yet G-D6 closure**: an actual process-level signed update → status/search → rollback → status/search round-trip plus explicit failure/recovery coverage must still pass exact-head CI.
 
 Only candidates that pass **every mandatory gate** may enter final weighted comparison. ADR-0026 therefore remains intentionally undecided.
 
@@ -273,7 +273,7 @@ Stage 1 Governance / Architecture Sync         COMPLETE
      5.6.1 Executable Candidate Builds         COMPLETE / VERIFIED
      5.6.2 Hard Gates / Selection / ADR-0026   IN PROGRESS
             G-D5 Active Pack Integration       COMPLETE / VERIFIED
-            G-D6 Update / Safe Rollback        IN PROGRESS — core primitives implemented; closure pending
+            G-D6 Update / Safe Rollback        IN PROGRESS — IPC/reload integration-green; round-trip closure pending
      5.6.3 First Preview UI                    PLANNED
      5.6.4 Windows Packaging / Smoke Closure   PLANNED
 5.7  Web / PWA                                 DEFERRED BEYOND FIRST PREVIEW
