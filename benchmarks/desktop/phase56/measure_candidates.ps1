@@ -69,30 +69,73 @@ function Get-ProcessTreeIds {
     return @($seen | ForEach-Object { [int]$_ })
 }
 
-function Test-TCPListenerForPids {
+function Get-ObservedProcessName {
+    param([Parameter(Mandatory = $true)][int]$ProcessId)
+    try {
+        return [string](Get-Process -Id $ProcessId -ErrorAction Stop).ProcessName
+    }
+    catch {
+        return '<exited-or-unavailable>'
+    }
+}
+
+function Get-TCPListenerDetailsForPids {
     param([Parameter(Mandatory = $true)][int[]]$ProcessIds)
 
     if (-not (Get-Command Get-NetTCPConnection -ErrorAction SilentlyContinue)) {
         throw 'Get-NetTCPConnection is required for the fail-closed TCP listener measurement.'
     }
-    $listeners = @(Get-NetTCPConnection -State Listen -ErrorAction Stop)
-    foreach ($listener in $listeners) {
-        if ($ProcessIds -contains [int]$listener.OwningProcess) { return $true }
+    $matches = @()
+    foreach ($listener in @(Get-NetTCPConnection -State Listen -ErrorAction Stop)) {
+        $owningProcess = [int]$listener.OwningProcess
+        if ($ProcessIds -contains $owningProcess) {
+            $matches += [ordered]@{
+                owning_process = $owningProcess
+                process_name = Get-ObservedProcessName -ProcessId $owningProcess
+                local_address = [string]$listener.LocalAddress
+                local_port = [int]$listener.LocalPort
+                state = [string]$listener.State
+            }
+        }
     }
-    return $false
+    return @($matches)
 }
 
-function Test-UDPEndpointForPids {
+function Get-UDPEndpointDetailsForPids {
     param([Parameter(Mandatory = $true)][int[]]$ProcessIds)
 
     if (-not (Get-Command Get-NetUDPEndpoint -ErrorAction SilentlyContinue)) {
         throw 'Get-NetUDPEndpoint is required for the fail-closed UDP endpoint measurement.'
     }
-    $endpoints = @(Get-NetUDPEndpoint -ErrorAction Stop)
-    foreach ($endpoint in $endpoints) {
-        if ($ProcessIds -contains [int]$endpoint.OwningProcess) { return $true }
+    $matches = @()
+    foreach ($endpoint in @(Get-NetUDPEndpoint -ErrorAction Stop)) {
+        $owningProcess = [int]$endpoint.OwningProcess
+        if ($ProcessIds -contains $owningProcess) {
+            $matches += [ordered]@{
+                owning_process = $owningProcess
+                process_name = Get-ObservedProcessName -ProcessId $owningProcess
+                local_address = [string]$endpoint.LocalAddress
+                local_port = [int]$endpoint.LocalPort
+            }
+        }
     }
-    return $false
+    return @($matches)
+}
+
+function Add-NetworkObservations {
+    param(
+        [Parameter(Mandatory = $true)]$Details,
+        [Parameter(Mandatory = $true)][System.Collections.Generic.HashSet[string]]$Keys,
+        [Parameter(Mandatory = $true)][System.Collections.ArrayList]$Target,
+        [Parameter(Mandatory = $true)][string]$Protocol
+    )
+
+    foreach ($detail in @($Details)) {
+        $key = "$Protocol|$($detail.owning_process)|$($detail.local_address)|$($detail.local_port)"
+        if ($Keys.Add($key)) {
+            [void]$Target.Add($detail)
+        }
+    }
 }
 
 function Invoke-ProbeSample {
@@ -108,7 +151,8 @@ function Invoke-ProbeSample {
     $workingDirectory = Split-Path -Parent $Executable
     $stdoutPath = Join-Path $EvidenceDir ("measure-$Candidate-$SampleKind-$SampleIndex.stdout.txt")
     $stderrPath = Join-Path $EvidenceDir ("measure-$Candidate-$SampleKind-$SampleIndex.stderr.txt")
-    Remove-Item -Force -LiteralPath $stdoutPath,$stderrPath -ErrorAction SilentlyContinue
+    $networkPath = Join-Path $EvidenceDir ("measure-$Candidate-$SampleKind-$SampleIndex-network.json")
+    Remove-Item -Force -LiteralPath $stdoutPath,$stderrPath,$networkPath -ErrorAction SilentlyContinue
 
     $psi = [System.Diagnostics.ProcessStartInfo]::new()
     $psi.FileName = $Executable
@@ -124,13 +168,16 @@ function Invoke-ProbeSample {
     $process.StartInfo = $psi
     $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
     if (-not $process.Start()) { throw "$Candidate failed to start" }
+    $rootPid = [int]$process.Id
     $stdoutTask = $process.StandardOutput.ReadToEndAsync()
     $stderrTask = $process.StandardError.ReadToEndAsync()
 
     $peakTreeWorkingSet = 0L
     $maxProcessCount = 1
-    $tcpListenerSeen = $false
-    $udpEndpointSeen = $false
+    $tcpKeys = [System.Collections.Generic.HashSet[string]]::new()
+    $udpKeys = [System.Collections.Generic.HashSet[string]]::new()
+    $tcpObservations = [System.Collections.ArrayList]::new()
+    $udpObservations = [System.Collections.ArrayList]::new()
     $timeout = [TimeSpan]::FromSeconds(25)
 
     while (-not $process.HasExited) {
@@ -139,7 +186,7 @@ function Invoke-ProbeSample {
             throw "$Candidate measurement timed out"
         }
 
-        $treeIds = @(Get-ProcessTreeIds -RootPid $process.Id)
+        $treeIds = @(Get-ProcessTreeIds -RootPid $rootPid)
         if ($treeIds.Count -gt $maxProcessCount) { $maxProcessCount = $treeIds.Count }
 
         $treeWorkingSet = 0L
@@ -152,12 +199,8 @@ function Invoke-ProbeSample {
         }
         if ($treeWorkingSet -gt $peakTreeWorkingSet) { $peakTreeWorkingSet = $treeWorkingSet }
 
-        if (-not $tcpListenerSeen -and (Test-TCPListenerForPids -ProcessIds $treeIds)) {
-            $tcpListenerSeen = $true
-        }
-        if (-not $udpEndpointSeen -and (Test-UDPEndpointForPids -ProcessIds $treeIds)) {
-            $udpEndpointSeen = $true
-        }
+        Add-NetworkObservations -Details (Get-TCPListenerDetailsForPids -ProcessIds $treeIds) -Keys $tcpKeys -Target $tcpObservations -Protocol 'tcp'
+        Add-NetworkObservations -Details (Get-UDPEndpointDetailsForPids -ProcessIds $treeIds) -Keys $udpKeys -Target $udpObservations -Protocol 'udp'
         Start-Sleep -Milliseconds 20
     }
 
@@ -167,6 +210,19 @@ function Invoke-ProbeSample {
     $stderr = $stderrTask.GetAwaiter().GetResult()
     Set-Content -LiteralPath $stdoutPath -Value $stdout -Encoding utf8
     Set-Content -LiteralPath $stderrPath -Value $stderr -Encoding utf8
+
+    $networkEvidence = [ordered]@{
+        evidence_version = 1
+        candidate = $Candidate
+        sample_kind = $SampleKind
+        sample_index = $SampleIndex
+        root_pid = $rootPid
+        executable = $Executable
+        tcp_listeners = @($tcpObservations)
+        udp_endpoints = @($udpObservations)
+        fail_closed = $true
+    }
+    $networkEvidence | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $networkPath -Encoding utf8
 
     if ($process.ExitCode -ne 0) {
         throw "$Candidate probe failed with exit code $($process.ExitCode): $($stderr.Substring(0, [Math]::Min(2000, $stderr.Length)))"
@@ -182,11 +238,14 @@ function Invoke-ProbeSample {
     if ($probe.status_result.network_listener -ne $false -or $probe.status_result.offline_capable -ne $true) {
         throw "$Candidate core status violated the offline/no-listener boundary"
     }
+
+    $tcpListenerSeen = $tcpObservations.Count -gt 0
+    $udpEndpointSeen = $udpObservations.Count -gt 0
     if ($tcpListenerSeen) {
-        throw "$Candidate process tree opened a TCP listener during the controlled probe"
+        throw "$Candidate process tree opened a TCP listener during the controlled probe; attribution: $networkPath"
     }
     if ($udpEndpointSeen) {
-        throw "$Candidate process tree opened a UDP endpoint during the controlled probe"
+        throw "$Candidate process tree opened a UDP endpoint during the controlled probe; attribution: $networkPath"
     }
 
     return [ordered]@{
@@ -274,7 +333,7 @@ $document = [ordered]@{
     measurement_scope = 'common-external-windows-host-probe'
     ranking_note = 'Candidate-internal round_trip_ms is reference-only and MUST NOT be used for cross-candidate ranking.'
     first_launch_note = 'first_launch is the first launch after the staged build; it is not a laboratory OS cold-cache measurement.'
-    network_probe_note = 'The common harness fails closed if any candidate process tree owns a TCP listener or any UDP endpoint during a controlled probe.'
+    network_probe_note = 'The common harness fails closed if any candidate process tree owns a TCP listener or any UDP endpoint during a controlled probe. Per-sample network attribution evidence records PID, process name, local address and local port before any failure is raised.'
     warmup_count = $WarmupCount
     measured_count = $MeasuredCount
     common_sidecar_sha256 = $expectedSidecarHash
