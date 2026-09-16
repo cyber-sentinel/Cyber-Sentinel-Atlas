@@ -11,9 +11,9 @@ Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: a ve
 > **Stage 1:** COMPLETE
 > **Completed foundation:** Phases 5.1–5.5 COMPLETE / MERGED / VERIFIED
 > **Current delivery boundary:** Phase 5.6 — Windows Desktop MVP
-> **Completed desktop slice:** Phase 5.6.0 — Desktop Spike Contract + Environment/Core-Boundary Probe
-> **Active desktop slice:** Phase 5.6.1 — Executable Desktop Candidate Builds
-> **Desktop framework:** Not selected yet; ADR-0026 remains pending evidence from Phase 5.6.2
+> **Completed desktop slices:** Phase 5.6.0 COMPLETE / VERIFIED; Phase 5.6.1 COMPLETE / VERIFIED
+> **Active desktop slice:** Phase 5.6.2 — Hard Gates, Measurements & Desktop Selection
+> **Desktop framework:** Not selected; ADR-0026 remains blocked on all mandatory gates
 > **Visibility:** Private during active development
 > **Release state:** Pre-preview / unreleased
 
@@ -25,25 +25,9 @@ Cyber defense knowledge is fragmented across operating systems, SIEMs, EDR/XDR p
 
 Atlas makes those relationships searchable and operational while keeping technical claims bound to inspectable evidence.
 
-```text
-Platform / Technology
-        ↓
-Telemetry Provider / Source
-        ↓
-Telemetry Record / Artifact
-        ↓
-Security Meaning / Behavior
-        ↓
-ATT&CK / D3FEND / CAR
-        ↓
-Detection / Hunt
-        ↓
-Investigation / DFIR
-        ↓
-Response / Defensive Action
-        ↓
-Claim-level Sources & Provenance
-```
+<p align="center">
+  <img src="assets/satellite.png" alt="Cyber-Sentinel Atlas product thesis — telemetry, security knowledge, investigation, defensive action and provenance" width="100%" />
+</p>
 
 ## Product Position
 
@@ -77,18 +61,18 @@ Atlas is **offline-first**. Deterministic exact and lexical retrieval must work 
 
 ## Accepted Architecture Decisions
 
-The current accepted implementation boundary includes:
+The accepted implementation boundary includes:
 
 - **Canonical schema:** Atlas schema contract `1.0.0`, JSON Schema Draft 2020-12;
 - **Canonical model:** exactly seven `AtlasRecord` families;
 - **Search contract:** deterministic exact-before-lexical retrieval with bounded ambiguity and ordering semantics;
 - **Search engine:** SQLite + FTS5;
-- **Content-pack trust:** TUF-based trust and update model with offline verification and Last Known Good preservation;
-- **Pack format/runtime:** verified `.atlaspack` handling, immutable generations, rollback guards, and atomic activation semantics;
+- **Content-pack trust:** TUF-based trust and update model with offline verification and rollback protection;
+- **Pack format/runtime:** verified `.atlaspack` handling, immutable generations, durable state, health-gated activation and Last Known Good semantics;
 - **Production Shared Core:** Go;
 - **Reference/conformance role:** Python remains the semantic and cross-language conformance oracle;
-- **Local Shared Core boundary:** `atlas-core --serve-stdio` using a versioned, bounded, length-prefixed UTF-8 JSON protocol;
-- **Network posture:** no default local HTTP/TCP listener and no hidden network fallback;
+- **Local Shared Core boundary:** `atlas-core --serve-stdio` using protocol `atlas-core/1.0.0`, bounded big-endian length-prefixed UTF-8 JSON frames, mandatory handshake, and one request at a time;
+- **Network posture:** no default local HTTP/TCP/WebSocket listener and no hidden network fallback;
 - **Official user-facing CLI command:** `atlas`.
 
 These decisions do **not** automatically select the Windows Desktop UI framework, Web/PWA stack, Grounded AI runtime, semantic/vector retrieval, cloud synchronization, or broader remote API topology.
@@ -165,7 +149,7 @@ Search indexes are derived artifacts and never become the canonical source of tr
 
 **Phase 5.5 is complete, merged, and post-merge verified.**
 
-The production Shared Core now establishes the frozen boundary consumed by Phase 5.6 Desktop work. Delivered capabilities include:
+The production Shared Core establishes the frozen boundary consumed by Phase 5.6 Desktop work. Delivered capabilities include:
 
 - TUF-based content trust contracts;
 - secure `.atlaspack` verification and extraction rules;
@@ -197,36 +181,52 @@ The Windows runner and production sidecar boundary were validated with the accep
 
 ### 5.6.1 — Executable Desktop Candidate Builds
 
-**IN PROGRESS**
+**COMPLETE / VERIFIED**
 
-Three candidate host families are being evaluated without granting architecture preference:
+Three executable Windows candidate host families have been built and exercised against the **same exact-head production `atlas-core` sidecar**:
 
 - Tauri 2.x;
 - Electron;
 - .NET 10 Windows Desktop / WPF.
 
-Candidate evidence must be based on executable Windows builds consuming the **same frozen production `atlas-core` sidecar**. A successful candidate build is not sufficient by itself to select the framework.
+The candidate baseline now includes deterministic dependency locks, sidecar integrity/version checks, successful handshake/status probes, no default core network listener, offline capability, and common external measurement evidence. This baseline does **not** select a framework.
 
 ### 5.6.2 — Hard Gates, Measurements & Selection
 
-**NEXT after 5.6.1 closure**
+**IN PROGRESS**
 
-The selection boundary requires normalized evidence for:
+Phase 5.6.2 closes the evidence required before ADR-0026 may select exactly one Windows Desktop host.
 
-- clean Windows build;
-- stdio handshake/status and capability integration;
-- offline/no-default-listener behavior;
-- deterministic sidecar location and integrity/version verification;
-- search / record / relationship / provenance capability through Shared Core;
-- verified pack state, update and rollback capability;
-- Desktop security surface;
-- installer and portable feasibility;
-- comparable startup, IPC, process, memory, package and footprint measurements;
-- deterministic dependency locks and supply-chain review.
+Current state:
 
-Only candidates that pass the mandatory gates are eligible for weighted comparison. **ADR-0026 will select exactly one Desktop host only after that evidence exists.**
+- executable candidate build baseline is green across Tauri, Electron, and .NET;
+- Electron and Tauri dependency graphs are lockfile-based and deterministic;
+- common external startup/IPC/process/memory/footprint measurement is integrated and validated;
+- production `atlas-core` startup can resolve the durable Active Generation and construct the canonical/search/graph read model;
+- no-pack operation remains available for handshake/status while data operations fail closed with pack-not-ready semantics;
+- corrupt or unsafe durable Active state fails closed instead of silently falling back;
+- standard Go regression, Desktop candidate, Foundation, and Bootstrap CI are green for the current Shared Core startup wiring;
+- the dedicated signed-pack → Active Generation integration gate is **not yet closed**: its latest exact-head run still fails because the current signed fixture exposes search projections that are not canonical records under the test assumption. G-D5 therefore remains open until this integration contract is corrected and green;
+- verified Desktop pack update and explicit safe rollback UX/core operations remain part of G-D6 and are not yet complete;
+- Desktop host security review and installer/portable feasibility still require final gate evidence.
 
-### First Preview Boundary
+Mandatory selection gates remain:
+
+- **G-D1** clean Windows build;
+- **G-D2** `atlas-core` stdio handshake/status;
+- **G-D3** offline/no-default-listener behavior;
+- **G-D4** deterministic sidecar location + integrity/version verification;
+- **G-D5** search / record / relationship / provenance through Shared Core and an Active verified pack;
+- **G-D6** verified pack state, update and safe rollback capability;
+- **G-D7** Desktop security surface;
+- **G-D8** installer + portable feasibility;
+- **G-D9** comparable startup, IPC, process, memory, package and footprint measurements.
+
+Only candidates that pass **every mandatory gate** are eligible for weighted comparison. **ADR-0026 remains intentionally undecided.**
+
+### 5.6.3 — First Preview UI
+
+**PLANNED — blocked on 5.6.2 selection**
 
 The first usable Windows preview is intentionally constrained to:
 
@@ -237,8 +237,13 @@ The first usable Windows preview is intentionally constrained to:
 - Verified Pack State;
 - Pack Update;
 - Safe Rollback / Last Known Good;
-- Windows Desktop package/build;
-- smoke-tested launch and critical-path navigation.
+- core failure/recovery visibility.
+
+### 5.6.4 — Windows Packaging / Smoke Closure
+
+**PLANNED**
+
+This slice will close the Windows executable/package/installer boundary, sidecar integrity packaging, portable-mode behavior, and clean-machine smoke tests across launch, search, record/provenance, pack state/update, and rollback.
 
 Deferred beyond First Preview include Web/PWA, Grounded AI, semantic/vector search, cloud sync, remote/public API surfaces, non-Windows Desktop, and decorative feature expansion.
 
@@ -301,31 +306,6 @@ DefenseOps may provide controlled defensive content to Atlas, but repository ori
 
 `VALIDATE`, `AUTOMATE`, and `EVOLVE` are ecosystem operating outcomes and feedback stages, not separate repositories.
 
-```text
-Authoritative Sources / Telemetry / Security Knowledge
-                         │
-                         ▼
-                  ATLAS — KNOW
-        Connect • Search • Investigate • Explain
-                         │
-             evidence / defensive context
-                         ▼
-               DefenseOps — DEFEND
-       Detect • Hunt • Validate • Respond • Automate
-                         │
-              repeatable operating method
-                         ▼
-                  Skills — APPLY
-          Execute • Review • Reuse • Govern
-                         │
-                         ▼
-          VALIDATE → AUTOMATE → EVOLVE
-                         │
-                         └──────────────↺
-                    feedback into knowledge,
-                 engineering and procedures
-```
-
 ## Delivery Sequence
 
 ```text
@@ -340,8 +320,8 @@ Authoritative Sources / Telemetry / Security Knowledge
      5.5.4 Production Go Shared Core           COMPLETE
 5.6  Windows Desktop MVP                       IN PROGRESS
      5.6.0 Environment / Core Boundary         COMPLETE / VERIFIED
-     5.6.1 Executable Candidate Builds         IN PROGRESS
-     5.6.2 Hard Gates / Selection / ADR-0026   NEXT
+     5.6.1 Executable Candidate Builds         COMPLETE / VERIFIED
+     5.6.2 Hard Gates / Selection / ADR-0026   IN PROGRESS
      5.6.3 First Preview UI                    PLANNED
      5.6.4 Windows Packaging / Smoke Closure   PLANNED
 5.7  Web / PWA                                 DEFERRED BEYOND FIRST PREVIEW
