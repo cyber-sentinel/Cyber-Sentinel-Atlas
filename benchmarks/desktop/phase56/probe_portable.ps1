@@ -32,10 +32,10 @@ foreach ($candidate in $candidates) {
     New-Item -ItemType Directory -Force -Path $destination | Out-Null
     Copy-Item -Path (Join-Path $source '*') -Destination $destination -Recurse -Force
 
-    $host = Join-Path $destination $candidate.host
+    $hostPath = Join-Path $destination $candidate.host
     $core = Join-Path $destination 'atlas-core.exe'
     $manifest = Join-Path $destination 'atlas-core.exe.sha256'
-    foreach ($path in @($host, $core, $manifest)) {
+    foreach ($path in @($hostPath, $core, $manifest)) {
         if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "portable payload missing: $path" }
     }
 
@@ -46,7 +46,7 @@ foreach ($candidate in $candidates) {
     }
 
     $probePath = Join-Path $evidenceRoot "portable-$($candidate.id)-probe.json"
-    $process = Start-Process -FilePath $host -WorkingDirectory $destination `
+    $process = Start-Process -FilePath $hostPath -WorkingDirectory $destination `
         -ArgumentList @('--atlas-probe',"--probe-output=$probePath") -Wait -PassThru
     if ($process.ExitCode -ne 0) {
         throw "portable probe failed for $($candidate.id) with exit code $($process.ExitCode)"
