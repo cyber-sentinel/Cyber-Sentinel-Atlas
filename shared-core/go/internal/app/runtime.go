@@ -151,7 +151,7 @@ func (r *Runtime) Handle(method string, raw json.RawMessage) (any, *protocol.Ope
 		if ready {
 			state = "read_model_ready"
 		}
-		result := map[string]any{"ready": ready, "state": state, "phase": "5.6.2"}
+		result := map[string]any{"ready": ready, "state": state, "phase": "5.5.4B"}
 		if ready && r.GenerationID != "" {
 			result["generation_id"] = r.GenerationID
 			result["pack_id"] = r.PackID
@@ -181,6 +181,9 @@ func (r *Runtime) Handle(method string, raw json.RawMessage) (any, *protocol.Ope
 		result, err := pack.ApplyPendingUpdate(r.RuntimeRoot)
 		if err != nil {
 			return nil, classifyPackControl(err)
+		}
+		if result.GenerationID == r.GenerationID {
+			return result, nil
 		}
 		if err := r.reloadActive(); err != nil {
 			if _, rollbackErr := pack.RollbackPrevious(r.RuntimeRoot); rollbackErr == nil {
