@@ -5,10 +5,10 @@
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
 - Active implementation branch: `feature/phase-5.6-windows-desktop-mvp`
-- Last Reviewed Main SHA: `ebe2d29c8857bdbfde5c87bedb4b91e08d05777a`
+- Last reviewed `main` SHA: `ebe2d29c8857bdbfde5c87bedb4b91e08d05777a`
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
-- Release state: **Pre-preview / unreleased**
+- Release state: **First Preview candidate / not yet merged**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
 - Search contract version: `1.0.0`
@@ -16,9 +16,9 @@
 - Content-pack trust model: TUF — ADR-0023 Accepted
 - Production Shared Core: Go — ADR-0024 Accepted
 - Shared Core local interface: child-process stdio protocol — ADR-0025 Accepted
-- Desktop implementation stack: **not selected** — ADR-0026 pending
+- Desktop implementation stack: **Tauri 2.x — ADR-0026 Accepted**
 
-Detailed operational status is maintained in [`docs/current-status.md`](current-status.md). Historical snapshots remain under `docs/history/`.
+Operational evidence is summarized in [`docs/current-status.md`](current-status.md). Historical snapshots remain under `docs/history/`.
 
 ## Current Phase
 
@@ -28,21 +28,18 @@ Detailed operational status is maintained in [`docs/current-status.md`](current-
 - Phase 5.3 — Source & Ingestion Core: **COMPLETE / MERGED**
 - Phase 5.4 — Deterministic Search Core: **COMPLETE / MERGED**
 - Phase 5.5 — Offline Pack Runtime / Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED / FROZEN**
-- Phase 5.6 — Windows Desktop MVP: **IN PROGRESS**
+- Phase 5.6 — Windows Desktop MVP: **IN PROGRESS — FINAL PACKAGING/SMOKE CLOSURE**
   - 5.6.0 Environment / Core Boundary: **COMPLETE / VERIFIED**
   - 5.6.1 Executable Candidate Builds: **COMPLETE / VERIFIED**
-  - 5.6.2 Mandatory Hard Gates / Desktop Selection: **IN PROGRESS**
-    - G-D1 Clean Windows build: **PASS**
-    - G-D2 stdio handshake/status: **PASS**
-    - G-D3 Offline / TCP / UDP process-tree network posture: **PASS / VERIFIED**
-    - G-D4 Sidecar location/integrity/version: **PASS**
-    - G-D5 Active verified pack read model: **PASS / VERIFIED**
-    - G-D6 Pack update + safe rollback: **PASS / VERIFIED**
-    - G-D7 Desktop security surface: **IMPLEMENTED / CI PENDING**
-    - G-D8 Installer / Portable feasibility: **IMPLEMENTED / CI PENDING**
-    - G-D9 Measurements / reproducibility closure: **PARTIAL**
-  - 5.6.3 First Preview UI: **PLANNED**
-  - 5.6.4 Windows Packaging / Smoke Closure: **PLANNED**
+  - 5.6.2 Mandatory Hard Gates / Desktop Selection: **COMPLETE / VERIFIED**
+    - G-D1 through G-D9: **PASS / CLOSED**
+    - exact-head evidence run: `35090304056`
+    - candidate evidence commit: `c343ffd881dd7b6a420f04cea2ffb91c3ea8a715`
+    - ADR-0026: **ACCEPTED — Tauri 2.x**
+  - 5.6.3 First Preview UI: **COMPLETE / VERIFIED ON FEATURE BRANCH**
+  - 5.6.4 Windows Packaging / Clean-Machine Smoke: **IN PROGRESS**
+    - active run: `35092036802`
+    - exact package-code commit: `9b58be1a542d2d86a84ddfd14053a66be4162a1a`
 - Phase 5.7 — Web / PWA: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.8 — Broader API surfaces: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
@@ -50,48 +47,41 @@ Detailed operational status is maintained in [`docs/current-status.md`](current-
 
 ## Frozen Architecture
 
-The following remain authoritative and may not drift merely to simplify the Desktop host:
+The following remain authoritative and may not drift to simplify the Desktop host:
 
 - exactly seven canonical `AtlasRecord` families under `schemas/v1/`;
-- canonical identifiers remain provider/entity scoped; Event ID is not globally unique;
+- canonical identifiers remain provider/entity scoped;
 - deterministic exact-before-lexical retrieval;
-- SQLite + FTS5 as the derived deterministic search artifact;
-- TUF-based signed content-pack trust, trusted-time and anti-rollback state;
+- SQLite + FTS5 as derived deterministic search artifact;
+- TUF signed content-pack trust, trusted-time and anti-rollback state;
 - immutable generations, atomic activation and Last Known Good behavior;
 - Go production Shared Core with Python retained as semantic/conformance oracle;
-- existing Atlas deterministic serialization/digest profile;
-- ADR-0025 `atlas-core --serve-stdio` local protocol boundary;
-- no default local HTTP/TCP/WebSocket listener and no hidden network fallback;
+- deterministic Atlas serialization/digest profile;
+- ADR-0025 `atlas-core --serve-stdio` local boundary;
+- no default local HTTP/TCP/WebSocket listener or hidden network fallback;
 - offline-first operation and inspectable provenance.
 
-## Phase 5.6 Active Boundary
+## Phase 5.6 Closed Selection Boundary
 
-Phase 5.6 consumes the frozen Shared Core rather than reimplementing it.
+All three candidate families passed mandatory hard gates. The accepted weighted review is retained in `benchmarks/desktop/phase56/weighted-review.json` and ADR-0026 records the final host decision:
 
-Three Windows host candidates remain under evaluation:
+- **Selected:** Tauri 2.x;
+- .NET 10 / WPF: evaluated and not selected;
+- Electron: evaluated and not selected.
 
-- Tauri 2.x;
-- Electron;
-- .NET 10 Windows Desktop / WPF.
+Selection does not move canonical, search, graph, provenance or pack-trust ownership into the UI. Those remain Shared Core responsibilities.
 
-No framework preference or selection is accepted until every mandatory hard gate is closed and ADR-0026 records the evidence, rejected alternatives and residual risk.
+### Selected-host security boundary
 
-### Verified desktop evidence to date
+The Tauri First Preview is limited to one main-window capability and exactly seven application commands:
 
-- G-D3: exact-head Candidate Builds run `35078440647` at `4e0a770e06cfacb195bfaf2ebb11a647aabc83e8` passed common process-tree TCP and UDP probes for all three candidates.
-- G-D5: verified Active Generation loads into production canonical/search/graph read models on Windows.
-- G-D6: exact-head run `35075820479` at `32874c7b95239579d6c11839a325dec0081d18f5` passed real-process signed update → same-process status/search → rollback → same-process status/search, while preserving highest-seen trust state and rejecting an untrusted-root update without losing the active read model.
+`core_status`, `search_records`, `get_record`, `expand_graph`, `pack_status`, `pack_update`, `pack_rollback`.
 
-### Implemented evidence awaiting CI closure
-
-- G-D7: machine-enforced candidate security-surface validation is implemented for Electron, Tauri and native .NET/WPF; it remains unverified until the active Windows Candidate run completes successfully.
-- G-D8: portable relocation and packaging-feasibility evidence is implemented. Each real candidate must run from a relocated path containing spaces while retaining the adjacent Shared Core integrity boundary. Final installer build/signing and clean-machine installer smoke remain Phase 5.6.4 work.
-- Tauri reproducibility: `Cargo.lock` is committed and exact-hash guarded; Candidate CI no longer calls `cargo generate-lockfile`, uses `--locked`, and fails on missing/drifted/mutated lock state.
-- Current Windows Candidate verification run: `35084472666` on branch snapshot `19242f0cabb27a606dc4ddc1603a381ea5a19342`; status at this project-state update: **IN PROGRESS**.
+The baseline retains CSP `connect-src 'none'`, no Tauri plugins, no generic frontend-controlled Shared Core method bridge, no generic application network API, committed/hash-guarded `Cargo.lock`, and adjacent SHA-256-bound `atlas-core.exe`.
 
 ## First Preview Product Boundary
 
-The first preview is intentionally constrained to analyst-critical functionality:
+The implemented First Preview is intentionally constrained to analyst-critical functionality:
 
 - Offline Global Search;
 - Canonical Record Detail;
@@ -100,26 +90,30 @@ The first preview is intentionally constrained to analyst-critical functionality
 - Windows Event and Sysmon-oriented investigation context present in the pack;
 - verified pack state/update;
 - safe rollback / recovery visibility;
-- UTC plus system/user-selected time zones, with Tehran/Jalali presentation as UX formatting rather than canonical timestamp mutation.
+- UTC plus system-local and Tehran/Jalali presentation as UI formatting;
+- operational dark UI and basic accessibility/high-contrast support.
 
-Visual direction is an operational intelligence dark interface with user-selectable theme tokens, stable security-state semantics, dense technical surfaces and validated geographic assets. Decorative identity remains subordinate to data.
+## Packaging Boundary
+
+Phase 5.6.4 produces a byte-bound portable Windows ZIP containing the selected Tauri host, the exact-head production Shared Core and its SHA-256 manifest. The same artifact must pass clean-Windows verification, relocation, corruption/fail-closed recovery, WebView2 prerequisite audit, GUI liveness and full-process-tree TCP/UDP listener checks.
+
+First Preview packaging is intentionally unsigned. Production Authenticode signing and public distribution/release hardening remain later release-readiness work. Binary auto-update is not part of First Preview.
 
 ## Accepted ADRs
 
-ADR-0001 through ADR-0025 remain accepted according to repository history. The current major technology decisions are:
+ADR-0001 through ADR-0026 are accepted according to repository history. Current major technology decisions include:
 
 - ADR-0022 — SQLite + FTS5 deterministic search artifact;
 - ADR-0023 — Secure Content Pack Trust and Update Model;
 - ADR-0024 — Go Production Shared Core;
 - ADR-0025 — Shared Core Local Interface Boundary;
-- ADR-0026 — Windows Desktop Host Selection: **PENDING**.
+- ADR-0026 — Windows Desktop Host Selection: **Tauri 2.x**.
 
 ## Technology Decisions Still Open
 
-- Windows Desktop host family — Phase 5.6.2 / ADR-0026;
-- final installer technology and portable packaging implementation;
-- application binary update mechanism;
 - production signing provider / HSM/KMS;
+- public installer/distribution policy beyond First Preview portable ZIP;
+- application binary update mechanism;
 - broader graph persistence/index implementation;
 - Detection Intermediate Representation;
 - remote content distribution/CDN topology;
@@ -128,15 +122,17 @@ ADR-0001 through ADR-0025 remain accepted according to repository history. The c
 ## Immediate Sequence
 
 ```text
-G-D7 / G-D8 Exact-head Windows Verification
+5.6.4 exact-head package build
        ↓
-G-D9 Measurement Closure
+clean Windows consume / integrity / GUI / no-listener smoke
        ↓
-ADR-0026 Desktop Selection
+feature closure documentation
        ↓
-5.6.3 First Preview UI
+PR → CI → merge to main
        ↓
-5.6.4 Windows Packaging / Smoke Closure
+post-merge package verification
+       ↓
+FIRST PREVIEW READY / POST-MERGE VERIFIED
 ```
 
-No blocking architecture conflict is currently known. Mandatory gates remain fail-closed and First Preview readiness may not be claimed before Phase 5.6.4 completes and verifies.
+No mandatory gate is bypassed. The project must not claim First Preview readiness before the sequence above is complete.
