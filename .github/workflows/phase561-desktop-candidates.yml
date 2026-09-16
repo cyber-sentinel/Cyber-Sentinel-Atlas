@@ -145,8 +145,8 @@ jobs:
           $Source = Join-Path (Get-Location) 'benchmarks\desktop\phase56\candidates\electron'
           Push-Location $Source
           try {
-            npm install --ignore-scripts --no-audit --no-fund
-            if ($LASTEXITCODE -ne 0) { throw "npm install failed" }
+            npm ci --ignore-scripts --no-audit --no-fund
+            if ($LASTEXITCODE -ne 0) { throw "npm ci failed" }
             node node_modules/electron/install.js
             if ($LASTEXITCODE -ne 0) { throw "Electron binary install failed" }
             $version = (node -e "process.stdout.write(require('electron/package.json').version)").Trim()
