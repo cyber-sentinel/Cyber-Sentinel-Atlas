@@ -60,7 +60,7 @@ Delivered the production Go Shared Core, canonical/search/graph operations, pack
 
 ## Phase 5.6 — Windows Desktop MVP
 
-Status: **FEATURE-BRANCH IMPLEMENTATION COMPLETE / RELEASE CLOSURE PENDING**
+Status: **FEATURE-BRANCH IMPLEMENTATION COMPLETE / PR RELEASE CLOSURE ACTIVE**
 
 The Windows-first MVP remains offline-first, evidence-first and bounded by the frozen Shared Core.
 
@@ -78,9 +78,9 @@ Tauri 2.x, Electron and .NET 10/WPF were built as executable hosts around the sa
 
 ### Phase 5.6.2 — Hard Gates, Measurements & ADR-0026
 
-Status: **COMPLETE / VERIFIED**
+Status: **COMPLETE / VERIFIED FOR ACCEPTED SELECTION EVIDENCE**
 
-Mandatory gate state:
+Mandatory selection-gate state from frozen evidence:
 
 - G-D1 Clean Windows build: **PASS / VERIFIED**
 - G-D2 stdio handshake/status: **PASS / VERIFIED**
@@ -92,9 +92,11 @@ Mandatory gate state:
 - G-D8 Installer + portable feasibility: **PASS / VERIFIED FOR FEASIBILITY**
 - G-D9 Startup / IPC / process / memory / package measurements: **PASS / VERIFIED**
 
-Exact-head Candidate Evidence run `35090304056` completed successfully. The accepted weighted review is stored in `benchmarks/desktop/phase56/weighted-review.json`.
+Accepted Candidate Evidence run `35090304056` completed successfully. The accepted weighted review is stored in `benchmarks/desktop/phase56/weighted-review.json`.
 
 ADR-0026: **ACCEPTED — Tauri 2.x selected**.
+
+The historical multi-candidate workflow remains a release regression gate. On PR implementation head `8feb39a62a1b480428b180ad68cf6ab88340f513`, run `35100673553` failed during the common external measurement harness because the **Electron process tree opened a UDP endpoint**. Candidate security validation and all three candidate builds/probes had passed before that point. This regression does not automatically rewrite ADR-0026, but it blocks PR merge until the endpoint is attributed and the regression contract is closed without bypassing network-posture policy.
 
 ### Phase 5.6.3 — First Preview UI
 
@@ -119,7 +121,7 @@ The selected Tauri host exposes only the seven explicit First Preview applicatio
 
 Status: **COMPLETE / VERIFIED ON FEATURE BRANCH**
 
-Authoritative exact-head run `35095383694` at package-code commit `2517ed5714dec2efc97db0df7789375c5aae50bb` completed successfully.
+Latest verified PR implementation-head run `35100673319` at `8feb39a62a1b480428b180ad68cf6ab88340f513` completed successfully. Earlier acceptance run `35095383694` remains supporting evidence for the same packaging boundary.
 
 One byte-bound portable Windows package was built once and consumed unchanged on a fresh GitHub-hosted Windows runner. The clean-machine gate verified:
 
@@ -127,7 +129,7 @@ One byte-bound portable Windows package was built once and consumed unchanged on
 - host and Shared Core identity/integrity/size;
 - adjacent sidecar manifest;
 - portable relocation to a path containing spaces;
-- exact-head Shared Core commit;
+- exact Shared Core commit binding;
 - packaged offline/no-default-listener status probe;
 - deliberate corrupted-sidecar rejection;
 - recovery after verified-byte restoration;
@@ -139,25 +141,29 @@ One byte-bound portable Windows package was built once and consumed unchanged on
 
 The First Preview deliverable is an **unsigned portable ZIP**. Authenticode signing and public distribution hardening are later release-readiness boundaries. Binary auto-update remains disabled/not part of First Preview.
 
-**FIRST PREVIEW READY may only be claimed after PR review/CI, merge to `main`, and post-merge verification succeed.**
+**FIRST PREVIEW READY may only be claimed after every PR regression gate passes, PR #39 merges to `main`, and post-merge verification succeeds.**
 
 ### Phase 5.6 release closure
 
-Status: **ACTIVE**
+Status: **ACTIVE — BLOCKED ON FINAL PR REGRESSION CLOSURE**
 
 ```text
-Feature implementation + package/smoke evidence   COMPLETE
+Feature implementation + selected-host package/smoke evidence   COMPLETE
        ↓
-Authoritative documentation sync                  COMPLETE
+README + authoritative documentation sync                       COMPLETE
        ↓
-PR review + PR CI                                 ACTIVE
+PR #39 final regression CI                                      ACTIVE
        ↓
-Merge to main                                     PENDING
+Electron UDP measurement attribution / regression closure       ACTIVE BLOCKER
        ↓
-Post-merge package verification                   PENDING
+Merge to main                                                   PENDING
+       ↓
+Post-merge package verification                                 PENDING
        ↓
 FIRST PREVIEW READY
 ```
+
+The remediation rule is evidence-first: identify which Electron-descendant process owns the UDP endpoint and why; do not generically allow UDP and do not weaken the selected-host network policy merely to obtain a green run.
 
 ## Phase 5.7 — Web / PWA
 
