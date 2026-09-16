@@ -8,7 +8,7 @@ Status timestamp: 2026-09-16
 - Release authority: `main`
 - Active implementation branch: `feature/phase-5.6-windows-desktop-mvp`
 - Repository visibility: **Public**
-- Release state: **First Preview candidate / not yet merged to release authority**
+- Release state: **First Preview candidate / feature implementation complete / not yet merged to release authority**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
 - Search contract version: `1.0.0`
@@ -20,7 +20,7 @@ Status timestamp: 2026-09-16
 
 `main` remains release authority. This document records verified feature-branch evidence without claiming merge or post-merge verification before those events occur.
 
-## Completed foundation
+## Phase state
 
 - Phase 5.1 — Product Foundation: **COMPLETE**
 - Stage 1 — Governance / Architecture Sync: **COMPLETE**
@@ -32,7 +32,8 @@ Status timestamp: 2026-09-16
 - Phase 5.6.1 — Executable Desktop Candidate Builds: **COMPLETE / VERIFIED**
 - Phase 5.6.2 — Hard Gates / Measurements / Desktop Selection: **COMPLETE / VERIFIED**
 - Phase 5.6.3 — First Preview UI: **COMPLETE / VERIFIED ON FEATURE BRANCH**
-- Phase 5.6.4 — Windows Packaging / Clean-Machine Smoke: **IN PROGRESS**
+- Phase 5.6.4 — Windows Packaging / Clean-Machine Smoke: **COMPLETE / VERIFIED ON FEATURE BRANCH**
+- Phase 5.6 — Windows Desktop MVP: **FEATURE-BRANCH IMPLEMENTATION COMPLETE / RELEASE CLOSURE PENDING**
 
 ## Frozen Shared Core boundary
 
@@ -51,7 +52,7 @@ Phase 5.5 remains frozen. Desktop code consumes, but does not redefine:
 
 ## Phase 5.6.2 — Closed mandatory gates
 
-Exact-head Candidate Evidence run `35090304056` at commit `c343ffd881dd7b6a420f04cea2ffb91c3ea8a715` completed successfully. The corresponding artifact `phase562-desktop-gate-evidence` records the following fail-closed state:
+Exact-head Candidate Evidence run `35090304056` at commit `c343ffd881dd7b6a420f04cea2ffb91c3ea8a715` completed successfully. The artifact `phase562-desktop-gate-evidence` records the fail-closed state below.
 
 | Gate | Requirement | State |
 | --- | --- | --- |
@@ -77,13 +78,13 @@ For the selected-candidate review, the successful evidence snapshot recorded app
 - no TCP listener observed;
 - no UDP endpoint observed.
 
-The common exact-head Shared Core IPC evidence separately measures handshake/status against the identical sidecar. Measurements are CI evidence, not universal performance guarantees for all hardware.
+Measurements are CI evidence, not universal performance guarantees for all hardware.
 
 ## ADR-0026 — Windows Desktop Host Selection
 
 **ACCEPTED — Tauri 2.x**
 
-The frozen weighted review is stored in `benchmarks/desktop/phase56/weighted-review.json`. All three candidates passed mandatory hard gates. Using the documented evidence-based review method, the recorded totals are:
+The frozen weighted review is stored in `benchmarks/desktop/phase56/weighted-review.json`. All three candidates passed mandatory hard gates. The recorded weighted totals are:
 
 - Tauri 2.x: `94.13`;
 - .NET 10 / WPF: `88.09`;
@@ -111,6 +112,7 @@ The First Preview provides the analyst-critical flow:
 - Canonical Record Detail;
 - bounded Relationship / Graph navigation;
 - claim/source provenance;
+- Windows Event / Sysmon investigation context available in the pack;
 - verified pack status;
 - pack update and safe rollback;
 - diagnostics and failure visibility;
@@ -119,13 +121,13 @@ The First Preview provides the analyst-critical flow:
 
 Security-surface regression evidence enforces one main-window capability, explicit application-command ACLs, CSP `connect-src 'none'`, no Tauri plugins, no generic frontend-controlled Shared Core method bridge and no generic application network API.
 
-## Phase 5.6.4 — Windows Packaging / Smoke Closure
+## Phase 5.6.4 — Windows Packaging / Clean-Machine Smoke
 
-**IN PROGRESS**
+**COMPLETE / VERIFIED ON FEATURE BRANCH**
 
-Active exact-head workflow: `Phase 5.6.4 Windows First Preview Package`, run `35092036802`, feature HEAD `9b58be1a542d2d86a84ddfd14053a66be4162a1a`.
+Authoritative package/smoke evidence: workflow `Phase 5.6.4 Windows First Preview Package`, run `35095383694`, package-code commit `2517ed5714dec2efc97db0df7789375c5aae50bb`, conclusion **SUCCESS**.
 
-The gate builds one portable Windows First Preview package and consumes the same immutable artifact on a fresh GitHub-hosted Windows runner. Acceptance requires:
+The workflow built one byte-bound portable Windows First Preview package and consumed the same immutable artifact on a fresh GitHub-hosted Windows runner. Verified acceptance controls:
 
 - exact package ZIP SHA-256 verification;
 - exact host and `atlas-core.exe` manifest/hash/size verification;
@@ -134,15 +136,33 @@ The gate builds one portable Windows First Preview package and consumes the same
 - exact `core_commit` binding to the workflow SHA;
 - deliberate sidecar corruption rejected fail-closed;
 - recovery after restoration of verified sidecar bytes;
-- WebView2 prerequisite audit without ATLAS downloading the runtime;
+- WebView2 prerequisite audit without ATLAS downloading/bootstraping the runtime;
 - GUI launch/liveness smoke;
-- no TCP listener or UDP endpoint in the packaged GUI process tree.
+- zero TCP listeners in the packaged GUI process tree;
+- zero UDP endpoints owned by ATLAS or Shared Core;
+- WebView2-runtime UDP, when present, attributed by process ownership and retained in clean-machine evidence.
+
+The runtime-owned WebView2 endpoint observed during the preceding failed audit was not allowlisted generically. The audit was changed to attribute ownership: non-WebView2 UDP still fails, TCP listeners anywhere in the process tree still fail, and runtime-owned WebView2 UDP remains visible in evidence.
 
 The First Preview artifact is intentionally an **unsigned portable ZIP**. Production Authenticode signing, public distribution hardening and a broader release process remain later release-readiness boundaries; CI does not simulate a signature. Binary auto-update is disabled/not part of First Preview.
 
-## First Preview readiness rule
+## Release-authority closure
 
-`FIRST PREVIEW READY` may be claimed only after Phase 5.6.4 succeeds, the feature branch is reviewed through PR, merged into `main`, and required post-merge verification completes. Until then the correct state is **First Preview candidate**.
+The feature implementation is complete. Remaining sequence:
+
+```text
+Feature-branch evidence + documentation complete
+        ↓
+PR review + PR CI
+        ↓
+Merge to main
+        ↓
+Post-merge package verification
+        ↓
+FIRST PREVIEW READY / POST-MERGE VERIFIED
+```
+
+`FIRST PREVIEW READY` must not be claimed before merge and post-merge verification succeed.
 
 ## Governance
 
