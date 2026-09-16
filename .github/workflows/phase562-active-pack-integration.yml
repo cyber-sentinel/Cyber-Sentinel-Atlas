@@ -1,0 +1,114 @@
+name: Phase 5.6.2 Active Pack Integration
+
+on:
+  push:
+    branches:
+      - feature/phase-5.6-windows-desktop-mvp
+    paths:
+      - 'shared-core/go/**'
+      - 'tools/pack/**'
+      - 'tests/phase55/**'
+      - '.github/workflows/phase562-active-pack-integration.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'shared-core/go/**'
+      - 'tools/pack/**'
+      - 'tests/phase55/**'
+      - '.github/workflows/phase562-active-pack-integration.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  active-pack-integration:
+    name: active-pack-integration (windows)
+    runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]
+    timeout-minutes: 35
+    env:
+      CGO_ENABLED: '0'
+      GOTOOLCHAIN: local
+      PYTHONPATH: .
+
+    steps:
+      - name: Checkout exact head
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Go 1.25.13
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.13'
+          cache-dependency-path: shared-core/go/go.sum
+
+      - name: Prepare Python 3.12 oracle venv
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
+          if ($version -ne '3.12') { throw "Python 3.12 required; found $version" }
+          $venv = Join-Path $env:RUNNER_TEMP 'atlas-phase562-pack-venv'
+          if (Test-Path $venv) { Remove-Item $venv -Recurse -Force }
+          python -m venv $venv
+          $scripts = Join-Path $venv 'Scripts'
+          $scripts | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          "VIRTUAL_ENV=$venv" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "ATLAS_PHASE554C_PYTHON=$(Join-Path $scripts 'python.exe')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          & (Join-Path $scripts 'python.exe') --version
+
+      - name: Install exact Python oracle dependencies
+        run: python -m pip install --disable-pip-version-check -r tools/pack/requirements-phase552.txt
+
+      - name: Assert exact Python oracle dependency versions
+        run: >-
+          python -c "import importlib.metadata as m;
+          assert m.version('tuf') == '7.0.0', m.version('tuf');
+          assert m.version('securesystemslib') == '1.4.0', m.version('securesystemslib');
+          assert m.version('jsonschema') == '4.25.1', m.version('jsonschema');
+          assert m.version('pytest') == '8.4.2', m.version('pytest')"
+
+      - name: Verify locked Go module graph
+        working-directory: shared-core/go
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          go mod download
+          if ($LASTEXITCODE -ne 0) { throw 'go mod download failed' }
+          go mod verify
+          if ($LASTEXITCODE -ne 0) { throw 'go mod verify failed' }
+          go mod tidy
+          if ($LASTEXITCODE -ne 0) { throw 'go mod tidy failed' }
+          git diff --exit-code -- go.mod go.sum
+          if ($LASTEXITCODE -ne 0) { throw 'Go lock drift detected' }
+
+      - name: Enforce gofmt
+        working-directory: shared-core/go
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          go fmt ./...
+          if ($LASTEXITCODE -ne 0) { throw 'gofmt failed' }
+          git diff --exit-code -- .
+          if ($LASTEXITCODE -ne 0) { throw 'Go formatting drift detected' }
+
+      - name: Run production Go regression suite
+        working-directory: shared-core/go
+        run: go test ./... -count=1
+
+      - name: Run signed-pack active-generation integration suite
+        working-directory: shared-core/go
+        run: go test -tags=phase554c_integration ./internal/pack -count=1
+
+      - name: Run Go vet
+        working-directory: shared-core/go
+        run: go vet ./...
+
+      - name: Confirm canonical schemas v1 remain unchanged
+        run: git diff --exit-code origin/main...HEAD -- schemas/v1
