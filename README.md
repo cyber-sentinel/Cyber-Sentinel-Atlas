@@ -13,6 +13,8 @@ Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: an o
 > **Release state:** Pre-preview / unreleased — First Preview candidate, not yet merged/post-merge verified
 > **Repository visibility:** Public
 
+Foundation regression invariants: **Phase 5.1 — Product Foundation: COMPLETE**; **Stage 1 — Governance / Architecture Sync: COMPLETE**.
+
 Public repository visibility does **not** imply public-release readiness. `main` remains release authority. First Preview readiness is claimed only after the package/smoke gate, PR merge and post-merge verification succeed.
 
 Detailed implementation state is maintained in [Current Status](docs/current-status.md), [Project State](docs/project-state.md), and the [Roadmap](docs/roadmap.md).
