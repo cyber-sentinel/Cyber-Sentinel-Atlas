@@ -298,6 +298,11 @@ func ApplyPendingUpdate(runtimeRoot string) (UpdateResult, error) {
 	if err := ensureControlRuntimeRoot(runtimeRoot); err != nil {
 		return UpdateResult{}, err
 	}
+	lock, err := AcquireRuntimeLock(runtimeRoot, time.Now().UTC())
+	if err != nil {
+		return UpdateResult{}, err
+	}
+	defer lock.Close()
 	available, err := pendingUpdateAvailable(runtimeRoot)
 	if err != nil {
 		return UpdateResult{}, err
@@ -305,11 +310,11 @@ func ApplyPendingUpdate(runtimeRoot string) (UpdateResult, error) {
 	if !available {
 		return UpdateResult{}, ErrNoPendingUpdate
 	}
-	lock, err := AcquireRuntimeLock(runtimeRoot, time.Now().UTC())
+	pendingPath := PendingUpdatePath(runtimeRoot)
+	pendingInfo, err := os.Lstat(pendingPath)
 	if err != nil {
 		return UpdateResult{}, err
 	}
-	defer lock.Close()
 	if err := GuardTrustedTime(runtimeRoot, time.Now().UTC()); err != nil {
 		return UpdateResult{}, err
 	}
@@ -325,7 +330,7 @@ func ApplyPendingUpdate(runtimeRoot string) (UpdateResult, error) {
 	defer os.RemoveAll(work)
 	extracted := filepath.Join(work, "extracted")
 	verifiedTargets := filepath.Join(work, "verified-targets")
-	if _, err := SafeExtractAtlaspack(PendingUpdatePath(runtimeRoot), extracted, DefaultSafetyLimits()); err != nil {
+	if _, err := SafeExtractAtlaspack(pendingPath, extracted, DefaultSafetyLimits()); err != nil {
 		return UpdateResult{}, fmt.Errorf("%w: pending archive rejected: %v", ErrPackControlTrust, err)
 	}
 	verified, err := VerifyPackDirectory(extracted, trustedRoot, filepath.Join(runtimeRoot, "tuf"), verifiedTargets, CurrentRuntimeVersion)
@@ -336,6 +341,18 @@ func ApplyPendingUpdate(runtimeRoot string) (UpdateResult, error) {
 	if err != nil {
 		return UpdateResult{}, err
 	}
+
+	// Consume only the exact pending file that was verified. If an external
+	// producer replaced the fixed inbox path while verification was running,
+	// leave the replacement untouched for the next explicit update request.
+	if currentInfo, statErr := os.Lstat(pendingPath); statErr == nil &&
+		os.SameFile(pendingInfo, currentInfo) &&
+		pendingInfo.Size() == currentInfo.Size() &&
+		pendingInfo.ModTime().Equal(currentInfo.ModTime()) {
+		consumedPath := filepath.Join(work, "consumed.atlaspack")
+		_ = os.Rename(pendingPath, consumedPath)
+	}
+
 	status, err := ControlState(runtimeRoot)
 	if err != nil {
 		return UpdateResult{}, err

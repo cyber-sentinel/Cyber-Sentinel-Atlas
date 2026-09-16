@@ -3,6 +3,7 @@
 package pack
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
@@ -50,6 +51,16 @@ func TestCoreOwnedPendingUpdateUsesDurableTrustRoot(t *testing.T) {
 	}
 	if result.RollbackAvailable {
 		t.Fatalf("same-generation metadata refresh must not create a rollback target: %#v", result)
+	}
+	if _, err := os.Lstat(PendingUpdatePath(runtimeRoot)); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("successful update must consume the verified pending archive: %v", err)
+	}
+	status, err := ControlState(runtimeRoot)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if status.PendingUpdate {
+		t.Fatalf("successful update left stale pending state: %#v", status)
 	}
 }
 
