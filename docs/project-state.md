@@ -3,23 +3,20 @@
 ## Repository Control Plane
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
-- Authoritative Branch: `main`
-- Live Main SHA: resolve from the GitHub `main` branch tip.
-- Last Reviewed Main SHA: `00a27df6b28b034fecc3905865e0aac200e5aa87`
-- Last Architecture-Reviewed Main SHA: `94f3136687f8e9765c0343b938a1049436878783`
-- Current Version: `0.1.0-foundation.1`
-- Canonical Schema Version: `1.0.0`
-- Ingestion Contract Version: `1.0.0`
-- Search Contract Version: `1.0.0`
-- Search Engine: SQLite + FTS5 — ADR-0022 Accepted
-- Content Pack Trust Model: TUF — ADR-0023 Accepted
+- Release authority: `main`
+- Active implementation branch: `feature/phase-5.6-windows-desktop-mvp`
+- Repository visibility: **Public**
+- Release state: **Pre-preview / unreleased**
+- Canonical schema version: `1.0.0`
+- Ingestion contract version: `1.0.0`
+- Search contract version: `1.0.0`
+- Search engine: SQLite + FTS5 — ADR-0022 Accepted
+- Content-pack trust model: TUF — ADR-0023 Accepted
 - Production Shared Core: Go — ADR-0024 Accepted
-- Shared Core Local Interface: child-process stdio protocol — ADR-0025 Accepted
-- Python Role: semantic/conformance oracle for frozen cross-language conformance
-- Repository Visibility: Private during active development
-- Branch Protection: unavailable/not enabled on the current private-repository plan; procedural PR + CI + architecture-review gates remain mandatory.
+- Shared Core local interface: child-process stdio protocol — ADR-0025 Accepted
+- Desktop implementation stack: **not selected** — ADR-0026 pending
 
-Detailed current status is maintained in [`docs/current-status.md`](current-status.md). Historical project-state detail from the Phase 5.3-era snapshot is preserved in [`docs/history/project-state-phase53-snapshot.md`](history/project-state-phase53-snapshot.md).
+Detailed operational status is maintained in [`docs/current-status.md`](current-status.md). Historical snapshots remain under `docs/history/`.
 
 ## Current Phase
 
@@ -28,134 +25,112 @@ Detailed current status is maintained in [`docs/current-status.md`](current-stat
 - Phase 5.2 — Canonical Data Model: **COMPLETE / MERGED**
 - Phase 5.3 — Source & Ingestion Core: **COMPLETE / MERGED**
 - Phase 5.4 — Deterministic Search Core: **COMPLETE / MERGED**
-- Phase 5.5 — Offline Pack Runtime / Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED**
-- Phase 5.5.1 — Pack Trust Contracts + ADR-0023: **COMPLETE / MERGED**
-- Phase 5.5.2 — Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**
-- Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**
-- Phase 5.5.4 — Production Go Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+- Phase 5.5 — Offline Pack Runtime / Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED / FROZEN**
 - Phase 5.6 — Windows Desktop MVP: **IN PROGRESS**
-- Phase 5.6.0 — Desktop Spike Contract + Environment/Core-Boundary Probe: **COMPLETE / VERIFIED**
-- Phase 5.6.1 — Executable Desktop Candidate Builds: **IN PROGRESS**
-- Phase 5.7 — Web / PWA: **NOT STARTED**
-- Phase 5.8 — API / CLI: **NOT STARTED**
-- Phase 5.9 — Grounded AI: **NOT STARTED**
-- Phase 5.10 — Public Preview Readiness: **NOT STARTED**
-
-The Phase 5.5.3 and 5.5.4 numbering was introduced at the Shared Core architecture boundary and is now part of the active roadmap.
+  - 5.6.0 Environment / Core Boundary: **COMPLETE / VERIFIED**
+  - 5.6.1 Executable Candidate Builds: **COMPLETE / VERIFIED**
+  - 5.6.2 Mandatory Hard Gates / Desktop Selection: **IN PROGRESS**
+    - G-D1 Clean Windows build: **PASS**
+    - G-D2 stdio handshake/status: **PASS**
+    - G-D3 Offline / TCP / UDP process-tree network posture: **PASS / VERIFIED**
+    - G-D4 Sidecar location/integrity/version: **PASS**
+    - G-D5 Active verified pack read model: **PASS / VERIFIED**
+    - G-D6 Pack update + safe rollback: **PASS / VERIFIED**
+    - G-D7 Desktop security surface: **IN PROGRESS**
+    - G-D8 Installer / Portable feasibility: **PENDING**
+    - G-D9 Measurements / reproducibility closure: **PARTIAL**
+  - 5.6.3 First Preview UI: **PLANNED**
+  - 5.6.4 Windows Packaging / Smoke Closure: **PLANNED**
+- Phase 5.7 — Web / PWA: **DEFERRED BEYOND FIRST PREVIEW**
+- Phase 5.8 — Broader API surfaces: **DEFERRED BEYOND FIRST PREVIEW**
+- Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
+- Phase 5.10 — Public Preview Readiness: **PLANNED**
 
 ## Frozen Architecture
 
-The following remain authoritative:
+The following remain authoritative and may not drift merely to simplify the Desktop host:
 
-- exactly seven canonical AtlasRecord families under `schemas/v1/`;
-- canonical identifier pattern `atlas:<entity-type>:<namespace>:<canonical-key>`;
-- native identifiers remain separate and Event ID is not globally unique;
-- legacy/current lifecycle preservation;
-- deterministic exact identifier resolution before lexical retrieval;
-- SQLite + FTS5 for the derived deterministic search artifact;
-- TUF-based signed content-pack trust, verification and rollback boundary;
-- Go as the production Shared Core implementation family;
-- the existing Atlas deterministic JSON serialization/digest profile; no implicit JCS migration;
-- Python as the semantic/conformance oracle for frozen vectors;
-- ADR-0025 child-process stdio protocol as the local Desktop-facing Shared Core boundary;
-- offline-first operation, inspectable provenance and Last Known Good preservation;
-- shared contracts across Desktop, Web/PWA, API and CLI;
-- official CLI command: `atlas`.
-
-## Phase 5.5.3 Closure
-
-Phase 5.5.3 merged via PR #23 at Merge Commit `bbb462b11de460216acb80116146f651ac2ef1ca` and is post-merge verified. PR #24 synchronized the resulting status boundary at `94f3136687f8e9765c0343b938a1049436878783`.
-
-The evidence-driven decision accepted ADR-0024 and selected Go because it was the only non-control finalist to pass every mandatory G-SC1..G-SC8 gate on both Linux and Windows. The accepted baseline includes:
-
-- Go toolchain family evidenced with `go1.25.0`;
-- `go-tuf/v2 v2.4.2`;
-- `modernc.org/sqlite v1.58.0`;
-- normalized dependency graph including `golang.org/x/text v0.36.0`;
-- SQLite/FTS5 parity with the accepted Phase 5.4 search contracts;
-- TUF/POUF, offline, archive, durable state, trusted-time and LKG/rollback parity with Phase 5.5.1/5.5.2;
-- cross-language deterministic JSON vectors preserved without digest migration;
-- no change to canonical `schemas/v1/`.
-
-Python control remains an eligible reference implementation and conformance oracle. Rust was not selected because the Phase 5.5.3 mandatory trust/runtime evidence envelope was incomplete or failed; that result is scoped to Phase 5.5.3 rather than a general language judgment.
-
-## Phase 5.5.4 Production Boundary and Closure
-
-Phase 5.5.4 converted the accepted Go spike evidence into the production Shared Core while keeping all canonical/search/pack contracts authoritative. ADR-0025 freezes the local integration boundary as `atlas-core --serve-stdio` with 4-byte big-endian length-prefixed UTF-8 JSON frames, strict `atlas-core` protocol `1.0.0` handshake, bounded request/response sizes, strict parsing, one request at a time per child process, method allowlisting and no default local network listener.
-
-PR #35 merged Phase 5.5.4D through Merge Commit `00a27df6b28b034fecc3905865e0aac200e5aa87`. Post-merge verification on that exact main SHA passed Foundation, architecture/canary gates, 5.5.4A/B/C/D on Linux and Windows, cross-language conformance, reproducibility, SBOM/license closure, `govulncheck`, binary/IPC measurement and pack trust/LKG regression coverage.
-
-The frozen production boundary includes:
-
-- canonical/read-model validation against the seven-family schema;
-- deterministic SQLite/FTS5 exact, lexical, catalog and bounded graph behavior;
-- Atlas TUF POUF v1 verification and verified-pack consumption;
-- durable install/activation/highest-seen/trusted-time/LKG rollback behavior;
-- locked Go dependencies, clean builds, SBOM and vulnerability evidence;
-- Linux/Windows conformance against the Python oracle;
-- stable versioned local protocol conformance without freezing the Desktop UI framework.
-
-Execution completed as 5.5.4A protocol/core skeleton, 5.5.4B canonical/search/graph parity, 5.5.4C pack trust/durable state, and 5.5.4D supply-chain/cross-platform closure.
+- exactly seven canonical `AtlasRecord` families under `schemas/v1/`;
+- canonical identifiers remain provider/entity scoped; Event ID is not globally unique;
+- deterministic exact-before-lexical retrieval;
+- SQLite + FTS5 as the derived deterministic search artifact;
+- TUF-based signed content-pack trust, trusted-time and anti-rollback state;
+- immutable generations, atomic activation and Last Known Good behavior;
+- Go production Shared Core with Python retained as semantic/conformance oracle;
+- existing Atlas deterministic serialization/digest profile;
+- ADR-0025 `atlas-core --serve-stdio` local protocol boundary;
+- no default local HTTP/TCP/WebSocket listener and no hidden network fallback;
+- offline-first operation and inspectable provenance.
 
 ## Phase 5.6 Active Boundary
 
-Phase 5.6 consumes the frozen Shared Core rather than reimplementing it. Phase 5.6.0 proved the Windows CI/toolchain environment, production `atlas-core.exe` build, exact stdio `core.handshake` + `core.status`, offline-capable status, absence of a default network listener, and no canonical schema drift.
+Phase 5.6 consumes the frozen Shared Core rather than reimplementing it.
 
-Phase 5.6.1 now evaluates minimal executable Tauri, Electron and .NET Windows Desktop hosts against the same sidecar and protocol operation before ADR-0026 selects exactly one Desktop host family.
+Three Windows host candidates remain under evaluation:
+
+- Tauri 2.x;
+- Electron;
+- .NET 10 Windows Desktop / WPF.
+
+No framework preference or selection is accepted until every mandatory hard gate is closed and ADR-0026 records the evidence, rejected alternatives and residual risk.
+
+### Verified desktop evidence to date
+
+- G-D3: exact-head Candidate Builds run `35078440647` at `4e0a770e06cfacb195bfaf2ebb11a647aabc83e8` passed common process-tree TCP and UDP probes for all three candidates.
+- G-D5: verified Active Generation loads into production canonical/search/graph read models on Windows.
+- G-D6: exact-head run `35075820479` at `32874c7b95239579d6c11839a325dec0081d18f5` passed real-process signed update → same-process status/search → rollback → same-process status/search, while preserving highest-seen trust state and rejecting an untrusted-root update without losing the active read model.
+- G-D7: machine-enforced candidate security-surface validation is implemented on technical commit `73c653e7b23033546522509dff64ee49dfe2c2e4`; full exact-head candidate closure is still running and therefore not yet recorded as PASS.
+
+## First Preview Product Boundary
+
+The first preview is intentionally constrained to analyst-critical functionality:
+
+- Offline Global Search;
+- Canonical Record Detail;
+- bounded relationship/graph navigation;
+- claim/source provenance;
+- Windows Event and Sysmon-oriented investigation context present in the pack;
+- verified pack state/update;
+- safe rollback / recovery visibility;
+- UTC plus system/user-selected time zones, with Tehran/Jalali presentation as UX formatting rather than canonical timestamp mutation.
+
+Visual direction is an operational intelligence dark interface with user-selectable theme tokens, stable security-state semantics, dense technical surfaces and validated geographic assets. Decorative identity remains subordinate to data.
 
 ## Accepted ADRs
 
-- ADR-0001 — Canonical Vendor-Neutral Model
-- ADR-0002 — Claim-Level Provenance
-- ADR-0003 — Offline-first Core
-- ADR-0004 — Ecosystem Ownership: Atlas, DefenseOps and Forge
-- ADR-0005 — Canonical Identifier Architecture
-- ADR-0006 — Shared Core and Interface Sequencing
-- ADR-0007 — Universal Telemetry Taxonomy
-- ADR-0008 — Coverage Measurement Model
-- ADR-0009 — Controlled Content Release Pipeline
-- ADR-0010 — Telemetry Lifecycle and Legacy Preservation
-- ADR-0011 — Canonical Record Families and Record Envelope
-- ADR-0012 — Native Identifiers, Aliases and Controlled Registries
-- ADR-0013 — Applicability, Versioning and Curation/Lifecycle Separation
-- ADR-0014 — Claim, Evidence and Relationship Contracts
-- ADR-0015 — Schema Versioning, Migration and Referential Integrity
-- ADR-0016 — Source & Ingestion Control Plane Boundary
-- ADR-0017 — Deterministic Acquisition, Parsing and Normalization
-- ADR-0018 — Authoritative Inventory, Completeness and Change Safety
-- ADR-0019 — Validation, Review and Pack-Ready Promotion
-- ADR-0020 — Encyclopedia Identifier Search/Browse Data Contract
-- ADR-0021 — Search Projection and Exact Resolver Contract
-- ADR-0022 — Search Engine Selection
-- ADR-0023 — Secure Content Pack Trust and Update Model
-- ADR-0024 — Production Shared Core Technology Selection
-- ADR-0025 — Shared Core Local Interface Boundary
+ADR-0001 through ADR-0025 remain accepted according to repository history. The current major technology decisions are:
+
+- ADR-0022 — SQLite + FTS5 deterministic search artifact;
+- ADR-0023 — Secure Content Pack Trust and Update Model;
+- ADR-0024 — Go Production Shared Core;
+- ADR-0025 — Shared Core Local Interface Boundary;
+- ADR-0026 — Windows Desktop Host Selection: **PENDING**.
 
 ## Technology Decisions Still Open
 
-- Windows Desktop implementation stack — Phase 5.6 spike in progress; ADR-0026 pending;
-- broader local application storage beyond the accepted derived search artifact;
-- graph persistence/index implementation;
-- Detection Intermediate Representation;
-- HSM/KMS and production signing-provider selection;
-- portable Windows packaging implementation;
+- Windows Desktop host family — Phase 5.6.2 / ADR-0026;
+- final installer technology and portable packaging implementation;
 - application binary update mechanism;
+- production signing provider / HSM/KMS;
+- broader graph persistence/index implementation;
+- Detection Intermediate Representation;
 - remote content distribution/CDN topology;
 - Grounded AI runtime.
 
-## Architecture Sync
+## Immediate Sequence
 
-- Architecture Sync Date: 2026-09-15
-- Architecture Authority: Atlas Architecture / Product / Data / Security Design workspace
-- Architecture Sync Status: **GREEN**
-- Stage 1: **APPROVED AND MERGED**
-- Phase 5.2: **APPROVED AND MERGED**
-- Phase 5.3: **APPROVED AND COMPLETE**
-- Phase 5.4: **APPROVED AND COMPLETE**
-- Phase 5.5.1: **APPROVED AND COMPLETE**
-- Phase 5.5.2: **APPROVED, MERGED AND POST-MERGE VERIFIED**
-- Phase 5.5.3: **APPROVED, GO SELECTED, MERGED AND POST-MERGE VERIFIED**
-- Phase 5.5.4: **APPROVED, MERGED AND POST-MERGE VERIFIED — ADR-0025**
-- Phase 5.6.0: **EXECUTED AND VERIFIED — DESKTOP STACK NOT YET SELECTED**
+```text
+G-D7 Desktop Security
+  ↓
+G-D8 Installer / Portable
+  ↓
+G-D9 Measurement + Reproducibility Closure
+  ↓
+ADR-0026 Desktop Selection
+  ↓
+5.6.3 First Preview UI
+  ↓
+5.6.4 Windows Packaging / Smoke Closure
+```
 
-No blocking architecture conflict is known at this boundary. Phase 5.6 Desktop candidates must consume the frozen Atlas security/search/pack/protocol contracts and may not redefine them to simplify a UI host.
+No blocking architecture conflict is currently known. Mandatory gates remain fail-closed and First Preview readiness may not be claimed before Phase 5.6.4 completes and verifies.
