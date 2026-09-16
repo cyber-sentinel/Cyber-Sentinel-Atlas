@@ -1,41 +1,70 @@
 # Phase 5.6 Desktop Candidate Hosts
 
-These hosts exist to produce executable Windows evidence for ADR-0026. They do not select a Desktop framework by themselves.
+These hosts were created to produce executable Windows evidence for ADR-0026. Candidate comparison is now **closed**; ADR-0026 is accepted and **Tauri 2.x is the selected Windows First Preview host**.
 
-All candidates must consume the same exact-head production `atlas-core.exe` through the frozen ADR-0025 child-process stdio protocol. Candidate code may locate and integrity-check the adjacent sidecar, perform the exact `atlas-core` protocol `1.0.0` handshake, call `core.status`, render returned data, and collect host/IPC/packaging evidence. It must not duplicate canonical validation, search/index semantics, graph behavior, pack trust, durable state, update, or rollback logic.
+All candidates consumed the same exact-head production `atlas-core.exe` through the frozen ADR-0025 child-process stdio protocol. Candidate code was permitted to locate and integrity-check the adjacent sidecar, perform the `atlas-core` protocol `1.0.0` handshake, call bounded methods, render returned data and collect host/IPC/packaging evidence. Candidate code was not permitted to duplicate canonical validation, search/index semantics, graph behavior, pack trust, durable state, update or rollback logic.
 
-The executable comparison currently covers:
+The evaluated host families were:
 
 - Tauri 2.11.5;
 - Electron 44.3.0;
 - .NET 10 Windows Desktop / WPF.
 
-Every candidate fails closed when the adjacent sidecar or its SHA-256 manifest is missing or mismatched. The CI evidence summarizer additionally requires the packaged candidates to carry an identical `atlas-core.exe`, report one exact core commit, preserve `network_listener: false` and `offline_capable: true`, and leave `schemas/v1/` unchanged.
+All three passed the mandatory Phase 5.6.2 hard gates. Build success alone was not used as the selection signal; the accepted decision is documented in `docs/adr/0026-windows-desktop-host-selection.md` and the frozen evidence-based weighted review in `benchmarks/desktop/phase56/weighted-review.json`.
 
 ## Dependency reproducibility
 
 Electron uses its committed `package-lock.json` with `npm ci`.
 
-Tauri uses a committed `Cargo.lock`. Candidate CI:
+Tauri uses a committed `Cargo.lock`. CI:
 
 - requires the lockfile to exist;
 - verifies the approved SHA-256 before build;
 - builds with `cargo build --locked` or `cargo xwin build --locked`;
 - resolves evidence metadata with `cargo metadata --locked`;
-- fails if the committed lockfile changes during the job.
+- fails if the committed lockfile changes during the job;
+- never regenerates dependency resolution with `cargo generate-lockfile`.
 
-The workflow must not regenerate Tauri dependency resolution with `cargo generate-lockfile`. Dependency drift is a hard failure rather than an implicit update.
+Approved Tauri `Cargo.lock` SHA-256:
 
-Because the Tauri lock is byte-hash guarded, `.gitattributes` forces `benchmarks/desktop/phase56/candidates/tauri/Cargo.lock` to `text eol=lf`. This prevents Windows checkout from converting canonical LF bytes to CRLF and creating a false SHA-256 drift signal.
+```text
+dd2a97c412b0f7289f07ba16cfc28b4cca02ea9b7a5f5ed4d488b34977e37b3e
+```
 
-## Phase 5.6.2 hard-gate evidence
+Because the lock is byte-hash guarded, `.gitattributes` forces `benchmarks/desktop/phase56/candidates/tauri/Cargo.lock` to LF to prevent false Windows CRLF drift.
 
-G-D7 Desktop Security Surface is implemented as candidate-specific, machine-enforced policy evidence. It validates the intended security boundary for Electron, Tauri and native .NET/WPF before the candidate summary can pass.
+## Closed Phase 5.6.2 evidence
 
-G-D8 Installer/Portable feasibility is implemented as executable evidence. Each staged candidate is relocated to a different directory whose path contains spaces and must successfully execute its real probe from that location while preserving the adjacent `atlas-core.exe` and SHA-256 manifest boundary. Packaging/runtime prerequisites, installer options, signing boundary and disabled binary auto-update posture are recorded as evidence.
+Exact-head Candidate Evidence run `35090304056` completed successfully and closed G-D1 through G-D9.
 
-G-D8 feasibility evidence does **not** replace real installer construction, release signing, or clean-machine installer smoke testing. Those remain Phase 5.6.4 requirements.
+The evidence enforces:
 
-G-D9 measurement closure is now implemented as fail-closed evidence and awaits successful exact-head Windows CI. The common external host harness captures first post-build launch, warm launch/IPC timing, process-tree peak working set, process count, package size and TCP/UDP endpoint observations. A separate common Shared Core harness measures `core.handshake` and `core.status` latency against the identical exact-head `atlas-core.exe`. The first post-build launch is explicitly qualified as not forcibly purging the Windows OS page cache.
+- identical production Shared Core binary across candidates;
+- exact core commit binding;
+- `network_listener=false` and `offline_capable=true`;
+- full process-tree TCP/UDP observation;
+- sidecar SHA-256 identity/integrity;
+- signed-pack Active Generation read model;
+- verified pack update and safe rollback;
+- candidate-specific Desktop security surfaces;
+- relocated portable execution from paths containing spaces;
+- comparable startup/IPC/process/memory/package measurements;
+- canonical schema v1 drift protection.
 
-Phase 5.6.1 completion does not authorize selection. G-D1 through G-D9 remain fail-closed, and ADR-0026 may be accepted only after Phase 5.6.2 closes every mandatory gate and completes the weighted evidence review.
+G-D8 in Phase 5.6.2 proved **packaging/portable feasibility**. Final First Preview package construction and clean-machine consumption are separately enforced by Phase 5.6.4.
+
+## Selected Tauri First Preview boundary
+
+The selected Tauri host has exactly one main-window capability and seven allowlisted application commands:
+
+- `core_status`;
+- `search_records`;
+- `get_record`;
+- `expand_graph`;
+- `pack_status`;
+- `pack_update`;
+- `pack_rollback`.
+
+Security regression evidence requires CSP `connect-src 'none'`, no Tauri plugins, disabled asset protocol, no generic frontend-controlled Shared Core method bridge and no generic frontend/Rust network API.
+
+Candidate directories remain in the repository as reproducible decision evidence and regression fixtures; they no longer represent an open framework-selection decision.
