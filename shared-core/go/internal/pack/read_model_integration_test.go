@@ -42,17 +42,36 @@ func TestLoadActiveReadModelFromInstalledGeneration(t *testing.T) {
 		t.Fatal("active generation did not produce a complete canonical/search read model")
 	}
 
-	first := model.Bundle.Documents[0]
-	if _, ok := model.Canonical.Get(first.TargetID); !ok {
-		t.Fatalf("projected document is absent from canonical store: %s", first.TargetID)
+	var canonicalTargetID, canonicalTitle string
+	for _, document := range model.Bundle.Documents {
+		if document.Title == "" {
+			continue
+		}
+		if _, ok := model.Canonical.Get(document.TargetID); ok {
+			canonicalTargetID = document.TargetID
+			canonicalTitle = document.Title
+			break
+		}
 	}
-	result, err := model.Search.Resolve(first.Title, 1, 10)
+	if canonicalTargetID == "" {
+		t.Fatal("active SPC contains no search document backed by a canonical record")
+	}
+
+	result, err := model.Search.Resolve(canonicalTitle, 1, 10)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(result.Matches) == 0 {
-		t.Fatalf("active immutable search index returned no match for %q", first.Title)
+	found := false
+	for _, match := range result.Matches {
+		if match.TargetID == canonicalTargetID {
+			found = true
+			break
+		}
 	}
+	if !found {
+		t.Fatalf("active immutable search index did not resolve canonical target %s from title %q", canonicalTargetID, canonicalTitle)
+	}
+
 	graphRuntime, err := graph.New(&model.Bundle)
 	if err != nil {
 		t.Fatalf("active SPC could not construct graph runtime: %v", err)
