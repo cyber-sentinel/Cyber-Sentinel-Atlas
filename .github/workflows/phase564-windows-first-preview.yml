@@ -3,6 +3,7 @@ name: Phase 5.6.4 Windows First Preview Package
 on:
   push:
     branches:
+      - main
       - feature/phase-5.6-windows-desktop-mvp
     paths:
       - 'benchmarks/desktop/phase56/candidates/tauri/**'
@@ -242,7 +243,7 @@ jobs:
           if ($probe.status_result.network_listener -ne $false -or $probe.status_result.offline_capable -ne $true) {
             throw 'packaged Shared Core did not prove offline/no-listener state'
           }
-          if ($probe.status_result.build.commit -ne $env:GITHUB_SHA) { throw 'packaged core exact-head commit mismatch' }
+          if ($probe.status_result.core_commit -ne $env:GITHUB_SHA) { throw 'packaged core exact-head commit mismatch' }
           Copy-Item $Evidence package-artifact\phase564-probe.json -Force
 
       - name: Prove sidecar corruption fails closed and recovery succeeds
