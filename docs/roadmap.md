@@ -64,6 +64,8 @@ Executable candidate hosts are available for:
 
 Each consumes the same verified production `atlas-core` sidecar and does not implement a parallel canonical/search/trust engine.
 
+Dependency reproducibility is now explicit: Electron uses committed `package-lock.json`; Tauri uses a committed and SHA-256-guarded `Cargo.lock`, and Candidate CI builds/resolves metadata with `--locked` rather than regenerating dependency resolution.
+
 ### Phase 5.6.2 — Hard Gates, Measurements & ADR-0026
 
 Status: **IN PROGRESS**
@@ -76,20 +78,20 @@ Mandatory gate state:
 - G-D4 Sidecar location/integrity/version: **PASS**
 - G-D5 Active verified pack → canonical/search/graph/provenance: **PASS / VERIFIED**
 - G-D6 Verified pack update + safe manual rollback: **PASS / VERIFIED**
-- G-D7 Desktop security surface: **IN PROGRESS**
-- G-D8 Installer + portable feasibility: **PENDING**
+- G-D7 Desktop security surface: **IMPLEMENTED / CI PENDING**
+- G-D8 Installer + portable feasibility: **IMPLEMENTED / CI PENDING**
 - G-D9 Startup / IPC / process / memory / package measurements and reproducibility closure: **PARTIAL**
+
+G-D7 and G-D8 are now executable/machine-enforced gates rather than pending design work. G-D8 currently proves portable relocation feasibility and records packaging/signing prerequisites; it does not replace the real installer/signing/clean-machine work reserved for Phase 5.6.4.
 
 Current execution sequence:
 
 ```text
-G-D7  Desktop Security Surface
-  ↓
-G-D8  Installer / Portable Feasibility
-  ↓
-G-D9  Measurement + Reproducibility Closure
-  ↓
-ADR-0026  Accept one eligible Windows host
+G-D7 / G-D8  Exact-head Windows CI verification
+       ↓
+G-D9           Measurement closure
+       ↓
+ADR-0026       Accept one eligible Windows host
 ```
 
 No Desktop framework may be selected before every mandatory gate is closed. Build success alone is not a selection signal.
