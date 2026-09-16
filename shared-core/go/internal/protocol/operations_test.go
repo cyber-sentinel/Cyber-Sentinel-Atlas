@@ -17,11 +17,11 @@ func (testOperations) Handle(method string, params json.RawMessage) (any, *Opera
 
 func TestOperationalAllowlistAfterHandshake(t *testing.T) {
 	input := &bytes.Buffer{}
-	writeRequest(t, input, `{"id":"h","method":"core.handshake","params":{"protocol":"atlas-core","version":"1.0.0","client_name":"test","client_version":"1","session_nonce":"n"}}`)
-	writeRequest(t, input, `{"id":"p","method":"pack.status","params":{}}`)
-	writeRequest(t, input, `{"id":"u","method":"pack.update","params":{}}`)
-	writeRequest(t, input, `{"id":"r","method":"pack.rollback","params":{}}`)
-	writeRequest(t, input, `{"id":"x","method":"shell.exec","params":{}}`)
+	writeRequest(t, input, "{\"id\":\"h\",\"method\":\"core.handshake\",\"params\":{\"protocol\":\"atlas-core\",\"version\":\"1.0.0\",\"client_name\":\"test\",\"client_version\":\"1\",\"session_nonce\":\"n\"}}")
+	writeRequest(t, input, "{\"id\":\"p\",\"method\":\"pack.status\",\"params\":{}}")
+	writeRequest(t, input, "{\"id\":\"u\",\"method\":\"pack.update\",\"params\":{}}")
+	writeRequest(t, input, "{\"id\":\"r\",\"method\":\"pack.rollback\",\"params\":{}}")
+	writeRequest(t, input, "{\"id\":\"x\",\"method\":\"shell.exec\",\"params\":{}}")
 	output := &bytes.Buffer{}
 	server := Server{Build: BuildInfo{Version: "v", Commit: "c"}, Operations: testOperations{}}
 	if err := server.Serve(input, output); err != nil {

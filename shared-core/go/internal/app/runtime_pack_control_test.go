@@ -27,7 +27,7 @@ func TestPackStatusIncludesCoreOwnedControlState(t *testing.T) {
 func TestPackControlMethodsRejectCallerSuppliedFields(t *testing.T) {
 	runtime := NewUnconfiguredAt(t.TempDir())
 	for _, method := range []string{"pack.update", "pack.rollback"} {
-		_, operationError := runtime.Handle(method, json.RawMessage(`{"path":"C:\\untrusted.atlaspack","generation_id":"caller-selected"}`))
+		_, operationError := runtime.Handle(method, json.RawMessage([]byte("{\"path\":\"C:\\\\untrusted.atlaspack\",\"generation_id\":\"caller-selected\"}")))
 		if operationError == nil || operationError.Code != protocol.CodeInvalidRequest {
 			t.Fatalf("%s must reject non-empty params: %#v", method, operationError)
 		}
