@@ -42,34 +42,31 @@ func TestLoadActiveReadModelFromInstalledGeneration(t *testing.T) {
 		t.Fatal("active generation did not produce a complete canonical/search read model")
 	}
 
-	var canonicalTargetID, canonicalTitle string
-	for _, document := range model.Bundle.Documents {
-		if document.Title == "" {
-			continue
-		}
-		if _, ok := model.Canonical.Get(document.TargetID); ok {
-			canonicalTargetID = document.TargetID
-			canonicalTitle = document.Title
-			break
-		}
+	canonicalIDs := model.Canonical.IDs()
+	if len(canonicalIDs) == 0 {
+		t.Fatal("active generation canonical store is empty")
 	}
-	if canonicalTargetID == "" {
-		t.Fatal("active SPC contains no search document backed by a canonical record")
+	if _, ok := model.Canonical.Get(canonicalIDs[0]); !ok {
+		t.Fatalf("active canonical record is not retrievable: %s", canonicalIDs[0])
 	}
 
-	result, err := model.Search.Resolve(canonicalTitle, 1, 10)
+	searchDocument := model.Bundle.Documents[0]
+	if searchDocument.TargetID == "" || searchDocument.Title == "" {
+		t.Fatalf("active SPC contains an incomplete search document: %#v", searchDocument)
+	}
+	result, err := model.Search.Resolve(searchDocument.Title, 1, 10)
 	if err != nil {
 		t.Fatal(err)
 	}
 	found := false
 	for _, match := range result.Matches {
-		if match.TargetID == canonicalTargetID {
+		if match.TargetID == searchDocument.TargetID {
 			found = true
 			break
 		}
 	}
 	if !found {
-		t.Fatalf("active immutable search index did not resolve canonical target %s from title %q", canonicalTargetID, canonicalTitle)
+		t.Fatalf("active immutable search index did not resolve SPC target %s from title %q", searchDocument.TargetID, searchDocument.Title)
 	}
 
 	graphRuntime, err := graph.New(&model.Bundle)
@@ -78,5 +75,34 @@ func TestLoadActiveReadModelFromInstalledGeneration(t *testing.T) {
 	}
 	if graphRuntime == nil {
 		t.Fatal("active SPC graph runtime is nil")
+	}
+
+	var graphEdgeFound bool
+	for _, edge := range model.Bundle.Edges {
+		if edge.SourceID == edge.TargetID {
+			continue
+		}
+		pivots, err := graphRuntime.Expand(
+			[]string{edge.SourceID},
+			1,
+			[]string{edge.RelationshipType},
+			"outgoing",
+			10,
+		)
+		if err != nil {
+			t.Fatalf("active graph expansion failed for %#v: %v", edge, err)
+		}
+		for _, pivot := range pivots {
+			if pivot.TargetID == edge.TargetID && pivot.RelationshipType == edge.RelationshipType {
+				graphEdgeFound = true
+				break
+			}
+		}
+		if graphEdgeFound {
+			break
+		}
+	}
+	if !graphEdgeFound {
+		t.Fatal("active SPC did not expose a traversable non-self graph edge")
 	}
 }
