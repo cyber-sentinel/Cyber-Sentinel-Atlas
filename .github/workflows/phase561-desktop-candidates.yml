@@ -6,6 +6,7 @@ on:
       - feature/phase-5.6-windows-desktop-mvp
     paths:
       - 'benchmarks/desktop/phase56/candidates/**'
+      - 'benchmarks/desktop/phase56/measure_candidates.ps1'
       - 'benchmarks/desktop/phase56/summarize_candidates.py'
       - '.github/workflows/phase561-desktop-candidates.yml'
       - 'shared-core/go/**'
@@ -14,6 +15,7 @@ on:
       - main
     paths:
       - 'benchmarks/desktop/phase56/candidates/**'
+      - 'benchmarks/desktop/phase56/measure_candidates.ps1'
       - 'benchmarks/desktop/phase56/summarize_candidates.py'
       - '.github/workflows/phase561-desktop-candidates.yml'
       - 'shared-core/go/**'
@@ -177,10 +179,16 @@ jobs:
           $ErrorActionPreference = 'Stop'
           . ./benchmarks/desktop/phase56/candidates/tauri/prepare_msvc.ps1
           $Manifest = Join-Path (Get-Location) 'benchmarks\desktop\phase56\candidates\tauri\Cargo.toml'
+          $Lock = Join-Path (Split-Path -Parent $Manifest) 'Cargo.lock'
           $env:CARGO_TARGET_DIR = Join-Path $env:RUNNER_TEMP 'atlas-tauri-phase561-target'
           Remove-Item -Recurse -Force $env:CARGO_TARGET_DIR -ErrorAction SilentlyContinue
           cargo generate-lockfile --manifest-path $Manifest
           if ($LASTEXITCODE -ne 0) { throw "cargo generate-lockfile failed" }
+          $expectedLockHash = 'dd2a97c412b0f7289f07ba16cfc28b4cca02ea9b7a5f5ed4d488b34977e37b3e'
+          $actualLockHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $Lock).Hash.ToLowerInvariant()
+          if ($actualLockHash -ne $expectedLockHash) {
+            throw "Tauri Cargo.lock drift detected: expected $expectedLockHash, found $actualLockHash"
+          }
 
           if ($env:ATLAS_TAURI_BUILD_MODE -eq 'cargo-xwin') {
             cargo xwin build --release --locked --manifest-path $Manifest --target x86_64-pc-windows-msvc
@@ -204,7 +212,17 @@ jobs:
             -ArgumentList @('--atlas-probe',"--probe-output=$env:PHASE561_EVIDENCE\tauri.json") `
             -Wait -PassThru
           if ($process.ExitCode -ne 0) { throw "Tauri candidate probe failed with exit code $($process.ExitCode)" }
-          Copy-Item 'benchmarks\desktop\phase56\candidates\tauri\Cargo.lock' "$env:PHASE561_EVIDENCE\tauri-Cargo.lock" -Force
+          Copy-Item $Lock "$env:PHASE561_EVIDENCE\tauri-Cargo.lock" -Force
+
+      - name: Measure candidates with common external harness
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          ./benchmarks/desktop/phase56/measure_candidates.ps1 `
+            -StageDir $env:PHASE561_STAGE `
+            -EvidenceDir $env:PHASE561_EVIDENCE `
+            -WarmupCount 1 `
+            -MeasuredCount 5
 
       - name: Summarize fail-closed candidate evidence
         shell: pwsh
