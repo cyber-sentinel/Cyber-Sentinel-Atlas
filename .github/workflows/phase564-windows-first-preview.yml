@@ -339,17 +339,57 @@ jobs:
               if ($descendantIds.Contains([int]$child.ParentProcessId)) { [void]$descendantIds.Add([int]$child.ProcessId) }
             }
           }
-          $listeners = @()
-          foreach ($processId in $descendantIds) {
-            $listeners += @(Get-NetTCPConnection -State Listen -OwningProcess $processId -ErrorAction SilentlyContinue)
-            $listeners += @(Get-NetUDPEndpoint -OwningProcess $processId -ErrorAction SilentlyContinue)
-          }
-          if ($listeners.Count -ne 0) { throw "packaged GUI process tree opened network listener/UDP endpoint: $($listeners | Out-String)" }
 
-          $processTree = @($descendantIds | Sort-Object)
+          $processRows = @{}
+          foreach ($row in Get-CimInstance Win32_Process) {
+            if ($descendantIds.Contains([int]$row.ProcessId)) { $processRows[[int]$row.ProcessId] = $row }
+          }
+
+          $tcpListeners = @()
+          $udpEndpoints = @()
+          foreach ($processId in $descendantIds) {
+            $tcpListeners += @(Get-NetTCPConnection -State Listen -OwningProcess $processId -ErrorAction SilentlyContinue)
+            $udpEndpoints += @(Get-NetUDPEndpoint -OwningProcess $processId -ErrorAction SilentlyContinue)
+          }
+          if ($tcpListeners.Count -ne 0) {
+            throw "packaged GUI process tree opened TCP listener: $($tcpListeners | Format-List LocalAddress,LocalPort,OwningProcess | Out-String)"
+          }
+
+          $webViewUdpEvidence = @()
+          $forbiddenUdpEvidence = @()
+          foreach ($endpoint in $udpEndpoints) {
+            $ownerId = [int]$endpoint.OwningProcess
+            $owner = $processRows[$ownerId]
+            $ownerName = if ($owner) { [string]$owner.Name } else { '<unknown>' }
+            $entry = [ordered]@{
+              pid = $ownerId
+              process_name = $ownerName
+              local_address = [string]$endpoint.LocalAddress
+              local_port = [int]$endpoint.LocalPort
+            }
+            if ($ownerName -ieq 'msedgewebview2.exe') {
+              $webViewUdpEvidence += [pscustomobject]$entry
+            }
+            else {
+              $forbiddenUdpEvidence += [pscustomobject]$entry
+            }
+          }
+          if ($forbiddenUdpEvidence.Count -ne 0) {
+            throw "ATLAS/Core or unexpected GUI descendant opened UDP endpoint: $($forbiddenUdpEvidence | Format-List | Out-String)"
+          }
+
+          $processTree = @(
+            foreach ($processId in ($descendantIds | Sort-Object)) {
+              $row = $processRows[[int]$processId]
+              [ordered]@{
+                pid = [int]$processId
+                process_name = if ($row) { [string]$row.Name } else { '<unknown>' }
+              }
+            }
+          )
           $provisioned = $env:PHASE564_WEBVIEW2_PROVISIONED -eq 'true'
           $evidence = [ordered]@{
-            evidence_version = 1
+            evidence_version = 2
             phase = '5.6.4'
             commit = $env:GITHUB_SHA
             clean_environment = [ordered]@{ runner='github-hosted'; image='windows-latest'; relocated_path=$Root }
@@ -360,15 +400,21 @@ jobs:
               prerequisite_source=$env:PHASE564_WEBVIEW2_SOURCE
               provisioned_by_ci=$provisioned
               downloaded_by_atlas=$false
+              runtime_udp_endpoints=$webViewUdpEvidence
             }
-            gui = [ordered]@{ launched=$true; remained_alive_for_seconds=8; process_tree_ids=$processTree }
-            network = [ordered]@{ tcp_listener_seen=$false; udp_endpoint_seen=$false }
+            gui = [ordered]@{ launched=$true; remained_alive_for_seconds=8; process_tree=$processTree }
+            network = [ordered]@{
+              tcp_listener_seen=$false
+              atlas_or_core_udp_endpoint_seen=$false
+              webview2_runtime_udp_endpoint_count=$webViewUdpEvidence.Count
+              policy='no TCP listener anywhere in GUI tree; no UDP endpoint owned by ATLAS/Core or unexpected descendants; WebView2 runtime UDP is recorded explicitly as platform-runtime surface'
+            }
             integrity_negative_test = 'PASS_FAIL_CLOSED'
             recovery_after_verified_restore = 'PASS'
             portable_relocation = 'PASS'
           }
           $EvidencePath = Join-Path package-artifact 'phase564-clean-windows-evidence.json'
-          $evidence | ConvertTo-Json -Depth 8 | Set-Content -Encoding utf8 $EvidencePath
+          $evidence | ConvertTo-Json -Depth 10 | Set-Content -Encoding utf8 $EvidencePath
           Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
 
       - name: Upload clean-machine acceptance evidence
