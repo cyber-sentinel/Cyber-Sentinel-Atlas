@@ -170,7 +170,7 @@ Current mandatory-gate state:
 | G-D3 | Offline / no-default-listener behavior | **PARTIAL — core/TCP pass; UDP review pending** |
 | G-D4 | Deterministic sidecar location + integrity/version | **PASS** |
 | G-D5 | Active verified pack → search / record / graph / provenance read model | **PASS / VERIFIED** |
-| G-D6 | Verified pack state, update and safe manual rollback | **IN PROGRESS — next implementation boundary** |
+| G-D6 | Verified pack state, update and safe manual rollback | **IN PROGRESS — core-owned primitive implementation started** |
 | G-D7 | Desktop security surface | **PENDING** |
 | G-D8 | Installer + portable feasibility | **PENDING** |
 | G-D9 | Comparable startup / IPC / process / memory / package measurements | **PARTIAL — common harness captured; closure pending** |
