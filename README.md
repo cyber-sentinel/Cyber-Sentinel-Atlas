@@ -11,7 +11,7 @@ Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: an o
 > **Current delivery boundary:** Phase 5.6 — Windows Desktop MVP
 > **Completed desktop slices:** 5.6.0 COMPLETE / VERIFIED; 5.6.1 COMPLETE / VERIFIED
 > **Active desktop slice:** 5.6.2 — Mandatory Hard Gates, Measurements & Desktop Selection
-> **Current technical focus:** G-D6 — Verified Pack Update + Safe Manual Rollback
+> **Current technical focus:** G-D3 — UDP / no-default-listener closure, then G-D7 Desktop Security
 > **Desktop framework:** Not selected; ADR-0026 remains blocked until every mandatory gate is closed
 > **Repository visibility:** Public
 > **Release state:** Pre-preview / unreleased
@@ -159,7 +159,7 @@ Electron uses a committed dependency lockfile. Tauri currently builds with a pin
 
 **IN PROGRESS**
 
-The signed-pack Active Generation integration gate proves a verified pack can be installed and loaded into the production read model on Windows, including canonical data, immutable search, graph runtime and generation identity. **G-D5 is closed and verified.** The current G-D6 implementation through core-controlled pending-pack consumption is green in the dedicated exact-head Active Pack Integration workflow; process-level signed round-trip and failure/recovery closure remain before the gate can be declared verified.
+The signed-pack Active Generation integration gate proves a verified pack can be installed and loaded into the production read model on Windows, including canonical data, immutable search, graph runtime and generation identity. **G-D5 is closed and verified. G-D6 is also closed and verified.** The active engineering focus is now G-D3 UDP/no-default-listener closure, followed by G-D7 Desktop Security.
 
 Current mandatory-gate state:
 
@@ -170,12 +170,12 @@ Current mandatory-gate state:
 | G-D3 | Offline / no-default-listener behavior | **PARTIAL — core/TCP pass; UDP review pending** |
 | G-D4 | Deterministic sidecar location + integrity/version | **PASS** |
 | G-D5 | Active verified pack → search / record / graph / provenance read model | **PASS / VERIFIED** |
-| G-D6 | Verified pack state, update and safe manual rollback | **IN PROGRESS — primitives + IPC + same-process reload implemented and integration-green; process-level signed round-trip/recovery closure pending** |
+| G-D6 | Verified pack state, update and safe manual rollback | **PASS / VERIFIED** |
 | G-D7 | Desktop security surface | **PENDING** |
 | G-D8 | Installer + portable feasibility | **PENDING** |
 | G-D9 | Comparable startup / IPC / process / memory / package measurements | **PARTIAL — common harness captured; closure pending** |
 
-G-D6 now has a core-owned control path on the feature branch: update input is accepted only from the fixed runtime inbox (`inbox/pending.atlaspack`); `pack.update` and `pack.rollback` are exposed through the bounded stdio protocol with empty-object parameters only; TUF verification, trusted-time state and highest-seen anti-rollback remain core-owned; rollback targets are core-recorded rather than caller-selected; successful generation changes hot-reload the read model in the same `atlas-core` process; recovery attempts fail closed; and a successfully verified pending archive is consumed without deleting a concurrently replaced pending file. These changes are green in the dedicated Windows Active Pack Integration workflow at commit `f06b38601dec3bce4683124ac4b2b659da645877`. This is **not yet G-D6 closure**: an actual process-level signed update → status/search → rollback → status/search round-trip plus explicit failure/recovery coverage must still pass exact-head CI.
+G-D6 is verified through the production bounded stdio boundary. Update input is accepted only from the fixed runtime inbox (`inbox/pending.atlaspack`); `pack.update` and `pack.rollback` accept empty-object parameters only; TUF verification, trusted-time state and highest-seen anti-rollback remain core-owned; rollback targets are core-recorded rather than caller-selected; successful generation changes hot-reload the read model in the same `atlas-core` process; and a successfully verified pending archive is consumed without deleting a concurrently replaced pending file. Exact-head Windows run `35075820479` at commit `32874c7b95239579d6c11839a325dec0081d18f5` passed the normal Go regression suite, the signed-pack integration suite, `go vet`, and the canonical-schema drift guard. The process-level test builds and launches the real `atlas-core.exe`, proves signed update → same-process status/search → manual rollback → same-process status/search, confirms highest-seen trust is not rewound, and verifies that a pack signed by an untrusted root is rejected while the active generation and search remain usable.
 
 Only candidates that pass **every mandatory gate** may enter final weighted comparison. ADR-0026 therefore remains intentionally undecided.
 
@@ -273,7 +273,8 @@ Stage 1 Governance / Architecture Sync         COMPLETE
      5.6.1 Executable Candidate Builds         COMPLETE / VERIFIED
      5.6.2 Hard Gates / Selection / ADR-0026   IN PROGRESS
             G-D5 Active Pack Integration       COMPLETE / VERIFIED
-            G-D6 Update / Safe Rollback        IN PROGRESS — IPC/reload integration-green; round-trip closure pending
+            G-D6 Update / Safe Rollback        COMPLETE / VERIFIED
+            G-D3 UDP / No-listener Closure     IN PROGRESS
      5.6.3 First Preview UI                    PLANNED
      5.6.4 Windows Packaging / Smoke Closure   PLANNED
 5.7  Web / PWA                                 DEFERRED BEYOND FIRST PREVIEW
