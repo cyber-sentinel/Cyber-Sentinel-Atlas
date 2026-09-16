@@ -8,9 +8,10 @@ Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: an o
 > **Completed foundation:** Phases 5.1–5.5 COMPLETE / MERGED / VERIFIED
 > **Windows Desktop:** Phase 5.6.0–5.6.4 COMPLETE / VERIFIED on the active feature branch
 > **Desktop host:** Tauri 2.x — ADR-0026 Accepted
-> **Hard gates:** G-D1 through G-D9 CLOSED / VERIFIED
-> **Packaging gate:** Phase 5.6.4 exact-head package + clean-Windows smoke VERIFIED
-> **Release state:** Pre-preview / unreleased — PR, merge and post-merge verification pending
+> **Hard gates:** G-D1 through G-D9 CLOSED / VERIFIED from frozen Phase 5.6.2 selection evidence
+> **Packaging gate:** Phase 5.6.4 Windows package + clean-Windows smoke VERIFIED
+> **Current release closure:** PR #39 open; final regression CI active; merge and post-merge verification pending
+> **Release state:** Pre-preview / unreleased
 > **Repository visibility:** Public
 
 Foundation regression invariants: **Phase 5.1 — Product Foundation: COMPLETE**; **Stage 1 — Governance / Architecture Sync: COMPLETE**.
@@ -135,7 +136,7 @@ Tauri 2.x, Electron and .NET 10/WPF were built and measured against the same pro
 
 **COMPLETE / VERIFIED**
 
-Exact-head Candidate Evidence run `35090304056` closed G-D1 through G-D9, including Windows build, bounded stdio, offline/no-listener posture, sidecar integrity, verified-pack read model/update/rollback, desktop security surface, portable feasibility and common startup/IPC/process/memory/package measurements.
+Frozen Candidate Evidence run `35090304056` closed G-D1 through G-D9 for the selection decision, including Windows build, bounded stdio, offline/no-listener posture, sidecar integrity, verified-pack read model/update/rollback, desktop security surface, portable feasibility and common startup/IPC/process/memory/package measurements.
 
 | Gate | State |
 | --- | --- |
@@ -150,6 +151,8 @@ Exact-head Candidate Evidence run `35090304056` closed G-D1 through G-D9, includ
 | G-D9 Comparable measurements | **PASS / VERIFIED** |
 
 The frozen weighted review is in `benchmarks/desktop/phase56/weighted-review.json`. ADR-0026 is accepted with **Tauri 2.x selected**.
+
+The historical multi-candidate evidence workflow remains part of regression CI. A regression rerun can block release closure without changing the already accepted framework selection; any such failure must still be diagnosed and closed before merge.
 
 ### 5.6.3 — First Preview UI
 
@@ -177,7 +180,7 @@ Security regression evidence enforces one main-window capability, explicit comma
 
 **COMPLETE / VERIFIED ON FEATURE BRANCH**
 
-Exact-head workflow run `35095383694` at commit `2517ed5714dec2efc97db0df7789375c5aae50bb` completed successfully.
+Latest verified implementation-head PR packaging evidence: workflow run `35100673319` at commit `8feb39a62a1b480428b180ad68cf6ab88340f513` completed successfully. Earlier acceptance run `35095383694` remains supporting evidence for the same packaging boundary.
 
 The workflow built one byte-bound portable Windows First Preview ZIP and consumed that same immutable artifact on a fresh GitHub-hosted Windows runner. Verified controls include:
 
@@ -232,12 +235,14 @@ Controlled content flows between projects only through explicit provenance, vali
 
 ## Release discipline
 
-The feature branch has now closed the complete Phase 5.6 implementation and packaging/smoke gate. The remaining release-authority sequence is:
+The feature branch has closed the Phase 5.6 implementation and packaging/smoke boundary. PR #39 is the active release-closure vehicle. The remaining release-authority sequence is:
 
 ```text
-Feature-branch evidence complete
+Feature-branch implementation evidence complete
         ↓
-PR review + CI
+PR #39 final regression CI / review — ACTIVE
+        ↓
+Close every remaining regression blocker
         ↓
 Merge to main
         ↓
@@ -246,4 +251,4 @@ Post-merge package verification
 FIRST PREVIEW READY
 ```
 
-Until merge and post-merge verification complete, the correct state remains **First Preview candidate / pre-preview**.
+Until all PR checks pass, merge completes, and post-merge verification succeeds, the correct state remains **First Preview candidate / pre-preview**.
