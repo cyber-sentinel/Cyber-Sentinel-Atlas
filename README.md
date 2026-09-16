@@ -6,16 +6,16 @@ Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: an o
 
 > **Development:** Active
 > **Completed foundation:** Phases 5.1–5.5 COMPLETE / MERGED / VERIFIED
-> **Windows Desktop:** Phase 5.6.0–5.6.3 COMPLETE / VERIFIED on the active feature branch
-> **Active closure:** Phase 5.6.4 — Windows package + clean-machine smoke
+> **Windows Desktop:** Phase 5.6.0–5.6.4 COMPLETE / VERIFIED on the active feature branch
 > **Desktop host:** Tauri 2.x — ADR-0026 Accepted
 > **Hard gates:** G-D1 through G-D9 CLOSED / VERIFIED
-> **Release state:** Pre-preview / unreleased — First Preview candidate, not yet merged/post-merge verified
+> **Packaging gate:** Phase 5.6.4 exact-head package + clean-Windows smoke VERIFIED
+> **Release state:** Pre-preview / unreleased — PR, merge and post-merge verification pending
 > **Repository visibility:** Public
 
 Foundation regression invariants: **Phase 5.1 — Product Foundation: COMPLETE**; **Stage 1 — Governance / Architecture Sync: COMPLETE**.
 
-Public repository visibility does **not** imply public-release readiness. `main` remains release authority. First Preview readiness is claimed only after the package/smoke gate, PR merge and post-merge verification succeed.
+Public repository visibility does **not** imply public-release readiness. `main` remains release authority. `FIRST PREVIEW READY` is reserved for successful PR review, merge to `main`, and required post-merge verification.
 
 Detailed implementation state is maintained in [Current Status](docs/current-status.md), [Project State](docs/project-state.md), and the [Roadmap](docs/roadmap.md).
 
@@ -175,9 +175,23 @@ Security regression evidence enforces one main-window capability, explicit comma
 
 ### 5.6.4 — Windows Packaging / Clean-Machine Smoke
 
-**IN PROGRESS**
+**COMPLETE / VERIFIED ON FEATURE BRANCH**
 
-The workflow builds one byte-bound portable Windows ZIP and consumes that same immutable artifact on a fresh GitHub-hosted Windows runner. It validates ZIP/payload hashes, exact Shared Core commit, relocation, offline/no-listener posture, deliberate sidecar-corruption rejection, recovery after verified restoration, WebView2 prerequisite handling and GUI liveness.
+Exact-head workflow run `35095383694` at commit `2517ed5714dec2efc97db0df7789375c5aae50bb` completed successfully.
+
+The workflow built one byte-bound portable Windows First Preview ZIP and consumed that same immutable artifact on a fresh GitHub-hosted Windows runner. Verified controls include:
+
+- ZIP SHA-256 plus host/sidecar hash and size binding;
+- exact Shared Core commit binding;
+- relocation to a path containing spaces;
+- packaged offline probe with `network_listener=false` and `offline_capable=true`;
+- deliberate sidecar corruption rejected fail-closed;
+- recovery after verified sidecar restoration;
+- WebView2 prerequisite detection without ATLAS runtime download/bootstrap;
+- GUI launch/liveness on clean Windows;
+- zero TCP listeners in the packaged GUI process tree;
+- zero UDP endpoints owned by ATLAS or Shared Core;
+- runtime-owned WebView2 UDP, when present, explicitly attributed and recorded as evidence rather than silently ignored.
 
 The First Preview artifact is intentionally an **unsigned portable ZIP**. Production Authenticode signing and public distribution hardening remain later release-readiness boundaries. Binary auto-update is not part of First Preview.
 
@@ -218,4 +232,18 @@ Controlled content flows between projects only through explicit provenance, vali
 
 ## Release discipline
 
-`FIRST PREVIEW READY` is reserved for a successful Phase 5.6.4 package/clean-machine gate, reviewed PR merge to `main`, and required post-merge verification. Until those events complete, the correct state is **First Preview candidate**.
+The feature branch has now closed the complete Phase 5.6 implementation and packaging/smoke gate. The remaining release-authority sequence is:
+
+```text
+Feature-branch evidence complete
+        ↓
+PR review + CI
+        ↓
+Merge to main
+        ↓
+Post-merge package verification
+        ↓
+FIRST PREVIEW READY
+```
+
+Until merge and post-merge verification complete, the correct state remains **First Preview candidate / pre-preview**.
