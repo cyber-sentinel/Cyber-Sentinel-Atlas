@@ -63,6 +63,12 @@ def verify_package(stage: Path, subdir: str, host_name: str, evidence: dict) -> 
     }
 
 
+def verify_network_probe(item: dict, context: str) -> None:
+    require(item.get("network_listener_seen") is False, f"network listener/endpoint observed {context}")
+    require(item.get("tcp_listener_seen") is False, f"TCP listener observed {context}")
+    require(item.get("udp_endpoint_seen") is False, f"UDP endpoint observed {context}")
+
+
 def verify_common_measurements(evidence_dir: Path, packages: dict[str, dict], common_hash: str) -> dict[str, dict]:
     path = evidence_dir / COMMON_MEASUREMENTS
     require(path.is_file(), f"missing common measurement evidence: {path}")
@@ -72,6 +78,7 @@ def verify_common_measurements(evidence_dir: Path, packages: dict[str, dict], co
     require(document.get("phase") == "5.6.2", "common measurement phase mismatch")
     require(document.get("measurement_scope") == "common-external-windows-host-probe", "common measurement scope mismatch")
     require(document.get("common_sidecar_sha256") == common_hash, "common measurement sidecar hash mismatch")
+    require(isinstance(document.get("network_probe_note"), str) and "TCP" in document["network_probe_note"] and "UDP" in document["network_probe_note"], "common measurement network probe note is incomplete")
     require(isinstance(document.get("warmup_count"), int) and document["warmup_count"] >= 1, "common measurement warmup count is insufficient")
     require(isinstance(document.get("measured_count"), int) and document["measured_count"] >= 5, "common measurement sample count is insufficient")
 
@@ -88,14 +95,14 @@ def verify_common_measurements(evidence_dir: Path, packages: dict[str, dict], co
         require(item.get("package_size_bytes") == package["package_size_bytes"], f"common measurement package size mismatch for {candidate}")
         require(item.get("host_size_bytes") == package["host_size_bytes"], f"common measurement host size mismatch for {candidate}")
         require(item.get("sidecar_size_bytes") == package["sidecar_size_bytes"], f"common measurement sidecar size mismatch for {candidate}")
-        require(item.get("network_listener_seen") is False, f"network listener observed for {candidate}")
+        verify_network_probe(item, f"for {candidate}")
         require(item.get("warmup_count") == document["warmup_count"], f"warmup count mismatch for {candidate}")
         require(item.get("measured_count") == document["measured_count"], f"measured count mismatch for {candidate}")
 
         first = item.get("first_launch")
         require(isinstance(first, dict), f"first-launch evidence missing for {candidate}")
         require(first.get("candidate") == candidate and first.get("sample_kind") == "first-launch", f"invalid first-launch identity for {candidate}")
-        require(first.get("network_listener_seen") is False, f"network listener observed during first launch for {candidate}")
+        verify_network_probe(first, f"during first launch for {candidate}")
         require(first.get("sidecar_sha256") == common_hash, f"first-launch sidecar mismatch for {candidate}")
         require(first.get("host_sha256") == package["host_sha256"], f"first-launch host hash mismatch for {candidate}")
         require(positive_number(first.get("external_process_total_ms")), f"invalid first-launch timing for {candidate}")
@@ -108,7 +115,7 @@ def verify_common_measurements(evidence_dir: Path, packages: dict[str, dict], co
             require(isinstance(sample, dict), f"invalid measured sample for {candidate}")
             require(sample.get("candidate") == candidate and sample.get("sample_kind") == "measured", f"invalid measured sample identity for {candidate}")
             require(sample.get("sample_index") == index, f"measured sample index mismatch for {candidate}")
-            require(sample.get("network_listener_seen") is False, f"network listener observed in measured sample for {candidate}")
+            verify_network_probe(sample, f"in measured sample {index} for {candidate}")
             require(sample.get("sidecar_sha256") == common_hash, f"measured sidecar mismatch for {candidate}")
             require(sample.get("host_sha256") == package["host_sha256"], f"measured host hash mismatch for {candidate}")
             require(positive_number(sample.get("external_process_total_ms")), f"invalid measured timing for {candidate}")
@@ -133,6 +140,8 @@ def verify_common_measurements(evidence_dir: Path, packages: dict[str, dict], co
             "peak_tree_working_set_bytes_p95": item["peak_tree_working_set_bytes_p95"],
             "max_process_count_p95": item["max_process_count_p95"],
             "network_listener_seen": False,
+            "tcp_listener_seen": False,
+            "udp_endpoint_seen": False,
         }
 
     require(set(by_id) == set(CANDIDATES), "common measurement candidate set is incomplete")
@@ -209,10 +218,10 @@ def main() -> int:
         "observed_hard_gates": {
             "G-D1-windows-clean-build": "PASS",
             "G-D2-atlas-core-stdio-handshake-and-status": "PASS",
-            "G-D3-offline-no-default-network-listener": "CORE_AND_TCP_PROCESS_TREE_PASS_UDP_REVIEW_PENDING",
+            "G-D3-offline-no-default-network-listener": "PASS",
             "G-D4-sidecar-location-and-integrity-control": "PASS",
-            "G-D5-search-record-graph-provenance-capability": "PENDING_5.6.2",
-            "G-D6-pack-status-update-and-rollback-capability": "PENDING_5.6.2",
+            "G-D5-search-record-graph-provenance-capability": "PASS_VERIFIED_SEPARATELY",
+            "G-D6-pack-status-update-and-rollback-capability": "PASS_VERIFIED_SEPARATELY",
             "G-D7-desktop-security-surface": "PENDING_5.6.2",
             "G-D8-installer-and-portable-mode-feasibility": "PENDING_5.6.2",
             "G-D9-footprint-startup-and-ipc-measurements": "PARTIAL_COMMON_HARNESS_CAPTURED",

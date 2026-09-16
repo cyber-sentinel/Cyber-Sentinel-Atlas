@@ -69,15 +69,28 @@ function Get-ProcessTreeIds {
     return @($seen | ForEach-Object { [int]$_ })
 }
 
-function Test-ListenerForPids {
+function Test-TCPListenerForPids {
     param([Parameter(Mandatory = $true)][int[]]$ProcessIds)
 
     if (-not (Get-Command Get-NetTCPConnection -ErrorAction SilentlyContinue)) {
-        throw 'Get-NetTCPConnection is required for the fail-closed network-listener measurement.'
+        throw 'Get-NetTCPConnection is required for the fail-closed TCP listener measurement.'
     }
     $listeners = @(Get-NetTCPConnection -State Listen -ErrorAction Stop)
     foreach ($listener in $listeners) {
         if ($ProcessIds -contains [int]$listener.OwningProcess) { return $true }
+    }
+    return $false
+}
+
+function Test-UDPEndpointForPids {
+    param([Parameter(Mandatory = $true)][int[]]$ProcessIds)
+
+    if (-not (Get-Command Get-NetUDPEndpoint -ErrorAction SilentlyContinue)) {
+        throw 'Get-NetUDPEndpoint is required for the fail-closed UDP endpoint measurement.'
+    }
+    $endpoints = @(Get-NetUDPEndpoint -ErrorAction Stop)
+    foreach ($endpoint in $endpoints) {
+        if ($ProcessIds -contains [int]$endpoint.OwningProcess) { return $true }
     }
     return $false
 }
@@ -116,7 +129,8 @@ function Invoke-ProbeSample {
 
     $peakTreeWorkingSet = 0L
     $maxProcessCount = 1
-    $networkListenerSeen = $false
+    $tcpListenerSeen = $false
+    $udpEndpointSeen = $false
     $timeout = [TimeSpan]::FromSeconds(25)
 
     while (-not $process.HasExited) {
@@ -138,8 +152,11 @@ function Invoke-ProbeSample {
         }
         if ($treeWorkingSet -gt $peakTreeWorkingSet) { $peakTreeWorkingSet = $treeWorkingSet }
 
-        if (-not $networkListenerSeen -and (Test-ListenerForPids -ProcessIds $treeIds)) {
-            $networkListenerSeen = $true
+        if (-not $tcpListenerSeen -and (Test-TCPListenerForPids -ProcessIds $treeIds)) {
+            $tcpListenerSeen = $true
+        }
+        if (-not $udpEndpointSeen -and (Test-UDPEndpointForPids -ProcessIds $treeIds)) {
+            $udpEndpointSeen = $true
         }
         Start-Sleep -Milliseconds 20
     }
@@ -165,8 +182,11 @@ function Invoke-ProbeSample {
     if ($probe.status_result.network_listener -ne $false -or $probe.status_result.offline_capable -ne $true) {
         throw "$Candidate core status violated the offline/no-listener boundary"
     }
-    if ($networkListenerSeen) {
+    if ($tcpListenerSeen) {
         throw "$Candidate process tree opened a TCP listener during the controlled probe"
+    }
+    if ($udpEndpointSeen) {
+        throw "$Candidate process tree opened a UDP endpoint during the controlled probe"
     }
 
     return [ordered]@{
@@ -176,7 +196,9 @@ function Invoke-ProbeSample {
         external_process_total_ms = [Math]::Round($stopwatch.Elapsed.TotalMilliseconds, 3)
         peak_tree_working_set_bytes = $peakTreeWorkingSet
         max_process_count = $maxProcessCount
-        network_listener_seen = $networkListenerSeen
+        network_listener_seen = ($tcpListenerSeen -or $udpEndpointSeen)
+        tcp_listener_seen = $tcpListenerSeen
+        udp_endpoint_seen = $udpEndpointSeen
         sidecar_sha256 = [string]$probe.sidecar_sha256
         host_sha256 = [string]$probe.host_sha256
         internal_round_trip_ms_reference_only = [double]$probe.round_trip_ms
@@ -241,6 +263,8 @@ foreach ($candidate in $candidates) {
         peak_tree_working_set_bytes_p95 = [Math]::Round((Get-PercentileNearestRank -Values $memory -Percentile 0.95), 0)
         max_process_count_p95 = [int](Get-PercentileNearestRank -Values $processCounts -Percentile 0.95)
         network_listener_seen = $false
+        tcp_listener_seen = $false
+        udp_endpoint_seen = $false
     }
 }
 
@@ -250,6 +274,7 @@ $document = [ordered]@{
     measurement_scope = 'common-external-windows-host-probe'
     ranking_note = 'Candidate-internal round_trip_ms is reference-only and MUST NOT be used for cross-candidate ranking.'
     first_launch_note = 'first_launch is the first launch after the staged build; it is not a laboratory OS cold-cache measurement.'
+    network_probe_note = 'The common harness fails closed if any candidate process tree owns a TCP listener or any UDP endpoint during a controlled probe.'
     warmup_count = $WarmupCount
     measured_count = $MeasuredCount
     common_sidecar_sha256 = $expectedSidecarHash
