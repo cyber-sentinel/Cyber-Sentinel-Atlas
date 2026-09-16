@@ -170,10 +170,12 @@ Current mandatory-gate state:
 | G-D3 | Offline / no-default-listener behavior | **PARTIAL — core/TCP pass; UDP review pending** |
 | G-D4 | Deterministic sidecar location + integrity/version | **PASS** |
 | G-D5 | Active verified pack → search / record / graph / provenance read model | **PASS / VERIFIED** |
-| G-D6 | Verified pack state, update and safe manual rollback | **IN PROGRESS — core-owned primitive implementation started** |
+| G-D6 | Verified pack state, update and safe manual rollback | **IN PROGRESS — core-owned primitives implemented; IPC, same-process reload and signed end-to-end closure pending** |
 | G-D7 | Desktop security surface | **PENDING** |
 | G-D8 | Installer + portable feasibility | **PENDING** |
 | G-D9 | Comparable startup / IPC / process / memory / package measurements | **PARTIAL — common harness captured; closure pending** |
+
+G-D6 now has a core-owned primitive layer on the feature branch: the update archive is consumed only from the fixed runtime inbox (`inbox/pending.atlaspack`), verification reuses durable TUF trust state and trusted-time protections, rollback targets are recorded by the core rather than supplied by the UI, and manual rollback does not rewind `HighestSeenPacks` or durable TUF metadata. This is **not yet G-D6 closure**: stdio protocol methods, same-process read-model replacement, signed end-to-end update/rollback coverage, and failure/recovery validation still have to pass CI.
 
 Only candidates that pass **every mandatory gate** may enter final weighted comparison. ADR-0026 therefore remains intentionally undecided.
 
@@ -261,6 +263,7 @@ Controlled content can flow between projects only through explicit provenance, v
 
 ```text
 5.1  Product Foundation                         COMPLETE
+Stage 1 Governance / Architecture Sync         COMPLETE
 5.2  Canonical Data Model                      COMPLETE
 5.3  Source & Ingestion Core                   COMPLETE
 5.4  Deterministic Search Core                 COMPLETE
@@ -270,7 +273,7 @@ Controlled content can flow between projects only through explicit provenance, v
      5.6.1 Executable Candidate Builds         COMPLETE / VERIFIED
      5.6.2 Hard Gates / Selection / ADR-0026   IN PROGRESS
             G-D5 Active Pack Integration       COMPLETE / VERIFIED
-            G-D6 Update / Safe Rollback        IN PROGRESS
+            G-D6 Update / Safe Rollback        IN PROGRESS — core primitives implemented; closure pending
      5.6.3 First Preview UI                    PLANNED
      5.6.4 Windows Packaging / Smoke Closure   PLANNED
 5.7  Web / PWA                                 DEFERRED BEYOND FIRST PREVIEW
