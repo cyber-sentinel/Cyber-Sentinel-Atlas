@@ -5,6 +5,8 @@
 Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: an offline-first, analyst-first platform for connecting security telemetry, canonical records, adversary behavior, detections, hunts, DFIR artifacts, defensive context, investigation pivots, and claim-level provenance into an inspectable knowledge system.
 
 > **Development:** Active
+> **Phase 5.1:** COMPLETE
+> **Stage 1:** COMPLETE
 > **Completed foundation:** Phases 5.1–5.5 COMPLETE / MERGED / VERIFIED
 > **Current delivery boundary:** Phase 5.6 — Windows Desktop MVP
 > **Completed desktop slices:** 5.6.0 COMPLETE / VERIFIED; 5.6.1 COMPLETE / VERIFIED
@@ -157,9 +159,7 @@ Electron uses a committed dependency lockfile. Tauri currently builds with a pin
 
 **IN PROGRESS**
 
-The current exact-head Windows evidence is green across Foundation Hygiene, Desktop Candidate Builds, Desktop Spike Bootstrap, and the dedicated Active Pack Integration workflow.
-
-The signed-pack Active Generation integration gate now proves a verified pack can be installed and loaded into the production read model on Windows, including canonical data, immutable search, graph runtime and generation identity. **G-D5 is closed and verified.**
+The signed-pack Active Generation integration gate proves a verified pack can be installed and loaded into the production read model on Windows, including canonical data, immutable search, graph runtime and generation identity. **G-D5 is closed and verified.** Current G-D6 changes remain subject to exact-head CI before they can be treated as verified evidence.
 
 Current mandatory-gate state:
 
