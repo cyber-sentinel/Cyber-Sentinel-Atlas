@@ -1,6 +1,6 @@
 'use strict';
 
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, session } = require('electron');
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -141,6 +141,10 @@ async function runProbeMode() {
 }
 
 async function createWindow() {
+  session.defaultSession.setPermissionCheckHandler(() => false);
+  session.defaultSession.setPermissionRequestHandler((_webContents, _permission, callback) => callback(false));
+  session.defaultSession.on('will-download', event => event.preventDefault());
+
   ipcMain.handle('atlas:status', async () => runCoreProbe());
   const win = new BrowserWindow({
     width: 900,
@@ -152,13 +156,14 @@ async function createWindow() {
       nodeIntegration: false,
       sandbox: true,
       webSecurity: true,
-      allowRunningInsecureContent: false
+      allowRunningInsecureContent: false,
+      webviewTag: false,
+      devTools: false
     }
   });
   win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
-  win.webContents.on('will-navigate', (event, url) => {
-    if (!url.startsWith('file://')) event.preventDefault();
-  });
+  win.webContents.on('will-navigate', event => event.preventDefault());
+  win.webContents.on('will-redirect', event => event.preventDefault());
   win.webContents.on('will-attach-webview', event => event.preventDefault());
   await win.loadFile('index.html');
 }

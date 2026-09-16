@@ -8,6 +8,7 @@ on:
       - 'benchmarks/desktop/phase56/candidates/**'
       - 'benchmarks/desktop/phase56/measure_candidates.ps1'
       - 'benchmarks/desktop/phase56/summarize_candidates.py'
+      - 'benchmarks/desktop/phase56/validate_security_surface.py'
       - '.github/workflows/phase561-desktop-candidates.yml'
       - 'shared-core/go/**'
   pull_request:
@@ -17,6 +18,7 @@ on:
       - 'benchmarks/desktop/phase56/candidates/**'
       - 'benchmarks/desktop/phase56/measure_candidates.ps1'
       - 'benchmarks/desktop/phase56/summarize_candidates.py'
+      - 'benchmarks/desktop/phase56/validate_security_surface.py'
       - '.github/workflows/phase561-desktop-candidates.yml'
       - 'shared-core/go/**'
 
@@ -57,7 +59,7 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
           if ($version -ne '3.12') { throw "Python 3.12 required; found $version" }
-          python -m py_compile benchmarks/desktop/phase56/summarize_candidates.py
+          python -m py_compile benchmarks/desktop/phase56/summarize_candidates.py benchmarks/desktop/phase56/validate_security_surface.py
 
       - name: Set up Node 24
         uses: actions/setup-node@v4
@@ -106,6 +108,13 @@ jobs:
           $ErrorActionPreference = 'Stop'
           Remove-Item -Recurse -Force $env:PHASE561_STAGE,$env:PHASE561_EVIDENCE -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Force -Path "$env:PHASE561_STAGE\core",$env:PHASE561_EVIDENCE | Out-Null
+
+      - name: Validate desktop security surface
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python benchmarks/desktop/phase56/validate_security_surface.py `
+            --output "$env:PHASE561_EVIDENCE\security-surface.json"
 
       - name: Build one exact-head production atlas-core
         shell: pwsh

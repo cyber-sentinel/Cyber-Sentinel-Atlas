@@ -10,6 +10,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
+        "label": "main",
         "title": "Cyber-Sentinel ATLAS — Tauri Candidate",
         "width": 900,
         "height": 620,
@@ -17,7 +18,21 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'none'; img-src 'self' data:"
+      "assetProtocol": {
+        "enable": false,
+        "scope": []
+      },
+      "capabilities": [
+        {
+          "identifier": "main-core-status-only",
+          "description": "Restrict the local main webview to the single fixed core_status application command.",
+          "windows": ["main"],
+          "permissions": ["allow-core-status"]
+        }
+      ],
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'none'; img-src 'self' data:",
+      "dangerousDisableAssetCspModification": false,
+      "freezePrototype": true
     }
   },
   "bundle": {

@@ -14,6 +14,7 @@ CANDIDATES = {
 }
 
 COMMON_MEASUREMENTS = "phase562-common-measurements.json"
+SECURITY_SURFACE = "security-surface.json"
 
 
 def require(condition: bool, message: str) -> None:
@@ -148,6 +149,23 @@ def verify_common_measurements(evidence_dir: Path, packages: dict[str, dict], co
     return by_id
 
 
+def verify_security_surface(evidence_dir: Path) -> dict[str, dict]:
+    path = evidence_dir / SECURITY_SURFACE
+    require(path.is_file(), f"missing desktop security-surface evidence: {path}")
+    document = json.loads(path.read_text(encoding="utf-8-sig"))
+    require(document.get("evidence_version") == 1, "unsupported desktop security-surface evidence version")
+    require(document.get("phase") == "5.6.2", "desktop security-surface phase mismatch")
+    require(document.get("gate") == "G-D7-desktop-security-surface", "desktop security-surface gate mismatch")
+    require(document.get("state") == "PASS", "desktop security-surface gate did not pass")
+    require(document.get("selection_authorized") is False, "desktop security-surface evidence must not select a framework")
+    candidates = document.get("candidates")
+    require(isinstance(candidates, dict), "desktop security-surface candidates must be an object")
+    require(set(candidates) == set(CANDIDATES), "desktop security-surface candidate set is incomplete")
+    for candidate, evidence in candidates.items():
+        require(isinstance(evidence, dict) and evidence.get("state") == "PASS", f"G-D7 did not pass for {candidate}")
+    return candidates
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--evidence-dir", required=True)
@@ -199,6 +217,7 @@ def main() -> int:
         require(next(iter(core_commits)) == expected_sha, f"atlas-core commit does not match exact workflow SHA: {core_commits}")
 
     common_measurements = verify_common_measurements(evidence_dir, packages, common_hash)
+    security_surface = verify_security_surface(evidence_dir)
 
     summary = {
         "phase": "5.6",
@@ -208,6 +227,7 @@ def main() -> int:
         "common_core_commit": next(iter(core_commits)),
         "candidates": rows,
         "common_external_measurements": common_measurements,
+        "security_surface": security_surface,
         "measurement_interpretation": {
             "candidate_internal_round_trip_ms": "REFERENCE_ONLY_NOT_CROSS_CANDIDATE_COMPARABLE",
             "external_process_total_ms": "COMMON_HARNESS_COMPARABLE_ON_THIS_RUNNER",
@@ -222,7 +242,7 @@ def main() -> int:
             "G-D4-sidecar-location-and-integrity-control": "PASS",
             "G-D5-search-record-graph-provenance-capability": "PASS_VERIFIED_SEPARATELY",
             "G-D6-pack-status-update-and-rollback-capability": "PASS_VERIFIED_SEPARATELY",
-            "G-D7-desktop-security-surface": "PENDING_5.6.2",
+            "G-D7-desktop-security-surface": "PASS",
             "G-D8-installer-and-portable-mode-feasibility": "PENDING_5.6.2",
             "G-D9-footprint-startup-and-ipc-measurements": "PARTIAL_COMMON_HARNESS_CAPTURED",
         },
