@@ -4,13 +4,13 @@
 
 Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: an offline-first, analyst-first platform for connecting security telemetry, canonical records, adversary behavior, detections, hunts, DFIR artifacts, defensive context, investigation pivots and claim-level provenance into an inspectable knowledge system.
 
-> **Development:** Active  
-> **Completed foundation:** Phases 5.1–5.5 COMPLETE / MERGED / VERIFIED  
-> **Windows Desktop:** Phase 5.6.0–5.6.3 COMPLETE / VERIFIED on the active feature branch  
-> **Active closure:** Phase 5.6.4 — Windows package + clean-machine smoke  
-> **Desktop host:** Tauri 2.x — ADR-0026 Accepted  
-> **Hard gates:** G-D1 through G-D9 CLOSED / VERIFIED  
-> **Release state:** First Preview candidate — not yet merged/post-merge verified  
+> **Development:** Active
+> **Completed foundation:** Phases 5.1–5.5 COMPLETE / MERGED / VERIFIED
+> **Windows Desktop:** Phase 5.6.0–5.6.3 COMPLETE / VERIFIED on the active feature branch
+> **Active closure:** Phase 5.6.4 — Windows package + clean-machine smoke
+> **Desktop host:** Tauri 2.x — ADR-0026 Accepted
+> **Hard gates:** G-D1 through G-D9 CLOSED / VERIFIED
+> **Release state:** Pre-preview / unreleased — First Preview candidate, not yet merged/post-merge verified
 > **Repository visibility:** Public
 
 Public repository visibility does **not** imply public-release readiness. `main` remains release authority. First Preview readiness is claimed only after the package/smoke gate, PR merge and post-merge verification succeed.
@@ -22,6 +22,8 @@ Detailed implementation state is maintained in [Current Status](docs/current-sta
 Cyber defense knowledge is fragmented across operating systems, SIEMs, EDR/XDR platforms, cloud environments, container runtimes, databases, vendor documentation, detection repositories, threat intelligence and incident-response references.
 
 ATLAS connects those sources into deterministic, searchable investigation context while keeping technical claims bound to inspectable evidence.
+
+**No technical claim without provenance.**
 
 <p align="center">
   <img src="assets/satellite.png" alt="Cyber-Sentinel Atlas product thesis — telemetry, security knowledge, investigation, defensive action and provenance" width="100%" />
@@ -172,8 +174,6 @@ Security regression evidence enforces one main-window capability, explicit comma
 ### 5.6.4 — Windows Packaging / Clean-Machine Smoke
 
 **IN PROGRESS**
-
-Active exact-head run: `35092036802` against package-code commit `9b58be1a542d2d86a84ddfd14053a66be4162a1a`.
 
 The workflow builds one byte-bound portable Windows ZIP and consumes that same immutable artifact on a fresh GitHub-hosted Windows runner. It validates ZIP/payload hashes, exact Shared Core commit, relocation, offline/no-listener posture, deliberate sidecar-corruption rejection, recovery after verified restoration, WebView2 prerequisite handling and GUI liveness.
 
