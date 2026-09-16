@@ -32,42 +32,35 @@ fn write_deterministic_windows_icon() -> PathBuf {
 
     let mut icon = Vec::with_capacity((IMAGE_OFFSET + DIB_BYTES) as usize);
 
-    // ICONDIR
-    push_u16_le(&mut icon, 0); // reserved
-    push_u16_le(&mut icon, 1); // image type: icon
-    push_u16_le(&mut icon, 1); // image count
+    push_u16_le(&mut icon, 0);
+    push_u16_le(&mut icon, 1);
+    push_u16_le(&mut icon, 1);
 
-    // ICONDIRENTRY
     icon.push(WIDTH as u8);
     icon.push(HEIGHT as u8);
-    icon.push(0); // palette size: no palette
-    icon.push(0); // reserved
-    push_u16_le(&mut icon, 1); // planes
-    push_u16_le(&mut icon, 32); // bits per pixel
+    icon.push(0);
+    icon.push(0);
+    push_u16_le(&mut icon, 1);
+    push_u16_le(&mut icon, 32);
     push_u32_le(&mut icon, DIB_BYTES);
     push_u32_le(&mut icon, IMAGE_OFFSET);
 
-    // BITMAPINFOHEADER. ICO stores XOR and AND masks vertically, so the
-    // encoded DIB height is twice the visible height.
     push_u32_le(&mut icon, 40);
     push_i32_le(&mut icon, WIDTH as i32);
     push_i32_le(&mut icon, (HEIGHT * 2) as i32);
     push_u16_le(&mut icon, 1);
     push_u16_le(&mut icon, 32);
-    push_u32_le(&mut icon, 0); // BI_RGB
+    push_u32_le(&mut icon, 0);
     push_u32_le(&mut icon, PIXEL_BYTES);
     push_i32_le(&mut icon, 0);
     push_i32_le(&mut icon, 0);
     push_u32_le(&mut icon, 0);
     push_u32_le(&mut icon, 0);
 
-    // Deterministic opaque dark-blue BGRA pixels. This is a build-only
-    // placeholder, not a product branding asset.
     for _ in 0..(WIDTH * HEIGHT) {
         icon.extend_from_slice(&[0x20, 0x12, 0x0b, 0xff]);
     }
 
-    // Fully opaque AND mask, DWORD-aligned per ICO/BMP row.
     icon.resize((IMAGE_OFFSET + DIB_BYTES) as usize, 0);
 
     fs::write(&icon_path, &icon).expect("failed to write deterministic Tauri Windows icon");
@@ -77,7 +70,15 @@ fn write_deterministic_windows_icon() -> PathBuf {
 fn main() {
     let icon_path = write_deterministic_windows_icon();
     let windows = tauri_build::WindowsAttributes::new().window_icon_path(icon_path);
-    let app_manifest = tauri_build::AppManifest::new().commands(&["core_status"]);
+    let app_manifest = tauri_build::AppManifest::new().commands(&[
+        "core_status",
+        "search_records",
+        "get_record",
+        "expand_graph",
+        "pack_status",
+        "pack_update",
+        "pack_rollback",
+    ]);
     let attributes = tauri_build::Attributes::new()
         .windows_attributes(windows)
         .app_manifest(app_manifest);
