@@ -15,7 +15,7 @@
 - Search engine: SQLite + FTS5 — ADR-0022 Accepted
 - Content-pack trust model: TUF — ADR-0023 Accepted
 - Production Shared Core: Go — ADR-0024 Accepted
-- Shared Core local interface: child-process stdio protocol — ADR-0025 Accepted
+- Shared Core Local Interface: child-process stdio protocol — ADR-0025 Accepted
 - Desktop implementation stack: **Tauri 2.x — ADR-0026 Accepted**
 
 Operational evidence is summarized in [`docs/current-status.md`](current-status.md). Historical snapshots remain under `docs/history/`.
@@ -28,6 +28,9 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
 - Phase 5.3 — Source & Ingestion Core: **COMPLETE / MERGED**
 - Phase 5.4 — Deterministic Search Core: **COMPLETE / MERGED**
 - Phase 5.5 — Offline Pack Runtime / Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED / FROZEN**
+- Phase 5.5.2 — Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+- Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+- Phase 5.5.4 — Production Go Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 - Phase 5.6 — Windows Desktop MVP: **FEATURE-BRANCH IMPLEMENTATION COMPLETE / RELEASE CLOSURE PENDING**
   - 5.6.0 Environment / Core Boundary: **COMPLETE / VERIFIED**
   - 5.6.1 Executable Candidate Builds: **COMPLETE / VERIFIED**
@@ -44,6 +47,8 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
 - Phase 5.8 — Broader API surfaces: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.10 — Public Preview Readiness: **PLANNED**
+
+The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers above are retained as current compatibility invariants for historical architecture gates even though the aggregate Phase 5.5 boundary is now frozen.
 
 ## Frozen Architecture
 
@@ -118,7 +123,7 @@ ADR-0001 through ADR-0026 are accepted according to repository history. Current 
 
 - ADR-0022 — SQLite + FTS5 deterministic search artifact;
 - ADR-0023 — Secure Content Pack Trust and Update Model;
-- ADR-0024 — Go Production Shared Core;
+- ADR-0024 — Production Shared Core Technology Selection;
 - ADR-0025 — Shared Core Local Interface Boundary;
 - ADR-0026 — Windows Desktop Host Selection: **Tauri 2.x**.
 
@@ -139,7 +144,7 @@ Feature implementation + exact-head package/smoke verification   COMPLETE
        ↓
 Documentation / final branch review                              COMPLETE
        ↓
-PR → PR CI                                                       NEXT
+PR → PR CI                                                       ACTIVE
        ↓
 Merge to main                                                    PENDING
        ↓

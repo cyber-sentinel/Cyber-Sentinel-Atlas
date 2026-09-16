@@ -14,6 +14,7 @@ Status timestamp: 2026-09-16
 - Search contract version: `1.0.0`
 - Search engine: SQLite + FTS5 — ADR-0022 Accepted
 - Content-pack trust model: TUF — ADR-0023 Accepted
+- Production Shared Core implementation family: **Go**
 - Production Shared Core: Go — ADR-0024 Accepted
 - Desktop/Core boundary: child-process stdio protocol — ADR-0025 Accepted
 - Desktop host: **Tauri 2.x** — ADR-0026 Accepted
@@ -28,12 +29,17 @@ Status timestamp: 2026-09-16
 - Phase 5.3 — Source & Ingestion Core: **COMPLETE / MERGED**
 - Phase 5.4 — Deterministic Search Core: **COMPLETE / MERGED**
 - Phase 5.5 — Offline Pack Runtime / Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED / FROZEN**
+- Phase 5.5.2 — Verified Pack Runtime: COMPLETE / MERGED / POST-MERGE VERIFIED
+- Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: COMPLETE / MERGED / POST-MERGE VERIFIED
+- Phase 5.5.4 — Production Go Shared Core: COMPLETE / MERGED / POST-MERGE VERIFIED
 - Phase 5.6.0 — Desktop Environment/Core Boundary: **COMPLETE / VERIFIED**
 - Phase 5.6.1 — Executable Desktop Candidate Builds: **COMPLETE / VERIFIED**
 - Phase 5.6.2 — Hard Gates / Measurements / Desktop Selection: **COMPLETE / VERIFIED**
 - Phase 5.6.3 — First Preview UI: **COMPLETE / VERIFIED ON FEATURE BRANCH**
 - Phase 5.6.4 — Windows Packaging / Clean-Machine Smoke: **COMPLETE / VERIFIED ON FEATURE BRANCH**
 - Phase 5.6 — Windows Desktop MVP: **FEATURE-BRANCH IMPLEMENTATION COMPLETE / RELEASE CLOSURE PENDING**
+
+The explicit 5.5.2/5.5.3/5.5.4 markers are retained because frozen architecture validators use them to prove lifecycle continuity across later phases.
 
 ## Frozen Shared Core boundary
 

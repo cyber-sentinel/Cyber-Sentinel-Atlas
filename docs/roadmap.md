@@ -40,6 +40,24 @@ Delivered TUF-based signed content-pack trust, secure `.atlaspack` extraction/ve
 
 ADR-0023, ADR-0024 and ADR-0025 remain authoritative. Phase 5.6 consumes this boundary but may not redefine it.
 
+### Phase 5.5.2 — Verified Pack Runtime
+
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+
+Delivered verified-pack extraction, trust validation, immutable generation installation, activation/LKG recovery, trusted-time and highest-seen anti-rollback behavior. This historical lifecycle marker remains explicit because later architecture validators consume it as a compatibility invariant.
+
+### Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024
+
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+
+Completed the evidence-based Shared Core technology selection. ADR-0024 selected Go as the production implementation family while preserving Python as semantic/conformance oracle and preserving frozen serialization, hashing and canonical contracts.
+
+### Phase 5.5.4 — Production Go Shared Core
+
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+
+Delivered the production Go Shared Core, canonical/search/graph operations, pack trust/durable state, bounded stdio protocol, conformance closure and supply-chain evidence. ADR-0025 defines the accepted local child-process stdio boundary.
+
 ## Phase 5.6 — Windows Desktop MVP
 
 Status: **FEATURE-BRANCH IMPLEMENTATION COMPLETE / RELEASE CLOSURE PENDING**
@@ -132,7 +150,7 @@ Feature implementation + package/smoke evidence   COMPLETE
        ↓
 Authoritative documentation sync                  COMPLETE
        ↓
-PR review + PR CI                                 NEXT
+PR review + PR CI                                 ACTIVE
        ↓
 Merge to main                                     PENDING
        ↓
