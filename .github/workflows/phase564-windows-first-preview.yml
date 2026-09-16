@@ -1,0 +1,321 @@
+name: Phase 5.6.4 Windows First Preview Package
+
+on:
+  push:
+    branches:
+      - feature/phase-5.6-windows-desktop-mvp
+    paths:
+      - 'benchmarks/desktop/phase56/candidates/tauri/**'
+      - 'shared-core/go/**'
+      - '.github/workflows/phase564-windows-first-preview.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'benchmarks/desktop/phase56/candidates/tauri/**'
+      - 'shared-core/go/**'
+      - '.github/workflows/phase564-windows-first-preview.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  GO_VERSION: '1.25.13'
+  RUST_VERSION: '1.95.0'
+  TAURI_LOCK_SHA256: 'dd2a97c412b0f7289f07ba16cfc28b4cca02ea9b7a5f5ed4d488b34977e37b3e'
+
+jobs:
+  build-package:
+    name: build exact-head preview package
+    runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]
+    timeout-minutes: 55
+    env:
+      GOTOOLCHAIN: local
+      CGO_ENABLED: '0'
+    steps:
+      - name: Checkout exact head
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: shared-core/go/go.sum
+
+      - name: Set up checksum-pinned Rust
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $RustupVersion = '1.29.0'
+          $Bootstrap = Join-Path $env:RUNNER_TEMP 'rustup-bootstrap-phase564'
+          $RustupInit = Join-Path $Bootstrap 'rustup-init.exe'
+          $Checksum = Join-Path $Bootstrap 'rustup-init.exe.sha256'
+          $Base = "https://static.rust-lang.org/rustup/archive/$RustupVersion/x86_64-pc-windows-msvc"
+          New-Item -ItemType Directory -Force -Path $Bootstrap | Out-Null
+          Invoke-WebRequest -Uri "$Base/rustup-init.exe" -OutFile $RustupInit
+          Invoke-WebRequest -Uri "$Base/rustup-init.exe.sha256" -OutFile $Checksum
+          $expected = ((Get-Content -Raw $Checksum).Trim() -split '\s+')[0].ToLowerInvariant()
+          $actual = (Get-FileHash -Algorithm SHA256 $RustupInit).Hash.ToLowerInvariant()
+          if ($actual -ne $expected) { throw 'rustup-init SHA-256 mismatch' }
+          $env:RUSTUP_HOME = Join-Path $env:RUNNER_TEMP 'rustup-home-phase564'
+          $env:CARGO_HOME = Join-Path $env:RUNNER_TEMP 'cargo-home-phase564'
+          & $RustupInit -y --no-modify-path --profile minimal --default-toolchain $env:RUST_VERSION
+          if ($LASTEXITCODE -ne 0) { throw "rustup-init failed with exit code $LASTEXITCODE" }
+          $CargoBin = Join-Path $env:CARGO_HOME 'bin'
+          "RUSTUP_HOME=$env:RUSTUP_HOME" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "CARGO_HOME=$env:CARGO_HOME" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          $CargoBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          if ((rustc --version) -notmatch '^rustc 1\.95\.0 ') { throw 'Rust 1.95.0 not active' }
+
+      - name: Build exact-head Shared Core
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Stage = Join-Path $env:RUNNER_TEMP 'atlas-phase564-package'
+          Remove-Item -Recurse -Force $Stage -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $Stage | Out-Null
+          $Core = Join-Path $Stage 'atlas-core.exe'
+          Push-Location shared-core/go
+          try {
+            go mod verify
+            go test ./... -count=1
+            if ($LASTEXITCODE -ne 0) { throw 'Shared Core tests failed' }
+            go build -trimpath -buildvcs=false `
+              -ldflags "-X main.coreCommit=$env:GITHUB_SHA -X main.coreVersion=0.1.0-preview" `
+              -o $Core ./cmd/atlas-core
+            if ($LASTEXITCODE -ne 0) { throw 'Shared Core build failed' }
+          }
+          finally { Pop-Location }
+          $CoreHash = (Get-FileHash -Algorithm SHA256 $Core).Hash.ToLowerInvariant()
+          "$CoreHash  atlas-core.exe" | Set-Content -Encoding ascii (Join-Path $Stage 'atlas-core.exe.sha256')
+          "PHASE564_STAGE=$Stage" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Build selected Tauri host with committed lock
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          . ./benchmarks/desktop/phase56/candidates/tauri/prepare_msvc.ps1
+          $Manifest = Join-Path (Get-Location) 'benchmarks\desktop\phase56\candidates\tauri\Cargo.toml'
+          $Lock = Join-Path (Split-Path -Parent $Manifest) 'Cargo.lock'
+          $LockHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $Lock).Hash.ToLowerInvariant()
+          if ($LockHash -ne $env:TAURI_LOCK_SHA256) {
+            throw "Tauri Cargo.lock drift: expected $env:TAURI_LOCK_SHA256, found $LockHash"
+          }
+          $env:CARGO_TARGET_DIR = Join-Path $env:RUNNER_TEMP 'atlas-phase564-tauri-target'
+          Remove-Item -Recurse -Force $env:CARGO_TARGET_DIR -ErrorAction SilentlyContinue
+          cargo build --release --locked --manifest-path $Manifest
+          if ($LASTEXITCODE -ne 0) { throw 'Tauri First Preview build failed' }
+          cargo metadata --format-version 1 --locked --manifest-path $Manifest | Out-Null
+          if ($LASTEXITCODE -ne 0) { throw 'Tauri locked metadata validation failed' }
+          git diff --exit-code -- benchmarks/desktop/phase56/candidates/tauri/Cargo.lock
+          if ($LASTEXITCODE -ne 0) { throw 'Tauri Cargo.lock mutated during build' }
+          $Host = Join-Path $env:CARGO_TARGET_DIR 'release\atlas-tauri-candidate.exe'
+          if (-not (Test-Path -LiteralPath $Host -PathType Leaf)) { throw "Tauri output missing: $Host" }
+          Copy-Item -LiteralPath $Host -Destination (Join-Path $env:PHASE564_STAGE 'Cyber-Sentinel-ATLAS.exe') -Force
+
+      - name: Assemble byte-bound portable preview package
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Stage = $env:PHASE564_STAGE
+          $Host = Join-Path $Stage 'Cyber-Sentinel-ATLAS.exe'
+          $Core = Join-Path $Stage 'atlas-core.exe'
+          $HostHash = (Get-FileHash -Algorithm SHA256 $Host).Hash.ToLowerInvariant()
+          $CoreHash = (Get-FileHash -Algorithm SHA256 $Core).Hash.ToLowerInvariant()
+          $Manifest = [ordered]@{
+            package_schema = 1
+            product = 'Cyber-Sentinel ATLAS'
+            channel = 'first-preview'
+            phase = '5.6.4'
+            desktop_host = 'Tauri 2.x'
+            screening_baseline = '2.11.5'
+            commit = $env:GITHUB_SHA
+            protocol = 'atlas-core/1.0.0'
+            host = [ordered]@{ file = 'Cyber-Sentinel-ATLAS.exe'; sha256 = $HostHash; size_bytes = (Get-Item $Host).Length }
+            sidecar = [ordered]@{ file = 'atlas-core.exe'; sha256 = $CoreHash; size_bytes = (Get-Item $Core).Length; placement = 'adjacent-to-host' }
+            runtime_dependencies = @([ordered]@{ name='Microsoft Edge WebView2 Runtime'; policy='required-by-Tauri-on-Windows'; bundled=$false; network_bootstrap_allowed=$false })
+            security = [ordered]@{ default_network_listener=$false; csp_connect_src='none'; binary_auto_update=$false; sidecar_integrity='sha256-fail-closed' }
+            packaging = [ordered]@{ mode='portable-zip'; authenticode='release-signing-boundary-not-embedded-in-CI'; installer='not-required-for-first-preview-portable-acceptance' }
+          }
+          $Manifest | ConvertTo-Json -Depth 8 | Set-Content -Encoding utf8 (Join-Path $Stage 'PACKAGE-MANIFEST.json')
+          $Readme = @'
+          Cyber-Sentinel ATLAS — First Preview
+
+          Run Cyber-Sentinel-ATLAS.exe from this directory. atlas-core.exe and
+          atlas-core.exe.sha256 must remain adjacent to the host. The Windows
+          Microsoft Edge WebView2 Runtime is a host prerequisite. This preview
+          never downloads that runtime and has no binary auto-updater.
+
+          The package is portable. Production Authenticode signing remains a
+          release/distribution boundary and is not simulated by CI.
+          '@
+          $Readme | Set-Content -Encoding utf8 (Join-Path $Stage 'README-FIRST-PREVIEW.txt')
+          $PackageRoot = Join-Path $env:RUNNER_TEMP 'atlas-phase564-output'
+          Remove-Item -Recurse -Force $PackageRoot -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $PackageRoot | Out-Null
+          $Zip = Join-Path $PackageRoot 'Cyber-Sentinel-ATLAS-First-Preview-win-x64.zip'
+          Compress-Archive -Path (Join-Path $Stage '*') -DestinationPath $Zip -CompressionLevel Optimal
+          $ZipHash = (Get-FileHash -Algorithm SHA256 $Zip).Hash.ToLowerInvariant()
+          "$ZipHash  $(Split-Path -Leaf $Zip)" | Set-Content -Encoding ascii "$Zip.sha256"
+          Copy-Item (Join-Path $Stage 'PACKAGE-MANIFEST.json') $PackageRoot
+
+      - name: Upload immutable preview package candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase564-first-preview-package
+          path: ${{ runner.temp }}\atlas-phase564-output\*
+          if-no-files-found: error
+          retention-days: 30
+
+  clean-windows-smoke:
+    name: consume package on clean GitHub Windows
+    needs: build-package
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Download exact package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: phase564-first-preview-package
+          path: package-artifact
+
+      - name: Verify package hash and extract to relocated path
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Zip = (Get-ChildItem package-artifact -Filter '*.zip' | Select-Object -First 1).FullName
+          $Checksum = "$Zip.sha256"
+          if (-not (Test-Path $Checksum)) { throw 'package checksum missing' }
+          $expected = ((Get-Content -Raw $Checksum).Trim() -split '\s+')[0].ToLowerInvariant()
+          $actual = (Get-FileHash -Algorithm SHA256 $Zip).Hash.ToLowerInvariant()
+          if ($actual -ne $expected) { throw 'package ZIP SHA-256 mismatch' }
+          $Target = Join-Path $env:RUNNER_TEMP 'ATLAS First Preview Clean Machine\Portable Package'
+          New-Item -ItemType Directory -Force -Path $Target | Out-Null
+          Expand-Archive -LiteralPath $Zip -DestinationPath $Target -Force
+          "PHASE564_CLEAN=$Target" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Verify payload manifest and adjacent sidecar
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Root = $env:PHASE564_CLEAN
+          $Manifest = Get-Content -Raw (Join-Path $Root 'PACKAGE-MANIFEST.json') | ConvertFrom-Json
+          if ($Manifest.commit -ne $env:GITHUB_SHA) { throw "package commit mismatch: $($Manifest.commit)" }
+          foreach ($entry in @($Manifest.host,$Manifest.sidecar)) {
+            $path = Join-Path $Root $entry.file
+            if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "payload missing: $($entry.file)" }
+            $actual = (Get-FileHash -Algorithm SHA256 $path).Hash.ToLowerInvariant()
+            if ($actual -ne $entry.sha256) { throw "payload hash mismatch: $($entry.file)" }
+            if ((Get-Item $path).Length -ne $entry.size_bytes) { throw "payload size mismatch: $($entry.file)" }
+          }
+          $CoreManifest = Join-Path $Root 'atlas-core.exe.sha256'
+          $expectedCore = ((Get-Content -Raw $CoreManifest).Trim() -split '\s+')[0].ToLowerInvariant()
+          if ($expectedCore -ne $Manifest.sidecar.sha256) { throw 'adjacent sidecar manifest is not package-bound' }
+
+      - name: Run portable probe from relocated clean path
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Root = $env:PHASE564_CLEAN
+          $Host = Join-Path $Root 'Cyber-Sentinel-ATLAS.exe'
+          $Evidence = Join-Path $env:RUNNER_TEMP 'phase564-probe.json'
+          $p = Start-Process -FilePath $Host -ArgumentList @('--atlas-probe',"--probe-output=$Evidence") -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "portable probe failed: $($p.ExitCode)" }
+          $probe = Get-Content -Raw $Evidence | ConvertFrom-Json
+          if ($probe.status_result.network_listener -ne $false -or $probe.status_result.offline_capable -ne $true) {
+            throw 'packaged Shared Core did not prove offline/no-listener state'
+          }
+          if ($probe.status_result.build.commit -ne $env:GITHUB_SHA) { throw 'packaged core exact-head commit mismatch' }
+          Copy-Item $Evidence package-artifact\phase564-probe.json -Force
+
+      - name: Prove sidecar corruption fails closed and recovery succeeds
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Root = $env:PHASE564_CLEAN
+          $Host = Join-Path $Root 'Cyber-Sentinel-ATLAS.exe'
+          $Core = Join-Path $Root 'atlas-core.exe'
+          $Backup = Join-Path $env:RUNNER_TEMP 'atlas-core.clean-backup.exe'
+          Copy-Item $Core $Backup -Force
+          Add-Content -Encoding ascii -NoNewline -Path $Core -Value 'corruption-test'
+          $bad = Start-Process -FilePath $Host -ArgumentList @('--atlas-probe',"--probe-output=$(Join-Path $env:RUNNER_TEMP 'should-not-exist.json')") -Wait -PassThru
+          if ($bad.ExitCode -eq 0) { throw 'corrupted sidecar was accepted' }
+          Copy-Item $Backup $Core -Force
+          $okEvidence = Join-Path $env:RUNNER_TEMP 'phase564-recovery-probe.json'
+          $good = Start-Process -FilePath $Host -ArgumentList @('--atlas-probe',"--probe-output=$okEvidence") -Wait -PassThru
+          if ($good.ExitCode -ne 0) { throw 'sidecar recovery probe failed after restoring verified bytes' }
+          Copy-Item $okEvidence package-artifact\phase564-recovery-probe.json -Force
+
+      - name: Audit WebView2 prerequisite and launch GUI
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Root = $env:PHASE564_CLEAN
+          $Host = Join-Path $Root 'Cyber-Sentinel-ATLAS.exe'
+          $webViewKeys = @(
+            'HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F1E7E9A5-0677-4D44-8C3F-49A93A2E2E20}',
+            'HKLM:\SOFTWARE\Microsoft\EdgeUpdate\Clients\{F1E7E9A5-0677-4D44-8C3F-49A93A2E2E20}',
+            'HKCU:\Software\Microsoft\EdgeUpdate\Clients\{F1E7E9A5-0677-4D44-8C3F-49A93A2E2E20}'
+          )
+          $versions = @()
+          foreach ($key in $webViewKeys) {
+            if (Test-Path $key) {
+              $pv = (Get-ItemProperty $key -ErrorAction SilentlyContinue).pv
+              if ($pv) { $versions += $pv }
+            }
+          }
+          $webViewVersion = ($versions | Select-Object -First 1)
+          if (-not $webViewVersion) { throw 'Microsoft Edge WebView2 Runtime not present on clean Windows runner; package correctly refuses network bootstrap, but GUI prerequisite is unmet' }
+
+          $before = @(Get-Process | Select-Object -ExpandProperty Id)
+          $process = Start-Process -FilePath $Host -PassThru
+          Start-Sleep -Seconds 8
+          $process.Refresh()
+          if ($process.HasExited) { throw "First Preview GUI exited during clean-machine smoke with code $($process.ExitCode)" }
+
+          $descendantIds = [System.Collections.Generic.HashSet[int]]::new()
+          [void]$descendantIds.Add($process.Id)
+          for ($round=0; $round -lt 5; $round++) {
+            foreach ($p in Get-CimInstance Win32_Process) {
+              if ($descendantIds.Contains([int]$p.ParentProcessId)) { [void]$descendantIds.Add([int]$p.ProcessId) }
+            }
+          }
+          $listeners = @()
+          foreach ($pid in $descendantIds) {
+            $listeners += @(Get-NetTCPConnection -State Listen -OwningProcess $pid -ErrorAction SilentlyContinue)
+            $listeners += @(Get-NetUDPEndpoint -OwningProcess $pid -ErrorAction SilentlyContinue)
+          }
+          if ($listeners.Count -ne 0) { throw "packaged GUI process tree opened network listener/UDP endpoint: $($listeners | Out-String)" }
+
+          $processTree = @($descendantIds | Sort-Object)
+          $evidence = [ordered]@{
+            evidence_version = 1
+            phase = '5.6.4'
+            commit = $env:GITHUB_SHA
+            clean_environment = [ordered]@{ runner='github-hosted'; image='windows-latest'; relocated_path=$Root }
+            webview2 = [ordered]@{ required=$true; present=$true; version=$webViewVersion; downloaded_by_atlas=$false }
+            gui = [ordered]@{ launched=$true; remained_alive_for_seconds=8; process_tree_ids=$processTree }
+            network = [ordered]@{ tcp_listener_seen=$false; udp_endpoint_seen=$false }
+            integrity_negative_test = 'PASS_FAIL_CLOSED'
+            recovery_after_verified_restore = 'PASS'
+            portable_relocation = 'PASS'
+          }
+          $EvidencePath = Join-Path package-artifact 'phase564-clean-windows-evidence.json'
+          $evidence | ConvertTo-Json -Depth 8 | Set-Content -Encoding utf8 $EvidencePath
+          Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
+
+      - name: Upload clean-machine acceptance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase564-clean-windows-evidence
+          path: package-artifact\phase564-*.json
+          if-no-files-found: error
+          retention-days: 30
