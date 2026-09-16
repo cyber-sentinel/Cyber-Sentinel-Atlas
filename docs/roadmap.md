@@ -60,7 +60,9 @@ Delivered the production Go Shared Core, canonical/search/graph operations, pack
 
 ## Phase 5.6 — Windows Desktop MVP
 
-Status: **FEATURE-BRANCH IMPLEMENTATION COMPLETE / PR RELEASE CLOSURE ACTIVE**
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+
+First Preview engineering readiness: **READY**. Public release state remains **Pre-preview / unreleased**.
 
 The Windows-first MVP remains offline-first, evidence-first and bounded by the frozen Shared Core.
 
@@ -78,92 +80,56 @@ Tauri 2.x, Electron and .NET 10/WPF were built as executable hosts around the sa
 
 ### Phase 5.6.2 — Hard Gates, Measurements & ADR-0026
 
-Status: **COMPLETE / VERIFIED FOR ACCEPTED SELECTION EVIDENCE**
+Status: **COMPLETE / VERIFIED**
 
-Mandatory selection-gate state from frozen evidence:
-
-- G-D1 Clean Windows build: **PASS / VERIFIED**
-- G-D2 stdio handshake/status: **PASS / VERIFIED**
-- G-D3 Offline / TCP / UDP process-tree network posture: **PASS / VERIFIED**
-- G-D4 Sidecar location/integrity/version: **PASS / VERIFIED**
-- G-D5 Active verified pack → canonical/search/graph/provenance: **PASS / VERIFIED**
-- G-D6 Verified pack update + safe manual rollback: **PASS / VERIFIED**
-- G-D7 Desktop security surface: **PASS / VERIFIED**
-- G-D8 Installer + portable feasibility: **PASS / VERIFIED FOR FEASIBILITY**
-- G-D9 Startup / IPC / process / memory / package measurements: **PASS / VERIFIED**
-
-Accepted Candidate Evidence run `35090304056` completed successfully. The accepted weighted review is stored in `benchmarks/desktop/phase56/weighted-review.json`.
+G-D1 through G-D9 are **PASS / VERIFIED** in the frozen selection evidence. Accepted Candidate Evidence run `35090304056` established the selection boundary. Final PR regression run `35112236628` completed successfully without weakening the network-posture policy.
 
 ADR-0026: **ACCEPTED — Tauri 2.x selected**.
 
-The historical multi-candidate workflow remains a release regression gate. On PR implementation head `8feb39a62a1b480428b180ad68cf6ab88340f513`, run `35100673553` failed during the common external measurement harness because the **Electron process tree opened a UDP endpoint**. Candidate security validation and all three candidate builds/probes had passed before that point. This regression does not automatically rewrite ADR-0026, but it blocks PR merge until the endpoint is attributed and the regression contract is closed without bypassing network-posture policy.
+Historical multi-candidate observations remain preserved as evidence. They do not redefine the accepted selected-host boundary.
 
 ### Phase 5.6.3 — First Preview UI
 
-Status: **COMPLETE / VERIFIED ON FEATURE BRANCH**
+Status: **COMPLETE / MERGED / VERIFIED**
 
-Delivered:
-
-- Offline Global Search;
-- Canonical Record / Entity Detail;
-- bounded relationship navigation and graph pivots;
-- claim/source provenance;
-- Windows Event / Sysmon investigation context available in the active pack;
-- verified pack state;
-- pack update and safe rollback;
-- diagnostics/recovery visibility;
-- UTC, system-local and Tehran/Jalali presentation;
-- operational dark UI with accessibility/high-contrast controls.
+Delivered Offline Global Search, Canonical Record / Entity Detail, bounded relationship navigation and graph pivots, claim/source provenance, Windows Event / Sysmon investigation context available in the active pack, verified pack state/update/rollback, diagnostics/recovery visibility, UTC/system-local/Tehran-Jalali presentation, and operational dark UI with accessibility/high-contrast controls.
 
 The selected Tauri host exposes only the seven explicit First Preview application commands and retains CSP/no-plugin/no-generic-network/no-generic-method-bridge restrictions.
 
 ### Phase 5.6.4 — Windows Packaging / Smoke Closure
 
-Status: **COMPLETE / VERIFIED ON FEATURE BRANCH**
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
-Latest verified PR implementation-head run `35100673319` at `8feb39a62a1b480428b180ad68cf6ab88340f513` completed successfully. Earlier acceptance run `35095383694` remains supporting evidence for the same packaging boundary.
+Release-authority workflow `Phase 5.6.4 Windows First Preview Package`, run `35133827422`, completed successfully on `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`.
 
-One byte-bound portable Windows package was built once and consumed unchanged on a fresh GitHub-hosted Windows runner. The clean-machine gate verified:
+The post-merge workflow built one byte-bound portable Windows package and consumed the same immutable artifact on clean GitHub-hosted Windows. It verified package/payload SHA-256 and size binding, exact Shared Core commit binding, relocation to a path containing spaces, offline/no-default-listener behavior, deliberate corrupted-sidecar rejection, recovery, WebView2 prerequisite handling without ATLAS runtime bootstrap, GUI liveness, zero TCP listeners, and zero UDP endpoints owned by ATLAS or Shared Core.
 
-- package ZIP SHA-256;
-- host and Shared Core identity/integrity/size;
-- adjacent sidecar manifest;
-- portable relocation to a path containing spaces;
-- exact Shared Core commit binding;
-- packaged offline/no-default-listener status probe;
-- deliberate corrupted-sidecar rejection;
-- recovery after verified-byte restoration;
-- WebView2 prerequisite handling without ATLAS runtime bootstrap;
-- GUI launch/liveness;
-- zero TCP listeners in the application process tree;
-- zero UDP endpoints owned by ATLAS or Shared Core;
-- explicit attribution/evidence for WebView2-runtime UDP when present.
+Post-merge artifacts:
 
-The First Preview deliverable is an **unsigned portable ZIP**. Authenticode signing and public distribution hardening are later release-readiness boundaries. Binary auto-update remains disabled/not part of First Preview.
+- `phase564-first-preview-package` — artifact `10462114843`, digest `sha256:57d9cce8a2ec85900bbc6b4fe250eefe53b43b241ddbefd2a9a1d9aafaee6f50`;
+- `phase564-clean-windows-evidence` — artifact `10463420685`, digest `sha256:456ea3aa6a7b2c84a555c2c1e60c8f31086781172ce53d530d677abd29f019d5`.
 
-**FIRST PREVIEW READY may only be claimed after every PR regression gate passes, PR #39 merges to `main`, and post-merge verification succeeds.**
+The First Preview deliverable is an **unsigned portable ZIP**. Authenticode signing, installer/public distribution hardening and binary auto-update remain later release-readiness boundaries.
 
 ### Phase 5.6 release closure
 
-Status: **ACTIVE — BLOCKED ON FINAL PR REGRESSION CLOSURE**
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
 ```text
 Feature implementation + selected-host package/smoke evidence   COMPLETE
        ↓
-README + authoritative documentation sync                       COMPLETE
+PR #39 final regression CI                                      COMPLETE / ALL GREEN
        ↓
-PR #39 final regression CI                                      ACTIVE
+Merge to main                                                   COMPLETE
        ↓
-Electron UDP measurement attribution / regression closure       ACTIVE BLOCKER
+Post-merge package verification                                 COMPLETE / VERIFIED
        ↓
-Merge to main                                                   PENDING
+FIRST PREVIEW READY — ENGINEERING READINESS
        ↓
-Post-merge package verification                                 PENDING
-       ↓
-FIRST PREVIEW READY
+Public release                                                  PRE-PREVIEW / UNRELEASED
 ```
 
-The remediation rule is evidence-first: identify which Electron-descendant process owns the UDP endpoint and why; do not generically allow UDP and do not weaken the selected-host network policy merely to obtain a green run.
+`FIRST PREVIEW READY` is an engineering-readiness milestone and must not be interpreted as a signed GA release, public binary release, or universal enterprise deployment approval.
 
 ## Phase 5.7 — Web / PWA
 
