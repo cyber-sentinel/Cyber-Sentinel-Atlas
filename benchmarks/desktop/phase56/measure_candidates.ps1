@@ -124,11 +124,13 @@ function Get-UDPEndpointDetailsForPids {
 
 function Add-NetworkObservations {
     param(
-        [Parameter(Mandatory = $true)]$Details,
+        [AllowNull()]$Details,
         [Parameter(Mandatory = $true)][System.Collections.Generic.HashSet[string]]$Keys,
         [Parameter(Mandatory = $true)][System.Collections.ArrayList]$Target,
         [Parameter(Mandatory = $true)][string]$Protocol
     )
+
+    if ($null -eq $Details) { return }
 
     foreach ($detail in @($Details)) {
         $key = "$Protocol|$($detail.owning_process)|$($detail.local_address)|$($detail.local_port)"
