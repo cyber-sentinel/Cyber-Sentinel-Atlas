@@ -1,0 +1,121 @@
+{
+  "review_version": "1.0.0",
+  "phase": "5.6.2",
+  "decision_adr": "ADR-0026",
+  "evidence_workflow_run": 35085162486,
+  "evidence_head": "8fb98c22daf74bf597da0e7527ea92f5b5f14779",
+  "evidence_artifact": "phase562-desktop-gate-evidence",
+  "evidence_artifact_sha256": "dc1ced987d87d339fc098964089295cdaea560e9b0f9a5ac7b945dab13e70904",
+  "eligibility": {
+    "rule": "all G-D1 through G-D9 hard gates must pass and no unmitigated security blocker may exist",
+    "eligible_candidates": [
+      "tauri-v2",
+      "electron",
+      "dotnet-wpf"
+    ],
+    "all_hard_gates_closed": true
+  },
+  "weights": {
+    "security_and_isolation": 25,
+    "shared_core_integration": 20,
+    "windows_build_and_packaging": 15,
+    "footprint_startup_ipc": 15,
+    "maintainability_and_supply_chain": 10,
+    "portable_mode": 10,
+    "accessibility_and_user_experience": 5
+  },
+  "scoring_method": {
+    "gate_backed_criteria": "award the full frozen criterion weight only where the exact-head evidence proves the corresponding hard-gate/capability contract for the candidate; all three candidates satisfied these contracts in the evidence run",
+    "footprint_startup_ipc": {
+      "method": "lower-is-better ratio normalization using score_component = component_weight * best_observed_value / candidate_value",
+      "component_weights": {
+        "package_size_bytes": 3,
+        "cold_first_launch_external_ms": 3,
+        "warm_external_ms_median": 4,
+        "peak_tree_working_set_bytes_median": 4,
+        "max_process_count_p95": 1
+      },
+      "total_weight": 15,
+      "notes": "Candidate-internal round-trip values are excluded because the common harness marks them reference-only. Common atlas-core handshake/status IPC is identical across candidates and therefore does not differentiate the host score."
+    },
+    "accessibility_and_user_experience": "0 for all candidates because Phase 5.6.2 collected no comparative accessibility/UX evidence; zero means unscored, not failed. This preserves the frozen weight without inventing evidence and does not affect ordering.",
+    "rounding": "display totals rounded to two decimals; selection uses unrounded component values"
+  },
+  "candidate_scores": {
+    "tauri-v2": {
+      "security_and_isolation": 25,
+      "shared_core_integration": 20,
+      "windows_build_and_packaging": 15,
+      "footprint_startup_ipc": 14.129595310204884,
+      "maintainability_and_supply_chain": 10,
+      "portable_mode": 10,
+      "accessibility_and_user_experience": 0,
+      "total": 94.12959531020488,
+      "total_display": 94.13,
+      "g_d9_inputs": {
+        "package_size_bytes": 28066386,
+        "cold_first_launch_external_ms": 262.744,
+        "warm_external_ms_median": 258.971,
+        "peak_tree_working_set_bytes_median": 25235456,
+        "max_process_count_p95": 3
+      }
+    },
+    "dotnet-wpf": {
+      "security_and_isolation": 25,
+      "shared_core_integration": 20,
+      "windows_build_and_packaging": 15,
+      "footprint_startup_ipc": 8.088861725606222,
+      "maintainability_and_supply_chain": 10,
+      "portable_mode": 10,
+      "accessibility_and_user_experience": 0,
+      "total": 88.08886172560622,
+      "total_display": 88.09,
+      "g_d9_inputs": {
+        "package_size_bytes": 19923348,
+        "cold_first_launch_external_ms": 1365.07,
+        "warm_external_ms_median": 470.138,
+        "peak_tree_working_set_bytes_median": 64786432,
+        "max_process_count_p95": 4
+      }
+    },
+    "electron": {
+      "security_and_isolation": 25,
+      "shared_core_integration": 20,
+      "windows_build_and_packaging": 15,
+      "footprint_startup_ipc": 2.6585362506451045,
+      "maintainability_and_supply_chain": 10,
+      "portable_mode": 10,
+      "accessibility_and_user_experience": 0,
+      "total": 82.6585362506451,
+      "total_display": 82.66,
+      "g_d9_inputs": {
+        "package_size_bytes": 405004847,
+        "cold_first_launch_external_ms": 1080.622,
+        "warm_external_ms_median": 1126.594,
+        "peak_tree_working_set_bytes_median": 385200128,
+        "max_process_count_p95": 5
+      }
+    }
+  },
+  "common_core_ipc": {
+    "cold_handshake_ms": 47.084,
+    "cold_status_ms": 0.175,
+    "warm_handshake_ms_median": 37.985,
+    "warm_handshake_ms_p95": 44.992,
+    "warm_status_ms_median": 0.208,
+    "warm_status_ms_p95": 0.331,
+    "sidecar_sha256": "83ca757c1629e37f2139161484cdaa8e9ea88c1045464b66565d7930c6cd9efd"
+  },
+  "selection": {
+    "candidate": "tauri-v2",
+    "host_family": "Tauri 2.x",
+    "screening_version": "2.11.5",
+    "reason": "highest weighted score among candidates that passed every hard gate, driven by materially lower measured warm startup, working-set footprint and process count while preserving the same verified Shared Core and security boundaries",
+    "requires_adr_acceptance": true
+  },
+  "residual_evidence_boundaries": [
+    "final installer production/signing and clean-machine smoke are Phase 5.6.4 acceptance work",
+    "accessibility and UX require real First Preview validation in Phase 5.6.3",
+    "cold-start evidence is first post-build/staged launch and does not force an OS page-cache purge"
+  ]
+}
