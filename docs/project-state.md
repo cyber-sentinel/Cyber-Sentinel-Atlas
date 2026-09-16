@@ -5,7 +5,7 @@
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
 - Active implementation branch: `feature/phase-5.6-windows-desktop-mvp`
-- Last reviewed `main` SHA: `ebe2d29c8857bdbfde5c87bedb4b91e08d05777a`
+- Last Reviewed Main SHA: `ebe2d29c8857bdbfde5c87bedb4b91e08d05777a`
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
 - Release state: **First Preview candidate / not yet merged**
@@ -38,8 +38,6 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
     - ADR-0026: **ACCEPTED — Tauri 2.x**
   - 5.6.3 First Preview UI: **COMPLETE / VERIFIED ON FEATURE BRANCH**
   - 5.6.4 Windows Packaging / Clean-Machine Smoke: **IN PROGRESS**
-    - active run: `35092036802`
-    - exact package-code commit: `9b58be1a542d2d86a84ddfd14053a66be4162a1a`
 - Phase 5.7 — Web / PWA: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.8 — Broader API surfaces: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
