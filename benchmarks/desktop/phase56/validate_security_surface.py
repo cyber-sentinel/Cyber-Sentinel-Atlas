@@ -239,15 +239,15 @@ def main() -> int:
         "dotnet-wpf": validate_dotnet(),
     }
     report = {
-        "evidence_version": 2,
-        "phase": "5.6.3",
+        "evidence_version": 1,
+        "phase": "5.6.2",
         "gate": "G-D7-desktop-security-surface",
         "state": "PASS",
         "candidates": candidates,
         "selected_candidate": "tauri-v2",
         "selection_adr": "ADR-0026",
-        "selection_authorized": True,
-        "note": "Static security-surface regression evidence complements the executable G-D3 process-tree probe. The selected Tauri host expands only to the fixed First Preview command allowlist; no generic method bridge is exposed.",
+        "selection_authorized": False,
+        "note": "G-D7 evidence remains a Phase 5.6.2 gate artifact and does not itself authorize framework selection. Post-selection regression context: ADR-0026 selected Tauri and the First Preview expands only to the fixed seven-command allowlist; no generic method bridge is exposed.",
     }
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
