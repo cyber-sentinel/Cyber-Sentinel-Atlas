@@ -42,7 +42,7 @@ ADR-0023, ADR-0024 and ADR-0025 remain authoritative. Phase 5.6 consumes this bo
 
 ## Phase 5.6 — Windows Desktop MVP
 
-Status: **IN PROGRESS — FINAL PACKAGING/SMOKE CLOSURE**
+Status: **FEATURE-BRANCH IMPLEMENTATION COMPLETE / RELEASE CLOSURE PENDING**
 
 The Windows-first MVP remains offline-first, evidence-first and bounded by the frozen Shared Core.
 
@@ -99,27 +99,47 @@ The selected Tauri host exposes only the seven explicit First Preview applicatio
 
 ### Phase 5.6.4 — Windows Packaging / Smoke Closure
 
-Status: **IN PROGRESS**
+Status: **COMPLETE / VERIFIED ON FEATURE BRANCH**
 
-Active exact-head run: `35092036802` against package-code commit `9b58be1a542d2d86a84ddfd14053a66be4162a1a`.
+Authoritative exact-head run `35095383694` at package-code commit `2517ed5714dec2efc97db0df7789375c5aae50bb` completed successfully.
 
-Acceptance requires one byte-bound portable Windows package to be built once and consumed unchanged on a fresh Windows runner. The clean-machine gate verifies:
+One byte-bound portable Windows package was built once and consumed unchanged on a fresh GitHub-hosted Windows runner. The clean-machine gate verified:
 
 - package ZIP SHA-256;
 - host and Shared Core identity/integrity/size;
 - adjacent sidecar manifest;
 - portable relocation to a path containing spaces;
 - exact-head Shared Core commit;
-- offline/no-default-listener posture;
+- packaged offline/no-default-listener status probe;
 - deliberate corrupted-sidecar rejection;
 - recovery after verified-byte restoration;
-- WebView2 prerequisite without network bootstrap by ATLAS;
+- WebView2 prerequisite handling without ATLAS runtime bootstrap;
 - GUI launch/liveness;
-- zero TCP listeners and UDP endpoints in the application process tree.
+- zero TCP listeners in the application process tree;
+- zero UDP endpoints owned by ATLAS or Shared Core;
+- explicit attribution/evidence for WebView2-runtime UDP when present.
 
 The First Preview deliverable is an **unsigned portable ZIP**. Authenticode signing and public distribution hardening are later release-readiness boundaries. Binary auto-update remains disabled/not part of First Preview.
 
-**FIRST PREVIEW READY may only be claimed after 5.6.4 succeeds, the feature branch merges through PR, and post-merge verification on `main` succeeds.**
+**FIRST PREVIEW READY may only be claimed after PR review/CI, merge to `main`, and post-merge verification succeed.**
+
+### Phase 5.6 release closure
+
+Status: **ACTIVE**
+
+```text
+Feature implementation + package/smoke evidence   COMPLETE
+       ↓
+Authoritative documentation sync                  COMPLETE
+       ↓
+PR review + PR CI                                 NEXT
+       ↓
+Merge to main                                     PENDING
+       ↓
+Post-merge package verification                   PENDING
+       ↓
+FIRST PREVIEW READY
+```
 
 ## Phase 5.7 — Web / PWA
 
