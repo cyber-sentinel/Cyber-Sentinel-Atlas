@@ -38,13 +38,13 @@ Status: **COMPLETE / MERGED / POST-MERGE VERIFIED / FROZEN**
 
 Delivered TUF-based signed content-pack trust, secure `.atlaspack` extraction/verification, offline operation, trusted-time/highest-seen rollback guards, immutable generations, atomic activation/LKG behavior, production Go Shared Core, canonical/search/graph read models, stdio protocol, conformance, reproducibility and supply-chain closure.
 
-ADR-0023, ADR-0024 and ADR-0025 remain authoritative. Phase 5.6 may integrate with this boundary but may not redefine it.
+ADR-0023, ADR-0024 and ADR-0025 remain authoritative. Phase 5.6 consumes this boundary but may not redefine it.
 
 ## Phase 5.6 — Windows Desktop MVP
 
-Status: **IN PROGRESS**
+Status: **IN PROGRESS — FINAL PACKAGING/SMOKE CLOSURE**
 
-First end-user Windows interface. The MVP remains Windows-first, offline-first, evidence-first and bounded by the frozen Shared Core.
+The Windows-first MVP remains offline-first, evidence-first and bounded by the frozen Shared Core.
 
 ### Phase 5.6.0 — Desktop Environment / Core Boundary
 
@@ -56,51 +56,33 @@ Proved Windows toolchains, production `atlas-core.exe`, protocol `1.0.0` handsha
 
 Status: **COMPLETE / VERIFIED**
 
-Executable candidate hosts are available for:
-
-- Tauri 2.x;
-- Electron;
-- .NET 10 Windows Desktop / WPF.
-
-Each consumes the same verified production `atlas-core` sidecar and does not implement a parallel canonical/search/trust engine.
-
-Dependency reproducibility is now explicit: Electron uses committed `package-lock.json`; Tauri uses a committed and SHA-256-guarded `Cargo.lock`, and Candidate CI builds/resolves metadata with `--locked` rather than regenerating dependency resolution.
+Tauri 2.x, Electron and .NET 10/WPF were built as executable hosts around the same verified Shared Core. Electron uses a committed `package-lock.json`; Tauri uses committed/hash-guarded `Cargo.lock` and `--locked` build/metadata operations.
 
 ### Phase 5.6.2 — Hard Gates, Measurements & ADR-0026
 
-Status: **IN PROGRESS**
+Status: **COMPLETE / VERIFIED**
 
 Mandatory gate state:
 
-- G-D1 Clean Windows build: **PASS**
-- G-D2 stdio handshake/status: **PASS**
+- G-D1 Clean Windows build: **PASS / VERIFIED**
+- G-D2 stdio handshake/status: **PASS / VERIFIED**
 - G-D3 Offline / TCP / UDP process-tree network posture: **PASS / VERIFIED**
-- G-D4 Sidecar location/integrity/version: **PASS**
+- G-D4 Sidecar location/integrity/version: **PASS / VERIFIED**
 - G-D5 Active verified pack → canonical/search/graph/provenance: **PASS / VERIFIED**
 - G-D6 Verified pack update + safe manual rollback: **PASS / VERIFIED**
-- G-D7 Desktop security surface: **IMPLEMENTED / CI PENDING**
-- G-D8 Installer + portable feasibility: **IMPLEMENTED / CI PENDING**
-- G-D9 Startup / IPC / process / memory / package measurements and reproducibility closure: **PARTIAL**
+- G-D7 Desktop security surface: **PASS / VERIFIED**
+- G-D8 Installer + portable feasibility: **PASS / VERIFIED FOR FEASIBILITY**
+- G-D9 Startup / IPC / process / memory / package measurements: **PASS / VERIFIED**
 
-G-D7 and G-D8 are now executable/machine-enforced gates rather than pending design work. G-D8 currently proves portable relocation feasibility and records packaging/signing prerequisites; it does not replace the real installer/signing/clean-machine work reserved for Phase 5.6.4.
+Exact-head Candidate Evidence run `35090304056` completed successfully. The accepted weighted review is stored in `benchmarks/desktop/phase56/weighted-review.json`.
 
-Current execution sequence:
-
-```text
-G-D7 / G-D8  Exact-head Windows CI verification
-       ↓
-G-D9           Measurement closure
-       ↓
-ADR-0026       Accept one eligible Windows host
-```
-
-No Desktop framework may be selected before every mandatory gate is closed. Build success alone is not a selection signal.
+ADR-0026: **ACCEPTED — Tauri 2.x selected**.
 
 ### Phase 5.6.3 — First Preview UI
 
-Status: **PLANNED — blocked on 5.6.2 selection**
+Status: **COMPLETE / VERIFIED ON FEATURE BRANCH**
 
-Preview-critical surfaces:
+Delivered:
 
 - Offline Global Search;
 - Canonical Record / Entity Detail;
@@ -108,28 +90,36 @@ Preview-critical surfaces:
 - claim/source provenance;
 - Windows Event / Sysmon investigation context available in the active pack;
 - verified pack state;
-- pack update;
-- safe rollback and failure/recovery visibility;
-- investigation time display in UTC plus system/user-selected time zone, with Tehran and Jalali presentation supported as UI formatting.
+- pack update and safe rollback;
+- diagnostics/recovery visibility;
+- UTC, system-local and Tehran/Jalali presentation;
+- operational dark UI with accessibility/high-contrast controls.
 
-UX direction is an operational intelligence dark application rather than a promotional dashboard: dense technical surfaces, user-selectable theme tokens, stable security-state colors, restrained Iranian identity on Home, and validated geographic assets rather than generated maps.
+The selected Tauri host exposes only the seven explicit First Preview application commands and retains CSP/no-plugin/no-generic-network/no-generic-method-bridge restrictions.
 
 ### Phase 5.6.4 — Windows Packaging / Smoke Closure
 
-Status: **PLANNED**
+Status: **IN PROGRESS**
 
-Deliver and verify:
+Active exact-head run: `35092036802` against package-code commit `9b58be1a542d2d86a84ddfd14053a66be4162a1a`.
 
-- selected Windows package/installer boundary;
-- sidecar identity/integrity packaging;
-- portable-mode behavior;
-- clean-machine launch;
-- search, record/provenance and graph smoke paths;
-- verified pack state/update;
-- safe rollback;
-- failure/recovery behavior.
+Acceptance requires one byte-bound portable Windows package to be built once and consumed unchanged on a fresh Windows runner. The clean-machine gate verifies:
 
-**FIRST PREVIEW READY may only be claimed after this slice completes and verifies.**
+- package ZIP SHA-256;
+- host and Shared Core identity/integrity/size;
+- adjacent sidecar manifest;
+- portable relocation to a path containing spaces;
+- exact-head Shared Core commit;
+- offline/no-default-listener posture;
+- deliberate corrupted-sidecar rejection;
+- recovery after verified-byte restoration;
+- WebView2 prerequisite without network bootstrap by ATLAS;
+- GUI launch/liveness;
+- zero TCP listeners and UDP endpoints in the application process tree.
+
+The First Preview deliverable is an **unsigned portable ZIP**. Authenticode signing and public distribution hardening are later release-readiness boundaries. Binary auto-update remains disabled/not part of First Preview.
+
+**FIRST PREVIEW READY may only be claimed after 5.6.4 succeeds, the feature branch merges through PR, and post-merge verification on `main` succeeds.**
 
 ## Phase 5.7 — Web / PWA
 
@@ -153,7 +143,7 @@ Only after deterministic retrieval/provenance and First Preview are mature: cite
 
 Status: **PLANNED**
 
-Includes security review, third-party licensing/redistribution closure, accessibility, contributor workflow, source freshness, signed release process, public documentation and launch criteria.
+Includes final security review, third-party licensing/redistribution closure, accessibility, contributor workflow, source freshness, production signing, public release packaging/documentation and launch criteria.
 
 ## Expansion After MVP
 
