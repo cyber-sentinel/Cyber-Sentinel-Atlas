@@ -114,19 +114,19 @@ jobs:
           Remove-Item -Recurse -Force $env:CARGO_TARGET_DIR -ErrorAction SilentlyContinue
           if ($env:ATLAS_TAURI_BUILD_MODE -eq 'cargo-xwin') {
             cargo xwin build --release --locked --manifest-path $Manifest --target x86_64-pc-windows-msvc
-            $Host = Join-Path $env:CARGO_TARGET_DIR 'x86_64-pc-windows-msvc\release\atlas-tauri-candidate.exe'
+            $HostPath = Join-Path $env:CARGO_TARGET_DIR 'x86_64-pc-windows-msvc\release\atlas-tauri-candidate.exe'
           }
           else {
             cargo build --release --locked --manifest-path $Manifest
-            $Host = Join-Path $env:CARGO_TARGET_DIR 'release\atlas-tauri-candidate.exe'
+            $HostPath = Join-Path $env:CARGO_TARGET_DIR 'release\atlas-tauri-candidate.exe'
           }
           if ($LASTEXITCODE -ne 0) { throw 'Tauri First Preview build failed' }
           cargo metadata --format-version 1 --locked --manifest-path $Manifest | Out-Null
           if ($LASTEXITCODE -ne 0) { throw 'Tauri locked metadata validation failed' }
           git diff --exit-code -- benchmarks/desktop/phase56/candidates/tauri/Cargo.lock
           if ($LASTEXITCODE -ne 0) { throw 'Tauri Cargo.lock mutated during build' }
-          if (-not (Test-Path -LiteralPath $Host -PathType Leaf)) { throw "Tauri output missing: $Host" }
-          Copy-Item -LiteralPath $Host -Destination (Join-Path $env:PHASE564_STAGE 'Cyber-Sentinel-ATLAS.exe') -Force
+          if (-not (Test-Path -LiteralPath $HostPath -PathType Leaf)) { throw "Tauri output missing: $HostPath" }
+          Copy-Item -LiteralPath $HostPath -Destination (Join-Path $env:PHASE564_STAGE 'Cyber-Sentinel-ATLAS.exe') -Force
           "PHASE564_TAURI_BUILD_MODE=$env:ATLAS_TAURI_BUILD_MODE" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Assemble byte-bound portable preview package
@@ -134,9 +134,9 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $Stage = $env:PHASE564_STAGE
-          $Host = Join-Path $Stage 'Cyber-Sentinel-ATLAS.exe'
+          $HostPath = Join-Path $Stage 'Cyber-Sentinel-ATLAS.exe'
           $Core = Join-Path $Stage 'atlas-core.exe'
-          $HostHash = (Get-FileHash -Algorithm SHA256 $Host).Hash.ToLowerInvariant()
+          $HostHash = (Get-FileHash -Algorithm SHA256 $HostPath).Hash.ToLowerInvariant()
           $CoreHash = (Get-FileHash -Algorithm SHA256 $Core).Hash.ToLowerInvariant()
           $Manifest = [ordered]@{
             package_schema = 1
@@ -148,7 +148,7 @@ jobs:
             commit = $env:GITHUB_SHA
             protocol = 'atlas-core/1.0.0'
             build_mode = $env:PHASE564_TAURI_BUILD_MODE
-            host = [ordered]@{ file = 'Cyber-Sentinel-ATLAS.exe'; sha256 = $HostHash; size_bytes = (Get-Item $Host).Length }
+            host = [ordered]@{ file = 'Cyber-Sentinel-ATLAS.exe'; sha256 = $HostHash; size_bytes = (Get-Item $HostPath).Length }
             sidecar = [ordered]@{ file = 'atlas-core.exe'; sha256 = $CoreHash; size_bytes = (Get-Item $Core).Length; placement = 'adjacent-to-host' }
             runtime_dependencies = @([ordered]@{ name='Microsoft Edge WebView2 Runtime'; policy='required-by-Tauri-on-Windows'; bundled=$false; network_bootstrap_allowed=$false })
             security = [ordered]@{ default_network_listener=$false; csp_connect_src='none'; binary_auto_update=$false; sidecar_integrity='sha256-fail-closed' }
@@ -234,9 +234,9 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $Root = $env:PHASE564_CLEAN
-          $Host = Join-Path $Root 'Cyber-Sentinel-ATLAS.exe'
+          $HostPath = Join-Path $Root 'Cyber-Sentinel-ATLAS.exe'
           $Evidence = Join-Path $env:RUNNER_TEMP 'phase564-probe.json'
-          $p = Start-Process -FilePath $Host -ArgumentList @('--atlas-probe',"--probe-output=$Evidence") -Wait -PassThru
+          $p = Start-Process -FilePath $HostPath -ArgumentList @('--atlas-probe',"--probe-output=$Evidence") -Wait -PassThru
           if ($p.ExitCode -ne 0) { throw "portable probe failed: $($p.ExitCode)" }
           $probe = Get-Content -Raw $Evidence | ConvertFrom-Json
           if ($probe.status_result.network_listener -ne $false -or $probe.status_result.offline_capable -ne $true) {
@@ -250,16 +250,16 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $Root = $env:PHASE564_CLEAN
-          $Host = Join-Path $Root 'Cyber-Sentinel-ATLAS.exe'
+          $HostPath = Join-Path $Root 'Cyber-Sentinel-ATLAS.exe'
           $Core = Join-Path $Root 'atlas-core.exe'
           $Backup = Join-Path $env:RUNNER_TEMP 'atlas-core.clean-backup.exe'
           Copy-Item $Core $Backup -Force
           Add-Content -Encoding ascii -NoNewline -Path $Core -Value 'corruption-test'
-          $bad = Start-Process -FilePath $Host -ArgumentList @('--atlas-probe',"--probe-output=$(Join-Path $env:RUNNER_TEMP 'should-not-exist.json')") -Wait -PassThru
+          $bad = Start-Process -FilePath $HostPath -ArgumentList @('--atlas-probe',"--probe-output=$(Join-Path $env:RUNNER_TEMP 'should-not-exist.json')") -Wait -PassThru
           if ($bad.ExitCode -eq 0) { throw 'corrupted sidecar was accepted' }
           Copy-Item $Backup $Core -Force
           $okEvidence = Join-Path $env:RUNNER_TEMP 'phase564-recovery-probe.json'
-          $good = Start-Process -FilePath $Host -ArgumentList @('--atlas-probe',"--probe-output=$okEvidence") -Wait -PassThru
+          $good = Start-Process -FilePath $HostPath -ArgumentList @('--atlas-probe',"--probe-output=$okEvidence") -Wait -PassThru
           if ($good.ExitCode -ne 0) { throw 'sidecar recovery probe failed after restoring verified bytes' }
           Copy-Item $okEvidence package-artifact\phase564-recovery-probe.json -Force
 
@@ -268,7 +268,7 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $Root = $env:PHASE564_CLEAN
-          $Host = Join-Path $Root 'Cyber-Sentinel-ATLAS.exe'
+          $HostPath = Join-Path $Root 'Cyber-Sentinel-ATLAS.exe'
           $webViewKeys = @(
             'HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F1E7E9A5-0677-4D44-8C3F-49A93A2E2E20}',
             'HKLM:\SOFTWARE\Microsoft\EdgeUpdate\Clients\{F1E7E9A5-0677-4D44-8C3F-49A93A2E2E20}',
@@ -284,7 +284,7 @@ jobs:
           $webViewVersion = ($versions | Select-Object -First 1)
           if (-not $webViewVersion) { throw 'Microsoft Edge WebView2 Runtime not present on clean Windows runner; package correctly refuses network bootstrap, but GUI prerequisite is unmet' }
 
-          $process = Start-Process -FilePath $Host -PassThru
+          $process = Start-Process -FilePath $HostPath -PassThru
           Start-Sleep -Seconds 8
           $process.Refresh()
           if ($process.HasExited) { throw "First Preview GUI exited during clean-machine smoke with code $($process.ExitCode)" }
