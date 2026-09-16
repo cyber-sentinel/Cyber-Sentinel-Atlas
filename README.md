@@ -8,18 +8,19 @@ ATLAS is designed for security teams that need investigation context to be **det
 
 > **Development:** Active
 > **Completed foundation:** Phases 5.1–5.5 COMPLETE / MERGED / VERIFIED
-> **Windows Desktop:** Phase 5.6.0–5.6.4 COMPLETE / MERGED TO `main`
+> **Windows Desktop:** Phase 5.6 COMPLETE / MERGED / POST-MERGE VERIFIED
 > **Desktop host:** Tauri 2.x — ADR-0026 Accepted
 > **Hard gates:** G-D1 through G-D9 CLOSED / VERIFIED
 > **PR release closure:** PR #39 MERGED
-> **Post-merge verification:** ACTIVE on `main` merge commit `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
-> **First Preview readiness:** PENDING post-merge package/smoke completion
+> **Post-merge verification:** VERIFIED on `main` merge commit `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
+> **First Preview engineering readiness:** READY
 > **Release state:** Pre-preview / unreleased
 > **Repository visibility:** Public
+> **Licensing note:** No project `LICENSE` is currently published; public visibility does not grant reuse or redistribution rights
 
 Foundation regression invariants: **Phase 5.1 — Product Foundation: COMPLETE**; **Stage 1 — Governance / Architecture Sync: COMPLETE**.
 
-Public repository visibility does **not** imply public-release readiness. `main` is the release authority. `FIRST PREVIEW READY` is reserved for successful post-merge verification of the merged product state.
+Public repository visibility does **not** imply a signed public release or GA readiness. `main` is the release authority. `FIRST PREVIEW READY` is an engineering-readiness milestone backed by merged and post-merge verified evidence; the project remains pre-preview/unreleased for public distribution.
 
 Detailed implementation state is maintained in [Current Status](docs/current-status.md), [Project State](docs/project-state.md), and the [Roadmap](docs/roadmap.md).
 
@@ -150,6 +151,8 @@ Phase 5.5 is frozen. Desktop work consumes this boundary rather than redefining 
 
 ## Phase 5.6 — Windows Desktop MVP
 
+**COMPLETE / MERGED / POST-MERGE VERIFIED**
+
 ### 5.6.0 — Desktop Environment / Core Boundary
 
 **COMPLETE / VERIFIED**
@@ -208,11 +211,11 @@ Security regression evidence enforces one main-window capability, explicit comma
 
 ### 5.6.4 — Windows Packaging / Clean-Machine Smoke
 
-**COMPLETE / VERIFIED ON PR HEAD / POST-MERGE VERIFICATION ACTIVE**
+**COMPLETE / MERGED / POST-MERGE VERIFIED**
 
-The accepted packaging workflow builds one byte-bound portable Windows First Preview ZIP and consumes the same immutable artifact on a fresh GitHub-hosted Windows runner.
+Release-authority post-merge workflow `Phase 5.6.4 Windows First Preview Package`, run `35133827422`, completed successfully on `main` merge commit `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`.
 
-Verified controls on the accepted implementation boundary include:
+The workflow built one byte-bound portable Windows First Preview ZIP and consumed the same immutable artifact on a fresh GitHub-hosted Windows runner. Verified controls include:
 
 - ZIP SHA-256 plus host/sidecar hash and size binding;
 - exact Shared Core commit binding;
@@ -224,9 +227,12 @@ Verified controls on the accepted implementation boundary include:
 - GUI launch/liveness on clean Windows;
 - zero TCP listeners in the packaged GUI process tree;
 - zero UDP endpoints owned by ATLAS or Shared Core;
-- runtime-owned WebView2 UDP, when present, explicitly attributed and recorded as evidence rather than silently ignored.
+- runtime-owned WebView2 UDP, when present, explicitly attributed and recorded rather than silently ignored.
 
-Post-merge run `35133827422` is the current release-authority package verification for merge commit `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`.
+Post-merge artifacts:
+
+- `phase564-first-preview-package` — artifact `10462114843`, digest `sha256:57d9cce8a2ec85900bbc6b4fe250eefe53b43b241ddbefd2a9a1d9aafaee6f50`;
+- `phase564-clean-windows-evidence` — artifact `10463420685`, digest `sha256:456ea3aa6a7b2c84a555c2c1e60c8f31086781172ce53d530d677abd29f019d5`.
 
 The First Preview artifact is intentionally an **unsigned portable ZIP**. Production Authenticode signing, installer/public distribution hardening, and binary auto-update remain later release-readiness boundaries.
 
@@ -294,29 +300,28 @@ Current boundaries are explicit:
 - no claim of complete Windows/Sysmon historical coverage;
 - no claim that AI output is canonical truth;
 - no claim that every supported architecture domain is already ingested;
-- no claim that a successful CI gate replaces enterprise deployment validation.
+- no claim that a successful CI gate replaces enterprise deployment validation;
+- public repository visibility does not grant license rights in the absence of a published project license.
 
-This conservative maturity model is intentional: security products should expose what has been proven, what remains conditional, and what has not yet been released.
+This conservative maturity model is intentional: security products should expose what has been proven, what remains conditional, and what has not yet been publicly released.
 
 ## Release Discipline
-
-Current release-authority sequence:
 
 ```text
 Phase 5.6 implementation complete
         ↓
 PR #39 final CI / review complete
         ↓
-Merged to main — COMPLETE
+Merged to main
         ↓
-Post-merge package + regression verification — ACTIVE
+Post-merge package + regression verification complete
         ↓
-FIRST PREVIEW READY
+FIRST PREVIEW READY — ENGINEERING READINESS
         ↓
 Later: signing / distribution hardening / broader release readiness
 ```
 
-`FIRST PREVIEW READY` is an engineering-readiness milestone. It is not equivalent to a signed GA release.
+`FIRST PREVIEW READY` is an engineering-readiness milestone. It is not equivalent to a signed GA release, a public binary release, or universal enterprise deployment approval.
 
 ---
 
