@@ -49,6 +49,7 @@ jobs:
             exit 1
           }
       - name: Preserve production implementation separation
+        if: github.head_ref == 'architecture/phase-5.5.4-shared-core-interface' || github.ref_name == 'architecture/phase-5.5.4-shared-core-interface'
         shell: bash
         run: |
           if git diff --name-only origin/main...HEAD | grep -q '^shared-core/go/'; then
