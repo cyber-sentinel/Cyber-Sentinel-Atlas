@@ -16,7 +16,7 @@ Every candidate fails closed when the adjacent sidecar or its SHA-256 manifest i
 
 Electron uses its committed `package-lock.json` with `npm ci`.
 
-Tauri now uses a committed `Cargo.lock`. Candidate CI:
+Tauri uses a committed `Cargo.lock`. Candidate CI:
 
 - requires the lockfile to exist;
 - verifies the approved SHA-256 before build;
@@ -26,14 +26,16 @@ Tauri now uses a committed `Cargo.lock`. Candidate CI:
 
 The workflow must not regenerate Tauri dependency resolution with `cargo generate-lockfile`. Dependency drift is a hard failure rather than an implicit update.
 
+Because the Tauri lock is byte-hash guarded, `.gitattributes` forces `benchmarks/desktop/phase56/candidates/tauri/Cargo.lock` to `text eol=lf`. This prevents Windows checkout from converting canonical LF bytes to CRLF and creating a false SHA-256 drift signal.
+
 ## Phase 5.6.2 hard-gate evidence
 
 G-D7 Desktop Security Surface is implemented as candidate-specific, machine-enforced policy evidence. It validates the intended security boundary for Electron, Tauri and native .NET/WPF before the candidate summary can pass.
 
-G-D8 Installer/Portable feasibility is also implemented as executable evidence. Each staged candidate is relocated to a different directory whose path contains spaces and must successfully execute its real probe from that location while preserving the adjacent `atlas-core.exe` and SHA-256 manifest boundary. Packaging/runtime prerequisites, installer options, signing boundary and disabled binary auto-update posture are recorded as evidence.
+G-D8 Installer/Portable feasibility is implemented as executable evidence. Each staged candidate is relocated to a different directory whose path contains spaces and must successfully execute its real probe from that location while preserving the adjacent `atlas-core.exe` and SHA-256 manifest boundary. Packaging/runtime prerequisites, installer options, signing boundary and disabled binary auto-update posture are recorded as evidence.
 
 G-D8 feasibility evidence does **not** replace real installer construction, release signing, or clean-machine installer smoke testing. Those remain Phase 5.6.4 requirements.
 
-G-D9 remains partially open. The common external Windows harness currently captures first post-build launch, repeated measured launch/IPC timing, process-tree peak working set, process count, package size and TCP/UDP endpoint observations. Any remaining measurement closure must be completed before weighted selection.
+G-D9 measurement closure is now implemented as fail-closed evidence and awaits successful exact-head Windows CI. The common external host harness captures first post-build launch, warm launch/IPC timing, process-tree peak working set, process count, package size and TCP/UDP endpoint observations. A separate common Shared Core harness measures `core.handshake` and `core.status` latency against the identical exact-head `atlas-core.exe`. The first post-build launch is explicitly qualified as not forcibly purging the Windows OS page cache.
 
 Phase 5.6.1 completion does not authorize selection. G-D1 through G-D9 remain fail-closed, and ADR-0026 may be accepted only after Phase 5.6.2 closes every mandatory gate and completes the weighted evidence review.
