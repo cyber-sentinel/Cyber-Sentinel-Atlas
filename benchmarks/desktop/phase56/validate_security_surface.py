@@ -109,9 +109,20 @@ def validate_tauri() -> dict[str, object]:
     main = read(base / "src" / "main.rs")
     frontend = read(base / "www" / "main.js")
 
+    commands = [
+        "core_status",
+        "search_records",
+        "get_record",
+        "expand_graph",
+        "pack_status",
+        "pack_update",
+        "pack_rollback",
+    ]
+    permissions = [f"allow-{command.replace('_', '-')}" for command in commands]
+
     app = config.get("app", {})
     require(app.get("withGlobalTauri") is True,
-            "Tauri static candidate requires the global JS API, which must remain capability-restricted")
+            "Tauri First Preview requires the global JS API, which must remain capability-restricted")
     windows = app.get("windows")
     require(isinstance(windows, list) and len(windows) == 1 and windows[0].get("label") == "main",
             "Tauri must expose exactly the explicitly labeled main window")
@@ -130,14 +141,16 @@ def validate_tauri() -> dict[str, object]:
             "Tauri must declare exactly one explicit security capability")
     capability = capabilities[0]
     require(isinstance(capability, dict), "Tauri capability must be inline and inspectable")
-    require(capability.get("identifier") == "main-core-status-only", "unexpected Tauri capability identifier")
+    require(capability.get("identifier") == "main-preview-commands", "unexpected Tauri capability identifier")
     require(capability.get("windows") == ["main"], "Tauri capability must bind only to the main window")
-    require(capability.get("permissions") == ["allow-core-status"],
-            "Tauri capability must grant only allow-core-status")
+    require(capability.get("permissions") == permissions,
+            "Tauri capability must grant exactly the First Preview allowlisted commands")
     require("remote" not in capability, "Tauri remote origins must not receive capabilities")
 
-    require('AppManifest::new().commands(&["core_status"])' in build,
-            "Tauri build manifest must register core_status for generated app-command ACL permissions")
+    require("AppManifest::new().commands(&[" in build,
+            "Tauri build manifest must register the explicit app-command ACL")
+    for command in commands:
+        require(f'"{command}"' in build, f"Tauri build manifest is missing command: {command}")
     require(".app_manifest(app_manifest)" in build,
             "Tauri build attributes must apply the application ACL manifest")
 
@@ -145,28 +158,43 @@ def validate_tauri() -> dict[str, object]:
     require(set(dependencies) == {"tauri", "serde_json", "sha2"},
             f"Tauri candidate has unexpected runtime dependencies: {sorted(dependencies)}")
     require(not any(name.startswith("tauri-plugin-") for name in dependencies),
-            "Tauri plugins are not allowed in the G-D7 baseline")
+            "Tauri plugins are not allowed in the First Preview baseline")
 
-    require(main.count("#[tauri::command]") == 1 and "fn core_status()" in main,
-            "Tauri must expose exactly one application command")
-    require("generate_handler![core_status]" in main, "Tauri invoke handler must expose only core_status")
-    require(main.count("Command::new(&core)") == 1, "Tauri may spawn only the verified atlas-core path")
+    require(main.count("#[tauri::command]") == len(commands),
+            "Tauri command count must exactly match the frozen First Preview command surface")
+    for command in commands:
+        require(f"fn {command}(" in main or f"fn {command}()" in main,
+                f"Tauri command implementation is missing: {command}")
+        require(command in main[main.find("generate_handler!["):],
+                f"Tauri invoke handler is missing: {command}")
+    require("fn run_core_session(method: &'static str" in main,
+            "Tauri may share an internal typed-session helper but it must not accept a frontend-provided method name")
+    require("method: String" not in main and "method: &str" not in main,
+            "Tauri must not expose a generic frontend-controlled Shared Core method bridge")
+    require(main.count("Command::new(&core)") == 1,
+            "Tauri may spawn only the verified atlas-core path")
     for forbidden in (
         "std::net", "TcpListener", "TcpStream", "UdpSocket", "reqwest", "hyper::", "tauri_plugin_",
         "powershell", "cmd.exe", "Command::new(\"",
     ):
         require(forbidden not in main, f"Tauri forbidden surface present: {forbidden}")
-    require("window.__TAURI__.core.invoke('core_status')" in frontend,
-            "Tauri frontend must invoke only the fixed core_status command")
+
+    invoked = re.findall(r"invoke\('([a-z_]+)'", frontend)
+    require(set(invoked) == set(commands),
+            f"Tauri frontend command set differs from allowlist: {sorted(set(invoked))}")
+    require(len(invoked) == len(commands),
+            "Tauri frontend must define exactly one literal invocation per allowlisted command")
     for forbidden in ("fetch(", "XMLHttpRequest", "WebSocket", ".shell", ".fs", "eval(", "new Function("):
         require(forbidden not in frontend, f"Tauri frontend forbidden surface present: {forbidden}")
 
     return {
         "state": "PASS",
-        "capability": "main window only / allow-core-status only",
-        "app_command_acl": "AppManifest-generated allow-core-status only",
+        "selected_by": "ADR-0026",
+        "capability": "main window only / seven explicit First Preview application commands",
+        "app_command_acl": permissions,
         "plugins": "none",
-        "command_surface": "core_status only",
+        "command_surface": commands,
+        "generic_method_bridge": False,
         "network_api": "no frontend/Rust generic network API",
         "csp_connect_src": "none",
     }
@@ -211,13 +239,15 @@ def main() -> int:
         "dotnet-wpf": validate_dotnet(),
     }
     report = {
-        "evidence_version": 1,
-        "phase": "5.6.2",
+        "evidence_version": 2,
+        "phase": "5.6.3",
         "gate": "G-D7-desktop-security-surface",
         "state": "PASS",
         "candidates": candidates,
-        "selection_authorized": False,
-        "note": "Static security-surface policy evidence complements the executable G-D3 process-tree network probe; it does not select a framework.",
+        "selected_candidate": "tauri-v2",
+        "selection_adr": "ADR-0026",
+        "selection_authorized": True,
+        "note": "Static security-surface regression evidence complements the executable G-D3 process-tree probe. The selected Tauri host expands only to the fixed First Preview command allowlist; no generic method bridge is exposed.",
     }
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
