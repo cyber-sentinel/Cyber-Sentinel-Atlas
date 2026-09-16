@@ -14,9 +14,10 @@ const (
 )
 
 var coreCapabilities = []string{"core.handshake", "core.status"}
-var operationalCapabilities = []string{"search.query", "record.get", "catalog.list", "graph.expand", "pack.status"}
+var operationalCapabilities = []string{"search.query", "record.get", "catalog.list", "graph.expand", "pack.status", "pack.update", "pack.rollback"}
 var operationalAllowlist = map[string]struct{}{
 	"search.query": {}, "record.get": {}, "catalog.list": {}, "graph.expand": {}, "pack.status": {},
+	"pack.update": {}, "pack.rollback": {},
 }
 
 type BuildInfo struct {

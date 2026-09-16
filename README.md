@@ -2,63 +2,43 @@
 
 **Provenance-First Cyber Defense Knowledge & Investigation Platform**
 
-Foundation descriptor: **Intelligent Cyber Defense Knowledge & Investigation Platform**
-
-Cyber-Sentinel-Atlas is the **KNOW** layer and knowledge/investigation product of the Cyber-Sentinel ecosystem: a vendor-neutral, analyst-first platform that connects telemetry, security records, adversary behavior, detections, hunts, forensic artifacts, defensive controls, investigation procedures, and response guidance into a source-backed, inspectable knowledge system.
+Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: an offline-first, analyst-first platform for connecting security telemetry, canonical records, adversary behavior, detections, hunts, DFIR artifacts, defensive context, investigation pivots and claim-level provenance into an inspectable knowledge system.
 
 > **Development:** Active
-> **Foundation state:** Phase 5.1 COMPLETE; Stage 1 COMPLETE
-> **Current delivery boundary:** Phase 5.6 — Windows Desktop MVP
-> **Completed:** Phases 5.1–5.5, including Phase 5.5.4A–5.5.4D production Go Shared Core closure
-> **Next implementation slice:** Phase 5.6 — Windows Desktop MVP
-> **Visibility:** Private during active development
-> **Version:** `0.1.0-foundation.1`
+> **Completed foundation:** Phases 5.1–5.5 COMPLETE / MERGED / VERIFIED
+> **Windows Desktop:** Phase 5.6.0–5.6.4 COMPLETE / VERIFIED on the active feature branch
+> **Desktop host:** Tauri 2.x — ADR-0026 Accepted
+> **Hard gates:** G-D1 through G-D9 CLOSED / VERIFIED from frozen Phase 5.6.2 selection evidence
+> **Packaging gate:** Phase 5.6.4 Windows package + clean-Windows smoke VERIFIED
+> **Current release closure:** PR #39 open; final regression CI active; merge and post-merge verification pending
+> **Release state:** Pre-preview / unreleased
+> **Repository visibility:** Public
 
-The live `main` branch is the final repository authority. Detailed phase evidence and roadmap state are maintained in [Current Status](docs/current-status.md), [Project State](docs/project-state.md), and the [Roadmap](docs/roadmap.md).
+Foundation regression invariants: **Phase 5.1 — Product Foundation: COMPLETE**; **Stage 1 — Governance / Architecture Sync: COMPLETE**.
+
+Public repository visibility does **not** imply public-release readiness. `main` remains release authority. `FIRST PREVIEW READY` is reserved for successful PR review, merge to `main`, and required post-merge verification.
+
+Detailed implementation state is maintained in [Current Status](docs/current-status.md), [Project State](docs/project-state.md), and the [Roadmap](docs/roadmap.md).
 
 ## Product Thesis
 
-Cyber defense knowledge is fragmented across operating systems, SIEMs, EDRs, cloud platforms, container runtimes, databases, vendor documentation, detection repositories, threat intelligence, and incident-response references.
+Cyber defense knowledge is fragmented across operating systems, SIEMs, EDR/XDR platforms, cloud environments, container runtimes, databases, vendor documentation, detection repositories, threat intelligence and incident-response references.
 
-Atlas makes those relationships searchable and operational while keeping technical claims bound to inspectable evidence:
+ATLAS connects those sources into deterministic, searchable investigation context while keeping technical claims bound to inspectable evidence.
 
-```text
-Platform / Technology
-        ↓
-Telemetry Provider / Source
-        ↓
-Telemetry Record / Artifact
-        ↓
-Security Meaning / Behavior
-        ↓
-ATT&CK / D3FEND / CAR
-        ↓
-Detection / Hunt
-        ↓
-Investigation / DFIR
-        ↓
-Response / Defensive Action
-        ↓
-Claim-level Sources & Provenance
-```
+**No technical claim without provenance.**
 
-## Product Position
+<p align="center">
+  <img src="assets/satellite.png" alt="Cyber-Sentinel Atlas product thesis — telemetry, security knowledge, investigation, defensive action and provenance" width="100%" />
+</p>
 
-Atlas is **not**:
+ATLAS is designed as a **Cyber Defense Knowledge Graph + Analyst Workbench + Offline Knowledge Platform**.
 
-- another Event ID wiki;
-- another detection-rule repository;
-- another ATT&CK browser;
-- another SIEM-specific content portal;
-- an AI chatbot without verifiable sources;
-- a replacement for the defensive-content engineering ownership of Cyber-Sentinel-DefenseOps;
-- a replacement for the reusable operational procedures and playbooks owned by Cyber-Sentinel-Skills.
+Within the Cyber-Sentinel ecosystem, ATLAS answers:
 
-Atlas is designed as a **Cyber Defense Knowledge Graph + Analyst Workbench + Offline Knowledge Platform**.
+> **What do we know about what we are seeing?**
 
-Within the wider Cyber-Sentinel model, Atlas answers the **KNOW** question: *What do we know about what we are seeing?* DefenseOps turns that knowledge into defensive engineering, while Skills turns repeatable operating methods into reusable procedures for humans and AI agents.
-
-Validated detections, hunts, and other defensive engineering outputs can enter Atlas from DefenseOps only through explicit versioned ingestion, provenance, validation, and controlled release gates.
+ATLAS is not an Event ID wiki, detection-rule dump, ATT&CK browser, SIEM-specific content portal or ungrounded AI chatbot. DefenseOps owns defensive engineering content; Skills owns reusable operating procedures. ATLAS owns governed knowledge, retrieval, provenance, relationships and investigation context.
 
 ## Current Architecture
 
@@ -66,31 +46,29 @@ Validated detections, hunts, and other defensive engineering outputs can enter A
   <img src="assets/ATLAS-IR.png" alt="Cyber-Sentinel Atlas content pipeline and production architecture" width="100%" />
 </p>
 
-The architecture is offline-first. Deterministic exact and lexical retrieval must work without AI, and no UI, search index, upstream source, or model response becomes canonical truth.
+ATLAS is **offline-first**. Deterministic exact and lexical retrieval works without AI, and no UI, search index, upstream source or model response becomes canonical truth.
 
-## Accepted Architecture Decisions
+### Accepted architecture boundary
 
-The current implementation boundary includes the following accepted decisions:
-
-- **Canonical schema:** Atlas schema contract `1.0.0`, JSON Schema Draft 2020-12;
+- **Canonical schema:** contract `1.0.0`, JSON Schema Draft 2020-12;
 - **Canonical model:** exactly seven `AtlasRecord` families;
-- **Search contract:** deterministic exact-before-lexical retrieval with bounded ambiguity and ordering semantics;
-- **Search engine:** SQLite + FTS5;
-- **Content-pack trust:** TUF-based trust and update model with offline verification and Last Known Good preservation;
-- **Pack format/runtime:** verified `.atlaspack` handling, immutable generations, rollback guards, and atomic activation semantics;
+- **Search:** deterministic exact-before-lexical retrieval using SQLite + FTS5;
+- **Content trust:** TUF-based verification, trusted-time and highest-seen rollback protection;
+- **Pack runtime:** verified `.atlaspack`, immutable generations, durable state, health-gated activation and Last Known Good semantics;
 - **Production Shared Core:** Go;
-- **Reference/conformance role:** Python remains the semantic and cross-language conformance oracle for Shared Core conformance;
-- **Local Shared Core boundary:** `atlas-core --serve-stdio` using a versioned, bounded, length-prefixed UTF-8 JSON protocol;
-- **Network posture:** no default local HTTP/TCP listener and no hidden network fallback;
+- **Conformance oracle:** Python;
+- **Desktop host:** Tauri 2.x — ADR-0026;
+- **Desktop/Core IPC:** `atlas-core --serve-stdio`, protocol `atlas-core/1.0.0`;
+- **Framing:** bounded 4-byte unsigned big-endian length prefix + UTF-8 JSON;
+- **Protocol behavior:** mandatory handshake, strict method allowlists, duplicate-key rejection and bounded payloads;
+- **Network posture:** no default local HTTP/TCP/WebSocket listener and no hidden network fallback;
 - **Official user-facing CLI command:** `atlas`.
 
-These decisions do **not** automatically select the Windows Desktop UI framework, broader application storage, graph database, HSM/KMS provider, application updater/CDN topology, Detection IR, semantic/vector retrieval, or Grounded AI runtime.
+The Desktop layer consumes Shared Core capabilities but does not duplicate or redefine canonical validation, search/graph semantics, TUF verification, durable trust state or rollback protection.
 
 ## Canonical Model
 
-The authoritative schema contract is **1.0.0**.
-
-Record families:
+The authoritative schema contract remains **1.0.0** with exactly seven record families:
 
 - `EntityRecord`
 - `ClaimRecord`
@@ -106,15 +84,9 @@ Canonical schema URI base:
 https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/
 ```
 
-The current schema `$id` / `$ref` namespace is part of the accepted v1 contract. Any future public-hosting or immutable-URI migration must be explicit and version-controlled rather than silently changing canonical identity.
+The current `$id` / `$ref` namespace is part of the accepted v1 contract. Schema changes must be explicit and versioned; CI includes a canonical-schema drift guard.
 
-The permanent canonical semantic validator is `tools/validate_phase52.py`. Permanent model tests are `tests/test_phase52_model.py` and `tests/test_phase52_invariants.py`.
-
-## Source & Ingestion Core
-
-The ingestion/control plane has been validated against ATT&CK, Windows Security, Sysmon, D3FEND, CAR, and the controlled DefenseOps export boundary.
-
-Ingestion Contract Version: **1.0.0**
+## Source, Ingestion & Deterministic Search
 
 ```text
 SourceRecord / source control
@@ -134,192 +106,149 @@ Inventory Diff → Validation → Human Review
 PACK_READY
 ```
 
-`PACK_READY` is a validated promotion state; it is not itself equivalent to signed, installed, or active content.
+`PACK_READY` is a validated promotion state; it is not equivalent to signed, installed or active content.
 
-The ingestion pipeline preserves source lineage, ambiguous-identity quarantine, independent authority dimensions, legacy/current lifecycle semantics, and fail-closed promotion controls without changing the seven-family canonical model.
+The deterministic search core provides exact identifier resolution before lexical retrieval, bounded ambiguity, deterministic ordering, catalog browsing, lifecycle-aware filters, bounded graph pivots, corruption/staleness checks and rebuildable derived indexes. Search artifacts never become canonical truth.
 
-## Deterministic Search
+## Phase 5.5 — Verified Offline Packs & Shared Core
 
-Phase 5.4 established the production deterministic search contract and selected **SQLite + FTS5** after cross-platform evaluation.
+**COMPLETE / MERGED / POST-MERGE VERIFIED / FROZEN**
 
-The search layer provides:
+Delivered production capabilities include TUF content trust, secure `.atlaspack` extraction/verification, offline verification, exact artifact binding, trusted-time/highest-seen anti-rollback controls, immutable generations, atomic activation/LKG recovery, deterministic verified-pack building, production Go Shared Core, canonical/search/graph read models, durable pack trust state and bounded local stdio IPC.
 
-- exact identifier resolution before lexical retrieval;
-- scoped/native identifier and alias handling;
-- deterministic ambiguity and result ordering;
-- bounded filters and catalog browsing;
-- lifecycle-aware browsing;
-- bounded graph pivots;
-- corruption/staleness checks;
-- rebuildable derived search artifacts;
-- no semantic/vector fallback in the deterministic core.
+Phase 5.5 is frozen. Desktop work consumes this boundary rather than redefining it.
 
-Search indexes are derived artifacts and never become the canonical source of truth.
+## Phase 5.6 — Windows Desktop MVP
 
-## Verified Offline Packs & Shared Core
+### 5.6.0 — Desktop Environment / Core Boundary
 
-Phase 5.5 established and closed the verified offline pack and production Shared Core boundary.
+**COMPLETE / VERIFIED**
 
-Completed capabilities include:
+Windows toolchain, exact-head `atlas-core.exe`, stdio handshake/status, offline posture and no-default-listener behavior are verified.
 
-- TUF-based content trust contracts;
-- secure `.atlaspack` validation and extraction rules;
-- offline verification;
-- exact manifest/artifact/control binding;
-- trusted-time and highest-seen rollback guards;
-- immutable generations;
-- atomic activation and Last Known Good rollback;
-- deterministic verified-pack building;
-- Go production protocol core (`5.5.4A`);
-- Go canonical, SQLite/FTS5 search, catalog, and bounded graph parity (`5.5.4B`);
-- Go TUF/pack trust, durable state, activation and LKG parity (`5.5.4C`);
-- Linux/Windows supply-chain closure, reproducible-build evidence, SBOM/vulnerability checks, dependency hardening and Python-oracle conformance (`5.5.4D`).
+### 5.6.1 — Executable Desktop Candidate Builds
 
-Phase 5.5.4D merged through PR #35 at `00a27df6b28b034fecc3905865e0aac200e5aa87`, closing the production Go Shared Core implementation sequence. The next delivery boundary is **Phase 5.6 — Windows Desktop MVP**; its UI technology remains a separate evidence/ADR decision and is not implied by the Go Shared Core.
+**COMPLETE / VERIFIED**
 
-## Initial MVP Domain
+Tauri 2.x, Electron and .NET 10/WPF were built and measured against the same production Shared Core. Electron uses committed `package-lock.json`; Tauri uses committed/hash-guarded `Cargo.lock` and locked build/metadata resolution.
 
-The first usable MVP intentionally starts narrow:
+### 5.6.2 — Hard Gates, Measurements & Desktop Selection
 
-- Windows Security Events
-- Sysmon
-- PowerShell
-- Active Directory
-- MITRE ATT&CK relationships
-- selected D3FEND/CAR relationships
-- DefenseOps validated detections and hunts
-- investigation pivots
-- official-source provenance
-- fast exact/lexical search
-- verified offline local datasets
+**COMPLETE / VERIFIED**
 
-The architecture is intentionally extensible to Linux, macOS, Exchange, SharePoint, Microsoft 365, Entra/Azure, AWS, Google Cloud, Docker, Kubernetes/OpenShift, DevOps/CI-CD, SQL/NoSQL databases, LOLBAS, GTFOBins, broader DFIR/IR, and cyber deception.
+Frozen Candidate Evidence run `35090304056` closed G-D1 through G-D9 for the selection decision, including Windows build, bounded stdio, offline/no-listener posture, sidecar integrity, verified-pack read model/update/rollback, desktop security surface, portable feasibility and common startup/IPC/process/memory/package measurements.
 
-Architecture support does not imply MVP ingestion of every domain.
+| Gate | State |
+| --- | --- |
+| G-D1 Clean Windows build | **PASS / VERIFIED** |
+| G-D2 Shared Core handshake/status | **PASS / VERIFIED** |
+| G-D3 Offline/no-default-listener | **PASS / VERIFIED** |
+| G-D4 Sidecar identity/integrity | **PASS / VERIFIED** |
+| G-D5 Active verified pack read model | **PASS / VERIFIED** |
+| G-D6 Verified update + safe rollback | **PASS / VERIFIED** |
+| G-D7 Desktop security surface | **PASS / VERIFIED** |
+| G-D8 Installer/portable feasibility | **PASS / VERIFIED FOR FEASIBILITY** |
+| G-D9 Comparable measurements | **PASS / VERIFIED** |
+
+The frozen weighted review is in `benchmarks/desktop/phase56/weighted-review.json`. ADR-0026 is accepted with **Tauri 2.x selected**.
+
+The historical multi-candidate evidence workflow remains part of regression CI. A regression rerun can block release closure without changing the already accepted framework selection; any such failure must still be diagnosed and closed before merge.
+
+### 5.6.3 — First Preview UI
+
+**COMPLETE / VERIFIED ON FEATURE BRANCH**
+
+The First Preview implements:
+
+- Offline Global Search;
+- Canonical Record / Entity Detail;
+- bounded Relationship / Graph navigation;
+- Claim / Source Provenance;
+- Windows Event / Sysmon investigation context available in the pack;
+- Verified Pack State;
+- Pack Update;
+- Safe Rollback / recovery visibility;
+- diagnostics;
+- UTC, system-local and Tehran/Jalali presentation;
+- operational dark UI with accessibility/high-contrast controls.
+
+The selected host exposes exactly seven application commands: `core_status`, `search_records`, `get_record`, `expand_graph`, `pack_status`, `pack_update`, and `pack_rollback`.
+
+Security regression evidence enforces one main-window capability, explicit command ACLs, CSP `connect-src 'none'`, no Tauri plugins, no generic frontend-controlled Shared Core method bridge and no generic application network API.
+
+### 5.6.4 — Windows Packaging / Clean-Machine Smoke
+
+**COMPLETE / VERIFIED ON FEATURE BRANCH**
+
+Latest verified implementation-head PR packaging evidence: workflow run `35100673319` at commit `8feb39a62a1b480428b180ad68cf6ab88340f513` completed successfully. Earlier acceptance run `35095383694` remains supporting evidence for the same packaging boundary.
+
+The workflow built one byte-bound portable Windows First Preview ZIP and consumed that same immutable artifact on a fresh GitHub-hosted Windows runner. Verified controls include:
+
+- ZIP SHA-256 plus host/sidecar hash and size binding;
+- exact Shared Core commit binding;
+- relocation to a path containing spaces;
+- packaged offline probe with `network_listener=false` and `offline_capable=true`;
+- deliberate sidecar corruption rejected fail-closed;
+- recovery after verified sidecar restoration;
+- WebView2 prerequisite detection without ATLAS runtime download/bootstrap;
+- GUI launch/liveness on clean Windows;
+- zero TCP listeners in the packaged GUI process tree;
+- zero UDP endpoints owned by ATLAS or Shared Core;
+- runtime-owned WebView2 UDP, when present, explicitly attributed and recorded as evidence rather than silently ignored.
+
+The First Preview artifact is intentionally an **unsigned portable ZIP**. Production Authenticode signing and public distribution hardening remain later release-readiness boundaries. Binary auto-update is not part of First Preview.
+
+## Initial Product Domain
+
+The initial usable domain is intentionally narrow:
+
+- Windows Security Events;
+- Sysmon;
+- PowerShell;
+- Active Directory;
+- MITRE ATT&CK relationships;
+- selected D3FEND/CAR relationships;
+- DefenseOps validated detections and hunts;
+- investigation pivots;
+- official-source provenance;
+- deterministic exact/lexical search;
+- verified offline local datasets.
+
+Architecture support for broader platforms does not imply initial ingestion or First Preview delivery for every domain.
 
 ## Cyber-Sentinel Ecosystem
 
-Cyber-Sentinel is intentionally a **contract-separated ecosystem**, not a single monolithic product. The three current project layers have distinct responsibilities:
+ATLAS is the KNOW layer in the ecosystem operating loop:
+
+<p align="center">
+  <img src="assets/azadi-tower-atlas.png" alt="Cyber-Sentinel ecosystem operating loop — ATLAS KNOW, DefenseOps DEFEND, Skills APPLY, validate automate evolve" width="100%" />
+</p>
 
 ```text
 Cyber-Sentinel
-├── Atlas       — KNOW   → Connect • Search • Investigate • Explain
+├── ATLAS       — KNOW   → Connect • Search • Investigate • Explain
 ├── DefenseOps  — DEFEND → Detect • Hunt • Validate • Respond • Automate
 └── Skills      — APPLY  → Execute • Review • Reuse • Govern
 ```
 
-### Atlas — KNOW
+Controlled content flows between projects only through explicit provenance, validation, versioning and release boundaries.
 
-[Cyber-Sentinel-Atlas](https://github.com/cyber-sentinel/Cyber-Sentinel-Atlas) owns governed cyber-defense knowledge, canonical relationships, deterministic retrieval, provenance, investigation context, offline knowledge delivery, and analyst-facing product interfaces.
+## Release discipline
 
-**Core question:** *What do we know about what we are seeing?*
-
-### DefenseOps — DEFEND
-
-[Cyber-Sentinel-DefenseOps](https://github.com/cyber-sentinel/Cyber-Sentinel-DefenseOps) owns defensive engineering content: detections, hunts, validation assets, response engineering, DFIR/IR material, deception-oriented content, and defensive automation.
-
-**Core question:** *What can we detect, validate, hunt, and defend?*
-
-DefenseOps may provide controlled defensive content to Atlas, but repository origin alone never grants canonical authority. Atlas applies its own ingestion, provenance, licensing, validation, promotion, and release boundaries.
-
-### Skills — APPLY
-
-[Cyber-Sentinel-Skills](https://github.com/cyber-sentinel/Cyber-Sentinel-Skills) owns reusable, vendor-neutral operational procedures and playbooks that make security tasks explicit, reviewable, attributable, repeatable, and usable by both humans and AI agents.
-
-**Core question:** *How should this security task be performed consistently?*
-
-Skills does not replace Atlas product contracts or DefenseOps engineering artifacts; it captures the repeatable operating method used to apply them consistently.
-
-### Ecosystem Operating Loop
-
-<p align="center">
-  <img src="assets/azadi-tower-atlas.png" alt="Cyber-Sentinel ecosystem operating loop: KNOW, DEFEND, APPLY, VALIDATE, AUTOMATE, EVOLVE" width="100%" />
-</p>
-
-`VALIDATE`, `AUTOMATE`, and `EVOLVE` are ecosystem operating outcomes and feedback stages, not separate repositories. Together the model is:
-
-`KNOW → DEFEND → APPLY → VALIDATE → AUTOMATE → EVOLVE`
-
-## Delivery Sequence
+The feature branch has closed the Phase 5.6 implementation and packaging/smoke boundary. PR #39 is the active release-closure vehicle. The remaining release-authority sequence is:
 
 ```text
-5.1  Product Foundation                         COMPLETE
-5.2  Canonical Data Model                      COMPLETE
-5.3  Source & Ingestion Core                   COMPLETE
-5.4  Deterministic Search Core                 COMPLETE
-5.5  Offline Pack Runtime / Shared Core         COMPLETE
-     5.5.1 Pack Trust Contracts                COMPLETE
-     5.5.2 Verified Pack Runtime               COMPLETE
-     5.5.3 Shared Core Technology Selection    COMPLETE
-     5.5.4A Go Protocol Core                   COMPLETE
-     5.5.4B Canonical / Search / Graph Core    COMPLETE
-     5.5.4C Pack Trust / Durable State         COMPLETE
-     5.5.4D Supply-chain / Closure             COMPLETE
-5.6  Windows Desktop MVP                       NEXT
-5.7  Web / PWA                                 NOT STARTED
-5.8  API / CLI                                 NOT STARTED
-5.9  Grounded AI                               NOT STARTED
-5.10 Public Preview Readiness                  NOT STARTED
+Feature-branch implementation evidence complete
+        ↓
+PR #39 final regression CI / review — ACTIVE
+        ↓
+Close every remaining regression blocker
+        ↓
+Merge to main
+        ↓
+Post-merge package verification
+        ↓
+FIRST PREVIEW READY
 ```
 
-This summary is intentionally phase-level. Exact merge SHAs, workflow evidence, and historical phase snapshots belong in the status/history documentation rather than the repository landing page.
-
-## Documentation
-
-### Project & Product
-
-- [Current Authoritative Status](docs/current-status.md)
-- [Project State](docs/project-state.md)
-- [Roadmap](docs/roadmap.md)
-- [Product Vision](docs/product/product-vision.md)
-- [Product Principles](docs/product/product-principles.md)
-- [Personas](docs/product/personas.md)
-- [Competitive Positioning](docs/product/competitive-positioning.md)
-
-### Architecture
-
-- [System Context](docs/architecture/system-context.md)
-- [Canonical Data Model v1](docs/architecture/canonical-data-model-v1.md)
-- [Schema Versioning & Migration](docs/architecture/schema-versioning-and-migration.md)
-- [Knowledge Graph Model](docs/architecture/knowledge-graph-model.md)
-- [Canonical Identifier Architecture](docs/architecture/canonical-identifier-architecture.md)
-- [Source & Provenance Model](docs/architecture/source-provenance-model.md)
-- [Source & Ingestion Core](docs/architecture/source-ingestion-core.md)
-- [Search Architecture](docs/architecture/search-architecture.md)
-- [Offline-first Architecture](docs/architecture/offline-first-architecture.md)
-- [API / CLI Architecture](docs/architecture/api-cli-architecture.md)
-- [AI / RAG Architecture](docs/architecture/ai-rag-architecture.md)
-- [Security Architecture](docs/architecture/security-architecture.md)
-- [Coverage Model](docs/architecture/coverage-model.md)
-- [Telemetry Lifecycle](docs/architecture/telemetry-lifecycle.md)
-- [Architecture Decision Records](docs/adr/)
-
-### Product Delivery & Governance
-
-- [UX Information Architecture](docs/ux/ux-information-architecture.md)
-- [MVP Scope](docs/mvp/mvp-scope.md)
-- [MVP Release Gates](docs/mvp/release-gates.md)
-- [Contributing](CONTRIBUTING.md)
-- [Security Policy](SECURITY.md)
-- [Third-Party Notices](THIRD_PARTY_NOTICES.md)
-- [Trademarks](TRADEMARKS.md)
-- [Licensing & Contributions](docs/governance/licensing-and-contributions.md)
-
-## Development & Release Posture
-
-The repository remains private during active development. A public project license has not yet been adopted. Third-party licensing, redistribution rights, contributor-rights review, security review, accessibility, and signed public release processes remain fail-closed requirements before Public Preview.
-
-Official changes follow the repository governance path:
-
-```text
-branch → pull request → CI → architecture/security review → merge → post-merge verification
-```
-
-## Core Principle
-
-> **No technical claim without provenance. No AI answer without inspectable evidence. No engine-specific syntax confused with the underlying security concept.**
-
----
-
-**Maintainer:** Ali RahimDabagh
-**GitHub:** `cyber-sentinel`
+Until all PR checks pass, merge completes, and post-merge verification succeeds, the correct state remains **First Preview candidate / pre-preview**.

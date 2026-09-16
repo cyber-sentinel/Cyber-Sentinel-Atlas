@@ -1,0 +1,310 @@
+name: Phase 5.6.2 Desktop Gate Evidence
+
+on:
+  push:
+    branches:
+      - feature/phase-5.6-windows-desktop-mvp
+    paths:
+      - 'benchmarks/desktop/phase56/candidates/**'
+      - 'benchmarks/desktop/phase56/measure_candidates.ps1'
+      - 'benchmarks/desktop/phase56/measure_core_ipc.py'
+      - 'benchmarks/desktop/phase56/probe_portable.ps1'
+      - 'benchmarks/desktop/phase56/summarize_candidates.py'
+      - 'benchmarks/desktop/phase56/validate_security_surface.py'
+      - 'benchmarks/desktop/phase56/validate_packaging_feasibility.py'
+      - 'benchmarks/desktop/phase56/validate_measurement_closure.py'
+      - '.github/workflows/phase561-desktop-candidates.yml'
+      - 'shared-core/go/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'benchmarks/desktop/phase56/candidates/**'
+      - 'benchmarks/desktop/phase56/measure_candidates.ps1'
+      - 'benchmarks/desktop/phase56/measure_core_ipc.py'
+      - 'benchmarks/desktop/phase56/probe_portable.ps1'
+      - 'benchmarks/desktop/phase56/summarize_candidates.py'
+      - 'benchmarks/desktop/phase56/validate_security_surface.py'
+      - 'benchmarks/desktop/phase56/validate_packaging_feasibility.py'
+      - 'benchmarks/desktop/phase56/validate_measurement_closure.py'
+      - '.github/workflows/phase561-desktop-candidates.yml'
+      - 'shared-core/go/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  candidates:
+    name: desktop-gates (windows)
+    runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]
+    timeout-minutes: 80
+    env:
+      GOTOOLCHAIN: local
+      CGO_ENABLED: '0'
+      PHASE561_STAGE: .phase561-stage
+      PHASE561_EVIDENCE: .phase561-evidence
+
+    steps:
+      - name: Checkout exact head
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Go 1.25.13
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.13'
+          cache-dependency-path: shared-core/go/go.sum
+
+      - name: Verify Python 3.12
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
+          if ($version -ne '3.12') { throw "Python 3.12 required; found $version" }
+          python -m py_compile `
+            benchmarks/desktop/phase56/measure_core_ipc.py `
+            benchmarks/desktop/phase56/summarize_candidates.py `
+            benchmarks/desktop/phase56/validate_security_surface.py `
+            benchmarks/desktop/phase56/validate_packaging_feasibility.py `
+            benchmarks/desktop/phase56/validate_measurement_closure.py
+
+      - name: Set up Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Set up .NET 10 LTS
+        uses: actions/setup-dotnet@v4
+        env:
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}\dotnet
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Set up checksum-pinned Rust 1.95
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $RustupVersion = '1.29.0'
+          $Bootstrap = Join-Path $env:RUNNER_TEMP 'rustup-bootstrap-phase561'
+          $RustupInit = Join-Path $Bootstrap 'rustup-init.exe'
+          $Checksum = Join-Path $Bootstrap 'rustup-init.exe.sha256'
+          $Base = "https://static.rust-lang.org/rustup/archive/$RustupVersion/x86_64-pc-windows-msvc"
+          New-Item -ItemType Directory -Force -Path $Bootstrap | Out-Null
+          Invoke-WebRequest -Uri "$Base/rustup-init.exe" -OutFile $RustupInit
+          Invoke-WebRequest -Uri "$Base/rustup-init.exe.sha256" -OutFile $Checksum
+          $expected = ((Get-Content -Raw $Checksum).Trim() -split '\s+')[0].ToLowerInvariant()
+          $actual = (Get-FileHash -Algorithm SHA256 $RustupInit).Hash.ToLowerInvariant()
+          if ($actual -ne $expected) { throw "rustup-init SHA-256 mismatch" }
+          $env:RUSTUP_HOME = Join-Path $env:RUNNER_TEMP 'rustup-home-phase561'
+          $env:CARGO_HOME = Join-Path $env:RUNNER_TEMP 'cargo-home-phase561'
+          & $RustupInit -y --no-modify-path --profile minimal --default-toolchain 1.95.0
+          if ($LASTEXITCODE -ne 0) { throw "rustup-init failed with exit code $LASTEXITCODE" }
+          $CargoBin = Join-Path $env:CARGO_HOME 'bin'
+          $env:PATH = "$CargoBin;$env:PATH"
+          "RUSTUP_HOME=$env:RUSTUP_HOME" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "CARGO_HOME=$env:CARGO_HOME" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          $CargoBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          $rustVersion = (rustc --version).Trim()
+          if ($rustVersion -notmatch '^rustc 1\.95\.0 ') { throw "Rust 1.95.0 required; found $rustVersion" }
+          rustc --version
+          cargo --version
+
+      - name: Prepare clean staging directories
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Remove-Item -Recurse -Force $env:PHASE561_STAGE,$env:PHASE561_EVIDENCE -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path "$env:PHASE561_STAGE\core",$env:PHASE561_EVIDENCE | Out-Null
+
+      - name: Validate desktop security surface
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python benchmarks/desktop/phase56/validate_security_surface.py `
+            --output "$env:PHASE561_EVIDENCE\security-surface.json"
+
+      - name: Build one exact-head production atlas-core
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Core = Join-Path (Get-Location) "$env:PHASE561_STAGE\core\atlas-core.exe"
+          Push-Location shared-core/go
+          try {
+            go mod verify
+            go test ./... -count=1
+            go build -trimpath -buildvcs=false `
+              -ldflags "-X main.coreCommit=$env:GITHUB_SHA -X main.coreVersion=0.1.0-dev" `
+              -o $Core ./cmd/atlas-core
+          }
+          finally { Pop-Location }
+          $hash = (Get-FileHash -Algorithm SHA256 $Core).Hash.ToLowerInvariant()
+          "$hash  atlas-core.exe" | Set-Content -Encoding ascii "$Core.sha256"
+          Copy-Item $Core "$env:PHASE561_EVIDENCE\atlas-core.exe"
+          Copy-Item "$Core.sha256" "$env:PHASE561_EVIDENCE\atlas-core.exe.sha256"
+
+      - name: Measure common atlas-core handshake and status IPC
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python benchmarks/desktop/phase56/measure_core_ipc.py `
+            --core "$env:PHASE561_STAGE\core\atlas-core.exe" `
+            --manifest "$env:PHASE561_STAGE\core\atlas-core.exe.sha256" `
+            --output "$env:PHASE561_EVIDENCE\phase562-core-ipc.json" `
+            --warmup-count 1 `
+            --measured-count 7
+
+      - name: Build and probe .NET WPF candidate
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Out = Join-Path (Get-Location) "$env:PHASE561_STAGE\dotnet"
+          New-Item -ItemType Directory -Force -Path $Out | Out-Null
+          dotnet publish benchmarks/desktop/phase56/candidates/dotnet/Atlas.DotNetCandidate.csproj `
+            -c Release -r win-x64 --self-contained false -p:PublishSingleFile=false -o $Out
+          if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
+          Copy-Item "$env:PHASE561_STAGE\core\atlas-core.exe" $Out
+          Copy-Item "$env:PHASE561_STAGE\core\atlas-core.exe.sha256" $Out
+          & "$Out\Atlas.DotNetCandidate.exe" --atlas-probe --probe-output "$env:PHASE561_EVIDENCE\dotnet.json"
+          if ($LASTEXITCODE -ne 0) { throw ".NET candidate probe failed with exit code $LASTEXITCODE" }
+
+      - name: Build and probe Electron 44.3.0 candidate
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Source = Join-Path (Get-Location) 'benchmarks\desktop\phase56\candidates\electron'
+          Push-Location $Source
+          try {
+            npm ci --ignore-scripts --no-audit --no-fund
+            if ($LASTEXITCODE -ne 0) { throw "npm ci failed" }
+            node node_modules/electron/install.js
+            if ($LASTEXITCODE -ne 0) { throw "Electron binary install failed" }
+            $version = (node -e "process.stdout.write(require('electron/package.json').version)").Trim()
+            if ($version -ne '44.3.0') { throw "Electron 44.3.0 required; found $version" }
+            $ElectronExe = (node -e "process.stdout.write(require('electron'))").Trim()
+          }
+          finally { Pop-Location }
+          $Dist = Split-Path $ElectronExe -Parent
+          $Out = Join-Path (Get-Location) "$env:PHASE561_STAGE\electron"
+          New-Item -ItemType Directory -Force -Path $Out | Out-Null
+          Copy-Item "$Dist\*" $Out -Recurse -Force
+          $App = Join-Path $Out 'resources\app'
+          New-Item -ItemType Directory -Force -Path $App | Out-Null
+          foreach ($file in 'package.json','main.js','preload.js','index.html','renderer.js') {
+            Copy-Item (Join-Path $Source $file) $App -Force
+          }
+          Copy-Item "$env:PHASE561_STAGE\core\atlas-core.exe" $Out
+          Copy-Item "$env:PHASE561_STAGE\core\atlas-core.exe.sha256" $Out
+          $process = Start-Process -FilePath "$Out\electron.exe" `
+            -ArgumentList @('--atlas-probe',"--probe-output=$env:PHASE561_EVIDENCE\electron.json") `
+            -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw "Electron candidate probe failed with exit code $($process.ExitCode)" }
+          Copy-Item "$Source\package-lock.json" "$env:PHASE561_EVIDENCE\electron-package-lock.json" -Force
+
+      - name: Build and probe Tauri 2.11.5 candidate
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          . ./benchmarks/desktop/phase56/candidates/tauri/prepare_msvc.ps1
+          $LockRelative = 'benchmarks/desktop/phase56/candidates/tauri/Cargo.lock'
+          $Manifest = Join-Path (Get-Location) 'benchmarks\desktop\phase56\candidates\tauri\Cargo.toml'
+          $Lock = Join-Path (Split-Path -Parent $Manifest) 'Cargo.lock'
+          $env:CARGO_TARGET_DIR = Join-Path $env:RUNNER_TEMP 'atlas-tauri-phase561-target'
+          Remove-Item -Recurse -Force $env:CARGO_TARGET_DIR -ErrorAction SilentlyContinue
+
+          if (-not (Test-Path -LiteralPath $Lock -PathType Leaf)) {
+            throw "committed Tauri Cargo.lock missing: $Lock"
+          }
+          $expectedLockHash = 'dd2a97c412b0f7289f07ba16cfc28b4cca02ea9b7a5f5ed4d488b34977e37b3e'
+          $actualLockHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $Lock).Hash.ToLowerInvariant()
+          if ($actualLockHash -ne $expectedLockHash) {
+            throw "committed Tauri Cargo.lock drift detected: expected $expectedLockHash, found $actualLockHash"
+          }
+
+          if ($env:ATLAS_TAURI_BUILD_MODE -eq 'cargo-xwin') {
+            cargo xwin build --release --locked --manifest-path $Manifest --target x86_64-pc-windows-msvc
+            $TauriBinary = Join-Path $env:CARGO_TARGET_DIR 'x86_64-pc-windows-msvc\release\atlas-tauri-candidate.exe'
+          }
+          else {
+            cargo build --release --locked --manifest-path $Manifest
+            $TauriBinary = Join-Path $env:CARGO_TARGET_DIR 'release\atlas-tauri-candidate.exe'
+          }
+          if ($LASTEXITCODE -ne 0) { throw "Tauri candidate build failed" }
+          if (-not (Test-Path $TauriBinary -PathType Leaf)) { throw "Tauri candidate output not found: $TauriBinary" }
+
+          cargo metadata --format-version 1 --locked --manifest-path $Manifest > "$env:PHASE561_EVIDENCE\tauri-cargo-metadata.json"
+          if ($LASTEXITCODE -ne 0) { throw "cargo metadata failed" }
+          git diff --exit-code -- $LockRelative
+          if ($LASTEXITCODE -ne 0) { throw "Tauri Cargo.lock changed during locked build/metadata" }
+
+          $Out = Join-Path (Get-Location) "$env:PHASE561_STAGE\tauri"
+          New-Item -ItemType Directory -Force -Path $Out | Out-Null
+          Copy-Item $TauriBinary $Out
+          Copy-Item "$env:PHASE561_STAGE\core\atlas-core.exe" $Out
+          Copy-Item "$env:PHASE561_STAGE\core\atlas-core.exe.sha256" $Out
+          $process = Start-Process -FilePath "$Out\atlas-tauri-candidate.exe" `
+            -ArgumentList @('--atlas-probe',"--probe-output=$env:PHASE561_EVIDENCE\tauri.json") `
+            -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw "Tauri candidate probe failed with exit code $($process.ExitCode)" }
+          Copy-Item $Lock "$env:PHASE561_EVIDENCE\tauri-Cargo.lock" -Force
+
+      - name: Measure candidates with common external harness
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          ./benchmarks/desktop/phase56/measure_candidates.ps1 `
+            -StageDir $env:PHASE561_STAGE `
+            -EvidenceDir $env:PHASE561_EVIDENCE `
+            -WarmupCount 1 `
+            -MeasuredCount 5
+
+      - name: Probe portable-mode relocation feasibility
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          ./benchmarks/desktop/phase56/probe_portable.ps1 `
+            -StageDir $env:PHASE561_STAGE `
+            -EvidenceDir $env:PHASE561_EVIDENCE
+
+      - name: Summarize fail-closed candidate evidence
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python benchmarks/desktop/phase56/summarize_candidates.py `
+            --evidence-dir $env:PHASE561_EVIDENCE `
+            --stage-dir $env:PHASE561_STAGE `
+            --output "$env:PHASE561_EVIDENCE\summary.json"
+
+      - name: Validate G-D8 installer and portable feasibility
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python benchmarks/desktop/phase56/validate_packaging_feasibility.py `
+            --evidence-dir $env:PHASE561_EVIDENCE `
+            --summary "$env:PHASE561_EVIDENCE\summary.json"
+
+      - name: Validate G-D9 measurement closure
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python benchmarks/desktop/phase56/validate_measurement_closure.py `
+            --evidence-dir $env:PHASE561_EVIDENCE `
+            --summary "$env:PHASE561_EVIDENCE\summary.json"
+
+      - name: Confirm canonical schemas v1 remain unchanged
+        shell: pwsh
+        run: git diff --exit-code origin/main...HEAD -- schemas/v1
+
+      - name: Upload Phase 5.6.2 gate evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: phase562-desktop-gate-evidence
+          path: .phase561-evidence/
+          if-no-files-found: warn
+          include-hidden-files: true

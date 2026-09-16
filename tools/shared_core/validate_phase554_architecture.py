@@ -42,6 +42,7 @@ def main() -> int:
     ):
         require(phrase in adr, f"ADR-0025 invariant missing: {phrase}")
 
+    # Historical architecture authority remains immutable after implementation closure.
     require("Status: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**" in arch, "Phase 5.5.4 architecture status drifted")
     for phrase in (
         "shared-core/go/",
@@ -61,9 +62,19 @@ def main() -> int:
     require("Production packages must not import `benchmarks/shared-core/phase553` as a runtime dependency." in arch, "benchmark/runtime separation missing")
     require("no canonical schema drift exists" in arch, "canonical schema preservation exit criterion missing")
 
+    state_old = "Phase 5.5.4 — Production Go Shared Core: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**" in state
+    state_closed = "Phase 5.5.4 — Production Go Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in state
+    require(state_old or state_closed, "project-state has invalid Phase 5.5.4 lifecycle state")
+
+    roadmap_old = "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**" in roadmap
+    roadmap_closed = "### Phase 5.5.4 — Production Go Shared Core\n\nStatus: **COMPLETE / MERGED / POST-MERGE VERIFIED**" in roadmap
+    require(roadmap_old or roadmap_closed, "roadmap has invalid Phase 5.5.4 lifecycle state")
+
+    current_old = "Phase 5.5.4 — Production Go Shared Core: ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED" in current
+    current_closed = "Phase 5.5.4 — Production Go Shared Core: COMPLETE / MERGED / POST-MERGE VERIFIED" in current
+    require(current_old or current_closed, "current-status has invalid Phase 5.5.4 lifecycle state")
+
     for text, name in ((state, "project-state"), (roadmap, "roadmap"), (current, "current-status")):
-        require("Phase 5.5.4" in text, f"{name} missing Phase 5.5.4")
-        require("ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED" in text, f"{name} must authorize Phase 5.5.4 implementation")
         require("ADR-0025" in text, f"{name} missing ADR-0025")
 
     require("Shared Core Local Interface: child-process stdio protocol — ADR-0025 Accepted" in state, "project-state interface decision missing")

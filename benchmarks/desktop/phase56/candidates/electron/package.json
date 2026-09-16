@@ -1,0 +1,10 @@
+{
+  "name": "atlas-electron-candidate",
+  "version": "0.1.0",
+  "private": true,
+  "main": "main.js",
+  "description": "Phase 5.6.1 Electron candidate host for Cyber-Sentinel ATLAS",
+  "devDependencies": {
+    "electron": "44.3.0"
+  }
+}

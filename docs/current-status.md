@@ -1,99 +1,188 @@
 # Cyber-Sentinel-Atlas — Current Authoritative Status
 
-Status timestamp: 2026-09-06
+Status timestamp: 2026-09-16
 
 ## Control plane
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
-- Authoritative branch: `main`
-- Phase 5.5.3 selection completion main SHA: `bbb462b11de460216acb80116146f651ac2ef1ca`
-- Phase 5.5.4 architecture baseline main SHA: `94f3136687f8e9765c0343b938a1049436878783`
+- Release authority: `main`
+- Active implementation branch: `feature/phase-5.6-windows-desktop-mvp`
+- Active release vehicle: **PR #39**
+- Repository visibility: **Public**
+- Release state: **First Preview candidate / feature implementation complete / final PR regression closure active / not yet merged**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
 - Search contract version: `1.0.0`
-- Search engine: SQLite + FTS5, accepted by ADR-0022
-- Content-pack trust model: TUF-based, accepted by ADR-0023
-- Production Shared Core implementation family: **Go**, accepted by ADR-0024
-- Production Shared Core local interface: **child-process stdio protocol**, accepted by ADR-0025
-- Python implementation role: semantic/conformance oracle during the production Go port
-- Repository visibility: private during active development
-- Public project license: not yet adopted; see `docs/governance/licensing-and-contributions.md`
+- Search engine: SQLite + FTS5 — ADR-0022 Accepted
+- Content-pack trust model: TUF — ADR-0023 Accepted
+- Production Shared Core implementation family: **Go**
+- Production Shared Core: Go — ADR-0024 Accepted
+- Desktop/Core boundary: child-process stdio protocol — ADR-0025 Accepted
+- Desktop host: **Tauri 2.x** — ADR-0026 Accepted
 
-Git history and the live `main` branch tip remain the final repository authority. This document records the last architecture-reviewed phase boundary and intentionally avoids predicting a future status-sync merge SHA.
+`main` remains release authority. This document records verified feature-branch evidence without claiming merge or post-merge verification before those events occur.
 
-## Completed phases
+## Phase state
 
 - Phase 5.1 — Product Foundation: **COMPLETE**
 - Stage 1 — Governance / Architecture Sync: **COMPLETE**
-- Phase 5.2 — Canonical Data Model: **COMPLETE**
+- Phase 5.2 — Canonical Data Model: **COMPLETE / MERGED**
 - Phase 5.3 — Source & Ingestion Core: **COMPLETE / MERGED**
-- Phase 5.3.1 — Ingestion Foundation: **COMPLETE / MERGED**
-- Phase 5.3.2 — ATT&CK Canary: **COMPLETE / MERGED**
-- Phase 5.3.3 — Windows Security + Sysmon: **COMPLETE / MERGED**
-- Phase 5.3.4 — D3FEND + CAR + DefenseOps + Promotion Gates: **COMPLETE / MERGED**
 - Phase 5.4 — Deterministic Search Core: **COMPLETE / MERGED**
-- Phase 5.4.1 — Search Contracts + Reference Resolver: **COMPLETE / MERGED**
-- Phase 5.4.2 — Engine Spike + ADR-0022: **COMPLETE / MERGED**
-- Phase 5.4.3 — Production SQLite/FTS5 Search Core: **COMPLETE / MERGED**
-- Phase 5.4.4 — Catalog, Graph Pivots, Benchmarks and Closure: **COMPLETE / MERGED**
-- Phase 5.5.1 — Pack Trust Contracts + ADR-0023: **COMPLETE / MERGED**
-- Phase 5.5.2 — Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**
-- Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+- Phase 5.5 — Offline Pack Runtime / Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED / FROZEN**
+- Phase 5.5.2 — Verified Pack Runtime: COMPLETE / MERGED / POST-MERGE VERIFIED
+- Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: COMPLETE / MERGED / POST-MERGE VERIFIED
+- Phase 5.5.4 — Production Go Shared Core: COMPLETE / MERGED / POST-MERGE VERIFIED
+- Phase 5.6.0 — Desktop Environment/Core Boundary: **COMPLETE / VERIFIED**
+- Phase 5.6.1 — Executable Desktop Candidate Builds: **COMPLETE / VERIFIED**
+- Phase 5.6.2 — Hard Gates / Measurements / Desktop Selection: **COMPLETE / VERIFIED FOR ACCEPTED SELECTION EVIDENCE**
+- Phase 5.6.3 — First Preview UI: **COMPLETE / VERIFIED ON FEATURE BRANCH**
+- Phase 5.6.4 — Windows Packaging / Clean-Machine Smoke: **COMPLETE / VERIFIED ON FEATURE BRANCH**
+- Phase 5.6 — Windows Desktop MVP: **FEATURE-BRANCH IMPLEMENTATION COMPLETE / PR RELEASE CLOSURE ACTIVE**
 
-## Phase 5.5.3 closure
+The explicit 5.5.2/5.5.3/5.5.4 markers are retained because frozen architecture validators use them to prove lifecycle continuity across later phases.
 
-Phase 5.5.3 selected Go only after executable cross-platform evidence. The accepted evidence boundary proved:
+## Frozen Shared Core boundary
 
-- Go passes mandatory G-SC1 through G-SC8 on Linux and Windows;
-- Python control also passes and remains the semantic/conformance oracle;
-- Rust is not selected because the Phase 5.5.3 mandatory trust/runtime evidence envelope was incomplete or failed; this is not a general rejection of Rust;
-- `go-tuf/v2 v2.4.2` is the evidenced TUF client baseline;
-- `modernc.org/sqlite v1.58.0` is the evidenced CGo-free SQLite baseline;
-- the normalized Go dependency graph includes `golang.org/x/text v0.36.0` for the accepted Unicode behavior;
-- SQLite/FTS5 exact and lexical behavior stays subordinate to the already accepted Phase 5.4 contracts;
-- existing Atlas deterministic JSON bytes remain the protocol serialization profile; there is no RFC 8785/JCS digest migration;
-- canonical `schemas/v1/` remains unchanged;
-- Desktop UI technology, broader persistence, graph database, HSM/KMS, updater/CDN, Detection IR and Grounded AI remain separate decisions.
+Phase 5.5 remains frozen. Desktop code consumes, but does not redefine:
 
-PR #23 merged the accepted ADR-0024 through Merge Commit `bbb462b11de460216acb80116146f651ac2ef1ca`. PR #24 then synchronized the authoritative status on `main@94f3136687f8e9765c0343b938a1049436878783`; Foundation Hygiene, Phase 5.5.3 Architecture, Governance Hygiene and Phase 5.3.4 canaries passed on that status boundary.
+- exactly seven canonical `AtlasRecord` families under `schemas/v1/`;
+- deterministic exact-before-lexical SQLite/FTS5 search semantics;
+- bounded catalog and graph behavior;
+- TUF pack trust, trusted-time and highest-seen anti-rollback state;
+- immutable generations, atomic activation and Last Known Good behavior;
+- deterministic Atlas serialization/digest semantics;
+- `atlas-core --serve-stdio`, protocol `atlas-core/1.0.0`;
+- 4-byte unsigned big-endian framing + UTF-8 JSON;
+- mandatory handshake, strict bounded parsing, method allowlists and protocol-only stdout;
+- no default local HTTP/TCP/WebSocket listener or hidden network fallback.
 
-## Active implementation slice
+## Phase 5.6.2 — Accepted selection evidence
 
-**Phase 5.5.4 — Production Go Shared Core: ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**
+Frozen Candidate Evidence run `35090304056` at commit `c343ffd881dd7b6a420f04cea2ffb91c3ea8a715` completed successfully. The artifact `phase562-desktop-gate-evidence` records the accepted fail-closed selection state below.
 
-ADR-0025 freezes the local Desktop-facing Shared Core boundary as a versioned child-process stdio protocol implemented by `atlas-core --serve-stdio` rather than Go FFI or a default local HTTP/TCP listener.
+| Gate | Requirement | State |
+| --- | --- | --- |
+| G-D1 | Clean Windows build | **PASS / VERIFIED** |
+| G-D2 | `atlas-core` stdio handshake/status | **PASS / VERIFIED** |
+| G-D3 | Offline / no-default-listener behavior | **PASS / VERIFIED** |
+| G-D4 | Deterministic sidecar location + integrity/version | **PASS / VERIFIED** |
+| G-D5 | Active verified pack → search / record / graph / provenance | **PASS / VERIFIED** |
+| G-D6 | Verified pack update + safe rollback | **PASS / VERIFIED** |
+| G-D7 | Desktop security surface | **PASS / VERIFIED** |
+| G-D8 | Installer + portable feasibility | **PASS / VERIFIED FOR FEASIBILITY** |
+| G-D9 | Footprint / startup / IPC / process / memory measurements | **PASS / VERIFIED** |
 
-Protocol v1 uses a 4-byte unsigned big-endian length prefix followed by UTF-8 JSON. It requires an exact `atlas-core` protocol `1.0.0` handshake, one request at a time per child process, compiled method allowlists, protocol-only stdout, diagnostic-only stderr, maximum 1 MiB requests, maximum 8 MiB responses, duplicate-key rejection, bounded nesting depth, strict UTF-8/JSON validation and no hidden network fallback.
+The accepted run preserved the canonical schema v1 drift guard and used an identical exact-head Shared Core across all candidates.
 
-Phase 5.5.4 implements the accepted Shared Core contracts as production Go code outside benchmark directories. It must preserve:
+### Measurement snapshot
 
-- exactly seven canonical AtlasRecord families and existing canonical/native identifier semantics;
-- the Atlas deterministic JSON serialization/digest profile and frozen cross-language vectors;
-- Phase 5.4 exact-before-lexical SQLite/FTS5 behavior, deterministic ambiguity/order, bounded filters and bounded graph reads;
-- ADR-0023 TUF/POUF v1, `.atlaspack`, offline verification, strict archive handling, immutable generation, trusted-time/highest-seen state, atomic activation and Last Known Good rollback semantics;
-- no hidden network fallback and no pack-provided executable code;
-- Linux/Windows reproducibility, locked dependencies, SBOM/vulnerability evidence and clean-build CI.
+For the accepted selected-candidate review, the successful evidence snapshot recorded approximately:
 
-Execution structure:
+- Tauri package: 28.1 MB;
+- Tauri warm external launch median: 259 ms;
+- Tauri median process-tree working set: 17.7 MB;
+- no TCP listener observed;
+- no UDP endpoint observed.
 
-1. 5.5.4A — core skeleton + protocol;
-2. 5.5.4B — canonical + SQLite/FTS5 search + graph parity;
-3. 5.5.4C — TUF/pack trust + durable state/LKG;
-4. 5.5.4D — supply-chain, cross-platform conformance and closure.
+Measurements are CI evidence, not universal performance guarantees for all hardware.
 
-## Remaining roadmap
+## Current PR regression blocker
 
-- Phase 5.5 — Offline Pack Runtime / Shared Core: **IN PROGRESS**
-  - 5.5.1 Pack Trust Contracts: **COMPLETE / MERGED**
-  - 5.5.2 Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**
-  - 5.5.3 Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**
-  - 5.5.4 Production Go Shared Core: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**
-- Phase 5.6 — Windows Desktop MVP
-- Phase 5.7 — Web / PWA
-- Phase 5.8 — API / CLI (`atlas`)
-- Phase 5.9 — Grounded AI
-- Phase 5.10 — Public Preview Readiness, licensing, security, accessibility, release and final repository hygiene
+PR #39 is in final regression closure. On implementation head `8feb39a62a1b480428b180ad68cf6ab88340f513`, most required workflows completed successfully, including Foundation/Governance, Phase 5.5 architecture and runtime regressions, Phase 5.5.4A/B/D, Active Pack Integration, and Phase 5.6.4 packaging/clean-Windows acceptance.
+
+However, `Phase 5.6.2 Desktop Gate Evidence` run `35100673553` failed in `Measure candidates with common external harness` because the **Electron candidate process tree opened a UDP endpoint during the controlled measurement probe**. Security-surface validation, exact-head Shared Core build/IPC, and all three candidate builds/probes had already passed before the measurement harness failed.
+
+This regression does **not** silently invalidate ADR-0026 or the verified selected Tauri package. Electron is a rejected candidate, while Tauri is the accepted host and the selected-host 5.6.4 clean-Windows package gate is green. Nevertheless, the historical multi-candidate workflow is part of PR regression policy, so merge remains blocked until this UDP observation is attributed and the regression gate is closed without weakening the intended network-posture assertion.
+
+The documentation sync itself advances the PR branch head. Therefore run/SHA references above are retained as evidence snapshots, while final merge authority will use the latest PR head after documentation and blocker remediation complete.
+
+## ADR-0026 — Windows Desktop Host Selection
+
+**ACCEPTED — Tauri 2.x**
+
+The frozen weighted review is stored in `benchmarks/desktop/phase56/weighted-review.json`. All three candidates passed mandatory hard gates in the accepted selection evidence. The recorded weighted totals are:
+
+- Tauri 2.x: `94.13`;
+- .NET 10 / WPF: `88.09`;
+- Electron: `82.66`.
+
+ADR-0026 records the decision, rejected alternatives, evidence boundary and residual risks. Candidate comparison does not alter the Shared Core authority model.
+
+## Phase 5.6.3 — First Preview UI
+
+**COMPLETE / VERIFIED ON FEATURE BRANCH**
+
+The selected Tauri host exposes exactly seven allowlisted application commands:
+
+- `core_status`;
+- `search_records`;
+- `get_record`;
+- `expand_graph`;
+- `pack_status`;
+- `pack_update`;
+- `pack_rollback`.
+
+The First Preview provides the analyst-critical flow:
+
+- Offline Global Search;
+- Canonical Record Detail;
+- bounded Relationship / Graph navigation;
+- claim/source provenance;
+- Windows Event / Sysmon investigation context available in the pack;
+- verified pack status;
+- pack update and safe rollback;
+- diagnostics and failure visibility;
+- UTC, system-local and Tehran/Jalali presentation without changing canonical UTC timestamps;
+- dark operational UI with accessibility/high-contrast controls.
+
+Security-surface regression evidence enforces one main-window capability, explicit application-command ACLs, CSP `connect-src 'none'`, no Tauri plugins, no generic frontend-controlled Shared Core method bridge and no generic application network API.
+
+## Phase 5.6.4 — Windows Packaging / Clean-Machine Smoke
+
+**COMPLETE / VERIFIED ON FEATURE BRANCH**
+
+Latest verified implementation-head PR package/smoke evidence: workflow `Phase 5.6.4 Windows First Preview Package`, run `35100673319`, implementation head `8feb39a62a1b480428b180ad68cf6ab88340f513`, conclusion **SUCCESS**. Earlier acceptance run `35095383694` remains supporting evidence for the same packaging boundary.
+
+The workflow built one byte-bound portable Windows First Preview package and consumed the same immutable artifact on a fresh GitHub-hosted Windows runner. Verified acceptance controls:
+
+- exact package ZIP SHA-256 verification;
+- exact host and `atlas-core.exe` manifest/hash/size verification;
+- relocation to a path containing spaces;
+- portable probe with `network_listener=false` and `offline_capable=true`;
+- exact `core_commit` binding to the workflow SHA;
+- deliberate sidecar corruption rejected fail-closed;
+- recovery after restoration of verified sidecar bytes;
+- WebView2 prerequisite audit without ATLAS downloading/bootstraping the runtime;
+- GUI launch/liveness smoke;
+- zero TCP listeners in the packaged GUI process tree;
+- zero UDP endpoints owned by ATLAS or Shared Core;
+- WebView2-runtime UDP, when present, attributed by process ownership and retained in clean-machine evidence.
+
+The runtime-owned WebView2 endpoint observed during the preceding failed audit was not allowlisted generically. The audit was changed to attribute ownership: non-WebView2 UDP still fails, TCP listeners anywhere in the process tree still fail, and runtime-owned WebView2 UDP remains visible in evidence.
+
+The First Preview artifact is intentionally an **unsigned portable ZIP**. Production Authenticode signing, public distribution hardening and a broader release process remain later release-readiness boundaries; CI does not simulate a signature. Binary auto-update is disabled/not part of First Preview.
+
+## Release-authority closure
+
+The feature implementation is complete. Remaining sequence:
+
+```text
+Feature implementation + selected-host package evidence complete
+        ↓
+PR #39 final regression CI / blocker closure — ACTIVE
+        ↓
+Merge to main
+        ↓
+Post-merge package verification
+        ↓
+FIRST PREVIEW READY / POST-MERGE VERIFIED
+```
+
+Current blocker: attribute and close the Electron-owned/process-tree UDP observation from `Phase 5.6.2 Desktop Gate Evidence` without bypassing the regression gate.
+
+`FIRST PREVIEW READY` must not be claimed before all PR checks, merge and post-merge verification succeed.
 
 ## Governance
 
-All official changes remain branch → PR → CI → architecture/security review → expected-head Merge Commit → post-merge verification. The standing Architecture Authority authorization permits autonomous progression through the accepted roadmap while these evidence and merge controls remain mandatory. Third-party licensing and public contributor-rights review remain fail-closed before Public Preview.
+Official changes remain branch → PR → CI → architecture/security review → exact-head verification → merge → post-merge verification. No mandatory gate is bypassed and no failed assertion is relaxed merely to obtain a green run.

@@ -1,0 +1,157 @@
+name: Phase 5.6 Desktop Spike Bootstrap
+
+on:
+  push:
+    branches:
+      - feature/phase-5.6-windows-desktop-mvp
+    paths:
+      - 'benchmarks/desktop/phase56/**'
+      - 'docs/architecture/phase-5.6-windows-desktop-technology-spike.md'
+      - '.github/workflows/phase56-desktop-spike.yml'
+      - 'shared-core/go/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'benchmarks/desktop/phase56/**'
+      - 'docs/architecture/phase-5.6-windows-desktop-technology-spike.md'
+      - '.github/workflows/phase56-desktop-spike.yml'
+      - 'shared-core/go/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  bootstrap:
+    name: desktop-spike-bootstrap (windows-latest)
+    runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]
+    timeout-minutes: 35
+    env:
+      GOTOOLCHAIN: local
+      CGO_ENABLED: '0'
+      PHASE56_EVIDENCE: .phase56-evidence
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Go 1.25.13
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.13'
+          cache-dependency-path: shared-core/go/go.sum
+
+      - name: Verify Python 3.12
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
+          if ($version -ne '3.12') { throw "Python 3.12 required; found $version" }
+          python --version
+
+      - name: Set up Node 24 screening toolchain
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Set up .NET 10 LTS screening toolchain
+        uses: actions/setup-dotnet@v4
+        env:
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}\dotnet
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Set up Rust 1.95 screening toolchain
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $RustupVersion = '1.29.0'
+          $RustupBootstrap = Join-Path $env:RUNNER_TEMP 'rustup-bootstrap'
+          $RustupInit = Join-Path $RustupBootstrap 'rustup-init.exe'
+          $RustupChecksum = Join-Path $RustupBootstrap 'rustup-init.exe.sha256'
+          $RustupBase = "https://static.rust-lang.org/rustup/archive/$RustupVersion/x86_64-pc-windows-msvc"
+
+          New-Item -ItemType Directory -Force -Path $RustupBootstrap | Out-Null
+          Invoke-WebRequest -Uri "$RustupBase/rustup-init.exe" -OutFile $RustupInit
+          Invoke-WebRequest -Uri "$RustupBase/rustup-init.exe.sha256" -OutFile $RustupChecksum
+
+          $expected = ((Get-Content -Raw $RustupChecksum).Trim() -split '\s+')[0].ToLowerInvariant()
+          $actual = (Get-FileHash -Algorithm SHA256 $RustupInit).Hash.ToLowerInvariant()
+          if ($actual -ne $expected) {
+            throw "rustup-init SHA-256 mismatch: expected $expected, got $actual"
+          }
+
+          $env:RUSTUP_HOME = Join-Path $env:RUNNER_TEMP 'rustup-home'
+          $env:CARGO_HOME = Join-Path $env:RUNNER_TEMP 'cargo-home'
+          & $RustupInit -y --no-modify-path --profile minimal --default-toolchain 1.95.0
+          if ($LASTEXITCODE -ne 0) { throw "rustup-init failed with exit code $LASTEXITCODE" }
+
+          $CargoBin = Join-Path $env:CARGO_HOME 'bin'
+          $env:PATH = "$CargoBin;$env:PATH"
+          "RUSTUP_HOME=$env:RUSTUP_HOME" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "CARGO_HOME=$env:CARGO_HOME" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          $CargoBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+          rustup --version
+          rustc --version
+          cargo --version
+          $rustVersion = (rustc --version).Trim()
+          if ($rustVersion -notmatch '^rustc 1\.95\.0 ') {
+            throw "Rust 1.95.0 required; found $rustVersion"
+          }
+
+      - name: Validate Phase 5.6 evaluation contract
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python -c "import json, pathlib; p=json.loads(pathlib.Path('benchmarks/desktop/phase56/evaluation-plan.json').read_text(encoding='utf-8')); assert p['phase']=='5.6'; assert p['slice']=='5.6.0'; assert sum(p['score_weights'].values())==100; assert p['core_boundary']['protocol_version']=='1.0.0'; assert len(p['hard_gates'])==9; print('phase56 evaluation contract OK')"
+          python -m py_compile benchmarks/desktop/phase56/probe_environment.py
+
+      - name: Create evidence directory
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force -Path $env:PHASE56_EVIDENCE | Out-Null
+
+      - name: Build production atlas-core sidecar
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Push-Location shared-core/go
+          try {
+            go mod verify
+            go test ./... -count=1
+            go build -trimpath -buildvcs=false `
+              -ldflags "-X main.coreCommit=$env:GITHUB_SHA -X main.coreVersion=0.1.0-dev" `
+              -o "../../$env:PHASE56_EVIDENCE/atlas-core.exe" ./cmd/atlas-core
+          }
+          finally {
+            Pop-Location
+          }
+
+      - name: Probe toolchains and atlas-core stdio boundary
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python benchmarks/desktop/phase56/probe_environment.py `
+            --atlas-core "$env:PHASE56_EVIDENCE/atlas-core.exe" `
+            --output "$env:PHASE56_EVIDENCE/environment-windows.json"
+
+      - name: Confirm canonical schemas v1 remain unchanged
+        run: git diff --exit-code origin/main...HEAD -- schemas/v1
+
+      - name: Upload Phase 5.6 bootstrap evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: phase56-desktop-bootstrap-windows
+          path: .phase56-evidence/
+          if-no-files-found: warn
+          include-hidden-files: true

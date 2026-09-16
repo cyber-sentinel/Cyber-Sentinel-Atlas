@@ -1,0 +1,107 @@
+{
+  "plan_version": "1.0.0",
+  "phase": "5.6",
+  "slice": "5.6.0",
+  "title": "Windows Desktop Technology Spike",
+  "baseline_main": "00a27df6b28b034fecc3905865e0aac200e5aa87",
+  "decision_adr": "ADR-0026",
+  "status": "EXECUTION_AUTHORIZED",
+  "product_requirements": [
+    "windows-first",
+    "offline-first",
+    "fast-exact-and-lexical-search",
+    "canonical-record-detail",
+    "relationship-navigation",
+    "claim-level-provenance",
+    "verified-pack-status-and-update",
+    "safe-rollback",
+    "portable-mode-evaluation"
+  ],
+  "core_boundary": {
+    "executable": "atlas-core",
+    "mode": "--serve-stdio",
+    "protocol": "atlas-core",
+    "protocol_version": "1.0.0",
+    "network_listener_default": false,
+    "source_adr": "ADR-0025"
+  },
+  "screening_candidates": [
+    {
+      "id": "tauri-v2",
+      "host": "Tauri",
+      "screening_version": "2.11.5",
+      "cli_screening_version": "2.11.4",
+      "frontend": "static-web-or-react-typescript",
+      "native_runtime": "Rust",
+      "notes": "Primary lightweight webview candidate; no selection implied."
+    },
+    {
+      "id": "electron",
+      "host": "Electron",
+      "screening_version": "44.3.0",
+      "frontend": "static-web-or-react-typescript",
+      "native_runtime": "Chromium-Node",
+      "notes": "Mature desktop packaging candidate; footprint and attack surface must be measured."
+    },
+    {
+      "id": "dotnet",
+      "host": ".NET Windows Desktop",
+      "screening_version": "10.0.12",
+      "frontend": "native-windows-ui",
+      "native_runtime": ".NET 10 LTS",
+      "notes": "Native Windows candidate; exact UI shell is selected only through executable evidence."
+    }
+  ],
+  "toolchain_baseline": {
+    "go": "1.25.13",
+    "python": "3.12",
+    "rust": "1.95.0",
+    "node": "24",
+    "dotnet": "10.0.x"
+  },
+  "hard_gates": [
+    "G-D1-windows-clean-build",
+    "G-D2-atlas-core-stdio-handshake-and-status",
+    "G-D3-offline-no-default-network-listener",
+    "G-D4-sidecar-location-and-integrity-control",
+    "G-D5-search-record-graph-provenance-capability",
+    "G-D6-pack-status-update-and-rollback-capability",
+    "G-D7-desktop-security-surface",
+    "G-D8-installer-and-portable-mode-feasibility",
+    "G-D9-footprint-startup-and-ipc-measurements"
+  ],
+  "score_weights": {
+    "security_and_isolation": 25,
+    "shared_core_integration": 20,
+    "windows_build_and_packaging": 15,
+    "footprint_startup_ipc": 15,
+    "maintainability_and_supply_chain": 10,
+    "portable_mode": 10,
+    "accessibility_and_user_experience": 5
+  },
+  "selection_rule": {
+    "must_pass_all_hard_gates": true,
+    "no_unmitigated_security_blocker": true,
+    "highest_weighted_score_wins_among_eligible_candidates": true,
+    "selection_requires_accepted_adr": true
+  },
+  "preview_critical_scope": [
+    "offline-search",
+    "canonical-detail",
+    "relationship-navigation",
+    "provenance",
+    "verified-pack-state",
+    "safe-rollback",
+    "windows-build-package"
+  ],
+  "explicitly_deferred": [
+    "web-pwa",
+    "grounded-ai",
+    "mcp",
+    "remote-api",
+    "cloud-sync",
+    "semantic-vector-search",
+    "non-windows-desktop"
+  ],
+  "version_reference_checked_at": "2026-09-15"
+}

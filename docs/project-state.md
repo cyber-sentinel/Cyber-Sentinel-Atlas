@@ -3,23 +3,23 @@
 ## Repository Control Plane
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
-- Authoritative Branch: `main`
-- Live Main SHA: resolve from the GitHub `main` branch tip.
-- Last Reviewed Main SHA: `94f3136687f8e9765c0343b938a1049436878783`
-- Last Architecture-Reviewed Main SHA: `94f3136687f8e9765c0343b938a1049436878783`
-- Current Version: `0.1.0-foundation.1`
-- Canonical Schema Version: `1.0.0`
-- Ingestion Contract Version: `1.0.0`
-- Search Contract Version: `1.0.0`
-- Search Engine: SQLite + FTS5 — ADR-0022 Accepted
-- Content Pack Trust Model: TUF — ADR-0023 Accepted
+- Release authority: `main`
+- Active implementation branch: `feature/phase-5.6-windows-desktop-mvp`
+- Active release vehicle: **PR #39**
+- Last Reviewed Main SHA: `ebe2d29c8857bdbfde5c87bedb4b91e08d05777a`
+- Architecture Sync Status: **GREEN**
+- Repository visibility: **Public**
+- Release state: **First Preview candidate / feature implementation complete / final PR regression closure active / not yet merged**
+- Canonical schema version: `1.0.0`
+- Ingestion contract version: `1.0.0`
+- Search contract version: `1.0.0`
+- Search engine: SQLite + FTS5 — ADR-0022 Accepted
+- Content-pack trust model: TUF — ADR-0023 Accepted
 - Production Shared Core: Go — ADR-0024 Accepted
 - Shared Core Local Interface: child-process stdio protocol — ADR-0025 Accepted
-- Python Role: semantic/conformance oracle during production Go port
-- Repository Visibility: Private during active development
-- Branch Protection: unavailable/not enabled on the current private-repository plan; procedural PR + CI + architecture-review gates remain mandatory.
+- Desktop implementation stack: **Tauri 2.x — ADR-0026 Accepted**
 
-Detailed current status is maintained in [`docs/current-status.md`](current-status.md). Historical project-state detail from the Phase 5.3-era snapshot is preserved in [`docs/history/project-state-phase53-snapshot.md`](history/project-state-phase53-snapshot.md).
+Operational evidence is summarized in [`docs/current-status.md`](current-status.md). Historical snapshots remain under `docs/history/`.
 
 ## Current Phase
 
@@ -28,125 +28,155 @@ Detailed current status is maintained in [`docs/current-status.md`](current-stat
 - Phase 5.2 — Canonical Data Model: **COMPLETE / MERGED**
 - Phase 5.3 — Source & Ingestion Core: **COMPLETE / MERGED**
 - Phase 5.4 — Deterministic Search Core: **COMPLETE / MERGED**
-- Phase 5.5 — Offline Pack Runtime / Shared Core: **IN PROGRESS**
-- Phase 5.5.1 — Pack Trust Contracts + ADR-0023: **COMPLETE / MERGED**
+- Phase 5.5 — Offline Pack Runtime / Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED / FROZEN**
 - Phase 5.5.2 — Verified Pack Runtime: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 - Phase 5.5.3 — Production Shared Core Technology Spike + ADR-0024: **COMPLETE / MERGED / POST-MERGE VERIFIED**
-- Phase 5.5.4 — Production Go Shared Core: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED**
-- Phase 5.6 — Windows Desktop MVP: **NOT STARTED / BLOCKED ON PRODUCTION SHARED CORE**
-- Phase 5.7 — Web / PWA: **NOT STARTED**
-- Phase 5.8 — API / CLI: **NOT STARTED**
-- Phase 5.9 — Grounded AI: **NOT STARTED**
-- Phase 5.10 — Public Preview Readiness: **NOT STARTED**
+- Phase 5.5.4 — Production Go Shared Core: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+- Phase 5.6 — Windows Desktop MVP: **FEATURE-BRANCH IMPLEMENTATION COMPLETE / PR RELEASE CLOSURE ACTIVE**
+  - 5.6.0 Environment / Core Boundary: **COMPLETE / VERIFIED**
+  - 5.6.1 Executable Candidate Builds: **COMPLETE / VERIFIED**
+  - 5.6.2 Mandatory Hard Gates / Desktop Selection: **COMPLETE / VERIFIED FOR ACCEPTED SELECTION EVIDENCE**
+    - G-D1 through G-D9: **PASS / CLOSED in frozen selection evidence**
+    - accepted evidence run: `35090304056`
+    - candidate evidence commit: `c343ffd881dd7b6a420f04cea2ffb91c3ea8a715`
+    - ADR-0026: **ACCEPTED — Tauri 2.x**
+    - current PR regression: **BLOCKED pending Electron UDP measurement attribution/closure**
+    - failed regression run snapshot: `35100673553`
+  - 5.6.3 First Preview UI: **COMPLETE / VERIFIED ON FEATURE BRANCH**
+  - 5.6.4 Windows Packaging / Clean-Machine Smoke: **COMPLETE / VERIFIED ON FEATURE BRANCH**
+    - latest verified PR implementation-head package/smoke run: `35100673319`
+    - verified implementation head: `8feb39a62a1b480428b180ad68cf6ab88340f513`
+    - earlier acceptance run: `35095383694`
+- Phase 5.7 — Web / PWA: **DEFERRED BEYOND FIRST PREVIEW**
+- Phase 5.8 — Broader API surfaces: **DEFERRED BEYOND FIRST PREVIEW**
+- Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
+- Phase 5.10 — Public Preview Readiness: **PLANNED**
 
-The Phase 5.5.3 and 5.5.4 numbering was introduced at the Shared Core architecture boundary and is now part of the active roadmap.
+The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers above are retained as current compatibility invariants for historical architecture gates even though the aggregate Phase 5.5 boundary is now frozen.
 
 ## Frozen Architecture
 
-The following remain authoritative:
+The following remain authoritative and may not drift to simplify the Desktop host:
 
-- exactly seven canonical AtlasRecord families under `schemas/v1/`;
-- canonical identifier pattern `atlas:<entity-type>:<namespace>:<canonical-key>`;
-- native identifiers remain separate and Event ID is not globally unique;
-- legacy/current lifecycle preservation;
-- deterministic exact identifier resolution before lexical retrieval;
-- SQLite + FTS5 for the derived deterministic search artifact;
-- TUF-based signed content-pack trust, verification and rollback boundary;
-- Go as the production Shared Core implementation family;
-- the existing Atlas deterministic JSON serialization/digest profile; no implicit JCS migration;
-- Python as the semantic/conformance oracle during the Go production port;
-- ADR-0025 child-process stdio protocol as the local Desktop-facing Shared Core boundary;
-- offline-first operation, inspectable provenance and Last Known Good preservation;
-- shared contracts across Desktop, Web/PWA, API and CLI;
-- official CLI command: `atlas`.
+- exactly seven canonical `AtlasRecord` families under `schemas/v1/`;
+- canonical identifiers remain provider/entity scoped;
+- deterministic exact-before-lexical retrieval;
+- SQLite + FTS5 as derived deterministic search artifact;
+- TUF signed content-pack trust, trusted-time and anti-rollback state;
+- immutable generations, atomic activation and Last Known Good behavior;
+- Go production Shared Core with Python retained as semantic/conformance oracle;
+- deterministic Atlas serialization/digest profile;
+- ADR-0025 `atlas-core --serve-stdio` local boundary;
+- no default local HTTP/TCP/WebSocket listener or hidden network fallback;
+- offline-first operation and inspectable provenance.
 
-## Phase 5.5.3 Closure
+## Phase 5.6 Closed Selection Boundary
 
-Phase 5.5.3 merged via PR #23 at Merge Commit `bbb462b11de460216acb80116146f651ac2ef1ca` and is post-merge verified. PR #24 synchronized the resulting status boundary at `94f3136687f8e9765c0343b938a1049436878783`.
+All three candidate families passed mandatory hard gates in the accepted selection evidence. The accepted weighted review is retained in `benchmarks/desktop/phase56/weighted-review.json` and ADR-0026 records the final host decision:
 
-The evidence-driven decision accepted ADR-0024 and selected Go because it was the only non-control finalist to pass every mandatory G-SC1..G-SC8 gate on both Linux and Windows. The accepted baseline includes:
+- **Selected:** Tauri 2.x;
+- .NET 10 / WPF: evaluated and not selected;
+- Electron: evaluated and not selected.
 
-- Go toolchain family evidenced with `go1.25.0`;
-- `go-tuf/v2 v2.4.2`;
-- `modernc.org/sqlite v1.58.0`;
-- normalized dependency graph including `golang.org/x/text v0.36.0`;
-- SQLite/FTS5 parity with the accepted Phase 5.4 search contracts;
-- TUF/POUF, offline, archive, durable state, trusted-time and LKG/rollback parity with Phase 5.5.1/5.5.2;
-- cross-language deterministic JSON vectors preserved without digest migration;
-- no change to canonical `schemas/v1/`.
+Selection does not move canonical, search, graph, provenance or pack-trust ownership into the UI. Those remain Shared Core responsibilities.
 
-Python control remains an eligible reference implementation and conformance oracle. Rust was not selected because the current mandatory trust/runtime evidence envelope was incomplete or failed; that result is scoped to Phase 5.5.3 rather than a general language judgment.
+### Selected-host security boundary
 
-## Phase 5.5.4 Production Boundary
+The Tauri First Preview is limited to one main-window capability and exactly seven application commands:
 
-Phase 5.5.4 is implementation-authorized. It converts the accepted Go spike evidence into production Shared Core code while keeping all canonical/search/pack contracts authoritative.
+`core_status`, `search_records`, `get_record`, `expand_graph`, `pack_status`, `pack_update`, `pack_rollback`.
 
-ADR-0025 freezes the local integration boundary as `atlas-core --serve-stdio` with 4-byte big-endian length-prefixed UTF-8 JSON frames, strict `atlas-core` protocol `1.0.0` handshake, bounded request/response sizes, strict parsing, one request at a time per child process, method allowlisting and no default local network listener.
+The baseline retains CSP `connect-src 'none'`, no Tauri plugins, no generic frontend-controlled Shared Core method bridge, no generic application network API, committed/hash-guarded `Cargo.lock`, and adjacent SHA-256-bound `atlas-core.exe`.
 
-Required production closure includes:
+## Current PR Regression Blocker
 
-- canonical/read-model validation against the seven-family schema;
-- deterministic SQLite/FTS5 exact, lexical, catalog and bounded graph behavior;
-- Atlas TUF POUF v1 verification and verified-pack consumption;
-- durable install/activation/highest-seen/trusted-time/LKG rollback behavior;
-- locked Go dependencies, clean builds, SBOM and vulnerability evidence;
-- Linux/Windows conformance against the Python oracle;
-- stable versioned local protocol conformance without freezing the Desktop UI framework.
+PR #39 is the active release-closure vehicle. On implementation head `8feb39a62a1b480428b180ad68cf6ab88340f513`, the following major workflows completed successfully before documentation sync advanced the branch head:
 
-Execution is structured as 5.5.4A protocol/core skeleton, 5.5.4B canonical/search/graph parity, 5.5.4C pack trust/durable state, and 5.5.4D supply-chain/cross-platform closure.
+- Governance Hygiene;
+- Foundation Hygiene;
+- Phase 5.5.1 Pack Trust Contracts;
+- Phase 5.5.2 Verified Pack Runtime;
+- Phase 5.5.3 Shared Core Architecture;
+- Phase 5.5.4 Production Go Architecture;
+- Phase 5.5.4A Go Protocol Core;
+- Phase 5.5.4B Canonical Search Graph;
+- Phase 5.5.4D Supply Chain Closure;
+- Phase 5.6.2 Active Pack Integration;
+- Phase 5.6.4 Windows First Preview Package.
+
+`Phase 5.6.2 Desktop Gate Evidence` run `35100673553` failed at `Measure candidates with common external harness` because the **Electron process tree opened a UDP endpoint during the controlled probe**. The security-surface validator, exact-head Shared Core build/IPC, and Tauri/.NET/Electron candidate builds and probes had already passed.
+
+This does not change ADR-0026 by assertion. Electron is not the selected product host, and the selected Tauri package/clean-Windows gate is green. It does remain a PR regression blocker because the comparative candidate workflow is still part of the release CI contract. The observation must be attributed and closed without weakening the intended network-posture check or bypassing the gate.
+
+## First Preview Product Boundary
+
+The implemented First Preview is intentionally constrained to analyst-critical functionality:
+
+- Offline Global Search;
+- Canonical Record Detail;
+- bounded relationship/graph navigation;
+- claim/source provenance;
+- Windows Event and Sysmon-oriented investigation context present in the pack;
+- verified pack state/update;
+- safe rollback / recovery visibility;
+- UTC plus system-local and Tehran/Jalali presentation as UI formatting;
+- operational dark UI and basic accessibility/high-contrast support.
+
+## Packaging Boundary
+
+Phase 5.6.4 produced a byte-bound portable Windows ZIP containing the selected Tauri host, the exact-head production Shared Core and its SHA-256 manifest. Latest verified PR implementation-head package evidence is run `35100673319` at `8feb39a62a1b480428b180ad68cf6ab88340f513`. The same immutable artifact passed clean-Windows verification for:
+
+- package and payload integrity;
+- relocation to a path containing spaces;
+- exact Shared Core commit binding;
+- packaged offline/no-listener probe;
+- deliberate sidecar-corruption rejection;
+- recovery after restoring verified bytes;
+- WebView2 prerequisite detection;
+- GUI liveness;
+- zero TCP listeners across the GUI process tree;
+- zero UDP endpoints owned by ATLAS or Shared Core.
+
+Runtime-owned WebView2 UDP, when present, is attributed and recorded in evidence; it is not conflated with an ATLAS/Core listener and is not silently ignored.
+
+First Preview packaging is intentionally unsigned. Production Authenticode signing and public distribution/release hardening remain later release-readiness work. Binary auto-update is not part of First Preview.
 
 ## Accepted ADRs
 
-- ADR-0001 — Canonical Vendor-Neutral Model
-- ADR-0002 — Claim-Level Provenance
-- ADR-0003 — Offline-first Core
-- ADR-0004 — Ecosystem Ownership: Atlas, DefenseOps and Forge
-- ADR-0005 — Canonical Identifier Architecture
-- ADR-0006 — Shared Core and Interface Sequencing
-- ADR-0007 — Universal Telemetry Taxonomy
-- ADR-0008 — Coverage Measurement Model
-- ADR-0009 — Controlled Content Release Pipeline
-- ADR-0010 — Telemetry Lifecycle and Legacy Preservation
-- ADR-0011 — Canonical Record Families and Record Envelope
-- ADR-0012 — Native Identifiers, Aliases and Controlled Registries
-- ADR-0013 — Applicability, Versioning and Curation/Lifecycle Separation
-- ADR-0014 — Claim, Evidence and Relationship Contracts
-- ADR-0015 — Schema Versioning, Migration and Referential Integrity
-- ADR-0016 — Source & Ingestion Control Plane Boundary
-- ADR-0017 — Deterministic Acquisition, Parsing and Normalization
-- ADR-0018 — Authoritative Inventory, Completeness and Change Safety
-- ADR-0019 — Validation, Review and Pack-Ready Promotion
-- ADR-0020 — Encyclopedia Identifier Search/Browse Data Contract
-- ADR-0021 — Search Projection and Exact Resolver Contract
-- ADR-0022 — Search Engine Selection
-- ADR-0023 — Secure Content Pack Trust and Update Model
-- ADR-0024 — Production Shared Core Technology Selection
-- ADR-0025 — Shared Core Local Interface Boundary
+ADR-0001 through ADR-0026 are accepted according to repository history. Current major technology decisions include:
+
+- ADR-0022 — SQLite + FTS5 deterministic search artifact;
+- ADR-0023 — Secure Content Pack Trust and Update Model;
+- ADR-0024 — Production Shared Core Technology Selection;
+- ADR-0025 — Shared Core Local Interface Boundary;
+- ADR-0026 — Windows Desktop Host Selection: **Tauri 2.x**.
 
 ## Technology Decisions Still Open
 
-- Windows Desktop implementation stack;
-- broader local application storage beyond the accepted derived search artifact;
-- graph persistence/index implementation;
-- Detection Intermediate Representation;
-- HSM/KMS and production signing-provider selection;
-- portable Windows packaging implementation;
+- production signing provider / HSM/KMS;
+- public installer/distribution policy beyond First Preview portable ZIP;
 - application binary update mechanism;
+- broader graph persistence/index implementation;
+- Detection Intermediate Representation;
 - remote content distribution/CDN topology;
 - Grounded AI runtime.
 
-## Architecture Sync
+## Immediate Sequence
 
-- Architecture Sync Date: 2026-09-06
-- Architecture Authority: Atlas Architecture / Product / Data / Security Design workspace
-- Architecture Sync Status: **GREEN**
-- Stage 1: **APPROVED AND MERGED**
-- Phase 5.2: **APPROVED AND MERGED**
-- Phase 5.3: **APPROVED AND COMPLETE**
-- Phase 5.4: **APPROVED AND COMPLETE**
-- Phase 5.5.1: **APPROVED AND COMPLETE**
-- Phase 5.5.2: **APPROVED, MERGED AND POST-MERGE VERIFIED**
-- Phase 5.5.3: **APPROVED, GO SELECTED, MERGED AND POST-MERGE VERIFIED**
-- Phase 5.5.4: **ARCHITECTURE ACCEPTED / IMPLEMENTATION AUTHORIZED — ADR-0025**
+```text
+Feature implementation + selected-host package/smoke verification   COMPLETE
+       ↓
+README / authoritative documentation sync                           COMPLETE
+       ↓
+PR #39 final regression blocker closure                             ACTIVE
+       ↓
+Merge to main                                                       PENDING
+       ↓
+Post-merge package verification                                     PENDING
+       ↓
+FIRST PREVIEW READY / POST-MERGE VERIFIED
+```
 
-No blocking architecture conflict is known at this boundary. Production Go code must conform to the accepted Atlas security/search/pack/protocol contracts; it may not redefine those contracts to simplify the port.
+Current blocker: identify ownership/cause of the Electron process-tree UDP endpoint observed by the historical multi-candidate measurement harness, remediate or correctly scope the assertion based on evidence, and obtain a green regression run without bypassing security policy.
+
+No mandatory gate is bypassed. The project must not claim First Preview readiness before all PR checks, merge and post-merge verification complete.
