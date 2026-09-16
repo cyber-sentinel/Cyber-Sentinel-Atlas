@@ -194,16 +194,19 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           . ./benchmarks/desktop/phase56/candidates/tauri/prepare_msvc.ps1
+          $LockRelative = 'benchmarks/desktop/phase56/candidates/tauri/Cargo.lock'
           $Manifest = Join-Path (Get-Location) 'benchmarks\desktop\phase56\candidates\tauri\Cargo.toml'
           $Lock = Join-Path (Split-Path -Parent $Manifest) 'Cargo.lock'
           $env:CARGO_TARGET_DIR = Join-Path $env:RUNNER_TEMP 'atlas-tauri-phase561-target'
           Remove-Item -Recurse -Force $env:CARGO_TARGET_DIR -ErrorAction SilentlyContinue
-          cargo generate-lockfile --manifest-path $Manifest
-          if ($LASTEXITCODE -ne 0) { throw "cargo generate-lockfile failed" }
+
+          if (-not (Test-Path -LiteralPath $Lock -PathType Leaf)) {
+            throw "committed Tauri Cargo.lock missing: $Lock"
+          }
           $expectedLockHash = 'dd2a97c412b0f7289f07ba16cfc28b4cca02ea9b7a5f5ed4d488b34977e37b3e'
           $actualLockHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $Lock).Hash.ToLowerInvariant()
           if ($actualLockHash -ne $expectedLockHash) {
-            throw "Tauri Cargo.lock drift detected: expected $expectedLockHash, found $actualLockHash"
+            throw "committed Tauri Cargo.lock drift detected: expected $expectedLockHash, found $actualLockHash"
           }
 
           if ($env:ATLAS_TAURI_BUILD_MODE -eq 'cargo-xwin') {
@@ -219,6 +222,9 @@ jobs:
 
           cargo metadata --format-version 1 --locked --manifest-path $Manifest > "$env:PHASE561_EVIDENCE\tauri-cargo-metadata.json"
           if ($LASTEXITCODE -ne 0) { throw "cargo metadata failed" }
+          git diff --exit-code -- $LockRelative
+          if ($LASTEXITCODE -ne 0) { throw "Tauri Cargo.lock changed during locked build/metadata" }
+
           $Out = Join-Path (Get-Location) "$env:PHASE561_STAGE\tauri"
           New-Item -ItemType Directory -Force -Path $Out | Out-Null
           Copy-Item $TauriBinary $Out
