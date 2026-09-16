@@ -58,15 +58,15 @@ function Get-ProcessTreeIds {
     while ($changed) {
         $changed = $false
         foreach ($row in $rows) {
-            $pid = [int]$row.ProcessId
-            $parent = [int]$row.ParentProcessId
-            if ($seen.Contains($parent) -and -not $seen.Contains($pid)) {
-                [void]$seen.Add($pid)
+            $childPid = [int]$row.ProcessId
+            $parentPid = [int]$row.ParentProcessId
+            if ($seen.Contains($parentPid) -and -not $seen.Contains($childPid)) {
+                [void]$seen.Add($childPid)
                 $changed = $true
             }
         }
     }
-    return @($seen)
+    return @($seen | ForEach-Object { [int]$_ })
 }
 
 function Test-ListenerForPids {
@@ -114,7 +114,7 @@ function Invoke-ProbeSample {
     $stdoutTask = $process.StandardOutput.ReadToEndAsync()
     $stderrTask = $process.StandardError.ReadToEndAsync()
 
-    $peakWorkingSet = 0L
+    $peakTreeWorkingSet = 0L
     $maxProcessCount = 1
     $networkListenerSeen = $false
     $timeout = [TimeSpan]::FromSeconds(25)
@@ -127,13 +127,17 @@ function Invoke-ProbeSample {
 
         $treeIds = @(Get-ProcessTreeIds -RootPid $process.Id)
         if ($treeIds.Count -gt $maxProcessCount) { $maxProcessCount = $treeIds.Count }
+
+        $treeWorkingSet = 0L
         foreach ($treePid in $treeIds) {
             try {
                 $treeProcess = Get-Process -Id $treePid -ErrorAction Stop
-                if ($treeProcess.WorkingSet64 -gt $peakWorkingSet) { $peakWorkingSet = $treeProcess.WorkingSet64 }
+                $treeWorkingSet += [long]$treeProcess.WorkingSet64
             }
             catch { }
         }
+        if ($treeWorkingSet -gt $peakTreeWorkingSet) { $peakTreeWorkingSet = $treeWorkingSet }
+
         if (-not $networkListenerSeen -and (Test-ListenerForPids -ProcessIds $treeIds)) {
             $networkListenerSeen = $true
         }
@@ -170,7 +174,7 @@ function Invoke-ProbeSample {
         sample_kind = $SampleKind
         sample_index = $SampleIndex
         external_process_total_ms = [Math]::Round($stopwatch.Elapsed.TotalMilliseconds, 3)
-        peak_working_set_bytes = $peakWorkingSet
+        peak_tree_working_set_bytes = $peakTreeWorkingSet
         max_process_count = $maxProcessCount
         network_listener_seen = $networkListenerSeen
         sidecar_sha256 = [string]$probe.sidecar_sha256
@@ -218,7 +222,7 @@ foreach ($candidate in $candidates) {
     }
 
     $timings = [double[]]@($samples | ForEach-Object { [double]$_.external_process_total_ms })
-    $memory = [double[]]@($samples | ForEach-Object { [double]$_.peak_working_set_bytes })
+    $memory = [double[]]@($samples | ForEach-Object { [double]$_.peak_tree_working_set_bytes })
     $processCounts = [double[]]@($samples | ForEach-Object { [double]$_.max_process_count })
 
     $results += [ordered]@{
@@ -233,8 +237,8 @@ foreach ($candidate in $candidates) {
         measured_samples = $samples
         external_process_total_ms_median = [Math]::Round((Get-Median -Values $timings), 3)
         external_process_total_ms_p95 = [Math]::Round((Get-PercentileNearestRank -Values $timings -Percentile 0.95), 3)
-        peak_working_set_bytes_median = [Math]::Round((Get-Median -Values $memory), 0)
-        peak_working_set_bytes_p95 = [Math]::Round((Get-PercentileNearestRank -Values $memory -Percentile 0.95), 0)
+        peak_tree_working_set_bytes_median = [Math]::Round((Get-Median -Values $memory), 0)
+        peak_tree_working_set_bytes_p95 = [Math]::Round((Get-PercentileNearestRank -Values $memory -Percentile 0.95), 0)
         max_process_count_p95 = [int](Get-PercentileNearestRank -Values $processCounts -Percentile 0.95)
         network_listener_seen = $false
     }
