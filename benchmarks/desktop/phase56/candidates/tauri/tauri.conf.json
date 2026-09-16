@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "ATLAS Tauri Candidate",
+  "productName": "Cyber-Sentinel ATLAS",
   "version": "0.1.0",
-  "identifier": "com.cybersentinel.atlas.tauri.candidate",
+  "identifier": "com.cybersentinel.atlas",
   "build": {
     "frontendDist": "www"
   },
@@ -11,10 +11,13 @@
     "windows": [
       {
         "label": "main",
-        "title": "Cyber-Sentinel ATLAS — Tauri Candidate",
-        "width": 900,
-        "height": 620,
-        "resizable": true
+        "title": "Cyber-Sentinel ATLAS — First Preview",
+        "width": 1320,
+        "height": 820,
+        "minWidth": 1040,
+        "minHeight": 680,
+        "resizable": true,
+        "fullscreen": false
       }
     ],
     "security": {
@@ -24,13 +27,21 @@
       },
       "capabilities": [
         {
-          "identifier": "main-core-status-only",
-          "description": "Restrict the local main webview to the single fixed core_status application command.",
+          "identifier": "main-preview-commands",
+          "description": "Restrict the local main webview to the fixed First Preview Shared Core command set accepted by ADR-0026.",
           "windows": ["main"],
-          "permissions": ["allow-core-status"]
+          "permissions": [
+            "allow-core-status",
+            "allow-search-records",
+            "allow-get-record",
+            "allow-expand-graph",
+            "allow-pack-status",
+            "allow-pack-update",
+            "allow-pack-rollback"
+          ]
         }
       ],
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'none'; img-src 'self' data:",
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'none'; img-src 'self' data:; font-src 'self'",
       "dangerousDisableAssetCspModification": false,
       "freezePrototype": true
     }
