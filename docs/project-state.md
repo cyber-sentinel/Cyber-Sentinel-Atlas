@@ -38,8 +38,8 @@ Detailed operational status is maintained in [`docs/current-status.md`](current-
     - G-D4 Sidecar location/integrity/version: **PASS**
     - G-D5 Active verified pack read model: **PASS / VERIFIED**
     - G-D6 Pack update + safe rollback: **PASS / VERIFIED**
-    - G-D7 Desktop security surface: **IN PROGRESS**
-    - G-D8 Installer / Portable feasibility: **PENDING**
+    - G-D7 Desktop security surface: **IMPLEMENTED / CI PENDING**
+    - G-D8 Installer / Portable feasibility: **IMPLEMENTED / CI PENDING**
     - G-D9 Measurements / reproducibility closure: **PARTIAL**
   - 5.6.3 First Preview UI: **PLANNED**
   - 5.6.4 Windows Packaging / Smoke Closure: **PLANNED**
@@ -81,7 +81,13 @@ No framework preference or selection is accepted until every mandatory hard gate
 - G-D3: exact-head Candidate Builds run `35078440647` at `4e0a770e06cfacb195bfaf2ebb11a647aabc83e8` passed common process-tree TCP and UDP probes for all three candidates.
 - G-D5: verified Active Generation loads into production canonical/search/graph read models on Windows.
 - G-D6: exact-head run `35075820479` at `32874c7b95239579d6c11839a325dec0081d18f5` passed real-process signed update → same-process status/search → rollback → same-process status/search, while preserving highest-seen trust state and rejecting an untrusted-root update without losing the active read model.
-- G-D7: machine-enforced candidate security-surface validation is implemented on technical commit `73c653e7b23033546522509dff64ee49dfe2c2e4`; full exact-head candidate closure is still running and therefore not yet recorded as PASS.
+
+### Implemented evidence awaiting CI closure
+
+- G-D7: machine-enforced candidate security-surface validation is implemented for Electron, Tauri and native .NET/WPF; it remains unverified until the active Windows Candidate run completes successfully.
+- G-D8: portable relocation and packaging-feasibility evidence is implemented. Each real candidate must run from a relocated path containing spaces while retaining the adjacent Shared Core integrity boundary. Final installer build/signing and clean-machine installer smoke remain Phase 5.6.4 work.
+- Tauri reproducibility: `Cargo.lock` is committed and exact-hash guarded; Candidate CI no longer calls `cargo generate-lockfile`, uses `--locked`, and fails on missing/drifted/mutated lock state.
+- Current Windows Candidate verification run: `35084472666` on branch snapshot `19242f0cabb27a606dc4ddc1603a381ea5a19342`; status at this project-state update: **IN PROGRESS**.
 
 ## First Preview Product Boundary
 
@@ -122,16 +128,14 @@ ADR-0001 through ADR-0025 remain accepted according to repository history. The c
 ## Immediate Sequence
 
 ```text
-G-D7 Desktop Security
-  ↓
-G-D8 Installer / Portable
-  ↓
-G-D9 Measurement + Reproducibility Closure
-  ↓
+G-D7 / G-D8 Exact-head Windows Verification
+       ↓
+G-D9 Measurement Closure
+       ↓
 ADR-0026 Desktop Selection
-  ↓
+       ↓
 5.6.3 First Preview UI
-  ↓
+       ↓
 5.6.4 Windows Packaging / Smoke Closure
 ```
 
