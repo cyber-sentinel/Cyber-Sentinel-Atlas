@@ -3,10 +3,204 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Cyber-Sentinel ATLAS — Tauri Candidate</title>
-  <style>
-    body{margin:0;background:#0a0e17;color:#dbe8ff;font:15px system-ui,sans-serif}main{max-width:940px;margin:auto;padding:32px}h1{font-size:24px}pre{white-space:pre-wrap;background:#111a29;border:1px solid #26364e;border-radius:12px;padding:20px;min-height:360px;color:#bfe1ff}.muted{color:#8ba0bd}
-  </style>
+  <meta name="color-scheme" content="dark">
+  <title>Cyber-Sentinel ATLAS — First Preview</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body><main><h1>Cyber-Sentinel ATLAS</h1><p class="muted">Tauri 2.11.5 candidate — frozen atlas-core stdio boundary</p><pre id="status">Validating packaged atlas-core and requesting core.status...</pre></main><script src="main.js"></script></body>
+<body data-theme="atlas-dark">
+  <a class="skip-link" href="#workspace">Skip to workspace</a>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-mark" aria-hidden="true">A</div>
+        <div>
+          <div class="eyebrow">CYBER-SENTINEL</div>
+          <h1>ATLAS <span>First Preview</span></h1>
+        </div>
+      </div>
+      <div class="topbar-status" aria-label="Runtime status">
+        <span id="offlineBadge" class="status-pill neutral">Checking core</span>
+        <span id="packBadge" class="status-pill neutral">Pack unknown</span>
+        <button id="refreshStatus" class="icon-button" type="button" aria-label="Refresh runtime status" title="Refresh runtime status">↻</button>
+      </div>
+    </header>
+
+    <aside class="sidebar" aria-label="Primary navigation">
+      <nav class="nav-stack">
+        <button class="nav-item active" type="button" data-view="investigate" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">⌕</span><span>Investigate</span>
+        </button>
+        <button class="nav-item" type="button" data-view="record">
+          <span class="nav-icon" aria-hidden="true">▤</span><span>Record</span>
+        </button>
+        <button class="nav-item" type="button" data-view="graph">
+          <span class="nav-icon" aria-hidden="true">⌘</span><span>Relationships</span>
+        </button>
+        <button class="nav-item" type="button" data-view="pack">
+          <span class="nav-icon" aria-hidden="true">◈</span><span>Pack Control</span>
+        </button>
+        <button class="nav-item" type="button" data-view="diagnostics">
+          <span class="nav-icon" aria-hidden="true">◎</span><span>Diagnostics</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-meta">
+        <label for="themeSelect">Theme</label>
+        <select id="themeSelect">
+          <option value="atlas-dark">Atlas Dark</option>
+          <option value="high-contrast">High Contrast</option>
+        </select>
+        <div class="security-note">
+          <strong>Offline-first</strong>
+          <span>No default network listener</span>
+        </div>
+      </div>
+    </aside>
+
+    <main id="workspace" class="workspace" tabindex="-1">
+      <section id="globalNotice" class="notice info" role="status" aria-live="polite">
+        Validating the packaged Shared Core and verified pack state…
+      </section>
+
+      <section class="view active" data-view-panel="investigate" aria-labelledby="investigateTitle">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">KNOW / INVESTIGATE</div>
+            <h2 id="investigateTitle">Offline Search</h2>
+            <p>Exact identifiers, aliases and bounded lexical search from the active verified knowledge pack.</p>
+          </div>
+          <div id="searchMeta" class="meta-chip">No query yet</div>
+        </div>
+
+        <form id="searchForm" class="search-bar" autocomplete="off">
+          <label class="sr-only" for="searchInput">Search Atlas knowledge</label>
+          <input id="searchInput" name="query" type="search" maxlength="512" placeholder="Search Event ID 4688, T1059.001, PowerShell, Sysmon…" required>
+          <select id="searchLimit" aria-label="Maximum search results">
+            <option value="10">10 results</option>
+            <option value="20" selected>20 results</option>
+            <option value="50">50 results</option>
+          </select>
+          <button class="primary-button" type="submit">Search</button>
+        </form>
+
+        <div class="content-grid search-grid">
+          <section class="panel" aria-labelledby="resultsTitle">
+            <div class="panel-heading">
+              <h3 id="resultsTitle">Results</h3>
+              <span id="resultCount" class="muted">0</span>
+            </div>
+            <div id="searchResults" class="result-list empty-state">Run an offline query to begin investigation.</div>
+          </section>
+
+          <section class="panel detail-panel" aria-labelledby="quickDetailTitle">
+            <div class="panel-heading">
+              <h3 id="quickDetailTitle">Quick Detail</h3>
+              <button id="openRecordView" class="text-button" type="button" disabled>Open record view</button>
+            </div>
+            <div id="quickDetail" class="empty-state">Select a result to load its canonical record.</div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="record" aria-labelledby="recordTitle">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">CANONICAL / EVIDENCE</div>
+            <h2 id="recordTitle">Record &amp; Provenance</h2>
+            <p>Canonical fields remain read-only. Claims and sources are rendered from the Shared Core response.</p>
+          </div>
+          <button id="recordGraphButton" class="secondary-button" type="button" disabled>Expand relationships</button>
+        </div>
+        <div id="recordDetail" class="panel record-detail empty-state">Select a search result first.</div>
+      </section>
+
+      <section class="view" data-view-panel="graph" aria-labelledby="graphTitle">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">RELATIONSHIPS / PIVOT</div>
+            <h2 id="graphTitle">Bounded Relationship Navigation</h2>
+            <p>Graph expansion is constrained by the Shared Core; the Desktop does not execute graph queries itself.</p>
+          </div>
+        </div>
+        <form id="graphForm" class="compact-form" autocomplete="off">
+          <label for="graphSeed">Canonical seed ID</label>
+          <input id="graphSeed" type="text" maxlength="1024" required>
+          <label for="graphDepth">Depth</label>
+          <select id="graphDepth">
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+          <button class="primary-button" type="submit">Expand</button>
+        </form>
+        <div id="graphResults" class="panel graph-results empty-state">Choose a canonical record or enter a seed ID.</div>
+      </section>
+
+      <section class="view" data-view-panel="pack" aria-labelledby="packTitle">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">TRUST / RECOVERY</div>
+            <h2 id="packTitle">Verified Pack Control</h2>
+            <p>Update and rollback authority stays inside the Shared Core and durable trust state.</p>
+          </div>
+          <button id="refreshPack" class="secondary-button" type="button">Refresh</button>
+        </div>
+        <div class="content-grid pack-grid">
+          <section class="panel">
+            <h3>Active state</h3>
+            <dl id="packFacts" class="facts"><div><dt>Status</dt><dd>Loading…</dd></div></dl>
+          </section>
+          <section class="panel danger-zone">
+            <h3>Controlled actions</h3>
+            <p>Actions fail closed when no verified pending update or safe rollback target exists.</p>
+            <div class="action-row">
+              <button id="applyUpdate" class="primary-button" type="button">Apply verified update</button>
+              <button id="rollbackPack" class="danger-button" type="button">Rollback to LKG</button>
+            </div>
+            <div id="packActionResult" class="operation-result" aria-live="polite"></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="diagnostics" aria-labelledby="diagnosticsTitle">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">LOCAL / VERIFIED</div>
+            <h2 id="diagnosticsTitle">Runtime Diagnostics</h2>
+            <p>Local-only build identity, protocol status and sidecar integrity evidence.</p>
+          </div>
+          <button id="refreshDiagnostics" class="secondary-button" type="button">Refresh</button>
+        </div>
+        <div class="content-grid diagnostics-grid">
+          <section class="panel">
+            <h3>Shared Core</h3>
+            <pre id="diagnosticsOutput">Loading…</pre>
+          </section>
+          <section class="panel">
+            <h3>Time presentation</h3>
+            <label for="timezoneSelect">Display timezone</label>
+            <select id="timezoneSelect">
+              <option value="system">System timezone</option>
+              <option value="UTC">UTC</option>
+              <option value="Asia/Tehran">Asia/Tehran</option>
+            </select>
+            <dl class="facts clock-facts">
+              <div><dt>UTC</dt><dd id="utcClock">—</dd></div>
+              <div><dt>System</dt><dd id="systemClock">—</dd></div>
+              <div><dt>Selected</dt><dd id="selectedClock">—</dd></div>
+              <div><dt>Tehran / Jalali</dt><dd id="tehranClock">—</dd></div>
+            </dl>
+            <p class="muted small">Canonical timestamps are not rewritten. Calendar/timezone conversion is presentation-only.</p>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>ADR-0026 · Tauri 2.x · atlas-core protocol 1.0.0</span>
+      <span id="footerState">Fail-closed startup validation pending</span>
+    </footer>
+  </div>
+  <script src="main.js"></script>
+</body>
 </html>
