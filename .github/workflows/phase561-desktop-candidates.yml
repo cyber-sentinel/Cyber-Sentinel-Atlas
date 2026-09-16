@@ -1,4 +1,4 @@
-name: Phase 5.6.1 Desktop Candidate Builds
+name: Phase 5.6.2 Desktop Gate Evidence
 
 on:
   push:
@@ -7,10 +7,12 @@ on:
     paths:
       - 'benchmarks/desktop/phase56/candidates/**'
       - 'benchmarks/desktop/phase56/measure_candidates.ps1'
+      - 'benchmarks/desktop/phase56/measure_core_ipc.py'
       - 'benchmarks/desktop/phase56/probe_portable.ps1'
       - 'benchmarks/desktop/phase56/summarize_candidates.py'
       - 'benchmarks/desktop/phase56/validate_security_surface.py'
       - 'benchmarks/desktop/phase56/validate_packaging_feasibility.py'
+      - 'benchmarks/desktop/phase56/validate_measurement_closure.py'
       - '.github/workflows/phase561-desktop-candidates.yml'
       - 'shared-core/go/**'
   pull_request:
@@ -19,10 +21,12 @@ on:
     paths:
       - 'benchmarks/desktop/phase56/candidates/**'
       - 'benchmarks/desktop/phase56/measure_candidates.ps1'
+      - 'benchmarks/desktop/phase56/measure_core_ipc.py'
       - 'benchmarks/desktop/phase56/probe_portable.ps1'
       - 'benchmarks/desktop/phase56/summarize_candidates.py'
       - 'benchmarks/desktop/phase56/validate_security_surface.py'
       - 'benchmarks/desktop/phase56/validate_packaging_feasibility.py'
+      - 'benchmarks/desktop/phase56/validate_measurement_closure.py'
       - '.github/workflows/phase561-desktop-candidates.yml'
       - 'shared-core/go/**'
 
@@ -35,7 +39,7 @@ concurrency:
 
 jobs:
   candidates:
-    name: desktop-candidates (windows)
+    name: desktop-gates (windows)
     runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]
     timeout-minutes: 80
     env:
@@ -64,9 +68,11 @@ jobs:
           $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
           if ($version -ne '3.12') { throw "Python 3.12 required; found $version" }
           python -m py_compile `
+            benchmarks/desktop/phase56/measure_core_ipc.py `
             benchmarks/desktop/phase56/summarize_candidates.py `
             benchmarks/desktop/phase56/validate_security_surface.py `
-            benchmarks/desktop/phase56/validate_packaging_feasibility.py
+            benchmarks/desktop/phase56/validate_packaging_feasibility.py `
+            benchmarks/desktop/phase56/validate_measurement_closure.py
 
       - name: Set up Node 24
         uses: actions/setup-node@v4
@@ -141,6 +147,17 @@ jobs:
           "$hash  atlas-core.exe" | Set-Content -Encoding ascii "$Core.sha256"
           Copy-Item $Core "$env:PHASE561_EVIDENCE\atlas-core.exe"
           Copy-Item "$Core.sha256" "$env:PHASE561_EVIDENCE\atlas-core.exe.sha256"
+
+      - name: Measure common atlas-core handshake and status IPC
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python benchmarks/desktop/phase56/measure_core_ipc.py `
+            --core "$env:PHASE561_STAGE\core\atlas-core.exe" `
+            --manifest "$env:PHASE561_STAGE\core\atlas-core.exe.sha256" `
+            --output "$env:PHASE561_EVIDENCE\phase562-core-ipc.json" `
+            --warmup-count 1 `
+            --measured-count 7
 
       - name: Build and probe .NET WPF candidate
         shell: pwsh
@@ -271,15 +288,23 @@ jobs:
             --evidence-dir $env:PHASE561_EVIDENCE `
             --summary "$env:PHASE561_EVIDENCE\summary.json"
 
+      - name: Validate G-D9 measurement closure
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python benchmarks/desktop/phase56/validate_measurement_closure.py `
+            --evidence-dir $env:PHASE561_EVIDENCE `
+            --summary "$env:PHASE561_EVIDENCE\summary.json"
+
       - name: Confirm canonical schemas v1 remain unchanged
         shell: pwsh
         run: git diff --exit-code origin/main...HEAD -- schemas/v1
 
-      - name: Upload Phase 5.6.1 candidate evidence
+      - name: Upload Phase 5.6.2 gate evidence
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: phase561-desktop-candidate-evidence
+          name: phase562-desktop-gate-evidence
           path: .phase561-evidence/
           if-no-files-found: warn
           include-hidden-files: true
