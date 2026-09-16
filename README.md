@@ -11,7 +11,7 @@ Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: an o
 > **Current delivery boundary:** Phase 5.6 — Windows Desktop MVP
 > **Completed desktop slices:** 5.6.0 COMPLETE / VERIFIED; 5.6.1 COMPLETE / VERIFIED
 > **Active desktop slice:** 5.6.2 — Mandatory Hard Gates, Measurements & Desktop Selection
-> **Current technical focus:** G-D7 — Desktop Security Surface; G-D8 Installer / Portable follows
+> **Current technical focus:** G-D7/G-D8 exact-head verification, then G-D9 measurement closure
 > **Desktop framework:** Not selected; ADR-0026 remains blocked until every mandatory gate is closed
 > **Repository visibility:** Public
 > **Release state:** Pre-preview / unreleased
@@ -153,13 +153,13 @@ Three Windows host candidates build and exercise the same production `atlas-core
 
 This evidence is comparative only. It does **not** select a framework.
 
-Electron uses a committed dependency lockfile. Tauri currently builds with a pinned/verified dependency procedure, but its candidate directory does **not yet contain a committed `Cargo.lock`**; committing that lockfile remains part of reproducibility closure before framework selection.
+Electron uses a committed `package-lock.json`. Tauri now also carries a committed `Cargo.lock`; the candidate workflow requires that lockfile to exist, verifies its approved SHA-256, builds and resolves metadata with `--locked`, and fails if the lockfile changes during the job. Dependency resolution is therefore no longer regenerated inside Candidate CI.
 
 ### 5.6.2 — Hard Gates, Measurements & Desktop Selection
 
 **IN PROGRESS**
 
-The signed-pack Active Generation integration gate proves a verified pack can be installed and loaded into the production read model on Windows, including canonical data, immutable search, graph runtime and generation identity. **G-D5 and G-D6 are closed and verified. G-D3 is also closed and verified across the full candidate process tree for both TCP listeners and UDP endpoints.** The active engineering focus is now G-D7 Desktop Security Surface.
+The signed-pack Active Generation integration gate proves a verified pack can be installed and loaded into the production read model on Windows, including canonical data, immutable search, graph runtime and generation identity. **G-D3, G-D5 and G-D6 are closed and verified.** G-D7 Desktop Security Surface and G-D8 Installer/Portable feasibility are implemented as machine-enforced evidence and await successful exact-head Windows CI before either is marked verified. G-D9 remains the next closure boundary.
 
 Current mandatory-gate state:
 
@@ -171,15 +171,19 @@ Current mandatory-gate state:
 | G-D4 | Deterministic sidecar location + integrity/version | **PASS** |
 | G-D5 | Active verified pack → search / record / graph / provenance read model | **PASS / VERIFIED** |
 | G-D6 | Verified pack state, update and safe manual rollback | **PASS / VERIFIED** |
-| G-D7 | Desktop security surface | **IN PROGRESS — machine-enforced validator under exact-head CI** |
-| G-D8 | Installer + portable feasibility | **PENDING** |
+| G-D7 | Desktop security surface | **IMPLEMENTED / CI PENDING — machine-enforced candidate policy validator** |
+| G-D8 | Installer + portable feasibility | **IMPLEMENTED / CI PENDING — relocated portable execution + packaging validator** |
 | G-D9 | Comparable startup / IPC / process / memory / package measurements | **PARTIAL — common harness captured; closure pending** |
 
 G-D3 is verified through the common external Windows harness. Exact-head Candidate Builds run `35078440647` at commit `4e0a770e06cfacb195bfaf2ebb11a647aabc83e8` completed successfully after probing the full process tree of Tauri, Electron and .NET/WPF; the evidence records both `tcp_listener_seen=false` and `udp_endpoint_seen=false` for every candidate. The same evidence summary records G-D3 as `PASS`; no framework selection is implied.
 
 G-D6 is verified through the production bounded stdio boundary. Update input is accepted only from the fixed runtime inbox (`inbox/pending.atlaspack`); `pack.update` and `pack.rollback` accept empty-object parameters only; TUF verification, trusted-time state and highest-seen anti-rollback remain core-owned; rollback targets are core-recorded rather than caller-selected; successful generation changes hot-reload the read model in the same `atlas-core` process; and a successfully verified pending archive is consumed without deleting a concurrently replaced pending file. Exact-head Windows run `35075820479` at commit `32874c7b95239579d6c11839a325dec0081d18f5` passed the normal Go regression suite, the signed-pack integration suite, `go vet`, and the canonical-schema drift guard. The process-level test builds and launches the real `atlas-core.exe`, proves signed update → same-process status/search → manual rollback → same-process status/search, confirms highest-seen trust is not rewound, and verifies that a pack signed by an untrusted root is rejected while the active generation and search remain usable.
 
-G-D7 is now implemented as candidate-specific, machine-enforced security-surface evidence rather than a manual checklist. The current exact-head implementation checks Electron isolation, navigation/permission denial and a constrained preload IPC bridge; Tauri CSP, explicit application-command ACL/capability scope, plugin/network restrictions and disabled asset protocol; and the native .NET/WPF no-browser/no-generic-network/shell-disabled sidecar boundary. G-D7 remains **IN PROGRESS** until the exact-head Windows candidate workflow completes successfully.
+G-D7 is implemented as candidate-specific, machine-enforced security-surface evidence rather than a manual checklist. The implementation checks Electron isolation, navigation/permission denial and a constrained preload IPC bridge; Tauri CSP, explicit application-command ACL/capability scope, plugin/network restrictions and disabled asset protocol; and the native .NET/WPF no-browser/no-generic-network/shell-disabled sidecar boundary. G-D7 remains **UNVERIFIED** until a successful Windows Candidate run covers the implementation head.
+
+G-D8 is implemented as a fail-closed portable/packaging feasibility gate. Each candidate is copied to a relocated path containing spaces, must execute its real probe from that relocated directory, must retain the adjacent `atlas-core.exe` and SHA-256 manifest integrity boundary, and emits packaging/runtime/signing evidence. This does **not** substitute for real installer build/signing or clean-machine installer smoke testing; those remain part of Phase 5.6.4. G-D8 therefore remains **UNVERIFIED** until the exact-head Candidate workflow passes its validator.
+
+The Tauri dependency graph is now committed rather than synthesized in CI. `Cargo.lock` was materialized from previously successful candidate evidence and independently guarded by SHA-256; the Candidate workflow now refuses a missing/drifted lockfile and uses `--locked` for build and metadata operations. This closes the identified repository-level reproducibility gap without selecting Tauri.
 
 Only candidates that pass **every mandatory gate** may enter final weighted comparison. ADR-0026 therefore remains intentionally undecided.
 
@@ -279,8 +283,8 @@ Stage 1 Governance / Architecture Sync         COMPLETE
             G-D3 Offline / TCP / UDP           COMPLETE / VERIFIED
             G-D5 Active Pack Integration       COMPLETE / VERIFIED
             G-D6 Update / Safe Rollback        COMPLETE / VERIFIED
-            G-D7 Desktop Security Surface      IN PROGRESS
-            G-D8 Installer / Portable          PENDING
+            G-D7 Desktop Security Surface      IMPLEMENTED / CI PENDING
+            G-D8 Installer / Portable          IMPLEMENTED / CI PENDING
             G-D9 Measurement Closure           PARTIAL
      5.6.3 First Preview UI                    PLANNED
      5.6.4 Windows Packaging / Smoke Closure   PLANNED
