@@ -6,20 +6,58 @@ import (
 
 	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/canonical"
 	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/graph"
+	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/pack"
 	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/protocol"
 	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/search"
 )
 
 type Runtime struct {
-	Canonical *canonical.Store
-	Search    *search.Core
-	Graph     *graph.Runtime
+	Canonical      *canonical.Store
+	Search         *search.Core
+	Graph          *graph.Runtime
+	GenerationID   string
+	PackID         string
+	PackVersion    string
+	ManifestDigest string
 }
 
 func NewUnconfigured() *Runtime { return &Runtime{} }
 
 func New(store *canonical.Store, searchCore *search.Core, graphRuntime *graph.Runtime) *Runtime {
 	return &Runtime{Canonical: store, Search: searchCore, Graph: graphRuntime}
+}
+
+// NewFromRuntimeRoot binds the process to the single active verified pack
+// generation selected by durable runtime state. It never selects another
+// generation when the active pointer is corrupt or unhealthy.
+func NewFromRuntimeRoot(runtimeRoot string) (*Runtime, error) {
+	model, err := pack.LoadActiveReadModel(runtimeRoot)
+	if err != nil {
+		return nil, err
+	}
+	graphRuntime, err := graph.New(&model.Bundle)
+	if err != nil {
+		_ = model.Close()
+		return nil, err
+	}
+	return &Runtime{
+		Canonical:      model.Canonical,
+		Search:         model.Search,
+		Graph:          graphRuntime,
+		GenerationID:   model.GenerationID,
+		PackID:         model.PackID,
+		PackVersion:    model.PackVersion,
+		ManifestDigest: model.ManifestDigest,
+	}, nil
+}
+
+func (r *Runtime) Close() error {
+	if r == nil || r.Search == nil {
+		return nil
+	}
+	err := r.Search.Close()
+	r.Search = nil
+	return err
 }
 
 type searchParams struct {
@@ -60,7 +98,14 @@ func (r *Runtime) Handle(method string, raw json.RawMessage) (any, *protocol.Ope
 		if ready {
 			state = "read_model_ready"
 		}
-		return map[string]any{"ready": ready, "state": state, "phase": "5.5.4B"}, nil
+		result := map[string]any{"ready": ready, "state": state, "phase": "5.5.4B"}
+		if ready && r.GenerationID != "" {
+			result["generation_id"] = r.GenerationID
+			result["pack_id"] = r.PackID
+			result["pack_version"] = r.PackVersion
+			result["manifest_digest"] = r.ManifestDigest
+		}
+		return result, nil
 	case "search.query":
 		if r == nil || r.Search == nil {
 			return nil, packNotReady()
