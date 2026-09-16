@@ -7,8 +7,10 @@ on:
     paths:
       - 'benchmarks/desktop/phase56/candidates/**'
       - 'benchmarks/desktop/phase56/measure_candidates.ps1'
+      - 'benchmarks/desktop/phase56/probe_portable.ps1'
       - 'benchmarks/desktop/phase56/summarize_candidates.py'
       - 'benchmarks/desktop/phase56/validate_security_surface.py'
+      - 'benchmarks/desktop/phase56/validate_packaging_feasibility.py'
       - '.github/workflows/phase561-desktop-candidates.yml'
       - 'shared-core/go/**'
   pull_request:
@@ -17,8 +19,10 @@ on:
     paths:
       - 'benchmarks/desktop/phase56/candidates/**'
       - 'benchmarks/desktop/phase56/measure_candidates.ps1'
+      - 'benchmarks/desktop/phase56/probe_portable.ps1'
       - 'benchmarks/desktop/phase56/summarize_candidates.py'
       - 'benchmarks/desktop/phase56/validate_security_surface.py'
+      - 'benchmarks/desktop/phase56/validate_packaging_feasibility.py'
       - '.github/workflows/phase561-desktop-candidates.yml'
       - 'shared-core/go/**'
 
@@ -33,7 +37,7 @@ jobs:
   candidates:
     name: desktop-candidates (windows)
     runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]
-    timeout-minutes: 70
+    timeout-minutes: 80
     env:
       GOTOOLCHAIN: local
       CGO_ENABLED: '0'
@@ -59,7 +63,10 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
           if ($version -ne '3.12') { throw "Python 3.12 required; found $version" }
-          python -m py_compile benchmarks/desktop/phase56/summarize_candidates.py benchmarks/desktop/phase56/validate_security_surface.py
+          python -m py_compile `
+            benchmarks/desktop/phase56/summarize_candidates.py `
+            benchmarks/desktop/phase56/validate_security_surface.py `
+            benchmarks/desktop/phase56/validate_packaging_feasibility.py
 
       - name: Set up Node 24
         uses: actions/setup-node@v4
@@ -233,6 +240,14 @@ jobs:
             -WarmupCount 1 `
             -MeasuredCount 5
 
+      - name: Probe portable-mode relocation feasibility
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          ./benchmarks/desktop/phase56/probe_portable.ps1 `
+            -StageDir $env:PHASE561_STAGE `
+            -EvidenceDir $env:PHASE561_EVIDENCE
+
       - name: Summarize fail-closed candidate evidence
         shell: pwsh
         run: |
@@ -241,6 +256,14 @@ jobs:
             --evidence-dir $env:PHASE561_EVIDENCE `
             --stage-dir $env:PHASE561_STAGE `
             --output "$env:PHASE561_EVIDENCE\summary.json"
+
+      - name: Validate G-D8 installer and portable feasibility
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python benchmarks/desktop/phase56/validate_packaging_feasibility.py `
+            --evidence-dir $env:PHASE561_EVIDENCE `
+            --summary "$env:PHASE561_EVIDENCE\summary.json"
 
       - name: Confirm canonical schemas v1 remain unchanged
         shell: pwsh
