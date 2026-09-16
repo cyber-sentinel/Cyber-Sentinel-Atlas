@@ -7,8 +7,9 @@ Status timestamp: 2026-09-16
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
 - Active implementation branch: `feature/phase-5.6-windows-desktop-mvp`
+- Active release vehicle: **PR #39**
 - Repository visibility: **Public**
-- Release state: **First Preview candidate / feature implementation complete / not yet merged to release authority**
+- Release state: **First Preview candidate / feature implementation complete / final PR regression closure active / not yet merged**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
 - Search contract version: `1.0.0`
@@ -34,10 +35,10 @@ Status timestamp: 2026-09-16
 - Phase 5.5.4 — Production Go Shared Core: COMPLETE / MERGED / POST-MERGE VERIFIED
 - Phase 5.6.0 — Desktop Environment/Core Boundary: **COMPLETE / VERIFIED**
 - Phase 5.6.1 — Executable Desktop Candidate Builds: **COMPLETE / VERIFIED**
-- Phase 5.6.2 — Hard Gates / Measurements / Desktop Selection: **COMPLETE / VERIFIED**
+- Phase 5.6.2 — Hard Gates / Measurements / Desktop Selection: **COMPLETE / VERIFIED FOR ACCEPTED SELECTION EVIDENCE**
 - Phase 5.6.3 — First Preview UI: **COMPLETE / VERIFIED ON FEATURE BRANCH**
 - Phase 5.6.4 — Windows Packaging / Clean-Machine Smoke: **COMPLETE / VERIFIED ON FEATURE BRANCH**
-- Phase 5.6 — Windows Desktop MVP: **FEATURE-BRANCH IMPLEMENTATION COMPLETE / RELEASE CLOSURE PENDING**
+- Phase 5.6 — Windows Desktop MVP: **FEATURE-BRANCH IMPLEMENTATION COMPLETE / PR RELEASE CLOSURE ACTIVE**
 
 The explicit 5.5.2/5.5.3/5.5.4 markers are retained because frozen architecture validators use them to prove lifecycle continuity across later phases.
 
@@ -56,9 +57,9 @@ Phase 5.5 remains frozen. Desktop code consumes, but does not redefine:
 - mandatory handshake, strict bounded parsing, method allowlists and protocol-only stdout;
 - no default local HTTP/TCP/WebSocket listener or hidden network fallback.
 
-## Phase 5.6.2 — Closed mandatory gates
+## Phase 5.6.2 — Accepted selection evidence
 
-Exact-head Candidate Evidence run `35090304056` at commit `c343ffd881dd7b6a420f04cea2ffb91c3ea8a715` completed successfully. The artifact `phase562-desktop-gate-evidence` records the fail-closed state below.
+Frozen Candidate Evidence run `35090304056` at commit `c343ffd881dd7b6a420f04cea2ffb91c3ea8a715` completed successfully. The artifact `phase562-desktop-gate-evidence` records the accepted fail-closed selection state below.
 
 | Gate | Requirement | State |
 | --- | --- | --- |
@@ -72,11 +73,11 @@ Exact-head Candidate Evidence run `35090304056` at commit `c343ffd881dd7b6a420f0
 | G-D8 | Installer + portable feasibility | **PASS / VERIFIED FOR FEASIBILITY** |
 | G-D9 | Footprint / startup / IPC / process / memory measurements | **PASS / VERIFIED** |
 
-The same run preserved the canonical schema v1 drift guard and used an identical exact-head Shared Core across all candidates.
+The accepted run preserved the canonical schema v1 drift guard and used an identical exact-head Shared Core across all candidates.
 
 ### Measurement snapshot
 
-For the selected-candidate review, the successful evidence snapshot recorded approximately:
+For the accepted selected-candidate review, the successful evidence snapshot recorded approximately:
 
 - Tauri package: 28.1 MB;
 - Tauri warm external launch median: 259 ms;
@@ -86,11 +87,21 @@ For the selected-candidate review, the successful evidence snapshot recorded app
 
 Measurements are CI evidence, not universal performance guarantees for all hardware.
 
+## Current PR regression blocker
+
+PR #39 is in final regression closure. On implementation head `8feb39a62a1b480428b180ad68cf6ab88340f513`, most required workflows completed successfully, including Foundation/Governance, Phase 5.5 architecture and runtime regressions, Phase 5.5.4A/B/D, Active Pack Integration, and Phase 5.6.4 packaging/clean-Windows acceptance.
+
+However, `Phase 5.6.2 Desktop Gate Evidence` run `35100673553` failed in `Measure candidates with common external harness` because the **Electron candidate process tree opened a UDP endpoint during the controlled measurement probe**. Security-surface validation, exact-head Shared Core build/IPC, and all three candidate builds/probes had already passed before the measurement harness failed.
+
+This regression does **not** silently invalidate ADR-0026 or the verified selected Tauri package. Electron is a rejected candidate, while Tauri is the accepted host and the selected-host 5.6.4 clean-Windows package gate is green. Nevertheless, the historical multi-candidate workflow is part of PR regression policy, so merge remains blocked until this UDP observation is attributed and the regression gate is closed without weakening the intended network-posture assertion.
+
+The documentation sync itself advances the PR branch head. Therefore run/SHA references above are retained as evidence snapshots, while final merge authority will use the latest PR head after documentation and blocker remediation complete.
+
 ## ADR-0026 — Windows Desktop Host Selection
 
 **ACCEPTED — Tauri 2.x**
 
-The frozen weighted review is stored in `benchmarks/desktop/phase56/weighted-review.json`. All three candidates passed mandatory hard gates. The recorded weighted totals are:
+The frozen weighted review is stored in `benchmarks/desktop/phase56/weighted-review.json`. All three candidates passed mandatory hard gates in the accepted selection evidence. The recorded weighted totals are:
 
 - Tauri 2.x: `94.13`;
 - .NET 10 / WPF: `88.09`;
@@ -131,7 +142,7 @@ Security-surface regression evidence enforces one main-window capability, explic
 
 **COMPLETE / VERIFIED ON FEATURE BRANCH**
 
-Authoritative package/smoke evidence: workflow `Phase 5.6.4 Windows First Preview Package`, run `35095383694`, package-code commit `2517ed5714dec2efc97db0df7789375c5aae50bb`, conclusion **SUCCESS**.
+Latest verified implementation-head PR package/smoke evidence: workflow `Phase 5.6.4 Windows First Preview Package`, run `35100673319`, implementation head `8feb39a62a1b480428b180ad68cf6ab88340f513`, conclusion **SUCCESS**. Earlier acceptance run `35095383694` remains supporting evidence for the same packaging boundary.
 
 The workflow built one byte-bound portable Windows First Preview package and consumed the same immutable artifact on a fresh GitHub-hosted Windows runner. Verified acceptance controls:
 
@@ -157,9 +168,9 @@ The First Preview artifact is intentionally an **unsigned portable ZIP**. Produc
 The feature implementation is complete. Remaining sequence:
 
 ```text
-Feature-branch evidence + documentation complete
+Feature implementation + selected-host package evidence complete
         ↓
-PR review + PR CI
+PR #39 final regression CI / blocker closure — ACTIVE
         ↓
 Merge to main
         ↓
@@ -168,7 +179,9 @@ Post-merge package verification
 FIRST PREVIEW READY / POST-MERGE VERIFIED
 ```
 
-`FIRST PREVIEW READY` must not be claimed before merge and post-merge verification succeed.
+Current blocker: attribute and close the Electron-owned/process-tree UDP observation from `Phase 5.6.2 Desktop Gate Evidence` without bypassing the regression gate.
+
+`FIRST PREVIEW READY` must not be claimed before all PR checks, merge and post-merge verification succeed.
 
 ## Governance
 
