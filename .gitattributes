@@ -1,3 +1,7 @@
 # Phase 5.5 byte-bound trust fixtures must be identical across Git checkouts.
 # Force LF so Windows checkout cannot rewrite target bytes before SHA-256 validation.
 tests/fixtures/phase55/*.json text eol=lf
+
+# Phase 5.6 Tauri dependency lock is byte-hash guarded for reproducible candidate builds.
+# Cargo writes canonical LF content; preserve those exact bytes on Windows/self-hosted checkouts.
+benchmarks/desktop/phase56/candidates/tauri/Cargo.lock text eol=lf
