@@ -264,26 +264,68 @@ jobs:
           if ($good.ExitCode -ne 0) { throw 'sidecar recovery probe failed after restoring verified bytes' }
           Copy-Item $okEvidence package-artifact\phase564-recovery-probe.json -Force
 
+      - name: Ensure declared WebView2 prerequisite is present
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          function Get-WebView2Runtime {
+            $keys = @(
+              'HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F1E7E9A5-0677-4D44-8C3F-49A93A2E2E20}',
+              'HKLM:\SOFTWARE\Microsoft\EdgeUpdate\Clients\{F1E7E9A5-0677-4D44-8C3F-49A93A2E2E20}',
+              'HKCU:\Software\Microsoft\EdgeUpdate\Clients\{F1E7E9A5-0677-4D44-8C3F-49A93A2E2E20}'
+            )
+            foreach ($key in $keys) {
+              if (Test-Path $key) {
+                $pv = (Get-ItemProperty $key -ErrorAction SilentlyContinue).pv
+                if ($pv) { return [pscustomobject]@{ Version=$pv; Source=$key } }
+              }
+            }
+
+            $roots = @(
+              (Join-Path ${env:ProgramFiles(x86)} 'Microsoft\EdgeWebView\Application'),
+              (Join-Path $env:ProgramFiles 'Microsoft\EdgeWebView\Application')
+            ) | Where-Object { $_ -and (Test-Path $_) }
+            foreach ($root in $roots) {
+              $candidate = Get-ChildItem -LiteralPath $root -Directory -ErrorAction SilentlyContinue |
+                Where-Object { $_.Name -match '^\d+\.\d+\.\d+\.\d+$' -and (Test-Path (Join-Path $_.FullName 'msedgewebview2.exe')) } |
+                Sort-Object { [version]$_.Name } -Descending |
+                Select-Object -First 1
+              if ($candidate) { return [pscustomobject]@{ Version=$candidate.Name; Source=$candidate.FullName } }
+            }
+            return $null
+          }
+
+          $runtime = Get-WebView2Runtime
+          $provisioned = $false
+          $source = 'preinstalled-on-runner'
+          if (-not $runtime) {
+            $installer = Join-Path $env:RUNNER_TEMP 'MicrosoftEdgeWebview2Setup.exe'
+            Invoke-WebRequest -Uri 'https://go.microsoft.com/fwlink/p/?LinkId=2124703' -OutFile $installer
+            $signature = Get-AuthenticodeSignature -FilePath $installer
+            if ($signature.Status -ne 'Valid' -or -not $signature.SignerCertificate -or $signature.SignerCertificate.Subject -notmatch 'Microsoft Corporation') {
+              throw "WebView2 prerequisite installer is not validly Microsoft-signed: status=$($signature.Status) subject=$($signature.SignerCertificate.Subject)"
+            }
+            $install = Start-Process -FilePath $installer -ArgumentList @('/silent','/install') -Wait -PassThru
+            if ($install.ExitCode -notin @(0,3010)) { throw "Microsoft WebView2 prerequisite installation failed: $($install.ExitCode)" }
+            Start-Sleep -Seconds 3
+            $runtime = Get-WebView2Runtime
+            if (-not $runtime) { throw 'Microsoft-signed WebView2 prerequisite installer completed but runtime is still unavailable' }
+            $provisioned = $true
+            $source = 'ci-provisioned-microsoft-signed-evergreen-bootstrapper'
+          }
+
+          "PHASE564_WEBVIEW2_VERSION=$($runtime.Version)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PHASE564_WEBVIEW2_SOURCE=$source" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PHASE564_WEBVIEW2_PROVISIONED=$($provisioned.ToString().ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
       - name: Audit WebView2 prerequisite and launch GUI
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
           $Root = $env:PHASE564_CLEAN
           $HostPath = Join-Path $Root 'Cyber-Sentinel-ATLAS.exe'
-          $webViewKeys = @(
-            'HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F1E7E9A5-0677-4D44-8C3F-49A93A2E2E20}',
-            'HKLM:\SOFTWARE\Microsoft\EdgeUpdate\Clients\{F1E7E9A5-0677-4D44-8C3F-49A93A2E2E20}',
-            'HKCU:\Software\Microsoft\EdgeUpdate\Clients\{F1E7E9A5-0677-4D44-8C3F-49A93A2E2E20}'
-          )
-          $versions = @()
-          foreach ($key in $webViewKeys) {
-            if (Test-Path $key) {
-              $pv = (Get-ItemProperty $key -ErrorAction SilentlyContinue).pv
-              if ($pv) { $versions += $pv }
-            }
-          }
-          $webViewVersion = ($versions | Select-Object -First 1)
-          if (-not $webViewVersion) { throw 'Microsoft Edge WebView2 Runtime not present on clean Windows runner; package correctly refuses network bootstrap, but GUI prerequisite is unmet' }
+          if (-not $env:PHASE564_WEBVIEW2_VERSION) { throw 'WebView2 prerequisite evidence is missing' }
 
           $process = Start-Process -FilePath $HostPath -PassThru
           Start-Sleep -Seconds 8
@@ -305,12 +347,20 @@ jobs:
           if ($listeners.Count -ne 0) { throw "packaged GUI process tree opened network listener/UDP endpoint: $($listeners | Out-String)" }
 
           $processTree = @($descendantIds | Sort-Object)
+          $provisioned = $env:PHASE564_WEBVIEW2_PROVISIONED -eq 'true'
           $evidence = [ordered]@{
             evidence_version = 1
             phase = '5.6.4'
             commit = $env:GITHUB_SHA
             clean_environment = [ordered]@{ runner='github-hosted'; image='windows-latest'; relocated_path=$Root }
-            webview2 = [ordered]@{ required=$true; present=$true; version=$webViewVersion; downloaded_by_atlas=$false }
+            webview2 = [ordered]@{
+              required=$true
+              present=$true
+              version=$env:PHASE564_WEBVIEW2_VERSION
+              prerequisite_source=$env:PHASE564_WEBVIEW2_SOURCE
+              provisioned_by_ci=$provisioned
+              downloaded_by_atlas=$false
+            }
             gui = [ordered]@{ launched=$true; remained_alive_for_seconds=8; process_tree_ids=$processTree }
             network = [ordered]@{ tcp_listener_seen=$false; udp_endpoint_seen=$false }
             integrity_negative_test = 'PASS_FAIL_CLOSED'
