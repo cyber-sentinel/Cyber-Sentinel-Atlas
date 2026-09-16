@@ -125,8 +125,8 @@ function Get-UDPEndpointDetailsForPids {
 function Add-NetworkObservations {
     param(
         [AllowNull()]$Details,
-        [Parameter(Mandatory = $true)][System.Collections.Generic.HashSet[string]]$Keys,
-        [Parameter(Mandatory = $true)][System.Collections.ArrayList]$Target,
+        [Parameter(Mandatory = $true)][AllowEmptyCollection()][System.Collections.Generic.HashSet[string]]$Keys,
+        [Parameter(Mandatory = $true)][AllowEmptyCollection()][System.Collections.ArrayList]$Target,
         [Parameter(Mandatory = $true)][string]$Protocol
     )
 
