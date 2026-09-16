@@ -111,15 +111,22 @@ jobs:
           }
           $env:CARGO_TARGET_DIR = Join-Path $env:RUNNER_TEMP 'atlas-phase564-tauri-target'
           Remove-Item -Recurse -Force $env:CARGO_TARGET_DIR -ErrorAction SilentlyContinue
-          cargo build --release --locked --manifest-path $Manifest
+          if ($env:ATLAS_TAURI_BUILD_MODE -eq 'cargo-xwin') {
+            cargo xwin build --release --locked --manifest-path $Manifest --target x86_64-pc-windows-msvc
+            $Host = Join-Path $env:CARGO_TARGET_DIR 'x86_64-pc-windows-msvc\release\atlas-tauri-candidate.exe'
+          }
+          else {
+            cargo build --release --locked --manifest-path $Manifest
+            $Host = Join-Path $env:CARGO_TARGET_DIR 'release\atlas-tauri-candidate.exe'
+          }
           if ($LASTEXITCODE -ne 0) { throw 'Tauri First Preview build failed' }
           cargo metadata --format-version 1 --locked --manifest-path $Manifest | Out-Null
           if ($LASTEXITCODE -ne 0) { throw 'Tauri locked metadata validation failed' }
           git diff --exit-code -- benchmarks/desktop/phase56/candidates/tauri/Cargo.lock
           if ($LASTEXITCODE -ne 0) { throw 'Tauri Cargo.lock mutated during build' }
-          $Host = Join-Path $env:CARGO_TARGET_DIR 'release\atlas-tauri-candidate.exe'
           if (-not (Test-Path -LiteralPath $Host -PathType Leaf)) { throw "Tauri output missing: $Host" }
           Copy-Item -LiteralPath $Host -Destination (Join-Path $env:PHASE564_STAGE 'Cyber-Sentinel-ATLAS.exe') -Force
+          "PHASE564_TAURI_BUILD_MODE=$env:ATLAS_TAURI_BUILD_MODE" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Assemble byte-bound portable preview package
         shell: pwsh
@@ -139,6 +146,7 @@ jobs:
             screening_baseline = '2.11.5'
             commit = $env:GITHUB_SHA
             protocol = 'atlas-core/1.0.0'
+            build_mode = $env:PHASE564_TAURI_BUILD_MODE
             host = [ordered]@{ file = 'Cyber-Sentinel-ATLAS.exe'; sha256 = $HostHash; size_bytes = (Get-Item $Host).Length }
             sidecar = [ordered]@{ file = 'atlas-core.exe'; sha256 = $CoreHash; size_bytes = (Get-Item $Core).Length; placement = 'adjacent-to-host' }
             runtime_dependencies = @([ordered]@{ name='Microsoft Edge WebView2 Runtime'; policy='required-by-Tauri-on-Windows'; bundled=$false; network_bootstrap_allowed=$false })
@@ -275,7 +283,6 @@ jobs:
           $webViewVersion = ($versions | Select-Object -First 1)
           if (-not $webViewVersion) { throw 'Microsoft Edge WebView2 Runtime not present on clean Windows runner; package correctly refuses network bootstrap, but GUI prerequisite is unmet' }
 
-          $before = @(Get-Process | Select-Object -ExpandProperty Id)
           $process = Start-Process -FilePath $Host -PassThru
           Start-Sleep -Seconds 8
           $process.Refresh()
@@ -284,14 +291,14 @@ jobs:
           $descendantIds = [System.Collections.Generic.HashSet[int]]::new()
           [void]$descendantIds.Add($process.Id)
           for ($round=0; $round -lt 5; $round++) {
-            foreach ($p in Get-CimInstance Win32_Process) {
-              if ($descendantIds.Contains([int]$p.ParentProcessId)) { [void]$descendantIds.Add([int]$p.ProcessId) }
+            foreach ($child in Get-CimInstance Win32_Process) {
+              if ($descendantIds.Contains([int]$child.ParentProcessId)) { [void]$descendantIds.Add([int]$child.ProcessId) }
             }
           }
           $listeners = @()
-          foreach ($pid in $descendantIds) {
-            $listeners += @(Get-NetTCPConnection -State Listen -OwningProcess $pid -ErrorAction SilentlyContinue)
-            $listeners += @(Get-NetUDPEndpoint -OwningProcess $pid -ErrorAction SilentlyContinue)
+          foreach ($processId in $descendantIds) {
+            $listeners += @(Get-NetTCPConnection -State Listen -OwningProcess $processId -ErrorAction SilentlyContinue)
+            $listeners += @(Get-NetUDPEndpoint -OwningProcess $processId -ErrorAction SilentlyContinue)
           }
           if ($listeners.Count -ne 0) { throw "packaged GUI process tree opened network listener/UDP endpoint: $($listeners | Out-String)" }
 
