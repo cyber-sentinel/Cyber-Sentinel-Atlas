@@ -66,9 +66,11 @@ Existing Phase 5.5.4D supply-chain controls already generate CycloneDX evidence 
 
 ### Microsoft Windows Security documentation
 
-- Atlas source profile includes the authoritative Event 4688 Microsoft Learn page and mutable-document drift controls.
-- Current state: **NOT YET CLEARED FOR PUBLIC CONTENT REDISTRIBUTION**.
-- Required action: distinguish facts/identifiers and independently authored Atlas explanations from copied Microsoft documentation text; verify the exact Microsoft terms applicable to any verbatim or substantial redistributed material. Until that review is complete, Public Preview pack generation must fail closed for such redistributed text.
+- Atlas source profile: `ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.release.json`.
+- The current authoritative reference is a Microsoft Learn previous-versions page rather than a repository revision with an explicit content license pinned by Atlas.
+- Current state: **SOURCE TEXT EXCLUDED FROM PUBLIC PACK**.
+- Public Preview may retain the source URL as provenance and may include independently authored Atlas facts, identifiers, field semantics and analysis, but it must not package verbatim or substantial Microsoft Learn documentation text unless separate redistribution rights are later established.
+- This exclusion removes ambiguous Microsoft Learn page text from the redistributable payload rather than treating public web visibility as redistribution permission.
 
 ### Microsoft Sysinternals / Sysmon documentation
 
@@ -77,8 +79,8 @@ Existing Phase 5.5.4D supply-chain controls already generate CycloneDX evidence 
 - Upstream docs repository: `MicrosoftDocs/sysinternals`
 - Pinned docs commit: `8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6`
 - Pinned document: `sysinternals/downloads/sysmon.md`
-- Current state: **LICENSE SOURCE PINNED / PUBLIC REDISTRIBUTION REVIEW REQUIRED**.
-- Required action: verify the pinned repository license and any Microsoft documentation terms applicable to the exact material placed in the public pack; prefer independently authored Atlas summaries linked to authoritative sources where redistribution is uncertain.
+- The repository `LICENSE` at the same pinned revision is **Creative Commons Attribution 4.0 International (CC-BY-4.0)** for documentation content.
+- Current state: **REDISTRIBUTION CONDITIONALLY CLEARABLE** — exact included material must retain required source/copyright/license attribution, indicate modifications where applicable, and avoid any Microsoft trademark or endorsement implication.
 
 ### Cyber-Sentinel DefenseOps
 
@@ -115,7 +117,7 @@ release_package_sha256
 PPR-04 remains **BLOCKED** until all of the following are complete:
 
 - exact Public Preview knowledge-corpus allowlist is selected;
-- Microsoft Windows/Sysmon content handling is reviewed and classified;
+- conditionally clearable ATT&CK/CAR/D3FEND/Sysmon entries are promoted to exact `ACCEPTED` release entries with final attribution material;
 - exact Rust/Tauri release dependency license inventory is generated from the committed lock/build;
 - release assets/fonts/icons are inventoried;
 - final third-party license/NOTICE bundle is generated;
