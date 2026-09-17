@@ -14,6 +14,8 @@ ATLAS is designed for security teams that need investigation context to be **det
 > **PR release closure:** PR #39 MERGED
 > **Post-merge verification:** VERIFIED on `main` merge commit `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 > **First Preview engineering readiness:** READY
+> **Active workstream:** Phase 5.10 — Public Preview Readiness — ACTIVE / PUBLIC PREVIEW BLOCKED
+> **Phase 5.10 baseline:** PR #42 MERGED to `main` at `ed8b77611bb174a5ffb3f104807e761531a628e9`; readiness baseline workflow verified
 > **Release state:** Pre-preview / unreleased
 > **Repository visibility:** Public
 > **Licensing note:** No project `LICENSE` is currently published; public visibility does not grant reuse or redistribution rights
@@ -22,7 +24,7 @@ Foundation regression invariants: **Phase 5.1 — Product Foundation: COMPLETE**
 
 Public repository visibility does **not** imply a signed public release or GA readiness. `main` is the release authority. `FIRST PREVIEW READY` is an engineering-readiness milestone backed by merged and post-merge verified evidence; the project remains pre-preview/unreleased for public distribution.
 
-Detailed implementation state is maintained in [Current Status](docs/current-status.md), [Project State](docs/project-state.md), and the [Roadmap](docs/roadmap.md).
+Detailed implementation state is maintained in [Current Status](docs/current-status.md), [Project State](docs/project-state.md), the [Roadmap](docs/roadmap.md), and the [Phase 5.10 Public Preview Readiness Gate Matrix](docs/releases/phase-5.10-public-preview-readiness.md). The machine-readable gate state is published in [`phase-5.10-public-preview-readiness.json`](docs/releases/phase-5.10-public-preview-readiness.json).
 
 ## Product Thesis
 
@@ -253,6 +255,37 @@ The First Preview intentionally favors a narrow attack surface:
 
 These controls reduce trust ambiguity but do not claim production deployment approval for every enterprise environment.
 
+## Phase 5.10 — Public Preview Readiness
+
+**ACTIVE / BASELINE MERGED / PUBLIC PREVIEW BLOCKED**
+
+Phase 5.10 converts public-release readiness from marketing language into explicit, machine-enforced evidence gates. PR #42 established the baseline on `main` at `ed8b77611bb174a5ffb3f104807e761531a628e9`; the post-merge `Phase 5.10 Public Preview Readiness` baseline check passed on that release-authority SHA.
+
+The authoritative controls are:
+
+- [Public Preview Readiness Gate Matrix](docs/releases/phase-5.10-public-preview-readiness.md)
+- [Machine-Readable PPR-01..PPR-11 State](docs/releases/phase-5.10-public-preview-readiness.json)
+
+Current mandatory gate state:
+
+| Gate | Readiness area | State |
+| --- | --- | --- |
+| PPR-01 | First Preview engineering baseline | **PASS** |
+| PPR-02 | Security disclosure and supported-release policy | **PASS** |
+| PPR-03 | First-party licensing decision | **BLOCKED** |
+| PPR-04 | Third-party redistribution closure | **BLOCKED** |
+| PPR-05 | Production code signing and key custody | **BLOCKED** |
+| PPR-06 | Public packaging and distribution hardening | **BLOCKED** |
+| PPR-07 | Accessibility release review | **PARTIAL** |
+| PPR-08 | Source freshness and public-pack publication policy | **BLOCKED** |
+| PPR-09 | Release governance and launch criteria | **PARTIAL** |
+| PPR-10 | Supply-chain evidence | **PASS** |
+| PPR-11 | Trademark and attribution controls | **PASS** |
+
+The baseline validator is intentionally fail-closed: normal development validates the integrity and honesty of the readiness state, while strict release mode can pass only after every mandatory Public Preview gate is explicitly closed with evidence.
+
+No first-party license, signing provider, certificate/key-custody model, public distribution channel, or legal redistribution conclusion is selected automatically. Those are explicit business, legal, security, and release-governance decisions.
+
 ## Initial Product Domain
 
 The initial usable domain is intentionally narrow:
@@ -318,10 +351,14 @@ Post-merge package + regression verification complete
         ↓
 FIRST PREVIEW READY — ENGINEERING READINESS
         ↓
-Later: signing / distribution hardening / broader release readiness
+Phase 5.10 Public Preview Readiness ACTIVE
+        ↓
+PPR-01..PPR-11 mandatory gates
+        ↓
+PUBLIC PREVIEW RELEASE — BLOCKED UNTIL ALL MANDATORY GATES PASS
 ```
 
-`FIRST PREVIEW READY` is an engineering-readiness milestone. It is not equivalent to a signed GA release, a public binary release, or universal enterprise deployment approval.
+`FIRST PREVIEW READY` is an engineering-readiness milestone. It is not equivalent to a signed GA release, a public binary release, or universal enterprise deployment approval. Public Preview will be declared only when the strict release gate passes against the release-authority commit.
 
 ---
 
