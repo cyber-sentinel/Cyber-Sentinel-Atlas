@@ -214,6 +214,33 @@ Delivered policy/governance controls:
 
 Remaining work in this slice is executable accessibility review on the exact packaged Public Preview candidate. PPR-07 must not move to PASS based only on source inspection or documentation.
 
+### Phase 5.10.5 — Usable Data Preview
+
+Status: **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING**
+
+Purpose: close the product-usability gap where the Windows desktop shell and IPC were healthy but no verified knowledge pack was active, causing search to return `ATLAS_PACK_NOT_READY`.
+
+Exact-head engineering evidence:
+
+- branch: `phase-5.10.5-usable-data-preview`;
+- verified head: `e5f76ef8f9bc8dad83b12387a7e7b9edfc6dd8a4`;
+- workflow run `35253441607`: **SUCCESS**;
+- `build exact-head usable data preview`: **PASS**;
+- `clean Windows first-run Search Record Graph`: **PASS**;
+- exact Windows Security Event ID `4688`: **PASS**;
+- Sysmon Event ID `1`: **PASS**;
+- Search → Record → Graph → Provenance: **PASS**;
+- deliberate TUF target tampering: **REJECTED FAIL-CLOSED / PASS**.
+
+Artifacts:
+
+- `phase5105-usable-data-preview` — artifact `10512162655`, digest `sha256:65bc9987b9673c0c711e049813b8562b978f30192799f11397cff1113d450f62`;
+- `phase5105-clean-windows-evidence` — artifact `10511033598`, digest `sha256:7c7569437f6139a27cee3743e1e0e426a64f03f0dc20044526165c3068bcc60e`.
+
+The next control is PR exact-head CI, merge to `main`, and automatic post-merge rerun on the resulting `main` SHA. Only then may this slice be marked **COMPLETE / MERGED / POST-MERGE VERIFIED**.
+
+This slice does not change the Public Preview PPR matrix. Licensing, redistribution, signing, distribution and executable accessibility remain independent release controls.
+
 ### Public Preview strict release gate
 
 Status: **BLOCKED**
