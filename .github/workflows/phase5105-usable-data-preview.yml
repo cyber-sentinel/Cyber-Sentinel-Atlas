@@ -51,6 +51,7 @@ jobs:
     env:
       GOTOOLCHAIN: local
       CGO_ENABLED: '0'
+      PYTHONPATH: .
     steps:
       - name: Checkout exact head
         uses: actions/checkout@v7
@@ -64,19 +65,30 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
           cache-dependency-path: shared-core/go/go.sum
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: pip
-          cache-dependency-path: tools/pack/requirements-phase552.txt
+      - name: Prepare runner-native Python 3.12 venv
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
+          if ($version -ne $env:PYTHON_VERSION) { throw "Python $env:PYTHON_VERSION required; found $version" }
+          $venv = Join-Path $env:RUNNER_TEMP 'atlas-phase5105-pack-venv'
+          if (Test-Path $venv) { Remove-Item $venv -Recurse -Force }
+          python -m venv $venv
+          $scripts = Join-Path $venv 'Scripts'
+          $scripts | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          "VIRTUAL_ENV=$venv" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          & (Join-Path $scripts 'python.exe') --version
 
       - name: Install exact pack dependencies
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
           python -m pip install --disable-pip-version-check -r tools/pack/requirements-phase552.txt
+          if ($LASTEXITCODE -ne 0) { throw 'pack dependency installation failed' }
           python -m pip check
+          if ($LASTEXITCODE -ne 0) { throw 'pack dependency verification failed' }
+          python -c "import importlib.metadata as m; assert m.version('tuf') == '7.0.0'; assert m.version('securesystemslib') == '1.4.0'; assert m.version('jsonschema') == '4.25.1'; assert m.version('pytest') == '8.4.2'"
+          if ($LASTEXITCODE -ne 0) { throw 'exact trust dependency version assertion failed' }
 
       - name: Prepare package stage and verified engineering pack
         shell: pwsh
@@ -100,6 +112,7 @@ jobs:
           Push-Location shared-core/go
           try {
             go mod verify
+            if ($LASTEXITCODE -ne 0) { throw 'Go module verification failed' }
             go test ./... -count=1
             if ($LASTEXITCODE -ne 0) { throw 'Shared Core tests failed' }
             go build -trimpath -buildvcs=false `
@@ -316,7 +329,9 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $Tampered = Join-Path $env:RUNNER_TEMP 'ATLAS Tampered Pack'
-          Copy-Item -Recurse -Force $env:PHASE5105_CLEAN $Tampered
+          Remove-Item -Recurse -Force $Tampered -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $Tampered | Out-Null
+          Copy-Item -Path (Join-Path $env:PHASE5105_CLEAN '*') -Destination $Tampered -Recurse -Force
           Add-Content -Encoding ascii -NoNewline -Path (Join-Path $Tampered 'atlas-engineering-preview.atlaspack') -Value 'tamper'
           $BadLocal = Join-Path $env:RUNNER_TEMP 'atlas-phase5105-tampered-localappdata'
           Remove-Item -Recurse -Force $BadLocal -ErrorAction SilentlyContinue
