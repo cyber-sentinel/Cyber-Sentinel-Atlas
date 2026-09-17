@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 INVENTORY = ROOT / "docs" / "releases" / "third-party-redistribution-inventory.json"
 POLICY = ROOT / "docs" / "releases" / "third-party-redistribution-closure.md"
 NOTICES = ROOT / "THIRD_PARTY_NOTICES.md"
+FINAL_RELEASE_NOTICES = ROOT / "docs" / "releases" / "public-preview-third-party-notices.md"
 ALLOWED_ENTRY_STATES = {
     "ACCEPTED",
     "CONDITIONALLY_CLEARABLE",
@@ -100,13 +101,17 @@ def validate_baseline(data: dict, errors: list[str]) -> None:
 
     policy = POLICY.read_text(encoding="utf-8") if POLICY.is_file() else ""
     for token in (
-        "Status: **IN PROGRESS / FAIL-CLOSED**",
         "Unknown, ambiguous, incompatible, or unverified rights remain a non-waivable publication failure.",
         "allowlist, not a denylist",
-        "PPR-04 remains **BLOCKED**",
     ):
         if token not in policy:
             fail(errors, f"redistribution closure policy missing required token: {token}")
+    if data.get("state") == "BLOCKED":
+        for token in ("Status: **IN PROGRESS / FAIL-CLOSED**", "PPR-04 remains **BLOCKED**"):
+            if token not in policy:
+                fail(errors, f"blocked redistribution policy missing required token: {token}")
+    elif data.get("state") == "PASS" and "Status: **CLOSED / RELEASE-SCOPED**" not in policy:
+        fail(errors, "closed redistribution policy must record Status: **CLOSED / RELEASE-SCOPED**")
 
     notices = NOTICES.read_text(encoding="utf-8") if NOTICES.is_file() else ""
     if "non-waivable publication failure" not in notices:
@@ -126,6 +131,12 @@ def validate_release(data: dict, errors: list[str]) -> None:
     for entry in data.get("entries", []):
         if isinstance(entry, dict) and entry.get("included") and entry.get("redistribution_state") != "ACCEPTED":
             fail(errors, f"strict redistribution release mode unresolved included entry: {entry.get('id')}")
+    if not FINAL_RELEASE_NOTICES.is_file():
+        fail(errors, f"strict redistribution release mode requires {FINAL_RELEASE_NOTICES.relative_to(ROOT)}")
+    else:
+        final_notices = FINAL_RELEASE_NOTICES.read_text(encoding="utf-8")
+        if package_sha and package_sha not in final_notices:
+            fail(errors, "final third-party notices are not bound to the exact release package SHA-256")
 
 
 def main() -> int:
