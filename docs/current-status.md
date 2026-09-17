@@ -1,15 +1,20 @@
 # Cyber-Sentinel-Atlas — Current Authoritative Status
 
-Status timestamp: 2026-09-16
+Status timestamp: 2026-09-17
 
 ## Control plane
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Authoritative main SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
+- Current control-plane main SHA: `d839bb366dbbd10282f6b6da70000d2fa4aaf826`
+- First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
+- Phase 5.6 documentation closure: PR #41 — **MERGED**
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
+- Active phase: **Phase 5.10 — Public Preview Readiness**
+- Active slice: **Phase 5.10.0 — Public Preview Readiness Baseline**
+- Public Preview readiness: **BLOCKED**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
 - Search contract version: `1.0.0`
@@ -20,7 +25,9 @@ Status timestamp: 2026-09-16
 - Desktop/Core boundary: child-process stdio protocol — ADR-0025 Accepted
 - Desktop host: **Tauri 2.x** — ADR-0026 Accepted
 
-`main` is the release authority. Phase 5.6 has completed implementation, PR regression closure, merge, and post-merge package/smoke verification. `FIRST PREVIEW READY` denotes engineering readiness only; no signed public binary/GA release is claimed.
+`main` is the release authority. Phase 5.6 has completed implementation, regression closure, merge, post-merge package/smoke verification, and documentation closure. `FIRST PREVIEW READY` denotes engineering readiness only; no signed Public Preview or GA release is claimed.
+
+The First Preview package evidence remains bound to `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`. Subsequent documentation/governance closure advanced the control-plane `main` to `d839bb366dbbd10282f6b6da70000d2fa4aaf826` without changing the verified package bytes or frozen architecture.
 
 ## Phase state
 
@@ -40,12 +47,17 @@ Status timestamp: 2026-09-16
 - Phase 5.6.4 — Windows Packaging / Clean-Machine Smoke: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 - Phase 5.6 — Windows Desktop MVP: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 - First Preview engineering readiness: **READY**
+- Phase 5.7 — Web / PWA: **DEFERRED BEYOND FIRST PREVIEW**
+- Phase 5.8 — Broader API surfaces: **DEFERRED BEYOND FIRST PREVIEW**
+- Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
+- Phase 5.10 — Public Preview Readiness: **ACTIVE**
+- Phase 5.10.0 — Public Preview Readiness Baseline: **ACTIVE**
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers are retained because frozen architecture validators use them to prove lifecycle continuity across later phases.
 
 ## Frozen Shared Core boundary
 
-Phase 5.5 remains frozen. Desktop code consumes, but does not redefine:
+Phase 5.5 remains frozen. Later release-readiness work consumes, but does not redefine:
 
 - exactly seven canonical `AtlasRecord` families under `schemas/v1/`;
 - deterministic exact-before-lexical SQLite/FTS5 search semantics;
@@ -60,7 +72,7 @@ Phase 5.5 remains frozen. Desktop code consumes, but does not redefine:
 
 ## Phase 5.6.2 — Selection evidence
 
-Accepted Candidate Evidence run `35090304056` established the frozen selection evidence and closed G-D1 through G-D9. Subsequent PR regression run `35112236628` on final PR head `bae4b2d87b5c227f6e332ffc3ca166d37b3fe4cd` completed successfully after fail-closed network-observation instrumentation was corrected without relaxing the network policy.
+Accepted Candidate Evidence run `35090304056` established the frozen selection evidence and closed G-D1 through G-D9. Final PR regression run `35112236628` on head `bae4b2d87b5c227f6e332ffc3ca166d37b3fe4cd` completed successfully after fail-closed network-observation instrumentation was corrected without relaxing the network policy.
 
 | Gate | Requirement | State |
 | --- | --- | --- |
@@ -94,7 +106,7 @@ Security regression evidence enforces one main-window capability, explicit appli
 
 ## Phase 5.6.4 — Release-authority evidence
 
-Post-merge workflow `Phase 5.6.4 Windows First Preview Package`, run `35133827422`, completed **SUCCESS** on authoritative `main` SHA `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`.
+Post-merge workflow `Phase 5.6.4 Windows First Preview Package`, run `35133827422`, completed **SUCCESS** on First Preview package baseline `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`.
 
 Both jobs completed successfully:
 
@@ -110,21 +122,45 @@ Artifacts:
 
 The First Preview artifact remains an **unsigned portable ZIP**. Production Authenticode signing, public distribution hardening, installer/release policy and binary auto-update are later release-readiness boundaries.
 
-## Release-authority closure
+## Phase 5.10 — Public Preview Readiness
+
+Phase 5.10 is now **ACTIVE**. The machine-readable authority is `docs/releases/phase-5.10-public-preview-readiness.json`; the human-readable gate matrix is `docs/releases/phase-5.10-public-preview-readiness.md`.
+
+Current mandatory gate state:
+
+- First Preview engineering baseline — **PASS**;
+- security disclosure/supported-state policy — **PASS**;
+- first-party licensing decision — **BLOCKED**;
+- third-party redistribution closure — **BLOCKED**;
+- production code signing/key custody — **BLOCKED**;
+- public packaging/distribution hardening — **BLOCKED**;
+- accessibility release review — **PARTIAL**;
+- source freshness/public-pack publication policy — **BLOCKED**;
+- release governance/launch criteria — **PARTIAL**;
+- supply-chain evidence — **PASS**;
+- trademark/attribution controls — **PASS**.
+
+The lack of a first-party `LICENSE` is intentionally represented as a blocker. No license family is selected by automation or documentation. Production signing provider, certificate lifecycle and HSM/KMS/key-custody design likewise remain explicit decisions rather than inferred defaults.
+
+## Release-authority sequence
 
 ```text
-Feature implementation                         COMPLETE
+FIRST PREVIEW READY — ENGINEERING READINESS       COMPLETE
         ↓
-PR #39 regression CI                           COMPLETE / ALL GREEN
+Phase 5.10.0 readiness baseline                  ACTIVE
         ↓
-Merge to main                                  COMPLETE
+Licensing / redistribution closure               BLOCKED
         ↓
-Post-merge package + clean-Windows verification COMPLETE / VERIFIED
+Signing / key custody / artifact attestation     BLOCKED
         ↓
-FIRST PREVIEW READY — ENGINEERING READINESS
+Public packaging / distribution hardening        BLOCKED
+        ↓
+Accessibility / freshness / launch governance    PARTIAL
+        ↓
+STRICT PUBLIC PREVIEW RELEASE GATE               BLOCKED
 ```
 
-There is no open Phase 5.6 engineering blocker. Public release remains intentionally unreleased until the separate release-readiness boundaries are closed.
+There is no open Phase 5.6 engineering blocker. Public release remains intentionally unreleased until every mandatory Phase 5.10 release-readiness gate passes.
 
 ## Governance
 
