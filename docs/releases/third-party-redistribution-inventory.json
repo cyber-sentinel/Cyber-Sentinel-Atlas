@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0.0",
+  "gate": "PPR-04",
+  "state": "BLOCKED",
+  "public_preview_corpus_frozen": false,
+  "software_payload_frozen": false,
+  "release_package_sha256": null,
+  "entries": [
+    {
+      "id": "mitre-attack-enterprise",
+      "class": "knowledge-content",
+      "included": true,
+      "upstream_revision": "attack-stix-data@6cda5ad8462c79e14fbb872f4e09059b18e0cfc4 / enterprise-attack-19.2.json",
+      "license_or_terms": "MITRE ATT&CK license",
+      "license_source": "https://github.com/mitre-attack/attack-stix-data/blob/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/LICENSE.txt",
+      "redistribution_state": "CONDITIONALLY_CLEARABLE",
+      "required_notices": "MITRE copyright designation and license text",
+      "review_evidence": "ingestion/source-profiles/mitre-attack-enterprise.release.json"
+    },
+    {
+      "id": "mitre-car",
+      "class": "knowledge-content",
+      "included": true,
+      "upstream_revision": "mitre-attack/car@1b922fe1527d956e222a99473472e594f10f610b",
+      "license_or_terms": "Apache-2.0",
+      "license_source": "https://github.com/mitre-attack/car/blob/1b922fe1527d956e222a99473472e594f10f610b/LICENSE.txt",
+      "redistribution_state": "CONDITIONALLY_CLEARABLE",
+      "required_notices": "Apache-2.0 license and applicable upstream notices",
+      "review_evidence": "ingestion/source-profiles/mitre-car.release.json"
+    },
+    {
+      "id": "mitre-d3fend-ontology",
+      "class": "knowledge-content",
+      "included": true,
+      "upstream_revision": "d3fend/d3fend-ontology@6f888567acb359328ebd1e793b7e01581b6a03ed / ontology 1.6.0 / sha256-4909a5bb66b75d2c359624398848936fb56a6b246bcd5cfcd277977a1277753a",
+      "license_or_terms": "MIT",
+      "license_source": "https://github.com/d3fend/d3fend-ontology/blob/6f888567acb359328ebd1e793b7e01581b6a03ed/LICENSE.md",
+      "redistribution_state": "CONDITIONALLY_CLEARABLE",
+      "required_notices": "MIT copyright and permission notice",
+      "review_evidence": "ingestion/source-profiles/mitre-d3fend-ontology.release.json"
+    },
+    {
+      "id": "microsoft-windows-security-documentation",
+      "class": "knowledge-content",
+      "included": true,
+      "upstream_revision": "Event 4688 Microsoft Learn source profile; exact public-pack text not frozen",
+      "license_or_terms": "Microsoft documentation terms — exact redistribution classification pending",
+      "license_source": "",
+      "redistribution_state": "REVIEW_REQUIRED",
+      "required_notices": "TBD only after exact terms/material review",
+      "review_evidence": "ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.release.json"
+    },
+    {
+      "id": "microsoft-sysmon-documentation",
+      "class": "knowledge-content",
+      "included": true,
+      "upstream_revision": "MicrosoftDocs/sysinternals@8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6 / Sysmon 15.21 documentation",
+      "license_or_terms": "Pinned repository/documentation terms require release review",
+      "license_source": "https://github.com/MicrosoftDocs/sysinternals/blob/8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6/LICENSE",
+      "redistribution_state": "REVIEW_REQUIRED",
+      "required_notices": "Pending exact material/terms classification",
+      "review_evidence": "ingestion/source-profiles/microsoft-sysmon-docs.release.json"
+    },
+    {
+      "id": "cyber-sentinel-defenseops-content",
+      "class": "knowledge-content",
+      "included": false,
+      "upstream_revision": "not selected for Public Preview pack",
+      "license_or_terms": "No project LICENSE on current DefenseOps main",
+      "license_source": "",
+      "redistribution_state": "EXCLUDED",
+      "required_notices": "none while excluded",
+      "review_evidence": "THIRD_PARTY_NOTICES.md"
+    },
+    {
+      "id": "go-shared-core-runtime",
+      "class": "software-runtime",
+      "included": true,
+      "upstream_revision": "Go 1.25.13 + shared-core/go/go.mod/go.sum + exact linked binary",
+      "license_or_terms": "Generated linked-module license evidence",
+      "license_source": "Phase 5.5.4D SBOM/license evidence",
+      "redistribution_state": "BUILD_EVIDENCE_REQUIRED",
+      "required_notices": "Generated from exact release binary/module set",
+      "review_evidence": "Phase 5.5.4D supply-chain workflow"
+    },
+    {
+      "id": "tauri-rust-runtime",
+      "class": "software-runtime",
+      "included": true,
+      "upstream_revision": "Tauri 2.11.5 + committed Cargo.lock",
+      "license_or_terms": "Exact Cargo dependency license inventory pending release build",
+      "license_source": "",
+      "redistribution_state": "BUILD_EVIDENCE_REQUIRED",
+      "required_notices": "Generate exact crate/license/notice bundle from release lock/build",
+      "review_evidence": "benchmarks/desktop/phase56/candidates/tauri/Cargo.lock"
+    },
+    {
+      "id": "webview2-runtime",
+      "class": "runtime-prerequisite",
+      "included": false,
+      "upstream_revision": "not bundled by current portable model",
+      "license_or_terms": "Microsoft WebView2 distribution terms apply if future installer redistributes/bootstrap-downloads runtime",
+      "license_source": "",
+      "redistribution_state": "EXCLUDED_CURRENT_MODEL",
+      "required_notices": "review required if packaging model changes",
+      "review_evidence": "Phase 5.6.4 packaging evidence"
+    }
+  ]
+}
