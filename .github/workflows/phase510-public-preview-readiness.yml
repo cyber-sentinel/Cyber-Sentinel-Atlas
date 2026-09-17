@@ -1,0 +1,80 @@
+name: Phase 5.10 Public Preview Readiness
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'README.md'
+      - 'SECURITY.md'
+      - 'CONTRIBUTING.md'
+      - 'THIRD_PARTY_NOTICES.md'
+      - 'TRADEMARKS.md'
+      - 'CITATION.cff'
+      - 'LICENSE'
+      - 'LICENSE.md'
+      - 'docs/releases/phase-5.10-public-preview-readiness.md'
+      - 'docs/releases/phase-5.10-public-preview-readiness.json'
+      - 'docs/releases/public-preview-release-evidence.json'
+      - 'docs/current-status.md'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - 'tools/release/validate_phase510_readiness.py'
+      - '.github/workflows/phase510-public-preview-readiness.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'README.md'
+      - 'SECURITY.md'
+      - 'CONTRIBUTING.md'
+      - 'THIRD_PARTY_NOTICES.md'
+      - 'TRADEMARKS.md'
+      - 'CITATION.cff'
+      - 'LICENSE'
+      - 'LICENSE.md'
+      - 'docs/releases/phase-5.10-public-preview-readiness.md'
+      - 'docs/releases/phase-5.10-public-preview-readiness.json'
+      - 'docs/releases/public-preview-release-evidence.json'
+      - 'docs/current-status.md'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - 'tools/release/validate_phase510_readiness.py'
+      - '.github/workflows/phase510-public-preview-readiness.yml'
+  workflow_dispatch:
+    inputs:
+      release_mode:
+        description: 'Run strict Public Preview release gate'
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  readiness-baseline:
+    if: github.event_name != 'workflow_dispatch' || inputs.release_mode != true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Validate Phase 5.10 readiness baseline
+        run: python tools/release/validate_phase510_readiness.py
+
+  readiness-strict-release:
+    if: github.event_name == 'workflow_dispatch' && inputs.release_mode == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Validate strict Public Preview release gate
+        run: python tools/release/validate_phase510_readiness.py --release
