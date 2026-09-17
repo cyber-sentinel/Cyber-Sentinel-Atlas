@@ -6,17 +6,19 @@ Status timestamp: 2026-09-17
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Current control-plane main SHA: `36aa628cc79a61a2e3234dc4005792d2d7f01f5c` at branch start; resolve live `main` after merge.
+- Current control-plane main SHA: `a8f3b4e9177e89b38a1dcf91ad9ef2d31416bafe` at Phase 5.10.5 branch start; resolve live `main` after merge.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
 - Phase 5.10 readiness baseline: PR #42 — **MERGED**
 - Phase 5.10 README sync: PR #43 — **MERGED**
+- Phase 5.10.4 governance/freshness closure: PR #44 — **MERGED**
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
 - Active phase: **Phase 5.10 — Public Preview Readiness**
 - Baseline slice: **Phase 5.10.0 — COMPLETE / MERGED**
-- Active parallel slice: **Phase 5.10.4 — Accessibility / Freshness / Launch Governance — IN PROGRESS**
+- Phase 5.10.4 — Accessibility / Freshness / Launch Governance: **IN PROGRESS**
+- Phase 5.10.5 — Usable Data Preview: **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING**
 - Public Preview readiness: **BLOCKED**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
@@ -31,6 +33,8 @@ Status timestamp: 2026-09-17
 `main` is the release authority. Phase 5.6 completed implementation, regression closure, merge, post-merge package/smoke verification, and documentation closure. `FIRST PREVIEW READY` denotes engineering readiness only; no signed Public Preview or GA release is claimed.
 
 The First Preview package evidence remains bound to `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`. Subsequent control-plane and release-governance work does not change those verified package bytes or the frozen Phase 5.5/5.6 architecture.
+
+Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that a clean packaged Windows flow can bootstrap a verified engineering knowledge pack, retrieve real Windows/Sysmon knowledge, navigate Record/Graph/Provenance, and reject deliberate signed-target tampering fail-closed. It does not grant Public Preview authority or change any PPR blocker.
 
 ## Phase state
 
@@ -62,6 +66,12 @@ The First Preview package evidence remains bound to `main@70afc6fdb9e5ce88afdb0d
   - source freshness / public-pack publication policy: **PASS / POLICY CLOSED**
   - release governance / launch / rollback / revocation criteria: **PASS / POLICY CLOSED**
   - packaged accessibility release review: **PARTIAL / EXECUTABLE REVIEW REQUIRED**
+- Phase 5.10.5 — Usable Data Preview: **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING**
+  - exact Windows Security Event ID `4688` search: **PASS**
+  - Sysmon Event ID `1` search: **PASS**
+  - packaged Record / Graph / Provenance flow: **PASS**
+  - TUF target tamper rejection: **PASS / FAIL-CLOSED**
+  - exact-head workflow run `35253441607`: **SUCCESS**
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers are retained because frozen architecture validators use them to prove lifecycle continuity across later phases.
 
@@ -132,6 +142,33 @@ Artifacts:
 
 The First Preview artifact remains an **unsigned portable ZIP**. Production Authenticode signing, public distribution hardening, installer/release policy and binary auto-update remain later release-readiness boundaries.
 
+## Phase 5.10.5 — Usable Data Preview evidence
+
+The final engineering acceptance run before PR creation is `Phase 5.10.5 Usable Data Preview` run `35253441607` on exact head `e5f76ef8f9bc8dad83b12387a7e7b9edfc6dd8a4` — **SUCCESS**.
+
+Both jobs passed:
+
+- `build exact-head usable data preview`;
+- `clean Windows first-run Search Record Graph`.
+
+Clean-Windows evidence verifies from the packaged bytes:
+
+- package relocation and all security-significant payload bindings;
+- desktop host bootstrap and verified first-run engineering pack activation;
+- exact Windows Security Event ID `4688` search;
+- Sysmon Event ID `1` search;
+- canonical Record resolution;
+- bounded Graph expansion;
+- claim/source Provenance;
+- deliberate signed TUF target tampering rejected fail-closed.
+
+Artifacts:
+
+- `phase5105-usable-data-preview` — ID `10512162655`, digest `sha256:65bc9987b9673c0c711e049813b8562b978f30192799f11397cff1113d450f62`;
+- `phase5105-clean-windows-evidence` — ID `10511033598`, digest `sha256:7c7569437f6139a27cee3743e1e0e426a64f03f0dc20044526165c3068bcc60e`.
+
+The previous `ATLAS_PACK_NOT_READY` usability gap is therefore closed on the verified exact-head package path. This is not equivalent to Public Preview authority; the PPR gate matrix remains fail-closed.
+
 ## Phase 5.10 — Public Preview Readiness
 
 Phase 5.10 is **ACTIVE**. The machine-readable authority is `docs/releases/phase-5.10-public-preview-readiness.json`; the human-readable gate matrix is `docs/releases/phase-5.10-public-preview-readiness.md`.
@@ -154,7 +191,8 @@ New release-readiness policy controls:
 
 - `docs/releases/source-freshness-and-publication-policy.md` — source classes, refresh objectives, maximum unattended age, fail-closed publication and per-release freshness evidence;
 - `docs/releases/public-preview-launch-governance.md` — exact release authority, GO/NO-GO criteria, immutable release evidence, rollback and emergency revocation;
-- `docs/releases/accessibility-release-review.md` — packaged Windows review contract covering keyboard, Narrator, high contrast, scaling, semantics and security-significant failure states.
+- `docs/releases/accessibility-release-review.md` — packaged Windows review contract covering keyboard, Narrator, high contrast, scaling, semantics and security-significant failure states;
+- `docs/releases/phase-5.10.5-usable-data-preview.md` — exact-head usable-data acceptance evidence and post-merge criteria.
 
 The lack of a first-party `LICENSE` remains an explicit blocker. No license family is selected by automation or documentation. Production signing provider, certificate lifecycle and HSM/KMS/key-custody design likewise remain explicit owner/business/security decisions rather than inferred defaults.
 
@@ -165,7 +203,9 @@ FIRST PREVIEW READY — ENGINEERING READINESS       COMPLETE
         ↓
 Phase 5.10.0 readiness baseline                  COMPLETE / MERGED
         ↓
-Phase 5.10.4 policy/governance closure            IN PROGRESS
+Phase 5.10.5 usable-data packaged acceptance     COMPLETE / EXACT-HEAD VERIFIED
+        ↓
+Phase 5.10.4 policy/governance closure           IN PROGRESS
         ├─ PPR-08 freshness/publication           PASS
         ├─ PPR-09 launch/rollback governance      PASS
         └─ PPR-07 packaged accessibility review   PARTIAL
