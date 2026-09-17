@@ -123,8 +123,8 @@ def validate_baseline(data: dict, errors: list[str]) -> None:
 
     readme = read_text("README.md")
     for token in (
-        "First Preview engineering readiness:** READY",
-        "Release state:** Pre-preview / unreleased",
+        "**First Preview engineering readiness:** READY",
+        "**Release state:** Pre-preview / unreleased",
         "No technical claim without provenance",
     ):
         if token not in readme:
