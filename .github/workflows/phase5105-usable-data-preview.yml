@@ -1,0 +1,407 @@
+name: Phase 5.10.5 Usable Data Preview
+
+on:
+  push:
+    branches:
+      - main
+      - phase-5.10.5-usable-data-preview
+    paths:
+      - 'README.md'
+      - 'docs/current-status.md'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - 'docs/releases/**'
+      - 'benchmarks/desktop/phase56/candidates/tauri/**'
+      - 'shared-core/go/**'
+      - 'tools/pack/**'
+      - 'tools/search/**'
+      - 'tools/release/build_engineering_preview_pack.py'
+      - 'tools/release/probe_engineering_preview.py'
+      - 'fixtures/phase-5.2/**'
+      - 'fixtures/phase-5.4.4/**'
+      - '.github/workflows/phase5105-usable-data-preview.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'README.md'
+      - 'docs/current-status.md'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - 'docs/releases/**'
+      - 'benchmarks/desktop/phase56/candidates/tauri/**'
+      - 'shared-core/go/**'
+      - 'tools/pack/**'
+      - 'tools/search/**'
+      - 'tools/release/build_engineering_preview_pack.py'
+      - 'tools/release/probe_engineering_preview.py'
+      - 'fixtures/phase-5.2/**'
+      - 'fixtures/phase-5.4.4/**'
+      - '.github/workflows/phase5105-usable-data-preview.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  GO_VERSION: '1.25.13'
+  PYTHON_VERSION: '3.12'
+  RUST_VERSION: '1.95.0'
+  TAURI_LOCK_SHA256: 'dd2a97c412b0f7289f07ba16cfc28b4cca02ea9b7a5f5ed4d488b34977e37b3e'
+
+jobs:
+  build-package:
+    name: build exact-head usable data preview
+    runs-on: [self-hosted, windows, x64, atlas-ci, atlas-windows]
+    timeout-minutes: 60
+    env:
+      GOTOOLCHAIN: local
+      CGO_ENABLED: '0'
+      PYTHONPATH: .
+    steps:
+      - name: Checkout exact head
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: shared-core/go/go.sum
+
+      - name: Prepare runner-native Python 3.12 venv
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
+          if ($version -ne $env:PYTHON_VERSION) { throw "Python $env:PYTHON_VERSION required; found $version" }
+          $venv = Join-Path $env:RUNNER_TEMP 'atlas-phase5105-pack-venv'
+          if (Test-Path $venv) { Remove-Item $venv -Recurse -Force }
+          python -m venv $venv
+          $scripts = Join-Path $venv 'Scripts'
+          $scripts | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          "VIRTUAL_ENV=$venv" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          & (Join-Path $scripts 'python.exe') --version
+
+      - name: Install exact pack dependencies
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python -m pip install --disable-pip-version-check -r tools/pack/requirements-phase552.txt
+          if ($LASTEXITCODE -ne 0) { throw 'pack dependency installation failed' }
+          python -m pip check
+          if ($LASTEXITCODE -ne 0) { throw 'pack dependency verification failed' }
+          python -c "import importlib.metadata as m; assert m.version('tuf') == '7.0.0'; assert m.version('securesystemslib') == '1.4.0'; assert m.version('jsonschema') == '4.25.1'; assert m.version('pytest') == '8.4.2'"
+          if ($LASTEXITCODE -ne 0) { throw 'exact trust dependency version assertion failed' }
+
+      - name: Prepare package stage and verified engineering pack
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Stage = Join-Path $env:RUNNER_TEMP 'atlas-phase5105-package'
+          Remove-Item -Recurse -Force $Stage -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $Stage | Out-Null
+          python tools/release/build_engineering_preview_pack.py --output-dir $Stage
+          if ($LASTEXITCODE -ne 0) { throw 'engineering preview pack build failed' }
+          foreach ($file in @('atlas-engineering-preview.atlaspack','atlas-engineering-preview-root.json','ENGINEERING-PREVIEW-PACK.json')) {
+            if (-not (Test-Path -LiteralPath (Join-Path $Stage $file) -PathType Leaf)) { throw "preview payload missing: $file" }
+          }
+          "PHASE5105_STAGE=$Stage" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Build and test exact-head Shared Core
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Core = Join-Path $env:PHASE5105_STAGE 'atlas-core.exe'
+          Push-Location shared-core/go
+          try {
+            go mod verify
+            if ($LASTEXITCODE -ne 0) { throw 'Go module verification failed' }
+            go test ./... -count=1
+            if ($LASTEXITCODE -ne 0) { throw 'Shared Core tests failed' }
+            go build -trimpath -buildvcs=false `
+              -ldflags "-X main.coreCommit=$env:GITHUB_SHA -X main.coreVersion=0.1.0-preview" `
+              -o $Core ./cmd/atlas-core
+            if ($LASTEXITCODE -ne 0) { throw 'Shared Core build failed' }
+          }
+          finally { Pop-Location }
+          $CoreHash = (Get-FileHash -Algorithm SHA256 $Core).Hash.ToLowerInvariant()
+          "$CoreHash  atlas-core.exe" | Set-Content -Encoding ascii (Join-Path $env:PHASE5105_STAGE 'atlas-core.exe.sha256')
+
+      - name: Set up checksum-pinned Rust
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $RustupVersion = '1.29.0'
+          $Bootstrap = Join-Path $env:RUNNER_TEMP 'rustup-bootstrap-phase5105'
+          $RustupInit = Join-Path $Bootstrap 'rustup-init.exe'
+          $Checksum = Join-Path $Bootstrap 'rustup-init.exe.sha256'
+          $Base = "https://static.rust-lang.org/rustup/archive/$RustupVersion/x86_64-pc-windows-msvc"
+          New-Item -ItemType Directory -Force -Path $Bootstrap | Out-Null
+          Invoke-WebRequest -Uri "$Base/rustup-init.exe" -OutFile $RustupInit
+          Invoke-WebRequest -Uri "$Base/rustup-init.exe.sha256" -OutFile $Checksum
+          $expected = ((Get-Content -Raw $Checksum).Trim() -split '\s+')[0].ToLowerInvariant()
+          $actual = (Get-FileHash -Algorithm SHA256 $RustupInit).Hash.ToLowerInvariant()
+          if ($actual -ne $expected) { throw 'rustup-init SHA-256 mismatch' }
+          $env:RUSTUP_HOME = Join-Path $env:RUNNER_TEMP 'rustup-home-phase5105'
+          $env:CARGO_HOME = Join-Path $env:RUNNER_TEMP 'cargo-home-phase5105'
+          & $RustupInit -y --no-modify-path --profile minimal --default-toolchain $env:RUST_VERSION
+          if ($LASTEXITCODE -ne 0) { throw "rustup-init failed with exit code $LASTEXITCODE" }
+          $CargoBin = Join-Path $env:CARGO_HOME 'bin'
+          $env:PATH = "$CargoBin;$env:PATH"
+          "RUSTUP_HOME=$env:RUSTUP_HOME" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "CARGO_HOME=$env:CARGO_HOME" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          $CargoBin | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          if ((rustc --version) -notmatch '^rustc 1\.95\.0 ') { throw 'Rust 1.95.0 not active' }
+
+      - name: Build selected Tauri host with committed lock
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          . ./benchmarks/desktop/phase56/candidates/tauri/prepare_msvc.ps1
+          $Manifest = Join-Path (Get-Location) 'benchmarks\desktop\phase56\candidates\tauri\Cargo.toml'
+          $Lock = Join-Path (Split-Path -Parent $Manifest) 'Cargo.lock'
+          $LockHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $Lock).Hash.ToLowerInvariant()
+          if ($LockHash -ne $env:TAURI_LOCK_SHA256) { throw "Tauri Cargo.lock drift: $LockHash" }
+          $env:CARGO_TARGET_DIR = Join-Path $env:RUNNER_TEMP 'atlas-phase5105-tauri-target'
+          Remove-Item -Recurse -Force $env:CARGO_TARGET_DIR -ErrorAction SilentlyContinue
+          if ($env:ATLAS_TAURI_BUILD_MODE -eq 'cargo-xwin') {
+            cargo xwin build --release --locked --manifest-path $Manifest --target x86_64-pc-windows-msvc
+            $HostPath = Join-Path $env:CARGO_TARGET_DIR 'x86_64-pc-windows-msvc\release\atlas-tauri-candidate.exe'
+          }
+          else {
+            cargo build --release --locked --manifest-path $Manifest
+            $HostPath = Join-Path $env:CARGO_TARGET_DIR 'release\atlas-tauri-candidate.exe'
+          }
+          if ($LASTEXITCODE -ne 0) { throw 'Tauri usable data preview build failed' }
+          git diff --exit-code -- benchmarks/desktop/phase56/candidates/tauri/Cargo.lock
+          if ($LASTEXITCODE -ne 0) { throw 'Tauri Cargo.lock mutated during build' }
+          if (-not (Test-Path -LiteralPath $HostPath -PathType Leaf)) { throw "Tauri output missing: $HostPath" }
+          Copy-Item -LiteralPath $HostPath -Destination (Join-Path $env:PHASE5105_STAGE 'Cyber-Sentinel-ATLAS.exe') -Force
+          "PHASE5105_TAURI_BUILD_MODE=$env:ATLAS_TAURI_BUILD_MODE" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Assemble byte-bound usable data preview
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Stage = $env:PHASE5105_STAGE
+          $HostPath = Join-Path $Stage 'Cyber-Sentinel-ATLAS.exe'
+          $Core = Join-Path $Stage 'atlas-core.exe'
+          $Pack = Join-Path $Stage 'atlas-engineering-preview.atlaspack'
+          $Root = Join-Path $Stage 'atlas-engineering-preview-root.json'
+          $PackEvidence = Get-Content -Raw (Join-Path $Stage 'ENGINEERING-PREVIEW-PACK.json') | ConvertFrom-Json
+          $Manifest = [ordered]@{
+            package_schema = 1
+            product = 'Cyber-Sentinel ATLAS'
+            channel = 'engineering-usable-data-preview'
+            phase = '5.10.5'
+            commit = $env:GITHUB_SHA
+            desktop_host = 'Tauri 2.x'
+            protocol = 'atlas-core/1.0.0'
+            build_mode = $env:PHASE5105_TAURI_BUILD_MODE
+            host = [ordered]@{ file='Cyber-Sentinel-ATLAS.exe'; sha256=(Get-FileHash -Algorithm SHA256 $HostPath).Hash.ToLowerInvariant(); size_bytes=(Get-Item $HostPath).Length }
+            sidecar = [ordered]@{ file='atlas-core.exe'; sha256=(Get-FileHash -Algorithm SHA256 $Core).Hash.ToLowerInvariant(); size_bytes=(Get-Item $Core).Length; placement='adjacent-to-host' }
+            baseline_pack = [ordered]@{ file='atlas-engineering-preview.atlaspack'; sha256=(Get-FileHash -Algorithm SHA256 $Pack).Hash.ToLowerInvariant(); size_bytes=(Get-Item $Pack).Length; scope='fixture-only'; first_run_activation='tuf-verified-fail-closed' }
+            bootstrap_root = [ordered]@{ file='atlas-engineering-preview-root.json'; sha256=(Get-FileHash -Algorithm SHA256 $Root).Hash.ToLowerInvariant(); size_bytes=(Get-Item $Root).Length; private_keys_persisted=$false }
+            acceptance = [ordered]@{ windows_event_4688=$true; sysmon_event_1=$true; record_detail=$true; bounded_graph=$true }
+            release_boundaries = [ordered]@{ public_preview=$false; production_signing=$false; production_pack_keys=$false; third_party_public_corpus=$false }
+            security = [ordered]@{ default_network_listener=$false; csp_connect_src='none'; binary_auto_update=$false; sidecar_integrity='sha256-fail-closed'; pack_trust='TUF' }
+          }
+          if ($PackEvidence.public_preview_corpus -ne $false -or $PackEvidence.private_keys_persisted -ne $false) { throw 'engineering pack scope invariant failed' }
+          $Manifest | ConvertTo-Json -Depth 10 | Set-Content -Encoding utf8 (Join-Path $Stage 'PACKAGE-MANIFEST.json')
+          @'
+          Cyber-Sentinel ATLAS — Engineering Usable Data Preview
+
+          Run Cyber-Sentinel-ATLAS.exe from this directory. On the first run,
+          atlas-core activates the adjacent engineering fixture pack through the
+          normal TUF verification, health gate, immutable-generation and LKG path.
+
+          Acceptance pivots include Windows Security Event 4688, Sysmon Event 1,
+          ATT&CK-oriented fixture context, record detail, deterministic search and
+          bounded graph data. The baseline pack is synthetic/repository-owned test
+          content and is NOT the Public Preview corpus.
+
+          Production Authenticode, managed pack-signing key custody, third-party
+          redistribution closure and the final Public Preview corpus remain Phase
+          5.10 release gates. No private TUF key is shipped in this package.
+          '@ | Set-Content -Encoding utf8 (Join-Path $Stage 'README-USABLE-DATA-PREVIEW.txt')
+          $PackageRoot = Join-Path $env:RUNNER_TEMP 'atlas-phase5105-output'
+          Remove-Item -Recurse -Force $PackageRoot -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $PackageRoot | Out-Null
+          $Zip = Join-Path $PackageRoot 'Cyber-Sentinel-ATLAS-Usable-Data-Preview-win-x64.zip'
+          Compress-Archive -Path (Join-Path $Stage '*') -DestinationPath $Zip -CompressionLevel Optimal
+          $ZipHash = (Get-FileHash -Algorithm SHA256 $Zip).Hash.ToLowerInvariant()
+          "$ZipHash  $(Split-Path -Leaf $Zip)" | Set-Content -Encoding ascii "$Zip.sha256"
+          Copy-Item (Join-Path $Stage 'PACKAGE-MANIFEST.json') $PackageRoot
+          Copy-Item (Join-Path $Stage 'ENGINEERING-PREVIEW-PACK.json') $PackageRoot
+
+      - name: Upload exact-head usable data preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase5105-usable-data-preview
+          path: ${{ runner.temp }}\atlas-phase5105-output\*
+          if-no-files-found: error
+          retention-days: 30
+
+  clean-windows-data-smoke:
+    name: clean Windows first-run Search Record Graph
+    needs: build-package
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact head test harness
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python probe runtime
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Download exact package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: phase5105-usable-data-preview
+          path: package-artifact
+
+      - name: Verify package and relocate
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Zip = (Get-ChildItem package-artifact -Filter '*.zip' | Select-Object -First 1).FullName
+          if (-not $Zip) { throw 'usable data preview ZIP missing' }
+          $expected = ((Get-Content -Raw "$Zip.sha256").Trim() -split '\s+')[0].ToLowerInvariant()
+          $actual = (Get-FileHash -Algorithm SHA256 $Zip).Hash.ToLowerInvariant()
+          if ($actual -ne $expected) { throw 'package ZIP SHA-256 mismatch' }
+          $Target = Join-Path $env:RUNNER_TEMP 'ATLAS Usable Data Preview\Relocated Package'
+          New-Item -ItemType Directory -Force -Path $Target | Out-Null
+          Expand-Archive -LiteralPath $Zip -DestinationPath $Target -Force
+          $FreshLocal = Join-Path $env:RUNNER_TEMP 'atlas-phase5105-localappdata'
+          Remove-Item -Recurse -Force $FreshLocal -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $FreshLocal | Out-Null
+          "PHASE5105_CLEAN=$Target" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "LOCALAPPDATA=$FreshLocal" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Verify every security-significant payload binding
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Root = $env:PHASE5105_CLEAN
+          $Manifest = Get-Content -Raw (Join-Path $Root 'PACKAGE-MANIFEST.json') | ConvertFrom-Json
+          if ($Manifest.commit -ne $env:GITHUB_SHA) { throw 'package exact-head commit mismatch' }
+          foreach ($entry in @($Manifest.host,$Manifest.sidecar,$Manifest.baseline_pack,$Manifest.bootstrap_root)) {
+            $path = Join-Path $Root $entry.file
+            if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "payload missing: $($entry.file)" }
+            $actual = (Get-FileHash -Algorithm SHA256 $path).Hash.ToLowerInvariant()
+            if ($actual -ne $entry.sha256) { throw "payload hash mismatch: $($entry.file)" }
+            if ((Get-Item $path).Length -ne $entry.size_bytes) { throw "payload size mismatch: $($entry.file)" }
+          }
+          $expectedCore = ((Get-Content -Raw (Join-Path $Root 'atlas-core.exe.sha256')).Trim() -split '\s+')[0].ToLowerInvariant()
+          if ($expectedCore -ne $Manifest.sidecar.sha256) { throw 'adjacent core hash is not package-bound' }
+          if ($Manifest.release_boundaries.public_preview -ne $false) { throw 'engineering package incorrectly claims Public Preview' }
+
+      - name: Run desktop host probe and trigger verified first-run bootstrap
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $HostPath = Join-Path $env:PHASE5105_CLEAN 'Cyber-Sentinel-ATLAS.exe'
+          $Evidence = Join-Path $env:RUNNER_TEMP 'phase5105-host-probe.json'
+          $p = Start-Process -FilePath $HostPath -ArgumentList @('--atlas-probe',"--probe-output=$Evidence") -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "desktop host probe failed: $($p.ExitCode)" }
+          $probe = Get-Content -Raw $Evidence | ConvertFrom-Json
+          if ($probe.status_result.network_listener -ne $false -or $probe.status_result.offline_capable -ne $true) { throw 'offline/no-listener invariant failed' }
+          if ($probe.status_result.core_commit -ne $env:GITHUB_SHA) { throw 'packaged core commit mismatch' }
+          Copy-Item $Evidence package-artifact\phase5105-host-probe.json -Force
+
+      - name: Prove exact 4688 Sysmon record and graph from packaged bytes
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Core = Join-Path $env:PHASE5105_CLEAN 'atlas-core.exe'
+          $Evidence = Join-Path $env:RUNNER_TEMP 'phase5105-data-probe.json'
+          python tools/release/probe_engineering_preview.py --core $Core --output $Evidence
+          if ($LASTEXITCODE -ne 0) { throw 'packaged data acceptance probe failed' }
+          $probe = Get-Content -Raw $Evidence | ConvertFrom-Json
+          if ($probe.pack_ready -ne $true -or $probe.windows_4688_search_ok -ne $true -or $probe.windows_4688_record_ok -ne $true -or $probe.sysmon_1_search_ok -ne $true -or $probe.sysmon_1_record_ok -ne $true -or $probe.graph_expand_ok -ne $true) {
+            throw 'usable data preview acceptance invariant failed'
+          }
+          Copy-Item $Evidence package-artifact\phase5105-data-probe.json -Force
+
+      - name: Prove TUF target tampering fails closed
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $Tampered = Join-Path $env:RUNNER_TEMP 'ATLAS-Tampered-Pack'
+          Remove-Item -Recurse -Force $Tampered -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $Tampered | Out-Null
+          Copy-Item -Path (Join-Path $env:PHASE5105_CLEAN '*') -Destination $Tampered -Recurse -Force
+          $Pack = Join-Path $Tampered 'atlas-engineering-preview.atlaspack'
+          $TamperedPack = "$Pack.tampered"
+          $TamperScript = Join-Path $env:RUNNER_TEMP 'phase5105-tamper-pack.py'
+          @'
+          import sys
+          import zipfile
+
+          source, destination = sys.argv[1], sys.argv[2]
+          target = "targets/atlas/pack-manifest.json"
+          found = False
+          with zipfile.ZipFile(source, "r") as src, zipfile.ZipFile(
+              destination, "w", compression=zipfile.ZIP_STORED, allowZip64=True
+          ) as dst:
+              for info in src.infolist():
+                  data = src.read(info.filename)
+                  if info.filename == target:
+                      if not data:
+                          raise SystemExit("signed target is unexpectedly empty")
+                      data = bytes([data[0] ^ 0x01]) + data[1:]
+                      found = True
+                  clone = zipfile.ZipInfo(info.filename, date_time=info.date_time)
+                  clone.compress_type = info.compress_type
+                  clone.create_system = info.create_system
+                  clone.external_attr = info.external_attr
+                  clone.flag_bits = info.flag_bits
+                  dst.writestr(clone, data)
+          if not found:
+              raise SystemExit(f"signed target not found: {target}")
+          '@ | Set-Content -Encoding utf8 $TamperScript
+          python $TamperScript $Pack $TamperedPack
+          if ($LASTEXITCODE -ne 0) { throw 'failed to construct valid ZIP with tampered signed target' }
+          Move-Item -Force $TamperedPack $Pack
+          $BadLocal = Join-Path $env:RUNNER_TEMP 'atlas-phase5105-tampered-localappdata'
+          Remove-Item -Recurse -Force $BadLocal -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $BadLocal | Out-Null
+          $OldLocal = $env:LOCALAPPDATA
+          $env:LOCALAPPDATA = $BadLocal
+          $FailureOutput = Join-Path $env:RUNNER_TEMP 'phase5105-tamper-probe-output.txt'
+          $FailureError = Join-Path $env:RUNNER_TEMP 'phase5105-tamper-probe-error.txt'
+          try {
+            $Python = (Get-Command python).Source
+            $Probe = Join-Path (Get-Location) 'tools\release\probe_engineering_preview.py'
+            $Core = Join-Path $Tampered 'atlas-core.exe'
+            $MustNotPass = Join-Path $env:RUNNER_TEMP 'must-not-pass.json'
+            $p = Start-Process -FilePath $Python -ArgumentList @($Probe,'--core',$Core,'--output',$MustNotPass) -Wait -PassThru -RedirectStandardOutput $FailureOutput -RedirectStandardError $FailureError
+            if ($p.ExitCode -eq 0) { throw 'tampered signed target was accepted' }
+            $failureText = ((Get-Content -Raw $FailureOutput -ErrorAction SilentlyContinue) + "`n" + (Get-Content -Raw $FailureError -ErrorAction SilentlyContinue))
+            if ($failureText -notmatch 'TUF manifest verification failed' -or $failureText -notmatch 'hash verification failed') {
+              throw "tampered pack failed for an unexpected reason: $failureText"
+            }
+            if (Test-Path -LiteralPath $MustNotPass) { throw 'tampered-pack probe unexpectedly emitted success evidence' }
+          }
+          finally { $env:LOCALAPPDATA = $OldLocal }
+
+      - name: Upload clean-machine acceptance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase5105-clean-windows-evidence
+          path: |
+            package-artifact\phase5105-host-probe.json
+            package-artifact\phase5105-data-probe.json
+          if-no-files-found: error
+          retention-days: 30

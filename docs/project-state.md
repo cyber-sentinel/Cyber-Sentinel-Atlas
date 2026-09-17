@@ -4,17 +4,19 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `36aa628cc79a61a2e3234dc4005792d2d7f01f5c`
-- Current control-plane main SHA: `36aa628cc79a61a2e3234dc4005792d2d7f01f5c` at branch start; resolve live `main` after merge.
+- Last Reviewed Main SHA: `a8f3b4e9177e89b38a1dcf91ad9ef2d31416bafe`
+- Current control-plane main SHA: `a8f3b4e9177e89b38a1dcf91ad9ef2d31416bafe` at Phase 5.10.5 branch start; resolve live `main` after merge.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
 - Phase 5.10 readiness baseline: PR #42 — **MERGED**
 - Phase 5.10 README sync: PR #43 — **MERGED**
+- Phase 5.10.4 governance/freshness closure: PR #44 — **MERGED**
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
 - Active phase: **Phase 5.10 — Public Preview Readiness**
+- Phase 5.10.5 Usable Data Preview: **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
 - Search contract version: `1.0.0`
@@ -62,6 +64,12 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
     - PPR-08 source freshness/public-pack publication policy: **PASS**
     - PPR-09 release governance/launch criteria: **PASS**
     - PPR-07 packaged accessibility release review: **PARTIAL**
+  - 5.10.5 Usable Data Preview: **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING**
+    - clean-Windows Windows Security Event ID `4688`: **PASS**
+    - clean-Windows Sysmon Event ID `1`: **PASS**
+    - Search / Record / Graph / Provenance: **PASS**
+    - deliberate TUF target tamper rejection: **PASS / FAIL-CLOSED**
+    - exact-head run `35253441607`: **SUCCESS**
   - Public Preview readiness: **BLOCKED**
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers above are compatibility invariants consumed by historical architecture gates even though the aggregate Phase 5.5 boundary is frozen.
@@ -138,6 +146,22 @@ Artifacts:
 
 First Preview packaging is intentionally unsigned. Production Authenticode signing and public distribution/release hardening are Phase 5.10 work. Binary auto-update is not part of First Preview.
 
+## Phase 5.10.5 Usable Data Preview Boundary
+
+Phase 5.10.5 closes the usability defect in which the desktop/process/IPC path could be healthy while the packaged product still had no active verified knowledge pack and search returned `ATLAS_PACK_NOT_READY`.
+
+Exact-head evidence authority before PR creation:
+
+- branch: `phase-5.10.5-usable-data-preview`;
+- exact head: `e5f76ef8f9bc8dad83b12387a7e7b9edfc6dd8a4`;
+- workflow run: `35253441607` — **SUCCESS**;
+- package artifact `10512162655`, digest `sha256:65bc9987b9673c0c711e049813b8562b978f30192799f11397cff1113d450f62`;
+- clean-Windows evidence artifact `10511033598`, digest `sha256:7c7569437f6139a27cee3743e1e0e426a64f03f0dc20044526165c3068bcc60e`.
+
+The same packaged acceptance path proved exact Windows Security Event ID `4688`, Sysmon Event ID `1`, canonical Record, bounded Graph and Provenance behavior. A deliberately modified signed target was rejected by TUF verification; the final harness explicitly treats that expected non-zero exit as successful fail-closed evidence.
+
+This slice adds no Public Preview authority. It preserves the frozen canonical schema, Shared Core, stdio, trust, anti-rollback, LKG and no-default-listener boundaries.
+
 ## Phase 5.10 Public Preview Readiness Boundary
 
 Phase 5.10 establishes a strict separation between First Preview engineering readiness and Public Preview publication authority.
@@ -168,6 +192,8 @@ The source freshness policy is defined in `docs/releases/source-freshness-and-pu
 The launch governance contract is defined in `docs/releases/public-preview-launch-governance.md`. It establishes exact release authority, strict GO/NO-GO criteria, immutable release evidence, rollback, withdrawal and emergency security revocation.
 
 The accessibility acceptance contract is defined in `docs/releases/accessibility-release-review.md`. PPR-07 remains PARTIAL until the exact packaged Windows candidate completes the keyboard, Narrator, high-contrast, scaling and semantic review with executable evidence.
+
+The Phase 5.10.5 evidence contract is defined in `docs/releases/phase-5.10.5-usable-data-preview.md` and records the clean-Windows usable-data acceptance without changing mandatory PPR status.
 
 A baseline CI gate validates that blockers are represented honestly. A separate strict release mode fails until every mandatory Public Preview gate is `PASS` and release evidence exists.
 
@@ -200,6 +226,8 @@ The source-freshness/public-pack publication policy and release-governance/launc
 Phase 5.6 / First Preview engineering closure                 COMPLETE
        ↓
 Phase 5.10.0 readiness baseline                              COMPLETE / MERGED
+       ↓
+Phase 5.10.5 clean-Windows usable-data acceptance            COMPLETE / EXACT-HEAD VERIFIED
        ↓
 Phase 5.10.4 freshness + launch governance                   PASS / POLICY CLOSED
        ↓

@@ -3,6 +3,7 @@
 **Provenance-First Cyber Defense Knowledge & Investigation Platform**
 
 [![First Preview](https://img.shields.io/badge/First%20Preview-engineering%20ready-success)](docs/current-status.md)
+[![Usable Data Preview](https://img.shields.io/badge/Usable%20Data%20Preview-exact--head%20verified-success)](docs/releases/phase-5.10.5-usable-data-preview.md)
 [![Public Preview](https://img.shields.io/badge/Public%20Preview-blocked-important)](docs/releases/phase-5.10-public-preview-readiness.md)
 ![Offline First](https://img.shields.io/badge/architecture-offline--first-informational)
 ![Shared Core](https://img.shields.io/badge/shared%20core-Go-informational)
@@ -14,6 +15,7 @@ Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: an o
 ATLAS is built for security teams that need investigation context to be **deterministic, attributable, reviewable, offline-capable, and operationally safe** rather than dependent on scattered references, opaque retrieval, or ungrounded AI output.
 
 > **First Preview engineering readiness:** READY
+> **Usable Data Preview:** EXACT-HEAD VERIFIED — merge/post-merge verification pending
 > **Current maturity:** Engineering-ready First Preview
 > **Release state:** Pre-preview / unreleased
 > **Repository visibility:** Public
@@ -25,7 +27,7 @@ ATLAS is built for security teams that need investigation context to be **determ
 
 Foundation regression invariants: **Phase 5.1 — Product Foundation: COMPLETE**; **Stage 1 — Governance / Architecture Sync: COMPLETE**.
 
-Public repository visibility does not imply a signed public release, GA status, or universal production approval. The engineering-ready First Preview and a publicly distributable security product are intentionally separate release states.
+Public repository visibility does not imply a signed public release, GA status, or universal production approval. The engineering-ready First Preview, the Phase 5.10.5 Usable Data Preview evidence, and a publicly distributable security product are intentionally separate release states.
 
 ## Product Thesis
 
@@ -88,6 +90,8 @@ The engineering-ready Windows First Preview provides:
 - diagnostics;
 - UTC, system-local, and Tehran/Jalali presentation;
 - operational dark UI with high-contrast/accessibility controls.
+
+Phase 5.10.5 additionally proves on clean Windows, from one packaged artifact, an end-to-end analyst flow for Windows Security Event ID `4688` and Sysmon Event ID `1` through Search → Record → Graph → Provenance, with deliberate TUF target tampering rejected fail-closed.
 
 The selected desktop host exposes exactly seven application commands: `core_status`, `search_records`, `get_record`, `expand_graph`, `pack_status`, `pack_update`, and `pack_rollback`.
 
@@ -193,6 +197,9 @@ These controls are engineering evidence, not a claim that every enterprise envir
 | ADR-0026 desktop selection | **ACCEPTED — Tauri 2.x** |
 | First Preview engineering readiness | **READY** |
 | Phase 5.10 — Public Preview Readiness | **ACTIVE** |
+| Phase 5.10.5 — Usable Data Preview | **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING** |
+
+Phase 5.10.5 exact-head run `35253441607` succeeded on `e5f76ef8f9bc8dad83b12387a7e7b9edfc6dd8a4`, including clean-Windows Search/Record/Graph/Provenance acceptance and fail-closed TUF target tamper rejection. The package artifact digest is `sha256:65bc9987b9673c0c711e049813b8562b978f30192799f11397cff1113d450f62`; clean-Windows evidence digest is `sha256:7c7569437f6139a27cee3743e1e0e426a64f03f0dc20044526165c3068bcc60e`.
 
 Phase 5.6 release authority is backed by the merged implementation and post-merge Windows packaging/smoke evidence. The First Preview artifact remains an **unsigned portable ZIP**; production signing and public distribution are separate Phase 5.10 controls.
 
@@ -218,11 +225,14 @@ Authoritative controls:
 
 - [Public Preview Readiness Gate Matrix](docs/releases/phase-5.10-public-preview-readiness.md)
 - [Machine-Readable Gate State](docs/releases/phase-5.10-public-preview-readiness.json)
+- [Phase 5.10.5 Usable Data Preview Evidence](docs/releases/phase-5.10.5-usable-data-preview.md)
 - [Source Freshness & Public Pack Publication Policy](docs/releases/source-freshness-and-publication-policy.md)
 - [Public Preview Launch Governance](docs/releases/public-preview-launch-governance.md)
 - [Accessibility Release Review Contract](docs/releases/accessibility-release-review.md)
 
 PPR-08 and PPR-09 are policy-closed and CI-enforced. PPR-07 remains partial until the exact packaged Public Preview candidate completes the executable Windows keyboard/Narrator/high-contrast/DPI review. Licensing, redistribution, production signing, and public packaging remain explicit blockers and are not auto-selected by tooling.
+
+Phase 5.10.5 improves the engineering usability baseline but **does not** convert any PPR blocker into PASS and does not authorize a Public Preview release.
 
 ## Deployment & Integration Model
 
@@ -272,6 +282,7 @@ Every material product claim should have inspectable evidence. Repository CI is 
 ATLAS distinguishes:
 
 - **engineering ready** — defined engineering and verification gates passed;
+- **usable data preview verified** — a packaged clean-Windows analyst workflow proves real knowledge retrieval plus fail-closed tamper behavior;
 - **Public Preview ready** — all mandatory PPR gates passed with concrete release evidence;
 - **production ready** — environment-specific and not inferable from repository CI alone.
 
@@ -290,6 +301,8 @@ The critical path is Phase 5.10 Public Preview readiness:
 
 ```text
 First Preview engineering closure                         COMPLETE
+        ↓
+Phase 5.10.5 usable-data analyst flow                    EXACT-HEAD VERIFIED
         ↓
 PPR-08 freshness/publication policy                      PASS
 PPR-09 launch/rollback/revocation governance             PASS
@@ -311,6 +324,7 @@ Web/PWA, broader API surfaces, and Grounded AI remain deferred beyond the First 
 - [Current Authoritative Status](docs/current-status.md)
 - [Project State](docs/project-state.md)
 - [Roadmap](docs/roadmap.md)
+- [Phase 5.10.5 Usable Data Preview Evidence](docs/releases/phase-5.10.5-usable-data-preview.md)
 - [Security Policy](SECURITY.md)
 - [Contribution Guidance](CONTRIBUTING.md)
 - [Third-Party Notices](THIRD_PARTY_NOTICES.md)
