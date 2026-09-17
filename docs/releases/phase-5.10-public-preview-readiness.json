@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0.0",
+  "phase": "5.10",
+  "slice": "5.10.0",
+  "title": "Public Preview Readiness Baseline",
+  "release_authority": "main",
+  "first_preview_release_baseline": "70afc6fdb9e5ce88afdb0dd4de139aa659606f1e",
+  "control_plane_baseline": "d839bb366dbbd10282f6b6da70000d2fa4aaf826",
+  "overall_state": "ACTIVE",
+  "public_preview_state": "BLOCKED",
+  "gates": [
+    {
+      "id": "PPR-01",
+      "name": "First Preview engineering baseline",
+      "mandatory": true,
+      "state": "PASS",
+      "evidence": "Phase 5.6 COMPLETE / MERGED / POST-MERGE VERIFIED; run 35133827422"
+    },
+    {
+      "id": "PPR-02",
+      "name": "Security disclosure and supported-release policy",
+      "mandatory": true,
+      "state": "PASS",
+      "evidence": "SECURITY.md"
+    },
+    {
+      "id": "PPR-03",
+      "name": "First-party licensing decision",
+      "mandatory": true,
+      "state": "BLOCKED",
+      "evidence": "No project LICENSE is currently published; license selection requires explicit legal/business approval"
+    },
+    {
+      "id": "PPR-04",
+      "name": "Third-party redistribution closure",
+      "mandatory": true,
+      "state": "BLOCKED",
+      "evidence": "THIRD_PARTY_NOTICES.md defines fail-closed inventory requirements; exact redistributable public-pack inventory is not yet closed"
+    },
+    {
+      "id": "PPR-05",
+      "name": "Production code signing and key custody",
+      "mandatory": true,
+      "state": "BLOCKED",
+      "evidence": "First Preview artifact is intentionally unsigned; provider, certificate lifecycle and protected key custody are not yet accepted"
+    },
+    {
+      "id": "PPR-06",
+      "name": "Public packaging and distribution hardening",
+      "mandatory": true,
+      "state": "BLOCKED",
+      "evidence": "Portable ZIP is verified for First Preview; signed installer/public distribution channel and release policy remain open"
+    },
+    {
+      "id": "PPR-07",
+      "name": "Accessibility release review",
+      "mandatory": true,
+      "state": "PARTIAL",
+      "evidence": "First Preview includes accessibility labels/high-contrast controls; broader release accessibility review remains open"
+    },
+    {
+      "id": "PPR-08",
+      "name": "Source freshness and public-pack publication policy",
+      "mandatory": true,
+      "state": "BLOCKED",
+      "evidence": "Ingestion provenance/versioning exists; public release freshness SLA and publication acceptance policy are not yet closed"
+    },
+    {
+      "id": "PPR-09",
+      "name": "Release governance and launch criteria",
+      "mandatory": true,
+      "state": "PARTIAL",
+      "evidence": "Branch/PR/CI/post-merge discipline exists; Public Preview launch checklist, rollback and publication authority remain to be formalized"
+    },
+    {
+      "id": "PPR-10",
+      "name": "Supply-chain evidence",
+      "mandatory": true,
+      "state": "PASS",
+      "evidence": "Reproducible Go build, CycloneDX SBOM, linked-module/license validation and pinned vulnerability scanning are CI-enforced"
+    },
+    {
+      "id": "PPR-11",
+      "name": "Trademark and attribution controls",
+      "mandatory": true,
+      "state": "PASS",
+      "evidence": "TRADEMARKS.md, CITATION.cff and THIRD_PARTY_NOTICES.md"
+    }
+  ]
+}
