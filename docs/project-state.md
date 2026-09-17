@@ -4,6 +4,7 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
+- Last Reviewed Main SHA: `d839bb366dbbd10282f6b6da70000d2fa4aaf826`
 - Current control-plane main SHA: `d839bb366dbbd10282f6b6da70000d2fa4aaf826`
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
