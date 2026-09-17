@@ -19,6 +19,9 @@ REQUIRED_POLICY_FILES = [
     "THIRD_PARTY_NOTICES.md",
     "TRADEMARKS.md",
     "CITATION.cff",
+    "docs/releases/accessibility-release-review.md",
+    "docs/releases/source-freshness-and-publication-policy.md",
+    "docs/releases/public-preview-launch-governance.md",
 ]
 
 
@@ -32,6 +35,11 @@ def load_manifest(errors: list[str]) -> dict:
     except Exception as exc:  # fail closed on malformed control data
         fail(f"Cannot load readiness manifest: {exc}", errors)
         return {}
+
+
+def read_text(rel: str) -> str:
+    path = ROOT / rel
+    return path.read_text(encoding="utf-8") if path.is_file() else ""
 
 
 def validate_baseline(data: dict, errors: list[str]) -> None:
@@ -102,22 +110,18 @@ def validate_baseline(data: dict, errors: list[str]) -> None:
     if license_gate.get("state") == "PASS" and not license_exists:
         fail("PPR-03 cannot PASS without a first-party LICENSE file", errors)
 
-    security = (ROOT / "SECURITY.md").read_text(encoding="utf-8") if (ROOT / "SECURITY.md").is_file() else ""
+    security = read_text("SECURITY.md")
     if "current private-development stage" in security:
         fail("SECURITY.md contains obsolete private-development wording", errors)
     for token in ("private vulnerability", "Public Preview", "signing"):
         if token.lower() not in security.lower():
             fail(f"SECURITY.md must address {token}", errors)
 
-    notices = (
-        (ROOT / "THIRD_PARTY_NOTICES.md").read_text(encoding="utf-8")
-        if (ROOT / "THIRD_PARTY_NOTICES.md").is_file()
-        else ""
-    )
+    notices = read_text("THIRD_PARTY_NOTICES.md")
     if "non-waivable publication failure" not in notices:
         fail("THIRD_PARTY_NOTICES.md must retain fail-closed publication language", errors)
 
-    readme = (ROOT / "README.md").read_text(encoding="utf-8") if (ROOT / "README.md").is_file() else ""
+    readme = read_text("README.md")
     for token in (
         "First Preview engineering readiness:** READY",
         "Release state:** Pre-preview / unreleased",
@@ -125,6 +129,34 @@ def validate_baseline(data: dict, errors: list[str]) -> None:
     ):
         if token not in readme:
             fail(f"README missing Phase 5.10 prerequisite marker: {token}", errors)
+
+    accessibility = read_text("docs/releases/accessibility-release-review.md")
+    if gate_by_id.get("PPR-07", {}).get("state") == "PASS":
+        for token in ("package SHA-256", "Windows Narrator", "final PPR-07 decision"):
+            if token.lower() not in accessibility.lower():
+                fail(f"PPR-07 PASS evidence missing accessibility token: {token}", errors)
+
+    freshness = read_text("docs/releases/source-freshness-and-publication-policy.md")
+    if gate_by_id.get("PPR-08", {}).get("state") == "PASS":
+        for token in (
+            "Status: **ACCEPTED FOR PUBLIC PREVIEW READINESS**",
+            "Last Known Good",
+            "Public-pack acceptance criteria",
+            "maximum unattended age",
+        ):
+            if token not in freshness:
+                fail(f"PPR-08 PASS evidence missing freshness policy token: {token}", errors)
+
+    launch = read_text("docs/releases/public-preview-launch-governance.md")
+    if gate_by_id.get("PPR-09", {}).get("state") == "PASS":
+        for token in (
+            "Status: **ACCEPTED FOR PUBLIC PREVIEW READINESS**",
+            "NO-GO",
+            "Emergency security revocation",
+            "public-preview-release-evidence.json",
+        ):
+            if token not in launch:
+                fail(f"PPR-09 PASS evidence missing launch-governance token: {token}", errors)
 
 
 def validate_release(data: dict, errors: list[str]) -> None:

@@ -6,14 +6,17 @@ Status timestamp: 2026-09-17
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Current control-plane main SHA: `d839bb366dbbd10282f6b6da70000d2fa4aaf826`
+- Current control-plane main SHA: `36aa628cc79a61a2e3234dc4005792d2d7f01f5c` at branch start; resolve live `main` after merge.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
+- Phase 5.10 readiness baseline: PR #42 — **MERGED**
+- Phase 5.10 README sync: PR #43 — **MERGED**
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
 - Active phase: **Phase 5.10 — Public Preview Readiness**
-- Active slice: **Phase 5.10.0 — Public Preview Readiness Baseline**
+- Baseline slice: **Phase 5.10.0 — COMPLETE / MERGED**
+- Active parallel slice: **Phase 5.10.4 — Accessibility / Freshness / Launch Governance — IN PROGRESS**
 - Public Preview readiness: **BLOCKED**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
@@ -25,9 +28,9 @@ Status timestamp: 2026-09-17
 - Desktop/Core boundary: child-process stdio protocol — ADR-0025 Accepted
 - Desktop host: **Tauri 2.x** — ADR-0026 Accepted
 
-`main` is the release authority. Phase 5.6 has completed implementation, regression closure, merge, post-merge package/smoke verification, and documentation closure. `FIRST PREVIEW READY` denotes engineering readiness only; no signed Public Preview or GA release is claimed.
+`main` is the release authority. Phase 5.6 completed implementation, regression closure, merge, post-merge package/smoke verification, and documentation closure. `FIRST PREVIEW READY` denotes engineering readiness only; no signed Public Preview or GA release is claimed.
 
-The First Preview package evidence remains bound to `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`. Subsequent documentation/governance closure advanced the control-plane `main` to `d839bb366dbbd10282f6b6da70000d2fa4aaf826` without changing the verified package bytes or frozen architecture.
+The First Preview package evidence remains bound to `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`. Subsequent control-plane and release-governance work does not change those verified package bytes or the frozen Phase 5.5/5.6 architecture.
 
 ## Phase state
 
@@ -51,7 +54,14 @@ The First Preview package evidence remains bound to `main@70afc6fdb9e5ce88afdb0d
 - Phase 5.8 — Broader API surfaces: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.10 — Public Preview Readiness: **ACTIVE**
-- Phase 5.10.0 — Public Preview Readiness Baseline: **ACTIVE**
+- Phase 5.10.0 — Public Preview Readiness Baseline: **COMPLETE / MERGED**
+- Phase 5.10.1 — Licensing / Redistribution Closure: **BLOCKED**
+- Phase 5.10.2 — Production Signing / Key Custody / Attestation: **BLOCKED**
+- Phase 5.10.3 — Public Packaging / Distribution Hardening: **BLOCKED**
+- Phase 5.10.4 — Accessibility / Freshness / Launch Governance: **IN PROGRESS**
+  - source freshness / public-pack publication policy: **PASS / POLICY CLOSED**
+  - release governance / launch / rollback / revocation criteria: **PASS / POLICY CLOSED**
+  - packaged accessibility release review: **PARTIAL / EXECUTABLE REVIEW REQUIRED**
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers are retained because frozen architecture validators use them to prove lifecycle continuity across later phases.
 
@@ -120,11 +130,11 @@ Artifacts:
 - `phase564-first-preview-package` — ID `10462114843`, digest `sha256:57d9cce8a2ec85900bbc6b4fe250eefe53b43b241ddbefd2a9a1d9aafaee6f50`;
 - `phase564-clean-windows-evidence` — ID `10463420685`, digest `sha256:456ea3aa6a7b2c84a555c2c1e60c8f31086781172ce53d530d677abd29f019d5`.
 
-The First Preview artifact remains an **unsigned portable ZIP**. Production Authenticode signing, public distribution hardening, installer/release policy and binary auto-update are later release-readiness boundaries.
+The First Preview artifact remains an **unsigned portable ZIP**. Production Authenticode signing, public distribution hardening, installer/release policy and binary auto-update remain later release-readiness boundaries.
 
 ## Phase 5.10 — Public Preview Readiness
 
-Phase 5.10 is now **ACTIVE**. The machine-readable authority is `docs/releases/phase-5.10-public-preview-readiness.json`; the human-readable gate matrix is `docs/releases/phase-5.10-public-preview-readiness.md`.
+Phase 5.10 is **ACTIVE**. The machine-readable authority is `docs/releases/phase-5.10-public-preview-readiness.json`; the human-readable gate matrix is `docs/releases/phase-5.10-public-preview-readiness.md`.
 
 Current mandatory gate state:
 
@@ -135,27 +145,36 @@ Current mandatory gate state:
 - production code signing/key custody — **BLOCKED**;
 - public packaging/distribution hardening — **BLOCKED**;
 - accessibility release review — **PARTIAL**;
-- source freshness/public-pack publication policy — **BLOCKED**;
-- release governance/launch criteria — **PARTIAL**;
+- source freshness/public-pack publication policy — **PASS**;
+- release governance/launch criteria — **PASS**;
 - supply-chain evidence — **PASS**;
 - trademark/attribution controls — **PASS**.
 
-The lack of a first-party `LICENSE` is intentionally represented as a blocker. No license family is selected by automation or documentation. Production signing provider, certificate lifecycle and HSM/KMS/key-custody design likewise remain explicit decisions rather than inferred defaults.
+New release-readiness policy controls:
+
+- `docs/releases/source-freshness-and-publication-policy.md` — source classes, refresh objectives, maximum unattended age, fail-closed publication and per-release freshness evidence;
+- `docs/releases/public-preview-launch-governance.md` — exact release authority, GO/NO-GO criteria, immutable release evidence, rollback and emergency revocation;
+- `docs/releases/accessibility-release-review.md` — packaged Windows review contract covering keyboard, Narrator, high contrast, scaling, semantics and security-significant failure states.
+
+The lack of a first-party `LICENSE` remains an explicit blocker. No license family is selected by automation or documentation. Production signing provider, certificate lifecycle and HSM/KMS/key-custody design likewise remain explicit owner/business/security decisions rather than inferred defaults.
 
 ## Release-authority sequence
 
 ```text
 FIRST PREVIEW READY — ENGINEERING READINESS       COMPLETE
         ↓
-Phase 5.10.0 readiness baseline                  ACTIVE
+Phase 5.10.0 readiness baseline                  COMPLETE / MERGED
+        ↓
+Phase 5.10.4 policy/governance closure            IN PROGRESS
+        ├─ PPR-08 freshness/publication           PASS
+        ├─ PPR-09 launch/rollback governance      PASS
+        └─ PPR-07 packaged accessibility review   PARTIAL
         ↓
 Licensing / redistribution closure               BLOCKED
         ↓
 Signing / key custody / artifact attestation     BLOCKED
         ↓
 Public packaging / distribution hardening        BLOCKED
-        ↓
-Accessibility / freshness / launch governance    PARTIAL
         ↓
 STRICT PUBLIC PREVIEW RELEASE GATE               BLOCKED
 ```
@@ -164,4 +183,4 @@ There is no open Phase 5.6 engineering blocker. Public release remains intention
 
 ## Governance
 
-Official changes remain branch → PR → CI → architecture/security review → exact-head verification → merge → post-merge verification. No mandatory gate was bypassed and no failed security assertion was relaxed merely to obtain a green run.
+Official changes remain branch → PR → CI → architecture/security review → exact-head verification → merge → post-merge verification. No mandatory gate may be bypassed and no failed security assertion may be relaxed merely to obtain a green run.

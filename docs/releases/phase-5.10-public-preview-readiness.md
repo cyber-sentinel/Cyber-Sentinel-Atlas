@@ -2,7 +2,7 @@
 
 Status: **ACTIVE**
 
-Current slice: **Phase 5.10.0 — Public Preview Readiness Baseline**
+Current parallel workstream: **Phase 5.10.4 — Accessibility / Freshness / Launch Governance**
 
 First Preview engineering readiness is already **READY**. Public Preview remains **BLOCKED** until every mandatory release-readiness gate is closed with reviewable evidence.
 
@@ -35,9 +35,9 @@ Those states are deliberately not treated as equivalent.
 | PPR-04 | Third-party redistribution closure | **BLOCKED** | `THIRD_PARTY_NOTICES.md` is fail-closed; public-pack inventory not yet closed |
 | PPR-05 | Production code signing and protected key custody | **BLOCKED** | First Preview is unsigned; provider/certificate/key-custody design not yet accepted |
 | PPR-06 | Public packaging and distribution hardening | **BLOCKED** | Verified portable ZIP exists; signed installer/public distribution channel remains open |
-| PPR-07 | Accessibility release review | **PARTIAL** | UI has accessibility/high-contrast controls; broader release review remains open |
-| PPR-08 | Source freshness and public-pack publication policy | **BLOCKED** | Provenance/versioning exists; freshness SLA and public publication criteria remain open |
-| PPR-09 | Release governance and launch criteria | **PARTIAL** | PR/CI/post-merge discipline exists; formal Public Preview launch/rollback authority remains open |
+| PPR-07 | Accessibility release review | **PARTIAL** | `docs/releases/accessibility-release-review.md` defines the packaged-app review contract; executable Windows review remains open |
+| PPR-08 | Source freshness and public-pack publication policy | **PASS** | `docs/releases/source-freshness-and-publication-policy.md` |
+| PPR-09 | Release governance and launch criteria | **PASS** | `docs/releases/public-preview-launch-governance.md` |
 | PPR-10 | Supply-chain evidence | **PASS** | Reproducible build, SBOM, linked-module/license validation and vulnerability scanning |
 | PPR-11 | Trademark and attribution controls | **PASS** | `TRADEMARKS.md`, `CITATION.cff`, `THIRD_PARTY_NOTICES.md` |
 
@@ -76,19 +76,22 @@ Those decisions require their own accepted evidence and, where applicable, legal
 ## Immediate Phase 5.10 sequence
 
 ```text
-5.10.0 Readiness baseline + machine gate                 ACTIVE
+5.10.0 Readiness baseline + machine gate                 COMPLETE
         ↓
-5.10.1 Licensing / redistribution closure               BLOCKED
+5.10.1 Licensing / redistribution closure               BLOCKED — owner/legal decision + inventory closure required
         ↓
-5.10.2 Signing / key custody / artifact attestation     BLOCKED
+5.10.2 Signing / key custody / artifact attestation     BLOCKED — provider/certificate/custody decision required
         ↓
-5.10.3 Public packaging / distribution hardening        BLOCKED
+5.10.3 Public packaging / distribution hardening        BLOCKED — depends on 5.10.2 and channel decision
         ↓
-5.10.4 Accessibility / freshness / launch governance    PARTIAL
+5.10.4 Accessibility / freshness / launch governance    IN PROGRESS
+        ├─ PPR-08 freshness/publication policy          PASS
+        ├─ PPR-09 launch/rollback governance            PASS
+        └─ PPR-07 packaged accessibility review         PARTIAL
         ↓
 Strict Public Preview readiness gate                    BLOCKED
         ↓
 PUBLIC PREVIEW READY
 ```
 
-The sequence may be parallelized, but `PUBLIC PREVIEW READY` requires every mandatory gate to pass.
+The sequence is intentionally parallelizable. Closing PPR-08 and PPR-09 does not waive PPR-03 through PPR-07. `PUBLIC PREVIEW READY` requires every mandatory gate to pass against the exact release-authority commit.

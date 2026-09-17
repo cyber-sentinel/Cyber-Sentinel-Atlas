@@ -4,11 +4,13 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `d839bb366dbbd10282f6b6da70000d2fa4aaf826`
-- Current control-plane main SHA: `d839bb366dbbd10282f6b6da70000d2fa4aaf826`
+- Last Reviewed Main SHA: `36aa628cc79a61a2e3234dc4005792d2d7f01f5c`
+- Current control-plane main SHA: `36aa628cc79a61a2e3234dc4005792d2d7f01f5c` at branch start; resolve live `main` after merge.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
+- Phase 5.10 readiness baseline: PR #42 — **MERGED**
+- Phase 5.10 README sync: PR #43 — **MERGED**
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
@@ -52,7 +54,14 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
 - Phase 5.8 — Broader API surfaces: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.10 — Public Preview Readiness: **ACTIVE**
-  - 5.10.0 Public Preview Readiness Baseline: **ACTIVE**
+  - 5.10.0 Public Preview Readiness Baseline: **COMPLETE / MERGED**
+  - 5.10.1 Licensing / Redistribution Closure: **BLOCKED**
+  - 5.10.2 Production Signing / Key Custody / Attestation: **BLOCKED**
+  - 5.10.3 Public Packaging / Distribution Hardening: **BLOCKED**
+  - 5.10.4 Accessibility / Freshness / Launch Governance: **IN PROGRESS**
+    - PPR-08 source freshness/public-pack publication policy: **PASS**
+    - PPR-09 release governance/launch criteria: **PASS**
+    - PPR-07 packaged accessibility release review: **PARTIAL**
   - Public Preview readiness: **BLOCKED**
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers above are compatibility invariants consumed by historical architecture gates even though the aggregate Phase 5.5 boundary is frozen.
@@ -143,16 +152,22 @@ Current mandatory blocker set:
 - third-party redistribution closure — **BLOCKED**;
 - production code signing and protected key custody — **BLOCKED**;
 - public packaging and distribution hardening — **BLOCKED**;
-- accessibility release review — **PARTIAL**;
-- source freshness/public-pack publication policy — **BLOCKED**;
-- release governance and launch criteria — **PARTIAL**.
+- accessibility release review — **PARTIAL**.
 
 Already closed supporting gates:
 
 - First Preview engineering baseline — **PASS**;
 - security disclosure/supported-release policy — **PASS**;
+- source freshness/public-pack publication policy — **PASS**;
+- release governance/launch criteria — **PASS**;
 - supply-chain evidence — **PASS**;
 - trademark/attribution controls — **PASS**.
+
+The source freshness policy is defined in `docs/releases/source-freshness-and-publication-policy.md`. It establishes source-specific refresh objectives, maximum unattended age, staleness handling, Last Known Good behavior and public-pack acceptance evidence.
+
+The launch governance contract is defined in `docs/releases/public-preview-launch-governance.md`. It establishes exact release authority, strict GO/NO-GO criteria, immutable release evidence, rollback, withdrawal and emergency security revocation.
+
+The accessibility acceptance contract is defined in `docs/releases/accessibility-release-review.md`. PPR-07 remains PARTIAL until the exact packaged Windows candidate completes the keyboard, Narrator, high-contrast, scaling and semantic review with executable evidence.
 
 A baseline CI gate validates that blockers are represented honestly. A separate strict release mode fails until every mandatory Public Preview gate is `PASS` and release evidence exists.
 
@@ -172,26 +187,29 @@ ADR-0001 through ADR-0026 are accepted according to repository history. Current 
 - production signing provider / HSM/KMS and certificate lifecycle;
 - public installer/distribution policy beyond First Preview portable ZIP;
 - application binary update mechanism;
-- public-pack source freshness SLA and publication policy;
 - broader graph persistence/index implementation;
 - Detection Intermediate Representation;
 - remote content distribution/CDN topology;
 - Grounded AI runtime.
+
+The source-freshness/public-pack publication policy and release-governance/launch criteria are no longer open policy decisions; they now require per-release operational evidence rather than architecture selection.
 
 ## Immediate Sequence
 
 ```text
 Phase 5.6 / First Preview engineering closure                 COMPLETE
        ↓
-Phase 5.10.0 readiness baseline                              ACTIVE
+Phase 5.10.0 readiness baseline                              COMPLETE / MERGED
+       ↓
+Phase 5.10.4 freshness + launch governance                   PASS / POLICY CLOSED
+       ↓
+Phase 5.10.4 packaged accessibility review                   PARTIAL
        ↓
 Licensing / third-party redistribution                       BLOCKED
        ↓
 Signing / key custody / artifact attestation                 BLOCKED
        ↓
 Public packaging / distribution hardening                    BLOCKED
-       ↓
-Accessibility / freshness / launch governance                PARTIAL
        ↓
 STRICT PUBLIC PREVIEW READINESS GATE                         BLOCKED
 ```
