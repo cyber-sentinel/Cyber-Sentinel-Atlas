@@ -6,6 +6,11 @@ on:
       - main
       - phase-5.10.5-usable-data-preview
     paths:
+      - 'README.md'
+      - 'docs/current-status.md'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - 'docs/releases/**'
       - 'benchmarks/desktop/phase56/candidates/tauri/**'
       - 'shared-core/go/**'
       - 'tools/pack/**'
@@ -19,6 +24,11 @@ on:
     branches:
       - main
     paths:
+      - 'README.md'
+      - 'docs/current-status.md'
+      - 'docs/project-state.md'
+      - 'docs/roadmap.md'
+      - 'docs/releases/**'
       - 'benchmarks/desktop/phase56/candidates/tauri/**'
       - 'shared-core/go/**'
       - 'tools/pack/**'
@@ -369,9 +379,20 @@ jobs:
           New-Item -ItemType Directory -Force -Path $BadLocal | Out-Null
           $OldLocal = $env:LOCALAPPDATA
           $env:LOCALAPPDATA = $BadLocal
+          $FailureOutput = Join-Path $env:RUNNER_TEMP 'phase5105-tamper-probe-output.txt'
+          $FailureError = Join-Path $env:RUNNER_TEMP 'phase5105-tamper-probe-error.txt'
           try {
-            python tools/release/probe_engineering_preview.py --core (Join-Path $Tampered 'atlas-core.exe') --output (Join-Path $env:RUNNER_TEMP 'must-not-pass.json')
-            if ($LASTEXITCODE -eq 0) { throw 'tampered signed target was accepted' }
+            $Python = (Get-Command python).Source
+            $Probe = Join-Path (Get-Location) 'tools\release\probe_engineering_preview.py'
+            $Core = Join-Path $Tampered 'atlas-core.exe'
+            $MustNotPass = Join-Path $env:RUNNER_TEMP 'must-not-pass.json'
+            $p = Start-Process -FilePath $Python -ArgumentList @($Probe,'--core',$Core,'--output',$MustNotPass) -Wait -PassThru -RedirectStandardOutput $FailureOutput -RedirectStandardError $FailureError
+            if ($p.ExitCode -eq 0) { throw 'tampered signed target was accepted' }
+            $failureText = ((Get-Content -Raw $FailureOutput -ErrorAction SilentlyContinue) + "`n" + (Get-Content -Raw $FailureError -ErrorAction SilentlyContinue))
+            if ($failureText -notmatch 'TUF manifest verification failed' -or $failureText -notmatch 'hash verification failed') {
+              throw "tampered pack failed for an unexpected reason: $failureText"
+            }
+            if (Test-Path -LiteralPath $MustNotPass) { throw 'tampered-pack probe unexpectedly emitted success evidence' }
           }
           finally { $env:LOCALAPPDATA = $OldLocal }
 
