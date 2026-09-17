@@ -13,6 +13,7 @@ from typing import Any, BinaryIO
 MAX_FRAME = 8 * 1024 * 1024
 EXPECTED_EVENT = "atlas:event:microsoft.windows.security:4688"
 EXPECTED_SYSMON = "atlas:event:microsoft.sysmon:1"
+EXPECTED_SEARCH_CONTRACT = "1.0.0"
 
 
 def write_frame(stream: BinaryIO, value: dict[str, Any]) -> None:
@@ -58,6 +59,20 @@ def request(
             f"{method} failed: {error.get('code', 'UNKNOWN')}: {error.get('message', '')}"
         )
     return response.get("result")
+
+
+def search_contains_target(result: Any, target_id: str) -> bool:
+    if not isinstance(result, dict):
+        return False
+    if result.get("search_contract_version") != EXPECTED_SEARCH_CONTRACT:
+        return False
+    matches = result.get("matches")
+    if not isinstance(matches, list):
+        return False
+    return any(
+        isinstance(match, dict) and match.get("target_id") == target_id
+        for match in matches
+    )
 
 
 def main() -> int:
@@ -123,6 +138,11 @@ def main() -> int:
             "search.query",
             {"query": "4688", "graph_depth": 1, "limit": 10},
         )
+        windows_4688_search_ok = search_contains_target(search_4688, EXPECTED_EVENT)
+        if not windows_4688_search_ok:
+            raise RuntimeError(
+                f"Windows Event 4688 was not returned by deterministic search: {search_4688}"
+            )
         record_4688 = request(
             process.stdin,
             process.stdout,
@@ -140,6 +160,11 @@ def main() -> int:
             "search.query",
             {"query": "Sysmon 1", "graph_depth": 1, "limit": 10},
         )
+        sysmon_1_search_ok = search_contains_target(search_sysmon, EXPECTED_SYSMON)
+        if not sysmon_1_search_ok:
+            raise RuntimeError(
+                f"Sysmon Event 1 was not returned by deterministic search: {search_sysmon}"
+            )
         record_sysmon = request(
             process.stdin,
             process.stdout,
@@ -174,9 +199,9 @@ def main() -> int:
             "pack_id": status.get("pack_id"),
             "pack_version": status.get("pack_version"),
             "generation_id": status.get("generation_id"),
-            "windows_4688_search_ok": search_4688 is not None,
+            "windows_4688_search_ok": windows_4688_search_ok,
             "windows_4688_record_ok": True,
-            "sysmon_1_search_ok": search_sysmon is not None,
+            "sysmon_1_search_ok": sysmon_1_search_ok,
             "sysmon_1_record_ok": True,
             "graph_expand_ok": True,
         }
