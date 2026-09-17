@@ -310,7 +310,7 @@ jobs:
           if ($probe.status_result.core_commit -ne $env:GITHUB_SHA) { throw 'packaged core commit mismatch' }
           Copy-Item $Evidence package-artifact\phase5105-host-probe.json -Force
 
-      - name: Prove 4688 Sysmon record and graph from packaged bytes
+      - name: Prove exact 4688 Sysmon record and graph from packaged bytes
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
@@ -319,12 +319,12 @@ jobs:
           python tools/release/probe_engineering_preview.py --core $Core --output $Evidence
           if ($LASTEXITCODE -ne 0) { throw 'packaged data acceptance probe failed' }
           $probe = Get-Content -Raw $Evidence | ConvertFrom-Json
-          if ($probe.pack_ready -ne $true -or $probe.windows_4688_record_ok -ne $true -or $probe.sysmon_1_record_ok -ne $true -or $probe.graph_expand_ok -ne $true) {
+          if ($probe.pack_ready -ne $true -or $probe.windows_4688_search_ok -ne $true -or $probe.windows_4688_record_ok -ne $true -or $probe.sysmon_1_search_ok -ne $true -or $probe.sysmon_1_record_ok -ne $true -or $probe.graph_expand_ok -ne $true) {
             throw 'usable data preview acceptance invariant failed'
           }
           Copy-Item $Evidence package-artifact\phase5105-data-probe.json -Force
 
-      - name: Prove tampered first-run pack fails closed
+      - name: Prove TUF target tampering fails closed
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
@@ -332,7 +332,38 @@ jobs:
           Remove-Item -Recurse -Force $Tampered -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Force -Path $Tampered | Out-Null
           Copy-Item -Path (Join-Path $env:PHASE5105_CLEAN '*') -Destination $Tampered -Recurse -Force
-          Add-Content -Encoding ascii -NoNewline -Path (Join-Path $Tampered 'atlas-engineering-preview.atlaspack') -Value 'tamper'
+          $Pack = Join-Path $Tampered 'atlas-engineering-preview.atlaspack'
+          $TamperedPack = "$Pack.tampered"
+          $TamperScript = Join-Path $env:RUNNER_TEMP 'phase5105-tamper-pack.py'
+          @'
+          import sys
+          import zipfile
+
+          source, destination = sys.argv[1], sys.argv[2]
+          target = "targets/atlas/pack-manifest.json"
+          found = False
+          with zipfile.ZipFile(source, "r") as src, zipfile.ZipFile(
+              destination, "w", compression=zipfile.ZIP_STORED, allowZip64=True
+          ) as dst:
+              for info in src.infolist():
+                  data = src.read(info.filename)
+                  if info.filename == target:
+                      if not data:
+                          raise SystemExit("signed target is unexpectedly empty")
+                      data = bytes([data[0] ^ 0x01]) + data[1:]
+                      found = True
+                  clone = zipfile.ZipInfo(info.filename, date_time=info.date_time)
+                  clone.compress_type = info.compress_type
+                  clone.create_system = info.create_system
+                  clone.external_attr = info.external_attr
+                  clone.flag_bits = info.flag_bits
+                  dst.writestr(clone, data)
+          if not found:
+              raise SystemExit(f"signed target not found: {target}")
+          '@ | Set-Content -Encoding utf8 $TamperScript
+          python $TamperScript $Pack $TamperedPack
+          if ($LASTEXITCODE -ne 0) { throw 'failed to construct valid ZIP with tampered signed target' }
+          Move-Item -Force $TamperedPack $Pack
           $BadLocal = Join-Path $env:RUNNER_TEMP 'atlas-phase5105-tampered-localappdata'
           Remove-Item -Recurse -Force $BadLocal -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Force -Path $BadLocal | Out-Null
@@ -340,7 +371,7 @@ jobs:
           $env:LOCALAPPDATA = $BadLocal
           try {
             python tools/release/probe_engineering_preview.py --core (Join-Path $Tampered 'atlas-core.exe') --output (Join-Path $env:RUNNER_TEMP 'must-not-pass.json')
-            if ($LASTEXITCODE -eq 0) { throw 'tampered first-run pack was accepted' }
+            if ($LASTEXITCODE -eq 0) { throw 'tampered signed target was accepted' }
           }
           finally { $env:LOCALAPPDATA = $OldLocal }
 
