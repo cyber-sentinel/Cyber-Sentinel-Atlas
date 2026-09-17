@@ -264,9 +264,9 @@ def main() -> int:
     root_path.write_bytes(bootstrap_root)
     evidence.update(
         {
-            "atlaspack_sha256": result["sha256"],
-            "atlaspack_length": result["length"],
-            "atlaspack_file_count": result["file_count"],
+            "atlaspack_sha256": result.sha256,
+            "atlaspack_length": result.length,
+            "atlaspack_file_count": result.file_count,
             "bootstrap_root_sha256": sha256_hex(bootstrap_root),
         }
     )
