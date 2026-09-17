@@ -38,7 +38,7 @@ Status: **COMPLETE / MERGED / POST-MERGE VERIFIED / FROZEN**
 
 Delivered TUF-based signed content-pack trust, secure `.atlaspack` extraction/verification, offline operation, trusted-time/highest-seen rollback guards, immutable generations, atomic activation/LKG behavior, production Go Shared Core, canonical/search/graph read models, stdio protocol, conformance, reproducibility and supply-chain closure.
 
-ADR-0023, ADR-0024 and ADR-0025 remain authoritative. Phase 5.6 consumes this boundary but may not redefine it.
+ADR-0023, ADR-0024 and ADR-0025 remain authoritative. Later phases consume this boundary but may not redefine it.
 
 ### Phase 5.5.2 — Verified Pack Runtime
 
@@ -100,7 +100,7 @@ The selected Tauri host exposes only the seven explicit First Preview applicatio
 
 Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
-Release-authority workflow `Phase 5.6.4 Windows First Preview Package`, run `35133827422`, completed successfully on `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`.
+Release-authority workflow `Phase 5.6.4 Windows First Preview Package`, run `35133827422`, completed successfully on First Preview package baseline `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`.
 
 The post-merge workflow built one byte-bound portable Windows package and consumed the same immutable artifact on clean GitHub-hosted Windows. It verified package/payload SHA-256 and size binding, exact Shared Core commit binding, relocation to a path containing spaces, offline/no-default-listener behavior, deliberate corrupted-sidecar rejection, recovery, WebView2 prerequisite handling without ATLAS runtime bootstrap, GUI liveness, zero TCP listeners, and zero UDP endpoints owned by ATLAS or Shared Core.
 
@@ -109,7 +109,7 @@ Post-merge artifacts:
 - `phase564-first-preview-package` — artifact `10462114843`, digest `sha256:57d9cce8a2ec85900bbc6b4fe250eefe53b43b241ddbefd2a9a1d9aafaee6f50`;
 - `phase564-clean-windows-evidence` — artifact `10463420685`, digest `sha256:456ea3aa6a7b2c84a555c2c1e60c8f31086781172ce53d530d677abd29f019d5`.
 
-The First Preview deliverable is an **unsigned portable ZIP**. Authenticode signing, installer/public distribution hardening and binary auto-update remain later release-readiness boundaries.
+The First Preview deliverable is an **unsigned portable ZIP**. Authenticode signing, installer/public distribution hardening and binary auto-update are later release-readiness boundaries.
 
 ### Phase 5.6 release closure
 
@@ -151,12 +151,71 @@ Only after deterministic retrieval/provenance and First Preview are mature: cite
 
 ## Phase 5.10 — Public Preview Readiness
 
-Status: **PLANNED**
+Status: **ACTIVE**
 
-Includes final security review, third-party licensing/redistribution closure, accessibility, contributor workflow, source freshness, production signing, public release packaging/documentation and launch criteria.
+Phase 5.10 closes the release-engineering, legal/redistribution, accessibility and publication boundaries required to move from an engineering-ready First Preview to a controlled Public Preview.
+
+### Phase 5.10.0 — Public Preview Readiness Baseline
+
+Status: **ACTIVE**
+
+Delivered or in progress:
+
+- machine-readable readiness manifest at `docs/releases/phase-5.10-public-preview-readiness.json`;
+- human-readable gate matrix at `docs/releases/phase-5.10-public-preview-readiness.md`;
+- baseline validator plus separate strict `--release` mode;
+- GitHub Actions readiness workflow;
+- public-source/pre-preview security reporting policy alignment;
+- explicit distinction between current control-plane `main` and the immutable First Preview package baseline.
+
+Current mandatory gate state:
+
+| Gate | State |
+| --- | --- |
+| First Preview engineering baseline | **PASS** |
+| Security disclosure / supported-release policy | **PASS** |
+| First-party licensing decision | **BLOCKED** |
+| Third-party redistribution closure | **BLOCKED** |
+| Production code signing / key custody | **BLOCKED** |
+| Public packaging / distribution hardening | **BLOCKED** |
+| Accessibility release review | **PARTIAL** |
+| Source freshness / public-pack publication policy | **BLOCKED** |
+| Release governance / launch criteria | **PARTIAL** |
+| Supply-chain evidence | **PASS** |
+| Trademark / attribution controls | **PASS** |
+
+### Phase 5.10.1 — Licensing & Redistribution Closure
+
+Status: **BLOCKED**
+
+Requires an explicit first-party licensing decision plus exact third-party redistribution clearance for the public release payload. Automation will not choose a license on behalf of the project owner.
+
+### Phase 5.10.2 — Production Signing & Artifact Attestation
+
+Status: **BLOCKED**
+
+Requires an accepted code-signing certificate/provider, certificate lifecycle, protected key custody (for example an accepted HSM/KMS model), signing workflow, verification policy and revocation/rotation procedure. No provider is selected by this roadmap.
+
+### Phase 5.10.3 — Public Packaging & Distribution Hardening
+
+Status: **BLOCKED**
+
+Requires the signed installer or other approved distribution format, trusted publication channel, release metadata/checksums, rollback/recovery policy and public installation/update documentation.
+
+### Phase 5.10.4 — Accessibility, Freshness & Launch Governance
+
+Status: **PARTIAL**
+
+Requires broader accessibility release review, source-freshness/public-pack acceptance policy, launch checklist, publication authority, incident/revocation process and explicit go/no-go criteria.
+
+### Public Preview strict release gate
+
+Status: **BLOCKED**
+
+`PUBLIC PREVIEW READY` may be declared only when every mandatory machine-readable gate is `PASS` and strict release validation succeeds with concrete release evidence.
 
 ## Expansion After MVP
 
 The architecture remains intended to expand beyond the Windows-first MVP to Linux/macOS, Microsoft 365/Exchange/SharePoint, Azure/Entra, AWS, Google Cloud, containers/Kubernetes/OpenShift, DevOps/CI-CD, SQL/NoSQL databases, LOLBAS/GTFOBins and broader DFIR/IR/deception content.
 
-Architecture support does not imply First Preview ingestion or delivery of every domain.
+Architecture support does not imply First Preview or Public Preview ingestion/delivery of every domain.
