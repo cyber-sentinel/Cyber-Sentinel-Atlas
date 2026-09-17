@@ -6,14 +6,17 @@ Status timestamp: 2026-09-17
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Current control-plane main SHA: `d839bb366dbbd10282f6b6da70000d2fa4aaf826`
+- Reviewed control-plane main baseline SHA: `36aa628cc79a61a2e3234dc4005792d2d7f01f5c`
+- Live `main` SHA: resolve from the GitHub branch tip; this closure document does not self-reference its future merge commit
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
+- Phase 5.10.0 readiness baseline vehicle: PR #42 — **MERGED / POST-MERGE VERIFIED**
+- Phase 5.10 README synchronization: PR #43 — **MERGED / POST-MERGE VERIFIED**
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
 - Active phase: **Phase 5.10 — Public Preview Readiness**
-- Active slice: **Phase 5.10.0 — Public Preview Readiness Baseline**
+- Phase 5.10.0 — Public Preview Readiness Baseline: **COMPLETE / MERGED / POST-MERGE BASELINE VERIFIED**
 - Public Preview readiness: **BLOCKED**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
@@ -25,9 +28,9 @@ Status timestamp: 2026-09-17
 - Desktop/Core boundary: child-process stdio protocol — ADR-0025 Accepted
 - Desktop host: **Tauri 2.x** — ADR-0026 Accepted
 
-`main` is the release authority. Phase 5.6 has completed implementation, regression closure, merge, post-merge package/smoke verification, and documentation closure. `FIRST PREVIEW READY` denotes engineering readiness only; no signed Public Preview or GA release is claimed.
+`main` is the release authority. Phase 5.6 completed implementation, regression closure, merge, post-merge package/smoke verification, and documentation closure. `FIRST PREVIEW READY` denotes engineering readiness only; no signed Public Preview or GA release is claimed.
 
-The First Preview package evidence remains bound to `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`. Subsequent documentation/governance closure advanced the control-plane `main` to `d839bb366dbbd10282f6b6da70000d2fa4aaf826` without changing the verified package bytes or frozen architecture.
+The First Preview package evidence remains immutably bound to `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`. Phase 5.10.0 subsequently established the Public Preview readiness control plane and machine-enforced gate model without changing those verified package bytes or the frozen architecture.
 
 ## Phase state
 
@@ -51,7 +54,7 @@ The First Preview package evidence remains bound to `main@70afc6fdb9e5ce88afdb0d
 - Phase 5.8 — Broader API surfaces: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.10 — Public Preview Readiness: **ACTIVE**
-- Phase 5.10.0 — Public Preview Readiness Baseline: **ACTIVE**
+- Phase 5.10.0 — Public Preview Readiness Baseline: **COMPLETE / MERGED / POST-MERGE BASELINE VERIFIED**
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers are retained because frozen architecture validators use them to prove lifecycle continuity across later phases.
 
@@ -124,7 +127,7 @@ The First Preview artifact remains an **unsigned portable ZIP**. Production Auth
 
 ## Phase 5.10 — Public Preview Readiness
 
-Phase 5.10 is now **ACTIVE**. The machine-readable authority is `docs/releases/phase-5.10-public-preview-readiness.json`; the human-readable gate matrix is `docs/releases/phase-5.10-public-preview-readiness.md`.
+Phase 5.10 remains **ACTIVE** while slice 5.10.0 is **COMPLETE / MERGED / POST-MERGE BASELINE VERIFIED**. The machine-readable authority is `docs/releases/phase-5.10-public-preview-readiness.json`; the human-readable gate matrix is `docs/releases/phase-5.10-public-preview-readiness.md`.
 
 Current mandatory gate state:
 
@@ -147,7 +150,7 @@ The lack of a first-party `LICENSE` is intentionally represented as a blocker. N
 ```text
 FIRST PREVIEW READY — ENGINEERING READINESS       COMPLETE
         ↓
-Phase 5.10.0 readiness baseline                  ACTIVE
+Phase 5.10.0 readiness baseline                  COMPLETE / MERGED / VERIFIED
         ↓
 Licensing / redistribution closure               BLOCKED
         ↓
