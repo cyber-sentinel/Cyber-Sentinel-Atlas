@@ -4,11 +4,15 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
+- Last Reviewed Main SHA: `d839bb366dbbd10282f6b6da70000d2fa4aaf826`
+- Current control-plane main SHA: `d839bb366dbbd10282f6b6da70000d2fa4aaf826`
+- First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
+- Phase 5.6 documentation closure: PR #41 — **MERGED**
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
+- Active phase: **Phase 5.10 — Public Preview Readiness**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
 - Search contract version: `1.0.0`
@@ -42,18 +46,20 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
   - 5.6.3 First Preview UI: **COMPLETE / MERGED / VERIFIED**
   - 5.6.4 Windows Packaging / Clean-Machine Smoke: **COMPLETE / MERGED / POST-MERGE VERIFIED**
     - authoritative post-merge run: `35133827422` — **SUCCESS**
-    - authoritative main SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
+    - First Preview package release baseline: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - First Preview engineering readiness: **READY**
 - Phase 5.7 — Web / PWA: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.8 — Broader API surfaces: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
-- Phase 5.10 — Public Preview Readiness: **PLANNED**
+- Phase 5.10 — Public Preview Readiness: **ACTIVE**
+  - 5.10.0 Public Preview Readiness Baseline: **ACTIVE**
+  - Public Preview readiness: **BLOCKED**
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers above are compatibility invariants consumed by historical architecture gates even though the aggregate Phase 5.5 boundary is frozen.
 
 ## Frozen Architecture
 
-The following remain authoritative and may not drift to simplify the Desktop host:
+The following remain authoritative and may not drift to simplify later release work:
 
 - exactly seven canonical `AtlasRecord` families under `schemas/v1/`;
 - canonical identifiers remain provider/entity scoped;
@@ -101,7 +107,7 @@ The First Preview is intentionally constrained to analyst-critical functionality
 
 ## Post-Merge Packaging Evidence
 
-Phase 5.6.4 post-merge run `35133827422` built the selected Tauri host and exact production Shared Core from authoritative `main`, produced one byte-bound portable package, and consumed the same immutable artifact on clean GitHub-hosted Windows.
+Phase 5.6.4 post-merge run `35133827422` built the selected Tauri host and exact production Shared Core from First Preview package release baseline `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`, produced one byte-bound portable package, and consumed the same immutable artifact on clean GitHub-hosted Windows.
 
 Verified acceptance included:
 
@@ -121,7 +127,34 @@ Artifacts:
 - package artifact `10462114843`, digest `sha256:57d9cce8a2ec85900bbc6b4fe250eefe53b43b241ddbefd2a9a1d9aafaee6f50`;
 - clean-Windows evidence artifact `10463420685`, digest `sha256:456ea3aa6a7b2c84a555c2c1e60c8f31086781172ce53d530d677abd29f019d5`.
 
-First Preview packaging is intentionally unsigned. Production Authenticode signing and public distribution/release hardening remain later release-readiness work. Binary auto-update is not part of First Preview.
+First Preview packaging is intentionally unsigned. Production Authenticode signing and public distribution/release hardening are Phase 5.10 work. Binary auto-update is not part of First Preview.
+
+## Phase 5.10 Public Preview Readiness Boundary
+
+Phase 5.10 establishes a strict separation between First Preview engineering readiness and Public Preview publication authority.
+
+Machine-readable authority: `docs/releases/phase-5.10-public-preview-readiness.json`.
+
+Human-readable gate matrix: `docs/releases/phase-5.10-public-preview-readiness.md`.
+
+Current mandatory blocker set:
+
+- first-party licensing decision — **BLOCKED**;
+- third-party redistribution closure — **BLOCKED**;
+- production code signing and protected key custody — **BLOCKED**;
+- public packaging and distribution hardening — **BLOCKED**;
+- accessibility release review — **PARTIAL**;
+- source freshness/public-pack publication policy — **BLOCKED**;
+- release governance and launch criteria — **PARTIAL**.
+
+Already closed supporting gates:
+
+- First Preview engineering baseline — **PASS**;
+- security disclosure/supported-release policy — **PASS**;
+- supply-chain evidence — **PASS**;
+- trademark/attribution controls — **PASS**.
+
+A baseline CI gate validates that blockers are represented honestly. A separate strict release mode fails until every mandatory Public Preview gate is `PASS` and release evidence exists.
 
 ## Accepted ADRs
 
@@ -135,9 +168,11 @@ ADR-0001 through ADR-0026 are accepted according to repository history. Current 
 
 ## Technology Decisions Still Open
 
-- production signing provider / HSM/KMS;
+- first-party licensing model;
+- production signing provider / HSM/KMS and certificate lifecycle;
 - public installer/distribution policy beyond First Preview portable ZIP;
 - application binary update mechanism;
+- public-pack source freshness SLA and publication policy;
 - broader graph persistence/index implementation;
 - Detection Intermediate Representation;
 - remote content distribution/CDN topology;
@@ -146,19 +181,21 @@ ADR-0001 through ADR-0026 are accepted according to repository history. Current 
 ## Immediate Sequence
 
 ```text
-Phase 5.6 implementation                                      COMPLETE
+Phase 5.6 / First Preview engineering closure                 COMPLETE
        ↓
-PR #39 final regression CI                                   COMPLETE / ALL GREEN
+Phase 5.10.0 readiness baseline                              ACTIVE
        ↓
-Merge to main                                                COMPLETE
+Licensing / third-party redistribution                       BLOCKED
        ↓
-Post-merge package + clean-Windows verification             COMPLETE / VERIFIED
+Signing / key custody / artifact attestation                 BLOCKED
        ↓
-FIRST PREVIEW READY — ENGINEERING READINESS
+Public packaging / distribution hardening                    BLOCKED
        ↓
-Phase 5.10 public-preview/signing/distribution readiness     PLANNED
+Accessibility / freshness / launch governance                PARTIAL
+       ↓
+STRICT PUBLIC PREVIEW READINESS GATE                         BLOCKED
 ```
 
-There is no remaining Phase 5.6 engineering blocker. The public release remains intentionally pre-preview/unreleased until the separate signing, licensing/publication, accessibility and distribution-readiness boundaries are closed.
+There is no remaining Phase 5.6 engineering blocker. The public release remains intentionally pre-preview/unreleased until the mandatory Phase 5.10 boundaries are closed.
 
 No mandatory gate was bypassed.
