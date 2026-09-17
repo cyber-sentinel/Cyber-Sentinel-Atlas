@@ -13,7 +13,8 @@ Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: an o
 
 ATLAS is built for security teams that need investigation context to be **deterministic, attributable, reviewable, offline-capable, and operationally safe** rather than dependent on scattered references, opaque retrieval, or ungrounded AI output.
 
-> **Current maturity:** First Preview engineering readiness **READY**
+> **First Preview engineering readiness:** READY
+> **Current maturity:** Engineering-ready First Preview
 > **Release state:** Pre-preview / unreleased
 > **Repository visibility:** Public
 > **Active workstream:** Phase 5.10 — Public Preview Readiness
