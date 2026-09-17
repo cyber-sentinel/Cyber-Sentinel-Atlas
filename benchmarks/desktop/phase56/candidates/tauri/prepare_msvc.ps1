@@ -27,6 +27,44 @@ function Import-CmdEnvironment {
     }
 }
 
+function Invoke-PinnedDownloadWithRetry {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Uri,
+        [Parameter(Mandatory = $true)]
+        [string]$OutFile,
+        [int]$MaxAttempts = 3
+    )
+
+    if ($MaxAttempts -lt 1 -or $MaxAttempts -gt 5) {
+        throw "Invalid bounded download retry count: $MaxAttempts"
+    }
+
+    $lastError = $null
+    for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
+        Remove-Item -Force $OutFile -ErrorAction SilentlyContinue
+        try {
+            Invoke-WebRequest -Uri $Uri -OutFile $OutFile
+            if (-not (Test-Path -LiteralPath $OutFile -PathType Leaf)) {
+                throw 'download command returned without creating the expected file'
+            }
+            return
+        }
+        catch {
+            $lastError = $_
+            Remove-Item -Force $OutFile -ErrorAction SilentlyContinue
+            if ($attempt -ge $MaxAttempts) {
+                break
+            }
+            $delaySeconds = 2 * $attempt
+            Write-Warning "Pinned download transport attempt $attempt/$MaxAttempts failed; retrying after $delaySeconds seconds. URI: $Uri"
+            Start-Sleep -Seconds $delaySeconds
+        }
+    }
+
+    throw "Pinned download failed after $MaxAttempts transport attempts: $Uri. Last error: $($lastError.Exception.Message)"
+}
+
 function Install-PinnedLlvmTools {
     $version = '22.1.8'
     $expectedSha256 = '16e5709785fef73c854646241c4a92c5cd574318d1b33c63330dd7721903e55c'
@@ -38,7 +76,7 @@ function Install-PinnedLlvmTools {
     Remove-Item -Recurse -Force $root -ErrorAction SilentlyContinue
     Remove-Item -Force $installer -ErrorAction SilentlyContinue
 
-    Invoke-WebRequest -Uri $url -OutFile $installer
+    Invoke-PinnedDownloadWithRetry -Uri $url -OutFile $installer
     $actualSha256 = (Get-FileHash -Algorithm SHA256 $installer).Hash.ToLowerInvariant()
     if ($actualSha256 -ne $expectedSha256) {
         throw "LLVM installer SHA-256 mismatch: expected $expectedSha256, got $actualSha256"
@@ -113,7 +151,7 @@ function Install-PinnedCargoXwin {
     Remove-Item -Force $archive -ErrorAction SilentlyContinue
     New-Item -ItemType Directory -Force -Path $root | Out-Null
 
-    Invoke-WebRequest -Uri $url -OutFile $archive
+    Invoke-PinnedDownloadWithRetry -Uri $url -OutFile $archive
     $actualSha256 = (Get-FileHash -Algorithm SHA256 $archive).Hash.ToLowerInvariant()
     if ($actualSha256 -ne $expectedSha256) {
         throw "cargo-xwin archive SHA-256 mismatch: expected $expectedSha256, got $actualSha256"
