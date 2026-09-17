@@ -56,21 +56,21 @@
       "name": "Accessibility release review",
       "mandatory": true,
       "state": "PARTIAL",
-      "evidence": "First Preview includes accessibility labels/high-contrast controls; broader release accessibility review remains open"
+      "evidence": "docs/releases/accessibility-release-review.md defines the packaged-app acceptance contract; executable Windows Narrator/keyboard/high-contrast/DPI release review remains open"
     },
     {
       "id": "PPR-08",
       "name": "Source freshness and public-pack publication policy",
       "mandatory": true,
-      "state": "BLOCKED",
-      "evidence": "Ingestion provenance/versioning exists; public release freshness SLA and publication acceptance policy are not yet closed"
+      "state": "PASS",
+      "evidence": "docs/releases/source-freshness-and-publication-policy.md defines source classes, refresh thresholds, fail-closed staleness handling, public-pack acceptance and per-release evidence requirements"
     },
     {
       "id": "PPR-09",
       "name": "Release governance and launch criteria",
       "mandatory": true,
-      "state": "PARTIAL",
-      "evidence": "Branch/PR/CI/post-merge discipline exists; Public Preview launch checklist, rollback and publication authority remain to be formalized"
+      "state": "PASS",
+      "evidence": "docs/releases/public-preview-launch-governance.md defines release authority, mandatory go/no-go evidence, immutable release records, rollback and emergency revocation"
     },
     {
       "id": "PPR-10",
