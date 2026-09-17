@@ -1,0 +1,43 @@
+name: Phase 5.10.1 Redistribution Closure
+
+on:
+  push:
+    branches:
+      - main
+      - phase-5.10.1-redistribution-closure-prep
+    paths:
+      - 'THIRD_PARTY_NOTICES.md'
+      - 'docs/releases/third-party-redistribution-closure.md'
+      - 'docs/releases/third-party-redistribution-inventory.json'
+      - 'tools/release/validate_redistribution_inventory.py'
+      - '.github/workflows/phase5101-redistribution-closure.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'THIRD_PARTY_NOTICES.md'
+      - 'docs/releases/third-party-redistribution-closure.md'
+      - 'docs/releases/third-party-redistribution-inventory.json'
+      - 'tools/release/validate_redistribution_inventory.py'
+      - '.github/workflows/phase5101-redistribution-closure.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: validate PPR-04 redistribution evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact head
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Validate fail-closed redistribution inventory
+        run: python tools/release/validate_redistribution_inventory.py
