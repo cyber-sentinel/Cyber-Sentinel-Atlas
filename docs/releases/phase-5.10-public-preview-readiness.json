@@ -35,7 +35,7 @@
       "name": "Third-party redistribution closure",
       "mandatory": true,
       "state": "BLOCKED",
-      "evidence": "THIRD_PARTY_NOTICES.md defines fail-closed inventory requirements; exact redistributable public-pack inventory is not yet closed"
+      "evidence": "THIRD_PARTY_NOTICES.md plus docs/releases/third-party-redistribution-closure.md and third-party-redistribution-inventory.json define a fail-closed release allowlist; Microsoft content review, exact Rust/Tauri release inventory, asset inventory, final notices and exact package binding remain open"
     },
     {
       "id": "PPR-05",
