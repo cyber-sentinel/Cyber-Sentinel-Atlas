@@ -157,16 +157,16 @@ Phase 5.10 closes the release-engineering, legal/redistribution, accessibility a
 
 ### Phase 5.10.0 — Public Preview Readiness Baseline
 
-Status: **ACTIVE**
+Status: **COMPLETE / MERGED**
 
-Delivered or in progress:
+Delivered:
 
 - machine-readable readiness manifest at `docs/releases/phase-5.10-public-preview-readiness.json`;
 - human-readable gate matrix at `docs/releases/phase-5.10-public-preview-readiness.md`;
 - baseline validator plus separate strict `--release` mode;
 - GitHub Actions readiness workflow;
 - public-source/pre-preview security reporting policy alignment;
-- explicit distinction between current control-plane `main` and the immutable First Preview package baseline.
+- explicit distinction between the control-plane `main` and the immutable First Preview package baseline.
 
 Current mandatory gate state:
 
@@ -179,8 +179,8 @@ Current mandatory gate state:
 | Production code signing / key custody | **BLOCKED** |
 | Public packaging / distribution hardening | **BLOCKED** |
 | Accessibility release review | **PARTIAL** |
-| Source freshness / public-pack publication policy | **BLOCKED** |
-| Release governance / launch criteria | **PARTIAL** |
+| Source freshness / public-pack publication policy | **PASS** |
+| Release governance / launch criteria | **PASS** |
 | Supply-chain evidence | **PASS** |
 | Trademark / attribution controls | **PASS** |
 
@@ -200,13 +200,19 @@ Requires an accepted code-signing certificate/provider, certificate lifecycle, p
 
 Status: **BLOCKED**
 
-Requires the signed installer or other approved distribution format, trusted publication channel, release metadata/checksums, rollback/recovery policy and public installation/update documentation.
+Requires the signed installer or other approved distribution format, trusted publication channel, release metadata/checksums, rollback/recovery policy and public installation/update documentation. This slice depends on the accepted signing/custody boundary and public-channel decision.
 
 ### Phase 5.10.4 — Accessibility, Freshness & Launch Governance
 
-Status: **PARTIAL**
+Status: **IN PROGRESS**
 
-Requires broader accessibility release review, source-freshness/public-pack acceptance policy, launch checklist, publication authority, incident/revocation process and explicit go/no-go criteria.
+Delivered policy/governance controls:
+
+- **PPR-08 PASS:** `docs/releases/source-freshness-and-publication-policy.md` defines source classes, refresh objectives, maximum unattended age, fail-closed staleness handling, Last Known Good behavior, public-pack acceptance criteria and per-release evidence requirements;
+- **PPR-09 PASS:** `docs/releases/public-preview-launch-governance.md` defines release authority, exact GO/NO-GO criteria, immutable release evidence, rollback/withdrawal and emergency security revocation;
+- **PPR-07 PARTIAL:** `docs/releases/accessibility-release-review.md` defines the packaged-app acceptance contract for keyboard navigation, Narrator, focus, semantics, high contrast, scaling, text reflow, error handling and localization resilience.
+
+Remaining work in this slice is executable accessibility review on the exact packaged Public Preview candidate. PPR-07 must not move to PASS based only on source inspection or documentation.
 
 ### Public Preview strict release gate
 
