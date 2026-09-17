@@ -41,13 +41,13 @@
     },
     {
       "id": "microsoft-windows-security-documentation",
-      "class": "knowledge-content",
-      "included": true,
-      "upstream_revision": "Event 4688 Microsoft Learn source profile; exact public-pack text not frozen",
-      "license_or_terms": "Microsoft documentation terms — exact redistribution classification pending",
-      "license_source": "",
-      "redistribution_state": "REVIEW_REQUIRED",
-      "required_notices": "TBD only after exact terms/material review",
+      "class": "knowledge-content-source-only",
+      "included": false,
+      "upstream_revision": "Event 4688 Microsoft Learn previous-versions page recorded by source profile",
+      "license_or_terms": "Microsoft Learn Terms of Use; verbatim/substantial Microsoft documentation excluded from Public Preview pack unless separately cleared",
+      "license_source": "https://learn.microsoft.com/en-us/legal/termsofuse",
+      "redistribution_state": "EXCLUDED",
+      "required_notices": "none for excluded Microsoft source text; retain source citation/provenance for independently authored Atlas facts and summaries",
       "review_evidence": "ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.release.json"
     },
     {
@@ -55,11 +55,11 @@
       "class": "knowledge-content",
       "included": true,
       "upstream_revision": "MicrosoftDocs/sysinternals@8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6 / Sysmon 15.21 documentation",
-      "license_or_terms": "Pinned repository/documentation terms require release review",
+      "license_or_terms": "CC-BY-4.0 documentation license at pinned repository revision",
       "license_source": "https://github.com/MicrosoftDocs/sysinternals/blob/8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6/LICENSE",
-      "redistribution_state": "REVIEW_REQUIRED",
-      "required_notices": "Pending exact material/terms classification",
-      "review_evidence": "ingestion/source-profiles/microsoft-sysmon-docs.release.json"
+      "redistribution_state": "CONDITIONALLY_CLEARABLE",
+      "required_notices": "CC-BY-4.0 attribution, copyright/source identification, license reference, and modification indication where applicable; no trademark/endorsement claim",
+      "review_evidence": "ingestion/source-profiles/microsoft-sysmon-docs.release.json plus pinned repository LICENSE"
     },
     {
       "id": "cyber-sentinel-defenseops-content",
