@@ -164,7 +164,7 @@ Planned implementation sequence after 5.6.1:
 
 - Architecture Sync Date: 2026-09-15
 - Architecture Authority: Atlas Architecture / Product / Data / Security Design workspace
-- Architecture Sync Status: **GREEN — PHASE 5.5 CLOSED / PHASE 5.6 ENTRY AUTHORIZED**
+- Architecture Sync Status: **GREEN** — PHASE 5.5 CLOSED / PHASE 5.6 ENTRY AUTHORIZED
 - Stage 1: **APPROVED AND MERGED**
 - Phase 5.2: **APPROVED AND MERGED**
 - Phase 5.3: **APPROVED AND COMPLETE**
