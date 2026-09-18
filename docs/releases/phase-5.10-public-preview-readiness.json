@@ -49,7 +49,7 @@
       "name": "Public packaging and distribution hardening",
       "mandatory": true,
       "state": "BLOCKED",
-      "evidence": "public-packaging-and-distribution.md plus public-packaging-readiness.json and validator define signed-package/distribution acceptance; final Windows format/channel and exact signed-package evidence remain unselected"
+      "evidence": "Signed portable ZIP and GitHub Releases are selected in public-preview-release-decisions.md and public-packaging-readiness.json; PPR-06 remains BLOCKED pending exact production-signed package, clean-Windows/package-bound acceptance, accessibility binding, publication, and post-publication byte re-verification"
     },
     {
       "id": "PPR-07",
