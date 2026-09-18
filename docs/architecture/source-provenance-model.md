@@ -40,7 +40,7 @@ Tier B engineering content does not become authoritative merely because it is va
 
 May support context but should not override canonical technical verification without review.
 
-**Approved role exception:** Ultimate Windows Security is the `PRIMARY_QUICK_DETAIL_REFERENCE` for Windows Security Event ID analyst-facing Quick Detail content. This presentation/source role does not convert the site into a Tier A canonical provider source and does not grant redistribution rights.
+**Approved role exception:** Ultimate Windows Security is the `PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE` and UX/coverage benchmark for Windows Security Event IDs. Its published Terms prohibit using retrieval/index/database/data-mining processes as a corpus ingestion mechanism, so it is not an automated/bulk ATLAS ingestion source without explicit written permission. Microsoft/provider evidence remains the canonical technical verification basis.
 
 The exact source-role rules are authoritative in [Telemetry Source Authority Policy](../content/telemetry-source-authority-policy.md).
 
