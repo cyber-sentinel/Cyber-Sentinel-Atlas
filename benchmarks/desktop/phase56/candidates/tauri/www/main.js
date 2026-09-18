@@ -113,37 +113,137 @@ function collectEvidenceSections(value, path = '', out = []) {
   return out;
 }
 
+function claimValue(claim) {
+  const object = claim?.object;
+  if (!object || typeof object !== 'object') return null;
+  return object.value ?? null;
+}
+
+function renderFieldDictionary(detail, container) {
+  const fields = Array.isArray(detail?.fields) ? detail.fields : [];
+  const claims = Array.isArray(detail?.claims) ? detail.claims : [];
+  if (!fields.length) return;
+
+  const section = el('section', 'detail-section field-dictionary');
+  const heading = el('div', 'detail-section-heading');
+  heading.append(el('strong', '', 'Field Dictionary'));
+  heading.append(el('span', 'muted', `${fields.length} structured field${fields.length === 1 ? '' : 's'}`));
+  section.append(heading);
+
+  const claimsBySubject = new Map();
+  claims.forEach(claim => {
+    const subject = claim?.subject_id;
+    if (!subject) return;
+    if (!claimsBySubject.has(subject)) claimsBySubject.set(subject, []);
+    claimsBySubject.get(subject).push(claim);
+  });
+
+  fields.forEach(field => {
+    const card = el('article', 'field-card');
+    card.append(el('div', 'field-name', field?.title || field?.canonical_key || field?.id || 'Field'));
+    if (field?.id) card.append(el('div', 'field-id', field.id));
+
+    const fieldClaims = claimsBySubject.get(field?.id) || [];
+    fieldClaims.forEach(claim => {
+      const value = claimValue(claim);
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        const facts = el('dl', 'facts compact-facts');
+        renderFacts(facts, value, [
+          'section', 'native_name', 'data_type', 'meaning', 'version_applicability',
+          'optional', 'conditional', 'collection_requirement', 'security_relevance'
+        ]);
+        card.append(facts);
+      } else if (value !== null) {
+        card.append(el('div', 'field-meaning', compactValue(value)));
+      }
+
+      const evidence = Array.isArray(claim?.evidence) ? claim.evidence : [];
+      evidence.slice(0, 3).forEach(item => {
+        const source = item?.source_id || 'source';
+        const locator = item?.locator?.heading || item?.locator?.section || '';
+        card.append(el('div', 'field-source', locator ? `${source} · ${locator}` : source));
+      });
+    });
+
+    section.append(card);
+  });
+  container.append(section);
+}
+
+function renderReferenceSources(detail, container) {
+  const sources = Array.isArray(detail?.sources) ? detail.sources : [];
+  if (!sources.length) return;
+  const section = el('section', 'detail-section');
+  section.append(el('strong', '', 'Sources / Provenance'));
+  sources.slice(0, 8).forEach(source => {
+    const row = el('div', 'source-row');
+    row.append(el('span', 'source-title', source?.title || source?.canonical_key || source?.id || 'Source'));
+    if (source?.id) row.append(el('span', 'source-id', source.id));
+    section.append(row);
+  });
+  container.append(section);
+}
+
 function renderRecord(record, target) {
   clear(target);
   target.classList.remove('empty-state');
+
+  const detail = record?.detail_version ? record : null;
+  const baseRecord = detail?.record || record || {};
   const summary = el('div', 'record-summary');
-  const title = record?.title || record?.name || state.currentRecordId || 'Canonical record';
+  const title = baseRecord?.title || baseRecord?.name || state.currentRecordId || 'Canonical record';
   summary.append(el('div', 'record-title', title));
   if (state.currentRecordId) summary.append(el('div', 'record-id', state.currentRecordId));
 
   const facts = el('dl', 'facts');
-  renderFacts(facts, record || {}, [
+  renderFacts(facts, baseRecord, [
     'entity_type', 'namespace', 'platform', 'product', 'provider', 'channel', 'lifecycle', 'version'
   ]);
   summary.append(facts);
 
-  const evidence = collectEvidenceSections(record).slice(0, 12);
-  if (evidence.length) {
-    const box = el('section', 'provenance-box');
-    box.append(el('strong', '', 'Claims / Sources / Provenance'));
-    evidence.forEach(item => {
-      const detail = document.createElement('details');
-      const heading = document.createElement('summary');
-      heading.textContent = item.path;
-      detail.append(heading, jsonBlock(item.value));
-      box.append(detail);
-    });
-    summary.append(box);
+  if (detail) {
+    renderFieldDictionary(detail, summary);
+
+    const recordClaims = (Array.isArray(detail.claims) ? detail.claims : [])
+      .filter(claim => claim?.subject_id === baseRecord?.id);
+    if (recordClaims.length) {
+      const box = el('section', 'provenance-box');
+      box.append(el('strong', '', 'Record Claims'));
+      recordClaims.slice(0, 16).forEach(claim => {
+        const item = document.createElement('details');
+        const heading = document.createElement('summary');
+        heading.textContent = claim?.predicate || claim?.id || 'Claim';
+        item.append(heading, jsonBlock(claimValue(claim) ?? claim));
+        box.append(item);
+      });
+      summary.append(box);
+    }
+
+    renderReferenceSources(detail, summary);
+
+    const relationCount = Array.isArray(detail.relationships) ? detail.relationships.length : 0;
+    if (relationCount) {
+      summary.append(el('div', 'detail-count-note', `${relationCount} direct relationship${relationCount === 1 ? '' : 's'} available in this bounded detail projection.`));
+    }
+  } else {
+    const evidence = collectEvidenceSections(baseRecord).slice(0, 12);
+    if (evidence.length) {
+      const box = el('section', 'provenance-box');
+      box.append(el('strong', '', 'Claims / Sources / Provenance'));
+      evidence.forEach(item => {
+        const detailNode = document.createElement('details');
+        const heading = document.createElement('summary');
+        heading.textContent = item.path;
+        detailNode.append(heading, jsonBlock(item.value));
+        box.append(detailNode);
+      });
+      summary.append(box);
+    }
   }
 
   const raw = document.createElement('details');
   const rawHeading = document.createElement('summary');
-  rawHeading.textContent = 'Canonical JSON';
+  rawHeading.textContent = detail ? 'Detail Projection JSON' : 'Canonical JSON';
   raw.append(rawHeading, jsonBlock(record));
   summary.append(raw);
   target.append(summary);
