@@ -80,7 +80,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          rustup toolchain install "$RUST_VERSION" --profile minimal --no-self-update
+          rustup toolchain install "$RUST_VERSION" --profile minimal
           cargo +"$RUST_VERSION" --version
           rustc +"$RUST_VERSION" --version
       - name: Verify immutable Tauri lock
@@ -117,8 +117,8 @@ jobs:
         with:
           name: phase5101-tauri-redistribution-evidence
           path: |
-            ${{ env.TAURI_EVIDENCE_DIR }}/cargo-metadata.json
-            ${{ env.TAURI_EVIDENCE_DIR }}/tauri-redistribution-evidence.json
-            ${{ env.TAURI_EVIDENCE_DIR }}/toolchain.txt
+            ${{ runner.temp }}/phase5101-tauri-redistribution/cargo-metadata.json
+            ${{ runner.temp }}/phase5101-tauri-redistribution/tauri-redistribution-evidence.json
+            ${{ runner.temp }}/phase5101-tauri-redistribution/toolchain.txt
           if-no-files-found: error
           retention-days: 30
