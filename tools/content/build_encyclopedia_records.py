@@ -23,8 +23,10 @@ SOURCE_PATHS = [
     ROOT / "ingestion" / "source-profiles" / "microsoft-sysmon-docs.source.json",
     ROOT / "ingestion" / "source-profiles" / "microsoft-sysmon-schema-export.source.json",
     ROOT / "ingestion" / "source-profiles" / "microsoft-windows-provider-metadata.source.json",
+    ROOT / "ingestion" / "source-profiles" / "microsoft-windows-security-auditing-4688-doc.source.json",
     ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4624.json",
     ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4624.json",
+    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4688.json",
 ]
 
 SYSMON_SCHEMA_SOURCE = "atlas:source:atlas.source:microsoft-sysmon-schema-export"
