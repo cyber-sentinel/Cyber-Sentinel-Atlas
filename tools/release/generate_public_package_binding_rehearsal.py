@@ -8,7 +8,8 @@ import hashlib
 import json
 import re
 import sys
-from pathlib import Path
+import zipfile
+from pathlib import Path, PurePosixPath
 
 COMMIT40 = re.compile(r"^[0-9a-f]{40}$")
 
@@ -65,6 +66,27 @@ def main() -> int:
     if args.package.suffix.lower() != ".zip":
         errors.append("package input must be a .zip file for the selected portable ZIP model")
 
+    zip_entry_count = 0
+    package_path = resolved.get("package")
+    if package_path is not None:
+        if not zipfile.is_zipfile(package_path):
+            errors.append("package input is not a valid ZIP archive")
+        else:
+            seen_entries: set[str] = set()
+            with zipfile.ZipFile(package_path, "r") as archive:
+                for info in archive.infolist():
+                    normalized = info.filename.replace("\\", "/")
+                    pure = PurePosixPath(normalized)
+                    if pure.is_absolute() or ".." in pure.parts:
+                        errors.append(f"unsafe ZIP entry path: {info.filename}")
+                    if normalized in seen_entries:
+                        errors.append(f"duplicate ZIP entry: {info.filename}")
+                    seen_entries.add(normalized)
+                    if not info.is_dir():
+                        zip_entry_count += 1
+            if zip_entry_count == 0:
+                errors.append("package ZIP must contain at least one file entry")
+
     unique = {str(path) for path in resolved.values()}
     if len(unique) != len(resolved):
         errors.append("package, SBOM, notices and release-notes inputs must be distinct files")
@@ -87,6 +109,7 @@ def main() -> int:
         "publication_channel": "GITHUB_RELEASES",
         "binary_auto_update_enabled": False,
         "release_commit": args.release_commit,
+        "package_zip_entry_count": zip_entry_count,
         "artifacts": artifacts,
     }
 
