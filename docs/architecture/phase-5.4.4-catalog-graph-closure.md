@@ -1,8 +1,10 @@
 # Phase 5.4.4 — Catalog, Graph Pivots, Benchmarks and Closure
 
-Status: **IMPLEMENTED — ARCHITECTURE REVIEW PENDING**
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
 Baseline main SHA: `d6a325c349cd0ec3035c5dbe05ed69ef840323c4`
+
+Lifecycle synchronization note: this architecture document retains its historical Phase 5.4 baseline SHA, while its status is synchronized with the authoritative roadmap/project state. Phase 5.4 is closed and its search/catalog/graph contracts remain under permanent regression coverage.
 
 Phase 5.4.4 closes the deterministic Search Core without introducing a graph database, semantic/vector retrieval, Grounded AI, signed-pack runtime, or a Desktop/Web stack decision.
 
