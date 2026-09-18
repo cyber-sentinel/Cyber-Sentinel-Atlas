@@ -1,10 +1,10 @@
 {
   "profile_id": "atlas:mapping-profile:atlas.ingestion:microsoft-sysmon-docs-v1",
-  "profile_version": "1.0.0",
+  "profile_version": "1.1.0",
   "normalizer_id": "atlas:normalizer:atlas.ingestion:microsoft-sysmon-docs",
   "normalizer_version": "1.0.0",
   "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
-  "source_version": "15.21",
+  "source_version": "15.22",
   "canonical_schema_version": "1.0.0",
   "namespace": "microsoft.sysmon",
   "provider": "Microsoft-Windows-Sysmon",
@@ -21,5 +21,5 @@
     "documentation_only": "unset-until-schema-or-provider-evidence"
   },
   "unsupported_native_types": "preserve-in-psr-and-report",
-  "profile_digest": "sha256-6809ff5d87cc4f358d705b2209b96366f97efd94521da423377a4590a047648a"
+  "profile_digest": "sha256-a90d4b771502132e6b38ca0142542486ec2e887fb273ba40f80f1464bf077811"
 }

@@ -101,7 +101,7 @@ def main() -> int:
     release = load("ingestion/source-profiles/microsoft-sysmon-docs.release.json")
     connector = load("ingestion/connectors/microsoft-sysmon-docs.json")
     mapping = load("ingestion/mappings/microsoft-sysmon-docs-v1.json")
-    inventory = load("ingestion/inventories/sysmon-docs-15.21.documentation.json")
+    inventory = load("ingestion/inventories/sysmon-docs-15.22.documentation.json")
 
     foundation = mod("sysmon_live_foundation", ROOT / "tools/ingestion/validate_ingestion_foundation.py")
     phase52 = mod("sysmon_live_phase52", ROOT / "tools/validate_phase52.py")
@@ -123,7 +123,7 @@ def main() -> int:
         raise RuntimeError("pinned sysmon.md Git blob identity mismatch")
 
     raw_digest = foundation.sha256_digest(raw)
-    run_id = f"atlas:acquisition-run:atlas.ingestion:sysmon-docs-v15.21-{raw_digest[7:31]}"
+    run_id = f"atlas:acquisition-run:atlas.ingestion:sysmon-docs-v15.22-{raw_digest[7:31]}"
     target_key = "sysmon-markdown"
     resource_key = release["document_path"]
     snapshot_id = foundation.stable_artifact_id(
