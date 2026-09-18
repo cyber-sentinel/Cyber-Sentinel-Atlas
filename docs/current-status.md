@@ -1,12 +1,12 @@
 # Cyber-Sentinel-Atlas — Current Authoritative Status
 
-Status timestamp: 2026-09-17
+Status timestamp: 2026-09-18
 
 ## Control plane
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Current control-plane main SHA: `a8f3b4e9177e89b38a1dcf91ad9ef2d31416bafe` at Phase 5.10.5 branch start; resolve live `main` after merge.
+- Latest verified Public Preview control-plane baseline: `d1efb549c1b651b58052a616bba82a3b146c0d6e` — PR #52 merged; PPR-03 through PPR-07 validators plus Foundation/Governance/Canaries passed post-merge.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
@@ -17,7 +17,7 @@ Status timestamp: 2026-09-17
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
 - Active phase: **Phase 5.10 — Public Preview Readiness**
 - Baseline slice: **Phase 5.10.0 — COMPLETE / MERGED**
-- Phase 5.10.4 — Accessibility / Freshness / Launch Governance: **IN PROGRESS**
+- Phase 5.10.4 — Accessibility / Freshness / Launch Governance: **CONTROL PLANE COMPLETE / PPR-07 PARTIAL**
 - Phase 5.10.5 — Usable Data Preview: **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING**
 - Public Preview readiness: **BLOCKED**
 - Canonical schema version: `1.0.0`
