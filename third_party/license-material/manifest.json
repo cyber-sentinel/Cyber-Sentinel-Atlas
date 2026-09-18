@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "gate": "PPR-04",
+  "state": "EVIDENCE_ONLY_NOT_ACCEPTANCE",
+  "materials": [
+    {
+      "id": "mitre-attack-enterprise",
+      "license_or_terms": "MITRE ATT&CK license",
+      "upstream_repository": "mitre-attack/attack-stix-data",
+      "upstream_revision": "6cda5ad8462c79e14fbb872f4e09059b18e0cfc4",
+      "upstream_path": "LICENSE.txt",
+      "upstream_git_blob_sha1": "7d8dc97542672cc9ec78de1b643b5b39ca7e2fba",
+      "local_path": "third_party/license-material/mitre-attack-enterprise/LICENSE.txt",
+      "redistribution_state_change": false
+    },
+    {
+      "id": "mitre-car",
+      "license_or_terms": "Apache-2.0",
+      "upstream_repository": "mitre-attack/car",
+      "upstream_revision": "1b922fe1527d956e222a99473472e594f10f610b",
+      "upstream_path": "LICENSE.txt",
+      "upstream_git_blob_sha1": "1b1041a3310aba29f75dd36f4d018388f5026080",
+      "local_path": "third_party/license-material/mitre-car/LICENSE.txt",
+      "redistribution_state_change": false
+    },
+    {
+      "id": "mitre-d3fend-ontology",
+      "license_or_terms": "MIT",
+      "upstream_repository": "d3fend/d3fend-ontology",
+      "upstream_revision": "6f888567acb359328ebd1e793b7e01581b6a03ed",
+      "upstream_path": "LICENSE.md",
+      "upstream_git_blob_sha1": "c8953158bcad8bcc59457b62ba5d2505dcb9b2b4",
+      "local_path": "third_party/license-material/mitre-d3fend-ontology/LICENSE.md",
+      "redistribution_state_change": false
+    },
+    {
+      "id": "microsoft-sysmon-documentation",
+      "license_or_terms": "CC-BY-4.0",
+      "upstream_repository": "MicrosoftDocs/sysinternals",
+      "upstream_revision": "8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6",
+      "upstream_path": "LICENSE",
+      "upstream_git_blob_sha1": "e056e7c3ec54533985dfb3a4c6ef70dab8ca2e42",
+      "local_path": "third_party/license-material/microsoft-sysmon-documentation/LICENSE",
+      "redistribution_state_change": false
+    }
+  ]
+}
