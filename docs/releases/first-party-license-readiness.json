@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0.0",
+  "gate": "PPR-03",
+  "state": "BLOCKED",
+  "owner_approved": false,
+  "license_id": null,
+  "license_file": "LICENSE",
+  "license_sha256": null,
+  "contribution_rights_model": "PENDING",
+  "third_party_relicensed": false,
+  "scope": [
+    "first-party source code",
+    "first-party documentation",
+    "first-party schemas and tests",
+    "repository-owned fixtures and assets"
+  ],
+  "evidence": [
+    "docs/releases/first-party-license-decision.md",
+    "CONTRIBUTING.md",
+    "THIRD_PARTY_NOTICES.md"
+  ]
+}
