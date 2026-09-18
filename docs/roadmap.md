@@ -341,6 +341,8 @@ The pinned Sysmon 15.21 source profile documents 30 Event IDs (`1..29` plus `255
 
 Windows Security/Event Log coverage must first freeze an explicit provider/channel/version denominator. "All Windows Event IDs" is not a valid completion metric until the target providers/channels and versions are machine-readable.
 
+Mandatory Windows Security Corpus scope additionally includes PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, and Service/persistence telemetry.
+
 Authoritative coverage plan: [`docs/windows-sysmon-coverage-plan.md`](windows-sysmon-coverage-plan.md).
 
 ## Phase 5.11 — Cross-Platform Desktop
