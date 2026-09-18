@@ -152,6 +152,42 @@ def main() -> int:
                 if data.get(dependency) is not True:
                     fail(errors, f"signature_verified=true requires {dependency}=true")
 
+        verification_hash = data.get("verification_evidence_sha256")
+        if verification_hash is not None and data.get("signature_verified") is not True:
+            fail(
+                errors,
+                "verification_evidence_sha256 may be set only after signature_verified=true",
+            )
+
+        if data.get("rfc3161_timestamp_verified") is True:
+            if data.get("timestamp_digest_algorithm") not in ALLOWED_DIGEST_ALGORITHMS:
+                fail(
+                    errors,
+                    "rfc3161_timestamp_verified=true requires an accepted timestamp_digest_algorithm",
+                )
+            if data.get("timestamp_chain_verified") is not True:
+                fail(
+                    errors,
+                    "rfc3161_timestamp_verified=true requires timestamp_chain_verified=true",
+                )
+
+        if any(
+            data.get(field) is True
+            for field in (
+                "certificate_chain_verified",
+                "certificate_code_signing_eku_verified",
+                "certificate_validity_verified",
+            )
+        ):
+            for field in (
+                "certificate_subject",
+                "certificate_serial",
+                "certificate_sha256_fingerprint",
+            ):
+                value = data.get(field)
+                if not isinstance(value, str) or not value.strip():
+                    fail(errors, f"certificate verification flags require {field}")
+
         unsigned_sha = data.get("unsigned_artifact_sha256")
         signed_sha = data.get("signed_artifact_sha256")
         if (
