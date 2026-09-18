@@ -125,6 +125,9 @@ def inventory_packages(metadata: dict, errors: list[str]) -> tuple[list[dict], l
 
         if license_file:
             license_path = Path(license_file)
+            if not license_path.is_absolute():
+                manifest_path = Path(str(package.get("manifest_path", "")))
+                license_path = manifest_path.parent / license_path
             if not license_path.is_file():
                 fail(errors, f"{package.get('name')} {package.get('version')}: license_file is missing: {license_file}")
             else:
