@@ -190,6 +190,8 @@ Status: **CONTROL PLANE COMPLETE / RELEASE GATES BLOCKED**
 
 Requires an explicit first-party licensing decision plus exact third-party redistribution clearance for the public release payload. Automation will not choose a license on behalf of the project owner.
 
+PR #54 adds fail-closed Windows-target Rust/Tauri redistribution preflight: exact Rust `1.95.0`, immutable Cargo lock verification, reachable third-party license metadata/license-file checks, frontend asset SHA-256 inventory, and remote-reference rejection. Exact-head run `35309913398` passed with 258 third-party crates and 3 frontend assets; artifact `10533096533` (`sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d`). This narrows PPR-04 but does not close it; the frozen release payload, final NOTICE bundle and exact package binding remain mandatory.
+
 ### Phase 5.10.2 — Production Signing & Artifact Attestation
 
 Status: **CONTROL PLANE COMPLETE / PROVIDER DECISION BLOCKED**
