@@ -14,5 +14,5 @@ class IngestionAuthorizationTests(unittest.TestCase):
     def test_04_unknown_parser_fails_closed(self): self.assertTrue(phase_policy.implementation_authorization_errors(self.authorized_paths()+["ingestion/parsers/unapproved.py"]))
     def test_05_unknown_normalizer_fails_closed(self): self.assertTrue(phase_policy.implementation_authorization_errors(self.authorized_paths()+["ingestion/normalizers/unapproved.py"]))
     def test_06_missing_authorized_asset_fails_closed(self): self.assertTrue(phase_policy.implementation_authorization_errors(self.authorized_paths()[1:]))
-    def test_07_noncontrolled_paths_do_not_expand_authority(self): self.assertEqual([],phase_policy.implementation_authorization_errors(self.authorized_paths()+["ingestion/mappings/mitre-d3fend-v1.json","ingestion/source-profiles/mitre-d3fend-ontology.source.json","ingestion/inventories/sysmon-docs-15.21.documentation.json"]))
+    def test_07_noncontrolled_paths_do_not_expand_authority(self): self.assertEqual([],phase_policy.implementation_authorization_errors(self.authorized_paths()+["ingestion/mappings/mitre-d3fend-v1.json","ingestion/source-profiles/mitre-d3fend-ontology.source.json","ingestion/inventories/sysmon-docs-15.22.documentation.json"]))
 if __name__=="__main__": unittest.main()
