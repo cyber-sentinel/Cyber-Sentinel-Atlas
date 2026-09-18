@@ -116,8 +116,6 @@ ATLAS
 ├── ATLAS Web
 │
 ├── ATLAS PWA
-│    ├── Desktop
-│    ├── Android
 │    └── iOS Safari
 │
 ├── ATLAS API
@@ -127,7 +125,7 @@ ATLAS
      └── Android
 ```
 
-This product family is **approved delivery scope**, not a statement that every surface is released today. Windows Desktop remains the current release-critical implementation. Web/PWA, CLI/API, cross-platform Desktop and native Mobile consume the same canonical/provenance contracts without creating a second source of truth.
+This product family is **approved delivery scope**, not a statement that every surface is released today. Windows Desktop remains the current release-critical implementation. Web plus the iOS Safari PWA, CLI/API, cross-platform Desktop and native Mobile consume the same canonical/provenance contracts without creating a second source of truth.
 
 Authoritative surface plan: [`docs/product-surfaces.md`](docs/product-surfaces.md).
 
