@@ -4,8 +4,8 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
-- Latest verified Public Preview control-plane baseline: `2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
+- Last Reviewed Main SHA: `a05907bbd530c4a46631e2cefa9a1ca613da9eea`
+- Latest verified Public Preview control-plane baseline: `a05907bbd530c4a46631e2cefa9a1ca613da9eea`
 - Release authority remains `main`; documentation commits may advance the branch without redefining the verified control-plane baseline above.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
@@ -14,7 +14,9 @@
 - Phase 5.10 README sync: PR #43 — **MERGED**
 - Phase 5.10.4 governance/freshness closure: PR #44 — **MERGED**
 - Phase 5.10.6 release vehicle/accessibility hardening: PR #56 — **MERGED**; exact-head applicable workflows **SUCCESS**
-- Phase 5.10.7 Public Preview RC functional freeze: **ACTIVE**; target `v0.1.0-rc.1`; visual identity intentionally remains open
+- Phase 5.10.7 Public Preview RC functional freeze: PR #57 — **MERGED**; target `v0.1.0-rc.1`; visual identity intentionally remains open
+- Phase 5.10.8 deterministic PPR-04 notice/package binding: PR #58 — **MERGED**
+- Approved Product Family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
@@ -55,8 +57,8 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
     - authoritative post-merge run: `35133827422` — **SUCCESS**
     - First Preview package release baseline: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - First Preview engineering readiness: **READY**
-- Phase 5.7 — Web / PWA: **DEFERRED BEYOND FIRST PREVIEW**
-- Phase 5.8 — Broader API surfaces: **DEFERRED BEYOND FIRST PREVIEW**
+- Phase 5.7 — Web / PWA: **APPROVED / DEFERRED UNTIL WINDOWS PUBLIC PREVIEW CLOSURE**
+- Phase 5.8 — CLI & Broader API surfaces: **APPROVED / DEFERRED UNTIL WINDOWS PUBLIC PREVIEW CLOSURE**
 - Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.10 — Public Preview Readiness: **ACTIVE**
   - 5.10.0 Public Preview Readiness Baseline: **COMPLETE / MERGED**
@@ -84,9 +86,34 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
     - target: `v0.1.0-rc.1`
     - functional/security boundary frozen from `main@2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
     - logo, banner, theme tokens and non-behavioral visual identity remain intentionally open
+  - 5.10.10 Windows & Sysmon Knowledge Coverage Expansion: **APPROVED / IMPLEMENTATION REQUIRED**
+    - current engineering pack: `23` canonical records / `14` search projections / `3` graph edges
+    - packaged Windows Security acceptance: Event ID `4688`
+    - packaged Sysmon acceptance: Event ID `1`
+    - pinned Sysmon 15.21 documented denominator: `30` IDs (`1..29`, `255`); `29` remain outside current packaged acceptance
+    - Windows provider/channel/version denominator: **NOT YET FROZEN**
+    - mandatory corpus families: Security-Auditing, Sysmon, PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
   - Public Preview readiness: **BLOCKED**
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers above are compatibility invariants consumed by historical architecture gates even though the aggregate Phase 5.5 boundary is frozen.
+
+## Approved Product Surfaces
+
+The product family is an approved delivery commitment, not merely a research backlog. The authoritative matrix is [`docs/product-surfaces.md`](product-surfaces.md).
+
+```text
+ATLAS
+├── Desktop: Windows / Linux / macOS
+├── CLI: Windows / Linux / macOS
+├── Web
+├── PWA: iOS Safari
+├── API
+└── Mobile: iOS / Android
+```
+
+Windows Desktop is the current release-critical surface. Linux/macOS Desktop, CLI, Web/PWA, API and native Mobile must reuse the canonical/provenance contracts and may not create an alternate source of truth.
+
+Knowledge coverage is separately governed by [`docs/windows-sysmon-coverage-plan.md`](windows-sysmon-coverage-plan.md). A source profile or parser does not count as coverage until the corresponding canonical record, provenance, index, pack and acceptance evidence exist.
 
 ## Frozen Architecture
 
