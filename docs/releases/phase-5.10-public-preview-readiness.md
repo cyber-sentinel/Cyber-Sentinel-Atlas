@@ -22,6 +22,7 @@ Those states are deliberately not treated as equivalent.
 
 - Latest verified control-plane baseline: `main@d1efb549c1b651b58052a616bba82a3b146c0d6e` — PPR-03 through PPR-07 control planes integrated; post-merge validators green
 - Usable Data Preview post-merge baseline: `main@4d64b2fb402b280d00c01783f7990538a3b67484`, run `35305516189` — **SUCCESS**
+- PPR-04 Tauri/Rust preflight merged baseline: `main@734e20dbb36083d9c5770a22e9c69e844903158f`; PR #54 exact-head run `35309913398` — **SUCCESS**; artifact `10533096533` / `sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d`
 - First Preview package baseline: `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - First Preview post-merge package run: `35133827422` — **SUCCESS**
 - Public Preview authority: future explicit release gate; not yet granted
@@ -33,7 +34,7 @@ Those states are deliberately not treated as equivalent.
 | PPR-01 | First Preview engineering baseline | **PASS** | Phase 5.6 complete, merged and post-merge verified |
 | PPR-02 | Security disclosure and supported-release policy | **PASS** | `SECURITY.md` |
 | PPR-03 | First-party licensing decision | **BLOCKED** | Fail-closed license decision state/validator are integrated; no project `LICENSE` is published and explicit maintainer/legal-business approval remains required |
-| PPR-04 | Third-party redistribution closure | **BLOCKED** | Exact redistribution inventory/validator are integrated; Microsoft Learn source text is excluded, pinned ATT&CK/CAR/D3FEND/Sysmon rights are classified, while final corpus/software freeze, final notices and exact package binding remain open |
+| PPR-04 | Third-party redistribution closure | **BLOCKED** | Exact inventory/validator plus Windows-target Rust/Tauri preflight are integrated; exact-head run `35309913398` verified 258 third-party crates and 3 frontend assets. Microsoft Learn source text is excluded and pinned ATT&CK/CAR/D3FEND/Sysmon rights are classified; final corpus/software freeze, final notices and exact package binding remain open |
 | PPR-05 | Production code signing and protected key custody | **BLOCKED** | Provider-neutral non-exportable/hardware-backed signing contract and validator are integrated; provider/certificate/key custody and exact signed-candidate evidence remain unselected |
 | PPR-06 | Public packaging and distribution hardening | **BLOCKED** | Packaging/distribution contract and validator are integrated; final signed format/channel and exact published-package evidence remain unselected |
 | PPR-07 | Accessibility release review | **PARTIAL** | Machine-readable accessibility state and strict validator are integrated; executable Windows keyboard/Narrator/high-contrast/scaling review remains open on the exact final candidate |
