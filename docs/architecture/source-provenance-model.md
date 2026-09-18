@@ -42,7 +42,7 @@ May support context but should not override canonical technical verification wit
 
 **Approved role exception:** Ultimate Windows Security is the `PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE` and UX/coverage benchmark for Windows Security Event IDs. Its published Terms prohibit using retrieval/index/database/data-mining processes as a corpus ingestion mechanism, so it is not an automated/bulk ATLAS ingestion source without explicit written permission. Microsoft/provider evidence remains the canonical technical verification basis.
 
-The exact source-role rules are authoritative in [Telemetry Source Authority Policy](../content/telemetry-source-authority-policy.md).
+The exact source-role rules are authoritative in [Telemetry Source Authority Policy](../content/source-authority-policy.md).
 
 ### Tier D — Community
 
