@@ -12,7 +12,9 @@ from typing import Any, BinaryIO
 
 MAX_FRAME = 8 * 1024 * 1024
 EXPECTED_EVENT = "atlas:event:microsoft.windows.security:4688"
+EXPECTED_EVENT_4624 = "atlas:event:microsoft.windows.security:4624"
 EXPECTED_SYSMON = "atlas:event:microsoft.sysmon:1"
+EXPECTED_SYSMON_3 = "atlas:event:microsoft.sysmon:3"
 EXPECTED_SEARCH_CONTRACT = "1.0.0"
 
 
@@ -175,6 +177,50 @@ def main() -> int:
         if record_sysmon.get("id") != EXPECTED_SYSMON:
             raise RuntimeError("Sysmon Event 1 record identity mismatch")
 
+        search_4624 = request(
+            process.stdin,
+            process.stdout,
+            "q3",
+            "search.query",
+            {"query": "4624", "graph_depth": 1, "limit": 10},
+        )
+        windows_4624_search_ok = search_contains_target(search_4624, EXPECTED_EVENT_4624)
+        if not windows_4624_search_ok:
+            raise RuntimeError(
+                f"Windows Event 4624 was not returned by deterministic search: {search_4624}"
+            )
+        record_4624 = request(
+            process.stdin,
+            process.stdout,
+            "r3",
+            "record.get",
+            {"id": EXPECTED_EVENT_4624},
+        )
+        if record_4624.get("id") != EXPECTED_EVENT_4624:
+            raise RuntimeError("Windows Event 4624 record identity mismatch")
+
+        search_sysmon_3 = request(
+            process.stdin,
+            process.stdout,
+            "q4",
+            "search.query",
+            {"query": "Sysmon 3", "graph_depth": 1, "limit": 10},
+        )
+        sysmon_3_search_ok = search_contains_target(search_sysmon_3, EXPECTED_SYSMON_3)
+        if not sysmon_3_search_ok:
+            raise RuntimeError(
+                f"Sysmon Event 3 was not returned by deterministic search: {search_sysmon_3}"
+            )
+        record_sysmon_3 = request(
+            process.stdin,
+            process.stdout,
+            "r4",
+            "record.get",
+            {"id": EXPECTED_SYSMON_3},
+        )
+        if record_sysmon_3.get("id") != EXPECTED_SYSMON_3:
+            raise RuntimeError("Sysmon Event 3 record identity mismatch")
+
         graph = request(
             process.stdin,
             process.stdout,
@@ -203,6 +249,10 @@ def main() -> int:
             "windows_4688_record_ok": True,
             "sysmon_1_search_ok": sysmon_1_search_ok,
             "sysmon_1_record_ok": True,
+            "windows_4624_search_ok": windows_4624_search_ok,
+            "windows_4624_record_ok": True,
+            "sysmon_3_search_ok": sysmon_3_search_ok,
+            "sysmon_3_record_ok": True,
             "graph_expand_ok": True,
         }
     finally:

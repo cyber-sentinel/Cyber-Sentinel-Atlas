@@ -39,6 +39,7 @@ from tools.pack.builder import build_verified_atlaspack
 from tools.pack.tuf_runtime import CURRENT_RUNTIME_VERSION, sha256_prefixed
 from tools.search.reference_search import build_projection_bundle
 from tools.search.sqlite_search import build_index
+from tools.content.build_encyclopedia_records import build_records as build_encyclopedia_records
 
 ROOT = Path(__file__).resolve().parents[2]
 PACK_ID = "atlas:pack:engineering-preview-fixture"
@@ -92,10 +93,23 @@ def load_canonical_records() -> list[dict[str, Any]]:
             if previous is not None and previous != value:
                 raise RuntimeError(f"conflicting canonical fixture id: {record_id}")
             by_id[record_id] = value
-    if "atlas:event:microsoft.windows.security:4688" not in by_id:
-        raise RuntimeError("Windows Event 4688 canonical fixture is missing")
-    if "atlas:event:microsoft.sysmon:1" not in by_id:
-        raise RuntimeError("Sysmon Event 1 canonical fixture is missing")
+    for value in build_encyclopedia_records():
+        record_id = value.get("id")
+        if not record_id:
+            raise RuntimeError("encyclopedia exemplar record is missing id")
+        previous = by_id.get(record_id)
+        if previous is not None and previous != value:
+            raise RuntimeError(f"conflicting encyclopedia exemplar id: {record_id}")
+        by_id[record_id] = value
+
+    for required in (
+        "atlas:event:microsoft.windows.security:4688",
+        "atlas:event:microsoft.windows.security:4624",
+        "atlas:event:microsoft.sysmon:1",
+        "atlas:event:microsoft.sysmon:3",
+    ):
+        if required not in by_id:
+            raise RuntimeError(f"required engineering-preview record is missing: {required}")
     return [by_id[key] for key in sorted(by_id)]
 
 
@@ -113,6 +127,52 @@ def make_signed_repository(repo: Path, pack_version: str) -> tuple[bytes, dict[s
             encoding="utf-8"
         )
     )
+    projection_ids = {record["id"] for record in graph_corpus.get("records", [])}
+    claims_by_subject = {}
+    for record in records:
+        if record.get("record_kind") == "claim" and record.get("predicate") == "telemetry.represents":
+            claims_by_subject[record.get("subject_id")] = record.get("object", {}).get("value", {})
+
+    for record in records:
+        if record.get("record_kind") != "entity" or record.get("entity_type") != "event":
+            continue
+        if record["id"] in projection_ids:
+            continue
+        native = []
+        for item in record.get("native_identifiers", []):
+            projected = {
+                "type": item["type"],
+                "value": item["value"],
+                "namespace": item.get("namespace"),
+                "case_sensitive": bool(item.get("case_sensitive")),
+                "primary": bool(item.get("primary")),
+            }
+            if item.get("type") == "event_id":
+                projected["numeric_semantics"] = True
+            native.append(projected)
+        scope = {}
+        if record.get("native_identifiers"):
+            scope = dict(record["native_identifiers"][0].get("context") or {})
+        overview = claims_by_subject.get(record["id"]) or {}
+        graph_corpus["records"].append({
+            "id": record["id"],
+            "entity_type": record["entity_type"],
+            "title": record["title"],
+            "namespace": record["namespace"],
+            "scope": {
+                "platform": scope.get("platform"),
+                "product": scope.get("product"),
+                "provider": scope.get("provider"),
+                "channel": scope.get("channel"),
+            },
+            "lifecycle": (record.get("lifecycle") or {}).get("state"),
+            "version": None,
+            "description": overview.get("summary", ""),
+            "native_identifiers": native,
+            "aliases": record.get("aliases", []),
+        })
+        projection_ids.add(record["id"])
+    graph_corpus["records"] = sorted(graph_corpus["records"], key=lambda item: item["id"])
     spc_bundle = build_projection_bundle(graph_corpus)
     spc_bytes = canonical_json_bytes(spc_bundle)
 
@@ -229,10 +289,18 @@ def make_signed_repository(repo: Path, pack_version: str) -> tuple[bytes, dict[s
         "pack_id": PACK_ID,
         "pack_version": pack_version,
         "canonical_record_count": len(records),
+        "canonical_entity_count": sum(1 for record in records if record.get("record_kind") == "entity"),
+        "canonical_claim_count": sum(1 for record in records if record.get("record_kind") == "claim"),
+        "canonical_relationship_count": sum(1 for record in records if record.get("record_kind") == "relationship"),
+        "canonical_source_count": sum(1 for record in records if record.get("record_kind") == "source"),
         "search_projection_count": len(graph_corpus.get("records", [])),
         "graph_edge_count": len(graph_corpus.get("edges", [])),
+        "legacy_fixture_graph_edge_count": len(graph_corpus.get("edges", [])),
         "contains_windows_4688": True,
+        "contains_windows_4624": True,
         "contains_sysmon_1": True,
+        "contains_sysmon_3": True,
+        "encyclopedia_exemplar_count": 2,
         "private_keys_persisted": False,
         "public_preview_corpus": False,
     }
