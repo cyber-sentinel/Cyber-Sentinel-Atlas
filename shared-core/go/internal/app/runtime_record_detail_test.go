@@ -9,12 +9,12 @@ import (
 
 func detailRecord(kind, id string) canonical.Record {
 	base := canonical.Record{
-		"schema_version": "1.0.0",
-		"record_kind": kind,
-		"id": id,
+		"schema_version":  "1.0.0",
+		"record_kind":     kind,
+		"id":              id,
 		"record_revision": json.Number("1"),
-		"created_at": "2026-09-18T00:00:00Z",
-		"updated_at": "2026-09-18T00:00:00Z",
+		"created_at":      "2026-09-18T00:00:00Z",
+		"updated_at":      "2026-09-18T00:00:00Z",
 		"curation_status": "validated",
 	}
 	return base
@@ -51,18 +51,18 @@ func TestRecordGetDetailProjectionIsBoundedAndDeterministic(t *testing.T) {
 	claim["subject_id"] = field["id"]
 	claim["predicate"] = "telemetry.field-semantics"
 	claim["object"] = map[string]any{
-		"kind": "json",
+		"kind":  "json",
 		"value": map[string]any{"meaning": "Full path of the created executable."},
 	}
 	claim["confidence"] = "high"
 	claim["evidence"] = []any{
 		map[string]any{
-			"source_id": source["id"],
-			"source_version": "test",
-			"retrieved_at": "2026-09-18T00:00:00Z",
-			"locator": map[string]any{"heading": "Process Information"},
+			"source_id":           source["id"],
+			"source_version":      "test",
+			"retrieved_at":        "2026-09-18T00:00:00Z",
+			"locator":             map[string]any{"heading": "Process Information"},
 			"transformation_type": "human-authored-synthesis",
-			"reviewer_status": "approved",
+			"reviewer_status":     "approved",
 		},
 	}
 
