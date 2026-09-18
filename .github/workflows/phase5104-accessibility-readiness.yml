@@ -1,0 +1,38 @@
+name: Phase 5.10.4 Accessibility Readiness
+
+on:
+  push:
+    branches:
+      - main
+      - phase-5.10.4-accessibility-evidence-control
+    paths:
+      - 'docs/releases/accessibility-release-review.md'
+      - 'docs/releases/accessibility-readiness.json'
+      - 'tools/release/validate_accessibility_readiness.py'
+      - '.github/workflows/phase5104-accessibility-readiness.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/releases/accessibility-release-review.md'
+      - 'docs/releases/accessibility-readiness.json'
+      - 'tools/release/validate_accessibility_readiness.py'
+      - '.github/workflows/phase5104-accessibility-readiness.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Validate fail-closed accessibility evidence
+        run: python tools/release/validate_accessibility_readiness.py

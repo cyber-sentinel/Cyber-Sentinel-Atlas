@@ -81,3 +81,14 @@ The actual review evidence should be stored as a versioned artifact or repositor
 - final PPR-07 decision.
 
 This document defines the acceptance contract for PPR-07 while preserving its current `PARTIAL` state until executable release evidence exists.
+
+
+## Machine-readable release control
+
+PPR-07 release evidence is also controlled by:
+
+- `docs/releases/accessibility-readiness.json` — machine-readable gate state and exact-package review record;
+- `tools/release/validate_accessibility_readiness.py` — fail-closed baseline/strict-release validator;
+- `.github/workflows/phase5104-accessibility-readiness.yml` — CI enforcement.
+
+The validator does not allow `PASS` from static/source inspection. Strict release mode requires a 64-character package SHA-256, completed manual review, all mandatory matrix rows at `PASS`, zero A11Y-1/A11Y-2 open defects, and recorded Windows/WebView2/Narrator/reviewer/display evidence.

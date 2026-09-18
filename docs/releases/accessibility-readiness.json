@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "gate": "PPR-07",
+  "state": "PARTIAL",
+  "release_package_sha256": null,
+  "manual_review_complete": false,
+  "severity_1_open": 0,
+  "severity_2_open": 0,
+  "matrix": {
+    "keyboard_navigation": "NOT_RUN",
+    "focus_visibility": "NOT_RUN",
+    "accessible_names": "NOT_RUN",
+    "semantic_structure": "NOT_RUN",
+    "windows_narrator": "NOT_RUN",
+    "high_contrast": "NOT_RUN",
+    "display_scaling": "NOT_RUN",
+    "text_zoom_reflow": "NOT_RUN",
+    "color_independence": "NOT_RUN",
+    "error_handling": "NOT_RUN",
+    "motion": "NOT_RUN",
+    "localization_resilience": "NOT_RUN"
+  },
+  "environment": {
+    "windows_build": null,
+    "webview2_version": null,
+    "display_configurations": [],
+    "screen_reader": null,
+    "reviewer": null,
+    "reviewed_at_utc": null
+  },
+  "evidence": [
+    "docs/releases/accessibility-release-review.md",
+    "benchmarks/desktop/phase56/candidates/tauri/www/index.html"
+  ],
+  "notes": "Source/static semantics are preflight only. PASS requires manual review on the exact packaged Public Preview candidate."
+}
