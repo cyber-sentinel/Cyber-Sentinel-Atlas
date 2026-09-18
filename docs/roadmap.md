@@ -186,25 +186,25 @@ Current mandatory gate state:
 
 ### Phase 5.10.1 — Licensing & Redistribution Closure
 
-Status: **BLOCKED**
+Status: **CONTROL PLANE COMPLETE / RELEASE GATES BLOCKED**
 
 Requires an explicit first-party licensing decision plus exact third-party redistribution clearance for the public release payload. Automation will not choose a license on behalf of the project owner.
 
 ### Phase 5.10.2 — Production Signing & Artifact Attestation
 
-Status: **BLOCKED**
+Status: **CONTROL PLANE COMPLETE / PROVIDER DECISION BLOCKED**
 
 Requires an accepted code-signing certificate/provider, certificate lifecycle, protected key custody (for example an accepted HSM/KMS model), signing workflow, verification policy and revocation/rotation procedure. No provider is selected by this roadmap.
 
 ### Phase 5.10.3 — Public Packaging & Distribution Hardening
 
-Status: **BLOCKED**
+Status: **CONTROL PLANE COMPLETE / FORMAT & CHANNEL DECISION BLOCKED**
 
 Requires the signed installer or other approved distribution format, trusted publication channel, release metadata/checksums, rollback/recovery policy and public installation/update documentation. This slice depends on the accepted signing/custody boundary and public-channel decision.
 
 ### Phase 5.10.4 — Accessibility, Freshness & Launch Governance
 
-Status: **IN PROGRESS**
+Status: **CONTROL PLANE COMPLETE / PPR-07 PARTIAL**
 
 Delivered policy/governance controls:
 
@@ -216,7 +216,7 @@ Remaining work in this slice is executable accessibility review on the exact pac
 
 ### Phase 5.10.5 — Usable Data Preview
 
-Status: **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING**
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
 Purpose: close the product-usability gap where the Windows desktop shell and IPC were healthy but no verified knowledge pack was active, causing search to return `ATLAS_PACK_NOT_READY`.
 
@@ -237,7 +237,12 @@ Artifacts:
 - `phase5105-usable-data-preview` — artifact `10512162655`, digest `sha256:65bc9987b9673c0c711e049813b8562b978f30192799f11397cff1113d450f62`;
 - `phase5105-clean-windows-evidence` — artifact `10511033598`, digest `sha256:7c7569437f6139a27cee3743e1e0e426a64f03f0dc20044526165c3068bcc60e`.
 
-The next control is PR exact-head CI, merge to `main`, and automatic post-merge rerun on the resulting `main` SHA. Only then may this slice be marked **COMPLETE / MERGED / POST-MERGE VERIFIED**.
+Post-merge artifacts:
+
+- `phase5105-usable-data-preview` — artifact `10530884223`, digest `sha256:174009a03ca99c5df83f3ab4489319f88ab9ff02a1c94343cecd066ac8b9f435`;
+- `phase5105-clean-windows-evidence` — artifact `10532105635`, digest `sha256:efea2fd75a83f6300d7463217a7412c96324a5428e8eaf2ae08ac548039ee438`.
+
+PR #45 is merged. After PR #49 hardened the checksum-pinned Windows dependency transport without weakening integrity checks, post-merge `Phase 5.10.5 Usable Data Preview` run `35305516189` succeeded on `main@4d64b2fb402b280d00c01783f7990538a3b67484`, including clean-Windows Search/Record/Graph/Provenance acceptance and fail-closed TUF target tamper rejection.
 
 This slice does not change the Public Preview PPR matrix. Licensing, redistribution, signing, distribution and executable accessibility remain independent release controls.
 

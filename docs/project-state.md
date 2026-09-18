@@ -4,8 +4,9 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `a8f3b4e9177e89b38a1dcf91ad9ef2d31416bafe`
-- Current control-plane main SHA: `a8f3b4e9177e89b38a1dcf91ad9ef2d31416bafe` at Phase 5.10.5 branch start; resolve live `main` after merge.
+- Last Reviewed Main SHA: `d1efb549c1b651b58052a616bba82a3b146c0d6e`
+- Latest verified Public Preview control-plane baseline: `d1efb549c1b651b58052a616bba82a3b146c0d6e`
+- Release authority remains `main`; documentation commits may advance the branch without redefining the verified control-plane baseline above.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
@@ -16,7 +17,7 @@
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
 - Active phase: **Phase 5.10 — Public Preview Readiness**
-- Phase 5.10.5 Usable Data Preview: **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING**
+- Phase 5.10.5 Usable Data Preview: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
 - Search contract version: `1.0.0`
@@ -57,14 +58,14 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
 - Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.10 — Public Preview Readiness: **ACTIVE**
   - 5.10.0 Public Preview Readiness Baseline: **COMPLETE / MERGED**
-  - 5.10.1 Licensing / Redistribution Closure: **BLOCKED**
-  - 5.10.2 Production Signing / Key Custody / Attestation: **BLOCKED**
-  - 5.10.3 Public Packaging / Distribution Hardening: **BLOCKED**
-  - 5.10.4 Accessibility / Freshness / Launch Governance: **IN PROGRESS**
+  - 5.10.1 Licensing / Redistribution Closure: **CONTROL PLANE COMPLETE / PPR-03 & PPR-04 BLOCKED**
+  - 5.10.2 Production Signing / Key Custody / Attestation: **CONTROL PLANE COMPLETE / PPR-05 BLOCKED**
+  - 5.10.3 Public Packaging / Distribution Hardening: **CONTROL PLANE COMPLETE / PPR-06 BLOCKED**
+  - 5.10.4 Accessibility / Freshness / Launch Governance: **CONTROL PLANE COMPLETE / PPR-07 PARTIAL**
     - PPR-08 source freshness/public-pack publication policy: **PASS**
     - PPR-09 release governance/launch criteria: **PASS**
     - PPR-07 packaged accessibility release review: **PARTIAL**
-  - 5.10.5 Usable Data Preview: **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING**
+  - 5.10.5 Usable Data Preview: **COMPLETE / MERGED / POST-MERGE VERIFIED**
     - clean-Windows Windows Security Event ID `4688`: **PASS**
     - clean-Windows Sysmon Event ID `1`: **PASS**
     - Search / Record / Graph / Provenance: **PASS**
@@ -148,6 +149,8 @@ First Preview packaging is intentionally unsigned. Production Authenticode signi
 
 ## Phase 5.10.5 Usable Data Preview Boundary
 
+**Post-merge Phase 5.10.5 authority:** `main@4d64b2fb402b280d00c01783f7990538a3b67484`, workflow run `35305516189` — **SUCCESS**. Package artifact `10530884223` / `sha256:174009a03ca99c5df83f3ab4489319f88ab9ff02a1c94343cecd066ac8b9f435`; clean-Windows evidence artifact `10532105635` / `sha256:efea2fd75a83f6300d7463217a7412c96324a5428e8eaf2ae08ac548039ee438`.
+
 Phase 5.10.5 closes the usability defect in which the desktop/process/IPC path could be healthy while the packaged product still had no active verified knowledge pack and search returned `ATLAS_PACK_NOT_READY`.
 
 Exact-head evidence authority before PR creation:
@@ -227,7 +230,7 @@ Phase 5.6 / First Preview engineering closure                 COMPLETE
        ↓
 Phase 5.10.0 readiness baseline                              COMPLETE / MERGED
        ↓
-Phase 5.10.5 clean-Windows usable-data acceptance            COMPLETE / EXACT-HEAD VERIFIED
+Phase 5.10.5 clean-Windows usable-data acceptance            COMPLETE / POST-MERGE VERIFIED
        ↓
 Phase 5.10.4 freshness + launch governance                   PASS / POLICY CLOSED
        ↓
