@@ -22,8 +22,6 @@ ATLAS
 ├── ATLAS Web
 │
 ├── ATLAS PWA
-│    ├── Desktop
-│    ├── Android
 │    └── iOS Safari
 │
 ├── ATLAS API
@@ -168,7 +166,7 @@ Public release                                                  PRE-PREVIEW / UN
 
 Status: **APPROVED / DEFERRED UNTIL WINDOWS PUBLIC PREVIEW CLOSURE**
 
-Deliver ATLAS Web plus installable PWA surfaces for desktop, Android-capable browsers and iOS Safari. The Web/PWA product must reuse the same canonical model, provenance semantics and bounded service contracts without exposing a generic Shared Core bridge.
+Deliver ATLAS Web plus the approved installable **iOS Safari PWA** for iPhone/iPad. Desktop and Android use the normal Web surface and are not separate PWA deliverables in the current roadmap. The Web/PWA product must reuse the same canonical model, provenance semantics and bounded service contracts without exposing a generic Shared Core bridge.
 
 ## Phase 5.8 — CLI & Broader API Surfaces
 
