@@ -1,6 +1,13 @@
-# MVP Release Gates
+# Public Preview Release Gates
 
-Atlas must remain private until mandatory public-preview gates are satisfied.
+ATLAS source is publicly inspectable, but **Public Preview binary/content publication remains fail-closed** until the mandatory release gates are satisfied.
+
+The authoritative Public Preview gate matrix is maintained in:
+
+- `docs/releases/phase-5.10-public-preview-readiness.md`;
+- `docs/releases/phase-5.10-public-preview-readiness.json`.
+
+This document summarizes the product/MVP progression and must not override those release authorities.
 
 ## Product Foundation
 
@@ -15,52 +22,92 @@ Atlas must remain private until mandatory public-preview gates are satisfied.
 - [x] Offline-first model defined
 - [x] API/CLI direction defined
 - [x] Security architecture defined
-- [x] MVP scope defined
+- [x] Windows-first MVP scope defined
 
-## Stage 1 Architecture / Governance Sync
+## Architecture / Governance Foundation
 
-- [x] `docs/project-state.md` merged
-- [x] Phase 5.1 consistently marked COMPLETE
-- [x] Atlas / DefenseOps / Forge ownership synchronized
+- [x] Project-state authority established
 - [x] Canonical identifier architecture recorded
-- [x] Shared-core/Desktop/Web sequencing synchronized
+- [x] Shared-core/interface sequencing synchronized
 - [x] Universal telemetry taxonomy recorded
 - [x] Coverage architecture recorded
 - [x] Controlled content release pipeline recorded
 - [x] Legacy/current telemetry lifecycle recorded
-- [x] ADR-0004 through ADR-0010 merged
+- [x] Canonical schema v1.0.0 implemented with exactly seven AtlasRecord families
+- [x] Production Go Shared Core selected and implemented
+- [x] SQLite + FTS5 deterministic search selected and implemented
+- [x] TUF content-pack trust/update model implemented
+- [x] Tauri 2.x selected for the Windows Desktop host
 
-## Before Public Preview
+## Windows First Preview Engineering Boundary
 
-- [x] Canonical Phase 5.2 schemas implemented and versioned
-- [ ] Source registry implemented
-- [x] Claim-level provenance enforced
-- [ ] Windows/Sysmon ingestion pipeline implemented
-- [ ] Exact and lexical search implemented
-- [ ] Offline shared runtime implemented
-- [ ] Windows Desktop MVP implemented
-- [ ] Web/PWA baseline implemented
-- [ ] At least one signed Atlas content pack
-- [ ] Pack install/verify/rollback path implemented
-- [ ] DefenseOps import pipeline implemented
-- [ ] Telemetry Coverage reported with declared denominator/scope/version
-- [ ] Detection Coverage reported separately
-- [ ] Security review completed
-- [ ] License/source redistribution review completed
-- [ ] Automated tests and CI green
-- [ ] No secrets or internal organizational data
-- [ ] Accessibility baseline completed
-- [ ] Performance targets measured
-- [ ] Public documentation and contribution policy ready
+- [x] Source registry / ingestion control plane implemented
+- [x] Windows/Sysmon ingestion foundation implemented
+- [x] Exact and lexical search implemented
+- [x] Offline Shared Core runtime implemented
+- [x] Windows Desktop MVP implemented
+- [x] Verified content-pack install / trust / update / rollback path implemented
+- [x] Clean-Windows package smoke accepted
+- [x] Pack bootstrap gap `ATLAS_PACK_NOT_READY` closed for the engineering usable-data preview
+- [x] Search → Record → Graph → Provenance acceptance proved for Windows Security `4688` and Sysmon `1`
+
+The current engineering pack is **not** the complete Windows Security Corpus.
+
+## Mandatory Windows Security Corpus Completion
+
+Before declaring the approved Windows corpus complete:
+
+- [ ] provider/channel/version denominators frozen for every mandatory telemetry family;
+- [ ] Sysmon documented coverage reaches the frozen target set;
+- [ ] Microsoft-Windows-Security-Auditing coverage reaches the frozen target set;
+- [ ] PowerShell Operational coverage accepted;
+- [ ] Windows Defender coverage accepted;
+- [ ] AppLocker coverage accepted;
+- [ ] WMI Activity coverage accepted;
+- [ ] Task Scheduler Operational coverage accepted;
+- [ ] RDP / Terminal Services coverage accepted;
+- [ ] Windows Firewall / Filtering Platform coverage accepted;
+- [ ] DNS Client / DNS Server coverage accepted where applicable;
+- [ ] Service Control Manager / service and persistence telemetry coverage accepted;
+- [ ] every in-scope identifier/state is explicit with no silent omissions;
+- [ ] canonical records, provenance, index, pack and coverage snapshots are consistent;
+- [ ] exhaustive lookup/negative tests pass against the exact pack.
+
+The detailed authority is `docs/windows-sysmon-coverage-plan.md`.
+
+## Public Preview Mandatory Closure
+
+Current release blockers remain separate from corpus engineering:
+
+- [ ] first-party licensing decision (PPR-03);
+- [ ] exact third-party redistribution closure (PPR-04);
+- [ ] production code signing / protected key custody (PPR-05);
+- [ ] exact public package/distribution evidence (PPR-06);
+- [ ] packaged executable accessibility review (PPR-07).
+
+Already established supporting controls include engineering baseline, security disclosure policy, source freshness/publication policy, release governance, supply-chain evidence and trademark/attribution controls.
+
+## Approved Post-Windows Product Surfaces
+
+These are approved delivery scope but are **not blockers for the first Windows Public Preview**:
+
+- ATLAS CLI — Windows / Linux / macOS;
+- ATLAS Web;
+- ATLAS PWA — iOS Safari;
+- ATLAS Public API;
+- ATLAS Desktop — Linux / macOS;
+- ATLAS Native Mobile — iOS / Android.
 
 ## Stable Public Release
 
-Public stable release requires additional evidence for:
+A later stable/GA release requires additional release-specific evidence for:
 
 - update reliability;
-- schema migration;
+- schema/data migration;
 - compatibility;
 - signed releases;
 - source freshness monitoring;
 - security maintenance policy;
-- community contribution governance.
+- operational supportability;
+- contribution/licensing governance;
+- platform-specific signing/notarization/store requirements for additional product surfaces.
