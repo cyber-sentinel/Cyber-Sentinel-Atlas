@@ -9,7 +9,9 @@ Phase 5.10.1 release-scoped redistribution controls are maintained in:
 - [`docs/releases/third-party-redistribution-closure.md`](docs/releases/third-party-redistribution-closure.md) — human-readable closure criteria and current review boundary;
 - [`docs/releases/third-party-redistribution-inventory.json`](docs/releases/third-party-redistribution-inventory.json) — machine-readable source/runtime inventory and redistribution state;
 - [`tools/release/validate_redistribution_inventory.py`](tools/release/validate_redistribution_inventory.py) — fail-closed baseline and strict-release validator;
-- [`tools/release/generate_public_preview_notice_bundle.py`](tools/release/generate_public_preview_notice_bundle.py) — deterministic draft/release notice metadata generator; release mode fails closed until exact PPR-04 closure and package binding.
+- [`tools/release/generate_public_preview_notice_bundle.py`](tools/release/generate_public_preview_notice_bundle.py) — deterministic draft/release notice metadata generator; release mode fails closed until exact PPR-04 closure and package binding;
+- [`third_party/license-material/manifest.json`](third_party/license-material/manifest.json) — exact upstream-revision/blob mapping for pinned third-party license material;
+- [`tools/release/validate_pinned_license_material.py`](tools/release/validate_pinned_license_material.py) — byte-identity validator and SHA-256 evidence generator for pinned license material.
 
 PPR-04 remains **BLOCKED** until the exact Public Preview corpus and software payload are frozen, all included entries are explicitly accepted, required notices are prepared, and the evidence is bound to the exact release package SHA-256.
 

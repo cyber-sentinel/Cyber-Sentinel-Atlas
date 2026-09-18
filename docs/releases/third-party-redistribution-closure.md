@@ -106,6 +106,21 @@ Two modes are intentionally separate:
 
 The Phase 5.10.1 workflow generates and uploads the draft on relevant changes so notice rendering remains executable evidence rather than a manually maintained release claim. Draft generation does not change redistribution state.
 
+## B.2 Pinned upstream license material
+
+ATLAS now keeps byte-identical copies of the upstream license material for the four conditionally-clearable knowledge sources selected by the current PPR-04 inventory:
+
+- MITRE ATT&CK Enterprise;
+- MITRE CAR;
+- MITRE D3FEND ontology;
+- Microsoft Sysinternals / Sysmon documentation.
+
+The authoritative mapping is `third_party/license-material/manifest.json`. Each material entry records the exact upstream repository, pinned commit, upstream path, upstream Git blob SHA-1 and local path.
+
+`tools/release/validate_pinned_license_material.py` reconstructs the Git blob object ID from the local bytes and requires it to match the recorded upstream blob exactly. It also emits SHA-256 and size evidence for later package binding.
+
+This is **evidence only**. The local presence of upstream license material does not promote an inventory entry to `ACCEPTED`, does not determine legal compatibility, and does not authorize publication.
+
 ## C. Public Preview pack construction rule
 
 The Public Preview corpus must be an allowlist, not a denylist. Pack build input must identify each included source target and its redistribution decision. A source target with any state other than an explicitly accepted redistributable state must cause pack publication to fail.
@@ -130,7 +145,7 @@ release_package_sha256
 PPR-04 remains **BLOCKED** until all of the following are complete:
 
 - exact Public Preview knowledge-corpus allowlist is selected;
-- conditionally clearable ATT&CK/CAR/D3FEND/Sysmon entries are promoted to exact `ACCEPTED` release entries with final attribution material;
+- pinned byte-identical license material for ATT&CK/CAR/D3FEND/Sysmon is now available and CI-verified; the entries still require explicit reviewed promotion to exact `ACCEPTED` release entries with final attribution/material-selection evidence;
 - exact Rust/Tauri preflight dependency/license and frontend-asset evidence is automated; final evidence must still be regenerated and bound to the frozen release build/package;
 - final release assets/fonts/icons, including generated/bundled artifacts outside the source `www` tree, are inventoried;
 - deterministic draft notice generation is automated; the final third-party license/NOTICE bundle must still be generated in strict release mode and must include the separately pinned upstream license/notice material required by each accepted entry;

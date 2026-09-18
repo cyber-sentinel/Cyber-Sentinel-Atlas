@@ -15,7 +15,10 @@
       "license_source": "https://github.com/mitre-attack/attack-stix-data/blob/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/LICENSE.txt",
       "redistribution_state": "CONDITIONALLY_CLEARABLE",
       "required_notices": "MITRE copyright designation and license text",
-      "review_evidence": "ingestion/source-profiles/mitre-attack-enterprise.release.json"
+      "review_evidence": "ingestion/source-profiles/mitre-attack-enterprise.release.json",
+      "license_material_path": "third_party/license-material/mitre-attack-enterprise/LICENSE.txt",
+      "license_material_manifest": "third_party/license-material/manifest.json",
+      "license_material_state": "PINNED_BYTE_IDENTICAL_EVIDENCE_ONLY"
     },
     {
       "id": "mitre-car",
@@ -26,7 +29,10 @@
       "license_source": "https://github.com/mitre-attack/car/blob/1b922fe1527d956e222a99473472e594f10f610b/LICENSE.txt",
       "redistribution_state": "CONDITIONALLY_CLEARABLE",
       "required_notices": "Apache-2.0 license and applicable upstream notices",
-      "review_evidence": "ingestion/source-profiles/mitre-car.release.json"
+      "review_evidence": "ingestion/source-profiles/mitre-car.release.json",
+      "license_material_path": "third_party/license-material/mitre-car/LICENSE.txt",
+      "license_material_manifest": "third_party/license-material/manifest.json",
+      "license_material_state": "PINNED_BYTE_IDENTICAL_EVIDENCE_ONLY"
     },
     {
       "id": "mitre-d3fend-ontology",
@@ -37,7 +43,10 @@
       "license_source": "https://github.com/d3fend/d3fend-ontology/blob/6f888567acb359328ebd1e793b7e01581b6a03ed/LICENSE.md",
       "redistribution_state": "CONDITIONALLY_CLEARABLE",
       "required_notices": "MIT copyright and permission notice",
-      "review_evidence": "ingestion/source-profiles/mitre-d3fend-ontology.release.json"
+      "review_evidence": "ingestion/source-profiles/mitre-d3fend-ontology.release.json",
+      "license_material_path": "third_party/license-material/mitre-d3fend-ontology/LICENSE.md",
+      "license_material_manifest": "third_party/license-material/manifest.json",
+      "license_material_state": "PINNED_BYTE_IDENTICAL_EVIDENCE_ONLY"
     },
     {
       "id": "microsoft-windows-security-documentation",
@@ -59,7 +68,10 @@
       "license_source": "https://github.com/MicrosoftDocs/sysinternals/blob/8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6/LICENSE",
       "redistribution_state": "CONDITIONALLY_CLEARABLE",
       "required_notices": "CC-BY-4.0 attribution, copyright/source identification, license reference, and modification indication where applicable; no trademark/endorsement claim",
-      "review_evidence": "ingestion/source-profiles/microsoft-sysmon-docs.release.json plus pinned repository LICENSE"
+      "review_evidence": "ingestion/source-profiles/microsoft-sysmon-docs.release.json plus pinned repository LICENSE",
+      "license_material_path": "third_party/license-material/microsoft-sysmon-documentation/LICENSE",
+      "license_material_manifest": "third_party/license-material/manifest.json",
+      "license_material_state": "PINNED_BYTE_IDENTICAL_EVIDENCE_ONLY"
     },
     {
       "id": "cyber-sentinel-defenseops-content",
