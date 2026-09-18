@@ -12,6 +12,8 @@ ATLAS must remain usable for analysts who rely on keyboard navigation, Windows a
 
 The First Preview includes accessibility-oriented labels and high-contrast controls, and the selected Windows host has already been evaluated for keyboard/accessibility/DPI feasibility. This is meaningful engineering evidence, but it is not yet the complete release review required by PPR-07.
 
+The source-level preflight now additionally enforces keyboard skip navigation, associated form labels, live status regions, visible focus styling, high-contrast support, responsive breakpoints, a resizable window, and logical minimum window dimensions suitable for 150–200% scaling review. The former fixed `body` minimum width and hidden responsive graph labels were removed. These controls reduce known reflow risk but do not replace executable assistive-technology testing.
+
 ## Mandatory review matrix
 
 The Public Preview candidate must be tested on the exact packaged build for the following:
