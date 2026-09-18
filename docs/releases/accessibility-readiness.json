@@ -30,7 +30,11 @@
   },
   "evidence": [
     "docs/releases/accessibility-release-review.md",
-    "benchmarks/desktop/phase56/candidates/tauri/www/index.html"
+    "benchmarks/desktop/phase56/candidates/tauri/www/index.html",
+    "tools/release/validate_accessibility_preflight.py",
+    ".github/workflows/phase5104-accessibility-readiness.yml",
+    "benchmarks/desktop/phase56/candidates/tauri/www/styles.css",
+    "benchmarks/desktop/phase56/candidates/tauri/tauri.conf.json"
   ],
-  "notes": "Source/static semantics are preflight only. PASS requires manual review on the exact packaged Public Preview candidate."
+  "notes": "Automated source preflight now enforces labels/live regions/focus/high-contrast and responsive reflow bounds. PASS still requires manual Windows/Narrator/high-contrast/scaling review on the exact final signed package."
 }
