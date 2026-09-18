@@ -3,6 +3,7 @@ package app
 import (
 	"encoding/json"
 	"errors"
+	"sort"
 
 	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/canonical"
 	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/graph"
@@ -120,7 +121,143 @@ type searchParams struct {
 }
 
 type recordParams struct {
-	ID string `json:"id"`
+	ID     string `json:"id"`
+	Detail bool   `json:"detail,omitempty"`
+}
+
+const (
+	maxDetailFields        = 256
+	maxDetailClaims        = 1024
+	maxDetailSources       = 256
+	maxDetailRelationships = 512
+)
+
+func appendBounded(records []canonical.Record, record canonical.Record, limit int) ([]canonical.Record, bool) {
+	if len(records) >= limit {
+		return records, true
+	}
+	return append(records, record), false
+}
+
+func recordString(record canonical.Record, key string) string {
+	value, _ := record[key].(string)
+	return value
+}
+
+func evidenceSourceIDs(record canonical.Record) []string {
+	raw, ok := record["evidence"].([]any)
+	if !ok {
+		return nil
+	}
+	ids := make([]string, 0, len(raw))
+	for _, item := range raw {
+		entry, ok := item.(map[string]any)
+		if !ok {
+			continue
+		}
+		if sourceID, ok := entry["source_id"].(string); ok && sourceID != "" {
+			ids = append(ids, sourceID)
+		}
+	}
+	return ids
+}
+
+func buildRecordDetail(store *canonical.Store, record canonical.Record) map[string]any {
+	targetID := recordString(record, "id")
+	fieldIDs := map[string]struct{}{}
+	subjectIDs := map[string]struct{}{targetID: {}}
+	fields := make([]canonical.Record, 0)
+	claims := make([]canonical.Record, 0)
+	sources := make([]canonical.Record, 0)
+	relationships := make([]canonical.Record, 0)
+	sourceIDs := map[string]struct{}{}
+	truncated := map[string]bool{}
+
+	// Pass 1: collect structural field relationships and analyst-facing relationships.
+	for _, id := range store.IDs() {
+		candidate, ok := store.Get(id)
+		if !ok || recordString(candidate, "record_kind") != "relationship" {
+			continue
+		}
+		from := recordString(candidate, "from")
+		to := recordString(candidate, "to")
+		relType := recordString(candidate, "relationship_type")
+		if relType == "HAS_FIELD" && from == targetID && to != "" {
+			fieldIDs[to] = struct{}{}
+			subjectIDs[to] = struct{}{}
+		}
+		if from == targetID || to == targetID {
+			var hit bool
+			relationships, hit = appendBounded(relationships, candidate, maxDetailRelationships)
+			truncated["relationships"] = truncated["relationships"] || hit
+		}
+	}
+
+	orderedFieldIDs := make([]string, 0, len(fieldIDs))
+	for id := range fieldIDs {
+		orderedFieldIDs = append(orderedFieldIDs, id)
+	}
+	sort.Strings(orderedFieldIDs)
+	for _, id := range orderedFieldIDs {
+		if len(fields) >= maxDetailFields {
+			truncated["fields"] = true
+			break
+		}
+		if field, ok := store.Get(id); ok {
+			fields = append(fields, field)
+		}
+	}
+
+	// Pass 2: collect claims for the record and its field entities.
+	for _, id := range store.IDs() {
+		candidate, ok := store.Get(id)
+		if !ok || recordString(candidate, "record_kind") != "claim" {
+			continue
+		}
+		subjectID := recordString(candidate, "subject_id")
+		if _, wanted := subjectIDs[subjectID]; !wanted {
+			continue
+		}
+		var hit bool
+		claims, hit = appendBounded(claims, candidate, maxDetailClaims)
+		truncated["claims"] = truncated["claims"] || hit
+		if !hit {
+			for _, sourceID := range evidenceSourceIDs(candidate) {
+				sourceIDs[sourceID] = struct{}{}
+			}
+		}
+	}
+
+	orderedSourceIDs := make([]string, 0, len(sourceIDs))
+	for id := range sourceIDs {
+		orderedSourceIDs = append(orderedSourceIDs, id)
+	}
+	sort.Strings(orderedSourceIDs)
+	for _, id := range orderedSourceIDs {
+		if len(sources) >= maxDetailSources {
+			truncated["sources"] = true
+			break
+		}
+		if source, ok := store.Get(id); ok {
+			sources = append(sources, source)
+		}
+	}
+
+	return map[string]any{
+		"detail_version": "1.0.0",
+		"record":         record,
+		"fields":         fields,
+		"claims":         claims,
+		"sources":        sources,
+		"relationships":  relationships,
+		"counts": map[string]any{
+			"fields":        len(fieldIDs),
+			"claims":        len(claims),
+			"sources":       len(sourceIDs),
+			"relationships": len(relationships),
+		},
+		"truncated": truncated,
+	}
 }
 
 type catalogParams struct {
@@ -248,6 +385,9 @@ func (r *Runtime) Handle(method string, raw json.RawMessage) (any, *protocol.Ope
 		record, ok := r.Canonical.Get(params.ID)
 		if !ok {
 			return nil, &protocol.OperationError{Code: protocol.CodeRecordNotFound, Message: "canonical record not found"}
+		}
+		if params.Detail {
+			return buildRecordDetail(r.Canonical, record), nil
 		}
 		return record, nil
 	case "catalog.list":
