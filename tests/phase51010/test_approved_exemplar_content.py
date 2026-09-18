@@ -18,6 +18,7 @@ def load_module(name: str, path: Path):
 
 builder = load_module("encyclopedia_builder", ROOT / "tools/content/build_encyclopedia_records.py")
 validator = load_module("phase52_validator", ROOT / "tools/validate_phase52.py")
+coverage_validator = load_module("encyclopedia_coverage_validator", ROOT / "tools/content/validate_encyclopedia_coverage.py")
 
 
 def records_with_paths():
@@ -140,6 +141,10 @@ def test_08_sysmon_schema_refresh_warning_is_explicit():
     assert claims
     for record in claims:
         assert record["object"]["value"]["structural_refresh_state"] == "PENDING_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
+
+
+def test_09_machine_readable_coverage_ledger_is_truthful():
+    assert coverage_validator.validate() == []
 
 
 if __name__ == "__main__":
