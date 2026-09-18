@@ -9,6 +9,9 @@ on:
       - 'docs/releases/accessibility-release-review.md'
       - 'docs/releases/accessibility-readiness.json'
       - 'tools/release/validate_accessibility_readiness.py'
+      - 'tools/release/validate_accessibility_preflight.py'
+      - 'benchmarks/desktop/phase56/candidates/tauri/www/**'
+      - 'benchmarks/desktop/phase56/candidates/tauri/tauri.conf.json'
       - '.github/workflows/phase5104-accessibility-readiness.yml'
   pull_request:
     branches:
@@ -17,6 +20,9 @@ on:
       - 'docs/releases/accessibility-release-review.md'
       - 'docs/releases/accessibility-readiness.json'
       - 'tools/release/validate_accessibility_readiness.py'
+      - 'tools/release/validate_accessibility_preflight.py'
+      - 'benchmarks/desktop/phase56/candidates/tauri/www/**'
+      - 'benchmarks/desktop/phase56/candidates/tauri/tauri.conf.json'
       - '.github/workflows/phase5104-accessibility-readiness.yml'
   workflow_dispatch:
 
@@ -34,5 +40,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+      - name: Validate desktop accessibility and reflow preflight
+        run: python tools/release/validate_accessibility_preflight.py
       - name: Validate fail-closed accessibility evidence
         run: python tools/release/validate_accessibility_readiness.py
