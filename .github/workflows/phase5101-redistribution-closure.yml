@@ -64,16 +64,33 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Validate fail-closed redistribution inventory
         run: python tools/release/validate_redistribution_inventory.py
-      - name: Generate deterministic Public Preview notice draft
+      - name: Prove deterministic Public Preview notice draft
         shell: bash
         run: |
           set -euo pipefail
           output="$RUNNER_TEMP/public-preview-third-party-notices.draft.md"
+          second="$RUNNER_TEMP/public-preview-third-party-notices.second.md"
           python tools/release/generate_public_preview_notice_bundle.py --output "$output"
+          python tools/release/generate_public_preview_notice_bundle.py --output "$second"
+          cmp "$output" "$second"
           grep -F 'Status: **DRAFT / NOT RELEASE AUTHORITY**' "$output"
           grep -F 'Release package SHA-256: `UNBOUND`' "$output"
           grep -F 'Redistribution state: **CONDITIONALLY_CLEARABLE**' "$output"
           echo "PPR04_NOTICE_DRAFT=$output" >> "$GITHUB_ENV"
+      - name: Prove strict notice generation fails closed while PPR-04 is blocked
+        shell: bash
+        run: |
+          set -euo pipefail
+          package_sha="$(printf '0%.0s' {1..64})"
+          output="$RUNNER_TEMP/must-not-be-a-release-notice.md"
+          if python tools/release/generate_public_preview_notice_bundle.py \
+              --release \
+              --package-sha256 "$package_sha" \
+              --output "$output"; then
+            echo "strict PPR-04 notice generation unexpectedly succeeded" >&2
+            exit 1
+          fi
+          test ! -f "$output"
       - name: Upload deterministic notice draft evidence
         uses: actions/upload-artifact@v4
         with:
