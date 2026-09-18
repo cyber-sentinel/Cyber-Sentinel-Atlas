@@ -49,6 +49,26 @@ International-market review questions:
 
 Post-preview candidates: advanced filters, saved/recent searches, richer export, expanded command palette.
 
+## Encyclopedia-grade Record Detail requirement
+
+For Windows/Sysmon telemetry, the Record & Provenance workspace must render a bounded analyst-facing detail projection rather than only the base Canonical Record.
+
+The projection must assemble, under explicit limits:
+
+- base telemetry record;
+- grouped field entities;
+- field-semantic claims;
+- event/version applicability;
+- value dictionaries;
+- collection prerequisites;
+- correlation pivots;
+- source/provenance locators;
+- defensive interpretation clearly separated from sourced fact.
+
+The default relationship graph is not a substitute for this view. Structural `HAS_FIELD` edges may be numerous and are intentionally not part of the default graph expansion.
+
+Any Shared Core/protocol change needed to supply this aggregate must be reviewed explicitly against the current functional freeze.
+
 ## Workspace 2 — Record & Provenance
 
 **Primary mission:** explain the canonical record and prove its claims.
