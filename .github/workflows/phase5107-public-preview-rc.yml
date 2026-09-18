@@ -1,0 +1,68 @@
+name: Phase 5.10.7 Public Preview RC
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/releases/public-preview-rc-contract.md'
+      - 'docs/releases/public-preview-rc-readiness.json'
+      - 'docs/releases/phase-5.10-public-preview-readiness.json'
+      - 'tools/release/validate_public_preview_rc.py'
+      - '.github/workflows/phase5107-public-preview-rc.yml'
+      - 'benchmarks/desktop/phase56/candidates/tauri/**'
+      - 'shared-core/go/**'
+      - 'schemas/v1/**'
+      - 'tools/pack/**'
+      - 'tools/search/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/releases/public-preview-rc-contract.md'
+      - 'docs/releases/public-preview-rc-readiness.json'
+      - 'docs/releases/phase-5.10-public-preview-readiness.json'
+      - 'tools/release/validate_public_preview_rc.py'
+      - '.github/workflows/phase5107-public-preview-rc.yml'
+      - 'benchmarks/desktop/phase56/candidates/tauri/**'
+      - 'shared-core/go/**'
+      - 'schemas/v1/**'
+      - 'tools/pack/**'
+      - 'tools/search/**'
+  workflow_dispatch:
+    inputs:
+      release_candidate_mode:
+        description: 'Run strict v0.1.0-rc.1 gate'
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  freeze-baseline:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.release_candidate_mode != true }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Validate functional freeze and RC baseline
+        run: python tools/release/validate_public_preview_rc.py
+
+  strict-release-candidate:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.release_candidate_mode == true }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Validate strict Public Preview RC
+        run: python tools/release/validate_public_preview_rc.py --release-candidate
