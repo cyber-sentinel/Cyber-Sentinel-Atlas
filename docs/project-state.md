@@ -16,7 +16,7 @@
 - Phase 5.10.6 release vehicle/accessibility hardening: PR #56 — **MERGED**; exact-head applicable workflows **SUCCESS**
 - Phase 5.10.7 Public Preview RC functional freeze: PR #57 — **MERGED**; target `v0.1.0-rc.1`; visual identity intentionally remains open
 - Phase 5.10.8 deterministic PPR-04 notice/package binding: PR #58 — **MERGED**
-- Approved Product Family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (Desktop/Android/iOS Safari), API, Native Mobile (iOS/Android)
+- Approved Product Family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
@@ -105,7 +105,7 @@ ATLAS
 ├── Desktop: Windows / Linux / macOS
 ├── CLI: Windows / Linux / macOS
 ├── Web
-├── PWA: Desktop / Android / iOS Safari
+├── PWA: iOS Safari
 ├── API
 └── Mobile: iOS / Android
 ```
