@@ -95,6 +95,17 @@ Existing Phase 5.5.4D supply-chain controls already generate CycloneDX evidence 
 - Current state: **OUT OF PUBLIC PACK BY DEFAULT**.
 - No source is admitted because it is merely public or technically ingestible. Each source requires exact version/license/attribution review before promotion.
 
+## B.1 Deterministic notice-bundle generation
+
+`tools/release/generate_public_preview_notice_bundle.py` converts the machine-readable redistribution inventory into deterministic human-readable notice metadata without inventing rights or upstream license text.
+
+Two modes are intentionally separate:
+
+- **draft mode** — succeeds while PPR-04 is still BLOCKED, records every included/excluded boundary, marks the package SHA as `UNBOUND` unless supplied, and states `DRAFT / NOT RELEASE AUTHORITY`;
+- **release mode** — fails closed unless the inventory is already `PASS`, the software payload and public corpus are frozen, every included entry is `ACCEPTED`, and the supplied package SHA-256 exactly matches the inventory binding.
+
+The Phase 5.10.1 workflow generates and uploads the draft on relevant changes so notice rendering remains executable evidence rather than a manually maintained release claim. Draft generation does not change redistribution state.
+
 ## C. Public Preview pack construction rule
 
 The Public Preview corpus must be an allowlist, not a denylist. Pack build input must identify each included source target and its redistribution decision. A source target with any state other than an explicitly accepted redistributable state must cause pack publication to fail.
@@ -122,7 +133,7 @@ PPR-04 remains **BLOCKED** until all of the following are complete:
 - conditionally clearable ATT&CK/CAR/D3FEND/Sysmon entries are promoted to exact `ACCEPTED` release entries with final attribution material;
 - exact Rust/Tauri preflight dependency/license and frontend-asset evidence is automated; final evidence must still be regenerated and bound to the frozen release build/package;
 - final release assets/fonts/icons, including generated/bundled artifacts outside the source `www` tree, are inventoried;
-- final third-party license/NOTICE bundle is generated;
+- deterministic draft notice generation is automated; the final third-party license/NOTICE bundle must still be generated in strict release mode and must include the separately pinned upstream license/notice material required by each accepted entry;
 - a machine-readable redistribution manifest is bound to the exact Public Preview package SHA-256;
 - no unresolved/unknown item remains.
 
