@@ -294,6 +294,7 @@ def make_signed_repository(repo: Path, pack_version: str) -> tuple[bytes, dict[s
         "canonical_relationship_count": sum(1 for record in records if record.get("record_kind") == "relationship"),
         "canonical_source_count": sum(1 for record in records if record.get("record_kind") == "source"),
         "search_projection_count": len(graph_corpus.get("records", [])),
+        "graph_edge_count": len(graph_corpus.get("edges", [])),
         "legacy_fixture_graph_edge_count": len(graph_corpus.get("edges", [])),
         "contains_windows_4688": True,
         "contains_windows_4624": True,
