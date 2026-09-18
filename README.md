@@ -137,6 +137,8 @@ The pinned Sysmon 15.21 profile enumerates **30 documented event IDs** (`1..29` 
 
 Authoritative coverage plan: [`docs/windows-sysmon-coverage-plan.md`](docs/windows-sysmon-coverage-plan.md).
 
+Telemetry content-depth contract: [`docs/content/telemetry-record-content-contract.md`](docs/content/telemetry-record-content-contract.md). A Windows/Sysmon Event ID counts as release coverage only after it reaches **ENCYCLOPEDIA_GRADE** depth: field dictionary, version applicability, collection prerequisites, value semantics, correlation pivots, defensive interpretation and provenance.
+
 Workspace UX authority: [`docs/ux/ux-information-architecture.md`](docs/ux/ux-information-architecture.md) and [`docs/ux/workspace-product-review.md`](docs/ux/workspace-product-review.md). Final visual freeze requires page-by-page product review; visual polish must not silently expand the frozen Core/API boundary.
 
 The approved Windows Security Corpus additionally mandates **PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, and Service/persistence telemetry** alongside Security-Auditing and Sysmon. These families are release-planned corpus scope, not optional future ideas.
