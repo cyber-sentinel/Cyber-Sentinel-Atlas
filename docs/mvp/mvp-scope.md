@@ -1,92 +1,136 @@
-# MVP Scope
+# ATLAS Windows MVP & Approved Product Expansion
 
-## MVP Objective
+## Windows MVP Objective
 
-Deliver a product that is already useful to Windows/SOC analysts before expanding horizontally, while preserving a universal underlying telemetry model.
+Deliver an operationally useful Windows analyst product first, while preserving a universal canonical/security knowledge model that can be consumed by later CLI, Web, API, cross-platform Desktop and Mobile surfaces.
 
-## In Scope
+The Windows MVP implementation is engineering-ready. Public Preview release closure and corpus expansion remain active work.
 
-### Content
+## Mandatory Windows Security Corpus Scope
 
-- Windows Security Events — prioritized security-relevant subset;
-- Sysmon Events;
-- PowerShell operational/security telemetry;
-- Active Directory relationships;
-- MITRE ATT&CK mappings;
-- selected D3FEND/CAR relationships where authoritative mapping is defensible;
-- DefenseOps Windows PowerShell/LOLBin detections;
-- DefenseOps threat hunts;
-- investigation pivots;
+The approved Windows corpus is not limited to two demonstration events.
+
+Mandatory telemetry families are:
+
+- Microsoft-Windows-Security-Auditing / Security;
+- Microsoft Sysmon;
+- PowerShell Operational;
+- Windows Defender native operational/security telemetry;
+- AppLocker;
+- WMI Activity;
+- Task Scheduler Operational;
+- Remote Desktop / Terminal Services;
+- Windows Firewall / Windows Filtering Platform;
+- DNS Client / DNS Server where applicable;
+- Service Control Manager / service and process-persistence telemetry;
+- additional persistence-relevant Windows providers admitted through explicit source/version/provenance review.
+
+Additional knowledge relationships include:
+
+- MITRE ATT&CK;
+- selected D3FEND and CAR relationships where defensible;
+- controlled DefenseOps detections/hunts;
+- investigation and DFIR pivots;
 - source/provenance metadata.
 
-### Shared Core
+A telemetry family counts as covered only when its denominator/scope is explicit and its accepted records are canonicalized, provenance-bound, indexed, packed and tested.
 
-- canonical local dataset;
+## Shared Core
+
+The frozen First Preview Shared Core provides:
+
+- canonical local dataset contracts;
 - exact identifier resolution;
-- lexical search;
-- relationship graph traversal;
+- SQLite + FTS5 lexical search;
+- bounded relationship graph traversal;
 - claim-level provenance;
-- versioned/signed/checksummed offline packs;
+- versioned TUF-verified offline packs;
 - schema/compatibility verification;
-- last-known-good preservation;
-- atomic install and rollback-safe updates;
-- shared contracts consumed by all interfaces.
+- trusted-time/highest-seen anti-rollback state;
+- immutable generations;
+- Last Known Good preservation;
+- atomic activation and safe rollback;
+- shared contracts consumed by product surfaces.
 
-### First Full End-User Interface — Windows Desktop
+## Current End-User Surface — Windows Desktop
+
+The selected Tauri 2.x Windows Desktop provides:
 
 - fast offline lookup;
-- exact identifier search;
-- lexical search;
-- relationship navigation;
+- exact and lexical search;
+- canonical record detail;
+- bounded relationship navigation;
 - provenance visibility;
-- no mandatory Internet connection;
-- signed pack updates;
-- safe rollback.
+- verified pack state/update/rollback;
+- diagnostics;
+- no mandatory Internet connection for core installed-pack investigation.
 
-Portable Windows mode remains an approved requirement candidate and must be evaluated during Desktop design.
+The initial Public Preview release vehicle is a signed portable ZIP distributed through GitHub Releases once the mandatory PPR gates pass.
 
-### Subsequent Interfaces
+## Approved Subsequent Interfaces
 
-- Web/PWA using the same canonical model and shared contracts;
-- read-only API;
-- official `atlas` CLI for search/read/relationship/pack operations;
-- grounded AI only after deterministic retrieval and provenance are mature.
+The approved product family is:
 
-### Quality
+```text
+ATLAS
+├── Desktop: Windows / Linux / macOS
+├── CLI: Windows / Linux / macOS
+├── Web
+├── PWA: iOS Safari
+├── API
+└── Mobile: iOS / Android
+```
+
+Delivery sequence after Windows closure:
+
+1. Windows Security Corpus expansion;
+2. ATLAS CLI;
+3. ATLAS Web + iOS Safari PWA;
+4. ATLAS Public API;
+5. Linux/macOS Desktop;
+6. Native iOS/Android.
+
+Desktop and Android browser use are covered by the normal Web surface and are not separate PWA product deliverables.
+
+Grounded AI remains deferred until deterministic retrieval, provenance and release boundaries are mature.
+
+## Quality
 
 - schema validation;
-- link/source validation where technically possible;
+- source/license/provenance validation;
 - duplicate canonical-ID checks;
-- provenance-required checks;
 - version/freshness checks;
-- telemetry coverage snapshots with declared scope/version/denominator;
-- detection coverage snapshots kept separate from telemetry coverage;
-- CI.
+- machine-readable coverage snapshots with declared provider/channel/version denominator;
+- detection coverage kept separate from telemetry coverage;
+- exhaustive identifier and negative tests;
+- exact-pack CI/release evidence.
 
-## Explicitly Deferred
+## Explicitly Deferred From Windows Public Preview
 
-- full cloud content coverage;
-- full Linux/macOS content coverage;
-- every database;
+- broad cloud corpus completion;
+- broad Linux/macOS telemetry corpus completion;
 - live SIEM integrations;
 - enterprise multi-tenancy;
 - production SOAR actions;
 - automatic remediation;
 - broad generative query conversion without validation;
-- large social/community features.
+- native mobile;
+- Linux/macOS Desktop;
+- public API/Web/PWA release.
 
-Universal schema support for deferred domains does not require their ingestion during the MVP.
+Universal schema support for a domain does not imply that its corpus is already delivered.
 
-## MVP Success Criteria
+## Windows Product Success Criteria
 
 A Windows analyst can:
 
-1. search Event ID 4688 and land on the correct canonical entity instantly;
-2. inspect meaning and important fields;
-3. traverse to Sysmon/ATT&CK/detections/hunts;
-4. inspect source-backed claims;
-5. use the same core content offline;
-6. distinguish current and historical/legacy telemetry;
-7. copy a relevant validated query where available;
+1. search a covered native identifier and resolve the correct canonical record deterministically;
+2. understand provider/channel/version applicability;
+3. inspect meaning, fields and security context present in the accepted corpus;
+4. traverse defensible relationships without losing provenance;
+5. inspect evidence behind material claims;
+6. work against installed verified content without Internet access;
+7. distinguish current/legacy/version-specific telemetry;
 8. understand validation and applicability limitations;
-9. update a signed local pack without risking corruption of the last-known-good dataset.
+9. update/rollback a trusted pack without corrupting Last Known Good;
+10. distinguish an unknown/out-of-scope identifier from a broken search result.
