@@ -21,6 +21,7 @@ Those states are deliberately not treated as equivalent.
 ## Release authorities
 
 - Latest verified control-plane baseline: `main@d1efb549c1b651b58052a616bba82a3b146c0d6e` — PPR-03 through PPR-07 control planes integrated; post-merge validators green
+- Usable Data Preview post-merge baseline: `main@4d64b2fb402b280d00c01783f7990538a3b67484`, run `35305516189` — **SUCCESS**
 - First Preview package baseline: `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - First Preview post-merge package run: `35133827422` — **SUCCESS**
 - Public Preview authority: future explicit release gate; not yet granted
