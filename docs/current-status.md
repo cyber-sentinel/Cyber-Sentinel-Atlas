@@ -18,7 +18,7 @@ Status timestamp: 2026-09-18
 - Active phase: **Phase 5.10 — Public Preview Readiness**
 - Baseline slice: **Phase 5.10.0 — COMPLETE / MERGED**
 - Phase 5.10.4 — Accessibility / Freshness / Launch Governance: **CONTROL PLANE COMPLETE / PPR-07 PARTIAL**
-- Phase 5.10.5 — Usable Data Preview: **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING**
+- Phase 5.10.5 — Usable Data Preview: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 - Public Preview readiness: **BLOCKED**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
@@ -66,7 +66,7 @@ Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that 
   - source freshness / public-pack publication policy: **PASS / POLICY CLOSED**
   - release governance / launch / rollback / revocation criteria: **PASS / POLICY CLOSED**
   - packaged accessibility release review: **PARTIAL / EXECUTABLE REVIEW REQUIRED**
-- Phase 5.10.5 — Usable Data Preview: **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING**
+- Phase 5.10.5 — Usable Data Preview: **COMPLETE / MERGED / POST-MERGE VERIFIED**
   - exact Windows Security Event ID `4688` search: **PASS**
   - Sysmon Event ID `1` search: **PASS**
   - packaged Record / Graph / Provenance flow: **PASS**
@@ -145,6 +145,8 @@ The First Preview artifact remains an **unsigned portable ZIP**. Production Auth
 ## Phase 5.10.5 — Usable Data Preview evidence
 
 The final engineering acceptance run before PR creation is `Phase 5.10.5 Usable Data Preview` run `35253441607` on exact head `e5f76ef8f9bc8dad83b12387a7e7b9edfc6dd8a4` — **SUCCESS**.
+
+Post-merge verification run `35305516189` succeeded on engineering baseline `main@4d64b2fb402b280d00c01783f7990538a3b67484`. Both `build exact-head usable data preview` and `clean Windows first-run Search Record Graph` passed. The post-merge package artifact is `phase5105-usable-data-preview` (artifact `10530884223`, digest `sha256:174009a03ca99c5df83f3ab4489319f88ab9ff02a1c94343cecd066ac8b9f435`) and the clean-Windows evidence is `phase5105-clean-windows-evidence` (artifact `10532105635`, digest `sha256:efea2fd75a83f6300d7463217a7412c96324a5428e8eaf2ae08ac548039ee438`).
 
 Both jobs passed:
 
