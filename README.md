@@ -19,7 +19,8 @@ ATLAS is built for security teams that need investigation context to be **determ
 > **Current maturity:** Engineering-ready First Preview
 > **Release state:** Pre-preview / unreleased
 > **Repository visibility:** Public
-> **Active workstream:** Phase 5.10 — Public Preview release-candidate decisions & evidence closure
+> **Active workstream:** Phase 5.10.7 — Public Preview RC functional freeze & evidence closure
+> **RC target:** `v0.1.0-rc.1` — functionally frozen; release evidence still blocked
 > **Public Preview state:** **BLOCKED** until every mandatory release gate passes
 > **Desktop:** Windows / Tauri 2.x — ADR-0026 Accepted
 > **Shared Core:** Go / bounded child-process stdio
@@ -235,6 +236,7 @@ Authoritative controls:
 - [Source Freshness & Public Pack Publication Policy](docs/releases/source-freshness-and-publication-policy.md)
 - [Public Preview Launch Governance](docs/releases/public-preview-launch-governance.md)
 - [Accessibility Release Review Contract](docs/releases/accessibility-release-review.md)
+- [Public Preview RC Functional Freeze Contract](docs/releases/public-preview-rc-contract.md)
 
 PPR-08 and PPR-09 are policy-closed and CI-enforced. PPR-07 remains partial until the exact packaged Public Preview candidate completes the executable Windows keyboard/Narrator/high-contrast/DPI review. Licensing, redistribution, production signing, and public packaging remain explicit blockers and are not auto-selected by tooling.
 
@@ -309,6 +311,10 @@ The critical path is Phase 5.10 Public Preview readiness:
 First Preview engineering closure                         COMPLETE
         ↓
 Phase 5.10.5 usable-data analyst flow                    POST-MERGE VERIFIED
+        ↓
+Phase 5.10.6 release vehicle/accessibility hardening      MERGED / VERIFIED
+        ↓
+Phase 5.10.7 functional freeze for v0.1.0-rc.1            ACTIVE / RC EVIDENCE BLOCKED
         ↓
 PPR-08 freshness/publication policy                      PASS
 PPR-09 launch/rollback/revocation governance             PASS
