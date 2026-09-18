@@ -13,6 +13,8 @@ INVENTORY = ROOT / "docs" / "releases" / "third-party-redistribution-inventory.j
 POLICY = ROOT / "docs" / "releases" / "third-party-redistribution-closure.md"
 NOTICES = ROOT / "THIRD_PARTY_NOTICES.md"
 FINAL_RELEASE_NOTICES = ROOT / "docs" / "releases" / "public-preview-third-party-notices.md"
+TAURI_EVIDENCE_TOOL = ROOT / "tools" / "release" / "generate_tauri_redistribution_evidence.py"
+TAURI_EVIDENCE_WORKFLOW = ROOT / ".github" / "workflows" / "phase5101-redistribution-closure.yml"
 ALLOWED_ENTRY_STATES = {
     "ACCEPTED",
     "CONDITIONALLY_CLEARABLE",
@@ -37,7 +39,7 @@ def load_inventory(errors: list[str]) -> dict:
 
 
 def validate_baseline(data: dict, errors: list[str]) -> None:
-    for path in (INVENTORY, POLICY, NOTICES):
+    for path in (INVENTORY, POLICY, NOTICES, TAURI_EVIDENCE_TOOL, TAURI_EVIDENCE_WORKFLOW):
         if not path.is_file():
             fail(errors, f"missing redistribution control artifact: {path.relative_to(ROOT)}")
 
@@ -112,6 +114,21 @@ def validate_baseline(data: dict, errors: list[str]) -> None:
                 fail(errors, f"blocked redistribution policy missing required token: {token}")
     elif data.get("state") == "PASS" and "Status: **CLOSED / RELEASE-SCOPED**" not in policy:
         fail(errors, "closed redistribution policy must record Status: **CLOSED / RELEASE-SCOPED**")
+
+    tauri_entries = [
+        entry for entry in entries
+        if isinstance(entry, dict) and entry.get("id") == "tauri-rust-runtime"
+    ]
+    if len(tauri_entries) != 1:
+        fail(errors, "redistribution inventory must contain exactly one tauri-rust-runtime entry")
+    else:
+        review_evidence = tauri_entries[0].get("review_evidence", "")
+        for token in (
+            "generate_tauri_redistribution_evidence.py",
+            "phase5101-redistribution-closure.yml",
+        ):
+            if token not in review_evidence:
+                fail(errors, f"tauri-rust-runtime review_evidence must reference {token}")
 
     notices = NOTICES.read_text(encoding="utf-8") if NOTICES.is_file() else ""
     if "non-waivable publication failure" not in notices:

@@ -88,11 +88,11 @@
       "class": "software-runtime",
       "included": true,
       "upstream_revision": "Tauri 2.11.5 + committed Cargo.lock",
-      "license_or_terms": "Exact Cargo dependency license inventory pending release build",
-      "license_source": "",
+      "license_or_terms": "Exact Windows-target Cargo metadata/license evidence generated from committed lock; final release-package notice binding remains pending",
+      "license_source": "Cargo package license/license_file metadata from the exact locked Windows-target dependency graph",
       "redistribution_state": "BUILD_EVIDENCE_REQUIRED",
-      "required_notices": "Generate exact crate/license/notice bundle from release lock/build",
-      "review_evidence": "benchmarks/desktop/phase56/candidates/tauri/Cargo.lock"
+      "required_notices": "Generate final crate/license/notice bundle from the frozen release graph and bind it to the exact Public Preview package",
+      "review_evidence": ".github/workflows/phase5101-redistribution-closure.yml + tools/release/generate_tauri_redistribution_evidence.py + benchmarks/desktop/phase56/candidates/tauri/Cargo.lock"
     },
     {
       "id": "webview2-runtime",
