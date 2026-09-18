@@ -8,7 +8,8 @@ import hashlib
 import json
 import re
 import sys
-from pathlib import Path
+import zipfile
+from pathlib import Path, PurePosixPath
 
 COMMIT40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -57,6 +58,10 @@ def main() -> int:
     if not isinstance(data.get("release_commit"), str) or not COMMIT40.fullmatch(data["release_commit"]):
         errors.append("release_commit must be an exact 40-character lowercase SHA")
 
+    zip_entry_count = data.get("package_zip_entry_count")
+    if not isinstance(zip_entry_count, int) or isinstance(zip_entry_count, bool) or zip_entry_count <= 0:
+        errors.append("package_zip_entry_count must be a positive integer")
+
     artifacts = data.get("artifacts")
     if not isinstance(artifacts, dict) or set(artifacts) != EXPECTED_ROLES:
         errors.append("binding must contain exactly package/SBOM/notices/release-notes roles")
@@ -87,6 +92,30 @@ def main() -> int:
             actual = sha256(path)
             if actual != expected_hash:
                 errors.append(f"{role}: SHA-256 mismatch")
+
+        if role == "package":
+            if not zipfile.is_zipfile(path):
+                errors.append("package: bound file is not a valid ZIP archive")
+            else:
+                seen_entries: set[str] = set()
+                actual_file_entries = 0
+                with zipfile.ZipFile(path, "r") as archive:
+                    for info in archive.infolist():
+                        normalized = info.filename.replace("\\", "/")
+                        pure = PurePosixPath(normalized)
+                        if pure.is_absolute() or ".." in pure.parts:
+                            errors.append(f"package: unsafe ZIP entry path: {info.filename}")
+                        if normalized in seen_entries:
+                            errors.append(f"package: duplicate ZIP entry: {info.filename}")
+                        seen_entries.add(normalized)
+                        if not info.is_dir():
+                            actual_file_entries += 1
+                if actual_file_entries <= 0:
+                    errors.append("package: ZIP must contain at least one file entry")
+                if isinstance(zip_entry_count, int) and actual_file_entries != zip_entry_count:
+                    errors.append(
+                        "package: ZIP file-entry count does not match binding evidence"
+                    )
 
     if errors:
         print("Public package binding rehearsal validation FAILED:")
