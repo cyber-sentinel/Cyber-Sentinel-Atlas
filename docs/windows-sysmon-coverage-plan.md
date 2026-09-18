@@ -100,6 +100,16 @@ Where a provider has no meaningful numeric Event-ID denominator or changes acros
    - clean-Windows package acceptance;
    - coverage manifest consistency.
 
+## Encyclopedia-grade depth requirement
+
+A telemetry identifier does **not** count toward release coverage merely because the identifier resolves.
+
+The mandatory content-depth contract is defined in [`docs/content/telemetry-record-content-contract.md`](content/telemetry-record-content-contract.md).
+
+Only records that reach `ENCYCLOPEDIA_GRADE` — including applicable field dictionary, field semantics, version applicability, collection prerequisites, value semantics, correlation pivots and provenance — count toward the release numerator.
+
+This prevents shallow records such as "Event ID exists and has a title" from being reported as complete corpus coverage.
+
 ## Completion criteria
 
 The approved Windows Security Corpus release is complete only when:
