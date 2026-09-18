@@ -8,6 +8,13 @@ An Event ID or telemetry record is not considered covered merely because ATLAS c
 
 For Windows Security, Sysmon and the approved Windows telemetry families, a record reaches **ENCYCLOPEDIA_GRADE** only when ATLAS can explain the record at field level with source-backed semantics and operational context.
 
+## Quick Detail source rule
+
+- Windows Security Event IDs: analyst-facing Quick Detail is derived from the Ultimate Windows Security event page for that Event ID.
+- Sysmon Event IDs: analyst-facing Quick Detail is derived from the official Microsoft Sysinternals Sysmon documentation.
+- Full Record & Provenance may contain additional verification sources, but those sources must not silently rewrite Quick Detail.
+- Missing primary-reference content is represented explicitly rather than filled from another reference.
+
 ## Required record sections
 
 Every applicable telemetry record must carry or resolve to:
