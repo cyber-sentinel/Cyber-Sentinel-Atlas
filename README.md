@@ -137,6 +137,8 @@ The pinned Sysmon 15.21 profile enumerates **30 documented event IDs** (`1..29` 
 
 Authoritative coverage plan: [`docs/windows-sysmon-coverage-plan.md`](docs/windows-sysmon-coverage-plan.md).
 
+The approved Windows Security Corpus additionally mandates **PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, and Service/persistence telemetry** alongside Security-Auditing and Sysmon. These families are release-planned corpus scope, not optional future ideas.
+
 ## Architecture
 
 <p align="center">
