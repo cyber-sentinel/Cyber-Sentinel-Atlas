@@ -1,0 +1,269 @@
+{
+  "coverage_contract_version": "1.0.0",
+  "as_of": "2026-09-18",
+  "overall_state": "IN_PROGRESS",
+  "completion_rule": "ATLAS may claim a telemetry family complete only after its version-scoped denominator is frozen and every required identity reaches the declared content and pack acceptance level.",
+  "dimensions": {
+    "content_state": [
+      "NONE",
+      "CATALOG_ONLY",
+      "BASIC_CANONICAL",
+      "STRUCTURED",
+      "ENCYCLOPEDIA_GRADE"
+    ],
+    "engineering_pack_state": [
+      "NOT_INCLUDED",
+      "PACK_INCLUDED",
+      "PACK_VERIFIED"
+    ]
+  },
+  "sysmon": {
+    "semantic_authority": {
+      "product_version": "15.22",
+      "source": "Microsoft Sysinternals / Microsoft Learn",
+      "documented_event_count": 30,
+      "documented_event_ids": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "255"
+      ]
+    },
+    "telemetry_schema_denominator": {
+      "controlled_reference_product_version": "15.21",
+      "schema_version": "4.91",
+      "identity_count": 30,
+      "refresh_state": "PENDING_CONTROLLED_15_22_REFERENCE_EXPORT"
+    },
+    "events": {
+      "1": {
+        "content_state": "BASIC_CANONICAL",
+        "engineering_pack_state": "PACK_VERIFIED"
+      },
+      "2": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "3": {
+        "content_state": "ENCYCLOPEDIA_GRADE",
+        "engineering_pack_state": "PACK_VERIFIED"
+      },
+      "4": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "5": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "6": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "7": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "8": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "9": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "10": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "11": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "12": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "13": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "14": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "15": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "16": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "17": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "18": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "19": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "20": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "21": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "22": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "23": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "24": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "25": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "26": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "27": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "28": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "29": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      },
+      "255": {
+        "content_state": "CATALOG_ONLY",
+        "engineering_pack_state": "NOT_INCLUDED"
+      }
+    }
+  },
+  "windows_security": {
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "channel": "Security",
+    "controlled_provider_reference": {
+      "windows_build": "26100.33296",
+      "unique_event_id_count": 423,
+      "semantics": "This is a controlled reference-host denominator for that provider/build, not a claim that raw numeric Event IDs are globally complete across all Windows generations."
+    },
+    "events": {
+      "4624": {
+        "content_state": "ENCYCLOPEDIA_GRADE",
+        "engineering_pack_state": "PACK_VERIFIED"
+      },
+      "4688": {
+        "content_state": "BASIC_CANONICAL",
+        "engineering_pack_state": "PACK_VERIFIED",
+        "upgrade_state": "ENCYCLOPEDIA_EXPANSION_REQUIRED"
+      }
+    },
+    "external_reference_policy": {
+      "benchmark": "Ultimate Windows Security — Windows Security Log Encyclopedia",
+      "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+      "redistribution": "LINK_AND_COVERAGE_BENCHMARK_ONLY"
+    }
+  },
+  "mandatory_provider_families": [
+    {
+      "id": "windows-security-auditing",
+      "name": "Windows Security Auditing",
+      "state": "ACTIVE_DENOMINATOR_FROZEN"
+    },
+    {
+      "id": "sysmon",
+      "name": "Sysmon",
+      "state": "ACTIVE_DOCS_CURRENT_SCHEMA_REFRESH_PENDING"
+    },
+    {
+      "id": "powershell-operational",
+      "name": "PowerShell Operational",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "windows-defender",
+      "name": "Windows Defender",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "applocker",
+      "name": "AppLocker",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "wmi-activity",
+      "name": "WMI Activity",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "task-scheduler-operational",
+      "name": "Task Scheduler Operational",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "rdp-terminal-services",
+      "name": "RDP / Terminal Services",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "windows-firewall-filtering-platform",
+      "name": "Windows Firewall / Filtering Platform",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "dns",
+      "name": "DNS Client / DNS Server",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "service-persistence",
+      "name": "Service / persistence telemetry",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    }
+  ]
+}
