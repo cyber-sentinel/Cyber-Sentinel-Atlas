@@ -4,8 +4,8 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `d1efb549c1b651b58052a616bba82a3b146c0d6e`
-- Latest verified Public Preview control-plane baseline: `d1efb549c1b651b58052a616bba82a3b146c0d6e`
+- Last Reviewed Main SHA: `2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
+- Latest verified Public Preview control-plane baseline: `2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
 - Release authority remains `main`; documentation commits may advance the branch without redefining the verified control-plane baseline above.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
@@ -13,6 +13,8 @@
 - Phase 5.10 readiness baseline: PR #42 — **MERGED**
 - Phase 5.10 README sync: PR #43 — **MERGED**
 - Phase 5.10.4 governance/freshness closure: PR #44 — **MERGED**
+- Phase 5.10.6 release vehicle/accessibility hardening: PR #56 — **MERGED**; exact-head applicable workflows **SUCCESS**
+- Phase 5.10.7 Public Preview RC functional freeze: **ACTIVE**; target `v0.1.0-rc.1`; visual identity intentionally remains open
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
@@ -74,6 +76,14 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
     - Search / Record / Graph / Provenance: **PASS**
     - deliberate TUF target tamper rejection: **PASS / FAIL-CLOSED**
     - exact-head run `35253441607`: **SUCCESS**
+  - 5.10.6 Release Vehicle / Accessibility Hardening: **COMPLETE / MERGED**
+    - signed portable ZIP selected for initial Public Preview
+    - GitHub Releases selected as canonical publication channel
+    - responsive/reflow accessibility source hardening merged
+  - 5.10.7 Public Preview RC Functional Freeze: **ACTIVE / RC EVIDENCE BLOCKED**
+    - target: `v0.1.0-rc.1`
+    - functional/security boundary frozen from `main@2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
+    - logo, banner, theme tokens and non-behavioral visual identity remain intentionally open
   - Public Preview readiness: **BLOCKED**
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers above are compatibility invariants consumed by historical architecture gates even though the aggregate Phase 5.5 boundary is frozen.
@@ -217,7 +227,8 @@ ADR-0001 through ADR-0026 are accepted according to repository history. Current 
 
 - first-party licensing model;
 - production signing provider / HSM/KMS and certificate lifecycle;
-- public installer/distribution policy beyond First Preview portable ZIP;
+- production release signing provider / certificate / protected key custody;
+- optional future installer formats or mirrors beyond the selected signed portable ZIP + GitHub Releases model;
 - application binary update mechanism;
 - broader graph persistence/index implementation;
 - Detection Intermediate Representation;
@@ -234,6 +245,10 @@ Phase 5.6 / First Preview engineering closure                 COMPLETE
 Phase 5.10.0 readiness baseline                              COMPLETE / MERGED
        ↓
 Phase 5.10.5 clean-Windows usable-data acceptance            COMPLETE / POST-MERGE VERIFIED
+       ↓
+Phase 5.10.6 release vehicle/accessibility hardening          COMPLETE / MERGED
+       ↓
+Phase 5.10.7 v0.1.0-rc.1 functional freeze                   ACTIVE / RC EVIDENCE BLOCKED
        ↓
 Phase 5.10.4 freshness + launch governance                   PASS / POLICY CLOSED
        ↓

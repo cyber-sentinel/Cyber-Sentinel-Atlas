@@ -6,7 +6,7 @@ Status timestamp: 2026-09-18
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Latest verified Public Preview control-plane baseline: `d1efb549c1b651b58052a616bba82a3b146c0d6e` — PR #52 merged; PPR-03 through PPR-07 validators plus Foundation/Governance/Canaries passed post-merge.
+- Latest reviewed Public Preview control-plane baseline: `2c7788e08e0254f330cca1cbb0d1a8a9432291f5` — PR #56 merged after all applicable exact-head workflows passed; signed portable ZIP + GitHub Releases selected and accessibility source/reflow hardening integrated.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
@@ -14,12 +14,16 @@ Status timestamp: 2026-09-18
 - Phase 5.10 README sync: PR #43 — **MERGED**
 - Phase 5.10.4 governance/freshness closure: PR #44 — **MERGED**
 - Phase 5.10.1 Tauri/Rust redistribution preflight: PR #54 — **MERGED**; exact-head run `35309913398` — **SUCCESS**; artifact `10533096533` / `sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d`
+- Phase 5.10.6 release vehicle/accessibility hardening: PR #56 — **MERGED**; merge baseline `2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
+- Phase 5.10.7 Public Preview RC functional freeze: **ACTIVE**; target `v0.1.0-rc.1`; visual identity remains intentionally open
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
 - Active phase: **Phase 5.10 — Public Preview Readiness**
 - Baseline slice: **Phase 5.10.0 — COMPLETE / MERGED**
 - Phase 5.10.4 — Accessibility / Freshness / Launch Governance: **CONTROL PLANE COMPLETE / PPR-07 PARTIAL**
 - Phase 5.10.5 — Usable Data Preview: **COMPLETE / MERGED / POST-MERGE VERIFIED**
+- Phase 5.10.6 — Release Vehicle / Accessibility Hardening: **COMPLETE / MERGED**
+- Phase 5.10.7 — Public Preview RC Functional Freeze: **ACTIVE / RC EVIDENCE BLOCKED**
 - Public Preview readiness: **BLOCKED**
 - Canonical schema version: `1.0.0`
 - Ingestion contract version: `1.0.0`
@@ -76,6 +80,14 @@ Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that 
   - packaged Record / Graph / Provenance flow: **PASS**
   - TUF target tamper rejection: **PASS / FAIL-CLOSED**
   - exact-head workflow run `35253441607`: **SUCCESS**
+- Phase 5.10.6 — Release Vehicle / Accessibility Hardening: **COMPLETE / MERGED**
+  - signed portable ZIP: **SELECTED**
+  - GitHub Releases canonical channel: **SELECTED**
+  - accessibility static/reflow preflight: **PASS on PR #56 exact head**
+- Phase 5.10.7 — Public Preview RC Functional Freeze: **ACTIVE / RC EVIDENCE BLOCKED**
+  - target candidate: `v0.1.0-rc.1`
+  - functional/security baseline: `main@2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
+  - visual identity: **OPEN BY DESIGN** for logo/banner/theme/non-behavioral polish
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers are retained because frozen architecture validators use them to prove lifecycle continuity across later phases.
 
@@ -210,6 +222,10 @@ FIRST PREVIEW READY — ENGINEERING READINESS       COMPLETE
 Phase 5.10.0 readiness baseline                  COMPLETE / MERGED
         ↓
 Phase 5.10.5 usable-data packaged acceptance     COMPLETE / EXACT-HEAD VERIFIED
+        ↓
+Phase 5.10.6 release vehicle/accessibility        COMPLETE / MERGED
+        ↓
+Phase 5.10.7 v0.1.0-rc.1 functional freeze       ACTIVE / RC EVIDENCE BLOCKED
         ↓
 Phase 5.10.4 policy/governance closure           IN PROGRESS
         ├─ PPR-08 freshness/publication           PASS
