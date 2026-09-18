@@ -97,3 +97,13 @@ Still open for the future interface phases:
 - customer/enterprise overlay and persistence models.
 
 SQLite + FTS5, Go Shared Core, canonical schema, TUF pack trust, Windows Tauri host and the First Preview seven-command desktop boundary are **not** open decisions.
+
+
+## Query-Language Naming
+
+ATLAS must not treat the acronym `KQL` as globally unambiguous.
+
+- **Microsoft Kusto Query Language (KQL)** is used by Microsoft Sentinel, Microsoft Defender XDR, Azure Data Explorer and related Microsoft query surfaces.
+- **Elastic Kibana Query Language (KQL)** is a distinct Elastic query/filter language.
+
+Any future query mapping, detection content, API field or CLI output that uses `KQL` must carry an explicit engine/query-language identity so content cannot be applied to the wrong platform.
