@@ -14,39 +14,29 @@ Define which source is allowed to drive analyst-facing Quick Detail content for 
 
 - index: https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/
 - event pattern: https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=<EVENT_ID>
-- source role: `PRIMARY_QUICK_DETAIL_REFERENCE`
-- scope: Windows Security Event ID analyst-facing description, field grouping, field/value semantics, version notes, corresponding events, correlation guidance and operational explanation.
+- source role: `PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE`
+- scope: analyst-facing coverage/section benchmark, external verification link, field-grouping and correlation-review reference.
+- ingestion authority: **NO AUTOMATED OR BULK INGESTION** without explicit written permission from the rights holder.
 
 ### Quick Detail rule
 
-For Windows Security Event IDs, the Quick Detail pane is derived from this reference only.
+For Windows Security Event IDs, Ultimate Windows Security is the approved **external analyst-reference benchmark**, but its pages are not a bulk-ingestion feed.
 
-Other sources may support:
+Quick Detail must match the useful information classes an analyst expects from that reference — identity, OS applicability, category/subcategory, success/failure type, legacy/corresponding events, field groups, value semantics, version notes and correlation pivots — while the redistributable ATLAS facts are independently authored from Microsoft/provider evidence.
 
-- canonical identity validation;
-- provider/channel/version verification;
-- schema/manifest validation;
-- Full Record provenance;
-- source conflict review;
-- legal/redistribution review.
+The UI displays the exact Ultimate Windows Security event URL as the Primary External Reference.
 
-They must not silently alter the analyst-facing Quick Detail content.
-
-If Ultimate Windows Security does not provide a fact needed by the Quick Detail contract, ATLAS displays an explicit unavailable/not-provided state rather than filling that Quick Detail field from another source.
+If the rights holder later grants written ingestion/redistribution permission, this policy may be upgraded through an explicit source-rights review.
 
 ### Redistribution boundary
 
-Ultimate Windows Security is a copyrighted third-party reference. ATLAS must not redistribute substantial verbatim page prose without explicit rights.
+Ultimate Windows Security is a copyrighted third-party reference whose published Terms restrict automated/manual retrieval processes used to index, database, data-mine or reproduce the site.
 
-ATLAS may:
+Unless explicit written permission is obtained, ATLAS must not scrape, crawl, bulk-extract, mirror, or package the site's prose/content as a competing encyclopedia corpus.
 
-- retain the source URL and attribution;
-- extract factual identifiers, field names, categories, versions and value relationships where legally permissible;
-- independently author concise ATLAS wording that preserves the factual meaning;
-- structure the facts into ATLAS field/value/correlation records;
-- provide the source link for analyst verification.
+ATLAS may safely preserve an outbound event reference URL and use the site as a human review/UX benchmark. Redistributable field facts and analysis are authored independently from sources with an accepted ingestion/rights boundary.
 
-The public corpus must not become a mirror of the reference site.
+The public corpus must not become a mirror or substantial recreation of the reference site.
 
 ## Sysmon
 
@@ -81,13 +71,14 @@ The Full Record & Provenance workspace may expose additional authoritative/secon
 
 ## Conflict handling
 
-If another source disagrees with the Primary Quick Detail Reference:
+If Microsoft/provider evidence and the external UWS reference appear to disagree:
 
 1. do not silently merge the disagreement;
 2. retain the conflict in review evidence;
-3. keep the last accepted Quick Detail fact until reviewed;
+3. treat Microsoft/provider evidence as canonical technical verification;
 4. show an applicability/uncertainty state when material;
-5. update the Quick Detail only after source-role review.
+5. preserve the UWS outbound reference for analyst comparison;
+6. update ATLAS facts only after source/version review.
 
 ## Product goal
 
