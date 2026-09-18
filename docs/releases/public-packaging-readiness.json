@@ -23,5 +23,10 @@
   "uninstall_or_remove_acceptance": false,
   "accessibility_package_sha_bound": false,
   "published_bytes_reverified": false,
-  "binary_auto_update_enabled": false
+  "binary_auto_update_enabled": false,
+  "package_binding_evidence_sha256": null,
+  "clean_windows_package_sha256": null,
+  "accessibility_package_sha256": null,
+  "published_package_sha256": null,
+  "publication_verification_run_or_audit_id": null
 }
