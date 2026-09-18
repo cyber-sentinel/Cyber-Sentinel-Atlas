@@ -4,6 +4,7 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
+- Last Reviewed Main SHA: `d1efb549c1b651b58052a616bba82a3b146c0d6e`
 - Latest verified Public Preview control-plane baseline: `d1efb549c1b651b58052a616bba82a3b146c0d6e`
 - Release authority remains `main`; documentation commits may advance the branch without redefining the verified control-plane baseline above.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
