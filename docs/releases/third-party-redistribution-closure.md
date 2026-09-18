@@ -27,12 +27,12 @@ The Public Preview software inventory must be generated from the exact built art
 | TUF Go runtime | `github.com/theupdateframework/go-tuf/v2 v2.4.2` | **TECHNICAL EVIDENCE AVAILABLE** | Include if linked/distributed; preserve license evidence |
 | SQLite Go implementation | `modernc.org/sqlite v1.58.0` | **TECHNICAL EVIDENCE AVAILABLE** | Bind linked dependency and license evidence to release binary |
 | Go text/runtime dependencies | `golang.org/x/text v0.39.0` plus indirect locked modules | **TECHNICAL EVIDENCE AVAILABLE** | Use generated SBOM/license validation; do not maintain a hand-written substitute |
-| Tauri desktop host | Tauri `2.11.5`, committed/hash-guarded Cargo lock | **INVENTORY REQUIRED FOR PUBLIC ARTIFACT** | Generate exact Rust/Cargo SBOM/license report from release lock/build |
-| `serde_json` / `sha2` and transitive Rust crates | Exact versions resolved by committed Cargo lock | **INVENTORY REQUIRED FOR PUBLIC ARTIFACT** | Include exact crate/license/notice inventory generated from the release lock |
+| Tauri desktop host | Tauri `2.11.5`, committed/hash-guarded Cargo lock | **AUTOMATED PREFLIGHT / RELEASE BINDING OPEN** | Generate exact Windows-target Cargo metadata/license evidence on every relevant change; bind final evidence to the release build/package |
+| `serde_json` / `sha2` and transitive Rust crates | Exact versions resolved by committed Cargo lock | **AUTOMATED PREFLIGHT / RELEASE BINDING OPEN** | Preserve exact crate license metadata/license-file hashes and generate the final notice bundle from the frozen release graph |
 | Microsoft Edge WebView2 Runtime | Runtime prerequisite; current portable First Preview does not claim redistribution of WebView2 binaries | **NOT BUNDLED IN CURRENT PORTABLE MODEL** | If a future installer bundles/bootstrap-downloads WebView2, review Microsoft's redistribution terms for that exact installer model |
 | Product artwork/UI assets | Cyber-Sentinel repository assets unless separately attributed | **FIRST-PARTY/REVIEW REQUIRED** | Confirm every shipped font/icon/image has recorded origin and rights; no untracked asset may enter release payload |
 
-Current desktop UI preflight: the packaged Tauri web surface contains only repository-owned `index.html`, `main.js`, and `styles.css`; no external CDN, remote font, `@font-face`, or remote asset URL is referenced. This reduces the current portable UI asset-risk surface, but the final signed Public Preview package must still inventory every shipped icon/image/font before PPR-04 can PASS.
+Current desktop UI preflight: the packaged Tauri web surface contains only repository-owned `index.html`, `main.js`, and `styles.css`; no external CDN, remote font, `@font-face`, or remote asset URL is referenced. The Phase 5.10.1 CI now regenerates an exact asset SHA-256 inventory and rejects remote references in text-like packaged frontend assets. It also captures Windows-target (`x86_64-pc-windows-msvc`) Cargo metadata from the committed lock, requires every reachable third-party crate to expose a license expression or license file, and hashes any declared license file. This is preflight evidence only: it does not make a redistribution approval or bind evidence to the final signed package.
 
 Existing Phase 5.5.4D supply-chain controls already generate CycloneDX evidence and fail closed on missing linked-module license evidence for the production Go binary. PPR-04 extends that discipline to the complete public distribution payload, including the Rust/Tauri host and release assets.
 
@@ -120,8 +120,8 @@ PPR-04 remains **BLOCKED** until all of the following are complete:
 
 - exact Public Preview knowledge-corpus allowlist is selected;
 - conditionally clearable ATT&CK/CAR/D3FEND/Sysmon entries are promoted to exact `ACCEPTED` release entries with final attribution material;
-- exact Rust/Tauri release dependency license inventory is generated from the committed lock/build;
-- release assets/fonts/icons are inventoried;
+- exact Rust/Tauri preflight dependency/license and frontend-asset evidence is automated; final evidence must still be regenerated and bound to the frozen release build/package;
+- final release assets/fonts/icons, including generated/bundled artifacts outside the source `www` tree, are inventoried;
 - final third-party license/NOTICE bundle is generated;
 - a machine-readable redistribution manifest is bound to the exact Public Preview package SHA-256;
 - no unresolved/unknown item remains.
