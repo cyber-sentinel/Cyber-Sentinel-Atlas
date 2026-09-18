@@ -92,8 +92,12 @@ def main() -> int:
         if not isinstance(local_path, str) or not local_path.strip():
             errors.append(f"{item_id}: local_path is required")
             continue
+        local_rel = Path(local_path)
+        if local_rel.is_absolute() or ".." in local_rel.parts:
+            errors.append(f"{item_id}: local_path must be repository-relative without traversal")
+            continue
 
-        path = ROOT / local_path
+        path = ROOT / local_rel
         if not path.is_file():
             errors.append(f"{item_id}: local license material missing: {local_path}")
             continue
