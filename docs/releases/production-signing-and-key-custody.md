@@ -52,9 +52,9 @@ Public release package
 
 PPR-05 may use one of the following architecture classes after explicit owner selection:
 
-1. **Managed cloud code-signing service with hardware-backed non-exportable keys** — CI authenticates to an authorized signing service; private key material never reaches the runner.
-2. **Dedicated HSM/KMS-backed organizational signing service** — a controlled service mediates signing requests and authorization against a hardware-backed key.
-3. **Hardware token / HSM attached to a dedicated signing station** — supported only if automation, operator access, backup/rotation and incident handling are demonstrably controlled.
+1. **Managed cloud code-signing service with hardware-backed non-exportable keys** (`MANAGED_CLOUD_HARDWARE_BACKED`) — CI authenticates to an authorized signing service; private key material never reaches the runner.
+2. **Dedicated HSM/KMS-backed organizational signing service** (`ORG_HSM_KMS_SERVICE`) — a controlled service mediates signing requests and authorization against a hardware-backed key.
+3. **Hardware token / HSM attached to a dedicated signing station** (`DEDICATED_HARDWARE_TOKEN_OR_HSM`) — supported only if automation, operator access, backup/rotation and incident handling are demonstrably controlled.
 
 A raw exportable `.pfx` copied into GitHub Actions or a self-hosted runner is **not an accepted production custody model**.
 
@@ -69,6 +69,27 @@ The release process must distinguish:
 - emergency revocation authority.
 
 One person may hold more than one role in the current owner-led project, but the system must record which authority was exercised and must not infer signing permission from ordinary repository write access.
+
+## Independent Windows verification contract
+
+`tools/release/verify_windows_authenticode.ps1` is a **verification-only** control. It does not sign files, load a private key, select a provider, or authorize publication.
+
+For the exact signed Windows binary it requires and records:
+
+- exact signed-artifact SHA-256;
+- Windows `Get-AuthenticodeSignature` status of `Valid`;
+- the exact expected certificate subject;
+- SHA-256 fingerprint of the signer certificate raw DER bytes;
+- signer certificate serial and validity interval;
+- Code Signing EKU OID `1.3.6.1.5.5.7.3.3`;
+- presence of a timestamp certificate;
+- successful Windows trust verification through `signtool verify /pa /all /v /tw`;
+- exact release commit and signing run/audit identifier;
+- SHA-256 of the verbose `signtool` verification output.
+
+The verifier emits machine-readable evidence for subsequent release attestation. It intentionally has **no key material input**.
+
+Timestamp presence and Windows trust verification are necessary but are not, by themselves, the entire RFC 3161 signing-operation proof. The authorized signing operation must use the approved RFC 3161 timestamp path and the release state must independently record `rfc3161_timestamp_verified=true` plus the accepted timestamp digest algorithm before PPR-05 can pass.
 
 ## Certificate lifecycle
 
@@ -119,8 +140,19 @@ custody_class
 certificate_subject
 certificate_serial
 certificate_sha256_fingerprint
+certificate_not_before
+certificate_not_after
+signature_digest_algorithm
+timestamp_digest_algorithm
+certificate_chain_verified
+certificate_code_signing_eku_verified
+certificate_validity_verified
 rfc3161_timestamp_verified
+timestamp_chain_verified
+windows_trust_verified
 signature_verified
+verification_tool
+verification_evidence_sha256
 signing_run_or_audit_id
 release_attestation_sha256
 ```
