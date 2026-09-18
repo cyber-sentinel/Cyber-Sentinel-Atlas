@@ -221,6 +221,8 @@ Public Preview is intentionally fail-closed. The current mandatory gate state is
 | PPR-10 | Supply-chain evidence | **PASS** |
 | PPR-11 | Trademark and attribution controls | **PASS** |
 
+PPR-04 now includes an exact Windows-target Rust/Tauri redistribution preflight. PR #54 exact-head workflow run `35309913398` passed the PPR-04 redistribution control and generated Windows-target Rust/Tauri preflight evidence for 258 reachable third-party crates and 3 packaged frontend assets. Artifact `10533096533` has digest `sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d`. This is preflight evidence only; final corpus/software freeze, final notices, and exact release-package binding remain required.
+
 Authoritative controls:
 
 - [Public Preview Readiness Gate Matrix](docs/releases/phase-5.10-public-preview-readiness.md)
