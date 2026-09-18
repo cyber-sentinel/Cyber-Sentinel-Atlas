@@ -23,5 +23,15 @@
   "rotation_procedure_documented": true,
   "revocation_procedure_documented": true,
   "compromise_response_documented": true,
-  "notes": "Provider/custody selection and production certificate enrollment require explicit owner/business/security approval."
+  "notes": "Provider/custody selection and production certificate enrollment require explicit owner/business/security approval.",
+  "authenticode_digest_policy": "SHA256_OR_STRONGER",
+  "signature_digest_algorithm": null,
+  "timestamp_digest_algorithm": null,
+  "certificate_chain_verified": false,
+  "certificate_code_signing_eku_verified": false,
+  "certificate_validity_verified": false,
+  "timestamp_chain_verified": false,
+  "windows_trust_verified": false,
+  "verification_tool": null,
+  "verification_evidence_sha256": null
 }

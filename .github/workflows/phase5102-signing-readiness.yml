@@ -9,6 +9,7 @@ on:
       - 'docs/releases/production-signing-and-key-custody.md'
       - 'docs/releases/production-signing-readiness.json'
       - 'tools/release/validate_production_signing.py'
+      - 'tools/release/verify_windows_authenticode.ps1'
       - '.github/workflows/phase5102-signing-readiness.yml'
   pull_request:
     branches: [main]
@@ -16,6 +17,7 @@ on:
       - 'docs/releases/production-signing-and-key-custody.md'
       - 'docs/releases/production-signing-readiness.json'
       - 'tools/release/validate_production_signing.py'
+      - 'tools/release/verify_windows_authenticode.ps1'
       - '.github/workflows/phase5102-signing-readiness.yml'
   workflow_dispatch:
 
@@ -34,4 +36,19 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - run: python tools/release/validate_production_signing.py
+      - name: Validate PPR-05 control plane
+        run: python tools/release/validate_production_signing.py
+      - name: Parse provider-neutral Authenticode verifier
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $parseErrors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            'tools/release/verify_windows_authenticode.ps1',
+            [ref]$tokens,
+            [ref]$parseErrors
+          ) | Out-Null
+          if ($parseErrors.Count -gt 0) {
+            $parseErrors | ForEach-Object { Write-Error $_.Message }
+            exit 1
+          }
