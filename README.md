@@ -19,7 +19,7 @@ ATLAS is built for security teams that need investigation context to be **determ
 > **Current maturity:** Engineering-ready First Preview
 > **Release state:** Pre-preview / unreleased
 > **Repository visibility:** Public
-> **Active workstream:** Phase 5.10 — Public Preview Readiness
+> **Active workstream:** Phase 5.10 — Public Preview release-candidate decisions & evidence closure
 > **Public Preview state:** **BLOCKED** until every mandatory release gate passes
 > **Desktop:** Windows / Tauri 2.x — ADR-0026 Accepted
 > **Shared Core:** Go / bounded child-process stdio
@@ -224,6 +224,10 @@ Public Preview is intentionally fail-closed. The current mandatory gate state is
 Authoritative controls:
 
 - [Public Preview Readiness Gate Matrix](docs/releases/phase-5.10-public-preview-readiness.md)
+- [First-Party License Decision Control](docs/releases/first-party-license-decision.md)
+- [Third-Party Redistribution Closure](docs/releases/third-party-redistribution-closure.md)
+- [Production Signing & Key Custody](docs/releases/production-signing-and-key-custody.md)
+- [Public Packaging & Distribution](docs/releases/public-packaging-and-distribution.md)
 - [Machine-Readable Gate State](docs/releases/phase-5.10-public-preview-readiness.json)
 - [Phase 5.10.5 Usable Data Preview Evidence](docs/releases/phase-5.10.5-usable-data-preview.md)
 - [Source Freshness & Public Pack Publication Policy](docs/releases/source-freshness-and-publication-policy.md)
