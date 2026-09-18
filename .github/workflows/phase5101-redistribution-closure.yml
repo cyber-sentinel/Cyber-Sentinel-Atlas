@@ -13,6 +13,8 @@ on:
       - 'tools/release/validate_redistribution_inventory.py'
       - 'tools/release/generate_tauri_redistribution_evidence.py'
       - 'tools/release/generate_public_preview_notice_bundle.py'
+      - 'tools/release/validate_pinned_license_material.py'
+      - 'third_party/license-material/**'
       - 'benchmarks/desktop/phase56/candidates/tauri/Cargo.toml'
       - 'benchmarks/desktop/phase56/candidates/tauri/Cargo.lock'
       - 'benchmarks/desktop/phase56/candidates/tauri/tauri.conf.json'
@@ -29,6 +31,8 @@ on:
       - 'tools/release/validate_redistribution_inventory.py'
       - 'tools/release/generate_tauri_redistribution_evidence.py'
       - 'tools/release/generate_public_preview_notice_bundle.py'
+      - 'tools/release/validate_pinned_license_material.py'
+      - 'third_party/license-material/**'
       - 'benchmarks/desktop/phase56/candidates/tauri/Cargo.toml'
       - 'benchmarks/desktop/phase56/candidates/tauri/Cargo.lock'
       - 'benchmarks/desktop/phase56/candidates/tauri/tauri.conf.json'
@@ -64,6 +68,13 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Validate fail-closed redistribution inventory
         run: python tools/release/validate_redistribution_inventory.py
+      - name: Validate pinned upstream license material
+        shell: bash
+        run: |
+          set -euo pipefail
+          evidence="$RUNNER_TEMP/pinned-third-party-license-material.json"
+          python tools/release/validate_pinned_license_material.py --evidence "$evidence"
+          echo "PPR04_LICENSE_MATERIAL_EVIDENCE=$evidence" >> "$GITHUB_ENV"
       - name: Prove deterministic Public Preview notice draft
         shell: bash
         run: |
@@ -91,11 +102,13 @@ jobs:
             exit 1
           fi
           test ! -f "$output"
-      - name: Upload deterministic notice draft evidence
+      - name: Upload deterministic notice and pinned-license evidence
         uses: actions/upload-artifact@v4
         with:
           name: phase5101-public-preview-notice-draft
-          path: ${{ env.PPR04_NOTICE_DRAFT }}
+          path: |
+            ${{ env.PPR04_NOTICE_DRAFT }}
+            ${{ env.PPR04_LICENSE_MATERIAL_EVIDENCE }}
           if-no-files-found: error
           retention-days: 30
 
