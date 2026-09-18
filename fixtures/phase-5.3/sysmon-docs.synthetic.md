@@ -1,9 +1,9 @@
 ---
 title: Synthetic Sysmon Fixture
-ms.date: 06/17/2026
+ms.date: 09/10/2026
 ---
 
-# Sysmon v15.21
+# Sysmon v15.22
 
 ## Events
 
