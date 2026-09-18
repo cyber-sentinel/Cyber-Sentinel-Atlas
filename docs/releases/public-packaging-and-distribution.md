@@ -53,6 +53,30 @@ A project-controlled HTTPS site/CDN or enterprise/private mirror may be added la
 
 The canonical release authority and artifact digest must be identical across mirrors. A mirror may not silently replace or repackage signed release bytes.
 
+## Package Binding Rehearsal
+
+Before a production-signed candidate exists, ATLAS exercises the package-binding mechanics through a deliberately non-authoritative rehearsal.
+
+`tools/release/generate_public_package_binding_rehearsal.py` binds an exact 40-character source commit to four distinct artifacts:
+
+- portable ZIP package;
+- SBOM;
+- third-party notices;
+- release notes.
+
+For every artifact it records SHA-256 and exact byte size. The evidence is deterministic and always records:
+
+- `release_authority=false`;
+- `publication_authorized=false`;
+- `signed_candidate_claimed=false`;
+- `distribution_format=SIGNED_PORTABLE_ZIP`;
+- `publication_channel=GITHUB_RELEASES`;
+- `binary_auto_update_enabled=false`.
+
+`tools/release/validate_public_package_binding_rehearsal.py` independently recomputes every bound hash and size and rejects missing files, traversal-style names, role drift, format/channel drift or any release-authority claim.
+
+The rehearsal does **not** satisfy PPR-05 signing, PPR-06 signed-candidate acceptance, PPR-07 accessibility review, or publication evidence. Its purpose is to prove the exact-byte binding mechanism before the real signed package exists.
+
 ## Required clean-machine acceptance
 
 For the exact Public Preview candidate:
@@ -70,7 +94,7 @@ For the exact Public Preview candidate:
 - exercise supported upgrade path from the prior published build when applicable;
 - exercise rollback/recovery behavior;
 - verify accessibility release evidence on the same package SHA-256;
-- verify public download bytes match the approved release digest.
+- verify public download bytes match the approved release digest and record that downloaded SHA-256 explicitly as the same package SHA used for clean-Windows and accessibility acceptance.
 
 ## Update boundary
 
@@ -78,6 +102,6 @@ Public Preview does not require automatic binary updates. If binary auto-update 
 
 ## Machine-readable evidence
 
-`docs/releases/public-packaging-readiness.json` is the PPR-06 machine-readable authority. Format/channel selection is closed. PPR-06 remains `BLOCKED` until an exact signed package passes the release acceptance contract, is published through GitHub Releases, and the published bytes are independently reverified.
+`docs/releases/public-packaging-readiness.json` is the PPR-06 machine-readable authority. Format/channel selection is closed. PPR-06 remains `BLOCKED` until an exact signed package passes the release acceptance contract, the clean-Windows and accessibility evidence are bound to that same package SHA-256, the package-binding evidence digest is recorded, the package is published through GitHub Releases, and the downloaded published bytes are independently reverified to the identical SHA-256.
 
 PPR-06 remains **BLOCKED** on signed-candidate and publication evidence, not on format/channel selection.
