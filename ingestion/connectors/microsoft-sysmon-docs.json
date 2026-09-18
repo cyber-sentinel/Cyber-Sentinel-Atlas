@@ -4,16 +4,16 @@
   "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
   "connector_version": "1.0.0",
   "status": "active",
-  "purpose": "Acquire the exact commit-pinned Microsoft Sysinternals Sysmon 15.21 Markdown documentation for deterministic event-heading ingestion.",
+  "purpose": "Acquire the exact commit-pinned Microsoft Sysinternals Sysmon 15.22 Markdown documentation for deterministic event-heading ingestion.",
   "transport": "https",
   "acquisition_strategy": "single-document",
   "targets": [
     {
       "target_key": "sysmon-markdown",
       "required": true,
-      "resource_uri": "https://raw.githubusercontent.com/MicrosoftDocs/sysinternals/8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6/sysinternals/downloads/sysmon.md",
+      "resource_uri": "https://raw.githubusercontent.com/MicrosoftDocs/sysinternals/2fd3249657118505564fd220e672e8ea45d35916/sysinternals/downloads/sysmon.md",
       "allowed_path_prefixes": [
-        "/MicrosoftDocs/sysinternals/8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6/sysinternals/downloads/"
+        "/MicrosoftDocs/sysinternals/2fd3249657118505564fd220e672e8ea45d35916/sysinternals/downloads/"
       ],
       "discovery": {"dynamic": false, "max_resources": 1, "max_depth": 0}
     }
