@@ -200,9 +200,9 @@ Requires an accepted code-signing certificate/provider, certificate lifecycle, p
 
 ### Phase 5.10.3 — Public Packaging & Distribution Hardening
 
-Status: **CONTROL PLANE COMPLETE / FORMAT & CHANNEL DECISION BLOCKED**
+Status: **CONTROL PLANE COMPLETE / FORMAT + CHANNEL SELECTED / SIGNED-CANDIDATE EVIDENCE BLOCKED**
 
-Requires the signed installer or other approved distribution format, trusted publication channel, release metadata/checksums, rollback/recovery policy and public installation/update documentation. This slice depends on the accepted signing/custody boundary and public-channel decision.
+Initial Public Preview distribution is selected as a **signed portable ZIP** through **GitHub Releases**. Remaining work is exact production signing, exact-package metadata/checksums, rollback/recovery acceptance, clean-Windows verification, accessibility binding, publication, and independent post-publication byte verification.
 
 ### Phase 5.10.4 — Accessibility, Freshness & Launch Governance
 
@@ -247,6 +247,35 @@ Post-merge artifacts:
 PR #45 is merged. After PR #49 hardened the checksum-pinned Windows dependency transport without weakening integrity checks, post-merge `Phase 5.10.5 Usable Data Preview` run `35305516189` succeeded on `main@4d64b2fb402b280d00c01783f7990538a3b67484`, including clean-Windows Search/Record/Graph/Provenance acceptance and fail-closed TUF target tamper rejection.
 
 This slice does not change the Public Preview PPR matrix. Licensing, redistribution, signing, distribution and executable accessibility remain independent release controls.
+
+### Phase 5.10.6 — Release Vehicle & Accessibility Hardening
+
+Status: **COMPLETE / MERGED**
+
+PR #56 selected the initial Public Preview release vehicle as a signed portable ZIP published through GitHub Releases, preserved binary auto-update as disabled, removed fixed-width/reflow blockers from the selected Tauri UI, and added fail-closed accessibility source preflight.
+
+All applicable exact-head PR #56 workflows completed successfully before merge. Merge baseline: `main@2c7788e08e0254f330cca1cbb0d1a8a9432291f5`.
+
+This slice does not close PPR-03 through PPR-07 by itself.
+
+### Phase 5.10.7 — Public Preview RC Functional Freeze
+
+Status: **ACTIVE / RC EVIDENCE BLOCKED**
+
+Target: `v0.1.0-rc.1`.
+
+The product feature/security boundary is now frozen for Release Candidate preparation. Canonical schema, Shared Core, IPC, command allowlist, deterministic search, bounded graph, TUF trust/rollback, offline/no-listener posture, Tauri host, signed portable ZIP distribution, GitHub Releases channel and disabled binary auto-update are frozen.
+
+Visual identity is deliberately outside the functional freeze. Logo, banner imagery, geographic/satellite artwork, CSS design tokens, ATLAS Blue / Tactical Dark Green themes, typography, spacing and non-behavioral presentation polish may continue, subject to applicable desktop/accessibility regression.
+
+Strict RC mode remains fail-closed until every mandatory PPR gate is PASS and the same exact signed package SHA is bound to corpus, notices, SBOM, release notes, clean-Windows acceptance and accessibility evidence.
+
+Authoritative controls:
+
+- `docs/releases/public-preview-rc-contract.md`;
+- `docs/releases/public-preview-rc-readiness.json`;
+- `tools/release/validate_public_preview_rc.py`;
+- `.github/workflows/phase5107-public-preview-rc.yml`.
 
 ### Public Preview strict release gate
 
