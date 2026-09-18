@@ -1,6 +1,6 @@
 # Windows & Sysmon Knowledge Coverage Plan
 
-Status: **APPROVED / IMPLEMENTATION REQUIRED**
+Status: **APPROVED MANDATORY WINDOWS SECURITY CORPUS / IMPLEMENTATION REQUIRED**
 
 ## Objective
 
@@ -36,6 +36,27 @@ The latest downloaded Engineering Usable Data Preview evidence reports:
 For Sysmon 15.21, the pinned source profile lists 30 documented event IDs (`1..29`, `255`). Therefore 29 documented IDs remain outside the current packaged end-to-end acceptance guarantee.
 
 No honest percentage is assigned yet to "all Windows Event IDs" because Windows event telemetry spans many providers/channels and the exhaustive denominator has not yet been frozen.
+
+## Approved mandatory Windows Security Corpus scope
+
+The following telemetry families are **approved mandatory corpus scope**, not optional backlog items:
+
+1. **Microsoft-Windows-Security-Auditing / Security**
+2. **Microsoft Sysmon**
+3. **PowerShell Operational**
+4. **Windows Defender native operational/security telemetry** and Defender for Endpoint-adjacent native Windows telemetry where authoritative and redistributable
+5. **AppLocker**
+6. **WMI Activity**
+7. **Task Scheduler Operational**
+8. **Remote Desktop / Terminal Services**
+9. **Windows Firewall / Windows Filtering Platform**
+10. **DNS Client and DNS Server telemetry where applicable**
+11. **Windows Service Control Manager and service/persistence-relevant telemetry**
+12. **Additional persistence-relevant Windows providers** admitted only through explicit source/version/provenance review
+
+A Windows corpus is not considered **complete for the approved scope** merely because Security-Auditing and Sysmon are complete. Every mandatory family above requires a frozen provider/channel/version denominator, explicit coverage states, provenance, index/pack inclusion and acceptance evidence.
+
+Where a provider has no meaningful numeric Event-ID denominator or changes across Windows versions, coverage is measured by the authoritative manifest/provider contract rather than by a fabricated percentage.
 
 ## Coverage workstreams
 
@@ -81,7 +102,7 @@ No honest percentage is assigned yet to "all Windows Event IDs" because Windows 
 
 ## Completion criteria
 
-A Windows/Sysmon coverage release is complete only when:
+The approved Windows Security Corpus release is complete only when:
 
 - the target denominator is machine-readable and frozen;
 - every in-scope identifier has an explicit state;
@@ -92,4 +113,6 @@ A Windows/Sysmon coverage release is complete only when:
 - automated exhaustive identifier lookup passes;
 - sampled semantic review passes;
 - clean packaged Windows acceptance passes;
-- the final coverage manifest is bound to the exact pack/package digest.
+- the final coverage manifest is bound to the exact pack/package digest;
+- every mandatory telemetry family in the approved scope has an explicit provider/channel/version coverage snapshot;
+- no mandatory family is silently deferred without a documented release exception approved by the maintainer.
