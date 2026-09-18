@@ -107,3 +107,12 @@ ATLAS must not treat the acronym `KQL` as globally unambiguous.
 - **Elastic Kibana Query Language (KQL)** is a distinct Elastic query/filter language.
 
 Any future query mapping, detection content, API field or CLI output that uses `KQL` must carry an explicit engine/query-language identity so content cannot be applied to the wrong platform.
+
+
+## Ownership and naming boundary
+
+Cyber-Sentinel-Forge is retired as an ATLAS ownership surface.
+
+DefenseOps is an approved engineering source for Atlas and may provide detection, hunting, validation, response and automation provenance where its exact material has explicit rights and attribution evidence.
+
+The official user-facing command is `atlas`. Internal executables such as `atlas-core --serve-stdio` are implementation details and are not the public CLI contract.
