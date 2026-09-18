@@ -4,10 +4,14 @@ use std::fs::{self, File};
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
+#[cfg(windows)]
+use std::os::windows::process::CommandExt;
 use std::thread;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 const MAX_RESPONSE: usize = 8 * 1024 * 1024;
+#[cfg(windows)]
+const CREATE_NO_WINDOW: u32 = 0x08000000;
 const MAX_UI_QUERY_SCALARS: usize = 512;
 const MAX_UI_IDENTIFIER_SCALARS: usize = 1024;
 const MAX_UI_RESULT_LIMIT: i64 = 100;
@@ -189,6 +193,10 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
             command.env(key, value);
         }
     }
+    #[cfg(windows)]
+    {
+        command.creation_flags(CREATE_NO_WINDOW);
+    }
 
     let started = Instant::now();
     let mut child = command
@@ -347,7 +355,7 @@ fn search_records(query: String, limit: Option<i64>) -> Result<Value, String> {
 #[tauri::command]
 fn get_record(id: String) -> Result<Value, String> {
     validate_nonempty_scalar_bounded(&id, "id", MAX_UI_IDENTIFIER_SCALARS)?;
-    Ok(run_core_session("record.get", json!({"id": id}))?.result)
+    Ok(run_core_session("record.get", json!({"id": id, "detail": true}))?.result)
 }
 
 #[tauri::command]
