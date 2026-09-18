@@ -131,24 +131,24 @@ CoverageSnapshot = VERIFIED
 
 A source profile, parser, or mention in documentation does not by itself count as product coverage.
 
-## Planned Windows telemetry coverage families
+## Approved mandatory Windows Security Corpus families
 
-The coverage program will start with security-relevant, high-value Windows telemetry families and expand under explicit provider/channel/version denominators, including:
+The following are approved mandatory ATLAS corpus families:
 
 - Microsoft-Windows-Security-Auditing / Security;
 - Microsoft Sysmon;
 - PowerShell Operational;
-- Windows Defender / Defender for Endpoint-adjacent native telemetry where redistributable and applicable;
-- Task Scheduler Operational;
-- WMI Activity;
-- Windows Firewall / Filtering Platform;
+- Windows Defender native operational/security telemetry and Defender for Endpoint-adjacent native Windows telemetry where authoritative and redistributable;
 - AppLocker;
+- WMI Activity;
+- Task Scheduler Operational;
 - Terminal Services / Remote Desktop Services;
-- DNS Client/Server where applicable;
-- Windows Update and service/process persistence-relevant providers;
-- other Windows providers only after source, licensing, schema and security relevance are reviewed.
+- Windows Firewall / Windows Filtering Platform;
+- DNS Client / DNS Server where applicable;
+- Service Control Manager and service/process persistence-relevant telemetry;
+- additional persistence-relevant Windows providers admitted through explicit source, licensing, schema and security-relevance review.
 
-The goal is broad and eventually comprehensive security telemetry knowledge, without pretending that every Windows provider/version is already covered.
+"Complete Windows Security Corpus" means coverage of this approved scope under frozen provider/channel/version denominators. It does not mean every Event Log provider ever shipped by Microsoft, and ATLAS will not fabricate a universal percentage across undefined providers.
 
 ## Native mobile distinction
 
