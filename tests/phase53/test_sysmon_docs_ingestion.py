@@ -40,7 +40,7 @@ class SysmonDocsIngestionTests(unittest.TestCase):
         cls.parser_def = load("ingestion/parsers/microsoft-sysmon-markdown.definition.json")
         cls.normalizer_def = load("ingestion/normalizers/microsoft-sysmon-docs.definition.json")
         cls.mapping = load("ingestion/mappings/microsoft-sysmon-docs-v1.json")
-        cls.inventory = load("ingestion/inventories/sysmon-docs-15.21.documentation.json")
+        cls.inventory = load("ingestion/inventories/sysmon-docs-15.22.documentation.json")
         cls.fixture = (ROOT / "fixtures/phase-5.3/sysmon-docs.synthetic.md").read_text(encoding="utf-8")
 
     def parse(self, text=None, snapshot_id=SNAPSHOT_ID):
@@ -66,9 +66,9 @@ class SysmonDocsIngestionTests(unittest.TestCase):
         self.assertIn("https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon", self.source["canonical_urls"])
 
     def test_02_release_is_exact_commit_and_blob_pinned(self):
-        self.assertEqual("15.21", self.release["release_version"])
-        self.assertEqual("8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6", self.release["upstream_commit_sha"])
-        self.assertEqual("3272fa16dcec7b1a1adba24e4f5f2fb7e95a9aa5", self.release["document_git_blob_sha1"])
+        self.assertEqual("15.22", self.release["release_version"])
+        self.assertEqual("2fd3249657118505564fd220e672e8ea45d35916", self.release["upstream_commit_sha"])
+        self.assertEqual("e9ee1e967957074ba4536dc8ed0c524a321992e7", self.release["document_git_blob_sha1"])
         self.assertIn(self.release["upstream_commit_sha"], self.release["document_url"])
         self.assertNotIn("/main/", self.release["document_url"])
         self.assertNotIn("/master/", self.release["document_url"])
