@@ -355,7 +355,7 @@ fn search_records(query: String, limit: Option<i64>) -> Result<Value, String> {
 #[tauri::command]
 fn get_record(id: String) -> Result<Value, String> {
     validate_nonempty_scalar_bounded(&id, "id", MAX_UI_IDENTIFIER_SCALARS)?;
-    Ok(run_core_session("record.get", json!({"id": id}))?.result)
+    Ok(run_core_session("record.get", json!({"id": id, "detail": true}))?.result)
 }
 
 #[tauri::command]
