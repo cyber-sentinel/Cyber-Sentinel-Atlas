@@ -16,6 +16,8 @@ FINAL_RELEASE_NOTICES = ROOT / "docs" / "releases" / "public-preview-third-party
 TAURI_EVIDENCE_TOOL = ROOT / "tools" / "release" / "generate_tauri_redistribution_evidence.py"
 TAURI_EVIDENCE_WORKFLOW = ROOT / ".github" / "workflows" / "phase5101-redistribution-closure.yml"
 NOTICE_GENERATOR = ROOT / "tools" / "release" / "generate_public_preview_notice_bundle.py"
+PINNED_LICENSE_MANIFEST = ROOT / "third_party" / "license-material" / "manifest.json"
+PINNED_LICENSE_VALIDATOR = ROOT / "tools" / "release" / "validate_pinned_license_material.py"
 ALLOWED_ENTRY_STATES = {
     "ACCEPTED",
     "CONDITIONALLY_CLEARABLE",
@@ -40,7 +42,7 @@ def load_inventory(errors: list[str]) -> dict:
 
 
 def validate_baseline(data: dict, errors: list[str]) -> None:
-    for path in (INVENTORY, POLICY, NOTICES, TAURI_EVIDENCE_TOOL, TAURI_EVIDENCE_WORKFLOW, NOTICE_GENERATOR):
+    for path in (INVENTORY, POLICY, NOTICES, TAURI_EVIDENCE_TOOL, TAURI_EVIDENCE_WORKFLOW, NOTICE_GENERATOR, PINNED_LICENSE_MANIFEST, PINNED_LICENSE_VALIDATOR):
         if not path.is_file():
             fail(errors, f"missing redistribution control artifact: {path.relative_to(ROOT)}")
 
