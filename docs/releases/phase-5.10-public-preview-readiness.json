@@ -28,35 +28,35 @@
       "name": "First-party licensing decision",
       "mandatory": true,
       "state": "BLOCKED",
-      "evidence": "No project LICENSE is currently published; license selection requires explicit legal/business approval"
+      "evidence": "docs/releases/first-party-license-decision.md plus first-party-license-readiness.json and validate_first_party_license.py define fail-closed license selection; no project LICENSE is published and owner approval remains required"
     },
     {
       "id": "PPR-04",
       "name": "Third-party redistribution closure",
       "mandatory": true,
       "state": "BLOCKED",
-      "evidence": "THIRD_PARTY_NOTICES.md defines fail-closed inventory requirements; exact redistributable public-pack inventory is not yet closed"
+      "evidence": "THIRD_PARTY_NOTICES.md plus third-party-redistribution-closure.md/inventory.json and validator define a fail-closed allowlist; Windows Learn text is excluded from redistribution, pinned Sysmon docs license is classified, while final corpus/software freeze, Rust/Tauri release inventory, final asset/notice bundle and exact package binding remain open"
     },
     {
       "id": "PPR-05",
       "name": "Production code signing and key custody",
       "mandatory": true,
       "state": "BLOCKED",
-      "evidence": "First Preview artifact is intentionally unsigned; provider, certificate lifecycle and protected key custody are not yet accepted"
+      "evidence": "production-signing-and-key-custody.md plus production-signing-readiness.json and validator define non-exportable/hardware-backed signing controls; provider/certificate identity/key custody and exact signed-candidate evidence remain unselected"
     },
     {
       "id": "PPR-06",
       "name": "Public packaging and distribution hardening",
       "mandatory": true,
       "state": "BLOCKED",
-      "evidence": "Portable ZIP is verified for First Preview; signed installer/public distribution channel and release policy remain open"
+      "evidence": "public-packaging-and-distribution.md plus public-packaging-readiness.json and validator define signed-package/distribution acceptance; final Windows format/channel and exact signed-package evidence remain unselected"
     },
     {
       "id": "PPR-07",
       "name": "Accessibility release review",
       "mandatory": true,
       "state": "PARTIAL",
-      "evidence": "docs/releases/accessibility-release-review.md defines the packaged-app acceptance contract; executable Windows Narrator/keyboard/high-contrast/DPI release review remains open"
+      "evidence": "accessibility-release-review.md plus accessibility-readiness.json and validator define fail-closed packaged-app review; exact-candidate Windows Narrator/keyboard/high-contrast/scaling evidence remains open"
     },
     {
       "id": "PPR-08",

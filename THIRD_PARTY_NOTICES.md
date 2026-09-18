@@ -4,6 +4,14 @@ Cyber-Sentinel-Atlas integrates or references material from multiple upstream cy
 
 This file is a control inventory, not a final legal opinion. Publication of a third-party target remains fail-closed until its exact source/release and redistribution status are verified.
 
+Phase 5.10.1 release-scoped redistribution controls are maintained in:
+
+- [`docs/releases/third-party-redistribution-closure.md`](docs/releases/third-party-redistribution-closure.md) — human-readable closure criteria and current review boundary;
+- [`docs/releases/third-party-redistribution-inventory.json`](docs/releases/third-party-redistribution-inventory.json) — machine-readable source/runtime inventory and redistribution state;
+- [`tools/release/validate_redistribution_inventory.py`](tools/release/validate_redistribution_inventory.py) — fail-closed baseline and strict-release validator.
+
+PPR-04 remains **BLOCKED** until the exact Public Preview corpus and software payload are frozen, all included entries are explicitly accepted, required notices are prepared, and the evidence is bound to the exact release package SHA-256.
+
 ## Controlled upstream families
 
 - MITRE ATT&CK — official structured source, version/release pinned by Atlas ingestion contracts.
@@ -17,3 +25,5 @@ This file is a control inventory, not a final legal opinion. Publication of a th
 ## Publication rule
 
 Every redistributable pack/release must be able to produce a machine-readable and human-readable source/license inventory for all included third-party targets. Unknown, incompatible, missing or ambiguous licensing is a non-waivable publication failure.
+
+Public visibility, technical ingestibility, or citation alone does not authorize redistribution. The Public Preview pack is constructed from an explicit allowlist; unresolved material is excluded or blocks publication.
