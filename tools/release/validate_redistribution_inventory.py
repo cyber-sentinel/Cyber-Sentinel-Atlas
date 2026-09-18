@@ -15,6 +15,7 @@ NOTICES = ROOT / "THIRD_PARTY_NOTICES.md"
 FINAL_RELEASE_NOTICES = ROOT / "docs" / "releases" / "public-preview-third-party-notices.md"
 TAURI_EVIDENCE_TOOL = ROOT / "tools" / "release" / "generate_tauri_redistribution_evidence.py"
 TAURI_EVIDENCE_WORKFLOW = ROOT / ".github" / "workflows" / "phase5101-redistribution-closure.yml"
+NOTICE_GENERATOR = ROOT / "tools" / "release" / "generate_public_preview_notice_bundle.py"
 ALLOWED_ENTRY_STATES = {
     "ACCEPTED",
     "CONDITIONALLY_CLEARABLE",
@@ -39,7 +40,7 @@ def load_inventory(errors: list[str]) -> dict:
 
 
 def validate_baseline(data: dict, errors: list[str]) -> None:
-    for path in (INVENTORY, POLICY, NOTICES, TAURI_EVIDENCE_TOOL, TAURI_EVIDENCE_WORKFLOW):
+    for path in (INVENTORY, POLICY, NOTICES, TAURI_EVIDENCE_TOOL, TAURI_EVIDENCE_WORKFLOW, NOTICE_GENERATOR):
         if not path.is_file():
             fail(errors, f"missing redistribution control artifact: {path.relative_to(ROOT)}")
 
@@ -154,6 +155,8 @@ def validate_release(data: dict, errors: list[str]) -> None:
         final_notices = FINAL_RELEASE_NOTICES.read_text(encoding="utf-8")
         if package_sha and package_sha not in final_notices:
             fail(errors, "final third-party notices are not bound to the exact release package SHA-256")
+        if "Status: **RELEASE-SCOPED / PACKAGE-BOUND**" not in final_notices:
+            fail(errors, "final third-party notices must record release-scoped/package-bound status")
 
 
 def main() -> int:
