@@ -173,6 +173,12 @@ def validate_tauri() -> dict[str, object]:
             "Tauri must not expose a generic frontend-controlled Shared Core method bridge")
     require(main.count("Command::new(&core)") == 1,
             "Tauri may spawn only the verified atlas-core path")
+    require('#[cfg(target_os = "windows")]' in main and "use std::os::windows::process::CommandExt;" in main,
+            "Tauri Windows sidecar launch must use the Windows CommandExt boundary")
+    require("const CREATE_NO_WINDOW: u32 = 0x0800_0000;" in main,
+            "Tauri must define the Windows CREATE_NO_WINDOW process flag")
+    require("command.creation_flags(CREATE_NO_WINDOW);" in main,
+            "Tauri Windows atlas-core sidecar must not open a visible console window")
     for forbidden in (
         "std::net", "TcpListener", "TcpStream", "UdpSocket", "reqwest", "hyper::", "tauri_plugin_",
         "powershell", "cmd.exe", "Command::new(\"",
