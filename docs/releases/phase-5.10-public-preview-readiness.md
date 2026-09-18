@@ -2,7 +2,7 @@
 
 Status: **ACTIVE**
 
-Current workstream: **Phase 5.10 — release-candidate decisions and evidence closure**
+Current workstream: **Phase 5.10.7 — Public Preview RC functional freeze and evidence closure**
 
 First Preview engineering readiness is already **READY**. Public Preview remains **BLOCKED** until every mandatory release-readiness gate is closed with reviewable evidence.
 
@@ -23,6 +23,7 @@ Those states are deliberately not treated as equivalent.
 - Latest verified control-plane baseline: `main@d1efb549c1b651b58052a616bba82a3b146c0d6e` — PPR-03 through PPR-07 control planes integrated; post-merge validators green
 - Usable Data Preview post-merge baseline: `main@4d64b2fb402b280d00c01783f7990538a3b67484`, run `35305516189` — **SUCCESS**
 - PPR-04 Tauri/Rust preflight merged baseline: `main@734e20dbb36083d9c5770a22e9c69e844903158f`; PR #54 exact-head run `35309913398` — **SUCCESS**; artifact `10533096533` / `sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d`
+- Public Preview RC functional-freeze baseline: `main@2c7788e08e0254f330cca1cbb0d1a8a9432291f5`; PR #56 exact-head mandatory workflows — **SUCCESS**; signed portable ZIP + GitHub Releases selected; accessibility source/reflow hardening merged
 - First Preview package baseline: `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - First Preview post-merge package run: `35133827422` — **SUCCESS**
 - Public Preview authority: future explicit release gate; not yet granted
@@ -46,6 +47,8 @@ Those states are deliberately not treated as equivalent.
 The machine-readable authority for this matrix is `docs/releases/phase-5.10-public-preview-readiness.json`.
 
 Release-vehicle decision record: [`public-preview-release-decisions.md`](public-preview-release-decisions.md).
+
+RC functional-freeze authority: [`public-preview-rc-contract.md`](public-preview-rc-contract.md), with machine state in [`public-preview-rc-readiness.json`](public-preview-rc-readiness.json). Visual identity remains intentionally open while functional/security boundaries are frozen.
 
 ## Gate semantics
 
@@ -92,6 +95,10 @@ Those decisions require their own accepted evidence and, where applicable, legal
         ├─ PPR-08 freshness/publication policy          PASS
         ├─ PPR-09 launch/rollback governance            PASS
         └─ PPR-07 packaged accessibility review         PARTIAL
+        ↓
+5.10.6 Release vehicle + accessibility hardening        COMPLETE / MERGED
+        ↓
+5.10.7 v0.1.0-rc.1 functional freeze                   ACTIVE / RC EVIDENCE BLOCKED
         ↓
 Strict Public Preview readiness gate                    BLOCKED
         ↓
