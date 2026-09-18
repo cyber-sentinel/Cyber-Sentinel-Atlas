@@ -1,8 +1,8 @@
 # Public Packaging & Distribution Hardening — Phase 5.10.3
 
-Status: **CONTROL PLANE READY / FORMAT & CHANNEL DECISION BLOCKED**
+Status: **FORMAT & CHANNEL SELECTED / SIGNED-CANDIDATE EVIDENCE BLOCKED**
 
-This contract defines PPR-06 technical requirements without selecting the final Windows installer/package format or public distribution channel.
+This contract defines PPR-06 technical requirements. The initial Public Preview release vehicle is now selected as a **signed portable ZIP** published through **GitHub Releases**; PPR-06 remains BLOCKED until exact signed-candidate and post-publication evidence are complete.
 
 ## Release pipeline
 
@@ -33,9 +33,11 @@ exact release commit
 - WebView2 prerequisite behavior must be explicit and deterministic;
 - failure/rollback/recovery instructions must be public and testable.
 
-## Accepted distribution-format classes for owner selection
+## Distribution format decision
 
-The project may select one or more of these after explicit approval:
+Selected for the initial Public Preview: **Signed portable ZIP**. MSI/MSIX remain future options requiring separate reviewed evidence.
+
+Previously evaluated format classes:
 
 1. **Signed portable ZIP** — lowest installer complexity; extraction-based deployment; easiest to inspect and hash.
 2. **Signed MSI** — enterprise-friendly Windows deployment and managed uninstall/upgrade semantics.
@@ -43,11 +45,11 @@ The project may select one or more of these after explicit approval:
 
 A format is not accepted merely because it builds. The exact candidate must pass installation, launch, upgrade/rollback, removal and security acceptance.
 
-## Public channel classes for owner selection
+## Public channel decision
 
-- GitHub Releases as canonical public artifact channel;
-- project-controlled HTTPS release site/CDN;
-- enterprise/private distribution channel in addition to, or instead of, public distribution.
+Selected canonical channel: **GitHub Releases** for `cyber-sentinel/Cyber-Sentinel-Atlas`.
+
+A project-controlled HTTPS site/CDN or enterprise/private mirror may be added later, but mirrors must preserve the canonical signed bytes and digest.
 
 The canonical release authority and artifact digest must be identical across mirrors. A mirror may not silently replace or repackage signed release bytes.
 
@@ -76,6 +78,6 @@ Public Preview does not require automatic binary updates. If binary auto-update 
 
 ## Machine-readable evidence
 
-`docs/releases/public-packaging-readiness.json` is the PPR-06 machine-readable authority. It remains `BLOCKED` until the owner selects a format/channel and an exact signed package passes release acceptance.
+`docs/releases/public-packaging-readiness.json` is the PPR-06 machine-readable authority. Format/channel selection is closed. PPR-06 remains `BLOCKED` until an exact signed package passes the release acceptance contract, is published through GitHub Releases, and the published bytes are independently reverified.
 
-PPR-06 remains **BLOCKED** until those decisions and exact package evidence exist.
+PPR-06 remains **BLOCKED** on signed-candidate and publication evidence, not on format/channel selection.
