@@ -36,7 +36,7 @@ Those states are deliberately not treated as equivalent.
 | PPR-03 | First-party licensing decision | **BLOCKED** | Fail-closed license decision state/validator are integrated; no project `LICENSE` is published and explicit maintainer/legal-business approval remains required |
 | PPR-04 | Third-party redistribution closure | **BLOCKED** | Exact inventory/validator plus Windows-target Rust/Tauri preflight are integrated; exact-head run `35309913398` verified 258 third-party crates and 3 frontend assets. Microsoft Learn source text is excluded and pinned ATT&CK/CAR/D3FEND/Sysmon rights are classified; final corpus/software freeze, final notices and exact package binding remain open |
 | PPR-05 | Production code signing and protected key custody | **BLOCKED** | Provider-neutral non-exportable/hardware-backed signing contract and validator are integrated; provider/certificate/key custody and exact signed-candidate evidence remain unselected |
-| PPR-06 | Public packaging and distribution hardening | **BLOCKED** | Packaging/distribution contract and validator are integrated; final signed format/channel and exact published-package evidence remain unselected |
+| PPR-06 | Public packaging and distribution hardening | **BLOCKED** | **Signed portable ZIP + GitHub Releases selected**; exact production-signed package, clean-Windows/package-bound acceptance, accessibility binding, publication and post-publication byte re-verification remain open |
 | PPR-07 | Accessibility release review | **PARTIAL** | Machine-readable accessibility state and strict validator are integrated; executable Windows keyboard/Narrator/high-contrast/scaling review remains open on the exact final candidate |
 | PPR-08 | Source freshness and public-pack publication policy | **PASS** | `docs/releases/source-freshness-and-publication-policy.md` |
 | PPR-09 | Release governance and launch criteria | **PASS** | `docs/releases/public-preview-launch-governance.md` |
@@ -44,6 +44,8 @@ Those states are deliberately not treated as equivalent.
 | PPR-11 | Trademark and attribution controls | **PASS** | `TRADEMARKS.md`, `CITATION.cff`, `THIRD_PARTY_NOTICES.md` |
 
 The machine-readable authority for this matrix is `docs/releases/phase-5.10-public-preview-readiness.json`.
+
+Release-vehicle decision record: [`public-preview-release-decisions.md`](public-preview-release-decisions.md).
 
 ## Gate semantics
 
@@ -69,7 +71,7 @@ This baseline does **not**:
 
 - choose an open-source or commercial first-party license;
 - choose a certificate authority, signing provider, HSM/KMS or key-custody vendor;
-- authorize a public installer or distribution channel;
+- bypass the selected signed portable ZIP / GitHub Releases release contract or authorize publication before exact-candidate evidence;
 - waive third-party redistribution review;
 - convert First Preview engineering readiness into GA or universal production readiness.
 
@@ -84,7 +86,7 @@ Those decisions require their own accepted evidence and, where applicable, legal
         ↓
 5.10.2 Signing / key custody control plane              COMPLETE — PPR-05 remains BLOCKED on provider/certificate/custody
         ↓
-5.10.3 Packaging / distribution control plane          COMPLETE — PPR-06 remains BLOCKED on final format/channel/evidence
+5.10.3 Packaging / distribution control plane          FORMAT + CHANNEL SELECTED — PPR-06 blocked on exact signed/publication evidence
         ↓
 5.10.4 Accessibility / freshness / launch controls     CONTROL PLANE COMPLETE
         ├─ PPR-08 freshness/publication policy          PASS
