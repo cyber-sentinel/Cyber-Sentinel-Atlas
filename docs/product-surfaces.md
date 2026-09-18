@@ -22,8 +22,6 @@ ATLAS
 ├── ATLAS Web
 │
 ├── ATLAS PWA
-│    ├── Desktop
-│    ├── Android
 │    └── iOS Safari
 │
 ├── ATLAS API
@@ -44,9 +42,7 @@ ATLAS
 | Linux CLI | **APPROVED / PLANNED** | Official command: `atlas` |
 | macOS CLI | **APPROVED / PLANNED** | Official command: `atlas` |
 | Web | **APPROVED / PHASE 5.7** | Browser-safe service boundary; no generic Shared Core bridge |
-| PWA Desktop | **APPROVED / PHASE 5.7** | Same Web/PWA contract |
-| PWA Android | **APPROVED / PHASE 5.7** | Installable web surface where platform permits |
-| PWA iOS Safari | **APPROVED / PHASE 5.7** | Safari/PWA surface; distinct from native App Store product |
+| PWA iOS Safari | **APPROVED / PHASE 5.7** | Installable Safari/PWA surface for iPhone/iPad; distinct from native App Store product |
 | Public API | **APPROVED / PHASE 5.8** | Versioned, authenticated, bounded read/search/graph/source/pack interfaces |
 | Native iOS | **APPROVED / FUTURE DELIVERY** | Requires a reviewed mobile-core/library boundary, Apple signing and App Store controls |
 | Native Android | **APPROVED / FUTURE DELIVERY** | Requires a reviewed mobile-core/library boundary and Android signing/distribution controls |
@@ -76,7 +72,7 @@ Windows + Sysmon knowledge coverage expansion
         ↓
 ATLAS CLI
         ↓
-ATLAS Web + PWA
+ATLAS Web + iOS Safari PWA
         ↓
 ATLAS Public API
         ↓
@@ -156,8 +152,8 @@ The goal is broad and eventually comprehensive security telemetry knowledge, wit
 
 ## Native mobile distinction
 
-PWA on iOS/Android and native mobile applications are separate products.
+The approved PWA deliverable is the **iOS Safari PWA** for iPhone/iPad. Desktop and Android are covered by the normal ATLAS Web surface and are not separate PWA product deliverables in the current roadmap.
 
-The PWA may run through supported browsers and install-to-home-screen capabilities. Native iOS/Android require a separately reviewed mobile runtime boundary. The Windows child-process `atlas-core.exe` model must not be copied blindly to mobile platforms.
+The iOS Safari PWA may use supported install-to-home-screen capabilities. Native iOS/Android remain separate products and require a separately reviewed mobile runtime boundary. The Windows child-process `atlas-core.exe` model must not be copied blindly to mobile platforms.
 
 Native iOS release additionally requires Apple Developer identity, signing, provisioning/entitlements, privacy declarations, App Store packaging and review. Native Android requires its own signing, manifest/permission, packaging and store/distribution controls.
