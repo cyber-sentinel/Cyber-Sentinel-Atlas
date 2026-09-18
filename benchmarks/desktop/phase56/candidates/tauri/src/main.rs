@@ -4,6 +4,8 @@ use std::fs::{self, File};
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
 use std::thread;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
@@ -12,6 +14,8 @@ const MAX_UI_QUERY_SCALARS: usize = 512;
 const MAX_UI_IDENTIFIER_SCALARS: usize = 1024;
 const MAX_UI_RESULT_LIMIT: i64 = 100;
 const MAX_UI_GRAPH_DEPTH: i64 = 32;
+#[cfg(target_os = "windows")]
+const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 const ENV_ALLOWLIST: &[&str] = &[
     "PATH",
     "SystemRoot",
@@ -188,6 +192,10 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
         if let Some(value) = std::env::var_os(key) {
             command.env(key, value);
         }
+    }
+    #[cfg(target_os = "windows")]
+    {
+        command.creation_flags(CREATE_NO_WINDOW);
     }
 
     let started = Instant::now();
