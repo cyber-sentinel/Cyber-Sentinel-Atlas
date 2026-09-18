@@ -12,6 +12,7 @@ on:
       - 'docs/releases/third-party-redistribution-inventory.json'
       - 'tools/release/validate_redistribution_inventory.py'
       - 'tools/release/generate_tauri_redistribution_evidence.py'
+      - 'tools/release/generate_public_preview_notice_bundle.py'
       - 'benchmarks/desktop/phase56/candidates/tauri/Cargo.toml'
       - 'benchmarks/desktop/phase56/candidates/tauri/Cargo.lock'
       - 'benchmarks/desktop/phase56/candidates/tauri/tauri.conf.json'
@@ -27,6 +28,7 @@ on:
       - 'docs/releases/third-party-redistribution-inventory.json'
       - 'tools/release/validate_redistribution_inventory.py'
       - 'tools/release/generate_tauri_redistribution_evidence.py'
+      - 'tools/release/generate_public_preview_notice_bundle.py'
       - 'benchmarks/desktop/phase56/candidates/tauri/Cargo.toml'
       - 'benchmarks/desktop/phase56/candidates/tauri/Cargo.lock'
       - 'benchmarks/desktop/phase56/candidates/tauri/tauri.conf.json'
@@ -62,6 +64,23 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Validate fail-closed redistribution inventory
         run: python tools/release/validate_redistribution_inventory.py
+      - name: Generate deterministic Public Preview notice draft
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$RUNNER_TEMP/public-preview-third-party-notices.draft.md"
+          python tools/release/generate_public_preview_notice_bundle.py --output "$output"
+          grep -F 'Status: **DRAFT / NOT RELEASE AUTHORITY**' "$output"
+          grep -F 'Release package SHA-256: `UNBOUND`' "$output"
+          grep -F 'Redistribution state: **CONDITIONALLY_CLEARABLE**' "$output"
+          echo "PPR04_NOTICE_DRAFT=$output" >> "$GITHUB_ENV"
+      - name: Upload deterministic notice draft evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase5101-public-preview-notice-draft
+          path: ${{ env.PPR04_NOTICE_DRAFT }}
+          if-no-files-found: error
+          retention-days: 30
 
   tauri-rust-asset-evidence:
     name: generate exact Tauri Rust and asset evidence
