@@ -1,0 +1,35 @@
+{
+  "profile_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:ultimate-windows-security-encyclopedia",
+  "source_role": "PRIMARY_WINDOWS_SECURITY_QUICK_DETAIL",
+  "base_url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/",
+  "event_url_template": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid={event_id}",
+  "scope": {
+    "platform": "Windows",
+    "channel": "Security",
+    "content": "Windows Security Log Event ID encyclopedia"
+  },
+  "quick_detail_sections": [
+    "event_identity",
+    "operating_systems",
+    "category_subcategory",
+    "event_type",
+    "legacy_corresponding_events",
+    "event_purpose",
+    "field_groups",
+    "field_semantics",
+    "version_notes",
+    "value_dictionaries",
+    "event_correlations",
+    "collection_notes"
+  ],
+  "redistribution_policy": {
+    "source_prose_in_public_pack": false,
+    "substantial_verbatim_examples_in_public_pack": false,
+    "facts_and_identifiers_may_be_normalized": true,
+    "atlas_independent_summary_required": true,
+    "source_link_required": true,
+    "reason": "Source site states copyright/all-rights-reserved; ATLAS preserves provenance and independently authors redistributable analyst text unless separate permission is obtained."
+  },
+  "change_policy": "Each acquired event page is snapshotted with digest/retrieval metadata. Structural or semantic drift requires review before promoted Quick Detail content is updated."
+}
