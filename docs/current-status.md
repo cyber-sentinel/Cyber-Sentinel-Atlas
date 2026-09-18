@@ -97,6 +97,7 @@ Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that 
   - end-to-end packaged Sysmon acceptance: Event ID `1`
   - pinned Sysmon 15.21 documented IDs: `30`; `29` remain outside current packaged acceptance
   - exhaustive Windows provider/channel/version denominator: **NOT YET FROZEN**
+  - mandatory corpus families: Security-Auditing, Sysmon, PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers are retained because frozen architecture validators use them to prove lifecycle continuity across later phases.
 
