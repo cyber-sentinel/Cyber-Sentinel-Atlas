@@ -60,6 +60,17 @@
       "review_evidence": "ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.release.json"
     },
     {
+      "id": "ultimate-windows-security-encyclopedia",
+      "class": "knowledge-content-source-only",
+      "included": false,
+      "upstream_revision": "Mutable Ultimate Windows Security Windows Security Log Encyclopedia web pages",
+      "license_or_terms": "Copyrighted/all-rights-reserved website content; factual normalization and independently authored ATLAS summaries only unless separate redistribution permission is obtained",
+      "license_source": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/",
+      "redistribution_state": "EXCLUDED_SOURCE_TEXT",
+      "required_notices": "Do not package substantial/verbatim page prose or examples; retain source URL/provenance for normalized facts and ATLAS-authored summaries",
+      "review_evidence": "ingestion/source-profiles/ultimate-windows-security-encyclopedia.release.json + docs/content/source-authority-policy.md"
+    },
+    {
       "id": "microsoft-sysmon-documentation",
       "class": "knowledge-content",
       "included": true,
