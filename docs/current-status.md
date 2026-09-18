@@ -17,7 +17,7 @@ Status timestamp: 2026-09-18
 - Phase 5.10.6 release vehicle/accessibility hardening: PR #56 — **MERGED**; merge baseline `2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
 - Phase 5.10.7 Public Preview RC functional freeze: PR #57 — **MERGED**; target `v0.1.0-rc.1`; visual identity remains intentionally open
 - Phase 5.10.8 PPR-04 deterministic notice/package binding: PR #58 — **MERGED**
-- Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (Desktop/Android/iOS Safari), API, Native Mobile (iOS/Android)
+- Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
 - Active phase: **Phase 5.10 — Public Preview Readiness**
@@ -109,7 +109,7 @@ ATLAS
 ├── Desktop: Windows / Linux / macOS
 ├── CLI: Windows / Linux / macOS
 ├── Web
-├── PWA: Desktop / Android / iOS Safari
+├── PWA: iOS Safari
 ├── API
 └── Mobile: iOS / Android
 ```
