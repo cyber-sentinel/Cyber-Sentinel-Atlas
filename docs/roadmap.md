@@ -186,25 +186,25 @@ Current mandatory gate state:
 
 ### Phase 5.10.1 — Licensing & Redistribution Closure
 
-Status: **BLOCKED**
+Status: **CONTROL PLANE COMPLETE / RELEASE GATES BLOCKED**
 
 Requires an explicit first-party licensing decision plus exact third-party redistribution clearance for the public release payload. Automation will not choose a license on behalf of the project owner.
 
 ### Phase 5.10.2 — Production Signing & Artifact Attestation
 
-Status: **BLOCKED**
+Status: **CONTROL PLANE COMPLETE / PROVIDER DECISION BLOCKED**
 
 Requires an accepted code-signing certificate/provider, certificate lifecycle, protected key custody (for example an accepted HSM/KMS model), signing workflow, verification policy and revocation/rotation procedure. No provider is selected by this roadmap.
 
 ### Phase 5.10.3 — Public Packaging & Distribution Hardening
 
-Status: **BLOCKED**
+Status: **CONTROL PLANE COMPLETE / FORMAT & CHANNEL DECISION BLOCKED**
 
 Requires the signed installer or other approved distribution format, trusted publication channel, release metadata/checksums, rollback/recovery policy and public installation/update documentation. This slice depends on the accepted signing/custody boundary and public-channel decision.
 
 ### Phase 5.10.4 — Accessibility, Freshness & Launch Governance
 
-Status: **IN PROGRESS**
+Status: **CONTROL PLANE COMPLETE / PPR-07 PARTIAL**
 
 Delivered policy/governance controls:
 
