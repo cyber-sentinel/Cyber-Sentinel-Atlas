@@ -35,7 +35,7 @@
     },
     {
       "id": "microsoft-sysmon-documentation",
-      "license_or_terms": "CC-BY-4.0",
+      "license_or_terms": "CC-BY-4.0 documentation license at pinned repository revision",
       "upstream_repository": "MicrosoftDocs/sysinternals",
       "upstream_revision": "8e3453544f1e417c481d5f6a368ce0e8bbf6a8e6",
       "upstream_path": "LICENSE",
