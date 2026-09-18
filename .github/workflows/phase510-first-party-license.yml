@@ -1,0 +1,45 @@
+name: Phase 5.10 First-Party License Readiness
+
+on:
+  push:
+    branches:
+      - main
+      - phase-5.10-control-plane-integration
+    paths:
+      - 'LICENSE'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+      - 'THIRD_PARTY_NOTICES.md'
+      - 'docs/releases/first-party-license-decision.md'
+      - 'docs/releases/first-party-license-readiness.json'
+      - 'tools/release/validate_first_party_license.py'
+      - '.github/workflows/phase510-first-party-license.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'LICENSE'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+      - 'THIRD_PARTY_NOTICES.md'
+      - 'docs/releases/first-party-license-decision.md'
+      - 'docs/releases/first-party-license-readiness.json'
+      - 'tools/release/validate_first_party_license.py'
+      - '.github/workflows/phase510-first-party-license.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Validate first-party license evidence
+        run: python tools/release/validate_first_party_license.py
