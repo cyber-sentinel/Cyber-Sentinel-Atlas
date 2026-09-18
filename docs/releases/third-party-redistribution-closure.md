@@ -32,6 +32,8 @@ The Public Preview software inventory must be generated from the exact built art
 | Microsoft Edge WebView2 Runtime | Runtime prerequisite; current portable First Preview does not claim redistribution of WebView2 binaries | **NOT BUNDLED IN CURRENT PORTABLE MODEL** | If a future installer bundles/bootstrap-downloads WebView2, review Microsoft's redistribution terms for that exact installer model |
 | Product artwork/UI assets | Cyber-Sentinel repository assets unless separately attributed | **FIRST-PARTY/REVIEW REQUIRED** | Confirm every shipped font/icon/image has recorded origin and rights; no untracked asset may enter release payload |
 
+Current desktop UI preflight: the packaged Tauri web surface contains only repository-owned `index.html`, `main.js`, and `styles.css`; no external CDN, remote font, `@font-face`, or remote asset URL is referenced. This reduces the current portable UI asset-risk surface, but the final signed Public Preview package must still inventory every shipped icon/image/font before PPR-04 can PASS.
+
 Existing Phase 5.5.4D supply-chain controls already generate CycloneDX evidence and fail closed on missing linked-module license evidence for the production Go binary. PPR-04 extends that discipline to the complete public distribution payload, including the Rust/Tauri host and release assets.
 
 ## B. Knowledge-content redistribution inventory
