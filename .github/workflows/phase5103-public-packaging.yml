@@ -9,6 +9,8 @@ on:
       - 'docs/releases/public-packaging-and-distribution.md'
       - 'docs/releases/public-packaging-readiness.json'
       - 'tools/release/validate_public_packaging.py'
+      - 'tools/release/generate_public_package_binding_rehearsal.py'
+      - 'tools/release/validate_public_package_binding_rehearsal.py'
       - '.github/workflows/phase5103-public-packaging.yml'
   pull_request:
     branches: [main]
@@ -16,6 +18,8 @@ on:
       - 'docs/releases/public-packaging-and-distribution.md'
       - 'docs/releases/public-packaging-readiness.json'
       - 'tools/release/validate_public_packaging.py'
+      - 'tools/release/generate_public_package_binding_rehearsal.py'
+      - 'tools/release/validate_public_package_binding_rehearsal.py'
       - '.github/workflows/phase5103-public-packaging.yml'
   workflow_dispatch:
 
@@ -34,4 +38,56 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - run: python tools/release/validate_public_packaging.py
+      - name: Validate PPR-06 control plane
+        run: python tools/release/validate_public_packaging.py
+      - name: Prove deterministic non-authoritative package binding rehearsal
+        shell: bash
+        env:
+          REHEARSAL_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/ppr06-package-binding-rehearsal"
+          rm -rf "$root"
+          mkdir -p "$root"
+          python - "$root" <<'PY'
+          import json
+          import pathlib
+          import sys
+          import zipfile
+
+          root = pathlib.Path(sys.argv[1])
+          with zipfile.ZipFile(root / "Cyber-Sentinel-ATLAS-rehearsal.zip", "w", zipfile.ZIP_DEFLATED) as archive:
+              archive.writestr("REHEARSAL.txt", "PPR-06 package binding rehearsal only\n")
+          (root / "sbom.json").write_text(json.dumps({"bomFormat":"CycloneDX","specVersion":"1.6"}) + "\n", encoding="utf-8")
+          (root / "third-party-notices.md").write_text("# Rehearsal Notices\n\nNot release authority.\n", encoding="utf-8")
+          (root / "release-notes.md").write_text("# Rehearsal Release Notes\n\nNot a release.\n", encoding="utf-8")
+          PY
+          python tools/release/generate_public_package_binding_rehearsal.py \
+            --release-commit "$REHEARSAL_COMMIT" \
+            --package "$root/Cyber-Sentinel-ATLAS-rehearsal.zip" \
+            --sbom "$root/sbom.json" \
+            --notices "$root/third-party-notices.md" \
+            --release-notes "$root/release-notes.md" \
+            --output "$root/binding-1.json"
+          python tools/release/generate_public_package_binding_rehearsal.py \
+            --release-commit "$REHEARSAL_COMMIT" \
+            --package "$root/Cyber-Sentinel-ATLAS-rehearsal.zip" \
+            --sbom "$root/sbom.json" \
+            --notices "$root/third-party-notices.md" \
+            --release-notes "$root/release-notes.md" \
+            --output "$root/binding-2.json"
+          cmp "$root/binding-1.json" "$root/binding-2.json"
+          python tools/release/validate_public_package_binding_rehearsal.py \
+            --binding "$root/binding-1.json" \
+            --artifacts-dir "$root"
+          grep -F '"release_authority": false' "$root/binding-1.json"
+          grep -F '"publication_authorized": false' "$root/binding-1.json"
+          grep -F '"signed_candidate_claimed": false' "$root/binding-1.json"
+          echo "PPR06_REHEARSAL_DIR=$root" >> "$GITHUB_ENV"
+      - name: Upload PPR-06 package binding rehearsal evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase5103-package-binding-rehearsal
+          path: ${{ env.PPR06_REHEARSAL_DIR }}/binding-1.json
+          if-no-files-found: error
+          retention-days: 30
