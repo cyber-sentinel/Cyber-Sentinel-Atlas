@@ -13,6 +13,7 @@ Status timestamp: 2026-09-18
 - Phase 5.10 readiness baseline: PR #42 — **MERGED**
 - Phase 5.10 README sync: PR #43 — **MERGED**
 - Phase 5.10.4 governance/freshness closure: PR #44 — **MERGED**
+- Phase 5.10.1 Tauri/Rust redistribution preflight: PR #54 — **MERGED**; exact-head run `35309913398` — **SUCCESS**; artifact `10533096533` / `sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d`
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
 - Active phase: **Phase 5.10 — Public Preview Readiness**
@@ -59,7 +60,10 @@ Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that 
 - Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.10 — Public Preview Readiness: **ACTIVE**
 - Phase 5.10.0 — Public Preview Readiness Baseline: **COMPLETE / MERGED**
-- Phase 5.10.1 — Licensing / Redistribution Closure: **BLOCKED**
+- Phase 5.10.1 — Licensing / Redistribution Closure: **CONTROL PLANE + TAURI/RUST PREFLIGHT COMPLETE / PPR-03 & PPR-04 BLOCKED**
+  - exact Windows-target Rust/Tauri dependency-license preflight: **PASS** (`258` third-party crates)
+  - packaged frontend source-asset inventory: **PASS** (`3` assets; SHA-256 evidence; remote-reference fail-closed check)
+  - final frozen payload/NOTICE/package binding: **OPEN / BLOCKING**
 - Phase 5.10.2 — Production Signing / Key Custody / Attestation: **BLOCKED**
 - Phase 5.10.3 — Public Packaging / Distribution Hardening: **BLOCKED**
 - Phase 5.10.4 — Accessibility / Freshness / Launch Governance: **IN PROGRESS**

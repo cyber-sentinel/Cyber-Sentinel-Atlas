@@ -58,7 +58,10 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
 - Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.10 — Public Preview Readiness: **ACTIVE**
   - 5.10.0 Public Preview Readiness Baseline: **COMPLETE / MERGED**
-  - 5.10.1 Licensing / Redistribution Closure: **CONTROL PLANE COMPLETE / PPR-03 & PPR-04 BLOCKED**
+  - 5.10.1 Licensing / Redistribution Closure: **CONTROL PLANE + TAURI/RUST PREFLIGHT COMPLETE / PPR-03 & PPR-04 BLOCKED**
+    - PR #54: **MERGED**; exact-head PPR-04 run `35309913398` — **SUCCESS**
+    - Rust/Tauri preflight: `258` third-party crates + `3` packaged frontend assets; artifact `10533096533`, digest `sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d`
+    - final release corpus/software freeze, NOTICE bundle and exact package binding remain **BLOCKING**
   - 5.10.2 Production Signing / Key Custody / Attestation: **CONTROL PLANE COMPLETE / PPR-05 BLOCKED**
   - 5.10.3 Public Packaging / Distribution Hardening: **CONTROL PLANE COMPLETE / PPR-06 BLOCKED**
   - 5.10.4 Accessibility / Freshness / Launch Governance: **CONTROL PLANE COMPLETE / PPR-07 PARTIAL**

@@ -35,7 +35,7 @@
       "name": "Third-party redistribution closure",
       "mandatory": true,
       "state": "BLOCKED",
-      "evidence": "THIRD_PARTY_NOTICES.md plus third-party-redistribution-closure.md/inventory.json and validator define a fail-closed allowlist; Windows Learn text is excluded from redistribution, pinned Sysmon docs license is classified, while final corpus/software freeze, Rust/Tauri release inventory, final asset/notice bundle and exact package binding remain open"
+      "evidence": "Exact redistribution inventory/validator plus Windows-target Rust/Tauri preflight are integrated; PR #54 exact-head run 35309913398 verified 258 third-party crates and 3 frontend assets (artifact 10533096533, sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d). Microsoft Learn source text is excluded and pinned ATT&CK/CAR/D3FEND/Sysmon rights are classified; final corpus/software freeze, final notices and exact package binding remain open"
     },
     {
       "id": "PPR-05",
