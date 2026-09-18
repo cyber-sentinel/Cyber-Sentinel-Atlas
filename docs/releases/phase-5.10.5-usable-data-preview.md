@@ -1,6 +1,6 @@
 # Phase 5.10.5 — Usable Data Preview
 
-Status: **COMPLETE / EXACT-HEAD VERIFIED — MERGE PENDING**
+Status: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 
 Date: 2026-09-17
 
@@ -21,6 +21,27 @@ Both jobs passed:
 
 1. `build exact-head usable data preview`
 2. `clean Windows first-run Search Record Graph`
+
+## Verified post-merge authority
+
+- Merge vehicle: PR #45 — **MERGED**
+- CI resilience closure: PR #49 — **MERGED**
+- Verified post-merge engineering baseline: `main@4d64b2fb402b280d00c01783f7990538a3b67484`
+- Workflow: `Phase 5.10.5 Usable Data Preview`
+- Run: `35305516189` — **SUCCESS**
+- `build exact-head usable data preview`: **PASS**
+- `clean Windows first-run Search Record Graph`: **PASS**
+
+Post-merge artifacts:
+
+- `phase5105-usable-data-preview`
+  - artifact ID: `10530884223`
+  - digest: `sha256:174009a03ca99c5df83f3ab4489319f88ab9ff02a1c94343cecd066ac8b9f435`
+- `phase5105-clean-windows-evidence`
+  - artifact ID: `10532105635`
+  - digest: `sha256:efea2fd75a83f6300d7463217a7412c96324a5428e8eaf2ae08ac548039ee438`
+
+The later Public Preview control-plane integration baseline `main@d1efb549c1b651b58052a616bba82a3b146c0d6e` changes release-control documentation/validators rather than the Phase 5.10.5 build-relevant product tree; all PPR control-plane, Foundation, Governance and Phase 5.3.4 canary workflows passed post-merge on that baseline.
 
 ## Acceptance evidence
 
@@ -63,12 +84,14 @@ The following boundaries remain unchanged:
 - no default application network listener is introduced;
 - the engineering package is not a signed Public Preview release.
 
-## Merge and post-merge requirement
+## Merge and post-merge closure
 
-This document records exact-head branch evidence. The slice becomes **COMPLETE / MERGED / POST-MERGE VERIFIED** only after:
+The required merge and post-merge conditions are closed:
 
-1. PR CI succeeds on the exact reviewed head;
-2. the PR is merged to `main` without head drift;
-3. `Phase 5.10.5 Usable Data Preview` succeeds again on the resulting `main` SHA.
+1. PR exact-head CI succeeded;
+2. PR #45 merged the reviewed implementation to `main`;
+3. PR #49 hardened the pinned Windows dependency download path without relaxing SHA-256 or Cargo.lock controls;
+4. post-merge run `35305516189` succeeded on `main@4d64b2fb402b280d00c01783f7990538a3b67484`;
+5. clean Windows acceptance again proved exact 4688/Sysmon retrieval, Record/Graph/Provenance, security-significant payload binding, and TUF tamper rejection.
 
 Public Preview remains governed independently by `docs/releases/phase-5.10-public-preview-readiness.md` and its machine-readable manifest.
