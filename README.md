@@ -19,7 +19,7 @@ ATLAS is built for security teams that need investigation context to be **determ
 > **Current maturity:** Engineering-ready First Preview
 > **Release state:** Pre-preview / unreleased
 > **Repository visibility:** Public
-> **Active workstream:** Phase 5.10.7 — Public Preview RC functional freeze & evidence closure
+> **Active workstream:** Phase 5.10.10 — Windows & Sysmon knowledge coverage expansion + Public Preview evidence closure
 > **RC target:** `v0.1.0-rc.1` — functionally frozen; release evidence still blocked
 > **Public Preview state:** **BLOCKED** until every mandatory release gate passes
 > **Desktop:** Windows / Tauri 2.x — ADR-0026 Accepted
@@ -131,11 +131,11 @@ Authoritative surface plan: [`docs/product-surfaces.md`](docs/product-surfaces.m
 
 ### Current Knowledge Coverage Boundary
 
-The current Engineering Usable Data Preview proves the runtime and analyst workflow, not comprehensive Windows telemetry coverage. Its packaged evidence contains **23 canonical records, 14 search projections and 3 graph edges**, and guarantees end-to-end retrieval for Windows Security Event ID `4688` and Sysmon Event ID `1`.
+The current Phase 5.10.10 engineering candidate expands the proven runtime and analyst workflow without claiming comprehensive Windows telemetry coverage. The candidate builder produces **303 canonical records** (`102` entities + `106` claims + `88` relationships + `7` sources), **16 search projections** and **3 graph edges**. The pack includes Windows Security Event IDs `4624` and `4688`, plus Sysmon Event IDs `1` and `3`; the existing clean-Windows acceptance evidence explicitly proves Windows `4688` and Sysmon `1` end-to-end, while the current candidate additionally requires packaged `ProcessCreate` alias resolution for Sysmon `1`.
 
-The pinned Sysmon 15.21 profile enumerates **30 documented event IDs** (`1..29` plus `255`); therefore 29 additional Sysmon IDs remain outside the current packaged end-to-end acceptance guarantee. Windows Security coverage does not yet have a frozen exhaustive provider/channel denominator, so ATLAS does not publish a misleading "all Windows Event IDs" percentage.
+The controlled Sysmon baseline is **15.22 / schema 4.91**, validated from the reference host and promoted to the current telemetry inventory. It enumerates **30 documented/current Event IDs** (`1..29` plus `255`). Sysmon Events `1` and `3` are `ENCYCLOPEDIA_GRADE`, leaving **28** Sysmon IDs below that depth. For `Microsoft-Windows-Security-Auditing / Security`, ATLAS now has an exact controlled reference denominator of **423 unique Event IDs** on Windows Server 2025 Datacenter 24H2 build `26100.33296`; Events `4624` and `4688` are encyclopedia-grade, leaving **421** IDs below that depth for this provider/build scope. This **does not** define an all-Windows denominator: the global Windows denominator remains intentionally unfrozen while the other mandatory telemetry families are incomplete.
 
-Authoritative coverage plan: [`docs/windows-sysmon-coverage-plan.md`](docs/windows-sysmon-coverage-plan.md).
+Authoritative coverage plan: [`docs/windows-sysmon-coverage-plan.md`](docs/windows-sysmon-coverage-plan.md). Machine-readable family state: [`content/encyclopedia/coverage-manifest.json`](content/encyclopedia/coverage-manifest.json).
 
 Telemetry content-depth contract: [`docs/content/telemetry-record-content-contract.md`](docs/content/telemetry-record-content-contract.md). A Windows/Sysmon Event ID counts as release coverage only after it reaches **ENCYCLOPEDIA_GRADE** depth: field dictionary, version applicability, collection prerequisites, value semantics, correlation pivots, defensive interpretation and provenance.
 
@@ -246,6 +246,7 @@ These controls are engineering evidence, not a claim that every enterprise envir
 | First Preview engineering readiness | **READY** |
 | Phase 5.10 — Public Preview Readiness | **ACTIVE** |
 | Phase 5.10.5 — Usable Data Preview | **COMPLETE / MERGED / POST-MERGE VERIFIED** |
+| Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion | **ACTIVE / 4 ENCYCLOPEDIA EXEMPLARS / SYSMON 15.22 + WINDOWS SECURITY DENOMINATORS EVIDENCE-BOUND** |
 
 Post-merge verification run `35305516189` succeeded on engineering baseline `main@4d64b2fb402b280d00c01783f7990538a3b67484`. Both `build exact-head usable data preview` and `clean Windows first-run Search Record Graph` passed. The post-merge package artifact is `phase5105-usable-data-preview` (artifact `10530884223`, digest `sha256:174009a03ca99c5df83f3ab4489319f88ab9ff02a1c94343cecd066ac8b9f435`) and the clean-Windows evidence is `phase5105-clean-windows-evidence` (artifact `10532105635`, digest `sha256:efea2fd75a83f6300d7463217a7412c96324a5428e8eaf2ae08ac548039ee438`).
 
@@ -287,7 +288,7 @@ Authoritative controls:
 
 PPR-08 and PPR-09 are policy-closed and CI-enforced. PPR-07 remains partial until the exact packaged Public Preview candidate completes the executable Windows keyboard/Narrator/high-contrast/DPI review. Licensing, redistribution, production signing, and public packaging remain explicit blockers and are not auto-selected by tooling.
 
-Phase 5.10.5 improves the engineering usability baseline but **does not** convert any PPR blocker into PASS and does not authorize a Public Preview release.
+Phase 5.10.5 improves the engineering usability baseline but **does not** convert any PPR blocker into PASS and does not authorize a Public Preview release. Phase 5.10.10 now carries the active corpus-expansion work: Windows `4624`/`4688` and Sysmon `1`/`3` are encyclopedia-grade exemplars. The Security-Auditing provider/build denominator and the Sysmon 15.22 denominator are now machine-readable, while the other mandatory Windows telemetry-family denominators and the remaining content depth remain open.
 
 ## Deployment & Integration Model
 
@@ -362,6 +363,8 @@ Phase 5.10.5 usable-data analyst flow                    POST-MERGE VERIFIED
 Phase 5.10.6 release vehicle/accessibility hardening      MERGED / VERIFIED
         ↓
 Phase 5.10.7 functional freeze for v0.1.0-rc.1            ACTIVE / RC EVIDENCE BLOCKED
+        ↓
+Phase 5.10.10 Windows/Sysmon corpus expansion             ACTIVE
         ↓
 PPR-08 freshness/publication policy                      PASS
 PPR-09 launch/rollback/revocation governance             PASS
