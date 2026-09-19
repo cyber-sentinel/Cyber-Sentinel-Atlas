@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import hashlib
 import importlib.util
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+SYSMON_STRUCTURAL_DIGESTS = ROOT / "ingestion" / "inventories" / "sysmon-schema-15.22-4.91.structural-digests.json"
 
 
 def load_module(name: str, path: Path):
@@ -95,7 +98,7 @@ def test_05_every_field_has_one_semantics_claim_and_has_field_relationship():
     claim_subjects = {r["subject_id"] for r in claims if r["subject_id"] in field_ids}
     relationship_targets = {r["to"] for r in rels}
 
-    assert len(field_ids) == 61
+    assert len(field_ids) == 84
     assert claim_subjects == field_ids
     assert relationship_targets == field_ids
 
@@ -181,6 +184,26 @@ def test_09_sysmon_1_field_dictionary_and_schema_evidence_are_complete():
         assert len(schema_evidence) == 1
         assert schema_evidence[0]["source_version"] == "sysmon-15.22-schema-4.91"
         assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_CREATE_PROCESS / ")
+
+
+
+def test_10_sysmon_approved_field_sets_match_controlled_15_22_structural_digests():
+    approved = json.loads((ROOT / "content" / "encyclopedia" / "approved-exemplars.json").read_text(encoding="utf-8"))
+    manifest = json.loads(SYSMON_STRUCTURAL_DIGESTS.read_text(encoding="utf-8"))
+    assert manifest["source_version"] == "sysmon-15.22-schema-4.91"
+    assert manifest["event_count"] == 30
+    by_event = {item["event_id"]: item for item in manifest["events"]}
+
+    for event in approved["events"]:
+        if event.get("namespace") != "microsoft.sysmon":
+            continue
+        structural = by_event[event["native_event_id"]]
+        native_names = [field["native_name"] for field in event["fields"]]
+        digest = "sha256-" + hashlib.sha256("\n".join(native_names).encode("utf-8")).hexdigest()
+        assert len(native_names) == structural["field_count"]
+        assert digest == structural["field_names_sha256"]
+        assert event["schema_locator"] == structural["event_name"]
+        assert event["overview"]["schema_event_version"] == structural["event_version"]
 
 
 
