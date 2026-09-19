@@ -1,6 +1,6 @@
 # Windows & Sysmon Knowledge Coverage Plan
 
-Status: **APPROVED MANDATORY WINDOWS SECURITY CORPUS / IMPLEMENTATION REQUIRED**
+Status: **ACTIVE MANDATORY WINDOWS SECURITY CORPUS / IMPLEMENTATION IN PROGRESS**
 
 ## Objective
 
@@ -21,21 +21,23 @@ The objective is not merely to store Event IDs. Each covered item must answer, w
 
 ## Current measured baseline
 
-The latest downloaded Engineering Usable Data Preview evidence reports:
+The current engineering-preview builder and merged Phase 5.10.10 content report:
 
 | Measure | Current engineering pack |
 | --- | ---: |
-| Canonical records | 23 |
-| Search projections | 14 |
+| Canonical records | 303 (`102` entities / `106` claims / `88` relationships / `7` sources) |
+| Search projections | 16 |
 | Graph edges | 3 |
-| Windows Security IDs end-to-end acceptance-tested | 1 (`4688`) |
-| Sysmon IDs end-to-end acceptance-tested | 1 (`1`) |
+| Packaged Windows Security examples | 2 (`4624`, `4688`) |
+| Packaged Sysmon examples | 2 (`1`, `3`) |
+| Encyclopedia-grade exemplars | 4 (`4624`, `4688`, Sysmon `1`, Sysmon `3`) |
+| Clean-Windows acceptance evidence | Windows `4688` + Sysmon `1` |
 | Public Preview corpus | No |
 | Pack scope | `engineering-preview-fixture-only` |
 
-For Sysmon 15.21, the pinned source profile lists 30 documented event IDs (`1..29`, `255`). Therefore 29 documented IDs remain outside the current packaged end-to-end acceptance guarantee.
+The controlled Sysmon `15.22` / schema `4.91` reference baseline is **VALIDATED / OPERATOR REVIEWED / PROMOTED**. Reference workflow run `35413291632` produced `24` schema manifests and `587` parsed records, with `30` current Event IDs and no observed structural drift from the previous promoted baseline. Sysmon Events `1` and `3` are encyclopedia-grade; **28 Sysmon Event IDs remain** below the same content-depth contract. A sanitized structural-digest manifest binds approved Sysmon field sets, event versions and schema locators back to that controlled reference export without redistributing the raw export.
 
-No honest percentage is assigned yet to "all Windows Event IDs" because Windows event telemetry spans many providers/channels and the exhaustive denominator has not yet been frozen.
+For `Microsoft-Windows-Security-Auditing / Security`, the controlled Windows Server 2025 Datacenter 24H2 build `26100.33296` inventory freezes an exact denominator of **423 unique Event IDs** (`488` provider event/version definitions). Windows `4624` and `4688` are encyclopedia-grade, so this narrowly scoped provider/build snapshot is **2/423 (0.47%)**, with **421** IDs below encyclopedia-grade. This number MUST NOT be presented as all-Windows completion. The global Windows denominator remains unfrozen until every mandatory telemetry family has an explicit provider/channel/version denominator.
 
 ## Approved mandatory Windows Security Corpus scope
 
@@ -61,6 +63,9 @@ Where a provider has no meaningful numeric Event-ID denominator or changes acros
 ## Coverage workstreams
 
 1. **Denominator freeze**
+   - Security-Auditing / Security / build `26100.33296`: **FROZEN — 423 IDs**;
+   - Sysmon 15.22: **FROZEN — 30 documented/current IDs**;
+   - all other mandatory Windows families: **NOT YET FROZEN**;
    - define provider/channel/version scope;
    - generate machine-readable expected-ID inventories;
    - distinguish documented IDs, manifest-derived IDs, deprecated/reserved IDs and version-specific IDs.
@@ -110,11 +115,17 @@ Only records that reach `ENCYCLOPEDIA_GRADE` — including applicable field dict
 
 This prevents shallow records such as "Event ID exists and has a title" from being reported as complete corpus coverage.
 
+## Machine-readable coverage authorities
+
+- `content/encyclopedia/coverage-manifest.json` — fail-closed family state; global Windows denominator remains unfrozen.
+- `content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json` — exact Security-Auditing provider/build denominator and per-ID state.
+- `content/encyclopedia/sysmon-15.22-coverage.snapshot.json` — exact Sysmon 15.22 denominator and per-ID state.
+
 ## Completion criteria
 
 The approved Windows Security Corpus release is complete only when:
 
-- the target denominator is machine-readable and frozen;
+- the target denominator is machine-readable and frozen for every mandatory telemetry family;
 - every in-scope identifier has an explicit state;
 - no ID is silently omitted;
 - every `VERIFIED` record has authoritative provenance;
