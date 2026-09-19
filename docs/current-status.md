@@ -22,6 +22,13 @@ Status timestamp: 2026-09-19
 - Phase 5.10.10 Sysmon semantic documentation refresh to 15.22: PR #67 — **MERGED / CI GREEN**
 - Phase 5.10.10 approved production exemplars (Windows 4624 + Sysmon 3): PR #70 — **MERGED / CI GREEN**
 - Phase 5.10.10 bounded encyclopedia Record Detail + hidden Windows sidecar: PR #72 — **MERGED / ALL APPLICABLE CI GREEN**
+- Phase 5.10.10 product-family / corpus / UX authoritative sync: PR #75 — **MERGED**
+- Phase 5.10.10 controlled Sysmon 15.22 reference-host collection: PR #76 — **MERGED**
+- Phase 5.10.10 Sysmon 15.22 coverage snapshot: PR #78 — **MERGED**
+- Phase 5.10.10 Windows Event 4688 encyclopedia-grade promotion: PR #79 — **MERGED**
+- Phase 5.10.3 exact package-binding hardening: PR #80 — **MERGED**
+- Phase 5.10.10 validated Sysmon 15.22 schema-baseline promotion: PR #81 — **MERGED**
+- Phase 5.10.10 Sysmon schema-evidence binding fix: PR #83 — **MERGED**
 - Phase 5.10.10 Sysmon Event 1 encyclopedia promotion + coverage ledger freeze: PR #85 — **MERGED / EXACT-HEAD CI GREEN**; stacked PR #87 integrated before final verification
 - Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Repository visibility: **Public**
