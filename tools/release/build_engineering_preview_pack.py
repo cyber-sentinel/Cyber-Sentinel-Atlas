@@ -45,6 +45,7 @@ ROOT = Path(__file__).resolve().parents[2]
 PACK_ID = "atlas:pack:engineering-preview-fixture"
 PACK_VERSION = "0.1.0-preview.1"
 CREATED_AT = "2026-09-17T12:00:00Z"
+ENCYCLOPEDIA_OVERRIDE_IDS = {"atlas:event:microsoft.windows.security:4688"}
 EXPIRY = datetime(2030, 1, 1, tzinfo=timezone.utc)
 
 
@@ -98,7 +99,7 @@ def load_canonical_records() -> list[dict[str, Any]]:
         if not record_id:
             raise RuntimeError("encyclopedia exemplar record is missing id")
         previous = by_id.get(record_id)
-        if previous is not None and previous != value:
+        if previous is not None and previous != value and record_id not in ENCYCLOPEDIA_OVERRIDE_IDS:
             raise RuntimeError(f"conflicting encyclopedia exemplar id: {record_id}")
         by_id[record_id] = value
 
@@ -300,7 +301,7 @@ def make_signed_repository(repo: Path, pack_version: str) -> tuple[bytes, dict[s
         "contains_windows_4624": True,
         "contains_sysmon_1": True,
         "contains_sysmon_3": True,
-        "encyclopedia_exemplar_count": 2,
+        "encyclopedia_exemplar_count": 3,
         "private_keys_persisted": False,
         "public_preview_corpus": False,
     }
