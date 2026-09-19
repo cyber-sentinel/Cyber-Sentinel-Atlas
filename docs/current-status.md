@@ -6,7 +6,7 @@ Status timestamp: 2026-09-19
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Latest reviewed engineering/control-plane baseline: `9ca62250a240f3f954ca5ec42f345b75dfc9aeb7` — PR #72 merged after Sysmon 15.22 documentation refresh and approved 4624/Sysmon 3 exemplar materialization.
+- Latest merged engineering/control-plane baseline: `c5de34267e6c5a620d581efab7400ae50da341e7` — PR #81 merged after Windows 4688 encyclopedia promotion, PPR-06 package-binding hardening, and Sysmon 15.22 controlled-baseline promotion.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
@@ -20,6 +20,9 @@ Status timestamp: 2026-09-19
 - Phase 5.10.10 Sysmon semantic documentation refresh to 15.22: PR #67 — **MERGED / CI GREEN**
 - Phase 5.10.10 approved production exemplars (Windows 4624 + Sysmon 3): PR #70 — **MERGED / CI GREEN**
 - Phase 5.10.10 bounded encyclopedia Record Detail + hidden Windows sidecar: PR #72 — **MERGED / ALL APPLICABLE CI GREEN**
+- Phase 5.10.10 Windows Security 4688 encyclopedia promotion: PR #79 — **MERGED / EXACT-HEAD CI GREEN**
+- Phase 5.10.3 exact package-binding hardening: PR #80 — **MERGED / EXACT-HEAD CI GREEN**
+- Phase 5.10.10 Sysmon 15.22 controlled schema baseline promotion: PR #81 — **MERGED / EXACT-HEAD CI GREEN**
 - Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
@@ -94,13 +97,16 @@ Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that 
   - freeze merge baseline: `main@3b37694abcd29919f1cf0a30ed430a8975245411`
   - visual identity: **OPEN BY DESIGN** for logo/banner/theme/non-behavioral polish
 - Phase 5.10.8 — PPR-04 Notice / Package Binding Automation: **COMPLETE / MERGED**
-- Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion: **APPROVED / IMPLEMENTATION REQUIRED**
-  - current engineering preview artifact: `178` canonical records = `64` entities + `58` claims + `50` relationships + `6` sources
-  - search projections: `16`; graph edges: `3`; encyclopedia-grade exemplar count: `2`
+- Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion: **ACTIVE / IMPLEMENTATION IN PROGRESS**
+  - current engineering preview builder: `230` canonical records = `79` entities + `79` claims + `65` relationships + `7` sources
+  - search projections: `16`; graph edges: `3`; encyclopedia-grade exemplar count: `3`
   - packaged Windows Security examples: Event IDs `4624` and `4688`
   - packaged Sysmon examples: Event IDs `1` and `3`
-  - pinned Sysmon semantic documentation: `15.22`; documented denominator: `30` IDs (`1..29`, `255`)
-  - controlled Sysmon telemetry-schema refresh to 15.22: **REFERENCE-HOST EXPORT TRIGGERED / VALIDATION PENDING**
+  - encyclopedia-grade exemplars: Windows Security `4624`, Windows Security `4688`, Sysmon `3`
+  - pinned Sysmon semantic documentation: `15.22`; documented/current denominator: `30` IDs (`1..29`, `255`)
+  - controlled Sysmon 15.22 / schema 4.91 telemetry baseline: **VALIDATED / OPERATOR REVIEWED / PROMOTED**
+  - reference evidence: workflow run `35413291632`; `24` schema manifests; `587` parsed records; `30` current Event IDs; no structural drift observed from the prior promoted baseline
+  - remaining Sysmon encyclopedia-grade work: **29 Event IDs**
   - exhaustive Windows provider/channel/version denominator: **NOT YET FROZEN**
   - mandatory corpus families: Security-Auditing, Sysmon, PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
 
@@ -259,6 +265,8 @@ Phase 5.10.5 usable-data packaged acceptance     COMPLETE / EXACT-HEAD VERIFIED
 Phase 5.10.6 release vehicle/accessibility        COMPLETE / MERGED
         ↓
 Phase 5.10.7 v0.1.0-rc.1 functional freeze       ACTIVE / RC EVIDENCE BLOCKED
+        ↓
+Phase 5.10.10 Windows/Sysmon corpus expansion     ACTIVE
         ↓
 Phase 5.10.4 policy/governance closure           IN PROGRESS
         ├─ PPR-08 freshness/publication           PASS
