@@ -131,7 +131,10 @@ def make_signed_repository(repo: Path, pack_version: str) -> tuple[bytes, dict[s
             encoding="utf-8"
         )
     )
-    projection_ids = {record["id"] for record in graph_corpus.get("records", [])}
+    projection_by_id = {
+        record["id"]: record
+        for record in graph_corpus.get("records", [])
+    }
     claims_by_subject = {}
     for record in records:
         if record.get("record_kind") == "claim" and record.get("predicate") == "telemetry.represents":
@@ -140,10 +143,17 @@ def make_signed_repository(repo: Path, pack_version: str) -> tuple[bytes, dict[s
     for record in records:
         if record.get("record_kind") != "entity" or record.get("entity_type") != "event":
             continue
-        if record["id"] in projection_ids:
+
+        identifiers = record.get("native_identifiers", [])
+        is_encyclopedia_exemplar = any(
+            (item.get("components") or {}).get("content_contract") == "ENCYCLOPEDIA_GRADE_EXEMPLAR"
+            for item in identifiers
+        )
+        if record["id"] in projection_by_id and not is_encyclopedia_exemplar:
             continue
+
         native = []
-        for item in record.get("native_identifiers", []):
+        for item in identifiers:
             projected = {
                 "type": item["type"],
                 "value": item["value"],
@@ -154,11 +164,14 @@ def make_signed_repository(repo: Path, pack_version: str) -> tuple[bytes, dict[s
             if item.get("type") == "event_id":
                 projected["numeric_semantics"] = True
             native.append(projected)
+
         scope = {}
-        if record.get("native_identifiers"):
-            scope = dict(record["native_identifiers"][0].get("context") or {})
+        semantic_version = None
+        if identifiers:
+            scope = dict(identifiers[0].get("context") or {})
+            semantic_version = (identifiers[0].get("components") or {}).get("semantic_source_version")
         overview = claims_by_subject.get(record["id"]) or {}
-        graph_corpus["records"].append({
+        projection_by_id[record["id"]] = {
             "id": record["id"],
             "entity_type": record["entity_type"],
             "title": record["title"],
@@ -170,13 +183,13 @@ def make_signed_repository(repo: Path, pack_version: str) -> tuple[bytes, dict[s
                 "channel": scope.get("channel"),
             },
             "lifecycle": (record.get("lifecycle") or {}).get("state"),
-            "version": None,
+            "version": semantic_version,
             "description": overview.get("summary", ""),
             "native_identifiers": native,
             "aliases": record.get("aliases", []),
-        })
-        projection_ids.add(record["id"])
-    graph_corpus["records"] = sorted(graph_corpus["records"], key=lambda item: item["id"])
+        }
+
+    graph_corpus["records"] = sorted(projection_by_id.values(), key=lambda item: item["id"])
     spc_bundle = build_projection_bundle(graph_corpus)
     spc_bytes = canonical_json_bytes(spc_bundle)
 
