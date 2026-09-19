@@ -1,104 +1,118 @@
-# API & CLI Architecture
+# ATLAS API & CLI Architecture
 
 ## Ownership Boundary
 
-Cyber-Sentinel-Forge is retired as an independent Atlas architectural component.
+ATLAS owns consumer/search/investigation interfaces and the official `atlas` CLI.
 
-Capability ownership is:
+DefenseOps owns defensive content engineering. DefenseOps content remains subject to ATLAS ingestion, provenance, validation and release controls before it becomes ATLAS knowledge.
 
-- Atlas consumer/search/investigation capabilities → Atlas interfaces and `atlas` CLI;
-- defensive content authoring/engineering capabilities → DefenseOps tooling.
+## Approved Product Interfaces
 
-DefenseOps is an approved engineering source for Atlas, but its content still passes Atlas ingestion, provenance, validation, and release controls.
+- CLI: Windows / Linux / macOS;
+- Web;
+- iOS Safari PWA through the Web service boundary;
+- Public API;
+- future Linux/macOS Desktop consumers;
+- future native mobile through a separately reviewed mobile boundary.
 
 ## API Principles
 
 - stable canonical IDs;
 - versioned API surface;
-- entity-first design;
+- authenticated/authorized operation where non-local exposure exists;
+- bounded resource/method allowlists;
 - explicit provenance;
 - no UI-only hidden semantics;
-- shared contracts across Desktop, Web/PWA, API, and CLI;
-- native identifiers preserved separately from Atlas canonical IDs.
+- native identifiers preserved separately from ATLAS canonical IDs;
+- deterministic retrieval remains authoritative;
+- no generic arbitrary pass-through to Shared Core methods;
+- auditability, input bounds and rate/resource protection appropriate to deployment mode.
 
 ## Candidate API Resources
 
 ```text
-GET /v1/entities/{id}
-GET /v1/telemetry/{id}
-GET /v1/events/{id}
-GET /v1/techniques/{id}
-GET /v1/detections/{id}
-GET /v1/hunts/{id}
 GET /v1/search
-GET /v1/graph/{id}
+GET /v1/records/{id}
+GET /v1/relationships/{id}
 GET /v1/sources/{id}
 GET /v1/claims/{id}
 GET /v1/coverage
-GET /v1/packs
+GET /v1/packs/status
 ```
 
-The exact API resource layout remains an implementation decision after Phase 5.2 schema contracts are defined.
+Exact resources remain a Phase 5.8B implementation decision and must map to bounded product semantics rather than mirror internal methods mechanically.
 
 ## Search API
 
-Future search contracts should support filters such as:
+Future filters may include:
 
-- q
-- entity_type
-- namespace
-- native_identifier_type
-- native_identifier_value
-- platform
-- provider
-- attack_id
-- engine
-- validation_level
-- source_class
-- lifecycle
-- offline_pack
+- q;
+- record/entity type;
+- namespace;
+- native identifier type/value;
+- platform;
+- provider/channel;
+- ATT&CK ID;
+- source class;
+- lifecycle/applicability;
+- pack/coverage scope.
 
-Exact identifier resolution must precede semantic retrieval.
+Exact identifier resolution precedes lexical/semantic augmentation.
 
 ## CLI Direction
 
-The official user-facing command is:
+The approved user-facing command is:
 
 ```text
 atlas
 ```
 
-Examples using the approved canonical identifier architecture:
+Planned examples:
 
 ```text
 atlas search 4688
-atlas show atlas:event:microsoft.windows.security:4688
-atlas related t1059.001
-atlas detection det-win-001
-atlas sources atlas:event:microsoft.windows.security:4688
-atlas pack list
-atlas validate
+atlas search "Sysmon Event 1"
+atlas record atlas:event:microsoft.windows.security:4688
+atlas graph atlas:event:microsoft.windows.security:4688
+atlas source show <source-id>
+atlas pack status
+atlas pack verify
 ```
 
-Future examples may include:
-
-```text
-atlas search CreateAccessKey
-atlas search EXECVE
-atlas show atlas:operation:aws.cloudtrail.iam:createaccesskey
-atlas show atlas:audit-record:linux.audit:execve
-```
+JSON output is an approved requirement for automation-oriented commands where applicable.
 
 ## CLI Rule
 
-The CLI consumes the same canonical model and shared contracts as the Desktop/Web/API surfaces. It must not become a second knowledge implementation or a parallel Forge knowledge engine.
+CLI must consume the same canonical/search/graph/pack contracts as other surfaces. It must not become a second implementation of canonical truth.
 
 ## Open Implementation Decisions
 
-The following are intentionally not frozen:
+Still open for the future interface phases:
 
-- CLI packaging/distribution;
-- API framework;
-- Detection Intermediate Representation;
-- exact DefenseOps → Atlas ingestion contract;
-- local storage and graph implementation.
+- exact CLI packaging/distribution per OS;
+- exact Web/API framework;
+- API authentication/deployment profiles;
+- mobile-core/library boundary;
+- broader graph service implementation;
+- customer/enterprise overlay and persistence models.
+
+SQLite + FTS5, Go Shared Core, canonical schema, TUF pack trust, Windows Tauri host and the First Preview seven-command desktop boundary are **not** open decisions.
+
+
+## Query-Language Naming
+
+ATLAS must not treat the acronym `KQL` as globally unambiguous.
+
+- **Microsoft Kusto Query Language (KQL)** is used by Microsoft Sentinel, Microsoft Defender XDR, Azure Data Explorer and related Microsoft query surfaces.
+- **Elastic Kibana Query Language (KQL)** is a distinct Elastic query/filter language.
+
+Any future query mapping, detection content, API field or CLI output that uses `KQL` must carry an explicit engine/query-language identity so content cannot be applied to the wrong platform.
+
+
+## Ownership and naming boundary
+
+Cyber-Sentinel-Forge is retired as an ATLAS ownership surface.
+
+DefenseOps is an approved engineering source for Atlas and may provide detection, hunting, validation, response and automation provenance where its exact material has explicit rights and attribution evidence.
+
+The official user-facing command is `atlas`. Internal executables such as `atlas-core --serve-stdio` are implementation details and are not the public CLI contract.
