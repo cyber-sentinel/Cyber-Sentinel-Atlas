@@ -1,0 +1,142 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:sysmon-schema-15.22-4.91",
+  "inventory_kind": "telemetry",
+  "declared_scope": "Microsoft Sysinternals Sysmon 15.22 current schema 4.91 Event ID identities captured by a controlled out-of-band `sysmon -s all` reference export",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-sysmon-schema-export"
+  ],
+  "inventory_method": "manual-controlled",
+  "inventory_source_version": "sysmon-15.22-schema-4.91",
+  "expected_identity_count": 30,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Sysmon",
+    "channel": "Microsoft-Windows-Sysmon/Operational",
+    "product": "Sysmon",
+    "platform": "Windows",
+    "sysmon_version": "15.22",
+    "current_schema_version": "4.91",
+    "reference_environment_product": "Windows Server 2022 Datacenter",
+    "reference_environment_version": "21H2",
+    "reference_environment_build": "20348.5622",
+    "architecture": "x64",
+    "locale": "en-US",
+    "reference_export_id": "atlas:reference-export:atlas.ingestion:sha256-af708379305756b3ac6e4f1bb518dfb007df0ee28565e807d81b56092ebcb28c",
+    "raw_artifact_sha256": "sha256-119d6c03612d2d1e8272571257f8efa18de4d8c122628e6004eaabca8ac817bb",
+    "collector_binary_sha256": "sha256-83d31f2478dc6716cfdbf69e5c384bf043072b5f0d8d7b2eea365f709fda4352",
+    "schema_document_count": 24,
+    "parsed_schema_event_record_count": 587,
+    "current_schema_event_count": 30,
+    "psr_representation_digest": "sha256-c197671929ae30b6311b6d427a7c0f0248c6353944845ad87a977c8088347c22",
+    "previous_promoted_psr_representation_digest": "sha256-c197671929ae30b6311b6d427a7c0f0248c6353944845ad87a977c8088347c22",
+    "structural_drift_from_previous_promoted_baseline": false,
+    "expected_identities": [
+      {
+        "event_id": "1"
+      },
+      {
+        "event_id": "2"
+      },
+      {
+        "event_id": "3"
+      },
+      {
+        "event_id": "4"
+      },
+      {
+        "event_id": "5"
+      },
+      {
+        "event_id": "6"
+      },
+      {
+        "event_id": "7"
+      },
+      {
+        "event_id": "8"
+      },
+      {
+        "event_id": "9"
+      },
+      {
+        "event_id": "10"
+      },
+      {
+        "event_id": "11"
+      },
+      {
+        "event_id": "12"
+      },
+      {
+        "event_id": "13"
+      },
+      {
+        "event_id": "14"
+      },
+      {
+        "event_id": "15"
+      },
+      {
+        "event_id": "16"
+      },
+      {
+        "event_id": "17"
+      },
+      {
+        "event_id": "18"
+      },
+      {
+        "event_id": "19"
+      },
+      {
+        "event_id": "20"
+      },
+      {
+        "event_id": "21"
+      },
+      {
+        "event_id": "22"
+      },
+      {
+        "event_id": "23"
+      },
+      {
+        "event_id": "24"
+      },
+      {
+        "event_id": "25"
+      },
+      {
+        "event_id": "26"
+      },
+      {
+        "event_id": "27"
+      },
+      {
+        "event_id": "28"
+      },
+      {
+        "event_id": "29"
+      },
+      {
+        "event_id": "255"
+      }
+    ],
+    "completeness_semantics": "telemetry denominator for the current Sysmon 15.22 schema 4.91 reference scope; documentation coverage is measured independently",
+    "history_semantics": "historical schema versions are preserved as evidence and may contain identities or encodings not present in the current schema; current-schema absence is NOT_OBSERVED, not automatic removal"
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-7b7ef5015676b640e1aa72ffabbea11a8eb2a354ce7e542f0e759fa160ff9c3e"
+}
