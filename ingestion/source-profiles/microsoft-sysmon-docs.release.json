@@ -1,5 +1,5 @@
 {
-  "profile_version": "1.1.0",
+  "profile_version": "1.2.0",
   "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
   "release_version": "15.22",
   "document_date": "2026-09-10",
@@ -11,17 +11,60 @@
   "learn_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
   "license_url": "https://github.com/MicrosoftDocs/sysinternals/blob/2fd3249657118505564fd220e672e8ea45d35916/LICENSE",
   "expected_documented_event_ids": [
-    "1","2","3","4","5","6","7","8","9","10",
-    "11","12","13","14","15","16","17","18","19","20",
-    "21","22","23","24","25","26","27","28","29","255"
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "255"
   ],
   "pinning_policy": "Release ingestion uses the exact sysmon.md blob at the explicit upstream commit. Floating branches are discovery-only. The documented event list is documentation coverage, not the authoritative telemetry denominator.",
   "primary_semantic_authority_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
-  "freshness_state": "CURRENT_DOCUMENTATION",
+  "freshness_state": "CURRENT_DOCUMENTATION_AND_VALIDATED_REFERENCE",
   "telemetry_schema_baseline": {
     "sysmon_version": "15.21",
     "schema_version": "4.91",
-    "state": "OLDER_CONTROLLED_REFERENCE_REQUIRES_15_22_REFRESH"
+    "state": "PROMOTED_CONTROLLED_BASELINE"
   },
-  "freshness_note": "The semantic documentation authority is pinned to Sysmon 15.22. The controlled telemetry-schema reference remains Sysmon 15.21/schema 4.91 until a new 15.22 reference-host export is collected and reviewed; documentation freshness must not be misrepresented as schema freshness."
+  "freshness_note": "Sysmon 15.22 semantic documentation is pinned. A controlled Sysmon 15.22/schema 4.91 reference-host export was collected and validated in workflow run 35413291632 with the same deterministic PSR representation digest as the promoted 15.21 baseline. The committed telemetry inventory remains the historical promoted 15.21 baseline until an explicit inventory-promotion change replaces it; validation and promotion are intentionally distinct states.",
+  "latest_controlled_reference_validation": {
+    "sysmon_version": "15.22",
+    "schema_version": "4.91",
+    "state": "VALIDATED_NOT_YET_PROMOTED_TO_TELEMETRY_INVENTORY",
+    "workflow_run_id": 35413291632,
+    "workflow_head_sha": "c35de6704207cbcbde02f76109bd301c5ba88e0d",
+    "artifact_id": 10574893522,
+    "artifact_zip_sha256": "sha256:c307282803e4e6b5a3f0c658ec37ce529fadcb881e6a4da1dd4a74c338306eef",
+    "reference_export_id": "atlas:reference-export:atlas.ingestion:sha256-af708379305756b3ac6e4f1bb518dfb007df0ee28565e807d81b56092ebcb28c",
+    "raw_artifact_sha256": "sha256-119d6c03612d2d1e8272571257f8efa18de4d8c122628e6004eaabca8ac817bb",
+    "psr_representation_digest": "sha256-c197671929ae30b6311b6d427a7c0f0248c6353944845ad87a977c8088347c22",
+    "schema_document_count": 24,
+    "parsed_schema_event_record_count": 587,
+    "current_schema_event_count": 30,
+    "reference_environment": "Windows Server 2022 Datacenter 21H2 build 20348.5622 x64 en-US"
+  }
 }
