@@ -1,0 +1,285 @@
+{
+  "coverage_contract_version": "1.0.0",
+  "product": "Microsoft Sysinternals Sysmon",
+  "semantic_release": "15.22",
+  "denominator_kind": "documented-event-id-catalog",
+  "denominator_count": 30,
+  "encyclopedia_grade_count": 1,
+  "remaining_count": 29,
+  "completion_ratio": "1/30",
+  "completion_percent": 3.33,
+  "release_numerator_rule": "Only ENCYCLOPEDIA_GRADE maintainer-approved records count.",
+  "telemetry_schema_refresh_state": "PENDING_CONTROLLED_SYSMON_15_22_REFERENCE_EXPORT",
+  "events": [
+    {
+      "event_id": "1",
+      "title": "Process creation",
+      "configuration_tag": "ProcessCreate",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:1",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "2",
+      "title": "A process changed a file creation time",
+      "configuration_tag": "FileCreateTime",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:2",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "3",
+      "title": "Network connection",
+      "configuration_tag": "NetworkConnect",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.sysmon:3",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "4",
+      "title": "Sysmon service state changed",
+      "configuration_tag": null,
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:4",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "5",
+      "title": "Process terminated",
+      "configuration_tag": "ProcessTerminate",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:5",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "6",
+      "title": "Driver loaded",
+      "configuration_tag": "DriverLoad",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:6",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "7",
+      "title": "Image loaded",
+      "configuration_tag": "ImageLoad",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:7",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "8",
+      "title": "CreateRemoteThread",
+      "configuration_tag": "CreateRemoteThread",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:8",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "9",
+      "title": "RawAccessRead",
+      "configuration_tag": "RawAccessRead",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:9",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "10",
+      "title": "ProcessAccess",
+      "configuration_tag": "ProcessAccess",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:10",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "11",
+      "title": "FileCreate",
+      "configuration_tag": "FileCreate",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:11",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "12",
+      "title": "RegistryEvent (Object create and delete)",
+      "configuration_tag": "RegistryEvent",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:12",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "13",
+      "title": "RegistryEvent (Value Set)",
+      "configuration_tag": "RegistryEvent",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:13",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "14",
+      "title": "RegistryEvent (Key and Value Rename)",
+      "configuration_tag": "RegistryEvent",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:14",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "15",
+      "title": "FileCreateStreamHash",
+      "configuration_tag": "FileCreateStreamHash",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:15",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "16",
+      "title": "ServiceConfigurationChange",
+      "configuration_tag": null,
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:16",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "17",
+      "title": "PipeEvent (Pipe Created)",
+      "configuration_tag": "PipeEvent",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:17",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "18",
+      "title": "PipeEvent (Pipe Connected)",
+      "configuration_tag": "PipeEvent",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:18",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "19",
+      "title": "WmiEvent (WmiEventFilter activity detected)",
+      "configuration_tag": "WmiEvent",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:19",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "20",
+      "title": "WmiEvent (WmiEventConsumer activity detected)",
+      "configuration_tag": "WmiEvent",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:20",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "21",
+      "title": "WmiEvent (WmiEventConsumerToFilter activity detected)",
+      "configuration_tag": "WmiEvent",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:21",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "22",
+      "title": "DNSEvent (DNS query)",
+      "configuration_tag": "DnsQuery",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:22",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "23",
+      "title": "FileDelete (File Delete archived)",
+      "configuration_tag": "FileDelete",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:23",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "24",
+      "title": "ClipboardChange (New content in the clipboard)",
+      "configuration_tag": "ClipboardChange",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:24",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "25",
+      "title": "ProcessTampering (Process image change)",
+      "configuration_tag": "ProcessTampering",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:25",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "26",
+      "title": "FileDeleteDetected (File Delete logged)",
+      "configuration_tag": "FileDeleteDetected",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:26",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "27",
+      "title": "FileBlockExecutable",
+      "configuration_tag": "FileBlockExecutable",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:27",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "28",
+      "title": "FileBlockShredding",
+      "configuration_tag": "FileBlockShredding",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:28",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "29",
+      "title": "FileExecutableDetected",
+      "configuration_tag": "FileExecutableDetected",
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:29",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    },
+    {
+      "event_id": "255",
+      "title": "Error",
+      "configuration_tag": null,
+      "coverage_state": "IDENTIFIED",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.sysmon:255",
+      "semantic_authority": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon"
+    }
+  ]
+}
