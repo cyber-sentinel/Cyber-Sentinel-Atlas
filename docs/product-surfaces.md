@@ -89,15 +89,17 @@ The current Engineering Usable Data Preview proves the runtime and packaged anal
 
 Current packaged engineering evidence:
 
-- `23` canonical records;
-- `14` search projections;
+- `230` canonical records (`79` entities, `79` claims, `65` relationships, `7` sources);
+- `16` search projections;
 - `3` graph edges;
-- Windows Security Event ID `4688` end-to-end verified;
-- Sysmon Event ID `1` end-to-end verified;
+- packaged Windows examples: Event IDs `4624` and `4688`;
+- packaged Sysmon examples: Event IDs `1` and `3`;
+- clean-Windows acceptance remains explicitly proven for Windows Security `4688` and Sysmon `1` on the published engineering evidence path;
+- encyclopedia-grade exemplars: Windows Security `4624`, Windows Security `4688`, Sysmon `3`;
 - engineering pack scope: `engineering-preview-fixture-only`;
 - `public_preview_corpus=false`.
 
-The pinned Sysmon 15.21 source profile documents 30 event IDs: `1..29` plus `255`. Current packaged acceptance guarantees Event ID `1`; full Sysmon event-ID coverage therefore still requires 29 additional documented event IDs to be represented, provenance-bound and acceptance-tested.
+The current controlled Sysmon baseline is `15.22` / schema `4.91`, validated on the reference host and promoted to the telemetry inventory. It contains the same 30 current Event IDs (`1..29` plus `255`) as the pinned 15.22 semantic documentation profile. Sysmon Event `3` is encyclopedia-grade; 29 Sysmon IDs remain to reach the same content depth before full Sysmon corpus coverage can be claimed.
 
 Windows Security/Event Log coverage does not yet have an approved exhaustive denominator. "All Windows Event IDs" spans multiple providers/channels and cannot be represented honestly by one unqualified percentage. Coverage must first be frozen by provider/channel/version and then measured through machine-readable coverage snapshots.
 
