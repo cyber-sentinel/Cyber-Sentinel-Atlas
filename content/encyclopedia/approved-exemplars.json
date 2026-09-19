@@ -823,6 +823,129 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:6",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "6",
+      "title": "Sysmon Event 6 — Driver loaded",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "6",
+      "aliases": [
+        "6",
+        "Sysmon 6",
+        "Sysmon Event 6",
+        "DriverLoad",
+        "Driver loaded"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 6: Driver loaded",
+      "schema_locator": "SYSMONEVENT_DRIVER_LOAD",
+      "overview": {
+        "summary": "Records a kernel driver load with the loaded image path, configured hashes, and signature-related context for investigation of driver trust and kernel-level activity.",
+        "event_class": "Driver Load",
+        "configuration_tag": "DriverLoad",
+        "schema_event_version": 4,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify newly or unexpectedly loaded kernel drivers",
+          "pivot from a loaded driver path to hash and signature context",
+          "support investigation of vulnerable, unsigned, tampered, or otherwise suspicious driver activity when surrounding evidence supports that interpretation",
+          "reconstruct driver-load timelines without treating a driver load as malicious by itself"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active Sysmon EventFiltering configuration must not exclude DriverLoad activity required by the investigation."
+        ],
+        "configuration_note": "DriverLoad is a filterable Sysmon event. Include/exclude policy should preserve the driver telemetry required by the environment's detection and investigation objectives.",
+        "interpretation_note": "Driver loading can be legitimate administrative, operating-system, security-software, or application activity. Signature-related information is produced asynchronously by Sysmon, so signature context should be interpreted together with hashes, image path, time, and corroborating evidence rather than as a standalone malicious verdict."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 11",
+          "key": "ImageLoaded ↔ TargetFilename + time",
+          "purpose": "correlate a driver load with prior creation of the same driver file when FileCreate telemetry is available",
+          "limitation": "Path normalization, rename activity, and collection policy can prevent a direct match."
+        },
+        {
+          "target": "Sysmon 1",
+          "key": "UtcTime + nearby installer/service-management process context",
+          "purpose": "identify process activity that may have installed or initiated the driver lifecycle",
+          "limitation": "Event 6 has no ProcessGuid or ProcessId; this is contextual temporal correlation, not process identity proof."
+        },
+        {
+          "target": "Windows System / Service Control Manager driver-service telemetry",
+          "key": "ImageLoaded + service/driver path + time",
+          "purpose": "corroborate driver service installation or start lifecycle when corresponding Windows System telemetry is available",
+          "scope": "Explicit out-of-scope target until its provider/channel denominator and canonical coverage are frozen."
+        }
+      ],
+      "analysis": [
+        "Prioritize unexpected driver paths, unusual publishers/signature states, uncommon hashes, and driver loads temporally associated with suspicious installation or privilege activity.",
+        "Use ImageLoaded and Hashes to pivot into approved file reputation, inventory, or threat-intelligence evidence when available.",
+        "Correlate with Sysmon FileCreate or Windows service/driver telemetry when available, while preserving the fact that Event 6 itself does not identify the initiating user-mode process.",
+        "Treat Event 6 as high-value kernel driver observation telemetry, not proof of maliciousness by itself."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the driver-load event when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the driver-load event."
+        },
+        {
+          "key": "imageloaded",
+          "section": "Driver Identity",
+          "native_name": "ImageLoaded",
+          "type": "UnicodeString/path",
+          "meaning": "Path of the driver image recorded as loaded."
+        },
+        {
+          "key": "hashes",
+          "section": "Driver Integrity",
+          "native_name": "Hashes",
+          "type": "UnicodeString/hash set",
+          "meaning": "Configured cryptographic hash values recorded for the loaded driver image.",
+          "correlation": "Use as a stable content pivot where the configured hash algorithm and value are available."
+        },
+        {
+          "key": "signed",
+          "section": "Driver Trust",
+          "native_name": "Signed",
+          "type": "UnicodeString",
+          "meaning": "Sysmon signature-status indicator recorded for the loaded driver."
+        },
+        {
+          "key": "signature",
+          "section": "Driver Trust",
+          "native_name": "Signature",
+          "type": "UnicodeString",
+          "meaning": "Signature or signer-related value recorded by Sysmon for the loaded driver when available."
+        },
+        {
+          "key": "signaturestatus",
+          "section": "Driver Trust",
+          "native_name": "SignatureStatus",
+          "type": "UnicodeString",
+          "meaning": "Signature evaluation status recorded by Sysmon for the loaded driver."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",

@@ -58,7 +58,7 @@ def validate() -> list[str]:
 
     for family_id, expected in {
         "windows-security-auditing": (423, 2, 421),
-        "sysmon": (30, 5, 25),
+        "sysmon": (30, 6, 24),
     }.items():
         family = by_id[family_id]
         snapshot_path = family.get("snapshot")
