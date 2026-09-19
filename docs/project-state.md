@@ -21,6 +21,13 @@
 - Phase 5.10.10 Sysmon 15.22 semantic documentation: PR #67 — **MERGED**
 - Phase 5.10.10 Windows 4624 + Sysmon 3 production exemplars: PR #70 — **MERGED**
 - Phase 5.10.10 bounded Record Detail + no-console Windows sidecar: PR #72 — **MERGED**
+- Phase 5.10.10 product-family / corpus / UX authoritative sync: PR #75 — **MERGED**
+- Phase 5.10.10 controlled Sysmon 15.22 reference-host collection: PR #76 — **MERGED**
+- Phase 5.10.10 Sysmon 15.22 machine-readable coverage snapshot: PR #78 — **MERGED**
+- Phase 5.10.10 Windows Event 4688 encyclopedia-grade promotion: PR #79 — **MERGED**
+- Phase 5.10.3 exact package-binding hardening: PR #80 — **MERGED**
+- Phase 5.10.10 validated Sysmon 15.22 schema-baseline promotion: PR #81 — **MERGED**
+- Phase 5.10.10 Sysmon schema-evidence binding fix: PR #83 — **MERGED**
 - Phase 5.10.10 Sysmon Event 1 encyclopedia promotion + frozen coverage ledger: PR #85 — **MERGED / EXACT-HEAD CI GREEN**
   - stacked coverage-ledger PR #87 integrated into PR #85 before final exact-head verification
 - Approved Product Family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
