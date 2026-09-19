@@ -2414,6 +2414,136 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:17",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "17",
+      "title": "Sysmon Event 17 — PipeEvent (Pipe Created)",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "17",
+      "aliases": [
+        "17",
+        "Sysmon 17",
+        "Sysmon Event 17",
+        "Pipe Created",
+        "Named pipe created"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 17: PipeEvent (Pipe Created)",
+      "schema_locator": "SYSMONEVENT_CREATE_NAMEDPIPE",
+      "overview": {
+        "summary": "Records creation of a named pipe and the process context associated with that pipe creation.",
+        "event_class": "Named Pipe Activity",
+        "configuration_tag": "PipeEvent",
+        "schema_event_version": 1,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "attribute named-pipe creation to a Sysmon process identity",
+          "identify unusual or application-inconsistent IPC pipe names when surrounding context warrants investigation",
+          "correlate named-pipe creation with later pipe connections",
+          "support IPC and execution-chain reconstruction without treating pipe creation as malicious by itself"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active PipeEvent filtering policy must preserve named-pipe creation telemetry required by the investigation."
+        ],
+        "volume_note": "Named pipes are widely used by Windows and legitimate applications. Collection and analysis should account for normal platform and product-specific pipe activity.",
+        "interpretation_note": "Malware can use named pipes for interprocess communication, but pipe creation alone is not a malicious verdict. Evaluate PipeName, Image, User, ProcessGuid and surrounding process activity together."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "associate pipe creation with process creation and command-line context"
+        },
+        {
+          "target": "Sysmon 18",
+          "key": "PipeName + host + time",
+          "purpose": "pair creation with later client/server pipe connection activity",
+          "limitation": "Matching a pipe name and time supports correlation but does not independently prove intent."
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "bound the pipe-creating process within its lifecycle when termination telemetry is available"
+        }
+      ],
+      "analysis": [
+        "Review named pipes created by unexpected executables, unusual service or user contexts, and uncommon pipe names relative to the environment baseline.",
+        "Correlate with Event 18 to identify processes connecting to the same PipeName and reconstruct IPC relationships.",
+        "Use ProcessGuid as the preferred in-Sysmon process key; ProcessId can be reused over time.",
+        "Treat Event 17 as named-pipe creation observation telemetry, not standalone evidence of malicious activity."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon PipeEvent filter when present."
+        },
+        {
+          "key": "eventtype",
+          "section": "Event Context",
+          "native_name": "EventType",
+          "type": "UnicodeString",
+          "meaning": "Sysmon event-type value describing the named-pipe activity."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the named-pipe creation event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated GUID identifying the process associated with pipe creation.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the pipe creation.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "pipename",
+          "section": "Named Pipe",
+          "native_name": "PipeName",
+          "type": "UnicodeString",
+          "meaning": "Name of the named pipe recorded as created.",
+          "correlation": "Primary pipe-level pivot for correlating Event 17 creation with Event 18 connection activity."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path associated with the pipe-creating process."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the process."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
