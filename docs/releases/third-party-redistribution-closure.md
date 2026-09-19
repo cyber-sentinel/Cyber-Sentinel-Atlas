@@ -81,7 +81,7 @@ Existing Phase 5.5.4D supply-chain controls already generate CycloneDX evidence 
 - Upstream docs repository: `MicrosoftDocs/sysinternals`
 - Pinned docs commit: `2fd3249657118505564fd220e672e8ea45d35916`
 - Pinned document: `sysinternals/downloads/sysmon.md`
-- Controlled telemetry-schema evidence remains Sysmon `15.21` / schema `4.91` until a reviewed 15.22 reference-host export replaces it; documentation and schema freshness are tracked independently.
+- Controlled telemetry-schema evidence is now promoted to Sysmon `15.22` / schema `4.91` from the reviewed reference-host export. The prior `15.21` inventory is retained as historical evidence, and semantic documentation freshness remains tracked independently from structural schema evidence.
 - The repository `LICENSE` at the same pinned revision is **Creative Commons Attribution 4.0 International (CC-BY-4.0)** for documentation content.
 - Current state: **REDISTRIBUTION CONDITIONALLY CLEARABLE** — exact included material must retain required source/copyright/license attribution, indicate modifications where applicable, and avoid any Microsoft trademark or endorsement implication.
 
