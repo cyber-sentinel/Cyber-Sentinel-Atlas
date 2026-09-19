@@ -4,8 +4,8 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `a05907bbd530c4a46631e2cefa9a1ca613da9eea`
-- Latest verified Public Preview control-plane baseline: `a05907bbd530c4a46631e2cefa9a1ca613da9eea`
+- Last Reviewed Main SHA: `9ca62250a240f3f954ca5ec42f345b75dfc9aeb7`
+- Latest verified engineering/control-plane baseline: `9ca62250a240f3f954ca5ec42f345b75dfc9aeb7`
 - Release authority remains `main`; documentation commits may advance the branch without redefining the verified control-plane baseline above.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
@@ -16,6 +16,9 @@
 - Phase 5.10.6 release vehicle/accessibility hardening: PR #56 — **MERGED**; exact-head applicable workflows **SUCCESS**
 - Phase 5.10.7 Public Preview RC functional freeze: PR #57 — **MERGED**; target `v0.1.0-rc.1`; visual identity intentionally remains open
 - Phase 5.10.8 deterministic PPR-04 notice/package binding: PR #58 — **MERGED**
+- Phase 5.10.10 Sysmon 15.22 semantic documentation: PR #67 — **MERGED**
+- Phase 5.10.10 Windows 4624 + Sysmon 3 production exemplars: PR #70 — **MERGED**
+- Phase 5.10.10 bounded Record Detail + no-console Windows sidecar: PR #72 — **MERGED**
 - Approved Product Family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
@@ -87,10 +90,12 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
     - functional/security boundary frozen from `main@2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
     - logo, banner, theme tokens and non-behavioral visual identity remain intentionally open
   - 5.10.10 Windows & Sysmon Knowledge Coverage Expansion: **APPROVED / IMPLEMENTATION REQUIRED**
-    - current engineering pack: `23` canonical records / `14` search projections / `3` graph edges
-    - packaged Windows Security acceptance: Event ID `4688`
-    - packaged Sysmon acceptance: Event ID `1`
-    - pinned Sysmon 15.21 documented denominator: `30` IDs (`1..29`, `255`); `29` remain outside current packaged acceptance
+    - current engineering preview: `178` canonical records / `16` search projections / `3` graph edges
+    - canonical composition: `64` entities / `58` claims / `50` relationships / `6` sources
+    - encyclopedia exemplars: Windows Security `4624`, Sysmon `3`
+    - packaged examples now include Windows `4624`,`4688` and Sysmon `1`,`3`
+    - pinned Sysmon semantic documentation: `15.22`; documented denominator remains `30` IDs (`1..29`, `255`)
+    - controlled Sysmon 15.22 telemetry-schema export: **TRIGGERED / PENDING VALIDATION**
     - Windows provider/channel/version denominator: **NOT YET FROZEN**
     - mandatory corpus families: Security-Auditing, Sysmon, PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
   - Public Preview readiness: **BLOCKED**
