@@ -6,7 +6,9 @@ Status timestamp: 2026-09-19
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Latest reviewed engineering/control-plane baseline: `9ca62250a240f3f954ca5ec42f345b75dfc9aeb7` — PR #72 merged after Sysmon 15.22 documentation refresh and approved 4624/Sysmon 3 exemplar materialization.
+- Latest merged engineering/control-plane baseline: `4bfe222eb708347ea0769da400c40dbdaf289b69` — PR #85 merged Sysmon Event 1 encyclopedia-grade content and the frozen Windows/Sysmon coverage ledger.
+- PR #85 exact-head: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene run `35429390496`, Phase 5.3.4 Canaries run `35429390498`, and Phase 5.10.5 Usable Data Preview run `35429390479`: **SUCCESS**.
+- Post-merge verification on `main@4bfe222eb708347ea0769da400c40dbdaf289b69`: **IN PROGRESS** at this status update.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
@@ -20,6 +22,7 @@ Status timestamp: 2026-09-19
 - Phase 5.10.10 Sysmon semantic documentation refresh to 15.22: PR #67 — **MERGED / CI GREEN**
 - Phase 5.10.10 approved production exemplars (Windows 4624 + Sysmon 3): PR #70 — **MERGED / CI GREEN**
 - Phase 5.10.10 bounded encyclopedia Record Detail + hidden Windows sidecar: PR #72 — **MERGED / ALL APPLICABLE CI GREEN**
+- Phase 5.10.10 Sysmon Event 1 encyclopedia promotion + coverage ledger freeze: PR #85 — **MERGED / EXACT-HEAD CI GREEN**; stacked PR #87 integrated before final verification
 - Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
