@@ -1448,6 +1448,179 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:10",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "10",
+      "title": "Sysmon Event 10 — Process accessed",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "10",
+      "aliases": [
+        "10",
+        "Sysmon 10",
+        "Sysmon Event 10",
+        "ProcessAccess",
+        "Process accessed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 10: ProcessAccess",
+      "schema_locator": "SYSMONEVENT_ACCESS_PROCESS",
+      "overview": {
+        "summary": "Records one process opening another process and preserves source/target process identity, granted access rights, call-trace context, users, and event time.",
+        "event_class": "Cross-Process Access",
+        "configuration_tag": "ProcessAccess",
+        "schema_event_version": 3,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify cross-process access involving sensitive or unusual target processes",
+          "inspect requested access rights through GrantedAccess",
+          "pivot between source and target process lifecycles using Sysmon process GUIDs",
+          "support memory-access and credential-access investigations without treating every process-open operation as malicious"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "ProcessAccess collection should be filtered to preserve security-relevant process pairs while removing expected high-volume diagnostic access where appropriate."
+        ],
+        "volume_note": "Diagnostic, monitoring, security, and management utilities can repeatedly open processes and generate substantial Event 10 volume. Filters should remove known expected access without hiding sensitive target-process coverage.",
+        "interpretation_note": "Opening another process is common in legitimate software. Event 10 becomes more significant when the source/target pair, GrantedAccess, call trace, user context, or surrounding behavior is unusual."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "SourceProcessGUID / TargetProcessGUID",
+          "purpose": "resolve process-creation, command-line, image, parent, and user context for both processes"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "SourceProcessGUID / TargetProcessGUID",
+          "purpose": "bound the source and target process lifetimes around the access operation"
+        },
+        {
+          "target": "Sysmon 8",
+          "key": "source/target process GUIDs + time",
+          "purpose": "review whether the same process pair also produced remote-thread creation activity",
+          "limitation": "ProcessAccess and CreateRemoteThread are distinct operations; correlation does not prove one caused the other."
+        },
+        {
+          "target": "Windows Security 4688",
+          "key": "ProcessId + Image + time",
+          "purpose": "corroborate source or target process creation outside Sysmon",
+          "limitation": "PID values are reusable; Sysmon GUIDs are preferred within Sysmon."
+        }
+      ],
+      "analysis": [
+        "Prioritize unusual access to security-sensitive processes, especially when the source image or user context is unexpected or GrantedAccess enables memory read/write, thread, token, or other powerful operations.",
+        "Review CallTrace as supporting execution context, but do not treat stack/module presence alone as a malicious verdict.",
+        "Correlate source and target process GUIDs with process creation, image loads, remote-thread creation, network/DNS activity, and termination telemetry where available.",
+        "Treat Event 10 as cross-process access telemetry. Legitimate debuggers, EDR/AV, monitoring agents, accessibility tools, and administrative utilities can produce similar events."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the process-access event when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the process-access event."
+        },
+        {
+          "key": "sourceprocessguid",
+          "section": "Source Process",
+          "native_name": "SourceProcessGUID",
+          "type": "GUID",
+          "meaning": "Sysmon-generated GUID identifying the source process that opened the target process.",
+          "correlation": "Preferred source-process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "sourceprocessid",
+          "section": "Source Process",
+          "native_name": "SourceProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier of the source process.",
+          "correlation": "Use with SourceProcessGUID and time because PID values can be reused."
+        },
+        {
+          "key": "sourcethreadid",
+          "section": "Source Process",
+          "native_name": "SourceThreadId",
+          "type": "UInt32",
+          "meaning": "Thread identifier in the source process associated with the access operation."
+        },
+        {
+          "key": "sourceimage",
+          "section": "Source Process",
+          "native_name": "SourceImage",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path recorded for the source process."
+        },
+        {
+          "key": "targetprocessguid",
+          "section": "Target Process",
+          "native_name": "TargetProcessGUID",
+          "type": "GUID",
+          "meaning": "Sysmon-generated GUID identifying the process that was opened.",
+          "correlation": "Preferred target-process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "targetprocessid",
+          "section": "Target Process",
+          "native_name": "TargetProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier of the target process.",
+          "correlation": "Use with TargetProcessGUID and time because PID values can be reused."
+        },
+        {
+          "key": "targetimage",
+          "section": "Target Process",
+          "native_name": "TargetImage",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path recorded for the target process."
+        },
+        {
+          "key": "grantedaccess",
+          "section": "Access Context",
+          "native_name": "GrantedAccess",
+          "type": "HexInt32",
+          "meaning": "Access mask granted for the source process handle to the target process.",
+          "correlation": "Interpret against Windows process-access rights and the specific investigation context rather than as a standalone severity score."
+        },
+        {
+          "key": "calltrace",
+          "section": "Execution Context",
+          "native_name": "CallTrace",
+          "type": "UnicodeString",
+          "meaning": "Call-trace information recorded by Sysmon for the access operation, providing supporting execution-stack context when available."
+        },
+        {
+          "key": "sourceuser",
+          "section": "Security Context",
+          "native_name": "SourceUser",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the source process."
+        },
+        {
+          "key": "targetuser",
+          "section": "Security Context",
+          "native_name": "TargetUser",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the target process."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
