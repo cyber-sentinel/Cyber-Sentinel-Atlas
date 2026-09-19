@@ -46,15 +46,16 @@
   "primary_semantic_authority_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
   "freshness_state": "CURRENT_DOCUMENTATION_AND_VALIDATED_REFERENCE",
   "telemetry_schema_baseline": {
-    "sysmon_version": "15.21",
+    "sysmon_version": "15.22",
     "schema_version": "4.91",
-    "state": "PROMOTED_CONTROLLED_BASELINE"
+    "state": "CURRENT_PROMOTED_CONTROLLED_REFERENCE",
+    "inventory_id": "atlas:inventory:atlas.ingestion:sysmon-schema-15.22-4.91"
   },
-  "freshness_note": "Sysmon 15.22 semantic documentation is pinned. A controlled Sysmon 15.22/schema 4.91 reference-host export was collected and validated in workflow run 35413291632 with the same deterministic PSR representation digest as the promoted 15.21 baseline. The committed telemetry inventory remains the historical promoted 15.21 baseline until an explicit inventory-promotion change replaces it; validation and promotion are intentionally distinct states.",
+  "freshness_note": "Sysmon 15.22 semantic documentation and the controlled telemetry-schema baseline are both current at release 15.22/schema 4.91. Workflow run 35413291632 produced the reviewed reference export; its deterministic PSR representation digest matches the prior 15.21 baseline, so the promotion records no observed structural drift while preserving the 15.21 inventory as historical evidence.",
   "latest_controlled_reference_validation": {
     "sysmon_version": "15.22",
     "schema_version": "4.91",
-    "state": "VALIDATED_NOT_YET_PROMOTED_TO_TELEMETRY_INVENTORY",
+    "state": "VALIDATED_AND_PROMOTED_TO_TELEMETRY_INVENTORY",
     "workflow_run_id": 35413291632,
     "workflow_head_sha": "c35de6704207cbcbde02f76109bd301c5ba88e0d",
     "artifact_id": 10574893522,
