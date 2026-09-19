@@ -207,7 +207,8 @@
           "type": "UnicodeString",
           "meaning": "Friendly destination service/port name when available."
         }
-      ]
+      ],
+      "schema_locator": "SYSMONEVENT_NETWORK_CONNECT"
     },
     {
       "id": "atlas:event:microsoft.windows.security:4624",
