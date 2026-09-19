@@ -5,7 +5,7 @@ param(
 
     [Parameter(Mandatory = $false)]
     [ValidatePattern('^[0-9]+\.[0-9]+$')]
-    [string]$ExpectedSysmonVersion = '15.21'
+    [string]$ExpectedSysmonVersion = '15.22'
 )
 
 Set-StrictMode -Version Latest
@@ -150,7 +150,7 @@ function Export-WindowsProviderMetadata {
 function Invoke-SysmonSchemaText {
     param([Parameter(Mandatory = $true)][string]$ExecutablePath)
 
-    # Sysmon 15.21 emits its schema stream as UTF-16LE. PowerShell's native command
+    # Sysmon emits its schema stream as UTF-16LE. PowerShell's native command
     # capture can preserve each NUL byte as a literal U+0000, so the controlled
     # reference host uses ProcessStartInfo with an explicit UTF-16LE decoder instead
     # of mutating the captured text by stripping NULs.
