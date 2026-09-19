@@ -67,7 +67,7 @@ def build_snapshot() -> dict[str, Any]:
         "remaining_count": total - complete,
         "completion_ratio": f"{complete}/{total}",
         "completion_percent": round((complete / total) * 100, 2) if total else 0.0,
-        "release_numerator_rule": "Only ENCYCLopedia-grade maintainer-approved records count.",
+        "release_numerator_rule": "Only ENCYCLOPEDIA_GRADE maintainer-approved records count.",
         "telemetry_schema_refresh_state": "PENDING_CONTROLLED_SYSMON_15_22_REFERENCE_EXPORT",
         "events": events,
     }
