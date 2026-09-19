@@ -129,7 +129,7 @@ def test_07_uws_is_reference_only_not_claim_prose_source():
     assert uws_evidence[0]["object"]["value"]["redistribution"] == "source-link-and-coverage-benchmark-only"
 
 
-def test_08_sysmon_schema_refresh_warning_is_explicit():
+def test_08_sysmon_schema_refresh_validation_is_explicit():
     records = by_id(records_with_paths())
     claims = [
         r for r in records.values()
@@ -139,7 +139,7 @@ def test_08_sysmon_schema_refresh_warning_is_explicit():
     ]
     assert claims
     for record in claims:
-        assert record["object"]["value"]["structural_refresh_state"] == "PENDING_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
+        assert record["object"]["value"]["structural_refresh_state"] == "VALIDATED_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
 
 
 
