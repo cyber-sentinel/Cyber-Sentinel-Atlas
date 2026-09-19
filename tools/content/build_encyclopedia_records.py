@@ -30,6 +30,7 @@ SOURCE_PATHS = [
 ]
 
 SYSMON_SCHEMA_SOURCE = "atlas:source:atlas.source:microsoft-sysmon-schema-export"
+SYSMON_SCHEMA_SOURCE_VERSION = "sysmon-15.22-schema-4.91"
 WINDOWS_PROVIDER_SOURCE = "atlas:source:atlas.source:microsoft-windows-provider-metadata"
 
 
@@ -183,12 +184,15 @@ def field_semantics(event: dict[str, Any], field: dict[str, Any], field_id: str)
             value[optional] = copy.deepcopy(field[optional])
 
     if event["namespace"] == "microsoft.sysmon":
+        schema_locator = event.get("schema_locator")
+        if not schema_locator:
+            raise ValueError(f"Sysmon encyclopedia event {event['native_event_id']} is missing schema_locator")
         ev = [
             evidence(event["source_id"], event["source_version"], event["source_locator"]),
             evidence(
                 SYSMON_SCHEMA_SOURCE,
-                "sysmon-15.21-schema-4.91-controlled-reference",
-                f"SYSMONEVENT_NETWORK_CONNECT / {field['native_name']}",
+                SYSMON_SCHEMA_SOURCE_VERSION,
+                f"{schema_locator} / {field['native_name']}",
                 transformation="normalized-fact",
             ),
         ]
