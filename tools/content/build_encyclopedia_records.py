@@ -23,8 +23,10 @@ SOURCE_PATHS = [
     ROOT / "ingestion" / "source-profiles" / "microsoft-sysmon-docs.source.json",
     ROOT / "ingestion" / "source-profiles" / "microsoft-sysmon-schema-export.source.json",
     ROOT / "ingestion" / "source-profiles" / "microsoft-windows-provider-metadata.source.json",
+    ROOT / "ingestion" / "source-profiles" / "microsoft-windows-security-auditing-4688-doc.source.json",
     ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4624.json",
     ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4624.json",
+    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4688.json",
 ]
 
 SYSMON_SCHEMA_SOURCE = "atlas:source:atlas.source:microsoft-sysmon-schema-export"
@@ -190,7 +192,7 @@ def field_semantics(event: dict[str, Any], field: dict[str, Any], field_id: str)
                 transformation="normalized-fact",
             ),
         ]
-        value["structural_refresh_state"] = "PENDING_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
+        value["structural_refresh_state"] = "VALIDATED_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
     else:
         ev = [evidence(event["source_id"], event["source_version"], f"{event['source_locator']} / {field['section']} / {field['native_name']}")]
         if field.get("provider_scope"):

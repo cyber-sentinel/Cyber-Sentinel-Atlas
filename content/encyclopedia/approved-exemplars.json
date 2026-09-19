@@ -13,7 +13,12 @@
       "product": "Sysmon",
       "platform": "Windows",
       "native_event_id": "3",
-      "aliases": ["Sysmon 3", "Sysmon Event 3", "NetworkConnect", "Network connection detected"],
+      "aliases": [
+        "Sysmon 3",
+        "Sysmon Event 3",
+        "NetworkConnect",
+        "Network connection detected"
+      ],
       "lifecycle": "current",
       "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
       "source_version": "15.22",
@@ -25,7 +30,7 @@
         "configuration_tag": "NetworkConnect",
         "default_collection_state": "disabled-by-default",
         "schema_event_version": 5,
-        "schema_state": "STRUCTURAL_REFERENCE_PENDING_CONTROLLED_15_22_EXPORT",
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
         "security_value": [
           "attribute network activity to a process",
           "pivot between process execution and remote infrastructure",
@@ -41,11 +46,32 @@
         "volume_note": "Network connection telemetry can be high-volume; use governed include/exclude filtering appropriate to the environment."
       },
       "correlations": [
-        {"target": "Sysmon 1", "key": "ProcessGuid", "purpose": "process creation context"},
-        {"target": "Sysmon 5", "key": "ProcessGuid", "purpose": "process lifetime/termination"},
-        {"target": "Sysmon 10", "key": "ProcessGuid or process identity", "purpose": "process access context"},
-        {"target": "Sysmon 22", "key": "process/time/domain context", "purpose": "DNS context"},
-        {"target": "Windows Security 4688", "key": "ProcessId + Image + time", "purpose": "Windows process-creation corroboration", "limitation": "PID can be reused; ProcessGuid is preferred inside Sysmon"}
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "process creation context"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "process lifetime/termination"
+        },
+        {
+          "target": "Sysmon 10",
+          "key": "ProcessGuid or process identity",
+          "purpose": "process access context"
+        },
+        {
+          "target": "Sysmon 22",
+          "key": "process/time/domain context",
+          "purpose": "DNS context"
+        },
+        {
+          "target": "Windows Security 4688",
+          "key": "ProcessId + Image + time",
+          "purpose": "Windows process-creation corroboration",
+          "limitation": "PID can be reused; ProcessGuid is preferred inside Sysmon"
+        }
       ],
       "analysis": [
         "Review script interpreters, LOLBins or user-writable executables establishing unexpected external connections.",
@@ -53,24 +79,134 @@
         "Treat Event 3 as observation telemetry, not a malicious verdict."
       ],
       "fields": [
-        {"key":"rulename","section":"Process Context","native_name":"RuleName","type":"UnicodeString","meaning":"Rule metadata associated with the Sysmon filter rule that produced the event when present."},
-        {"key":"utctime","section":"Process Context","native_name":"UtcTime","type":"UTC timestamp","meaning":"UTC time recorded for the network connection event."},
-        {"key":"processguid","section":"Process Context","native_name":"ProcessGuid","type":"GUID","meaning":"Sysmon-generated process GUID used as the preferred process correlation identifier.","correlation":"Prefer this over PID because Windows can reuse process IDs."},
-        {"key":"processid","section":"Process Context","native_name":"ProcessId","type":"UInt32/PID","meaning":"Windows process identifier associated with the connection.","correlation":"Use with Image and time when correlating outside Sysmon; PID alone is not globally unique."},
-        {"key":"image","section":"Process Context","native_name":"Image","type":"UnicodeString/path","meaning":"Executable image path associated with the network connection."},
-        {"key":"user","section":"Process Context","native_name":"User","type":"UnicodeString","meaning":"Account context associated with the process."},
-        {"key":"protocol","section":"Network Protocol","native_name":"Protocol","type":"UnicodeString","meaning":"Transport protocol recorded for the connection, commonly TCP or UDP."},
-        {"key":"initiated","section":"Network Protocol","native_name":"Initiated","type":"Boolean","meaning":"Direction indicator; true denotes a connection initiated by the process in applicable Sysmon telemetry."},
-        {"key":"sourceisipv6","section":"Source Network","native_name":"SourceIsIpv6","type":"Boolean","meaning":"Indicates whether SourceIp is an IPv6 address."},
-        {"key":"sourceip","section":"Source Network","native_name":"SourceIp","type":"IP address","meaning":"Source IP address recorded for the connection."},
-        {"key":"sourcehostname","section":"Source Network","native_name":"SourceHostname","type":"UnicodeString","meaning":"Source hostname when name resolution provides a value."},
-        {"key":"sourceport","section":"Source Network","native_name":"SourcePort","type":"UInt16","meaning":"Source port recorded for the connection."},
-        {"key":"sourceportname","section":"Source Network","native_name":"SourcePortName","type":"UnicodeString","meaning":"Friendly source service/port name when available."},
-        {"key":"destinationisipv6","section":"Destination Network","native_name":"DestinationIsIpv6","type":"Boolean","meaning":"Indicates whether DestinationIp is an IPv6 address."},
-        {"key":"destinationip","section":"Destination Network","native_name":"DestinationIp","type":"IP address","meaning":"Remote destination IP address recorded for the connection."},
-        {"key":"destinationhostname","section":"Destination Network","native_name":"DestinationHostname","type":"UnicodeString","meaning":"Destination hostname when name resolution provides a value."},
-        {"key":"destinationport","section":"Destination Network","native_name":"DestinationPort","type":"UInt16","meaning":"Remote destination port recorded for the connection."},
-        {"key":"destinationportname","section":"Destination Network","native_name":"DestinationPortName","type":"UnicodeString","meaning":"Friendly destination service/port name when available."}
+        {
+          "key": "rulename",
+          "section": "Process Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the event when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Process Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC time recorded for the network connection event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID used as the preferred process correlation identifier.",
+          "correlation": "Prefer this over PID because Windows can reuse process IDs."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the connection.",
+          "correlation": "Use with Image and time when correlating outside Sysmon; PID alone is not globally unique."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path associated with the network connection."
+        },
+        {
+          "key": "user",
+          "section": "Process Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "Account context associated with the process."
+        },
+        {
+          "key": "protocol",
+          "section": "Network Protocol",
+          "native_name": "Protocol",
+          "type": "UnicodeString",
+          "meaning": "Transport protocol recorded for the connection, commonly TCP or UDP."
+        },
+        {
+          "key": "initiated",
+          "section": "Network Protocol",
+          "native_name": "Initiated",
+          "type": "Boolean",
+          "meaning": "Direction indicator; true denotes a connection initiated by the process in applicable Sysmon telemetry."
+        },
+        {
+          "key": "sourceisipv6",
+          "section": "Source Network",
+          "native_name": "SourceIsIpv6",
+          "type": "Boolean",
+          "meaning": "Indicates whether SourceIp is an IPv6 address."
+        },
+        {
+          "key": "sourceip",
+          "section": "Source Network",
+          "native_name": "SourceIp",
+          "type": "IP address",
+          "meaning": "Source IP address recorded for the connection."
+        },
+        {
+          "key": "sourcehostname",
+          "section": "Source Network",
+          "native_name": "SourceHostname",
+          "type": "UnicodeString",
+          "meaning": "Source hostname when name resolution provides a value."
+        },
+        {
+          "key": "sourceport",
+          "section": "Source Network",
+          "native_name": "SourcePort",
+          "type": "UInt16",
+          "meaning": "Source port recorded for the connection."
+        },
+        {
+          "key": "sourceportname",
+          "section": "Source Network",
+          "native_name": "SourcePortName",
+          "type": "UnicodeString",
+          "meaning": "Friendly source service/port name when available."
+        },
+        {
+          "key": "destinationisipv6",
+          "section": "Destination Network",
+          "native_name": "DestinationIsIpv6",
+          "type": "Boolean",
+          "meaning": "Indicates whether DestinationIp is an IPv6 address."
+        },
+        {
+          "key": "destinationip",
+          "section": "Destination Network",
+          "native_name": "DestinationIp",
+          "type": "IP address",
+          "meaning": "Remote destination IP address recorded for the connection."
+        },
+        {
+          "key": "destinationhostname",
+          "section": "Destination Network",
+          "native_name": "DestinationHostname",
+          "type": "UnicodeString",
+          "meaning": "Destination hostname when name resolution provides a value."
+        },
+        {
+          "key": "destinationport",
+          "section": "Destination Network",
+          "native_name": "DestinationPort",
+          "type": "UInt16",
+          "meaning": "Remote destination port recorded for the connection."
+        },
+        {
+          "key": "destinationportname",
+          "section": "Destination Network",
+          "native_name": "DestinationPortName",
+          "type": "UnicodeString",
+          "meaning": "Friendly destination service/port name when available."
+        }
       ]
     },
     {
@@ -83,7 +219,12 @@
       "product": "Windows Security Auditing",
       "platform": "Windows",
       "native_event_id": "4624",
-      "aliases": ["4624", "Event ID 4624", "Windows 4624", "Successful logon"],
+      "aliases": [
+        "4624",
+        "Event ID 4624",
+        "Windows 4624",
+        "Successful logon"
+      ],
       "lifecycle": "current",
       "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4624",
       "source_version": "event-4624-v2-doc",
@@ -100,25 +241,67 @@
         "category": "Logon/Logoff",
         "subcategory": "Logon",
         "event_type": "Success",
-        "legacy_event_ids": ["528","540"],
+        "legacy_event_ids": [
+          "528",
+          "540"
+        ],
         "event_versions": [
-          {"version":"0","generation":"Windows Vista / Windows Server 2008","notes":"Base event structure."},
-          {"version":"1","generation":"Windows 8 / Windows Server 2012","notes":"Adds Impersonation Level."},
-          {"version":"2","generation":"Windows 10 and later documented generations","notes":"Adds Logon Information fields including Restricted Admin Mode, Virtual Account, Elevated Token, Linked Logon ID and network-account fields."}
+          {
+            "version": "0",
+            "generation": "Windows Vista / Windows Server 2008",
+            "notes": "Base event structure."
+          },
+          {
+            "version": "1",
+            "generation": "Windows 8 / Windows Server 2012",
+            "notes": "Adds Impersonation Level."
+          },
+          {
+            "version": "2",
+            "generation": "Windows 10 and later documented generations",
+            "notes": "Adds Logon Information fields including Restricted Admin Mode, Virtual Account, Elevated Token, Linked Logon ID and network-account fields."
+          }
         ],
         "newer_provider_note": "Controlled Windows Server 2025 provider evidence contains the current Event 4624 identity; newer fields such as Remote Credential Guard are represented only where structural/provider evidence and reviewed semantics permit."
       },
       "collection": {
-        "requirements": ["Audit Logon success auditing must be enabled for the applicable audit policy/subcategory."],
+        "requirements": [
+          "Audit Logon success auditing must be enabled for the applicable audit policy/subcategory."
+        ],
         "privacy_note": "Identity and network-origin fields can contain security-sensitive operational context; access to exported event data should follow organizational policy."
       },
       "correlations": [
-        {"target":"4634","key":"New Logon Logon ID","purpose":"session logoff"},
-        {"target":"4647","key":"New Logon Logon ID","purpose":"user-initiated logoff"},
-        {"target":"4672","key":"New Logon Logon ID","purpose":"special privileges assigned to the session"},
-        {"target":"4688","key":"Logon ID / Process context","purpose":"process activity associated with the logon session"},
-        {"target":"4769","key":"Logon GUID where valid","purpose":"Kerberos service-ticket context","limitation":"Correlation depends on populated/consistent GUID values and authentication path"},
-        {"target":"network telemetry","key":"Source Network Address + time + identity","purpose":"origin validation"}
+        {
+          "target": "4634",
+          "key": "New Logon Logon ID",
+          "purpose": "session logoff"
+        },
+        {
+          "target": "4647",
+          "key": "New Logon Logon ID",
+          "purpose": "user-initiated logoff"
+        },
+        {
+          "target": "4672",
+          "key": "New Logon Logon ID",
+          "purpose": "special privileges assigned to the session"
+        },
+        {
+          "target": "4688",
+          "key": "Logon ID / Process context",
+          "purpose": "process activity associated with the logon session"
+        },
+        {
+          "target": "4769",
+          "key": "Logon GUID where valid",
+          "purpose": "Kerberos service-ticket context",
+          "limitation": "Correlation depends on populated/consistent GUID values and authentication path"
+        },
+        {
+          "target": "network telemetry",
+          "key": "Source Network Address + time + identity",
+          "purpose": "origin validation"
+        }
       ],
       "analysis": [
         "Investigate unexpected RemoteInteractive (type 10) sessions, unusual network logons, privileged identities from new origins and service accounts using interactive logon types.",
@@ -127,53 +310,599 @@
       ],
       "value_dictionaries": {
         "logon_type": [
-          {"value":0,"name":"System","meaning":"System account logon used by Windows system activity."},
-          {"value":2,"name":"Interactive","meaning":"Local interactive logon at the computer."},
-          {"value":3,"name":"Network","meaning":"Network access to the computer."},
-          {"value":4,"name":"Batch","meaning":"Batch-style logon such as scheduled processing."},
-          {"value":5,"name":"Service","meaning":"Service logon initiated for a service context."},
-          {"value":7,"name":"Unlock","meaning":"Unlock of an existing workstation/session."},
-          {"value":8,"name":"NetworkCleartext","meaning":"Network logon in which cleartext-capable credentials are supplied to the authentication package; this does not mean the password necessarily traverses the network as plaintext."},
-          {"value":9,"name":"NewCredentials","meaning":"Local identity is retained while alternate credentials are used for outbound network connections."},
-          {"value":10,"name":"RemoteInteractive","meaning":"Remote interactive logon such as Remote Desktop/Terminal Services."},
-          {"value":11,"name":"CachedInteractive","meaning":"Interactive logon using cached domain credentials."}
+          {
+            "value": 0,
+            "name": "System",
+            "meaning": "System account logon used by Windows system activity."
+          },
+          {
+            "value": 2,
+            "name": "Interactive",
+            "meaning": "Local interactive logon at the computer."
+          },
+          {
+            "value": 3,
+            "name": "Network",
+            "meaning": "Network access to the computer."
+          },
+          {
+            "value": 4,
+            "name": "Batch",
+            "meaning": "Batch-style logon such as scheduled processing."
+          },
+          {
+            "value": 5,
+            "name": "Service",
+            "meaning": "Service logon initiated for a service context."
+          },
+          {
+            "value": 7,
+            "name": "Unlock",
+            "meaning": "Unlock of an existing workstation/session."
+          },
+          {
+            "value": 8,
+            "name": "NetworkCleartext",
+            "meaning": "Network logon in which cleartext-capable credentials are supplied to the authentication package; this does not mean the password necessarily traverses the network as plaintext."
+          },
+          {
+            "value": 9,
+            "name": "NewCredentials",
+            "meaning": "Local identity is retained while alternate credentials are used for outbound network connections."
+          },
+          {
+            "value": 10,
+            "name": "RemoteInteractive",
+            "meaning": "Remote interactive logon such as Remote Desktop/Terminal Services."
+          },
+          {
+            "value": 11,
+            "name": "CachedInteractive",
+            "meaning": "Interactive logon using cached domain credentials."
+          }
         ],
         "impersonation_level": [
-          {"value":"Anonymous","meaning":"Server cannot obtain client identity for impersonation."},
-          {"value":"Identification","meaning":"Server can inspect client identity but cannot impersonate it."},
-          {"value":"Impersonation","meaning":"Server can act using the client security context locally."},
-          {"value":"Delegation","meaning":"Delegation-capable impersonation where platform/authentication policy permits."}
+          {
+            "value": "Anonymous",
+            "meaning": "Server cannot obtain client identity for impersonation."
+          },
+          {
+            "value": "Identification",
+            "meaning": "Server can inspect client identity but cannot impersonate it."
+          },
+          {
+            "value": "Impersonation",
+            "meaning": "Server can act using the client security context locally."
+          },
+          {
+            "value": "Delegation",
+            "meaning": "Delegation-capable impersonation where platform/authentication policy permits."
+          }
         ]
       },
       "fields": [
-        {"key":"subject.security-id","section":"Subject","native_name":"Security ID","type":"SID","meaning":"SID of the account/process context that reported or requested the successful logon."},
-        {"key":"subject.account-name","section":"Subject","native_name":"Account Name","type":"UnicodeString","meaning":"Name of the subject account that reported or requested the logon."},
-        {"key":"subject.account-domain","section":"Subject","native_name":"Account Domain","type":"UnicodeString","meaning":"Domain or local-computer context of the subject account."},
-        {"key":"subject.logon-id","section":"Subject","native_name":"Logon ID","type":"HexInt64","meaning":"Identifier of the subject logon session.","correlation":"Can correlate with other events carrying the same subject Logon ID."},
-        {"key":"logon-information.logon-type","section":"Logon Information","native_name":"Logon Type","type":"UInt32","meaning":"Indicates how the logon occurred.","values_ref":"logon_type"},
-        {"key":"logon-information.restricted-admin-mode","section":"Logon Information","native_name":"Restricted Admin Mode","type":"UnicodeString","meaning":"Indicates Restricted Admin Mode in applicable Remote Desktop logon contexts.","versions":["2"]},
-        {"key":"logon-information.remote-credential-guard","section":"Logon Information","native_name":"Remote Credential Guard","type":"UnicodeString","meaning":"Records Remote Credential Guard state when the current Windows provider emits this field.","provider_scope":"Windows Server 2025/current provider evidence"},
-        {"key":"logon-information.virtual-account","section":"Logon Information","native_name":"Virtual Account","type":"UnicodeString","meaning":"Indicates whether the session represents a Windows virtual account.","versions":["2"]},
-        {"key":"logon-information.elevated-token","section":"Logon Information","native_name":"Elevated Token","type":"UnicodeString","meaning":"Indicates whether the logon session has an elevated administrative token.","versions":["2"]},
-        {"key":"impersonation-level","section":"Logon Information","native_name":"Impersonation Level","type":"UnicodeString","meaning":"Impersonation level granted to the server process for the client security context.","versions":["1","2"],"values_ref":"impersonation_level"},
-        {"key":"new-logon.security-id","section":"New Logon","native_name":"Security ID","type":"SID","meaning":"SID of the account for which the successful logon session was created."},
-        {"key":"new-logon.account-name","section":"New Logon","native_name":"Account Name","type":"UnicodeString","meaning":"Name of the account that successfully logged on."},
-        {"key":"new-logon.account-domain","section":"New Logon","native_name":"Account Domain","type":"UnicodeString","meaning":"Domain or local-computer context of the newly logged-on account."},
-        {"key":"new-logon.logon-id","section":"New Logon","native_name":"Logon ID","type":"HexInt64","meaning":"Identifier for the newly created logon session.","correlation":"Primary pivot to 4634, 4647, 4672 and other session events."},
-        {"key":"new-logon.linked-logon-id","section":"New Logon","native_name":"Linked Logon ID","type":"HexInt64","meaning":"Identifier of a paired logon session where Windows creates linked security contexts, such as applicable UAC split-token scenarios.","versions":["2"]},
-        {"key":"new-logon.network-account-name","section":"New Logon","native_name":"Network Account Name","type":"UnicodeString","meaning":"Alternate user identity used for outbound network connections in applicable NewCredentials logons.","versions":["2"]},
-        {"key":"new-logon.network-account-domain","section":"New Logon","native_name":"Network Account Domain","type":"UnicodeString","meaning":"Domain associated with the alternate outbound identity in applicable NewCredentials logons.","versions":["2"]},
-        {"key":"new-logon.logon-guid","section":"New Logon","native_name":"Logon GUID","type":"GUID","meaning":"Logon correlation GUID when Windows populates a non-zero value.","correlation":"May assist correlation with authentication events; zero GUIDs and path-specific limitations must be handled explicitly."},
-        {"key":"process-information.process-id","section":"Process Information","native_name":"Process ID","type":"Pointer/PID","meaning":"Process identifier of the process involved in handling/requesting the logon.","correlation":"Can be correlated with process-creation telemetry such as Event 4688 using timing and PID context."},
-        {"key":"process-information.process-name","section":"Process Information","native_name":"Process Name","type":"UnicodeString/path","meaning":"Executable path/name of the process involved in the logon."},
-        {"key":"network-information.workstation-name","section":"Network Information","native_name":"Workstation Name","type":"UnicodeString","meaning":"Originating workstation name when supplied by the authentication path."},
-        {"key":"network-information.source-network-address","section":"Network Information","native_name":"Source Network Address","type":"UnicodeString/IP","meaning":"Originating network address when supplied by the authentication path.","notes":"Localhost values and missing values are possible."},
-        {"key":"network-information.source-port","section":"Network Information","native_name":"Source Port","type":"UnicodeString/port","meaning":"Originating source port when supplied for the remote authentication path."},
-        {"key":"authentication.logon-process","section":"Detailed Authentication Information","native_name":"Logon Process","type":"UnicodeString","meaning":"Trusted logon process used for the logon."},
-        {"key":"authentication.authentication-package","section":"Detailed Authentication Information","native_name":"Authentication Package","type":"UnicodeString","meaning":"Authentication package used for the logon, commonly Kerberos, NTLM or Negotiate."},
-        {"key":"authentication.transited-services","section":"Detailed Authentication Information","native_name":"Transited Services","type":"UnicodeString","meaning":"Services traversed in applicable Kerberos S4U/delegation authentication flows."},
-        {"key":"authentication.package-name-ntlm","section":"Detailed Authentication Information","native_name":"Package Name (NTLM only)","type":"UnicodeString","meaning":"NTLM-family subprotocol when the authentication package is NTLM.","values":["NTLM V1","NTLM V2","LM"]},
-        {"key":"authentication.key-length","section":"Detailed Authentication Information","native_name":"Key Length","type":"UInt32","meaning":"NTLM session-security key length where applicable; zero is expected for authentication paths where this NTLM-specific value is not applicable."}
+        {
+          "key": "subject.security-id",
+          "section": "Subject",
+          "native_name": "Security ID",
+          "type": "SID",
+          "meaning": "SID of the account/process context that reported or requested the successful logon."
+        },
+        {
+          "key": "subject.account-name",
+          "section": "Subject",
+          "native_name": "Account Name",
+          "type": "UnicodeString",
+          "meaning": "Name of the subject account that reported or requested the logon."
+        },
+        {
+          "key": "subject.account-domain",
+          "section": "Subject",
+          "native_name": "Account Domain",
+          "type": "UnicodeString",
+          "meaning": "Domain or local-computer context of the subject account."
+        },
+        {
+          "key": "subject.logon-id",
+          "section": "Subject",
+          "native_name": "Logon ID",
+          "type": "HexInt64",
+          "meaning": "Identifier of the subject logon session.",
+          "correlation": "Can correlate with other events carrying the same subject Logon ID."
+        },
+        {
+          "key": "logon-information.logon-type",
+          "section": "Logon Information",
+          "native_name": "Logon Type",
+          "type": "UInt32",
+          "meaning": "Indicates how the logon occurred.",
+          "values_ref": "logon_type"
+        },
+        {
+          "key": "logon-information.restricted-admin-mode",
+          "section": "Logon Information",
+          "native_name": "Restricted Admin Mode",
+          "type": "UnicodeString",
+          "meaning": "Indicates Restricted Admin Mode in applicable Remote Desktop logon contexts.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "logon-information.remote-credential-guard",
+          "section": "Logon Information",
+          "native_name": "Remote Credential Guard",
+          "type": "UnicodeString",
+          "meaning": "Records Remote Credential Guard state when the current Windows provider emits this field.",
+          "provider_scope": "Windows Server 2025/current provider evidence"
+        },
+        {
+          "key": "logon-information.virtual-account",
+          "section": "Logon Information",
+          "native_name": "Virtual Account",
+          "type": "UnicodeString",
+          "meaning": "Indicates whether the session represents a Windows virtual account.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "logon-information.elevated-token",
+          "section": "Logon Information",
+          "native_name": "Elevated Token",
+          "type": "UnicodeString",
+          "meaning": "Indicates whether the logon session has an elevated administrative token.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "impersonation-level",
+          "section": "Logon Information",
+          "native_name": "Impersonation Level",
+          "type": "UnicodeString",
+          "meaning": "Impersonation level granted to the server process for the client security context.",
+          "versions": [
+            "1",
+            "2"
+          ],
+          "values_ref": "impersonation_level"
+        },
+        {
+          "key": "new-logon.security-id",
+          "section": "New Logon",
+          "native_name": "Security ID",
+          "type": "SID",
+          "meaning": "SID of the account for which the successful logon session was created."
+        },
+        {
+          "key": "new-logon.account-name",
+          "section": "New Logon",
+          "native_name": "Account Name",
+          "type": "UnicodeString",
+          "meaning": "Name of the account that successfully logged on."
+        },
+        {
+          "key": "new-logon.account-domain",
+          "section": "New Logon",
+          "native_name": "Account Domain",
+          "type": "UnicodeString",
+          "meaning": "Domain or local-computer context of the newly logged-on account."
+        },
+        {
+          "key": "new-logon.logon-id",
+          "section": "New Logon",
+          "native_name": "Logon ID",
+          "type": "HexInt64",
+          "meaning": "Identifier for the newly created logon session.",
+          "correlation": "Primary pivot to 4634, 4647, 4672 and other session events."
+        },
+        {
+          "key": "new-logon.linked-logon-id",
+          "section": "New Logon",
+          "native_name": "Linked Logon ID",
+          "type": "HexInt64",
+          "meaning": "Identifier of a paired logon session where Windows creates linked security contexts, such as applicable UAC split-token scenarios.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "new-logon.network-account-name",
+          "section": "New Logon",
+          "native_name": "Network Account Name",
+          "type": "UnicodeString",
+          "meaning": "Alternate user identity used for outbound network connections in applicable NewCredentials logons.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "new-logon.network-account-domain",
+          "section": "New Logon",
+          "native_name": "Network Account Domain",
+          "type": "UnicodeString",
+          "meaning": "Domain associated with the alternate outbound identity in applicable NewCredentials logons.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "new-logon.logon-guid",
+          "section": "New Logon",
+          "native_name": "Logon GUID",
+          "type": "GUID",
+          "meaning": "Logon correlation GUID when Windows populates a non-zero value.",
+          "correlation": "May assist correlation with authentication events; zero GUIDs and path-specific limitations must be handled explicitly."
+        },
+        {
+          "key": "process-information.process-id",
+          "section": "Process Information",
+          "native_name": "Process ID",
+          "type": "Pointer/PID",
+          "meaning": "Process identifier of the process involved in handling/requesting the logon.",
+          "correlation": "Can be correlated with process-creation telemetry such as Event 4688 using timing and PID context."
+        },
+        {
+          "key": "process-information.process-name",
+          "section": "Process Information",
+          "native_name": "Process Name",
+          "type": "UnicodeString/path",
+          "meaning": "Executable path/name of the process involved in the logon."
+        },
+        {
+          "key": "network-information.workstation-name",
+          "section": "Network Information",
+          "native_name": "Workstation Name",
+          "type": "UnicodeString",
+          "meaning": "Originating workstation name when supplied by the authentication path."
+        },
+        {
+          "key": "network-information.source-network-address",
+          "section": "Network Information",
+          "native_name": "Source Network Address",
+          "type": "UnicodeString/IP",
+          "meaning": "Originating network address when supplied by the authentication path.",
+          "notes": "Localhost values and missing values are possible."
+        },
+        {
+          "key": "network-information.source-port",
+          "section": "Network Information",
+          "native_name": "Source Port",
+          "type": "UnicodeString/port",
+          "meaning": "Originating source port when supplied for the remote authentication path."
+        },
+        {
+          "key": "authentication.logon-process",
+          "section": "Detailed Authentication Information",
+          "native_name": "Logon Process",
+          "type": "UnicodeString",
+          "meaning": "Trusted logon process used for the logon."
+        },
+        {
+          "key": "authentication.authentication-package",
+          "section": "Detailed Authentication Information",
+          "native_name": "Authentication Package",
+          "type": "UnicodeString",
+          "meaning": "Authentication package used for the logon, commonly Kerberos, NTLM or Negotiate."
+        },
+        {
+          "key": "authentication.transited-services",
+          "section": "Detailed Authentication Information",
+          "native_name": "Transited Services",
+          "type": "UnicodeString",
+          "meaning": "Services traversed in applicable Kerberos S4U/delegation authentication flows."
+        },
+        {
+          "key": "authentication.package-name-ntlm",
+          "section": "Detailed Authentication Information",
+          "native_name": "Package Name (NTLM only)",
+          "type": "UnicodeString",
+          "meaning": "NTLM-family subprotocol when the authentication package is NTLM.",
+          "values": [
+            "NTLM V1",
+            "NTLM V2",
+            "LM"
+          ]
+        },
+        {
+          "key": "authentication.key-length",
+          "section": "Detailed Authentication Information",
+          "native_name": "Key Length",
+          "type": "UInt32",
+          "meaning": "NTLM session-security key length where applicable; zero is expected for authentication paths where this NTLM-specific value is not applicable."
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4688",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4688",
+      "title": "Windows Security Event 4688 — A new process has been created",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4688",
+      "aliases": [
+        "4688",
+        "Event ID 4688",
+        "Windows 4688",
+        "Process Creation",
+        "A new process has been created"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-4688-doc",
+      "source_version": "learn-page-2022-01-24",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4688",
+      "source_locator": "4688(S): A new process has been created",
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4688",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4688",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records creation of a new process and identifies the creator security context, target security context where applicable, process identity, parent process context, elevation state and optional command-line data.",
+        "category": "Detailed Tracking",
+        "subcategory": "Audit Process Creation",
+        "event_type": "Success",
+        "minimum_supported_generation": "Windows Vista / Windows Server 2008",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Windows Vista / Windows Server 2008",
+            "notes": "Base process-creation event structure."
+          },
+          {
+            "version": "1",
+            "generation": "Windows 8.1 / Windows Server 2012 R2",
+            "notes": "Adds Process Command Line when the required policy is enabled."
+          },
+          {
+            "version": "2",
+            "generation": "Windows 10 and later documented generations",
+            "notes": "Renames Subject to Creator Subject and adds Target Subject, Mandatory Label and Creator Process Name."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Audit Process Creation success auditing must be enabled.",
+          "To populate Process Command Line, enable the policy that includes command-line data in process creation events."
+        ],
+        "privacy_note": "Process command lines can contain sensitive arguments. Collection, retention and access should follow organizational policy."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "Creator Subject Logon ID / Target Subject Logon ID",
+          "purpose": "associate process creation with the relevant logon session"
+        },
+        {
+          "target": "4689",
+          "key": "New Process ID + time",
+          "purpose": "identify termination of the created process"
+        },
+        {
+          "target": "4688",
+          "key": "Creator Process ID ↔ earlier New Process ID",
+          "purpose": "reconstruct parent/child process lineage"
+        },
+        {
+          "target": "Sysmon 1",
+          "key": "PID + image + time, preferring Sysmon ProcessGuid inside Sysmon",
+          "purpose": "enrich process creation with Sysmon context"
+        },
+        {
+          "target": "4672",
+          "key": "Logon ID",
+          "purpose": "identify sessions that received special privileges"
+        }
+      ],
+      "analysis": [
+        "Review unusual parent/child process chains, execution from user-writable paths, suspicious command lines and unexpected elevated-token use.",
+        "Correlate Logon ID with identity/session events and New Process ID with later process/network/file activity.",
+        "Treat Event 4688 as execution telemetry; suspiciousness depends on process, user, parent, command line, integrity and surrounding activity."
+      ],
+      "value_dictionaries": {
+        "token_elevation_type": [
+          {
+            "value": "%%1936",
+            "name": "Type 1 — Full token",
+            "meaning": "Full access token without UAC filtering; seen when UAC is disabled or in security contexts that receive an unfiltered token."
+          },
+          {
+            "value": "%%1937",
+            "name": "Type 2 — Elevated token",
+            "meaning": "Elevated administrative token, including applicable Run as administrator execution."
+          },
+          {
+            "value": "%%1938",
+            "name": "Type 3 — Limited token",
+            "meaning": "UAC-filtered standard token with administrative privileges/groups removed or disabled."
+          }
+        ],
+        "mandatory_integrity_level": [
+          {
+            "sid": "S-1-16-0",
+            "rid": "0x00000000",
+            "name": "Untrusted",
+            "meaning": "Untrusted integrity level."
+          },
+          {
+            "sid": "S-1-16-4096",
+            "rid": "0x00001000",
+            "name": "Low",
+            "meaning": "Low integrity level."
+          },
+          {
+            "sid": "S-1-16-8192",
+            "rid": "0x00002000",
+            "name": "Medium",
+            "meaning": "Medium integrity level."
+          },
+          {
+            "sid": "S-1-16-8448",
+            "rid": "0x00002100",
+            "name": "Medium Plus",
+            "meaning": "Medium-plus integrity level."
+          },
+          {
+            "sid": "S-1-16-12288",
+            "rid": "0x00003000",
+            "name": "High",
+            "meaning": "High integrity level."
+          },
+          {
+            "sid": "S-1-16-16384",
+            "rid": "0x00004000",
+            "name": "System",
+            "meaning": "System integrity level."
+          },
+          {
+            "sid": "S-1-16-20480",
+            "rid": "0x00005000",
+            "name": "Protected Process",
+            "meaning": "Protected-process integrity level."
+          }
+        ]
+      },
+      "fields": [
+        {
+          "key": "creator-subject.security-id",
+          "section": "Creator Subject",
+          "native_name": "Security ID",
+          "type": "SID",
+          "meaning": "SID of the account in the creator security context."
+        },
+        {
+          "key": "creator-subject.account-name",
+          "section": "Creator Subject",
+          "native_name": "Account Name",
+          "type": "UnicodeString",
+          "meaning": "Account name associated with the process creator."
+        },
+        {
+          "key": "creator-subject.account-domain",
+          "section": "Creator Subject",
+          "native_name": "Account Domain",
+          "type": "UnicodeString",
+          "meaning": "Domain or local-computer context of the creator account."
+        },
+        {
+          "key": "creator-subject.logon-id",
+          "section": "Creator Subject",
+          "native_name": "Logon ID",
+          "type": "HexInt64",
+          "meaning": "Identifier of the creator logon session.",
+          "correlation": "Use to pivot to 4624 and other events from the same logon session."
+        },
+        {
+          "key": "target-subject.security-id",
+          "section": "Target Subject",
+          "native_name": "Security ID",
+          "type": "SID",
+          "meaning": "SID of the target account when the process runs in a different security context.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "target-subject.account-name",
+          "section": "Target Subject",
+          "native_name": "Account Name",
+          "type": "UnicodeString",
+          "meaning": "Target account name when creator and target contexts differ.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "target-subject.account-domain",
+          "section": "Target Subject",
+          "native_name": "Account Domain",
+          "type": "UnicodeString",
+          "meaning": "Domain or local-computer context of the target account.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "target-subject.logon-id",
+          "section": "Target Subject",
+          "native_name": "Logon ID",
+          "type": "HexInt64",
+          "meaning": "Identifier of the target logon session when creator and target contexts differ.",
+          "versions": [
+            "2"
+          ],
+          "correlation": "Use to correlate the target security context with session events."
+        },
+        {
+          "key": "process-information.new-process-id",
+          "section": "Process Information",
+          "native_name": "New Process ID",
+          "type": "Pointer/PID",
+          "meaning": "Hexadecimal PID assigned to the newly created process.",
+          "correlation": "Correlate with Event 4689 Process ID and other process-scoped telemetry; PID reuse requires time context."
+        },
+        {
+          "key": "process-information.new-process-name",
+          "section": "Process Information",
+          "native_name": "New Process Name",
+          "type": "UnicodeString/path",
+          "meaning": "Full executable path of the newly created process."
+        },
+        {
+          "key": "process-information.token-elevation-type",
+          "section": "Process Information",
+          "native_name": "Token Elevation Type",
+          "type": "UnicodeString",
+          "meaning": "Indicates whether the process token is full, elevated or UAC-filtered.",
+          "values_ref": "token_elevation_type"
+        },
+        {
+          "key": "process-information.mandatory-label",
+          "section": "Process Information",
+          "native_name": "Mandatory Label",
+          "type": "SID",
+          "meaning": "Mandatory Integrity Control label associated with the new process.",
+          "versions": [
+            "2"
+          ],
+          "values_ref": "mandatory_integrity_level"
+        },
+        {
+          "key": "process-information.creator-process-id",
+          "section": "Process Information",
+          "native_name": "Creator Process ID",
+          "type": "Pointer/PID",
+          "meaning": "PID of the process that created the new process.",
+          "correlation": "Correlate with an earlier 4688 New Process ID to reconstruct parent/child lineage."
+        },
+        {
+          "key": "process-information.creator-process-name",
+          "section": "Process Information",
+          "native_name": "Creator Process Name",
+          "type": "UnicodeString/path",
+          "meaning": "Executable path of the parent/creator process.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "process-information.process-command-line",
+          "section": "Process Information",
+          "native_name": "Process Command Line",
+          "type": "UnicodeString",
+          "meaning": "Executable command line and arguments when command-line process auditing is enabled.",
+          "versions": [
+            "1",
+            "2"
+          ],
+          "notes": "The field is commonly empty when the command-line inclusion policy is not enabled."
+        }
       ]
     }
   ]
