@@ -263,6 +263,147 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:2",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "2",
+      "title": "Sysmon Event 2 — A process changed a file creation time",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "2",
+      "aliases": [
+        "2",
+        "Sysmon 2",
+        "Sysmon Event 2",
+        "FileCreateTime",
+        "A process changed a file creation time"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 2: A process changed a file creation time",
+      "schema_locator": "SYSMONEVENT_FILE_TIME",
+      "overview": {
+        "summary": "Records a process changing a file creation timestamp and preserves both the new and previous UTC creation times with process identity for investigation.",
+        "event_class": "File Timestamp Activity",
+        "configuration_tag": "FileCreateTime",
+        "schema_event_version": 5,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify file creation-time changes that may indicate timestomping or anti-forensic activity",
+          "attribute timestamp changes to a stable Sysmon process identity",
+          "compare new and previous creation times during file-system timeline reconstruction",
+          "correlate timestamp changes with process creation and related file activity"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active Sysmon EventFiltering configuration must not exclude the FileCreateTime activity required by the investigation."
+        ],
+        "interpretation_note": "Legitimate applications can modify file creation times. Collection and analysis should preserve process and surrounding file activity so timestamp changes are not treated as a malicious verdict by themselves."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "process creation and execution context for the process changing the timestamp"
+        },
+        {
+          "target": "Sysmon 11",
+          "key": "TargetFilename + time",
+          "purpose": "related file creation or overwrite activity"
+        },
+        {
+          "target": "Sysmon 23 / 26",
+          "key": "TargetFilename + time",
+          "purpose": "related file deletion activity where those event classes are collected"
+        },
+        {
+          "target": "Windows Security 4688",
+          "key": "ProcessId + Image + time",
+          "purpose": "Windows process-creation corroboration",
+          "limitation": "PID values can be reused; ProcessGuid is preferred inside Sysmon"
+        }
+      ],
+      "analysis": [
+        "Compare CreationUtcTime with PreviousCreationUtcTime and the surrounding file-system timeline to identify suspicious backdating or other anomalous timestamp changes.",
+        "Use ProcessGuid to pivot to the process creation record and related Sysmon activity before deciding whether the timestamp change is suspicious.",
+        "Prioritize timestamp changes made by unusual processes, script interpreters, LOLBins or executables from user-writable locations, while accounting for legitimate software behavior.",
+        "Treat Event 2 as observation telemetry rather than a malicious verdict."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the event when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the file creation-time change event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Identity",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID for the process that changed the file creation time.",
+          "correlation": "Preferred process correlation key across Sysmon events."
+        },
+        {
+          "key": "processid",
+          "section": "Process Identity",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier of the process that changed the file creation time.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "image",
+          "section": "Process Identity",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the process that changed the file creation time."
+        },
+        {
+          "key": "targetfilename",
+          "section": "File Context",
+          "native_name": "TargetFilename",
+          "type": "UnicodeString/path",
+          "meaning": "Path of the file whose creation timestamp was changed.",
+          "correlation": "Use with time and related file events to reconstruct file activity."
+        },
+        {
+          "key": "creationutctime",
+          "section": "Timestamp Context",
+          "native_name": "CreationUtcTime",
+          "type": "UTC timestamp",
+          "meaning": "Creation timestamp recorded after the file creation-time change."
+        },
+        {
+          "key": "previouscreationutctime",
+          "section": "Timestamp Context",
+          "native_name": "PreviousCreationUtcTime",
+          "type": "UTC timestamp",
+          "meaning": "File creation timestamp recorded before the change, preserved for comparison with the resulting value."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User/security-principal context associated with the process that changed the file creation time."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.sysmon:3",
       "namespace": "microsoft.sysmon",
       "canonical_key": "3",
