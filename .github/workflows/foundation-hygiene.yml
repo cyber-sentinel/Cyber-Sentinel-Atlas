@@ -185,7 +185,7 @@ jobs:
         run: |
           ./tools/reference-host/collect_windows_sysmon_reference.ps1 `
             -OutputDirectory "${{ github.workspace }}/reference-output" `
-            -ExpectedSysmonVersion "15.21"
+            -ExpectedSysmonVersion "15.22"
 
       - name: Validate real Windows provider export through PSR parser
         shell: pwsh
@@ -198,7 +198,7 @@ jobs:
             --output $psr
           python -c "import json,sys; d=json.load(open(sys.argv[1],encoding='utf-8')); r=d['records']; ids=sorted({int(x['native_fields']['event_id']) for x in r}); digest=d['representation_digest']; print('Windows ProviderMetadata PSR: records={} unique_event_ids={} min={} max={} has_4688={} has_592={} digest={}'.format(len(r),len(ids),min(ids),max(ids),4688 in ids,592 in ids,digest)); assert 4688 in ids" $psr
 
-      - name: Validate real Sysmon 15.21 schema through PSR parser
+      - name: Validate real Sysmon 15.22 schema through PSR parser
         shell: pwsh
         run: |
           python tools/ingestion/validate_sysmon_schema_reference.py `
