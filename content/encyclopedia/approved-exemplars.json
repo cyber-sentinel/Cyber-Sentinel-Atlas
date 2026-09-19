@@ -2032,6 +2032,148 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:14",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "14",
+      "title": "Sysmon Event 14 — Registry object renamed",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "14",
+      "aliases": [
+        "14",
+        "Sysmon 14",
+        "Sysmon Event 14",
+        "Registry object renamed",
+        "RegistryEvent Key and Value Rename"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 14: RegistryEvent (Key and Value Rename)",
+      "schema_locator": "SYSMONEVENT_REG_NAME",
+      "overview": {
+        "summary": "Records registry key or value rename activity with operation type, process identity, original target object, new name, user context, and event time.",
+        "event_class": "Registry Object Rename",
+        "configuration_tag": "RegistryEvent",
+        "default_collection_state": "ruledefault-exclude",
+        "schema_event_version": 2,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify renames of registry keys or values in persistence and security-relevant locations",
+          "attribute registry rename activity to a stable Sysmon process identity",
+          "preserve both original target context and the recorded new name for timeline reconstruction",
+          "distinguish suspicious rename behavior from normal installer, policy, migration, and application configuration activity"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "RegistryEvent rename activity required by the investigation must be explicitly admitted by EventFiltering because the controlled schema records ruledefault=exclude."
+        ],
+        "configuration_note": "Use governed include filters for registry paths, processes, and rename operations relevant to persistence, security controls, services, startup behavior, and investigation objectives.",
+        "interpretation_note": "Registry key/value rename operations can be legitimate. Security significance depends on the original object, NewName, process and user context, and surrounding registry or execution activity."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "resolve process creation, command-line, parent, image, hash, and user context for the process performing the rename"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "bound the rename operation within the process lifetime"
+        },
+        {
+          "target": "Sysmon 12",
+          "key": "TargetObject + time",
+          "purpose": "review nearby registry create/delete operations involving the same object or path",
+          "limitation": "Registry operations may be independently filtered and not every rename has a corresponding Event 12."
+        },
+        {
+          "target": "Sysmon 13",
+          "key": "TargetObject + time",
+          "purpose": "review value-set activity around the renamed registry object when applicable"
+        }
+      ],
+      "analysis": [
+        "Prioritize renames under autostart, service, security-control, shell, credential-provider, image-execution, and other persistence-relevant paths when the responsible process is unexpected.",
+        "Use TargetObject and NewName together to reconstruct the before/after registry identity rather than interpreting either field in isolation.",
+        "Correlate ProcessGuid with process creation and lifecycle telemetry and compare registry rename behavior with known software installation, policy, and administration baselines.",
+        "Treat Event 14 as registry-rename observation telemetry, not standalone proof of persistence or defense evasion."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the registry event when present."
+        },
+        {
+          "key": "eventtype",
+          "section": "Registry Operation",
+          "native_name": "EventType",
+          "type": "UnicodeString",
+          "meaning": "Operation type recorded by Sysmon for the registry rename activity."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the registry rename event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID identifying the process that performed the registry rename.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the registry rename.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the process performing the registry rename."
+        },
+        {
+          "key": "targetobject",
+          "section": "Registry Target",
+          "native_name": "TargetObject",
+          "type": "UnicodeString",
+          "meaning": "Registry key or value path recorded as the original rename target."
+        },
+        {
+          "key": "newname",
+          "section": "Registry Target",
+          "native_name": "NewName",
+          "type": "UnicodeString",
+          "meaning": "New registry key or value name recorded by Sysmon for the rename operation."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the process performing the registry rename."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
