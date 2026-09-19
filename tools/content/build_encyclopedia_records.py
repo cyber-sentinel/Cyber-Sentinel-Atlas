@@ -187,7 +187,7 @@ def field_semantics(event: dict[str, Any], field: dict[str, Any], field_id: str)
             evidence(event["source_id"], event["source_version"], event["source_locator"]),
             evidence(
                 SYSMON_SCHEMA_SOURCE,
-                "sysmon-15.21-schema-4.91-controlled-reference",
+                "sysmon-15.22-schema-4.91-controlled-reference",
                 f"SYSMONEVENT_NETWORK_CONNECT / {field['native_name']}",
                 transformation="normalized-fact",
             ),
