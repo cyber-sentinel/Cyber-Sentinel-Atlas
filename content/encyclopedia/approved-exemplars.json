@@ -1139,6 +1139,188 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:8",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "8",
+      "title": "Sysmon Event 8 — CreateRemoteThread detected",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "8",
+      "aliases": [
+        "8",
+        "Sysmon 8",
+        "Sysmon Event 8",
+        "CreateRemoteThread",
+        "CreateRemoteThread detected"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 8: CreateRemoteThread",
+      "schema_locator": "SYSMONEVENT_CREATE_REMOTE_THREAD",
+      "overview": {
+        "summary": "Records creation of a thread by one process in another process, including source and target process identity and the recorded start-address/module/function context.",
+        "event_class": "Cross-Process Thread Creation",
+        "configuration_tag": "CreateRemoteThread",
+        "schema_event_version": 2,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify cross-process thread creation that can be associated with code-injection activity",
+          "pivot between source and target process lifecycles using Sysmon process GUIDs",
+          "inspect start-address and inferred module/function context for unusual execution",
+          "separate potentially suspicious injection-like behavior from legitimate debugging, instrumentation, security, or application activity"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active Sysmon EventFiltering configuration must not exclude CreateRemoteThread activity required by the investigation."
+        ],
+        "configuration_note": "CreateRemoteThread is filterable Sysmon telemetry. Filtering should preserve source/target process pairs and execution contexts relevant to the environment's threat model.",
+        "interpretation_note": "Cross-process thread creation is security-relevant but is not intrinsically malicious. Legitimate debuggers, security products, instrumentation, and application components can perform similar operations.",
+        "field_note": "StartModule and StartFunction are inferred by Sysmon and may be empty when the start address is outside known loaded modules or exported functions."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "SourceProcessGuid / TargetProcessGuid",
+          "purpose": "resolve process-creation context for both source and target processes"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "SourceProcessGuid / TargetProcessGuid",
+          "purpose": "bound the source and target process lifetimes around the remote-thread activity"
+        },
+        {
+          "target": "Sysmon 10",
+          "key": "source/target process GUIDs + time",
+          "purpose": "look for process-access activity involving the same process pair before or around remote-thread creation",
+          "limitation": "ProcessAccess and CreateRemoteThread represent distinct operations; temporal/process-pair correlation does not prove a single causal chain."
+        },
+        {
+          "target": "Windows Security 4688",
+          "key": "ProcessId + Image + time",
+          "purpose": "corroborate Windows process-creation context for source or target processes",
+          "limitation": "Windows PIDs are reusable; Sysmon GUIDs are preferred inside Sysmon."
+        }
+      ],
+      "analysis": [
+        "Prioritize unusual source-to-target process pairs, especially when the source image, user context, or target process is inconsistent with normal administrative or application behavior.",
+        "Review StartAddress together with StartModule and StartFunction, while preserving that module/function values are inferred and can legitimately be empty.",
+        "Correlate source and target ProcessGuid values with process creation, image load, process access, network, DNS, and termination telemetry when available.",
+        "Treat Event 8 as cross-process execution telemetry that can support injection investigations, not as standalone proof of malicious code injection."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the event when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the remote-thread creation event."
+        },
+        {
+          "key": "sourceprocessguid",
+          "section": "Source Process",
+          "native_name": "SourceProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID identifying the process that created the remote thread.",
+          "correlation": "Preferred source-process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "sourceprocessid",
+          "section": "Source Process",
+          "native_name": "SourceProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier of the source process.",
+          "correlation": "Use with SourceProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "sourceimage",
+          "section": "Source Process",
+          "native_name": "SourceImage",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path recorded for the source process."
+        },
+        {
+          "key": "targetprocessguid",
+          "section": "Target Process",
+          "native_name": "TargetProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID identifying the target process receiving the new thread.",
+          "correlation": "Preferred target-process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "targetprocessid",
+          "section": "Target Process",
+          "native_name": "TargetProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier of the target process.",
+          "correlation": "Use with TargetProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "targetimage",
+          "section": "Target Process",
+          "native_name": "TargetImage",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path recorded for the target process."
+        },
+        {
+          "key": "newthreadid",
+          "section": "Thread Context",
+          "native_name": "NewThreadId",
+          "type": "UInt32",
+          "meaning": "Identifier of the newly created thread recorded by Sysmon."
+        },
+        {
+          "key": "startaddress",
+          "section": "Thread Start Context",
+          "native_name": "StartAddress",
+          "type": "UnicodeString",
+          "meaning": "Recorded start address for the new thread."
+        },
+        {
+          "key": "startmodule",
+          "section": "Thread Start Context",
+          "native_name": "StartModule",
+          "type": "UnicodeString",
+          "meaning": "Module name inferred by Sysmon for the start address when it can be resolved.",
+          "caveat": "This field can be empty when the start address is outside known loaded modules."
+        },
+        {
+          "key": "startfunction",
+          "section": "Thread Start Context",
+          "native_name": "StartFunction",
+          "type": "UnicodeString",
+          "meaning": "Exported function name inferred by Sysmon for the start address when it can be resolved.",
+          "caveat": "This field can be empty when the address does not map to a known exported function."
+        },
+        {
+          "key": "sourceuser",
+          "section": "Security Context",
+          "native_name": "SourceUser",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the source process."
+        },
+        {
+          "key": "targetuser",
+          "section": "Security Context",
+          "native_name": "TargetUser",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the target process."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
