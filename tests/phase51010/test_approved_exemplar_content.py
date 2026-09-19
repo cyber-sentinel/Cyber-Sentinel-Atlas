@@ -93,7 +93,7 @@ def test_05_every_field_has_one_semantics_claim_and_has_field_relationship():
     claim_subjects = {r["subject_id"] for r in claims if r["subject_id"] in field_ids}
     relationship_targets = {r["to"] for r in rels}
 
-    assert len(field_ids) == 46
+    assert len(field_ids) == 61
     assert claim_subjects == field_ids
     assert relationship_targets == field_ids
 
@@ -140,6 +140,67 @@ def test_08_sysmon_schema_refresh_warning_is_explicit():
     assert claims
     for record in claims:
         assert record["object"]["value"]["structural_refresh_state"] == "PENDING_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
+
+
+
+def test_20_windows_4688_field_dictionary_matches_approved_exemplar():
+    records = by_id(records_with_paths())
+    prefix = "atlas:field:microsoft.windows.security:4688."
+    fields = sorted(key for key in records if key.startswith(prefix))
+    assert len(fields) == 15
+    required = {
+        "4688.creator-subject.security-id",
+        "4688.creator-subject.logon-id",
+        "4688.target-subject.security-id",
+        "4688.target-subject.logon-id",
+        "4688.process-information.new-process-id",
+        "4688.process-information.new-process-name",
+        "4688.process-information.token-elevation-type",
+        "4688.process-information.mandatory-label",
+        "4688.process-information.creator-process-id",
+        "4688.process-information.creator-process-name",
+        "4688.process-information.process-command-line",
+    }
+    actual = {value.rsplit(":", 1)[-1] for value in fields}
+    assert required <= actual
+
+
+def test_21_windows_4688_value_dictionaries_and_uws_boundary():
+    records = by_id(records_with_paths())
+    event_claims = [
+        r for r in records.values()
+        if r.get("record_kind") == "claim"
+        and r.get("subject_id") == "atlas:event:microsoft.windows.security:4688"
+        and r.get("predicate") == "telemetry.field-semantics"
+    ]
+    dictionaries = [
+        r["object"]["value"].get("event_value_dictionaries", {})
+        for r in event_claims
+        if r.get("object", {}).get("kind") == "json"
+    ]
+    token = next(value["token_elevation_type"] for value in dictionaries if "token_elevation_type" in value)
+    assert [row["value"] for row in token] == ["%%1936", "%%1937", "%%1938"]
+    integrity = next(value["mandatory_integrity_level"] for value in dictionaries if "mandatory_integrity_level" in value)
+    assert [row["sid"] for row in integrity] == [
+        "S-1-16-0",
+        "S-1-16-4096",
+        "S-1-16-8192",
+        "S-1-16-8448",
+        "S-1-16-12288",
+        "S-1-16-16384",
+        "S-1-16-20480",
+    ]
+
+    source = records["atlas:source:atlas.source:ultimate-windows-security-event-4688"]
+    assert source["redistribution"]["policy"] == "prohibited"
+    uws_evidence = [
+        r for r in records.values()
+        if r.get("record_kind") == "claim"
+        and any(e.get("source_id") == source["id"] for e in r.get("evidence", []))
+    ]
+    assert len(uws_evidence) == 1
+    assert uws_evidence[0]["predicate"] == "telemetry.source"
+    assert uws_evidence[0]["object"]["value"]["redistribution"] == "source-link-and-coverage-benchmark-only"
 
 
 if __name__ == "__main__":
