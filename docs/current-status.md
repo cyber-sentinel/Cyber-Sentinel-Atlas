@@ -36,7 +36,7 @@ Status timestamp: 2026-09-19
 - Project control-plane and durable agent workflow synchronization: PR #89 — **MERGED / EXACT-HEAD CI GREEN / POST-MERGE VERIFIED**
 - Phase 5.10.10 Sysmon Event 2 encyclopedia promotion: PR #90 — **MERGED / EXACT-HEAD CI GREEN / POST-MERGE VERIFIED**
 - Phase 5.10.10 Sysmon Event 4 encyclopedia promotion: PR #92 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / POST-MERGE VERIFIED**
-- Phase 5.10.10 Sysmon Event 5 encyclopedia promotion: PR #94 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / POST-MERGE CI IN PROGRESS**
+- Phase 5.10.10 Sysmon Event 5 encyclopedia promotion: PR #94 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / POST-MERGE VERIFIED**
 - Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
