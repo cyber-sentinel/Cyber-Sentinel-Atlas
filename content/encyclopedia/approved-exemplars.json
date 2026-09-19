@@ -30,7 +30,7 @@
         "configuration_tag": "NetworkConnect",
         "default_collection_state": "disabled-by-default",
         "schema_event_version": 5,
-        "schema_state": "STRUCTURAL_REFERENCE_PENDING_CONTROLLED_15_22_EXPORT",
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
         "security_value": [
           "attribute network activity to a process",
           "pivot between process execution and remote infrastructure",
