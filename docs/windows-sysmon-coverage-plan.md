@@ -1,6 +1,6 @@
 # Windows & Sysmon Knowledge Coverage Plan
 
-Status: **APPROVED MANDATORY WINDOWS SECURITY CORPUS / IMPLEMENTATION REQUIRED**
+Status: **ACTIVE / CONTROLLED COVERAGE EXPANSION**
 
 ## Objective
 
@@ -19,23 +19,61 @@ The objective is not merely to store Event IDs. Each covered item must answer, w
 - source/version/provenance;
 - validation and coverage state.
 
-## Current measured baseline
+## Current controlled coverage baseline
 
-The latest downloaded Engineering Usable Data Preview evidence reports:
+Phase 5.10.10 now uses deterministic family-specific denominators rather than fixture counts as the coverage authority.
 
-| Measure | Current engineering pack |
-| --- | ---: |
-| Canonical records | 23 |
-| Search projections | 14 |
-| Graph edges | 3 |
-| Windows Security IDs end-to-end acceptance-tested | 1 (`4688`) |
-| Sysmon IDs end-to-end acceptance-tested | 1 (`1`) |
-| Public Preview corpus | No |
-| Pack scope | `engineering-preview-fixture-only` |
+| Family | Controlled denominator | Encyclopedia grade | Remaining |
+| --- | ---: | ---: | ---: |
+| Windows Security Auditing | 423 unique Event IDs / 488 provider event-version definitions | 2 — `4624`, `4688` | 421 |
+| Sysmon 15.22 | 30 documented/current Event IDs | 2 — `1`, `3` | 28 |
 
-For Sysmon 15.21, the pinned source profile lists 30 documented event IDs (`1..29`, `255`). Therefore 29 documented IDs remain outside the current packaged end-to-end acceptance guarantee.
+### Windows Security Auditing scope
 
-No honest percentage is assigned yet to "all Windows Event IDs" because Windows event telemetry spans many providers/channels and the exhaustive denominator has not yet been frozen.
+The frozen denominator is exact for:
+
+- provider: `Microsoft-Windows-Security-Auditing`;
+- channel: `Security`;
+- reference OS: Windows Server 2025 Datacenter 24H2;
+- build: `26100.33296`;
+- architecture: `x64`;
+- locale: `en-US`.
+
+This is a controlled provider/channel/build denominator. It is not an "all Windows" denominator and does not erase independently preserved historical identities that are absent from this specific build.
+
+### Sysmon scope
+
+The active Sysmon control plane is:
+
+- semantic release: `15.22`;
+- documented/current denominator: `30` Event IDs (`1..29` plus `255`);
+- controlled structural schema evidence: `4.91`;
+- encyclopedia-grade records: Event IDs `1` and `3`;
+- remaining: `28`.
+
+### Global Windows boundary
+
+The global Windows denominator is intentionally **not frozen** and no global completion percentage is published.
+
+The following mandatory families still require their own controlled provider/channel/version denominators:
+
+- PowerShell Operational;
+- Windows Defender;
+- AppLocker;
+- WMI Activity;
+- Task Scheduler Operational;
+- RDP / Terminal Services;
+- Windows Firewall / Windows Filtering Platform;
+- DNS Client / DNS Server;
+- Service / persistence telemetry.
+
+Authoritative machine-readable state:
+
+- `content/encyclopedia/coverage-manifest.json`;
+- `content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json`;
+- `content/encyclopedia/sysmon-15.22-coverage.snapshot.json`.
+
+The packaged engineering preview remains a proof of the bounded product path. Coverage progress does not by itself grant Public Preview corpus or release authority.
 
 ## Approved mandatory Windows Security Corpus scope
 
