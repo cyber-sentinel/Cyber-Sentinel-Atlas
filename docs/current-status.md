@@ -42,6 +42,8 @@ Status timestamp: 2026-09-19
 
 `main` is the release authority. Phase 5.6 completed implementation, regression closure, merge, post-merge package/smoke verification, and documentation closure. `FIRST PREVIEW READY` denotes engineering readiness only; no signed Public Preview or GA release is claimed.
 
+Project continuity is now explicitly repository-backed. [`AGENTS.md`](../AGENTS.md) defines the contributor/agent execution contract, [`docs/operations/agent-engineering-operating-model.md`](operations/agent-engineering-operating-model.md) defines interim and future multi-agent execution, and [`docs/operations/handoff-template.md`](operations/handoff-template.md) defines the minimum durable handoff state. CI runners remain verification infrastructure rather than autonomous development nodes.
+
 The First Preview package evidence remains bound to `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`. Subsequent control-plane and release-governance work does not change those verified package bytes or the frozen Phase 5.5/5.6 architecture.
 
 Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that a clean packaged Windows flow can bootstrap a verified engineering knowledge pack, retrieve real Windows/Sysmon knowledge, navigate Record/Graph/Provenance, and reject deliberate signed-target tampering fail-closed. It does not grant Public Preview authority or change any PPR blocker.
@@ -94,15 +96,17 @@ Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that 
   - freeze merge baseline: `main@3b37694abcd29919f1cf0a30ed430a8975245411`
   - visual identity: **OPEN BY DESIGN** for logo/banner/theme/non-behavioral polish
 - Phase 5.10.8 — PPR-04 Notice / Package Binding Automation: **COMPLETE / MERGED**
-- Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion: **APPROVED / IMPLEMENTATION REQUIRED**
-  - current engineering preview artifact: `178` canonical records = `64` entities + `58` claims + `50` relationships + `6` sources
-  - search projections: `16`; graph edges: `3`; encyclopedia-grade exemplar count: `2`
-  - packaged Windows Security examples: Event IDs `4624` and `4688`
-  - packaged Sysmon examples: Event IDs `1` and `3`
-  - pinned Sysmon semantic documentation: `15.22`; documented denominator: `30` IDs (`1..29`, `255`)
-  - controlled Sysmon telemetry-schema refresh to 15.22: **REFERENCE-HOST EXPORT TRIGGERED / VALIDATION PENDING**
-  - exhaustive Windows provider/channel/version denominator: **NOT YET FROZEN**
-  - mandatory corpus families: Security-Auditing, Sysmon, PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
+- Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion: **ACTIVE / CONTROLLED COVERAGE EXPANSION**
+  - Windows Security Auditing denominator: **FROZEN** to `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296`
+  - Windows Security denominator: `423` unique Event IDs / `488` provider event-version definitions
+  - Windows Security encyclopedia-grade: `2/423` — Event IDs `4624`, `4688`; remaining `421`
+  - Sysmon semantic release: `15.22`; controlled structural schema: `4.91`
+  - Sysmon denominator: `30`; encyclopedia-grade: `2/30` — Event IDs `1`, `3`; remaining `28`
+  - machine-readable coverage authority: `content/encyclopedia/coverage-manifest.json`
+  - global Windows denominator: **NOT FROZEN**
+  - global Windows completion percentage: **intentionally undefined**
+  - remaining mandatory families without frozen denominators: PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
+  - Public Preview corpus authority: **NOT GRANTED**
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers are retained because frozen architecture validators use them to prove lifecycle continuity across later phases.
 
