@@ -192,7 +192,7 @@ def field_semantics(event: dict[str, Any], field: dict[str, Any], field_id: str)
                 transformation="normalized-fact",
             ),
         ]
-        value["structural_refresh_state"] = "PENDING_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
+        value["structural_refresh_state"] = "VALIDATED_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
     else:
         ev = [evidence(event["source_id"], event["source_version"], f"{event['source_locator']} / {field['section']} / {field['native_name']}")]
         if field.get("provider_scope"):
