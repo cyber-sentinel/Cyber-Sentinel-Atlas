@@ -23,6 +23,9 @@ Status timestamp: 2026-09-19
 - Phase 5.10.10 Windows Security 4688 encyclopedia promotion: PR #79 — **MERGED / EXACT-HEAD CI GREEN**
 - Phase 5.10.3 exact package-binding hardening: PR #80 — **MERGED / EXACT-HEAD CI GREEN**
 - Phase 5.10.10 Sysmon 15.22 controlled schema baseline promotion: PR #81 — **MERGED / EXACT-HEAD CI GREEN**
+- Phase 5.10.10 Sysmon schema-evidence binding: PR #83 — **MERGED / FOUNDATION CI GREEN**
+- Phase 5.10.10 Sysmon Event 1 encyclopedia promotion: PR #85 — **ACTIVE CANDIDATE / FINAL CI PENDING**
+- Phase 5.10.10 Windows Security denominator + coverage ledger: PR #87 — **STACKED ACTIVE CANDIDATE / FINAL CI PENDING**
 - Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
