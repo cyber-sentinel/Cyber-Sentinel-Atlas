@@ -1,113 +1,93 @@
 # ATLAS Windows Telemetry Source Authority Policy
 
-Status: **APPROVED SOURCE POLICY**
+Status: **APPROVED**
 
 ## Purpose
 
-This policy defines the primary semantic reference used by ATLAS for Windows Security Event IDs and Sysmon Event IDs.
-
-The goal is to keep the analyst-facing answer consistent and predictable while preserving ATLAS provenance, licensing, versioning and validation rules.
+Define which source is allowed to drive analyst-facing Quick Detail content for Windows Security and Sysmon records, while preserving independent provenance and legal/redistribution controls.
 
 ## Windows Security Event IDs
 
-### Primary Quick Detail reference
+### Primary Quick Detail Reference
 
-For Windows Security Log Event IDs, the approved primary analyst-reference source is:
+**Ultimate Windows Security — Windows Security Log Encyclopedia**
 
-- Ultimate Windows Security — Windows Security Log Encyclopedia
-- Base URL: https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/
-- Event URL pattern: https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid={EVENT_ID}
+- index: https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/
+- event pattern: https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=<EVENT_ID>
+- source role: `PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE`
+- scope: analyst-facing coverage/section benchmark, external verification link, field-grouping and correlation-review reference.
+- ingestion authority: **NO AUTOMATED OR BULK INGESTION** without explicit written permission from the rights holder.
 
-The **Quick Detail / Quick Response** surface for a Windows Security Event ID is driven by factual content normalized from this primary reference.
+### Quick Detail rule
 
-Applicable categories include, where present:
+For Windows Security Event IDs, Ultimate Windows Security is the approved **external analyst-reference benchmark**, but its pages are not a bulk-ingestion feed.
 
-- Event ID and title;
-- supported/observed Windows operating-system generations;
-- category/subcategory;
-- success/failure type;
-- legacy/corresponding Event IDs;
-- short event purpose;
-- field groups and field names;
-- field-level semantics;
-- version-introduced fields;
-- enumerated/value dictionaries;
-- correlations to other Event IDs;
-- collection/audit-policy notes;
-- security-relevant caveats.
+Quick Detail must match the useful information classes an analyst expects from that reference — identity, OS applicability, category/subcategory, success/failure type, legacy/corresponding events, field groups, value semantics, version notes and correlation pivots — while the redistributable ATLAS facts are independently authored from Microsoft/provider evidence.
 
-### Quick Detail source isolation
+The UI displays the exact Ultimate Windows Security event URL as the Primary External Reference.
 
-For a Windows Security Event Quick Detail response:
-
-- Ultimate Windows Security is the primary semantic reference;
-- content from unrelated sources must not be silently mixed into the Quick Detail text;
-- any ATLAS-authored interpretation must be visibly labeled as ATLAS analysis rather than source fact;
-- deeper Record & Provenance views may separately show corroborating authoritative sources, but the Quick Detail source identity remains explicit.
+If the rights holder later grants written ingestion/redistribution permission, this policy may be upgraded through an explicit source-rights review.
 
 ### Redistribution boundary
 
-Ultimate Windows Security identifies its site content as copyrighted/all-rights-reserved. ATLAS therefore must not package or reproduce substantial page prose or full examples verbatim without separate permission.
+Ultimate Windows Security is a copyrighted third-party reference whose published Terms restrict automated/manual retrieval processes used to index, database, data-mine or reproduce the site.
 
-ATLAS may instead:
+Unless explicit written permission is obtained, ATLAS must not scrape, crawl, bulk-extract, mirror, or package the site's prose/content as a competing encyclopedia corpus.
 
-- retain source URL and retrieval metadata;
-- normalize factual event identifiers, titles, field names, platform/version facts and value dictionaries where legally appropriate;
-- independently author concise field explanations and security analysis;
-- preserve claim-level provenance back to the source;
-- link the analyst to the original page.
+ATLAS may safely preserve an outbound event reference URL and use the site as a human review/UX benchmark. Redistributable field facts and analysis are authored independently from sources with an accepted ingestion/rights boundary.
 
-The target UX may mirror the **information architecture** of the reference page without copying protected explanatory prose wholesale.
+The public corpus must not become a mirror or substantial recreation of the reference site.
 
 ## Sysmon
 
-### Primary semantic authority
+### Primary Quick Detail Reference
 
-For Sysmon, the approved primary source is Microsoft Sysinternals / Microsoft Learn:
+**Microsoft Sysinternals — Sysmon**
 
 https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
 
-ATLAS uses the Microsoft Learn page as the canonical public semantic reference for:
+- source role: `PRIMARY_QUICK_DETAIL_REFERENCE`
+- scope: Sysmon event identities, event meaning, event behavior, configuration/filtering context and analyst-facing Quick Detail.
 
-- current Sysmon release context;
-- Event ID names and descriptions;
-- operational log/channel information;
-- configuration behavior;
-- filter tags and event filtering semantics;
-- documented field/configuration guidance.
+The Microsoft-published Sysmon schema/manifest may additionally provide exact field names/types/version structure as technical evidence, but the analyst-facing Quick Detail remains anchored to the official Sysmon documentation.
 
-For deterministic release ingestion, ATLAS may bind the corresponding MicrosoftDocs/sysinternals repository document to an exact commit/blob while retaining the Learn URL as the canonical public reference.
+### Current source freshness
 
-### Current freshness observation
+As of 2026-09-18 the official Microsoft page identifies **Sysmon v15.22**, published 2026-09-10.
 
-The Microsoft Learn page currently identifies Sysmon **v15.22**, published **2026-09-10**.
+Release ingestion must use an immutable pinned MicrosoftDocs revision rather than relying only on the floating Learn page.
 
-The existing controlled ATLAS Sysmon schema/export baseline is older and must be refreshed/validated before ATLAS claims current 15.22 schema coverage.
+## Provenance display
 
-Documentation freshness and telemetry-schema freshness are separate states and must not be conflated.
+Every Quick Detail must visibly identify:
 
-## Source precedence
-
-For the approved Windows Security Corpus:
-
-1. Windows Security Event Quick Detail semantics → Ultimate Windows Security Encyclopedia.
-2. Sysmon Event semantics → Microsoft Sysinternals / Microsoft Learn Sysmon page.
-3. Provider/schema exports → controlled Windows/Sysmon reference exports for field/version denominator and structural validation.
-4. MITRE ATT&CK / D3FEND / CAR → their own pinned authoritative sources.
-5. ATLAS analysis → independently authored and explicitly identified as ATLAS defensive analysis.
-
-No lower-precedence source may silently overwrite a higher-precedence source's Quick Detail semantics.
-
-## Provenance requirement
-
-Every Quick Detail payload must record:
-
-- source ID;
+- Primary Reference;
 - source URL;
-- source role;
-- retrieved/snapshot date;
-- source version/revision when available;
-- transformation type;
+- source/retrieval or pinned version;
+- ATLAS transformation state;
 - validation state.
 
-A Quick Detail payload with missing source identity is not release-eligible.
+The Full Record & Provenance workspace may expose additional authoritative/secondary evidence without changing the Quick Detail source-role contract.
+
+## Conflict handling
+
+If Microsoft/provider evidence and the external UWS reference appear to disagree:
+
+1. do not silently merge the disagreement;
+2. retain the conflict in review evidence;
+3. treat Microsoft/provider evidence as canonical technical verification;
+4. show an applicability/uncertainty state when material;
+5. preserve the UWS outbound reference for analyst comparison;
+6. update ATLAS facts only after source/version review.
+
+## Product goal
+
+Quick Detail should feel like a high-quality security-event encyclopedia response:
+
+- immediate;
+- field-oriented;
+- version-aware;
+- correlation-aware;
+- operationally useful;
+- concise enough for first response;
+- expandable into the full Record & Provenance workspace.
