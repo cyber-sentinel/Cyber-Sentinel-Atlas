@@ -2,7 +2,7 @@
 
 Status: **ACTIVE**
 
-Current workstream: **Phase 5.10.7 — Public Preview RC functional freeze and evidence closure**
+Current workstream: **Phase 5.10.10 — Windows/Sysmon knowledge coverage expansion + provider-scoped denominator closure + Phase 5.10.7 Public Preview RC evidence closure**
 
 First Preview engineering readiness is already **READY**. Public Preview remains **BLOCKED** until every mandatory release-readiness gate is closed with reviewable evidence.
 
@@ -20,7 +20,7 @@ Those states are deliberately not treated as equivalent.
 
 ## Release authorities
 
-- Latest verified control-plane baseline: `main@d1efb549c1b651b58052a616bba82a3b146c0d6e` — PPR-03 through PPR-07 control planes integrated; post-merge validators green
+- Latest post-merge verified control-plane baseline: `main@c5de34267e6c5a620d581efab7400ae50da341e7` — PR #79 Windows 4688 encyclopedia content, PR #80 exact package-binding hardening, and PR #81 Sysmon 15.22 controlled-baseline promotion are merged; exact-head validation was green and post-merge Foundation Hygiene run `35424374521` plus Phase 5.3.4 Canaries run `35424374528` completed **SUCCESS**.
 - Usable Data Preview post-merge baseline: `main@4d64b2fb402b280d00c01783f7990538a3b67484`, run `35305516189` — **SUCCESS**
 - PPR-04 Tauri/Rust preflight merged baseline: `main@734e20dbb36083d9c5770a22e9c69e844903158f`; PR #54 exact-head run `35309913398` — **SUCCESS**; artifact `10533096533` / `sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d`
 - Public Preview RC functional-freeze baseline: `main@2c7788e08e0254f330cca1cbb0d1a8a9432291f5`; PR #56 exact-head mandatory workflows — **SUCCESS**; signed portable ZIP + GitHub Releases selected; accessibility source/reflow hardening merged
@@ -37,7 +37,7 @@ Those states are deliberately not treated as equivalent.
 | PPR-03 | First-party licensing decision | **BLOCKED** | Fail-closed license decision state/validator are integrated; no project `LICENSE` is published and explicit maintainer/legal-business approval remains required |
 | PPR-04 | Third-party redistribution closure | **BLOCKED** | Exact inventory/validator plus Windows-target Rust/Tauri preflight are integrated; exact-head run `35309913398` verified 258 third-party crates and 3 frontend assets. Microsoft Learn source text is excluded and pinned ATT&CK/CAR/D3FEND/Sysmon rights are classified; final corpus/software freeze, final notices and exact package binding remain open |
 | PPR-05 | Production code signing and protected key custody | **BLOCKED** | Provider-neutral non-exportable/hardware-backed signing contract and validator are integrated; provider/certificate/key custody and exact signed-candidate evidence remain unselected |
-| PPR-06 | Public packaging and distribution hardening | **BLOCKED** | **Signed portable ZIP + GitHub Releases selected**; exact production-signed package, clean-Windows/package-bound acceptance, accessibility binding, publication and post-publication byte re-verification remain open |
+| PPR-06 | Public packaging and distribution hardening | **BLOCKED** | **Signed portable ZIP + GitHub Releases selected**; PR #80 adds deterministic exact-package binding rehearsal and fail-closed validation, but the exact production-signed package, clean-Windows/package-bound acceptance, accessibility binding, publication and post-publication byte re-verification remain open |
 | PPR-07 | Accessibility release review | **PARTIAL** | Machine-readable accessibility state and strict validator are integrated; executable Windows keyboard/Narrator/high-contrast/scaling review remains open on the exact final candidate |
 | PPR-08 | Source freshness and public-pack publication policy | **PASS** | `docs/releases/source-freshness-and-publication-policy.md` |
 | PPR-09 | Release governance and launch criteria | **PASS** | `docs/releases/public-preview-launch-governance.md` |
@@ -49,6 +49,10 @@ The machine-readable authority for this matrix is `docs/releases/phase-5.10-publ
 Release-vehicle decision record: [`public-preview-release-decisions.md`](public-preview-release-decisions.md).
 
 RC functional-freeze authority: [`public-preview-rc-contract.md`](public-preview-rc-contract.md), with machine state in [`public-preview-rc-readiness.json`](public-preview-rc-readiness.json). Visual identity remains intentionally open while functional/security boundaries are frozen.
+
+## Coverage state relevant to readiness
+
+Corpus progress remains independent from the PPR gate matrix. `content/encyclopedia/coverage-manifest.json` keeps `global_windows_denominator_frozen=false`; only Sysmon 15.22 and the controlled `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 build 26100.33296` provider scope currently have frozen denominators. This progress does not change PPR-03 through PPR-07.
 
 ## Gate semantics
 
