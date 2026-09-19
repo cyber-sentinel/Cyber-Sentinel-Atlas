@@ -53,7 +53,7 @@ ATLAS project continuity is repository-backed rather than chat-backed.
 
 - Engineering contract: [`AGENTS.md`](../AGENTS.md)
 - Agent operating model: [`docs/operations/agent-engineering-operating-model.md`](operations/agent-engineering-operating-model.md)
-- Handoff template: [`docs/operations/handoff-template.md`](operations/handoff-template.md)
+- Handoff template: [`docs/operations/session-handoff-guide.md`](operations/session-handoff-guide.md)
 - CI runners are verification infrastructure; they are not general development-agent nodes.
 - Until a dedicated Agent Control Node is deployed, execution continues through focused GitHub branches/PRs with the existing Linux and Windows runners.
 - Future multi-agent execution must use isolated worktrees/containers, one bounded task per branch, and the same PR/CI/merge controls.
