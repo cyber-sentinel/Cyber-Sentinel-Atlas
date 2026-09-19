@@ -6,7 +6,7 @@ on:
       expected_sysmon_version:
         description: "Expected Microsoft Sysinternals Sysmon major.minor release; fail closed on drift"
         required: true
-        default: "15.21"
+        default: "15.22"
         type: string
 
 permissions:
@@ -50,7 +50,11 @@ jobs:
         run: |
           python tools/ingestion/validate_sysmon_schema_reference.py `
             "${{ github.workspace }}/reference-output/sysmon-schema.txt" `
-            --required-event-id 1
+            --expected-schema-count 24 `
+            --expected-current-schema 4.91 `
+            --expected-current-event-count 30 `
+            --required-event-id 1 `
+            --required-event-id 255
 
       - name: Validate output boundary before upload
         shell: pwsh
