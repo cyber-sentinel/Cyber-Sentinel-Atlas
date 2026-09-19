@@ -324,25 +324,44 @@ Status: **BLOCKED**
 
 ### Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion
 
-Status: **APPROVED / IMPLEMENTATION REQUIRED**
+Status: **ACTIVE / CONTROLLED COVERAGE EXPANSION**
 
-The current Engineering Usable Data Preview is a fixture-based proof of the runtime, not the complete Windows corpus.
+The Engineering Usable Data Preview proved the product path. Phase 5.10.10 now expands that path into a measured, provenance-bound knowledge corpus.
 
-Measured current engineering-pack baseline:
+Current controlled coverage state:
 
-- 178 canonical records (`64` entities, `58` claims, `50` relationships, `6` sources);
-- 16 search projections;
-- 3 graph edges;
-- packaged Windows examples: Event IDs `4624` and `4688`;
-- packaged Sysmon examples: Event IDs `1` and `3`;
-- encyclopedia-grade approved exemplars: Windows `4624` and Sysmon `3`;
-- `public_preview_corpus=false`.
+- Windows Security Auditing denominator is frozen to `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296`;
+- Windows Security denominator: **423 unique Event IDs** / **488 provider event-version definitions**;
+- Windows Security encyclopedia-grade numerator: **2/423** — Event IDs `4624` and `4688`;
+- Windows Security remaining: **421**;
+- Sysmon semantic release: **15.22**;
+- Sysmon controlled structural schema: **4.91**;
+- Sysmon documented/current denominator: **30** Event IDs (`1..29` plus `255`);
+- Sysmon encyclopedia-grade numerator: **2/30** — Event IDs `1` and `3`;
+- Sysmon remaining: **28**;
+- global Windows denominator: **NOT FROZEN**;
+- global Windows completion percentage: **intentionally undefined**;
+- Public Preview corpus authority: **NOT GRANTED**.
 
-The pinned Sysmon 15.22 semantic documentation profile documents 30 Event IDs (`1..29` plus `255`). Sysmon Event `3` is the first approved encyclopedia-grade exemplar; the remaining 29 documented IDs still require encyclopedia-grade materialization before full Sysmon corpus coverage can be claimed. Event `1` remains packaged engineering data but does not count toward the encyclopedia-grade release numerator until it meets the same content contract.
+Authoritative machine-readable state:
 
-Windows Security/Event Log coverage must first freeze an explicit provider/channel/version denominator. "All Windows Event IDs" is not a valid completion metric until the target providers/channels and versions are machine-readable.
+- `content/encyclopedia/coverage-manifest.json`;
+- `content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json`;
+- `content/encyclopedia/sysmon-15.22-coverage.snapshot.json`.
 
-Mandatory Windows Security Corpus scope additionally includes PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, and Service/persistence telemetry.
+The next corpus work is not a single "fill every Event ID" batch. It is a controlled sequence:
+
+1. materialize remaining identities to the encyclopedia-grade content contract;
+2. preserve exact source/version/provenance evidence;
+3. validate fields, semantics, collection prerequisites, correlations and defensive interpretation;
+4. project approved records into deterministic search and pack paths;
+5. acceptance-test Search → Record → Graph → Provenance;
+6. update deterministic coverage snapshots;
+7. freeze provider/channel/version denominators for the remaining mandatory Windows families.
+
+Mandatory families still without frozen denominators include PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, and Service/persistence telemetry.
+
+ATLAS will not publish an unqualified "all Windows" percentage while those denominators remain undefined.
 
 Authoritative coverage plan: [`docs/windows-sysmon-coverage-plan.md`](windows-sysmon-coverage-plan.md).
 
