@@ -140,6 +140,13 @@ def test_08_sysmon_schema_refresh_validation_is_explicit():
     assert claims
     for record in claims:
         assert record["object"]["value"]["structural_refresh_state"] == "VALIDATED_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
+        schema_evidence = [
+            item for item in record["evidence"]
+            if item.get("source_id") == "atlas:source:atlas.source:microsoft-sysmon-schema-export"
+        ]
+        assert len(schema_evidence) == 1
+        assert schema_evidence[0]["source_version"] == "sysmon-15.22-schema-4.91"
+        assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_NETWORK_CONNECT / ")
 
 
 
