@@ -19,7 +19,7 @@ ATLAS is built for security teams that need investigation context to be **determ
 > **Current maturity:** Engineering-ready First Preview
 > **Release state:** Pre-preview / unreleased
 > **Repository visibility:** Public
-> **Active workstream:** Phase 5.10.7 — Public Preview RC functional freeze & evidence closure
+> **Active workstreams:** Phase 5.10.7 — Public Preview RC evidence closure; Phase 5.10.10 — controlled Windows & Sysmon knowledge-coverage expansion
 > **RC target:** `v0.1.0-rc.1` — functionally frozen; release evidence still blocked
 > **Public Preview state:** **BLOCKED** until every mandatory release gate passes
 > **Desktop:** Windows / Tauri 2.x — ADR-0026 Accepted
@@ -131,17 +131,28 @@ Authoritative surface plan: [`docs/product-surfaces.md`](docs/product-surfaces.m
 
 ### Current Knowledge Coverage Boundary
 
-The current Engineering Usable Data Preview proves the runtime and analyst workflow, not comprehensive Windows telemetry coverage. Its packaged evidence contains **23 canonical records, 14 search projections and 3 graph edges**, and guarantees end-to-end retrieval for Windows Security Event ID `4688` and Sysmon Event ID `1`.
+ATLAS now separates **runtime proof** from **corpus completion**. The packaged engineering preview proves the analyst path, while deterministic coverage ledgers measure how much telemetry knowledge has actually reached the maintained encyclopedia-grade contract.
 
-The pinned Sysmon 15.21 profile enumerates **30 documented event IDs** (`1..29` plus `255`); therefore 29 additional Sysmon IDs remain outside the current packaged end-to-end acceptance guarantee. Windows Security coverage does not yet have a frozen exhaustive provider/channel denominator, so ATLAS does not publish a misleading "all Windows Event IDs" percentage.
+Current controlled Phase 5.10.10 coverage:
+
+| Family | Controlled denominator | Encyclopedia grade | Remaining |
+| --- | ---: | ---: | ---: |
+| Windows Security Auditing | 423 unique Event IDs on `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296` | 2 — `4624`, `4688` | 421 |
+| Sysmon 15.22 | 30 documented/current Event IDs with controlled schema 4.91 evidence | 2 — `1`, `3` | 28 |
+
+The authoritative machine-readable ledger is [`content/encyclopedia/coverage-manifest.json`](content/encyclopedia/coverage-manifest.json).
+
+The global Windows denominator is intentionally **not frozen**. PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, and Service/persistence telemetry still require controlled denominators and encyclopedia-grade materialization. ATLAS therefore does not publish a misleading unqualified "all Windows Event IDs" percentage.
+
+An Event ID counts toward maintained coverage only after authoritative source pinning, canonical/provenance materialization, encyclopedia-grade depth, deterministic search/pack projection, and acceptance evidence. A parser, source profile, fixture, or UI mention alone does not count.
+
+The Public Preview corpus remains fail-closed; individual coverage progress does not by itself authorize a public release.
 
 Authoritative coverage plan: [`docs/windows-sysmon-coverage-plan.md`](docs/windows-sysmon-coverage-plan.md).
 
-Telemetry content-depth contract: [`docs/content/telemetry-record-content-contract.md`](docs/content/telemetry-record-content-contract.md). A Windows/Sysmon Event ID counts as release coverage only after it reaches **ENCYCLOPEDIA_GRADE** depth: field dictionary, version applicability, collection prerequisites, value semantics, correlation pivots, defensive interpretation and provenance.
+Telemetry content-depth contract: [`docs/content/telemetry-record-content-contract.md`](docs/content/telemetry-record-content-contract.md).
 
-Workspace UX authority: [`docs/ux/ux-information-architecture.md`](docs/ux/ux-information-architecture.md) and [`docs/ux/workspace-product-review.md`](docs/ux/workspace-product-review.md). Final visual freeze requires page-by-page product review; visual polish must not silently expand the frozen Core/API boundary.
-
-The approved Windows Security Corpus additionally mandates **PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, and Service/persistence telemetry** alongside Security-Auditing and Sysmon. These families are release-planned corpus scope, not optional future ideas.
+Workspace UX authority: [`docs/ux/ux-information-architecture.md`](docs/ux/ux-information-architecture.md) and [`docs/ux/workspace-product-review.md`](docs/ux/workspace-product-review.md).
 
 ## Architecture
 
@@ -347,6 +358,8 @@ The authoritative workflow is:
 Branch → PR → CI → architecture/security review → exact-head verification
       → merge → post-merge verification → controlled release authority
 ```
+
+Agent and human contributors follow the same durable engineering contract in [`AGENTS.md`](AGENTS.md). The multi-agent / session-continuity model is defined in [`docs/operations/agent-engineering-operating-model.md`](docs/operations/agent-engineering-operating-model.md). Project continuation must be recoverable from GitHub without relying on a previous chat session.
 
 Mandatory release gates are not weakened to obtain a green build.
 

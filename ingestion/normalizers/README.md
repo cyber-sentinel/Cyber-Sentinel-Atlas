@@ -1,5 +1,13 @@
-# Normalizers
+# Deterministic Normalizers
 
-Reserved for deterministic normalizer definitions and later implementations.
+This directory contains the production/reviewed deterministic normalization implementations and their definitions.
 
-Normalizers consume pinned PSR, mapping profiles, registry bundles, and Canonical Schema versions. Network access and AI are forbidden in the deterministic core.
+Current normalizers cover ATT&CK, D3FEND, CAR, DefenseOps, Microsoft Sysmon documentation/schema, and Microsoft Windows provider/documentation evidence.
+
+Normalizers consume pinned Parsed Source Representation (PSR), mapping profiles, controlled registries, and canonical schema contracts. The deterministic core:
+
+- performs no network access;
+- does not call AI/LLM services;
+- preserves provenance and source/version identity;
+- fails closed on unsupported structural assumptions;
+- must not invent security semantics that are absent from the source or approved authored enrichment.
