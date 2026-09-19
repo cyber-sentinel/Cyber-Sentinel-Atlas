@@ -41,6 +41,8 @@ def test_02_approved_event_identities_and_search_aliases():
     records = records_with_paths()
     assert validator.resolve_query(records, "4624") == ["atlas:event:microsoft.windows.security:4624"]
     assert validator.resolve_query(records, "Windows 4624") == ["atlas:event:microsoft.windows.security:4624"]
+    assert validator.resolve_query(records, "Sysmon 1") == ["atlas:event:microsoft.sysmon:1"]
+    assert validator.resolve_query(records, "ProcessCreate") == ["atlas:event:microsoft.sysmon:1"]
     assert validator.resolve_query(records, "Sysmon 3") == ["atlas:event:microsoft.sysmon:3"]
     assert validator.resolve_query(records, "NetworkConnect") == ["atlas:event:microsoft.sysmon:3"]
 
@@ -147,6 +149,38 @@ def test_08_sysmon_schema_refresh_validation_is_explicit():
         assert len(schema_evidence) == 1
         assert schema_evidence[0]["source_version"] == "sysmon-15.22-schema-4.91"
         assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_NETWORK_CONNECT / ")
+
+
+def test_09_sysmon_1_field_dictionary_and_schema_evidence_are_complete():
+    records = by_id(records_with_paths())
+    prefix = "atlas:field:microsoft.sysmon:1."
+    fields = sorted(key for key in records if key.startswith(prefix))
+    assert len(fields) == 23
+    expected = {
+        "rulename", "utctime", "processguid", "processid", "image",
+        "fileversion", "description", "product", "company", "originalfilename",
+        "commandline", "currentdirectory", "user", "logonguid", "logonid",
+        "terminalsessionid", "integritylevel", "hashes", "parentprocessguid",
+        "parentprocessid", "parentimage", "parentcommandline", "parentuser",
+    }
+    assert {value.rsplit(":", 1)[-1].split(".", 1)[1] for value in fields} == expected
+
+    claims = [
+        record for record in records.values()
+        if record.get("record_kind") == "claim"
+        and record.get("predicate") == "telemetry.field-semantics"
+        and record.get("subject_id", "").startswith(prefix)
+    ]
+    assert len(claims) == 23
+    for record in claims:
+        assert record["object"]["value"]["structural_refresh_state"] == "VALIDATED_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
+        schema_evidence = [
+            item for item in record["evidence"]
+            if item.get("source_id") == "atlas:source:atlas.source:microsoft-sysmon-schema-export"
+        ]
+        assert len(schema_evidence) == 1
+        assert schema_evidence[0]["source_version"] == "sysmon-15.22-schema-4.91"
+        assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_CREATE_PROCESS / ")
 
 
 
