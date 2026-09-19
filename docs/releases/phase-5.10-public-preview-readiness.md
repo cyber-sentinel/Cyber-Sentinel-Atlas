@@ -2,7 +2,9 @@
 
 Status: **ACTIVE**
 
-Current workstream: **Phase 5.10.7 — Public Preview RC functional freeze and evidence closure**
+Release workstream: **Phase 5.10.7 — Public Preview RC functional freeze and evidence closure**
+
+Corpus workstream: **Phase 5.10.10 — Windows & Sysmon controlled knowledge-coverage expansion**
 
 First Preview engineering readiness is already **READY**. Public Preview remains **BLOCKED** until every mandatory release-readiness gate is closed with reviewable evidence.
 
@@ -17,6 +19,8 @@ The phase exists to close the difference between:
 - an environment-specific production deployment decision.
 
 Those states are deliberately not treated as equivalent.
+
+Phase 5.10.10 may expand reviewed knowledge content while the Phase 5.10.7 functional/security boundary remains frozen. Corpus changes do not authorize a Public Preview release; the exact public corpus must still satisfy PPR-04 and be bound to the final release package under the strict RC gate.
 
 ## Release authorities
 
