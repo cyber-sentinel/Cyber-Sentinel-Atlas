@@ -2930,6 +2930,128 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:21",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "21",
+      "title": "Sysmon Event 21 — WmiEvent (WmiEventConsumerToFilter activity detected)",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "21",
+      "aliases": [
+        "21",
+        "Sysmon 21",
+        "Sysmon Event 21",
+        "WmiEventConsumerToFilter",
+        "WMI consumer to filter binding"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 21: WmiEvent (WmiEventConsumerToFilter activity detected)",
+      "schema_locator": "SYSMONEVENT_WMI_BINDING",
+      "overview": {
+        "summary": "Records binding of a WMI event consumer to an event filter, including consumer/filter references, operation and user context.",
+        "event_class": "WMI Subscription Activity",
+        "configuration_tag": "WmiEvent",
+        "schema_event_version": 3,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify completion of a WMI permanent-event-subscription relationship",
+          "link filter and consumer components into a single subscription chain",
+          "inspect unexpected consumer/filter pairings used for automation or persistence",
+          "reconstruct WMI subscription state without treating every binding as malicious"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active WmiEvent filtering policy must preserve consumer-to-filter binding telemetry required by the investigation."
+        ],
+        "attribution_limit": "Event 21 does not provide ProcessGuid or ProcessId. User and WMI object references provide context, while initiating process attribution requires other telemetry.",
+        "interpretation_note": "Consumer-to-filter bindings are legitimate in management and automation environments and can also participate in persistence. Evaluate the binding together with Events 19 and 20 and external WMI/change evidence."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 19",
+          "key": "Filter reference + host + time",
+          "purpose": "resolve the WMI filter component involved in the binding"
+        },
+        {
+          "target": "Sysmon 20",
+          "key": "Consumer reference + host + time",
+          "purpose": "resolve the WMI consumer component involved in the binding"
+        },
+        {
+          "target": "Windows WMI Activity telemetry",
+          "key": "WMI object references + time + host",
+          "purpose": "corroborate WMI operations and possible initiating activity",
+          "scope": "Explicit out-of-scope target until the WMI Activity provider/channel denominator is frozen."
+        }
+      ],
+      "analysis": [
+        "Correlate Event 21 with Events 19 and 20 to reconstruct the complete filter-consumer-binding subscription chain.",
+        "Prioritize bindings connecting unusual filters or consumers, registrations outside change windows, and objects inconsistent with approved administration tooling.",
+        "Use User and Operation as context while preserving that Event 21 lacks initiating process identity.",
+        "Treat Event 21 as WMI subscription relationship telemetry, not standalone proof of malicious persistence."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the WmiEvent filter when present."
+        },
+        {
+          "key": "eventtype",
+          "section": "Event Context",
+          "native_name": "EventType",
+          "type": "UnicodeString",
+          "meaning": "Sysmon event-type value describing WMI binding activity."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the WMI binding event."
+        },
+        {
+          "key": "operation",
+          "section": "WMI Operation",
+          "native_name": "Operation",
+          "type": "UnicodeString",
+          "meaning": "WMI operation/state action recorded for the binding activity."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User context recorded for the WMI binding activity."
+        },
+        {
+          "key": "consumer",
+          "section": "WMI Binding",
+          "native_name": "Consumer",
+          "type": "UnicodeString",
+          "meaning": "Reference identifying the WMI consumer participating in the binding.",
+          "correlation": "Use to pivot to corresponding Event 20 consumer registration."
+        },
+        {
+          "key": "filter",
+          "section": "WMI Binding",
+          "native_name": "Filter",
+          "type": "UnicodeString",
+          "meaning": "Reference identifying the WMI event filter participating in the binding.",
+          "correlation": "Use to pivot to corresponding Event 19 filter registration."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
