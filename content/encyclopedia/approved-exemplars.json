@@ -946,6 +946,199 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:7",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "7",
+      "title": "Sysmon Event 7 — Image loaded",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "7",
+      "aliases": [
+        "7",
+        "Sysmon 7",
+        "Sysmon Event 7",
+        "ImageLoad",
+        "Image loaded"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 7: Image loaded",
+      "schema_locator": "SYSMONEVENT_IMAGE_LOAD",
+      "overview": {
+        "summary": "Records module image loads within a process, including process identity, loaded image metadata, configured hashes, signature context, and user context.",
+        "event_class": "Image Load",
+        "configuration_tag": "ImageLoad",
+        "default_collection_state": "disabled-by-default",
+        "schema_event_version": 3,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "attribute DLL or module loads to a specific process",
+          "identify unusual module paths, publishers, hashes, or unsigned images when surrounding evidence supports investigation",
+          "pivot between process execution and loaded-code activity using ProcessGuid",
+          "support detection of suspicious module-loading patterns while preserving normal software-loading context"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "ImageLoad collection must be enabled by configuration because Event ID 7 is disabled by default."
+        ],
+        "volume_note": "Image-load telemetry can be high-volume. Governed include/exclude filters should be used to preserve investigation value without collecting every routine module load.",
+        "signature_note": "Sysmon produces signature information asynchronously for performance reasons. Signature-related values should be interpreted together with image path, hashes, process identity, and timing."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "associate loaded modules with the process creation record and command-line context"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "bound module-load activity within the process lifetime"
+        },
+        {
+          "target": "Sysmon 11",
+          "key": "ImageLoaded ↔ TargetFilename + time",
+          "purpose": "correlate a loaded module with prior creation or overwrite of the same file when FileCreate telemetry is available",
+          "limitation": "Path normalization, rename operations, and collection filters can prevent a direct match."
+        },
+        {
+          "target": "Windows Security 4688",
+          "key": "ProcessId + Image + time",
+          "purpose": "corroborate Windows process creation context outside Sysmon",
+          "limitation": "PID values can be reused; Sysmon ProcessGuid remains the preferred in-Sysmon process key."
+        }
+      ],
+      "analysis": [
+        "Investigate modules loaded from user-writable, temporary, uncommon, or application-inconsistent paths when the surrounding execution context makes the load unexpected.",
+        "Use Hashes, Signature, SignatureStatus, Company, Product, OriginalFileName, and ImageLoaded together rather than treating any single metadata field as a malicious verdict.",
+        "Pivot by ProcessGuid to process creation, network, DNS, process-access, and lifecycle telemetry when those events are collected.",
+        "Treat Event 7 as module-load observation telemetry; common operating-system and application modules generate legitimate events at high volume."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the image-load event when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the image-load event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID for the process into which the module was loaded.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the image load.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the process receiving the module load."
+        },
+        {
+          "key": "imageloaded",
+          "section": "Loaded Image",
+          "native_name": "ImageLoaded",
+          "type": "UnicodeString/path",
+          "meaning": "Path of the module or image recorded as loaded into the process."
+        },
+        {
+          "key": "fileversion",
+          "section": "Loaded Image Metadata",
+          "native_name": "FileVersion",
+          "type": "UnicodeString",
+          "meaning": "File-version metadata recorded for the loaded image when available."
+        },
+        {
+          "key": "description",
+          "section": "Loaded Image Metadata",
+          "native_name": "Description",
+          "type": "UnicodeString",
+          "meaning": "File-description metadata recorded for the loaded image when available."
+        },
+        {
+          "key": "product",
+          "section": "Loaded Image Metadata",
+          "native_name": "Product",
+          "type": "UnicodeString",
+          "meaning": "Product-name metadata recorded for the loaded image when available."
+        },
+        {
+          "key": "company",
+          "section": "Loaded Image Metadata",
+          "native_name": "Company",
+          "type": "UnicodeString",
+          "meaning": "Company or publisher metadata recorded for the loaded image when available."
+        },
+        {
+          "key": "originalfilename",
+          "section": "Loaded Image Metadata",
+          "native_name": "OriginalFileName",
+          "type": "UnicodeString",
+          "meaning": "Original filename metadata embedded in the loaded image when available."
+        },
+        {
+          "key": "hashes",
+          "section": "Loaded Image Integrity",
+          "native_name": "Hashes",
+          "type": "UnicodeString/hash set",
+          "meaning": "Configured cryptographic hash values recorded for the loaded image.",
+          "correlation": "Use as a content pivot where algorithm and value are available."
+        },
+        {
+          "key": "signed",
+          "section": "Loaded Image Trust",
+          "native_name": "Signed",
+          "type": "UnicodeString",
+          "meaning": "Sysmon signature-status indicator recorded for the loaded image."
+        },
+        {
+          "key": "signature",
+          "section": "Loaded Image Trust",
+          "native_name": "Signature",
+          "type": "UnicodeString",
+          "meaning": "Signature or signer-related value recorded by Sysmon for the loaded image when available."
+        },
+        {
+          "key": "signaturestatus",
+          "section": "Loaded Image Trust",
+          "native_name": "SignatureStatus",
+          "type": "UnicodeString",
+          "meaning": "Signature evaluation status recorded by Sysmon for the loaded image."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the process receiving the image load."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
