@@ -324,21 +324,21 @@ Status: **BLOCKED**
 
 ### Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion
 
-Status: **APPROVED / IMPLEMENTATION REQUIRED**
+Status: **ACTIVE / IMPLEMENTATION IN PROGRESS**
 
-The current Engineering Usable Data Preview is a fixture-based proof of the runtime, not the complete Windows corpus.
+The current Engineering Usable Data Preview is a fixture-based proof of the runtime, not the complete Windows corpus. PR #79 promoted Windows Security Event `4688` to encyclopedia-grade content, and PR #81 promoted the reviewed Sysmon 15.22/schema 4.91 controlled reference baseline.
 
 Measured current engineering-pack baseline:
 
-- 178 canonical records (`64` entities, `58` claims, `50` relationships, `6` sources);
+- 230 canonical records (`79` entities, `79` claims, `65` relationships, `7` sources);
 - 16 search projections;
 - 3 graph edges;
 - packaged Windows examples: Event IDs `4624` and `4688`;
 - packaged Sysmon examples: Event IDs `1` and `3`;
-- encyclopedia-grade approved exemplars: Windows `4624` and Sysmon `3`;
+- encyclopedia-grade approved exemplars: Windows `4624`, Windows `4688`, and Sysmon `3`;
 - `public_preview_corpus=false`.
 
-The pinned Sysmon 15.22 semantic documentation profile documents 30 Event IDs (`1..29` plus `255`). Sysmon Event `3` is the first approved encyclopedia-grade exemplar; the remaining 29 documented IDs still require encyclopedia-grade materialization before full Sysmon corpus coverage can be claimed. Event `1` remains packaged engineering data but does not count toward the encyclopedia-grade release numerator until it meets the same content contract.
+The pinned Sysmon 15.22 semantic documentation profile and the promoted controlled Sysmon 15.22/schema 4.91 telemetry baseline agree on 30 current Event IDs (`1..29` plus `255`). Reference-host workflow run `35413291632` validated 24 schema manifests and 587 parsed schema records with no structural drift from the prior promoted baseline. Sysmon Event `3` is currently encyclopedia-grade; the remaining 29 documented/current IDs still require encyclopedia-grade materialization before full Sysmon corpus coverage can be claimed. Event `1` remains packaged engineering data but does not count toward the encyclopedia-grade release numerator until it meets the same content contract.
 
 Windows Security/Event Log coverage must first freeze an explicit provider/channel/version denominator. "All Windows Event IDs" is not a valid completion metric until the target providers/channels and versions are machine-readable.
 
