@@ -1,0 +1,75 @@
+{
+  "coverage_contract_version": "1.0.0",
+  "as_of": "2026-09-19",
+  "overall_state": "IN_PROGRESS",
+  "global_windows_denominator_frozen": false,
+  "global_windows_completion_percent": null,
+  "completion_rule": "A telemetry family may be declared complete only after its provider/channel/version denominator is frozen and every required identity reaches the declared encyclopedia-grade and release acceptance level. No family-specific percentage may be presented as all-Windows completeness.",
+  "families": [
+    {
+      "id": "windows-security-auditing",
+      "name": "Windows Security Auditing",
+      "state": "ACTIVE_DENOMINATOR_FROZEN",
+      "denominator_scope": "Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296",
+      "snapshot": "content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json",
+      "denominator_count": 423,
+      "encyclopedia_grade_count": 2,
+      "remaining_count": 421
+    },
+    {
+      "id": "sysmon",
+      "name": "Microsoft Sysinternals Sysmon",
+      "state": "ACTIVE_DENOMINATOR_FROZEN",
+      "denominator_scope": "Sysmon 15.22 documented/current Event IDs with controlled schema 4.91 reference evidence",
+      "snapshot": "content/encyclopedia/sysmon-15.22-coverage.snapshot.json",
+      "denominator_count": 30,
+      "encyclopedia_grade_count": 2,
+      "remaining_count": 28
+    },
+    {
+      "id": "powershell-operational",
+      "name": "PowerShell Operational",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "windows-defender",
+      "name": "Windows Defender",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "applocker",
+      "name": "AppLocker",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "wmi-activity",
+      "name": "WMI Activity",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "task-scheduler-operational",
+      "name": "Task Scheduler Operational",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "rdp-terminal-services",
+      "name": "RDP / Terminal Services",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "windows-firewall-filtering-platform",
+      "name": "Windows Firewall / Filtering Platform",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "dns",
+      "name": "DNS Client / DNS Server",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "service-persistence",
+      "name": "Service / persistence telemetry",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    }
+  ]
+}
