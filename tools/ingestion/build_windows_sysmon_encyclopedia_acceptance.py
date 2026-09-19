@@ -106,7 +106,7 @@ def build_acceptance_corpus() -> dict:
 
     sysmon_mapping = load("ingestion/mappings/microsoft-sysmon-docs-v1.json")
     sysmon_release = load("ingestion/source-profiles/microsoft-sysmon-docs.release.json")
-    sysmon_inventory = load("ingestion/inventories/sysmon-schema-15.21-4.91.telemetry.json")
+    sysmon_inventory = load("ingestion/inventories/sysmon-schema-15.22-4.91.telemetry.json")
     sysmon_doc_inventory = load("ingestion/inventories/sysmon-docs-15.22.documentation.json")
     sysmon_markdown = (ROOT / "fixtures/phase-5.3/sysmon-docs.synthetic.md").read_text(encoding="utf-8")
     sysmon_psr = sysmon_parser.parse_markdown(

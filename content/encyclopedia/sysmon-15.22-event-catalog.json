@@ -8,37 +8,197 @@
   "provider": "Microsoft-Windows-Sysmon",
   "platform": "Windows",
   "product": "Sysmon",
-  "coverage_state": "SEMANTIC_PENDING_15_22_SCHEMA_FIELD_REFRESH",
+  "coverage_state": "SEMANTIC_CURRENT_15_22_SCHEMA_REFERENCE_VALIDATED",
   "events": [
-    {"id":"1","title":"Process creation","tag":"ProcessCreate","summary":"Records a newly created process with extended execution context such as command line, ProcessGuid and configured file hashes."},
-    {"id":"2","title":"A process changed a file creation time","tag":"FileCreateTime","summary":"Records explicit modification of a file creation timestamp and preserves timing context useful for detecting timestamp manipulation while acknowledging legitimate changes."},
-    {"id":"3","title":"Network connection","tag":"NetworkConnect","summary":"Records process-associated TCP and UDP network connections with source and destination network context.","default_state":"disabled"},
-    {"id":"4","title":"Sysmon service state changed","tag":null,"summary":"Reports Sysmon service state transitions such as service start and stop."},
-    {"id":"5","title":"Process terminated","tag":"ProcessTerminate","summary":"Records process termination with process identity and UTC timing context."},
-    {"id":"6","title":"Driver loaded","tag":"DriverLoad","summary":"Records driver load activity with configured hashes and signature-related information."},
-    {"id":"7","title":"Image loaded","tag":"ImageLoad","summary":"Records a module or image being loaded into a process, including process, hash and signature context; collection can be high-volume.","default_state":"disabled"},
-    {"id":"8","title":"CreateRemoteThread","tag":"CreateRemoteThread","summary":"Records creation of a thread in another process, including source/target process context and available thread start-address/module/function information."},
-    {"id":"9","title":"RawAccessRead","tag":"RawAccessRead","summary":"Records raw read access to disks or volumes using raw-device paths and identifies the source process and target device."},
-    {"id":"10","title":"ProcessAccess","tag":"ProcessAccess","summary":"Records one process opening another process, providing telemetry useful for investigating memory access and process-manipulation activity; filtering is important in noisy environments."},
-    {"id":"11","title":"FileCreate","tag":"FileCreate","summary":"Records file creation and overwrite operations, supporting monitoring of persistence, temporary, download and other security-relevant locations."},
-    {"id":"12","title":"RegistryEvent (Object create and delete)","tag":"RegistryEvent","summary":"Records Registry key and value create/delete operations, useful for monitoring persistence and other configuration changes."},
-    {"id":"13","title":"RegistryEvent (Value Set)","tag":"RegistryEvent","summary":"Records Registry value modifications and captures written values for supported Registry data types such as DWORD and QWORD."},
-    {"id":"14","title":"RegistryEvent (Key and Value Rename)","tag":"RegistryEvent","summary":"Records Registry key and value rename operations and the resulting name."},
-    {"id":"15","title":"FileCreateStreamHash","tag":"FileCreateStreamHash","summary":"Records creation of named file streams and hashes relevant file and stream content, including alternate-data-stream scenarios such as Zone.Identifier."},
-    {"id":"16","title":"ServiceConfigurationChange","tag":null,"summary":"Records changes to Sysmon configuration, including updates to filtering rules."},
-    {"id":"17","title":"PipeEvent (Pipe Created)","tag":"PipeEvent","summary":"Records creation of a named pipe for interprocess communication."},
-    {"id":"18","title":"PipeEvent (Pipe Connected)","tag":"PipeEvent","summary":"Records a named-pipe connection between client and server endpoints."},
-    {"id":"19","title":"WmiEvent (WmiEventFilter activity detected)","tag":"WmiEvent","summary":"Records WMI event-filter registration with namespace, filter name and expression context."},
-    {"id":"20","title":"WmiEvent (WmiEventConsumer activity detected)","tag":"WmiEvent","summary":"Records registration of a WMI event consumer and associated consumer/destination context."},
-    {"id":"21","title":"WmiEvent (WmiEventConsumerToFilter activity detected)","tag":"WmiEvent","summary":"Records binding of a WMI consumer to an event filter."},
-    {"id":"22","title":"DNSEvent (DNS query)","tag":"DnsQuery","summary":"Records process DNS queries whether successful or failed and whether cached or not; this telemetry is available on supported Windows generations beginning with Windows 8.1."},
-    {"id":"23","title":"FileDelete (File Delete archived)","tag":"FileDelete","summary":"Records file deletion and additionally archives the deleted file in the configured archive directory."},
-    {"id":"24","title":"ClipboardChange (New content in the clipboard)","tag":"ClipboardChange","summary":"Records changes to system clipboard content."},
-    {"id":"25","title":"ProcessTampering (Process image change)","tag":"ProcessTampering","summary":"Records detection of supported process-image tampering/hiding techniques such as process hollowing or herpaderp-style behavior."},
-    {"id":"26","title":"FileDeleteDetected (File Delete logged)","tag":"FileDeleteDetected","summary":"Records file deletion without archiving the deleted file."},
-    {"id":"27","title":"FileBlockExecutable","tag":"FileBlockExecutable","summary":"Records Sysmon detecting and blocking creation of executable PE files under configured policy."},
-    {"id":"28","title":"FileBlockShredding","tag":"FileBlockShredding","summary":"Records Sysmon detecting and blocking file-shredding activity under configured policy."},
-    {"id":"29","title":"FileExecutableDetected","tag":"FileExecutableDetected","summary":"Records detection of creation of a new executable PE file."},
-    {"id":"255","title":"Error","tag":null,"summary":"Reports internal Sysmon errors or conditions that prevented expected work, including heavy-load, implementation, security or integrity-related failures."}
-  ]
+    {
+      "id": "1",
+      "title": "Process creation",
+      "tag": "ProcessCreate",
+      "summary": "Records a newly created process with extended execution context such as command line, ProcessGuid and configured file hashes."
+    },
+    {
+      "id": "2",
+      "title": "A process changed a file creation time",
+      "tag": "FileCreateTime",
+      "summary": "Records explicit modification of a file creation timestamp and preserves timing context useful for detecting timestamp manipulation while acknowledging legitimate changes."
+    },
+    {
+      "id": "3",
+      "title": "Network connection",
+      "tag": "NetworkConnect",
+      "summary": "Records process-associated TCP and UDP network connections with source and destination network context.",
+      "default_state": "disabled"
+    },
+    {
+      "id": "4",
+      "title": "Sysmon service state changed",
+      "tag": null,
+      "summary": "Reports Sysmon service state transitions such as service start and stop."
+    },
+    {
+      "id": "5",
+      "title": "Process terminated",
+      "tag": "ProcessTerminate",
+      "summary": "Records process termination with process identity and UTC timing context."
+    },
+    {
+      "id": "6",
+      "title": "Driver loaded",
+      "tag": "DriverLoad",
+      "summary": "Records driver load activity with configured hashes and signature-related information."
+    },
+    {
+      "id": "7",
+      "title": "Image loaded",
+      "tag": "ImageLoad",
+      "summary": "Records a module or image being loaded into a process, including process, hash and signature context; collection can be high-volume.",
+      "default_state": "disabled"
+    },
+    {
+      "id": "8",
+      "title": "CreateRemoteThread",
+      "tag": "CreateRemoteThread",
+      "summary": "Records creation of a thread in another process, including source/target process context and available thread start-address/module/function information."
+    },
+    {
+      "id": "9",
+      "title": "RawAccessRead",
+      "tag": "RawAccessRead",
+      "summary": "Records raw read access to disks or volumes using raw-device paths and identifies the source process and target device."
+    },
+    {
+      "id": "10",
+      "title": "ProcessAccess",
+      "tag": "ProcessAccess",
+      "summary": "Records one process opening another process, providing telemetry useful for investigating memory access and process-manipulation activity; filtering is important in noisy environments."
+    },
+    {
+      "id": "11",
+      "title": "FileCreate",
+      "tag": "FileCreate",
+      "summary": "Records file creation and overwrite operations, supporting monitoring of persistence, temporary, download and other security-relevant locations."
+    },
+    {
+      "id": "12",
+      "title": "RegistryEvent (Object create and delete)",
+      "tag": "RegistryEvent",
+      "summary": "Records Registry key and value create/delete operations, useful for monitoring persistence and other configuration changes."
+    },
+    {
+      "id": "13",
+      "title": "RegistryEvent (Value Set)",
+      "tag": "RegistryEvent",
+      "summary": "Records Registry value modifications and captures written values for supported Registry data types such as DWORD and QWORD."
+    },
+    {
+      "id": "14",
+      "title": "RegistryEvent (Key and Value Rename)",
+      "tag": "RegistryEvent",
+      "summary": "Records Registry key and value rename operations and the resulting name."
+    },
+    {
+      "id": "15",
+      "title": "FileCreateStreamHash",
+      "tag": "FileCreateStreamHash",
+      "summary": "Records creation of named file streams and hashes relevant file and stream content, including alternate-data-stream scenarios such as Zone.Identifier."
+    },
+    {
+      "id": "16",
+      "title": "ServiceConfigurationChange",
+      "tag": null,
+      "summary": "Records changes to Sysmon configuration, including updates to filtering rules."
+    },
+    {
+      "id": "17",
+      "title": "PipeEvent (Pipe Created)",
+      "tag": "PipeEvent",
+      "summary": "Records creation of a named pipe for interprocess communication."
+    },
+    {
+      "id": "18",
+      "title": "PipeEvent (Pipe Connected)",
+      "tag": "PipeEvent",
+      "summary": "Records a named-pipe connection between client and server endpoints."
+    },
+    {
+      "id": "19",
+      "title": "WmiEvent (WmiEventFilter activity detected)",
+      "tag": "WmiEvent",
+      "summary": "Records WMI event-filter registration with namespace, filter name and expression context."
+    },
+    {
+      "id": "20",
+      "title": "WmiEvent (WmiEventConsumer activity detected)",
+      "tag": "WmiEvent",
+      "summary": "Records registration of a WMI event consumer and associated consumer/destination context."
+    },
+    {
+      "id": "21",
+      "title": "WmiEvent (WmiEventConsumerToFilter activity detected)",
+      "tag": "WmiEvent",
+      "summary": "Records binding of a WMI consumer to an event filter."
+    },
+    {
+      "id": "22",
+      "title": "DNSEvent (DNS query)",
+      "tag": "DnsQuery",
+      "summary": "Records process DNS queries whether successful or failed and whether cached or not; this telemetry is available on supported Windows generations beginning with Windows 8.1."
+    },
+    {
+      "id": "23",
+      "title": "FileDelete (File Delete archived)",
+      "tag": "FileDelete",
+      "summary": "Records file deletion and additionally archives the deleted file in the configured archive directory."
+    },
+    {
+      "id": "24",
+      "title": "ClipboardChange (New content in the clipboard)",
+      "tag": "ClipboardChange",
+      "summary": "Records changes to system clipboard content."
+    },
+    {
+      "id": "25",
+      "title": "ProcessTampering (Process image change)",
+      "tag": "ProcessTampering",
+      "summary": "Records detection of supported process-image tampering/hiding techniques such as process hollowing or herpaderp-style behavior."
+    },
+    {
+      "id": "26",
+      "title": "FileDeleteDetected (File Delete logged)",
+      "tag": "FileDeleteDetected",
+      "summary": "Records file deletion without archiving the deleted file."
+    },
+    {
+      "id": "27",
+      "title": "FileBlockExecutable",
+      "tag": "FileBlockExecutable",
+      "summary": "Records Sysmon detecting and blocking creation of executable PE files under configured policy."
+    },
+    {
+      "id": "28",
+      "title": "FileBlockShredding",
+      "tag": "FileBlockShredding",
+      "summary": "Records Sysmon detecting and blocking file-shredding activity under configured policy."
+    },
+    {
+      "id": "29",
+      "title": "FileExecutableDetected",
+      "tag": "FileExecutableDetected",
+      "summary": "Records detection of creation of a new executable PE file."
+    },
+    {
+      "id": "255",
+      "title": "Error",
+      "tag": null,
+      "summary": "Reports internal Sysmon errors or conditions that prevented expected work, including heavy-load, implementation, security or integrity-related failures."
+    }
+  ],
+  "reference_validation": {
+    "state": "VALIDATED",
+    "workflow_run_id": 35413291632,
+    "sysmon_version": "15.22",
+    "schema_version": "4.91",
+    "current_event_count": 30,
+    "psr_representation_digest": "sha256-c197671929ae30b6311b6d427a7c0f0248c6353944845ad87a977c8088347c22"
+  }
 }

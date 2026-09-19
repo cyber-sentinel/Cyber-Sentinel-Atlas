@@ -17,7 +17,7 @@ SPEC.loader.exec_module(foundation)
 INVENTORY_PATHS = {
     "windows_provider": ROOT / "ingestion/inventories/windows-security-auditing-provider-26100.33296.telemetry.json",
     "windows_4688_docs": ROOT / "ingestion/inventories/windows-security-4688-doc-learn-page-2022-01-24.documentation.json",
-    "sysmon_schema": ROOT / "ingestion/inventories/sysmon-schema-15.21-4.91.telemetry.json",
+    "sysmon_schema": ROOT / "ingestion/inventories/sysmon-schema-15.22-4.91.telemetry.json",
     "sysmon_docs": ROOT / "ingestion/inventories/sysmon-docs-15.22.documentation.json",
 }
 
@@ -87,7 +87,7 @@ def reconcile(inventories: dict[str, dict]) -> dict:
         errors.append("legacy acceptance identity 592 unexpectedly appears in the declared current provider inventory")
 
     if sysmon_docs != sysmon_schema:
-        errors.append("Sysmon 15.22 documentation and controlled Sysmon 15.21/schema 4.91 identity sets drifted")
+        errors.append("Sysmon 15.22 documentation and controlled Sysmon 15.22/schema 4.91 identity sets drifted")
     if "1" not in sysmon_schema:
         errors.append("Sysmon acceptance identity 1 is missing from the current schema inventory")
 
@@ -134,7 +134,7 @@ def validate_repository(root: Path = ROOT) -> tuple[list[str], dict]:
     INVENTORY_PATHS = {
         "windows_provider": ROOT / "ingestion/inventories/windows-security-auditing-provider-26100.33296.telemetry.json",
         "windows_4688_docs": ROOT / "ingestion/inventories/windows-security-4688-doc-learn-page-2022-01-24.documentation.json",
-        "sysmon_schema": ROOT / "ingestion/inventories/sysmon-schema-15.21-4.91.telemetry.json",
+        "sysmon_schema": ROOT / "ingestion/inventories/sysmon-schema-15.22-4.91.telemetry.json",
         "sysmon_docs": ROOT / "ingestion/inventories/sysmon-docs-15.22.documentation.json",
     }
     inventories = {name: load(path) for name, path in INVENTORY_PATHS.items()}
