@@ -3052,6 +3052,149 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:22",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "22",
+      "title": "Sysmon Event 22 — DNSEvent (DNS query)",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "22",
+      "aliases": [
+        "22",
+        "Sysmon 22",
+        "Sysmon Event 22",
+        "DNSEvent",
+        "DNS query"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 22: DNSEvent (DNS query)",
+      "schema_locator": "SYSMONEVENT_DNS_QUERY",
+      "overview": {
+        "summary": "Records process-associated DNS query activity, including query name, result/status context and stable Sysmon process identity.",
+        "event_class": "DNS Activity",
+        "configuration_tag": "DnsQuery",
+        "schema_event_version": 5,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "applicability": "Sysmon DNS query telemetry is documented for Windows 8.1 and later and is not available on Windows 7 and earlier.",
+        "security_value": [
+          "attribute DNS queries to a process using ProcessGuid",
+          "identify unusual domains, repeated failures, encoded-looking names, or process/domain combinations when context warrants investigation",
+          "correlate DNS activity with process, network and lifecycle telemetry",
+          "preserve successful, failed and cached query observations without equating a domain lookup with malicious communication"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active DnsQuery filtering policy must preserve DNS telemetry required by the investigation.",
+          "The operating system must support Sysmon DNS query telemetry; the official documentation states Windows 8.1 or later."
+        ],
+        "interpretation_note": "DNS queries are ubiquitous. Evaluate QueryName, QueryStatus, QueryResults, Image, User and process/network context together rather than treating a lookup as a malicious verdict."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "resolve process creation, command line, parent, hashes and user context for the querying process"
+        },
+        {
+          "target": "Sysmon 3",
+          "key": "ProcessGuid + destination/time context",
+          "purpose": "review network connections from the same process around the DNS query",
+          "limitation": "A DNS query and a later connection do not by themselves prove that the returned name/address caused that connection."
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "bound DNS activity within the process lifetime"
+        },
+        {
+          "target": "DNS resolver/server telemetry",
+          "key": "QueryName + result + time + host",
+          "purpose": "corroborate resolver-side observations when enterprise DNS logging is available",
+          "scope": "External/out-of-scope telemetry until a corresponding ATLAS source denominator is frozen."
+        }
+      ],
+      "analysis": [
+        "Prioritize unexpected domains queried by sensitive processes, scripting engines, LOLBins, unsigned/user-writable executables, or applications that normally do not perform DNS resolution.",
+        "Review repeated failures, rare domains, unusually long or encoded-looking labels, and query/result changes only with surrounding process and network evidence.",
+        "Use ProcessGuid as the stable in-Sysmon process pivot and preserve OS applicability when comparing hosts.",
+        "Treat Event 22 as DNS observation telemetry, not proof that a queried domain is malicious or that a subsequent connection occurred."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon DnsQuery filter when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the DNS query event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID identifying the querying process.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the query.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "queryname",
+          "section": "DNS Query",
+          "native_name": "QueryName",
+          "type": "UnicodeString",
+          "meaning": "DNS name queried by the process."
+        },
+        {
+          "key": "querystatus",
+          "section": "DNS Query",
+          "native_name": "QueryStatus",
+          "type": "UnicodeString/status",
+          "meaning": "Status information recorded by Sysmon for the DNS query."
+        },
+        {
+          "key": "queryresults",
+          "section": "DNS Query",
+          "native_name": "QueryResults",
+          "type": "UnicodeString",
+          "meaning": "Result information recorded for the DNS query, when available."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the querying process."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the querying process."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
