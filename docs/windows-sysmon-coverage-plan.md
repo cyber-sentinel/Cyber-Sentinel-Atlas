@@ -1,6 +1,6 @@
 # Windows & Sysmon Knowledge Coverage Plan
 
-Status: **APPROVED MANDATORY WINDOWS SECURITY CORPUS / IMPLEMENTATION REQUIRED**
+Status: **ACTIVE MANDATORY WINDOWS SECURITY CORPUS / IMPLEMENTATION IN PROGRESS**
 
 ## Objective
 
@@ -21,19 +21,21 @@ The objective is not merely to store Event IDs. Each covered item must answer, w
 
 ## Current measured baseline
 
-The latest downloaded Engineering Usable Data Preview evidence reports:
+The current engineering-preview builder and merged Phase 5.10.10 content report:
 
 | Measure | Current engineering pack |
 | --- | ---: |
-| Canonical records | 23 |
-| Search projections | 14 |
+| Canonical records | 230 (`79` entities / `79` claims / `65` relationships / `7` sources) |
+| Search projections | 16 |
 | Graph edges | 3 |
-| Windows Security IDs end-to-end acceptance-tested | 1 (`4688`) |
-| Sysmon IDs end-to-end acceptance-tested | 1 (`1`) |
+| Packaged Windows Security examples | 2 (`4624`, `4688`) |
+| Packaged Sysmon examples | 2 (`1`, `3`) |
+| Encyclopedia-grade exemplars | 3 (`4624`, `4688`, Sysmon `3`) |
+| Clean-Windows acceptance evidence | Windows `4688` + Sysmon `1` |
 | Public Preview corpus | No |
 | Pack scope | `engineering-preview-fixture-only` |
 
-For Sysmon 15.21, the pinned source profile lists 30 documented event IDs (`1..29`, `255`). Therefore 29 documented IDs remain outside the current packaged end-to-end acceptance guarantee.
+The controlled Sysmon `15.22` / schema `4.91` reference baseline is now **VALIDATED / OPERATOR REVIEWED / PROMOTED**. Reference workflow run `35413291632` produced `24` schema manifests and `587` parsed records, with `30` current Event IDs and no observed structural drift from the previous promoted baseline. Sysmon Event `3` is encyclopedia-grade; **29 Sysmon Event IDs remain** to reach the same content-depth contract.
 
 No honest percentage is assigned yet to "all Windows Event IDs" because Windows event telemetry spans many providers/channels and the exhaustive denominator has not yet been frozen.
 
