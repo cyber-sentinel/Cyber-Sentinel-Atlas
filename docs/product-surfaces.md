@@ -85,21 +85,22 @@ This sequence is a dependency order, not a calendar commitment.
 
 ## Windows knowledge coverage boundary
 
-The current Engineering Usable Data Preview proves the runtime and packaged analyst flow, but it is **not** the complete Windows knowledge corpus.
+The Engineering Usable Data Preview proves the runtime and packaged analyst flow, but it is **not** the complete Windows knowledge corpus. Public Preview corpus authority remains fail-closed.
 
-Current packaged engineering evidence:
+The current Phase 5.10.10 coverage control plane freezes two bounded denominators:
 
-- `23` canonical records;
-- `14` search projections;
-- `3` graph edges;
-- Windows Security Event ID `4688` end-to-end verified;
-- Sysmon Event ID `1` end-to-end verified;
-- engineering pack scope: `engineering-preview-fixture-only`;
-- `public_preview_corpus=false`.
+| Family | Frozen scope | Encyclopedia grade | Remaining |
+| --- | --- | ---: | ---: |
+| Windows Security Auditing | `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296` — 423 unique Event IDs / 488 provider event-version definitions | `2/423` — Event IDs `4624`, `4688` | 421 |
+| Sysmon | Sysmon `15.22`, 30 documented/current Event IDs with controlled schema `4.91` reference evidence | `2/30` — Event IDs `1`, `3` | 28 |
 
-The pinned Sysmon 15.21 source profile documents 30 event IDs: `1..29` plus `255`. Current packaged acceptance guarantees Event ID `1`; full Sysmon event-ID coverage therefore still requires 29 additional documented event IDs to be represented, provenance-bound and acceptance-tested.
+The authoritative machine-readable ledger is `content/encyclopedia/coverage-manifest.json`.
 
-Windows Security/Event Log coverage does not yet have an approved exhaustive denominator. "All Windows Event IDs" spans multiple providers/channels and cannot be represented honestly by one unqualified percentage. Coverage must first be frozen by provider/channel/version and then measured through machine-readable coverage snapshots.
+The global Windows denominator is deliberately **not frozen** and `global_windows_completion_percent` remains null. PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, and Service/persistence telemetry still require their own controlled provider/channel/version denominators.
+
+ATLAS therefore does not publish an unqualified "all Windows Event IDs" completion percentage.
+
+The engineering package remains a controlled preview surface and does not become Public Preview corpus authority merely because individual records reach `ENCYCLOPEDIA_GRADE`.
 
 ## Required coverage completion model
 

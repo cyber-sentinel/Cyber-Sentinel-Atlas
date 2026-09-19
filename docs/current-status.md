@@ -6,7 +6,9 @@ Status timestamp: 2026-09-19
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Latest reviewed engineering/control-plane baseline: `9ca62250a240f3f954ca5ec42f345b75dfc9aeb7` — PR #72 merged after Sysmon 15.22 documentation refresh and approved 4624/Sysmon 3 exemplar materialization.
+- Latest merged engineering/control-plane baseline: `4bfe222eb708347ea0769da400c40dbdaf289b69` — PR #85 merged Sysmon Event 1 encyclopedia-grade content and the frozen Windows/Sysmon coverage ledger.
+- PR #85 exact-head: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene run `35429390496`, Phase 5.3.4 Canaries run `35429390498`, and Phase 5.10.5 Usable Data Preview run `35429390479`: **SUCCESS**.
+- Post-merge verification on `main@4bfe222eb708347ea0769da400c40dbdaf289b69`: **SUCCESS** — Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` all completed successfully.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
@@ -20,6 +22,14 @@ Status timestamp: 2026-09-19
 - Phase 5.10.10 Sysmon semantic documentation refresh to 15.22: PR #67 — **MERGED / CI GREEN**
 - Phase 5.10.10 approved production exemplars (Windows 4624 + Sysmon 3): PR #70 — **MERGED / CI GREEN**
 - Phase 5.10.10 bounded encyclopedia Record Detail + hidden Windows sidecar: PR #72 — **MERGED / ALL APPLICABLE CI GREEN**
+- Phase 5.10.10 product-family / corpus / UX authoritative sync: PR #75 — **MERGED**
+- Phase 5.10.10 controlled Sysmon 15.22 reference-host collection: PR #76 — **MERGED**
+- Phase 5.10.10 Sysmon 15.22 coverage snapshot: PR #78 — **MERGED**
+- Phase 5.10.10 Windows Event 4688 encyclopedia-grade promotion: PR #79 — **MERGED**
+- Phase 5.10.3 exact package-binding hardening: PR #80 — **MERGED**
+- Phase 5.10.10 validated Sysmon 15.22 schema-baseline promotion: PR #81 — **MERGED**
+- Phase 5.10.10 Sysmon schema-evidence binding fix: PR #83 — **MERGED**
+- Phase 5.10.10 Sysmon Event 1 encyclopedia promotion + coverage ledger freeze: PR #85 — **MERGED / EXACT-HEAD CI GREEN**; stacked PR #87 integrated before final verification
 - Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
@@ -41,6 +51,8 @@ Status timestamp: 2026-09-19
 - Desktop host: **Tauri 2.x** — ADR-0026 Accepted
 
 `main` is the release authority. Phase 5.6 completed implementation, regression closure, merge, post-merge package/smoke verification, and documentation closure. `FIRST PREVIEW READY` denotes engineering readiness only; no signed Public Preview or GA release is claimed.
+
+Project continuity is now explicitly repository-backed. [`AGENTS.md`](../AGENTS.md) defines the contributor/agent execution contract, [`docs/operations/agent-engineering-operating-model.md`](operations/agent-engineering-operating-model.md) defines interim and future multi-agent execution, and [`docs/operations/session-handoff-guide.md`](operations/session-handoff-guide.md) defines the minimum durable handoff state. CI runners remain verification infrastructure rather than autonomous development nodes.
 
 The First Preview package evidence remains bound to `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`. Subsequent control-plane and release-governance work does not change those verified package bytes or the frozen Phase 5.5/5.6 architecture.
 
@@ -94,15 +106,17 @@ Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that 
   - freeze merge baseline: `main@3b37694abcd29919f1cf0a30ed430a8975245411`
   - visual identity: **OPEN BY DESIGN** for logo/banner/theme/non-behavioral polish
 - Phase 5.10.8 — PPR-04 Notice / Package Binding Automation: **COMPLETE / MERGED**
-- Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion: **APPROVED / IMPLEMENTATION REQUIRED**
-  - current engineering preview artifact: `178` canonical records = `64` entities + `58` claims + `50` relationships + `6` sources
-  - search projections: `16`; graph edges: `3`; encyclopedia-grade exemplar count: `2`
-  - packaged Windows Security examples: Event IDs `4624` and `4688`
-  - packaged Sysmon examples: Event IDs `1` and `3`
-  - pinned Sysmon semantic documentation: `15.22`; documented denominator: `30` IDs (`1..29`, `255`)
-  - controlled Sysmon telemetry-schema refresh to 15.22: **REFERENCE-HOST EXPORT TRIGGERED / VALIDATION PENDING**
-  - exhaustive Windows provider/channel/version denominator: **NOT YET FROZEN**
-  - mandatory corpus families: Security-Auditing, Sysmon, PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
+- Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion: **ACTIVE / CONTROLLED COVERAGE EXPANSION**
+  - Windows Security Auditing denominator: **FROZEN** to `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296`
+  - Windows Security denominator: `423` unique Event IDs / `488` provider event-version definitions
+  - Windows Security encyclopedia-grade: `2/423` — Event IDs `4624`, `4688`; remaining `421`
+  - Sysmon semantic release: `15.22`; controlled structural schema: `4.91`
+  - Sysmon denominator: `30`; encyclopedia-grade: `2/30` — Event IDs `1`, `3`; remaining `28`
+  - machine-readable coverage authority: `content/encyclopedia/coverage-manifest.json`
+  - global Windows denominator: **NOT FROZEN**
+  - global Windows completion percentage: **intentionally undefined**
+  - remaining mandatory families without frozen denominators: PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
+  - Public Preview corpus authority: **NOT GRANTED**
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers are retained because frozen architecture validators use them to prove lifecycle continuity across later phases.
 

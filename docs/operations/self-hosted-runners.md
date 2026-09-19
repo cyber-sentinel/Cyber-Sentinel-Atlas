@@ -1,12 +1,32 @@
 # Atlas Self-Hosted GitHub Actions Runners
 
-Status: implementation preparation
+Status: **ACTIVE / OPERATIONAL**
 
 ## Decision
 
-Atlas keeps the private GitHub repository as the source of truth and moves CI compute from GitHub-hosted runners to two organization-owned, repository-scoped self-hosted runners.
+ATLAS keeps GitHub as the source of truth and uses two repository-scoped self-hosted runners for the required Linux and Windows CI workloads.
 
 This is an operational change only. It does not change the canonical data model, search contracts, pack trust model, ADR-0024 technology selection, ADR-0025 local interface boundary, or Merge Commit governance.
+
+## Role separation: CI runners are not agent nodes
+
+`ATLAS-CI-LNX01` and `ATLAS-CI-WIN01` are verification/build infrastructure. They are not the persistent development workspace for Codex or other autonomous implementation agents.
+
+The supported separation is:
+
+```text
+Technical Lead / Agent Orchestrator
+        ↓
+isolated development worktree/container
+        ↓
+GitHub branch / PR
+        ↓
+ATLAS-CI-LNX01 + ATLAS-CI-WIN01
+        ↓
+CI evidence / package evidence
+```
+
+A future dedicated Agent Control Node is a separate host and is governed by [`agent-engineering-operating-model.md`](agent-engineering-operating-model.md). General-purpose agent credentials, long-running development state, or production secrets must not be moved onto CI runners merely to gain persistence.
 
 ## Hosts
 
