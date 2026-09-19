@@ -5,7 +5,7 @@
   "title": "Public Preview Readiness Baseline",
   "release_authority": "main",
   "first_preview_release_baseline": "70afc6fdb9e5ce88afdb0dd4de139aa659606f1e",
-  "control_plane_baseline": "d1efb549c1b651b58052a616bba82a3b146c0d6e",
+  "control_plane_baseline": "c5de34267e6c5a620d581efab7400ae50da341e7",
   "overall_state": "ACTIVE",
   "public_preview_state": "BLOCKED",
   "gates": [
@@ -49,7 +49,7 @@
       "name": "Public packaging and distribution hardening",
       "mandatory": true,
       "state": "BLOCKED",
-      "evidence": "Signed portable ZIP and GitHub Releases are selected in public-preview-release-decisions.md and public-packaging-readiness.json; PPR-06 remains BLOCKED pending exact production-signed package, clean-Windows/package-bound acceptance, accessibility binding, publication, and post-publication byte re-verification"
+      "evidence": "Signed portable ZIP and GitHub Releases are selected; PR #80 merged deterministic exact-package binding rehearsal and fail-closed binding validation. PPR-06 remains BLOCKED pending the exact production-signed package, package-bound clean-Windows/accessibility acceptance, publication, and post-publication byte re-verification."
     },
     {
       "id": "PPR-07",
