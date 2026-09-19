@@ -45,7 +45,10 @@ ROOT = Path(__file__).resolve().parents[2]
 PACK_ID = "atlas:pack:engineering-preview-fixture"
 PACK_VERSION = "0.1.0-preview.1"
 CREATED_AT = "2026-09-17T12:00:00Z"
-ENCYCLOPEDIA_OVERRIDE_IDS = {"atlas:event:microsoft.windows.security:4688"}
+ENCYCLOPEDIA_OVERRIDE_IDS = {
+    "atlas:event:microsoft.windows.security:4688",
+    "atlas:event:microsoft.sysmon:1",
+}
 EXPIRY = datetime(2030, 1, 1, tzinfo=timezone.utc)
 
 
@@ -301,7 +304,16 @@ def make_signed_repository(repo: Path, pack_version: str) -> tuple[bytes, dict[s
         "contains_windows_4624": True,
         "contains_sysmon_1": True,
         "contains_sysmon_3": True,
-        "encyclopedia_exemplar_count": 3,
+        "encyclopedia_exemplar_count": sum(
+            1
+            for record in records
+            if record.get("record_kind") == "entity"
+            and record.get("entity_type") == "event"
+            and any(
+                (item.get("components") or {}).get("content_contract") == "ENCYCLOPEDIA_GRADE_EXEMPLAR"
+                for item in record.get("native_identifiers", [])
+            )
+        ),
         "private_keys_persisted": False,
         "public_preview_corpus": False,
     }
