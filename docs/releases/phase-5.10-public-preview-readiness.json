@@ -5,7 +5,7 @@
   "title": "Public Preview Readiness Baseline",
   "release_authority": "main",
   "first_preview_release_baseline": "70afc6fdb9e5ce88afdb0dd4de139aa659606f1e",
-  "control_plane_baseline": "d1efb549c1b651b58052a616bba82a3b146c0d6e",
+  "control_plane_baseline": "d836721af2e75510773109807e9f34a748ee469e",
   "overall_state": "ACTIVE",
   "public_preview_state": "BLOCKED",
   "gates": [
@@ -35,7 +35,7 @@
       "name": "Third-party redistribution closure",
       "mandatory": true,
       "state": "BLOCKED",
-      "evidence": "Exact redistribution inventory/validator plus Windows-target Rust/Tauri preflight are integrated; PR #54 exact-head run 35309913398 verified 258 third-party crates and 3 frontend assets (artifact 10533096533, sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d). Microsoft Learn source text is excluded and pinned ATT&CK/CAR/D3FEND/Sysmon rights are classified; final corpus/software freeze, final notices and exact package binding remain open"
+      "evidence": "Exact redistribution inventory/validator plus Windows-target Rust/Tauri preflight are integrated; PR #54 exact-head run 35309913398 verified 258 third-party crates and 3 frontend assets (artifact 10533096533, sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d). Microsoft Learn source text is excluded; pinned ATT&CK/CAR/D3FEND/Sysmon rights are classified; controlled Sysmon schema evidence is 15.22/schema 4.91. Final corpus/software freeze, final notices and exact package binding remain open."
     },
     {
       "id": "PPR-05",
