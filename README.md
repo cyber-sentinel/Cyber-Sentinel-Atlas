@@ -19,7 +19,7 @@ ATLAS is built for security teams that need investigation context to be **determ
 > **Current maturity:** Engineering-ready First Preview
 > **Release state:** Pre-preview / unreleased
 > **Repository visibility:** Public
-> **Active workstream:** Phase 5.10.7 — Public Preview RC functional freeze & evidence closure
+> **Active workstreams:** Phase 5.10.7 — Public Preview RC evidence closure; Phase 5.10.10 — controlled Windows & Sysmon knowledge-coverage expansion
 > **RC target:** `v0.1.0-rc.1` — functionally frozen; release evidence still blocked
 > **Public Preview state:** **BLOCKED** until every mandatory release gate passes
 > **Desktop:** Windows / Tauri 2.x — ADR-0026 Accepted
