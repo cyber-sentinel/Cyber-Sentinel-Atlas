@@ -131,7 +131,7 @@ Authoritative surface plan: [`docs/product-surfaces.md`](docs/product-surfaces.m
 
 ### Current Knowledge Coverage Boundary
 
-The current Engineering Usable Data Preview proves the runtime and analyst workflow, not comprehensive Windows telemetry coverage. The current builder produces **230 canonical records** (`79` entities + `79` claims + `65` relationships + `7` sources), **16 search projections** and **3 graph edges**. Packaged acceptance covers Windows Security Event IDs `4624` and `4688`, plus Sysmon Event IDs `1` and `3`.
+The current Engineering Usable Data Preview proves the runtime and analyst workflow, not comprehensive Windows telemetry coverage. The current builder produces **230 canonical records** (`79` entities + `79` claims + `65` relationships + `7` sources), **16 search projections** and **3 graph edges**. The pack includes Windows Security Event IDs `4624` and `4688`, plus Sysmon Event IDs `1` and `3`; the existing clean-Windows acceptance evidence explicitly proves Windows `4688` and Sysmon `1` end-to-end.
 
 The controlled Sysmon baseline is now **15.22 / schema 4.91**, validated from the reference host and promoted to the current telemetry inventory. It enumerates **30 documented/current Event IDs** (`1..29` plus `255`). Sysmon Event `3` is currently `ENCYCLOPEDIA_GRADE`; the remaining **29** Sysmon IDs still require the same depth before full Sysmon corpus coverage can be claimed. Windows Security coverage does not yet have a frozen exhaustive provider/channel/version denominator, so ATLAS does not publish a misleading "all Windows Event IDs" percentage.
 
