@@ -1,135 +1,106 @@
-# Offline-first Architecture
+# Offline-First Architecture
 
 ## Principle
 
-Offline is not an export feature. It is a supported operating mode and part of the shared runtime required before the Windows Desktop MVP.
+Offline operation is not an export feature. It is a first-class supported mode for installed ATLAS content.
 
-Authoritative decisions:
+Authoritative decisions include:
 
-- [ADR-0003 — Offline-first Core](../adr/0003-offline-first.md)
-- [ADR-0006 — Shared Core and Interface Sequencing](../adr/0006-shared-core-and-interface-sequencing.md)
-- [ADR-0009 — Controlled Content Release Pipeline](../adr/0009-controlled-content-release-pipeline.md)
+- ADR-0003 — Offline-first Core;
+- ADR-0006 — Shared Core and Interface Sequencing;
+- ADR-0022 — SQLite + FTS5 deterministic search;
+- ADR-0023 — Secure Content Pack Trust and Update Model;
+- ADR-0024 — Go Production Shared Core;
+- ADR-0025 — Bounded child-process stdio interface;
+- ADR-0026 — Tauri 2.x Windows Desktop host.
 
 ## Offline Core
 
-The MVP offline runtime should support:
+The installed runtime supports or carries contracts for:
 
-- canonical entities;
+- canonical records/entities;
 - native identifiers and aliases;
-- claims;
+- claims and provenance;
 - relationships;
-- lifecycle/applicability metadata;
+- lifecycle/applicability/version metadata;
 - source metadata;
-- selected source excerpts/locators where redistribution permits;
-- exact search index;
-- lexical search index;
+- exact resolver;
+- SQLite + FTS5 lexical search;
 - coverage metadata;
-- saved analyst workspace where product design requires it;
-- product schema/version metadata.
+- pack/schema/version metadata;
+- trusted pack state and Last Known Good.
 
 ## Content Pack Model
 
-Atlas requires independent, versioned content packs.
+ATLAS uses independent, versioned `.atlaspack` content with TUF-based trust.
 
-Candidate names currently include:
+A release pack carries or binds:
 
-```text
-atlas-core
-atlas-windows
-atlas-sysmon
-atlas-mitre-attack
-atlas-defenseops
-```
-
-Additional domain packs are expected later.
-
-**Exact final pack naming is an open architecture decision.**
-
-A released pack must support:
-
-- content version;
-- schema version;
-- source version;
-- source provenance;
-- checksum;
-- signature;
+- content/schema/source versions;
+- provenance;
+- target hashes;
+- trust metadata;
 - compatibility;
 - freshness;
 - coverage;
-- validation status;
-- rollback.
+- validation state.
 
-## Controlled Publication
+Exact public pack naming may evolve without weakening these contracts.
 
-No source directly updates installed/production Atlas content.
-
-See [Controlled Content Release Pipeline](content-release-pipeline.md).
-
-## Client Update Flow
+## Client Pack Lifecycle
 
 ```text
-Released Pack
-        ↓
-Manifest Verification
-        ↓
-Signature Verification
-        ↓
-Checksum Verification
-        ↓
-Schema/Compatibility Check
-        ↓
-Preserve Last Known Good
-        ↓
-Atomic Install
-        ↓
-Index/Migration
-        ↓
-Health Check
-        ↓
-Activation
+Candidate Pack
+      ↓
+TUF / target verification
+      ↓
+Path / extraction safety
+      ↓
+Schema / compatibility checks
+      ↓
+Immutable generation install
+      ↓
+Health gate
+      ↓
+Atomic activation
+      ↓
+ACTIVE
+      ↓
+Last Known Good / safe rollback when required
 ```
 
-Failure requires rollback to Last Known Good.
+Trusted-time and highest-seen state prevent silent rollback to older trusted metadata after newer metadata has been accepted.
 
-## Shared Runtime Position
-
-The approved sequence is:
+## Current Shared Runtime Position
 
 ```text
-Deterministic Search Core
+SQLite + FTS5 Search
         ↓
-Offline Pack Runtime / Shared Core
+Verified Pack Runtime
         ↓
-Windows Desktop MVP
+Go Shared Core
         ↓
-Web / PWA
+Windows Desktop
+        ↓
+CLI / Web / API and later platform surfaces
 ```
 
-The Desktop application must not require Internet connectivity for core lookup/search/navigation over installed packs.
+The Windows Desktop must not require Internet connectivity for core lookup/search/navigation over installed verified packs.
 
-## Local Storage Requirement
+## Local Storage
 
-The architecture requires portable embedded local storage and deterministic offline search.
+SQLite + FTS5 is the accepted deterministic search artifact under ADR-0022.
 
-The exact database/storage engine remains an open implementation decision.
+Canonical records and provenance remain authoritative; the search database is a derived deterministic artifact rather than a second source of truth.
 
-## Windows Desktop Requirement
+## Approved Product Expansion
 
-The first full end-user interface must support:
+Offline/shared contracts must remain reusable by:
 
-- fast offline lookup;
-- exact identifier resolution;
-- lexical search;
-- local canonical dataset;
-- relationship navigation;
-- provenance visibility;
-- signed pack updates;
-- safe rollback.
+- Windows/Linux/macOS CLI;
+- Web and iOS Safari PWA through a reviewed service boundary;
+- public API;
+- Linux/macOS Desktop;
+- future native mobile where platform storage/runtime constraints are separately reviewed.
 
-Portable Windows mode remains an approved requirement candidate.
-
-## Web / PWA
-
-Web/PWA follows the shared core/Desktop MVP and uses the same canonical model/contracts.
-
-It must not become a separate source of truth.
+No future surface may weaken pack trust merely to simplify platform packaging.
