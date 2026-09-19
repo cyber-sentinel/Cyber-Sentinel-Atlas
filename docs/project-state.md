@@ -36,6 +36,18 @@
 
 Operational evidence is summarized in [`docs/current-status.md`](current-status.md). Historical snapshots remain under `docs/history/`.
 
+## Durable Continuity / Agent Control Plane
+
+ATLAS project continuity is repository-backed rather than chat-backed.
+
+- Engineering contract: [`AGENTS.md`](../AGENTS.md)
+- Agent operating model: [`docs/operations/agent-engineering-operating-model.md`](operations/agent-engineering-operating-model.md)
+- Handoff template: [`docs/operations/handoff-template.md`](operations/handoff-template.md)
+- CI runners are verification infrastructure; they are not general development-agent nodes.
+- Until a dedicated Agent Control Node is deployed, execution continues through focused GitHub branches/PRs with the existing Linux and Windows runners.
+- Future multi-agent execution must use isolated worktrees/containers, one bounded task per branch, and the same PR/CI/merge controls.
+- No session is authoritative by itself. A new chat or engineering agent must be able to reconstruct the current work from GitHub.
+
 ## Current Phase
 
 - Phase 5.1 — Product Foundation: **COMPLETE**
@@ -89,15 +101,16 @@ Operational evidence is summarized in [`docs/current-status.md`](current-status.
     - target: `v0.1.0-rc.1`
     - functional/security boundary frozen from `main@2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
     - logo, banner, theme tokens and non-behavioral visual identity remain intentionally open
-  - 5.10.10 Windows & Sysmon Knowledge Coverage Expansion: **APPROVED / IMPLEMENTATION REQUIRED**
-    - current engineering preview: `178` canonical records / `16` search projections / `3` graph edges
-    - canonical composition: `64` entities / `58` claims / `50` relationships / `6` sources
-    - encyclopedia exemplars: Windows Security `4624`, Sysmon `3`
-    - packaged examples now include Windows `4624`,`4688` and Sysmon `1`,`3`
-    - pinned Sysmon semantic documentation: `15.22`; documented denominator remains `30` IDs (`1..29`, `255`)
-    - controlled Sysmon 15.22 telemetry-schema export: **TRIGGERED / PENDING VALIDATION**
-    - Windows provider/channel/version denominator: **NOT YET FROZEN**
-    - mandatory corpus families: Security-Auditing, Sysmon, PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
+  - 5.10.10 Windows & Sysmon Knowledge Coverage Expansion: **ACTIVE / CONTROLLED COVERAGE EXPANSION**
+    - Windows Security Auditing denominator: **FROZEN** for `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296`
+    - Windows Security controlled denominator: `423` unique Event IDs / `488` provider event-version definitions
+    - Windows Security encyclopedia grade: `2/423` — Event IDs `4624`, `4688`; remaining `421`
+    - Sysmon semantic release: `15.22`; controlled structural schema: `4.91`
+    - Sysmon denominator: `30` documented/current Event IDs; encyclopedia grade: `2/30` — Event IDs `1`, `3`; remaining `28`
+    - global Windows denominator: **NOT FROZEN**; global completion percentage intentionally undefined
+    - remaining mandatory families still require controlled denominators: PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
+    - machine-readable authority: `content/encyclopedia/coverage-manifest.json`
+    - Public Preview corpus authority: **NOT GRANTED**
   - Public Preview readiness: **BLOCKED**
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers above are compatibility invariants consumed by historical architecture gates even though the aggregate Phase 5.5 boundary is frozen.
