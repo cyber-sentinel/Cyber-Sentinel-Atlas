@@ -36,14 +36,17 @@ def test_02_sysmon_denominator_is_exactly_30_documented_ids():
 
 def test_03_only_approved_encyclopedia_grade_records_count():
     snapshot = builder.build_snapshot()
-    assert snapshot["encyclopedia_grade_count"] == 4
-    assert snapshot["remaining_count"] == 26
-    assert snapshot["completion_ratio"] == "4/30"
-    assert snapshot["completion_percent"] == 13.33
+    assert snapshot["encyclopedia_grade_count"] == 5
+    assert snapshot["remaining_count"] == 25
+    assert snapshot["completion_ratio"] == "5/30"
+    assert snapshot["completion_percent"] == 16.67
+    event5 = next(item for item in snapshot["events"] if item["event_id"] == "5")
     event4 = next(item for item in snapshot["events"] if item["event_id"] == "4")
     event3 = next(item for item in snapshot["events"] if item["event_id"] == "3")
     event2 = next(item for item in snapshot["events"] if item["event_id"] == "2")
     event1 = next(item for item in snapshot["events"] if item["event_id"] == "1")
+    assert event5["coverage_state"] == "ENCYCLOPEDIA_GRADE"
+    assert event5["counts_toward_release_coverage"] is True
     assert event4["coverage_state"] == "ENCYCLOPEDIA_GRADE"
     assert event4["counts_toward_release_coverage"] is True
     assert event3["coverage_state"] == "ENCYCLOPEDIA_GRADE"

@@ -709,6 +709,120 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:5",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "5",
+      "title": "Sysmon Event 5 — Process terminated",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "5",
+      "aliases": [
+        "5",
+        "Sysmon 5",
+        "Sysmon Event 5",
+        "ProcessTerminate",
+        "Process terminated"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 5: Process terminated",
+      "schema_locator": "SYSMONEVENT_PROCESS_TERMINATE",
+      "overview": {
+        "summary": "Records termination of a process and preserves stable process identity and execution context so analysts can complete process timelines and correlate related Sysmon activity.",
+        "event_class": "Process Lifecycle",
+        "configuration_tag": "ProcessTerminate",
+        "schema_event_version": 3,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "complete process execution timelines by pairing process termination with process creation",
+          "identify short-lived or unexpectedly terminating processes when surrounding context warrants investigation",
+          "correlate the terminated process with other Sysmon telemetry through ProcessGuid",
+          "support duration and lifecycle analysis without treating normal process exit as a malicious verdict"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active Sysmon EventFiltering configuration must not exclude the ProcessTerminate activity required by the investigation."
+        ],
+        "configuration_note": "ProcessTerminate is a filterable Sysmon event. Exclusions should be governed so required lifecycle visibility is preserved.",
+        "interpretation_note": "Process termination is routine operating-system activity. Event 5 provides lifecycle evidence and should be interpreted with process creation and surrounding telemetry rather than as a malicious verdict by itself."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "pair process creation and termination to reconstruct process lifetime"
+        },
+        {
+          "target": "Sysmon 3",
+          "key": "ProcessGuid + time",
+          "purpose": "review network activity associated with the process before termination"
+        },
+        {
+          "target": "Sysmon 22",
+          "key": "ProcessGuid + time",
+          "purpose": "review DNS activity associated with the process before termination"
+        }
+      ],
+      "analysis": [
+        "Pair Event 5 with Sysmon Event 1 using ProcessGuid to reconstruct process lifetime and surrounding execution context.",
+        "Review unusually short-lived or repeatedly terminating processes only in conjunction with image path, user context, process creation data and related telemetry.",
+        "Use ProcessGuid as the preferred Sysmon correlation key because Windows process IDs can be reused over time.",
+        "Treat Event 5 as process-lifecycle observation telemetry rather than evidence of maliciousness by itself."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the process termination event when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the process termination event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Identity",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID identifying the terminated process.",
+          "correlation": "Preferred process correlation key across Sysmon lifecycle and activity events."
+        },
+        {
+          "key": "processid",
+          "section": "Process Identity",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier of the terminated process.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "image",
+          "section": "Process Identity",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path recorded for the terminated process."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the terminated process."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
