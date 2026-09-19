@@ -319,7 +319,7 @@ jobs:
           python tools/release/probe_engineering_preview.py --core $Core --output $Evidence
           if ($LASTEXITCODE -ne 0) { throw 'packaged data acceptance probe failed' }
           $probe = Get-Content -Raw $Evidence | ConvertFrom-Json
-          if ($probe.pack_ready -ne $true -or $probe.windows_4688_search_ok -ne $true -or $probe.windows_4688_record_ok -ne $true -or $probe.sysmon_1_search_ok -ne $true -or $probe.sysmon_1_processcreate_alias_ok -ne $true -or $probe.sysmon_1_record_ok -ne $true -or $probe.graph_expand_ok -ne $true) {
+          if ($probe.pack_ready -ne $true -or $probe.windows_4688_search_ok -ne $true -or $probe.windows_4688_record_ok -ne $true -or $probe.sysmon_1_search_ok -ne $true -or $probe.sysmon_1_processcreate_alias_ok -ne $true -or $probe.sysmon_1_record_processcreate_alias_ok -ne $true -or $probe.sysmon_1_record_ok -ne $true -or $probe.graph_expand_ok -ne $true) {
             throw 'usable data preview acceptance invariant failed'
           }
           Copy-Item $Evidence package-artifact\phase5105-data-probe.json -Force
