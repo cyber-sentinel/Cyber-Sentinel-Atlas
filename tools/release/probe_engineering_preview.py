@@ -193,6 +193,16 @@ def main() -> int:
         )
         if record_sysmon.get("id") != EXPECTED_SYSMON:
             raise RuntimeError("Sysmon Event 1 record identity mismatch")
+        sysmon_1_record_aliases = {
+            str(item.get("value", "")).casefold()
+            for item in record_sysmon.get("aliases", [])
+            if isinstance(item, dict)
+        }
+        sysmon_1_record_processcreate_alias_ok = "processcreate" in sysmon_1_record_aliases
+        if not sysmon_1_record_processcreate_alias_ok:
+            raise RuntimeError(
+                f"Sysmon Event 1 canonical record is missing ProcessCreate alias: {record_sysmon}"
+            )
 
         search_4624 = request(
             process.stdin,
@@ -266,6 +276,7 @@ def main() -> int:
             "windows_4688_record_ok": True,
             "sysmon_1_search_ok": sysmon_1_search_ok,
             "sysmon_1_processcreate_alias_ok": sysmon_1_processcreate_alias_ok,
+            "sysmon_1_record_processcreate_alias_ok": sysmon_1_record_processcreate_alias_ok,
             "sysmon_1_record_ok": True,
             "windows_4624_search_ok": windows_4624_search_ok,
             "windows_4624_record_ok": True,
