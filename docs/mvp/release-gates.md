@@ -49,7 +49,10 @@ This document summarizes the product/MVP progression and must not override those
 - [x] Verified content-pack install / trust / update / rollback path implemented
 - [x] Clean-Windows package smoke accepted
 - [x] Pack bootstrap gap `ATLAS_PACK_NOT_READY` closed for the engineering usable-data preview
-- [x] Search → Record → Graph → Provenance acceptance proved for Windows Security `4688` and Sysmon `1`
+- [x] Search → Record → Graph → Provenance clean-Windows acceptance proved for Windows Security `4688` and Sysmon `1`
+- [x] Engineering pack additionally contains Windows Security `4624` and Sysmon `3`
+- [x] Encyclopedia-grade content exists for Windows Security `4624`, Windows Security `4688`, Sysmon `1`, and Sysmon `3`
+- [x] Controlled Sysmon `15.22` / schema `4.91` reference baseline validated and promoted
 
 The current engineering pack is **not** the complete Windows Security Corpus.
 
@@ -57,9 +60,9 @@ The current engineering pack is **not** the complete Windows Security Corpus.
 
 Before declaring the approved Windows corpus complete:
 
-- [ ] provider/channel/version denominators frozen for every mandatory telemetry family;
-- [ ] Sysmon documented coverage reaches the frozen target set;
-- [ ] Microsoft-Windows-Security-Auditing coverage reaches the frozen target set;
+- [ ] provider/channel/version denominators frozen for every mandatory telemetry family (Security-Auditing and Sysmon are frozen; all other mandatory families remain open);
+- [ ] Sysmon encyclopedia-grade coverage reaches the frozen 30-ID target set (current: `2/30`; `28` remaining);
+- [ ] Microsoft-Windows-Security-Auditing coverage reaches the controlled 423-ID provider/build target set (current encyclopedia-grade: `2/423`; `421` remaining);
 - [ ] PowerShell Operational coverage accepted;
 - [ ] Windows Defender coverage accepted;
 - [ ] AppLocker coverage accepted;
@@ -73,7 +76,7 @@ Before declaring the approved Windows corpus complete:
 - [ ] canonical records, provenance, index, pack and coverage snapshots are consistent;
 - [ ] exhaustive lookup/negative tests pass against the exact pack.
 
-The detailed authority is `docs/windows-sysmon-coverage-plan.md`.
+The detailed authority is `docs/windows-sysmon-coverage-plan.md`; machine-readable family state is `content/encyclopedia/coverage-manifest.json`.
 
 ## Public Preview Mandatory Closure
 
