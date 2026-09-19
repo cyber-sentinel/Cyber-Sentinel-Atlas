@@ -1,7 +1,7 @@
 {
   "evidence_version": "1.0.0",
   "evidence_kind": "controlled-sysmon-reference-validation",
-  "status": "VALIDATED_OPERATOR_REVIEWED",
+  "status": "VALIDATED_OPERATOR_REVIEWED_AND_PROMOTED",
   "collected_at_utc": "2026-09-19T02:09:58Z",
   "reviewed_at_utc": "2026-09-19T03:30:00Z",
   "source_id": "atlas:source:atlas.source:microsoft-sysmon-schema-export",
@@ -76,5 +76,13 @@
     "upstream_binary_executed_by_atlas_core": false,
     "operator_review_required": true,
     "validation_does_not_equal_inventory_promotion": true
+  },
+  "promotion": {
+    "state": "PROMOTED_TO_CURRENT_TELEMETRY_INVENTORY",
+    "inventory_path": "ingestion/inventories/sysmon-schema-15.22-4.91.telemetry.json",
+    "inventory_id": "atlas:inventory:atlas.ingestion:sysmon-schema-15.22-4.91",
+    "mapping_path": "ingestion/mappings/microsoft-sysmon-schema-v1.json",
+    "previous_inventory_preserved": "ingestion/inventories/sysmon-schema-15.21-4.91.telemetry.json",
+    "structural_drift_observed": false
   }
 }
