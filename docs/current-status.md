@@ -1,12 +1,12 @@
 # Cyber-Sentinel-Atlas — Current Authoritative Status
 
-Status timestamp: 2026-09-18
+Status timestamp: 2026-09-19
 
 ## Control plane
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Latest reviewed Public Preview control-plane baseline: `2c7788e08e0254f330cca1cbb0d1a8a9432291f5` — PR #56 merged after all applicable exact-head workflows passed; signed portable ZIP + GitHub Releases selected and accessibility source/reflow hardening integrated.
+- Latest reviewed engineering/control-plane baseline: `9ca62250a240f3f954ca5ec42f345b75dfc9aeb7` — PR #72 merged after Sysmon 15.22 documentation refresh and approved 4624/Sysmon 3 exemplar materialization.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
@@ -15,7 +15,12 @@ Status timestamp: 2026-09-18
 - Phase 5.10.4 governance/freshness closure: PR #44 — **MERGED**
 - Phase 5.10.1 Tauri/Rust redistribution preflight: PR #54 — **MERGED**; exact-head run `35309913398` — **SUCCESS**; artifact `10533096533` / `sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d`
 - Phase 5.10.6 release vehicle/accessibility hardening: PR #56 — **MERGED**; merge baseline `2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
-- Phase 5.10.7 Public Preview RC functional freeze: **ACTIVE**; target `v0.1.0-rc.1`; visual identity remains intentionally open
+- Phase 5.10.7 Public Preview RC functional freeze: PR #57 — **MERGED**; target `v0.1.0-rc.1`; visual identity remains intentionally open
+- Phase 5.10.8 PPR-04 deterministic notice/package binding: PR #58 — **MERGED**
+- Phase 5.10.10 Sysmon semantic documentation refresh to 15.22: PR #67 — **MERGED / CI GREEN**
+- Phase 5.10.10 approved production exemplars (Windows 4624 + Sysmon 3): PR #70 — **MERGED / CI GREEN**
+- Phase 5.10.10 bounded encyclopedia Record Detail + hidden Windows sidecar: PR #72 — **MERGED / ALL APPLICABLE CI GREEN**
+- Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
 - Active phase: **Phase 5.10 — Public Preview Readiness**
@@ -59,8 +64,8 @@ Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that 
 - Phase 5.6.4 — Windows Packaging / Clean-Machine Smoke: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 - Phase 5.6 — Windows Desktop MVP: **COMPLETE / MERGED / POST-MERGE VERIFIED**
 - First Preview engineering readiness: **READY**
-- Phase 5.7 — Web / PWA: **DEFERRED BEYOND FIRST PREVIEW**
-- Phase 5.8 — Broader API surfaces: **DEFERRED BEYOND FIRST PREVIEW**
+- Phase 5.7 — Web / PWA: **APPROVED / DEFERRED UNTIL WINDOWS PUBLIC PREVIEW CLOSURE**
+- Phase 5.8 — CLI & Broader API surfaces: **APPROVED / DEFERRED UNTIL WINDOWS PUBLIC PREVIEW CLOSURE**
 - Phase 5.9 — Grounded AI: **DEFERRED BEYOND FIRST PREVIEW**
 - Phase 5.10 — Public Preview Readiness: **ACTIVE**
 - Phase 5.10.0 — Public Preview Readiness Baseline: **COMPLETE / MERGED**
@@ -84,12 +89,40 @@ Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that 
   - signed portable ZIP: **SELECTED**
   - GitHub Releases canonical channel: **SELECTED**
   - accessibility static/reflow preflight: **PASS on PR #56 exact head**
-- Phase 5.10.7 — Public Preview RC Functional Freeze: **ACTIVE / RC EVIDENCE BLOCKED**
+- Phase 5.10.7 — Public Preview RC Functional Freeze: **MERGED / RC EVIDENCE BLOCKED**
   - target candidate: `v0.1.0-rc.1`
-  - functional/security baseline: `main@2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
+  - freeze merge baseline: `main@3b37694abcd29919f1cf0a30ed430a8975245411`
   - visual identity: **OPEN BY DESIGN** for logo/banner/theme/non-behavioral polish
+- Phase 5.10.8 — PPR-04 Notice / Package Binding Automation: **COMPLETE / MERGED**
+- Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion: **APPROVED / IMPLEMENTATION REQUIRED**
+  - current engineering preview artifact: `178` canonical records = `64` entities + `58` claims + `50` relationships + `6` sources
+  - search projections: `16`; graph edges: `3`; encyclopedia-grade exemplar count: `2`
+  - packaged Windows Security examples: Event IDs `4624` and `4688`
+  - packaged Sysmon examples: Event IDs `1` and `3`
+  - pinned Sysmon semantic documentation: `15.22`; documented denominator: `30` IDs (`1..29`, `255`)
+  - controlled Sysmon telemetry-schema refresh to 15.22: **REFERENCE-HOST EXPORT TRIGGERED / VALIDATION PENDING**
+  - exhaustive Windows provider/channel/version denominator: **NOT YET FROZEN**
+  - mandatory corpus families: Security-Auditing, Sysmon, PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
 
 The explicit Phase 5.5.2/5.5.3/5.5.4 lifecycle markers are retained because frozen architecture validators use them to prove lifecycle continuity across later phases.
+
+## Approved Product Family
+
+Authoritative product-surface plan: [`docs/product-surfaces.md`](product-surfaces.md).
+
+```text
+ATLAS
+├── Desktop: Windows / Linux / macOS
+├── CLI: Windows / Linux / macOS
+├── Web
+├── PWA: iOS Safari
+├── API
+└── Mobile: iOS / Android
+```
+
+Only Windows Desktop is currently engineering-ready. The other surfaces are approved future deliverables and must preserve the canonical/provenance/trust boundaries.
+
+Current knowledge-content truth is separately governed by [`docs/windows-sysmon-coverage-plan.md`](windows-sysmon-coverage-plan.md). The current Usable Data Preview is a verified engineering-fixture pack, not the complete Windows/Sysmon corpus.
 
 ## Frozen Shared Core boundary
 

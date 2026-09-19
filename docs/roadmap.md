@@ -2,6 +2,37 @@
 
 This file is the current phase-level roadmap. Operational evidence and exact verified boundaries are maintained in [`docs/current-status.md`](current-status.md). Historical snapshots remain under `docs/history/`.
 
+## Approved Product Family
+
+The approved delivery family is broader than the current Windows release surface and is governed by [`docs/product-surfaces.md`](product-surfaces.md):
+
+```text
+ATLAS
+│
+├── ATLAS Desktop
+│    ├── Windows       ← current release-critical surface
+│    ├── Linux
+│    └── macOS
+│
+├── ATLAS CLI
+│    ├── Windows
+│    ├── Linux
+│    └── macOS
+│
+├── ATLAS Web
+│
+├── ATLAS PWA
+│    └── iOS Safari
+│
+├── ATLAS API
+│
+└── ATLAS Mobile
+     ├── iOS
+     └── Android
+```
+
+Approval of the family does not imply that every surface is released. All surfaces must reuse the canonical/provenance contracts and must not create an alternate source of truth.
+
 ## Phase 5.1 — Product Foundation
 
 Status: **COMPLETE**
@@ -133,15 +164,23 @@ Public release                                                  PRE-PREVIEW / UN
 
 ## Phase 5.7 — Web / PWA
 
-Status: **DEFERRED BEYOND FIRST PREVIEW**
+Status: **APPROVED / DEFERRED UNTIL WINDOWS PUBLIC PREVIEW CLOSURE**
 
-Will reuse the same canonical model and shared contracts after the Windows critical path is complete.
+Deliver ATLAS Web plus the approved installable **iOS Safari PWA** for iPhone/iPad. Desktop and Android use the normal Web surface and are not separate PWA deliverables in the current roadmap. The Web/PWA product must reuse the same canonical model, provenance semantics and bounded service contracts without exposing a generic Shared Core bridge.
 
-## Phase 5.8 — Broader API Surfaces
+## Phase 5.8 — CLI & Broader API Surfaces
 
-Status: **DEFERRED BEYOND FIRST PREVIEW**
+Status: **APPROVED / DEFERRED UNTIL WINDOWS PUBLIC PREVIEW CLOSURE**
 
-Broader read/search/graph/source/pack interfaces remain secondary to the Windows MVP. The official CLI command remains `atlas`.
+### Phase 5.8A — ATLAS CLI
+
+Approved targets: Windows, Linux and macOS. The official command remains `atlas`.
+
+The CLI will expose bounded product operations such as search, record retrieval, graph expansion, source inspection and pack status/verification while preserving the same canonical contracts and fail-closed trust model.
+
+### Phase 5.8B — ATLAS Public API
+
+Approved as a versioned, authenticated and auditable read/search/graph/source/pack service boundary. The API must not become a generic pass-through to arbitrary Shared Core methods.
 
 ## Phase 5.9 — Grounded AI
 
@@ -283,8 +322,46 @@ Status: **BLOCKED**
 
 `PUBLIC PREVIEW READY` may be declared only when every mandatory machine-readable gate is `PASS` and strict release validation succeeds with concrete release evidence.
 
+### Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion
+
+Status: **APPROVED / IMPLEMENTATION REQUIRED**
+
+The current Engineering Usable Data Preview is a fixture-based proof of the runtime, not the complete Windows corpus.
+
+Measured current engineering-pack baseline:
+
+- 178 canonical records (`64` entities, `58` claims, `50` relationships, `6` sources);
+- 16 search projections;
+- 3 graph edges;
+- packaged Windows examples: Event IDs `4624` and `4688`;
+- packaged Sysmon examples: Event IDs `1` and `3`;
+- encyclopedia-grade approved exemplars: Windows `4624` and Sysmon `3`;
+- `public_preview_corpus=false`.
+
+The pinned Sysmon 15.22 semantic documentation profile documents 30 Event IDs (`1..29` plus `255`). Sysmon Event `3` is the first approved encyclopedia-grade exemplar; the remaining 29 documented IDs still require encyclopedia-grade materialization before full Sysmon corpus coverage can be claimed. Event `1` remains packaged engineering data but does not count toward the encyclopedia-grade release numerator until it meets the same content contract.
+
+Windows Security/Event Log coverage must first freeze an explicit provider/channel/version denominator. "All Windows Event IDs" is not a valid completion metric until the target providers/channels and versions are machine-readable.
+
+Mandatory Windows Security Corpus scope additionally includes PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, and Service/persistence telemetry.
+
+Authoritative coverage plan: [`docs/windows-sysmon-coverage-plan.md`](windows-sysmon-coverage-plan.md).
+
+## Phase 5.11 — Cross-Platform Desktop
+
+Status: **APPROVED / FUTURE DELIVERY**
+
+Deliver Linux Desktop and macOS Desktop surfaces after the Windows Public Preview, coverage expansion and shared CLI/API contracts are stable. Platform packaging, signing, sandboxing and native accessibility requirements are separate release gates.
+
+## Phase 5.12 — Native Mobile
+
+Status: **APPROVED / FUTURE DELIVERY**
+
+Deliver native iOS and Android applications after a dedicated mobile-core/library boundary is reviewed. Native mobile is distinct from PWA delivery. The Windows child-process sidecar model must not be copied blindly to mobile platforms.
+
+Native iOS requires Apple signing/provisioning, privacy declarations, App Store packaging/review and platform-appropriate storage/runtime controls. Native Android requires its own application signing, permission, packaging and distribution controls.
+
 ## Expansion After MVP
 
-The architecture remains intended to expand beyond the Windows-first MVP to Linux/macOS, Microsoft 365/Exchange/SharePoint, Azure/Entra, AWS, Google Cloud, containers/Kubernetes/OpenShift, DevOps/CI-CD, SQL/NoSQL databases, LOLBAS/GTFOBins and broader DFIR/IR/deception content.
+Beyond the approved product surfaces, the content architecture remains intended to expand to Microsoft 365/Exchange/SharePoint, Azure/Entra, AWS, Google Cloud, containers/Kubernetes/OpenShift, DevOps/CI-CD, SQL/NoSQL databases, LOLBAS/GTFOBins and broader DFIR/IR/deception content.
 
 Architecture support does not imply First Preview or Public Preview ingestion/delivery of every domain.

@@ -96,6 +96,53 @@ Phase 5.10.5 additionally proves on clean Windows, from one packaged artifact, a
 
 The selected desktop host exposes exactly seven application commands: `core_status`, `search_records`, `get_record`, `expand_graph`, `pack_status`, `pack_update`, and `pack_rollback`.
 
+### Approved ATLAS Product Family
+
+The approved ATLAS product family is broader than the current Windows release surface:
+
+```text
+ATLAS
+│
+├── ATLAS Desktop
+│    ├── Windows       ← current release-critical surface
+│    ├── Linux
+│    └── macOS
+│
+├── ATLAS CLI
+│    ├── Windows
+│    ├── Linux
+│    └── macOS
+│
+├── ATLAS Web
+│
+├── ATLAS PWA
+│    └── iOS Safari
+│
+├── ATLAS API
+│
+└── ATLAS Mobile
+     ├── iOS
+     └── Android
+```
+
+This product family is **approved delivery scope**, not a statement that every surface is released today. Windows Desktop remains the current release-critical implementation. Web plus the iOS Safari PWA, CLI/API, cross-platform Desktop and native Mobile consume the same canonical/provenance contracts without creating a second source of truth.
+
+Authoritative surface plan: [`docs/product-surfaces.md`](docs/product-surfaces.md).
+
+### Current Knowledge Coverage Boundary
+
+The current Engineering Usable Data Preview proves the runtime and analyst workflow, not comprehensive Windows telemetry coverage. Its packaged evidence contains **23 canonical records, 14 search projections and 3 graph edges**, and guarantees end-to-end retrieval for Windows Security Event ID `4688` and Sysmon Event ID `1`.
+
+The pinned Sysmon 15.21 profile enumerates **30 documented event IDs** (`1..29` plus `255`); therefore 29 additional Sysmon IDs remain outside the current packaged end-to-end acceptance guarantee. Windows Security coverage does not yet have a frozen exhaustive provider/channel denominator, so ATLAS does not publish a misleading "all Windows Event IDs" percentage.
+
+Authoritative coverage plan: [`docs/windows-sysmon-coverage-plan.md`](docs/windows-sysmon-coverage-plan.md).
+
+Telemetry content-depth contract: [`docs/content/telemetry-record-content-contract.md`](docs/content/telemetry-record-content-contract.md). A Windows/Sysmon Event ID counts as release coverage only after it reaches **ENCYCLOPEDIA_GRADE** depth: field dictionary, version applicability, collection prerequisites, value semantics, correlation pivots, defensive interpretation and provenance.
+
+Workspace UX authority: [`docs/ux/ux-information-architecture.md`](docs/ux/ux-information-architecture.md) and [`docs/ux/workspace-product-review.md`](docs/ux/workspace-product-review.md). Final visual freeze requires page-by-page product review; visual polish must not silently expand the frozen Core/API boundary.
+
+The approved Windows Security Corpus additionally mandates **PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, and Service/persistence telemetry** alongside Security-Auditing and Sysmon. These families are release-planned corpus scope, not optional future ideas.
+
 ## Architecture
 
 <p align="center">
