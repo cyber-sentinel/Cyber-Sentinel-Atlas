@@ -6,7 +6,7 @@ Status timestamp: 2026-09-19
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Latest merged engineering/control-plane baseline: `c5de34267e6c5a620d581efab7400ae50da341e7` — PR #81 merged after Windows 4688 encyclopedia promotion, PPR-06 package-binding hardening, and Sysmon 15.22 controlled-baseline promotion.
+- Latest post-merge verified engineering/control-plane baseline: `c5de34267e6c5a620d581efab7400ae50da341e7` — PRs #79/#80/#81 merged; Foundation Hygiene run `35424374521` and Phase 5.3.4 Canaries run `35424374528` both completed **SUCCESS**.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
