@@ -330,14 +330,15 @@ The current Engineering Usable Data Preview is a fixture-based proof of the runt
 
 Measured current engineering-pack baseline:
 
-- 23 canonical records;
-- 14 search projections;
+- 178 canonical records (`64` entities, `58` claims, `50` relationships, `6` sources);
+- 16 search projections;
 - 3 graph edges;
-- Windows Security Event ID `4688` end-to-end verified;
-- Sysmon Event ID `1` end-to-end verified;
+- packaged Windows examples: Event IDs `4624` and `4688`;
+- packaged Sysmon examples: Event IDs `1` and `3`;
+- encyclopedia-grade approved exemplars: Windows `4624` and Sysmon `3`;
 - `public_preview_corpus=false`.
 
-The pinned Sysmon 15.21 source profile documents 30 Event IDs (`1..29` plus `255`). Full documented Sysmon event-ID coverage therefore requires 29 additional IDs beyond the current packaged acceptance guarantee.
+The pinned Sysmon 15.22 semantic documentation profile documents 30 Event IDs (`1..29` plus `255`). Sysmon Event `3` is the first approved encyclopedia-grade exemplar; the remaining 29 documented IDs still require encyclopedia-grade materialization before full Sysmon corpus coverage can be claimed. Event `1` remains packaged engineering data but does not count toward the encyclopedia-grade release numerator until it meets the same content contract.
 
 Windows Security/Event Log coverage must first freeze an explicit provider/channel/version denominator. "All Windows Event IDs" is not a valid completion metric until the target providers/channels and versions are machine-readable.
 
