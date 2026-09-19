@@ -20,7 +20,7 @@ Those states are deliberately not treated as equivalent.
 
 ## Release authorities
 
-- Latest merged control-plane baseline: `main@c5de34267e6c5a620d581efab7400ae50da341e7` — PR #79 Windows 4688 encyclopedia content, PR #80 exact package-binding hardening, and PR #81 Sysmon 15.22 controlled-baseline promotion are merged; all three exact-head PR validation sets were green. Post-merge `main` workflows remain a separate verification step.
+- Latest post-merge verified control-plane baseline: `main@c5de34267e6c5a620d581efab7400ae50da341e7` — PR #79 Windows 4688 encyclopedia content, PR #80 exact package-binding hardening, and PR #81 Sysmon 15.22 controlled-baseline promotion are merged; exact-head validation was green and post-merge Foundation Hygiene run `35424374521` plus Phase 5.3.4 Canaries run `35424374528` completed **SUCCESS**.
 - Usable Data Preview post-merge baseline: `main@4d64b2fb402b280d00c01783f7990538a3b67484`, run `35305516189` — **SUCCESS**
 - PPR-04 Tauri/Rust preflight merged baseline: `main@734e20dbb36083d9c5770a22e9c69e844903158f`; PR #54 exact-head run `35309913398` — **SUCCESS**; artifact `10533096533` / `sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d`
 - Public Preview RC functional-freeze baseline: `main@2c7788e08e0254f330cca1cbb0d1a8a9432291f5`; PR #56 exact-head mandatory workflows — **SUCCESS**; signed portable ZIP + GitHub Releases selected; accessibility source/reflow hardening merged
