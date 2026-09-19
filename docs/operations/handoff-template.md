@@ -49,7 +49,7 @@ For each blocker, include the exact failing gate, job, command, or decision depe
 
 ## Files changed
 
-- 
+-
 
 ## Evidence / artifacts
 
