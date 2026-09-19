@@ -18,8 +18,12 @@ Preferred source of truth:
 
 Canonical Microsoft references:
 
-- Sysmon: https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
+- Sysmon Primary Quick Detail / authoritative product documentation: https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
 - Sysinternals: https://learn.microsoft.com/en-us/sysinternals/
+
+Windows Security Quick Detail primary reference:
+
+- Ultimate Windows Security Encyclopedia: https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/
 
 ### Tier B — Primary Engineering
 
@@ -34,9 +38,11 @@ Tier B engineering content does not become authoritative merely because it is va
 
 ### Tier C — Secondary Research
 
-May support context but should not override authoritative sources without review.
+May support context but should not override canonical technical verification without review.
 
-UltimateWindowsSecurity and similar references belong here unless a more specific classification is justified.
+**Approved role exception:** Ultimate Windows Security is the `PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE` and UX/coverage benchmark for Windows Security Event IDs. Its published Terms prohibit using retrieval/index/database/data-mining processes as a corpus ingestion mechanism, so it is not an automated/bulk ATLAS ingestion source without explicit written permission. Microsoft/provider evidence remains the canonical technical verification basis.
+
+The exact source-role rules are authoritative in [Telemetry Source Authority Policy](../content/source-authority-policy.md).
 
 ### Tier D — Community
 
