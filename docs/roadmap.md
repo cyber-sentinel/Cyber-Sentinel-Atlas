@@ -337,8 +337,8 @@ Current controlled coverage state:
 - Sysmon semantic release: **15.22**;
 - Sysmon controlled structural schema: **4.91**;
 - Sysmon documented/current denominator: **30** Event IDs (`1..29` plus `255`);
-- Sysmon encyclopedia-grade numerator: **4/30** — Event IDs `1`, `2`, `3`, and `4`;
-- Sysmon remaining: **26**;
+- Sysmon encyclopedia-grade numerator: **5/30** — Event IDs `1`, `2`, `3`, `4`, and `5`;
+- Sysmon remaining: **25**;
 - global Windows denominator: **NOT FROZEN**;
 - global Windows completion percentage: **intentionally undefined**;
 - Public Preview corpus authority: **NOT GRANTED**.
