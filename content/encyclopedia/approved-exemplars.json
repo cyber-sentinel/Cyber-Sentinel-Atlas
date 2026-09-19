@@ -611,6 +611,104 @@
       "schema_locator": "SYSMONEVENT_NETWORK_CONNECT"
     },
     {
+      "id": "atlas:event:microsoft.sysmon:4",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "4",
+      "title": "Sysmon Event 4 — Sysmon service state changed",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "4",
+      "aliases": [
+        "4",
+        "Sysmon 4",
+        "Sysmon Event 4",
+        "ServiceStateChange",
+        "Sysmon service state changed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 4: Sysmon service state changed",
+      "schema_locator": "SYSMONEVENT_SERVICE_STATE_CHANGE",
+      "overview": {
+        "summary": "Reports a Sysmon service state transition, including the service state together with the Sysmon binary version and active schema version for telemetry continuity analysis.",
+        "event_class": "Service State",
+        "configuration_tag": null,
+        "schema_event_version": 3,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify Sysmon service starts and stops that affect telemetry availability",
+          "detect unexpected service interruption or restart for investigation",
+          "record the Sysmon and schema versions associated with a service transition",
+          "correlate service-state changes with configuration changes, errors and surrounding host activity"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed on the host.",
+          "The Sysmon Operational channel must be collected and retained for the investigation window."
+        ],
+        "configuration_note": "Event 4 is a Sysmon service state event and is not filterable through an EventFiltering tag.",
+        "interpretation_note": "A service stop or start can be legitimate during maintenance, upgrade or reboot. Treat the event as telemetry availability evidence rather than a malicious verdict."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 16",
+          "key": "time + host",
+          "purpose": "determine whether a service transition occurred near a Sysmon configuration change"
+        },
+        {
+          "target": "Sysmon 255",
+          "key": "time + host",
+          "purpose": "identify nearby Sysmon internal errors that may explain telemetry disruption"
+        },
+        {
+          "target": "Sysmon 1 / Windows Security 4688",
+          "key": "time + host",
+          "purpose": "review process execution around unexpected service-state transitions"
+        }
+      ],
+      "analysis": [
+        "Establish whether the reported state change aligns with an approved reboot, upgrade, maintenance window or administrative action.",
+        "Investigate unexpected stops or repeated restart patterns because they can reduce host telemetry visibility, while avoiding treating the event alone as proof of tampering.",
+        "Record Version and SchemaVersion when comparing telemetry behavior across hosts or before and after upgrades.",
+        "Correlate the transition time with Sysmon configuration changes, internal errors and relevant process-execution telemetry to determine operational or security context."
+      ],
+      "fields": [
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the Sysmon service state transition."
+        },
+        {
+          "key": "state",
+          "section": "Service State",
+          "native_name": "State",
+          "type": "UnicodeString",
+          "meaning": "Reported Sysmon service state for the transition, such as a started or stopped state."
+        },
+        {
+          "key": "version",
+          "section": "Runtime Version",
+          "native_name": "Version",
+          "type": "UnicodeString",
+          "meaning": "Sysmon runtime version reported with the service state transition."
+        },
+        {
+          "key": "schemaversion",
+          "section": "Runtime Version",
+          "native_name": "SchemaVersion",
+          "type": "UnicodeString",
+          "meaning": "Sysmon configuration schema version reported with the service state transition."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
