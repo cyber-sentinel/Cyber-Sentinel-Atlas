@@ -1,0 +1,2566 @@
+{
+  "coverage_contract_version": "1.0.0",
+  "product": "Windows Security Auditing",
+  "provider": "Microsoft-Windows-Security-Auditing",
+  "channel": "Security",
+  "reference_scope": {
+    "product": "Windows Server 2025 Datacenter",
+    "windows_version": "24H2",
+    "windows_build": "26100.33296",
+    "architecture": "x64",
+    "locale": "en-US"
+  },
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-auditing-provider-26100.33296",
+  "inventory_digest": "sha256-fa2d7346bf7e28ada33645b232f7b556b6aff8c5def3ec2d491fb8d914b3e969",
+  "psr_representation_digest": "sha256-ef6bf952ef92518ce433f643a9666a50d7824c57b8ec6c5405475864845ac839",
+  "raw_artifact_sha256": "sha256-06569f12a802f0d8a14ceeec23865520af23fa4f240c0421fff3117ccffd7d68",
+  "denominator_kind": "controlled-provider-manifest-unique-event-id",
+  "denominator_count": 423,
+  "provider_event_version_definition_count": 488,
+  "encyclopedia_grade_count": 2,
+  "remaining_count": 421,
+  "completion_ratio": "2/423",
+  "completion_percent": 0.47,
+  "release_numerator_rule": "Only ENCYCLOPEDIA_GRADE maintainer-approved records count.",
+  "legacy_semantics": "This denominator is exact for Microsoft-Windows-Security-Auditing / Security on Windows Server 2025 Datacenter 24H2 build 26100.33296. Absence of historical Event ID 592 does not remove its independently preserved legacy canonical identity and does not imply completeness across other Windows builds/providers/channels.",
+  "events": [
+    {
+      "event_id": "4608",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4608"
+    },
+    {
+      "event_id": "4609",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4609"
+    },
+    {
+      "event_id": "4610",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4610"
+    },
+    {
+      "event_id": "4611",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4611"
+    },
+    {
+      "event_id": "4612",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4612"
+    },
+    {
+      "event_id": "4614",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4614"
+    },
+    {
+      "event_id": "4615",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4615"
+    },
+    {
+      "event_id": "4616",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4616"
+    },
+    {
+      "event_id": "4618",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4618"
+    },
+    {
+      "event_id": "4621",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4621"
+    },
+    {
+      "event_id": "4622",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4622"
+    },
+    {
+      "event_id": "4624",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.security:4624"
+    },
+    {
+      "event_id": "4625",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4625"
+    },
+    {
+      "event_id": "4626",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4626"
+    },
+    {
+      "event_id": "4627",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4627"
+    },
+    {
+      "event_id": "4634",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4634"
+    },
+    {
+      "event_id": "4646",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4646"
+    },
+    {
+      "event_id": "4647",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4647"
+    },
+    {
+      "event_id": "4648",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4648"
+    },
+    {
+      "event_id": "4649",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4649"
+    },
+    {
+      "event_id": "4650",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4650"
+    },
+    {
+      "event_id": "4651",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4651"
+    },
+    {
+      "event_id": "4652",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4652"
+    },
+    {
+      "event_id": "4653",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4653"
+    },
+    {
+      "event_id": "4654",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4654"
+    },
+    {
+      "event_id": "4655",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4655"
+    },
+    {
+      "event_id": "4656",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4656"
+    },
+    {
+      "event_id": "4657",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4657"
+    },
+    {
+      "event_id": "4658",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4658"
+    },
+    {
+      "event_id": "4659",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4659"
+    },
+    {
+      "event_id": "4660",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4660"
+    },
+    {
+      "event_id": "4661",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4661"
+    },
+    {
+      "event_id": "4662",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4662"
+    },
+    {
+      "event_id": "4663",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4663"
+    },
+    {
+      "event_id": "4664",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4664"
+    },
+    {
+      "event_id": "4665",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4665"
+    },
+    {
+      "event_id": "4666",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4666"
+    },
+    {
+      "event_id": "4667",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4667"
+    },
+    {
+      "event_id": "4668",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4668"
+    },
+    {
+      "event_id": "4670",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4670"
+    },
+    {
+      "event_id": "4671",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4671"
+    },
+    {
+      "event_id": "4672",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4672"
+    },
+    {
+      "event_id": "4673",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4673"
+    },
+    {
+      "event_id": "4674",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4674"
+    },
+    {
+      "event_id": "4675",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4675"
+    },
+    {
+      "event_id": "4688",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.security:4688"
+    },
+    {
+      "event_id": "4689",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4689"
+    },
+    {
+      "event_id": "4690",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4690"
+    },
+    {
+      "event_id": "4691",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4691"
+    },
+    {
+      "event_id": "4692",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4692"
+    },
+    {
+      "event_id": "4693",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4693"
+    },
+    {
+      "event_id": "4694",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4694"
+    },
+    {
+      "event_id": "4695",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4695"
+    },
+    {
+      "event_id": "4696",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4696"
+    },
+    {
+      "event_id": "4697",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4697"
+    },
+    {
+      "event_id": "4698",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4698"
+    },
+    {
+      "event_id": "4699",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4699"
+    },
+    {
+      "event_id": "4700",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4700"
+    },
+    {
+      "event_id": "4701",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4701"
+    },
+    {
+      "event_id": "4702",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4702"
+    },
+    {
+      "event_id": "4703",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4703"
+    },
+    {
+      "event_id": "4704",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4704"
+    },
+    {
+      "event_id": "4705",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4705"
+    },
+    {
+      "event_id": "4706",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4706"
+    },
+    {
+      "event_id": "4707",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4707"
+    },
+    {
+      "event_id": "4709",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4709"
+    },
+    {
+      "event_id": "4710",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4710"
+    },
+    {
+      "event_id": "4711",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4711"
+    },
+    {
+      "event_id": "4712",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4712"
+    },
+    {
+      "event_id": "4713",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4713"
+    },
+    {
+      "event_id": "4714",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4714"
+    },
+    {
+      "event_id": "4715",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4715"
+    },
+    {
+      "event_id": "4716",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4716"
+    },
+    {
+      "event_id": "4717",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4717"
+    },
+    {
+      "event_id": "4718",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4718"
+    },
+    {
+      "event_id": "4719",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4719"
+    },
+    {
+      "event_id": "4720",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4720"
+    },
+    {
+      "event_id": "4722",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4722"
+    },
+    {
+      "event_id": "4723",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4723"
+    },
+    {
+      "event_id": "4724",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4724"
+    },
+    {
+      "event_id": "4725",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4725"
+    },
+    {
+      "event_id": "4726",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4726"
+    },
+    {
+      "event_id": "4727",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4727"
+    },
+    {
+      "event_id": "4728",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4728"
+    },
+    {
+      "event_id": "4729",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4729"
+    },
+    {
+      "event_id": "4730",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4730"
+    },
+    {
+      "event_id": "4731",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4731"
+    },
+    {
+      "event_id": "4732",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4732"
+    },
+    {
+      "event_id": "4733",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4733"
+    },
+    {
+      "event_id": "4734",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4734"
+    },
+    {
+      "event_id": "4735",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4735"
+    },
+    {
+      "event_id": "4737",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4737"
+    },
+    {
+      "event_id": "4738",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4738"
+    },
+    {
+      "event_id": "4739",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4739"
+    },
+    {
+      "event_id": "4740",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4740"
+    },
+    {
+      "event_id": "4741",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4741"
+    },
+    {
+      "event_id": "4742",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4742"
+    },
+    {
+      "event_id": "4743",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4743"
+    },
+    {
+      "event_id": "4744",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4744"
+    },
+    {
+      "event_id": "4745",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4745"
+    },
+    {
+      "event_id": "4746",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4746"
+    },
+    {
+      "event_id": "4747",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4747"
+    },
+    {
+      "event_id": "4748",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4748"
+    },
+    {
+      "event_id": "4749",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4749"
+    },
+    {
+      "event_id": "4750",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4750"
+    },
+    {
+      "event_id": "4751",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4751"
+    },
+    {
+      "event_id": "4752",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4752"
+    },
+    {
+      "event_id": "4753",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4753"
+    },
+    {
+      "event_id": "4754",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4754"
+    },
+    {
+      "event_id": "4755",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4755"
+    },
+    {
+      "event_id": "4756",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4756"
+    },
+    {
+      "event_id": "4757",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4757"
+    },
+    {
+      "event_id": "4758",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4758"
+    },
+    {
+      "event_id": "4759",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4759"
+    },
+    {
+      "event_id": "4760",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4760"
+    },
+    {
+      "event_id": "4761",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4761"
+    },
+    {
+      "event_id": "4762",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4762"
+    },
+    {
+      "event_id": "4763",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4763"
+    },
+    {
+      "event_id": "4764",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4764"
+    },
+    {
+      "event_id": "4765",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4765"
+    },
+    {
+      "event_id": "4766",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4766"
+    },
+    {
+      "event_id": "4767",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4767"
+    },
+    {
+      "event_id": "4768",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4768"
+    },
+    {
+      "event_id": "4769",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4769"
+    },
+    {
+      "event_id": "4770",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4770"
+    },
+    {
+      "event_id": "4771",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4771"
+    },
+    {
+      "event_id": "4772",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4772"
+    },
+    {
+      "event_id": "4773",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4773"
+    },
+    {
+      "event_id": "4774",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4774"
+    },
+    {
+      "event_id": "4775",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4775"
+    },
+    {
+      "event_id": "4776",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4776"
+    },
+    {
+      "event_id": "4777",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4777"
+    },
+    {
+      "event_id": "4778",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4778"
+    },
+    {
+      "event_id": "4779",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4779"
+    },
+    {
+      "event_id": "4780",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4780"
+    },
+    {
+      "event_id": "4781",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4781"
+    },
+    {
+      "event_id": "4782",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4782"
+    },
+    {
+      "event_id": "4783",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4783"
+    },
+    {
+      "event_id": "4784",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4784"
+    },
+    {
+      "event_id": "4785",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4785"
+    },
+    {
+      "event_id": "4786",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4786"
+    },
+    {
+      "event_id": "4787",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4787"
+    },
+    {
+      "event_id": "4788",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4788"
+    },
+    {
+      "event_id": "4789",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4789"
+    },
+    {
+      "event_id": "4790",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4790"
+    },
+    {
+      "event_id": "4791",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4791"
+    },
+    {
+      "event_id": "4792",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4792"
+    },
+    {
+      "event_id": "4793",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4793"
+    },
+    {
+      "event_id": "4794",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4794"
+    },
+    {
+      "event_id": "4797",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4797"
+    },
+    {
+      "event_id": "4798",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4798"
+    },
+    {
+      "event_id": "4799",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4799"
+    },
+    {
+      "event_id": "4800",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4800"
+    },
+    {
+      "event_id": "4801",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4801"
+    },
+    {
+      "event_id": "4802",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4802"
+    },
+    {
+      "event_id": "4803",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4803"
+    },
+    {
+      "event_id": "4816",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4816"
+    },
+    {
+      "event_id": "4817",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4817"
+    },
+    {
+      "event_id": "4818",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4818"
+    },
+    {
+      "event_id": "4819",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4819"
+    },
+    {
+      "event_id": "4820",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4820"
+    },
+    {
+      "event_id": "4821",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4821"
+    },
+    {
+      "event_id": "4822",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4822"
+    },
+    {
+      "event_id": "4823",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4823"
+    },
+    {
+      "event_id": "4824",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4824"
+    },
+    {
+      "event_id": "4825",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4825"
+    },
+    {
+      "event_id": "4826",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4826"
+    },
+    {
+      "event_id": "4830",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4830"
+    },
+    {
+      "event_id": "4864",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4864"
+    },
+    {
+      "event_id": "4865",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4865"
+    },
+    {
+      "event_id": "4866",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4866"
+    },
+    {
+      "event_id": "4867",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4867"
+    },
+    {
+      "event_id": "4868",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4868"
+    },
+    {
+      "event_id": "4869",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4869"
+    },
+    {
+      "event_id": "4870",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4870"
+    },
+    {
+      "event_id": "4871",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4871"
+    },
+    {
+      "event_id": "4872",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4872"
+    },
+    {
+      "event_id": "4873",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4873"
+    },
+    {
+      "event_id": "4874",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4874"
+    },
+    {
+      "event_id": "4875",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4875"
+    },
+    {
+      "event_id": "4876",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4876"
+    },
+    {
+      "event_id": "4877",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4877"
+    },
+    {
+      "event_id": "4878",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4878"
+    },
+    {
+      "event_id": "4879",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4879"
+    },
+    {
+      "event_id": "4880",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4880"
+    },
+    {
+      "event_id": "4881",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4881"
+    },
+    {
+      "event_id": "4882",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4882"
+    },
+    {
+      "event_id": "4883",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4883"
+    },
+    {
+      "event_id": "4884",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4884"
+    },
+    {
+      "event_id": "4885",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4885"
+    },
+    {
+      "event_id": "4886",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4886"
+    },
+    {
+      "event_id": "4887",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4887"
+    },
+    {
+      "event_id": "4888",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4888"
+    },
+    {
+      "event_id": "4889",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4889"
+    },
+    {
+      "event_id": "4890",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4890"
+    },
+    {
+      "event_id": "4891",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4891"
+    },
+    {
+      "event_id": "4892",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4892"
+    },
+    {
+      "event_id": "4893",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4893"
+    },
+    {
+      "event_id": "4894",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4894"
+    },
+    {
+      "event_id": "4895",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4895"
+    },
+    {
+      "event_id": "4896",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4896"
+    },
+    {
+      "event_id": "4897",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4897"
+    },
+    {
+      "event_id": "4898",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4898"
+    },
+    {
+      "event_id": "4899",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4899"
+    },
+    {
+      "event_id": "4900",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4900"
+    },
+    {
+      "event_id": "4902",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4902"
+    },
+    {
+      "event_id": "4904",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4904"
+    },
+    {
+      "event_id": "4905",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4905"
+    },
+    {
+      "event_id": "4906",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4906"
+    },
+    {
+      "event_id": "4907",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4907"
+    },
+    {
+      "event_id": "4908",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4908"
+    },
+    {
+      "event_id": "4909",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4909"
+    },
+    {
+      "event_id": "4910",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4910"
+    },
+    {
+      "event_id": "4911",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4911"
+    },
+    {
+      "event_id": "4912",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4912"
+    },
+    {
+      "event_id": "4913",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4913"
+    },
+    {
+      "event_id": "4928",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4928"
+    },
+    {
+      "event_id": "4929",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4929"
+    },
+    {
+      "event_id": "4930",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4930"
+    },
+    {
+      "event_id": "4931",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4931"
+    },
+    {
+      "event_id": "4932",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4932"
+    },
+    {
+      "event_id": "4933",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4933"
+    },
+    {
+      "event_id": "4934",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4934"
+    },
+    {
+      "event_id": "4935",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4935"
+    },
+    {
+      "event_id": "4936",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4936"
+    },
+    {
+      "event_id": "4937",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4937"
+    },
+    {
+      "event_id": "4944",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4944"
+    },
+    {
+      "event_id": "4945",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4945"
+    },
+    {
+      "event_id": "4946",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4946"
+    },
+    {
+      "event_id": "4947",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4947"
+    },
+    {
+      "event_id": "4948",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4948"
+    },
+    {
+      "event_id": "4949",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4949"
+    },
+    {
+      "event_id": "4950",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4950"
+    },
+    {
+      "event_id": "4951",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4951"
+    },
+    {
+      "event_id": "4952",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4952"
+    },
+    {
+      "event_id": "4953",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4953"
+    },
+    {
+      "event_id": "4954",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4954"
+    },
+    {
+      "event_id": "4956",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4956"
+    },
+    {
+      "event_id": "4957",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4957"
+    },
+    {
+      "event_id": "4958",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4958"
+    },
+    {
+      "event_id": "4960",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4960"
+    },
+    {
+      "event_id": "4961",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4961"
+    },
+    {
+      "event_id": "4962",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4962"
+    },
+    {
+      "event_id": "4963",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4963"
+    },
+    {
+      "event_id": "4964",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4964"
+    },
+    {
+      "event_id": "4965",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4965"
+    },
+    {
+      "event_id": "4976",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4976"
+    },
+    {
+      "event_id": "4977",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4977"
+    },
+    {
+      "event_id": "4978",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4978"
+    },
+    {
+      "event_id": "4979",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4979"
+    },
+    {
+      "event_id": "4980",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4980"
+    },
+    {
+      "event_id": "4981",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4981"
+    },
+    {
+      "event_id": "4982",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4982"
+    },
+    {
+      "event_id": "4983",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4983"
+    },
+    {
+      "event_id": "4984",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4984"
+    },
+    {
+      "event_id": "4985",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:4985"
+    },
+    {
+      "event_id": "5024",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5024"
+    },
+    {
+      "event_id": "5025",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5025"
+    },
+    {
+      "event_id": "5027",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5027"
+    },
+    {
+      "event_id": "5028",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5028"
+    },
+    {
+      "event_id": "5029",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5029"
+    },
+    {
+      "event_id": "5030",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5030"
+    },
+    {
+      "event_id": "5031",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5031"
+    },
+    {
+      "event_id": "5032",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5032"
+    },
+    {
+      "event_id": "5033",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5033"
+    },
+    {
+      "event_id": "5034",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5034"
+    },
+    {
+      "event_id": "5035",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5035"
+    },
+    {
+      "event_id": "5037",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5037"
+    },
+    {
+      "event_id": "5038",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5038"
+    },
+    {
+      "event_id": "5039",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5039"
+    },
+    {
+      "event_id": "5040",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5040"
+    },
+    {
+      "event_id": "5041",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5041"
+    },
+    {
+      "event_id": "5042",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5042"
+    },
+    {
+      "event_id": "5043",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5043"
+    },
+    {
+      "event_id": "5044",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5044"
+    },
+    {
+      "event_id": "5045",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5045"
+    },
+    {
+      "event_id": "5046",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5046"
+    },
+    {
+      "event_id": "5047",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5047"
+    },
+    {
+      "event_id": "5048",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5048"
+    },
+    {
+      "event_id": "5049",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5049"
+    },
+    {
+      "event_id": "5050",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5050"
+    },
+    {
+      "event_id": "5051",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5051"
+    },
+    {
+      "event_id": "5056",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5056"
+    },
+    {
+      "event_id": "5057",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5057"
+    },
+    {
+      "event_id": "5058",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5058"
+    },
+    {
+      "event_id": "5059",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5059"
+    },
+    {
+      "event_id": "5060",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5060"
+    },
+    {
+      "event_id": "5061",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5061"
+    },
+    {
+      "event_id": "5062",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5062"
+    },
+    {
+      "event_id": "5063",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5063"
+    },
+    {
+      "event_id": "5064",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5064"
+    },
+    {
+      "event_id": "5065",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5065"
+    },
+    {
+      "event_id": "5066",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5066"
+    },
+    {
+      "event_id": "5067",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5067"
+    },
+    {
+      "event_id": "5068",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5068"
+    },
+    {
+      "event_id": "5069",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5069"
+    },
+    {
+      "event_id": "5070",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5070"
+    },
+    {
+      "event_id": "5071",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5071"
+    },
+    {
+      "event_id": "5120",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5120"
+    },
+    {
+      "event_id": "5121",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5121"
+    },
+    {
+      "event_id": "5122",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5122"
+    },
+    {
+      "event_id": "5123",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5123"
+    },
+    {
+      "event_id": "5124",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5124"
+    },
+    {
+      "event_id": "5125",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5125"
+    },
+    {
+      "event_id": "5126",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5126"
+    },
+    {
+      "event_id": "5127",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5127"
+    },
+    {
+      "event_id": "5136",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5136"
+    },
+    {
+      "event_id": "5137",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5137"
+    },
+    {
+      "event_id": "5138",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5138"
+    },
+    {
+      "event_id": "5139",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5139"
+    },
+    {
+      "event_id": "5140",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5140"
+    },
+    {
+      "event_id": "5141",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5141"
+    },
+    {
+      "event_id": "5142",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5142"
+    },
+    {
+      "event_id": "5143",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5143"
+    },
+    {
+      "event_id": "5144",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5144"
+    },
+    {
+      "event_id": "5145",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5145"
+    },
+    {
+      "event_id": "5146",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5146"
+    },
+    {
+      "event_id": "5147",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5147"
+    },
+    {
+      "event_id": "5148",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5148"
+    },
+    {
+      "event_id": "5149",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5149"
+    },
+    {
+      "event_id": "5150",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5150"
+    },
+    {
+      "event_id": "5151",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5151"
+    },
+    {
+      "event_id": "5152",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5152"
+    },
+    {
+      "event_id": "5153",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5153"
+    },
+    {
+      "event_id": "5154",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5154"
+    },
+    {
+      "event_id": "5155",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5155"
+    },
+    {
+      "event_id": "5156",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5156"
+    },
+    {
+      "event_id": "5157",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5157"
+    },
+    {
+      "event_id": "5158",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5158"
+    },
+    {
+      "event_id": "5159",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5159"
+    },
+    {
+      "event_id": "5160",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5160"
+    },
+    {
+      "event_id": "5168",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5168"
+    },
+    {
+      "event_id": "5169",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5169"
+    },
+    {
+      "event_id": "5170",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5170"
+    },
+    {
+      "event_id": "5376",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5376"
+    },
+    {
+      "event_id": "5377",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5377"
+    },
+    {
+      "event_id": "5378",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5378"
+    },
+    {
+      "event_id": "5379",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5379"
+    },
+    {
+      "event_id": "5380",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5380"
+    },
+    {
+      "event_id": "5381",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5381"
+    },
+    {
+      "event_id": "5382",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5382"
+    },
+    {
+      "event_id": "5440",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5440"
+    },
+    {
+      "event_id": "5441",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5441"
+    },
+    {
+      "event_id": "5442",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5442"
+    },
+    {
+      "event_id": "5443",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5443"
+    },
+    {
+      "event_id": "5444",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5444"
+    },
+    {
+      "event_id": "5446",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5446"
+    },
+    {
+      "event_id": "5447",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5447"
+    },
+    {
+      "event_id": "5448",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5448"
+    },
+    {
+      "event_id": "5449",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5449"
+    },
+    {
+      "event_id": "5450",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5450"
+    },
+    {
+      "event_id": "5451",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5451"
+    },
+    {
+      "event_id": "5452",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5452"
+    },
+    {
+      "event_id": "5453",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5453"
+    },
+    {
+      "event_id": "5456",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5456"
+    },
+    {
+      "event_id": "5457",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5457"
+    },
+    {
+      "event_id": "5458",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5458"
+    },
+    {
+      "event_id": "5459",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5459"
+    },
+    {
+      "event_id": "5460",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5460"
+    },
+    {
+      "event_id": "5461",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5461"
+    },
+    {
+      "event_id": "5462",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5462"
+    },
+    {
+      "event_id": "5463",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5463"
+    },
+    {
+      "event_id": "5464",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5464"
+    },
+    {
+      "event_id": "5465",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5465"
+    },
+    {
+      "event_id": "5466",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5466"
+    },
+    {
+      "event_id": "5467",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5467"
+    },
+    {
+      "event_id": "5468",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5468"
+    },
+    {
+      "event_id": "5471",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5471"
+    },
+    {
+      "event_id": "5472",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5472"
+    },
+    {
+      "event_id": "5473",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5473"
+    },
+    {
+      "event_id": "5474",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5474"
+    },
+    {
+      "event_id": "5477",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5477"
+    },
+    {
+      "event_id": "5478",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5478"
+    },
+    {
+      "event_id": "5479",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5479"
+    },
+    {
+      "event_id": "5480",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5480"
+    },
+    {
+      "event_id": "5483",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5483"
+    },
+    {
+      "event_id": "5484",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5484"
+    },
+    {
+      "event_id": "5485",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5485"
+    },
+    {
+      "event_id": "5632",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5632"
+    },
+    {
+      "event_id": "5633",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5633"
+    },
+    {
+      "event_id": "5712",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5712"
+    },
+    {
+      "event_id": "5888",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5888"
+    },
+    {
+      "event_id": "5889",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5889"
+    },
+    {
+      "event_id": "5890",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:5890"
+    },
+    {
+      "event_id": "6144",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6144"
+    },
+    {
+      "event_id": "6145",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6145"
+    },
+    {
+      "event_id": "6272",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6272"
+    },
+    {
+      "event_id": "6273",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6273"
+    },
+    {
+      "event_id": "6274",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6274"
+    },
+    {
+      "event_id": "6275",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6275"
+    },
+    {
+      "event_id": "6276",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6276"
+    },
+    {
+      "event_id": "6277",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6277"
+    },
+    {
+      "event_id": "6278",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6278"
+    },
+    {
+      "event_id": "6279",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6279"
+    },
+    {
+      "event_id": "6280",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6280"
+    },
+    {
+      "event_id": "6281",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6281"
+    },
+    {
+      "event_id": "6400",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6400"
+    },
+    {
+      "event_id": "6401",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6401"
+    },
+    {
+      "event_id": "6402",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6402"
+    },
+    {
+      "event_id": "6403",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6403"
+    },
+    {
+      "event_id": "6404",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6404"
+    },
+    {
+      "event_id": "6405",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6405"
+    },
+    {
+      "event_id": "6406",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6406"
+    },
+    {
+      "event_id": "6407",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6407"
+    },
+    {
+      "event_id": "6408",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6408"
+    },
+    {
+      "event_id": "6409",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6409"
+    },
+    {
+      "event_id": "6410",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6410"
+    },
+    {
+      "event_id": "6416",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6416"
+    },
+    {
+      "event_id": "6417",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6417"
+    },
+    {
+      "event_id": "6418",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6418"
+    },
+    {
+      "event_id": "6419",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6419"
+    },
+    {
+      "event_id": "6420",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6420"
+    },
+    {
+      "event_id": "6421",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6421"
+    },
+    {
+      "event_id": "6422",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6422"
+    },
+    {
+      "event_id": "6423",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6423"
+    },
+    {
+      "event_id": "6424",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6424"
+    },
+    {
+      "event_id": "6425",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6425"
+    },
+    {
+      "event_id": "6426",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6426"
+    },
+    {
+      "event_id": "6427",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6427"
+    },
+    {
+      "event_id": "6428",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6428"
+    },
+    {
+      "event_id": "6429",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6429"
+    },
+    {
+      "event_id": "6430",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:6430"
+    },
+    {
+      "event_id": "8191",
+      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": false,
+      "canonical_id": "atlas:event:microsoft.windows.security:8191"
+    }
+  ]
+}
