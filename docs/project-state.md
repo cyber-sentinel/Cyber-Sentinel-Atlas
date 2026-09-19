@@ -4,9 +4,11 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `9ca62250a240f3f954ca5ec42f345b75dfc9aeb7`
-- Latest verified engineering/control-plane baseline: `9ca62250a240f3f954ca5ec42f345b75dfc9aeb7`
-- Release authority remains `main`; documentation commits may advance the branch without redefining the verified control-plane baseline above.
+- Last Reviewed Main SHA: `4bfe222eb708347ea0769da400c40dbdaf289b69`
+- Latest merged engineering/control-plane baseline: `4bfe222eb708347ea0769da400c40dbdaf289b69`
+- PR #85 exact-head baseline: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene `35429390496`, Phase 5.3.4 Canaries `35429390498`, and Phase 5.10.5 Usable Data Preview `35429390479` all **SUCCESS**
+- PR #85 merged to `main` as `4bfe222eb708347ea0769da400c40dbdaf289b69`; post-merge workflows are required before labeling this merge commit POST-MERGE VERIFIED.
+- Release authority remains `main`; documentation commits may advance the branch without redefining the verified product evidence above.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
 - Phase 5.6 documentation closure: PR #41 — **MERGED**
@@ -19,6 +21,8 @@
 - Phase 5.10.10 Sysmon 15.22 semantic documentation: PR #67 — **MERGED**
 - Phase 5.10.10 Windows 4624 + Sysmon 3 production exemplars: PR #70 — **MERGED**
 - Phase 5.10.10 bounded Record Detail + no-console Windows sidecar: PR #72 — **MERGED**
+- Phase 5.10.10 Sysmon Event 1 encyclopedia promotion + frozen coverage ledger: PR #85 — **MERGED / EXACT-HEAD CI GREEN**
+  - stacked coverage-ledger PR #87 integrated into PR #85 before final exact-head verification
 - Approved Product Family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
