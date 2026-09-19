@@ -4,7 +4,7 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `c5de34267e6c5a620d581efab7400ae50da341e7`
+- Last Reviewed Main SHA: `d836721af2e75510773109807e9f34a748ee469e`
 - Latest post-merge verified engineering/control-plane baseline: `c5de34267e6c5a620d581efab7400ae50da341e7`
 - PR #79, PR #80 and PR #81 exact-head validations were **GREEN**; post-merge Foundation Hygiene run `35424374521` and Phase 5.3.4 Canaries run `35424374528` both completed **SUCCESS**.
 - Release authority remains `main`; documentation commits may advance the branch without redefining the package/release evidence baselines recorded below.
@@ -23,6 +23,9 @@
 - Phase 5.10.10 Windows Security 4688 encyclopedia promotion: PR #79 — **MERGED / EXACT-HEAD CI GREEN**
 - Phase 5.10.3 exact package-binding hardening: PR #80 — **MERGED / EXACT-HEAD CI GREEN**
 - Phase 5.10.10 Sysmon 15.22 controlled schema baseline promotion: PR #81 — **MERGED / EXACT-HEAD CI GREEN**
+- Phase 5.10.10 Sysmon schema-evidence binding: PR #83 — **MERGED / FOUNDATION CI GREEN**
+- Phase 5.10.10 Sysmon Event 1 encyclopedia promotion: PR #85 — **ACTIVE CANDIDATE / FINAL CI PENDING**
+- Phase 5.10.10 Windows Security denominator + coverage ledger: PR #87 — **STACKED ACTIVE CANDIDATE / FINAL CI PENDING**
 - Approved Product Family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
