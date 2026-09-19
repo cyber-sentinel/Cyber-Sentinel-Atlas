@@ -1,0 +1,254 @@
+{
+  "manifest_contract_version": "1.0.0",
+  "source_id": "atlas:source:atlas.source:microsoft-sysmon-schema-export",
+  "source_version": "sysmon-15.22-schema-4.91",
+  "sysmon_version": "15.22",
+  "schema_version": "4.91",
+  "reference_workflow_run_id": 35413291632,
+  "reference_artifact_id": 10574893522,
+  "raw_artifact_sha256": "sha256-119d6c03612d2d1e8272571257f8efa18de4d8c122628e6004eaabca8ac817bb",
+  "event_count": 30,
+  "derivation": "structural digests from operator-reviewed controlled Sysmon 15.22 schema export; raw export is not redistributed",
+  "events": [
+    {
+      "event_id": "1",
+      "event_name": "SYSMONEVENT_CREATE_PROCESS",
+      "event_version": 5,
+      "field_count": 23,
+      "field_names_sha256": "sha256-26ee2edb41c597709d9be51e6e5792447e84271519958f86f1a557e72a7c95e1",
+      "field_structure_sha256": "sha256-5807769c64ed5a16a8f1ab3c0fd0d8ebfb7f7411d986736ef8d635efcdd1cdd4"
+    },
+    {
+      "event_id": "2",
+      "event_name": "SYSMONEVENT_FILE_TIME",
+      "event_version": 5,
+      "field_count": 9,
+      "field_names_sha256": "sha256-10efc73cded93e192e83aa22ad88463d783b1c68d73e0130802818acbb67a3a8",
+      "field_structure_sha256": "sha256-399f5c47824ef1629f56560595b5fb428061441558a87d2ae74474d9a19b8508"
+    },
+    {
+      "event_id": "3",
+      "event_name": "SYSMONEVENT_NETWORK_CONNECT",
+      "event_version": 5,
+      "field_count": 18,
+      "field_names_sha256": "sha256-57ff9b8dcaab7cdb5949f41b41c20c5e57d16fa0e7fa1040980d7d840eda1bef",
+      "field_structure_sha256": "sha256-120c43de2f8fb073a3fde0bc2f9aa9ba9bcb212a28fdcb7dafc123ab5eae56b3"
+    },
+    {
+      "event_id": "4",
+      "event_name": "SYSMONEVENT_SERVICE_STATE_CHANGE",
+      "event_version": 3,
+      "field_count": 4,
+      "field_names_sha256": "sha256-f44e9e1ab3d07b0b63879c7b22b7a4993ab19fbfb0c5122d56049c7e16255e7c",
+      "field_structure_sha256": "sha256-353746b53071fd881610ce212d5f1fa00c5390a40c754dd0abb38e6bcfd93725"
+    },
+    {
+      "event_id": "5",
+      "event_name": "SYSMONEVENT_PROCESS_TERMINATE",
+      "event_version": 3,
+      "field_count": 6,
+      "field_names_sha256": "sha256-451a92c3d1cffe953d99b5547c57e94f7f073c6e619d5cf206fb125f3588b478",
+      "field_structure_sha256": "sha256-33b5615a66b6e0bf72a104b220bfb0337db49963c0f14cae917b33c5a5bdd81f"
+    },
+    {
+      "event_id": "6",
+      "event_name": "SYSMONEVENT_DRIVER_LOAD",
+      "event_version": 4,
+      "field_count": 7,
+      "field_names_sha256": "sha256-72dacc46eb0c98cece0068735043ad3070aaedfca1b55f66d330ccb8d5ff6b0f",
+      "field_structure_sha256": "sha256-9219078b23beda0bda24c1856e7c3c4934edc04cd588b03142c7a34778732567"
+    },
+    {
+      "event_id": "7",
+      "event_name": "SYSMONEVENT_IMAGE_LOAD",
+      "event_version": 3,
+      "field_count": 16,
+      "field_names_sha256": "sha256-df7f338c18db644bd0acccd1380eb391660280747b4dfc3e4472acb41d08aace",
+      "field_structure_sha256": "sha256-a0c801aad3e29bd59b59ae14315b5c282d0a82e9b24cb8c6950ef92e7227e030"
+    },
+    {
+      "event_id": "8",
+      "event_name": "SYSMONEVENT_CREATE_REMOTE_THREAD",
+      "event_version": 2,
+      "field_count": 14,
+      "field_names_sha256": "sha256-d174a2af31dfd072aa813b77255398c84910244316a9324cebc46511b02a3461",
+      "field_structure_sha256": "sha256-39864f83d7637f5da2e12972b3bb3870b4149f092d96d4f5a7feede5d1250cae"
+    },
+    {
+      "event_id": "9",
+      "event_name": "SYSMONEVENT_RAWACCESS_READ",
+      "event_version": 2,
+      "field_count": 7,
+      "field_names_sha256": "sha256-e299a420b10fa514e4d1242696eaf8a782ef672f7aea46563b43ccf8db0761d9",
+      "field_structure_sha256": "sha256-193d172e5586f1edaca7347b4acf5f86b41a96256d51881f6258a5f83a6c85d4"
+    },
+    {
+      "event_id": "10",
+      "event_name": "SYSMONEVENT_ACCESS_PROCESS",
+      "event_version": 3,
+      "field_count": 13,
+      "field_names_sha256": "sha256-a07b46d1abc8e6b092a5227aabc19eae4043f51b86c149760ef27aa2de1196bd",
+      "field_structure_sha256": "sha256-f6ec4dd979bd134689e013199778506b644463479b5c104aea83f1a95e23cd6f"
+    },
+    {
+      "event_id": "11",
+      "event_name": "SYSMONEVENT_FILE_CREATE",
+      "event_version": 2,
+      "field_count": 8,
+      "field_names_sha256": "sha256-99428ab75b09edc3409e5e01aa07027cb86326c34714616e6c385bffbc834516",
+      "field_structure_sha256": "sha256-96affc1819d8998309ddd75e40ba25a8b7fd2ba4e884547b812b2b65f8e471bc"
+    },
+    {
+      "event_id": "12",
+      "event_name": "SYSMONEVENT_REG_KEY",
+      "event_version": 2,
+      "field_count": 8,
+      "field_names_sha256": "sha256-bf66d73459f700bca42e9446d340b9a6bb9b1fe90e202051bfb01cc0afc1fd37",
+      "field_structure_sha256": "sha256-a9a220e6888957b116a5b1e6e69d240765b69dd10b45f25ef6a95aa90e8d6da8"
+    },
+    {
+      "event_id": "13",
+      "event_name": "SYSMONEVENT_REG_SETVALUE",
+      "event_version": 2,
+      "field_count": 9,
+      "field_names_sha256": "sha256-833a46058eadc3fe300b31f8d8905693844b0f50aabcc706047b29628b5f6b2e",
+      "field_structure_sha256": "sha256-f658b40c8366745c5e97f611b651ad5cabf7695a754da02f8367c3dd7ecec968"
+    },
+    {
+      "event_id": "14",
+      "event_name": "SYSMONEVENT_REG_NAME",
+      "event_version": 2,
+      "field_count": 9,
+      "field_names_sha256": "sha256-3aba0661548c65d4a04194ad7d3d2005ac086e7047cd9bd6fd8f71fc35207b7e",
+      "field_structure_sha256": "sha256-3466a6ad55964d514460d1731d942a0237f773416887dd47a049675488e47b51"
+    },
+    {
+      "event_id": "15",
+      "event_name": "SYSMONEVENT_FILE_CREATE_STREAM_HASH",
+      "event_version": 2,
+      "field_count": 10,
+      "field_names_sha256": "sha256-fc1238ceec0533764b889da295152342e175b3ce46ab0f34f5785079e47fe503",
+      "field_structure_sha256": "sha256-4cbc10a9e9ff2429b6ac780a6033e06d083a72ce3f2d88e1d464f2a76afc07c6"
+    },
+    {
+      "event_id": "16",
+      "event_name": "SYSMONEVENT_SERVICE_CONFIGURATION_CHANGE",
+      "event_version": 3,
+      "field_count": 3,
+      "field_names_sha256": "sha256-0977148bfc014963247fb2098dfd438208a6137b7f4020a65e7c3d0829784bc9",
+      "field_structure_sha256": "sha256-83d3984499c2a64ee58f5622347dcaad8adfb4da0e0a545c1803f0ce442611ce"
+    },
+    {
+      "event_id": "17",
+      "event_name": "SYSMONEVENT_CREATE_NAMEDPIPE",
+      "event_version": 1,
+      "field_count": 8,
+      "field_names_sha256": "sha256-fa530c880f262ca7b35c4db9ae69e3bc00a7ca03fdc011c694fcb1be06fe2aee",
+      "field_structure_sha256": "sha256-59f25fb6e300a5904f25d506c00ca0654722fd6d9bbe7e06af03450878720cd9"
+    },
+    {
+      "event_id": "18",
+      "event_name": "SYSMONEVENT_CONNECT_NAMEDPIPE",
+      "event_version": 1,
+      "field_count": 8,
+      "field_names_sha256": "sha256-fa530c880f262ca7b35c4db9ae69e3bc00a7ca03fdc011c694fcb1be06fe2aee",
+      "field_structure_sha256": "sha256-59f25fb6e300a5904f25d506c00ca0654722fd6d9bbe7e06af03450878720cd9"
+    },
+    {
+      "event_id": "19",
+      "event_name": "SYSMONEVENT_WMI_FILTER",
+      "event_version": 3,
+      "field_count": 8,
+      "field_names_sha256": "sha256-5744d06a59567dfd9836f54dd00edf490120bb9d6da353ef00b2e5d11ca4158d",
+      "field_structure_sha256": "sha256-226b943595b405ba75abe9f59c42524f4ab0f45a6d56e77caa350df1b0ad1bf9"
+    },
+    {
+      "event_id": "20",
+      "event_name": "SYSMONEVENT_WMI_CONSUMER",
+      "event_version": 3,
+      "field_count": 8,
+      "field_names_sha256": "sha256-e1a344ca7484f541c91a3f56dabc62b0317206dcfb0128121ef330264a4a4476",
+      "field_structure_sha256": "sha256-681f98ffd19452f1881129d0ee842ac78c24cd24f6bc6d47273514fae9ff89d5"
+    },
+    {
+      "event_id": "21",
+      "event_name": "SYSMONEVENT_WMI_BINDING",
+      "event_version": 3,
+      "field_count": 7,
+      "field_names_sha256": "sha256-0fc87f0196cdafdf5a0017c4f83b38915cc770f50882b5e1cff3973b1e99152d",
+      "field_structure_sha256": "sha256-2557d95ba4df612d6c0a950890bb1096f37bc899e4bc66ad23f2dfc8fe6430bb"
+    },
+    {
+      "event_id": "22",
+      "event_name": "SYSMONEVENT_DNS_QUERY",
+      "event_version": 5,
+      "field_count": 9,
+      "field_names_sha256": "sha256-f4437731b79a77b91a4985f8c384fb7c67e8ae4f213224c1101970ea1362d59c",
+      "field_structure_sha256": "sha256-bf3582c39f4184a7b33b385cc6e340be4476aab6b1b108b005753e97100b0394"
+    },
+    {
+      "event_id": "23",
+      "event_name": "SYSMONEVENT_FILE_DELETE",
+      "event_version": 5,
+      "field_count": 10,
+      "field_names_sha256": "sha256-2a699e21009cdb5d8d7eb92d5dfadbd5fcb1248b2b612d098bc0f46dd10a2e28",
+      "field_structure_sha256": "sha256-2ab6032468ede68b66289ef4a45170bdb01a5ee060e3c5e8d22a57e8f25ad048"
+    },
+    {
+      "event_id": "24",
+      "event_name": "SYSMONEVENT_CLIPBOARD",
+      "event_version": 5,
+      "field_count": 10,
+      "field_names_sha256": "sha256-108d9af3e2966e288542cd9387d977c416cb018324ca060314a9407525f56e55",
+      "field_structure_sha256": "sha256-d1c49757308e8831ffa739e777c8fe57e9527bef4a77878589ddab51a47b439c"
+    },
+    {
+      "event_id": "25",
+      "event_name": "SYSMONEVENT_PROCESS_IMAGE_TAMPERING",
+      "event_version": 5,
+      "field_count": 7,
+      "field_names_sha256": "sha256-dd6d67641eda9bbe00dca0212ada5427a177cdd36db5dc8382d735d0adaa3fa5",
+      "field_structure_sha256": "sha256-5afb1c49115aecc360dd75de0f735ab9b273c22fec4dc870bc229ce375049b7c"
+    },
+    {
+      "event_id": "26",
+      "event_name": "SYSMONEVENT_FILE_DELETE_DETECTED",
+      "event_version": 5,
+      "field_count": 9,
+      "field_names_sha256": "sha256-29248d50648e46ddb3bbbd62d4dfb97f290d99465cdb44eed34a16a54fd20fff",
+      "field_structure_sha256": "sha256-09a33553abe42eac93c5419f6d66546baea13493ca2e23dd007691f494871d7f"
+    },
+    {
+      "event_id": "27",
+      "event_name": "SYSMONEVENT_FILE_BLOCK_EXE",
+      "event_version": 5,
+      "field_count": 8,
+      "field_names_sha256": "sha256-b9a1c88178b0a6d8fadaca3755fba05da0a79b82d870a0da6a55271c30bf51e3",
+      "field_structure_sha256": "sha256-28440cf7c42d4cc3f488f926c7f96bfc365738d9057eae3bb119bc308906b1f8"
+    },
+    {
+      "event_id": "28",
+      "event_name": "SYSMONEVENT_FILE_BLOCK_SHREDDING",
+      "event_version": 5,
+      "field_count": 9,
+      "field_names_sha256": "sha256-29248d50648e46ddb3bbbd62d4dfb97f290d99465cdb44eed34a16a54fd20fff",
+      "field_structure_sha256": "sha256-09a33553abe42eac93c5419f6d66546baea13493ca2e23dd007691f494871d7f"
+    },
+    {
+      "event_id": "29",
+      "event_name": "SYSMONEVENT_FILE_EXE_DETECTED",
+      "event_version": 5,
+      "field_count": 8,
+      "field_names_sha256": "sha256-b9a1c88178b0a6d8fadaca3755fba05da0a79b82d870a0da6a55271c30bf51e3",
+      "field_structure_sha256": "sha256-28440cf7c42d4cc3f488f926c7f96bfc365738d9057eae3bb119bc308906b1f8"
+    },
+    {
+      "event_id": "255",
+      "event_name": "SYSMONEVENT_ERROR",
+      "event_version": 3,
+      "field_count": 3,
+      "field_names_sha256": "sha256-750b2b4e931157e27a48b17d966d512d5d745fde2ed13f4348cd57bbbb669075",
+      "field_structure_sha256": "sha256-66f1c7a2868235467ba58db1ddcff4c4ce465080ee45675b294edc97c0711e09"
+    }
+  ]
+}
