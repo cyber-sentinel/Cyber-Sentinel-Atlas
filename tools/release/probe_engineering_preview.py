@@ -167,6 +167,23 @@ def main() -> int:
             raise RuntimeError(
                 f"Sysmon Event 1 was not returned by deterministic search: {search_sysmon}"
             )
+
+        search_processcreate = request(
+            process.stdin,
+            process.stdout,
+            "q2a",
+            "search.query",
+            {"query": "ProcessCreate", "graph_depth": 1, "limit": 10},
+        )
+        sysmon_1_processcreate_alias_ok = search_contains_target(
+            search_processcreate, EXPECTED_SYSMON
+        )
+        if not sysmon_1_processcreate_alias_ok:
+            raise RuntimeError(
+                "Sysmon Event 1 ProcessCreate alias was not returned by "
+                f"deterministic search: {search_processcreate}"
+            )
+
         record_sysmon = request(
             process.stdin,
             process.stdout,
@@ -176,6 +193,16 @@ def main() -> int:
         )
         if record_sysmon.get("id") != EXPECTED_SYSMON:
             raise RuntimeError("Sysmon Event 1 record identity mismatch")
+        sysmon_1_record_aliases = {
+            str(item.get("value", "")).casefold()
+            for item in record_sysmon.get("aliases", [])
+            if isinstance(item, dict)
+        }
+        sysmon_1_record_processcreate_alias_ok = "processcreate" in sysmon_1_record_aliases
+        if not sysmon_1_record_processcreate_alias_ok:
+            raise RuntimeError(
+                f"Sysmon Event 1 canonical record is missing ProcessCreate alias: {record_sysmon}"
+            )
 
         search_4624 = request(
             process.stdin,
@@ -248,6 +275,8 @@ def main() -> int:
             "windows_4688_search_ok": windows_4688_search_ok,
             "windows_4688_record_ok": True,
             "sysmon_1_search_ok": sysmon_1_search_ok,
+            "sysmon_1_processcreate_alias_ok": sysmon_1_processcreate_alias_ok,
+            "sysmon_1_record_processcreate_alias_ok": sysmon_1_record_processcreate_alias_ok,
             "sysmon_1_record_ok": True,
             "windows_4624_search_ok": windows_4624_search_ok,
             "windows_4624_record_ok": True,

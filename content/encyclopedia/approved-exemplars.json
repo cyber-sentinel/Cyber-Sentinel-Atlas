@@ -4,6 +4,265 @@
   "generated_at_policy": "deterministic-fixed-metadata",
   "events": [
     {
+      "id": "atlas:event:microsoft.sysmon:1",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "1",
+      "title": "Sysmon Event 1 — Process creation",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "1",
+      "aliases": [
+        "1",
+        "Sysmon 1",
+        "Sysmon Event 1",
+        "ProcessCreate",
+        "Process creation"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 1: Process creation",
+      "schema_locator": "SYSMONEVENT_CREATE_PROCESS",
+      "overview": {
+        "summary": "Records creation of a new process with execution context including full command line, stable ProcessGuid correlation, configured image hashes, logon/session context and parent-process details.",
+        "event_class": "Process Execution",
+        "configuration_tag": "ProcessCreate",
+        "schema_event_version": 5,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "reconstruct process creation and parent/child execution chains",
+          "correlate process activity across Sysmon events with ProcessGuid",
+          "investigate suspicious command lines, executable paths and integrity context",
+          "pivot from process execution to network, DNS, image-load and process-access telemetry"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active Sysmon EventFiltering configuration must not exclude the ProcessCreate activity required by the investigation."
+        ],
+        "configuration_note": "ProcessCreate is a filterable Sysmon event. Collection volume and exclusions should be governed for the environment without removing required security visibility.",
+        "hash_note": "Image hashes reflect the hash algorithms configured for Sysmon and may contain multiple algorithm/value pairs."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 3",
+          "key": "ProcessGuid",
+          "purpose": "network activity attributed to the created process"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "process termination and lifetime"
+        },
+        {
+          "target": "Sysmon 7",
+          "key": "ProcessGuid",
+          "purpose": "image/module load context when ImageLoad is enabled"
+        },
+        {
+          "target": "Sysmon 10",
+          "key": "ProcessGuid / ProcessId + time",
+          "purpose": "process-access context"
+        },
+        {
+          "target": "Sysmon 22",
+          "key": "ProcessGuid + time",
+          "purpose": "DNS query context"
+        },
+        {
+          "target": "Sysmon 1",
+          "key": "ParentProcessGuid",
+          "purpose": "parent/child process-chain reconstruction"
+        },
+        {
+          "target": "Windows Security 4688",
+          "key": "ProcessId + Image + time + logon context",
+          "purpose": "Windows process-creation corroboration",
+          "limitation": "Windows can reuse PIDs; ProcessGuid is preferred within Sysmon and time/context are required for cross-provider correlation"
+        }
+      ],
+      "analysis": [
+        "Review unusual parent/child chains, script interpreters, LOLBins and execution from user-writable or temporary paths.",
+        "Inspect full command lines, image metadata, configured hashes, user/logon context and integrity level together rather than treating any single field as a malicious verdict.",
+        "Use ParentProcessGuid and ProcessGuid to reconstruct execution lineage, then pivot to network, DNS, image-load and process-access telemetry where available.",
+        "Treat file-version metadata such as Company, Product, Description and OriginalFileName as contextual claims from the executable metadata, not proof of trust."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the event when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the process creation event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Identity",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID intended to provide stable correlation for the process even when Windows reuses process IDs.",
+          "correlation": "Preferred process correlation key across Sysmon events."
+        },
+        {
+          "key": "processid",
+          "section": "Process Identity",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier assigned to the newly created process.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "image",
+          "section": "Process Image",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path for the newly created process."
+        },
+        {
+          "key": "fileversion",
+          "section": "Image Metadata",
+          "native_name": "FileVersion",
+          "type": "UnicodeString",
+          "meaning": "File-version metadata reported for the executable image when available."
+        },
+        {
+          "key": "description",
+          "section": "Image Metadata",
+          "native_name": "Description",
+          "type": "UnicodeString",
+          "meaning": "File-description metadata reported by the executable image when available."
+        },
+        {
+          "key": "product",
+          "section": "Image Metadata",
+          "native_name": "Product",
+          "type": "UnicodeString",
+          "meaning": "Product-name metadata reported by the executable image when available."
+        },
+        {
+          "key": "company",
+          "section": "Image Metadata",
+          "native_name": "Company",
+          "type": "UnicodeString",
+          "meaning": "Company/publisher metadata reported by the executable image when available; this value is contextual and is not a trust decision."
+        },
+        {
+          "key": "originalfilename",
+          "section": "Image Metadata",
+          "native_name": "OriginalFileName",
+          "type": "UnicodeString",
+          "meaning": "Original-file-name metadata embedded in the executable image when available; it may differ from the current path or filename."
+        },
+        {
+          "key": "commandline",
+          "section": "Execution Context",
+          "native_name": "CommandLine",
+          "type": "UnicodeString",
+          "meaning": "Full command line recorded for the newly created process."
+        },
+        {
+          "key": "currentdirectory",
+          "section": "Execution Context",
+          "native_name": "CurrentDirectory",
+          "type": "UnicodeString/path",
+          "meaning": "Working directory associated with the newly created process."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User/security-principal context associated with the newly created process."
+        },
+        {
+          "key": "logonguid",
+          "section": "Security Context",
+          "native_name": "LogonGuid",
+          "type": "GUID",
+          "meaning": "Sysmon session/logon GUID associated with the process when available.",
+          "correlation": "Use to pivot among events associated with the same logon/session context where populated consistently."
+        },
+        {
+          "key": "logonid",
+          "section": "Security Context",
+          "native_name": "LogonId",
+          "type": "HexInt64",
+          "meaning": "Windows logon-session identifier associated with the process.",
+          "correlation": "May be correlated with Windows logon/security telemetry when provider semantics and timing align."
+        },
+        {
+          "key": "terminalsessionid",
+          "section": "Security Context",
+          "native_name": "TerminalSessionId",
+          "type": "UInt32",
+          "meaning": "Terminal Services session identifier associated with the process."
+        },
+        {
+          "key": "integritylevel",
+          "section": "Security Context",
+          "native_name": "IntegrityLevel",
+          "type": "UnicodeString",
+          "meaning": "Integrity level reported for the process security context."
+        },
+        {
+          "key": "hashes",
+          "section": "Image Integrity",
+          "native_name": "Hashes",
+          "type": "UnicodeString",
+          "meaning": "Configured hash values for the process image, potentially containing multiple algorithm/value pairs.",
+          "notes": "Available algorithms depend on the active Sysmon hash configuration."
+        },
+        {
+          "key": "parentprocessguid",
+          "section": "Parent Process",
+          "native_name": "ParentProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated GUID of the parent process.",
+          "correlation": "Primary Sysmon key for parent/child process-chain reconstruction."
+        },
+        {
+          "key": "parentprocessid",
+          "section": "Parent Process",
+          "native_name": "ParentProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier of the parent process.",
+          "correlation": "Use with ParentProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "parentimage",
+          "section": "Parent Process",
+          "native_name": "ParentImage",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path recorded for the parent process."
+        },
+        {
+          "key": "parentcommandline",
+          "section": "Parent Process",
+          "native_name": "ParentCommandLine",
+          "type": "UnicodeString",
+          "meaning": "Command line recorded for the parent process."
+        },
+        {
+          "key": "parentuser",
+          "section": "Parent Process",
+          "native_name": "ParentUser",
+          "type": "UnicodeString",
+          "meaning": "User/security-principal context recorded for the parent process."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.sysmon:3",
       "namespace": "microsoft.sysmon",
       "canonical_key": "3",
