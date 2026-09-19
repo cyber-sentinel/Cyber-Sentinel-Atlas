@@ -41,6 +41,8 @@ def test_02_approved_event_identities_and_search_aliases():
     records = records_with_paths()
     assert validator.resolve_query(records, "4624") == ["atlas:event:microsoft.windows.security:4624"]
     assert validator.resolve_query(records, "Windows 4624") == ["atlas:event:microsoft.windows.security:4624"]
+    assert validator.resolve_query(records, "Sysmon 1") == ["atlas:event:microsoft.sysmon:1"]
+    assert validator.resolve_query(records, "ProcessCreate") == ["atlas:event:microsoft.sysmon:1"]
     assert validator.resolve_query(records, "Sysmon 3") == ["atlas:event:microsoft.sysmon:3"]
     assert validator.resolve_query(records, "NetworkConnect") == ["atlas:event:microsoft.sysmon:3"]
 
@@ -93,7 +95,7 @@ def test_05_every_field_has_one_semantics_claim_and_has_field_relationship():
     claim_subjects = {r["subject_id"] for r in claims if r["subject_id"] in field_ids}
     relationship_targets = {r["to"] for r in rels}
 
-    assert len(field_ids) == 61
+    assert len(field_ids) == 84
     assert claim_subjects == field_ids
     assert relationship_targets == field_ids
 
@@ -146,7 +148,48 @@ def test_08_sysmon_schema_refresh_validation_is_explicit():
         ]
         assert len(schema_evidence) == 1
         assert schema_evidence[0]["source_version"] == "sysmon-15.22-schema-4.91"
-        assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_NETWORK_CONNECT / ")
+        subject = record["subject_id"]
+        if subject.startswith("atlas:field:microsoft.sysmon:1."):
+            assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_CREATE_PROCESS / ")
+        elif subject.startswith("atlas:field:microsoft.sysmon:3."):
+            assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_NETWORK_CONNECT / ")
+        else:
+            raise AssertionError(f"unexpected Sysmon encyclopedia field subject: {subject}")
+
+
+
+def test_09_sysmon_1_field_dictionary_matches_controlled_schema():
+    records = by_id(records_with_paths())
+    prefix = "atlas:field:microsoft.sysmon:1."
+    fields = sorted(key for key in records if key.startswith(prefix))
+    assert len(fields) == 23
+    required = {
+        "1.rulename",
+        "1.utctime",
+        "1.processguid",
+        "1.processid",
+        "1.image",
+        "1.fileversion",
+        "1.description",
+        "1.product",
+        "1.company",
+        "1.originalfilename",
+        "1.commandline",
+        "1.currentdirectory",
+        "1.user",
+        "1.logonguid",
+        "1.logonid",
+        "1.terminalsessionid",
+        "1.integritylevel",
+        "1.hashes",
+        "1.parentprocessguid",
+        "1.parentprocessid",
+        "1.parentimage",
+        "1.parentcommandline",
+        "1.parentuser",
+    }
+    actual = {value.rsplit(":", 1)[-1] for value in fields}
+    assert required == actual
 
 
 
