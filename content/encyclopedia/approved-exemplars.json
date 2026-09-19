@@ -1757,6 +1757,137 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:12",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "12",
+      "title": "Sysmon Event 12 — Registry object added or deleted",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "12",
+      "aliases": [
+        "12",
+        "Sysmon 12",
+        "Sysmon Event 12",
+        "Registry object added or deleted",
+        "RegistryEvent object create/delete"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 12: RegistryEvent (Object create and delete)",
+      "schema_locator": "SYSMONEVENT_REG_KEY",
+      "overview": {
+        "summary": "Records registry key or value object creation and deletion with operation type, process identity, target registry object, user context, and event time.",
+        "event_class": "Registry Object Create/Delete",
+        "configuration_tag": "RegistryEvent",
+        "default_collection_state": "ruledefault-exclude",
+        "schema_event_version": 2,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "monitor creation and deletion of registry objects in persistence or security-relevant locations",
+          "attribute registry object changes to a stable Sysmon process identity",
+          "reconstruct registry change timelines using operation type and target object",
+          "distinguish suspicious persistence or defense-evasion changes from normal installer, policy, service, and application activity"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "RegistryEvent activity required by the investigation must be explicitly admitted by EventFiltering because the controlled schema records ruledefault=exclude."
+        ],
+        "configuration_note": "Use governed include filters for registry paths and processes relevant to persistence, security controls, service configuration, startup behavior, and other investigation objectives.",
+        "path_note": "Sysmon documentation uses abbreviated registry root names such as HKLM, HKU, HKLM\\\\System\\\\CurrentControlSet, and HKCR. Investigation logic should normalize those forms consistently.",
+        "interpretation_note": "Registry object creation and deletion are routine. Security significance depends on target path, operation type, process/user context, and surrounding execution or persistence activity."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "resolve process creation, command-line, parent, image, hash, and user context for the process changing the registry"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "bound the registry operation within the process lifetime"
+        },
+        {
+          "target": "Windows Security 4688",
+          "key": "ProcessId + Image + time",
+          "purpose": "corroborate process creation context outside Sysmon",
+          "limitation": "PID values can be reused; ProcessGuid remains the preferred in-Sysmon key."
+        }
+      ],
+      "analysis": [
+        "Prioritize creates or deletes under autostart, service, security-control, shell-extension, credential-provider, image-execution, and other persistence-relevant paths when the responsible process is unexpected.",
+        "Use EventType to distinguish the registry operation and TargetObject to preserve exact key/value context; do not collapse create and delete into one undifferentiated verdict.",
+        "Correlate ProcessGuid with process creation and lifecycle telemetry and compare registry-path activity against known software installation, policy, and administration baselines.",
+        "Treat Event 12 as registry-change observation telemetry; normal installers, Group Policy, services, security software, and applications can legitimately create or delete registry objects."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the registry event when present."
+        },
+        {
+          "key": "eventtype",
+          "section": "Registry Operation",
+          "native_name": "EventType",
+          "type": "UnicodeString",
+          "meaning": "Operation type recorded by Sysmon for the registry object create/delete activity."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the registry event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID identifying the process that performed the registry operation.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the registry operation.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the process performing the registry operation."
+        },
+        {
+          "key": "targetobject",
+          "section": "Registry Target",
+          "native_name": "TargetObject",
+          "type": "UnicodeString",
+          "meaning": "Registry key or value path targeted by the create/delete operation."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the process performing the registry operation."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
