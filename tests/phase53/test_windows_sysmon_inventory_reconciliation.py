@@ -49,7 +49,7 @@ class WindowsSysmonInventoryReconciliationTests(unittest.TestCase):
         self.assertEqual(423, windows["expected_identity_count"])
         self.assertEqual(30, sysmon["expected_identity_count"])
         self.assertEqual("26100.33296", windows["scope_metadata"]["windows_build"])
-        self.assertEqual("15.21", sysmon["scope_metadata"]["sysmon_version"])
+        self.assertEqual("15.22", sysmon["scope_metadata"]["sysmon_version"])
         self.assertEqual("4.91", sysmon["scope_metadata"]["current_schema_version"])
         self.assertEqual(24, sysmon["scope_metadata"]["schema_document_count"])
         self.assertEqual(587, sysmon["scope_metadata"]["parsed_schema_event_record_count"])
