@@ -5,8 +5,8 @@
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
 - Last Reviewed Main SHA: `c5de34267e6c5a620d581efab7400ae50da341e7`
-- Latest merged engineering/control-plane baseline: `c5de34267e6c5a620d581efab7400ae50da341e7`
-- Latest exact-head PR validation for the newly merged slices: **GREEN** for PR #79, PR #80 and PR #81; post-merge `main` workflows are tracked separately and must complete before this baseline is called post-merge verified.
+- Latest post-merge verified engineering/control-plane baseline: `c5de34267e6c5a620d581efab7400ae50da341e7`
+- PR #79, PR #80 and PR #81 exact-head validations were **GREEN**; post-merge Foundation Hygiene run `35424374521` and Phase 5.3.4 Canaries run `35424374528` both completed **SUCCESS**.
 - Release authority remains `main`; documentation commits may advance the branch without redefining the package/release evidence baselines recorded below.
 - First Preview package release baseline SHA: `70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`
 - Phase 5.6 release vehicle: PR #39 — **MERGED**
