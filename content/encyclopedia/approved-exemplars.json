@@ -3345,6 +3345,149 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:24",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "24",
+      "title": "Sysmon Event 24 — ClipboardChange (New content in the clipboard)",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "24",
+      "aliases": [
+        "24",
+        "Sysmon 24",
+        "Sysmon Event 24",
+        "ClipboardChange",
+        "Clipboard change"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 24: ClipboardChange (New content in the clipboard)",
+      "schema_locator": "SYSMONEVENT_CLIPBOARD",
+      "overview": {
+        "summary": "Records a system clipboard content change with process, session, client, hash/archive and user context.",
+        "event_class": "Clipboard Activity",
+        "configuration_tag": "ClipboardChange",
+        "schema_event_version": 5,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "attribute clipboard-change activity to a stable Sysmon process identity",
+          "investigate unexpected clipboard use in sensitive applications or sessions",
+          "use session/client context when reviewing interactive or remote-user workflows",
+          "support data-handling investigations without treating clipboard changes as malicious by themselves"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active ClipboardChange filtering policy must preserve clipboard telemetry required by the investigation."
+        ],
+        "privacy_note": "Clipboard telemetry can intersect with sensitive user data and should be collected and retained under an explicit organizational policy.",
+        "interpretation_note": "Clipboard changes are routine interactive behavior. Evaluate process, user, session/client context, hashes/archive indicators, and surrounding activity before assigning security significance."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "resolve process creation, command line, hashes and user context for the process associated with the clipboard change"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "bound clipboard activity within the process lifetime"
+        },
+        {
+          "target": "Remote Desktop / interactive session telemetry",
+          "key": "Session + ClientInfo + User + time",
+          "purpose": "corroborate interactive or remote-session context when applicable",
+          "scope": "External/out-of-scope until corresponding Windows session provider denominators are frozen."
+        }
+      ],
+      "analysis": [
+        "Prioritize clipboard changes involving credential tools, password managers, remote-session utilities, scripting environments, sensitive business applications, or unexpected processes when policy and context justify review.",
+        "Use Session and ClientInfo as contextual pivots rather than assuming remote access or data theft from those fields alone.",
+        "Correlate ProcessGuid with process creation and surrounding network/session activity where available.",
+        "Treat Event 24 as clipboard observation telemetry and preserve privacy/retention constraints during investigation."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon ClipboardChange filter when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the clipboard-change event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated GUID identifying the process associated with the clipboard change.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the clipboard change.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path associated with the clipboard-change activity."
+        },
+        {
+          "key": "session",
+          "section": "Session Context",
+          "native_name": "Session",
+          "type": "UnicodeString/session",
+          "meaning": "Session context recorded by Sysmon for the clipboard change."
+        },
+        {
+          "key": "clientinfo",
+          "section": "Session Context",
+          "native_name": "ClientInfo",
+          "type": "UnicodeString",
+          "meaning": "Client-related context recorded by Sysmon for the clipboard change when available."
+        },
+        {
+          "key": "hashes",
+          "section": "Clipboard Evidence",
+          "native_name": "Hashes",
+          "type": "UnicodeString/hash set",
+          "meaning": "Configured hash/evidence values recorded for the clipboard content or associated archived representation."
+        },
+        {
+          "key": "archived",
+          "section": "Clipboard Evidence",
+          "native_name": "Archived",
+          "type": "Boolean/status",
+          "meaning": "Archive-state indicator recorded by Sysmon for the clipboard event."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the clipboard activity."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
