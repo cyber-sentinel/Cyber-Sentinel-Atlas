@@ -1321,6 +1321,133 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:9",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "9",
+      "title": "Sysmon Event 9 — RawAccessRead detected",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "9",
+      "aliases": [
+        "9",
+        "Sysmon 9",
+        "Sysmon Event 9",
+        "RawAccessRead",
+        "RawAccessRead detected"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 9: RawAccessRead",
+      "schema_locator": "SYSMONEVENT_RAWACCESS_READ",
+      "overview": {
+        "summary": "Records a process reading directly from a drive or device through raw-access paths, preserving process identity, target device, user context, and event time.",
+        "event_class": "Raw Device Access",
+        "configuration_tag": "RawAccessRead",
+        "schema_event_version": 2,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify process activity that reads directly from drive or device paths instead of normal file-oriented access",
+          "investigate attempts to access locked data or bypass higher-level file-access auditing controls",
+          "attribute raw device reads to a stable Sysmon process identity",
+          "distinguish suspicious disk access from legitimate backup, imaging, antivirus, forensic, or storage-management activity"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active Sysmon EventFiltering configuration must not exclude RawAccessRead activity required by the investigation."
+        ],
+        "configuration_note": "RawAccessRead is filterable Sysmon telemetry. Filtering should preserve raw-device access by processes that are security-relevant in the environment.",
+        "interpretation_note": "Raw device reads can be performed by legitimate backup, antivirus, imaging, forensic, storage, and administrative software. Event 9 should be interpreted with process identity, device, user context, and surrounding activity."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "resolve process creation, command-line, parent, hash, and user context for the process performing the raw read"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "bound the raw-read activity within the process lifetime"
+        },
+        {
+          "target": "Sysmon 3",
+          "key": "ProcessGuid + time",
+          "purpose": "review network activity from the same process when raw access is investigated as part of a possible data-access or exfiltration chain"
+        },
+        {
+          "target": "Windows Security 4688",
+          "key": "ProcessId + Image + time",
+          "purpose": "corroborate Windows process-creation context outside Sysmon",
+          "limitation": "PID values can be reused; ProcessGuid is preferred within Sysmon."
+        }
+      ],
+      "analysis": [
+        "Prioritize raw access performed by uncommon executables, user-writable images, unexpected user contexts, or processes whose role does not normally require direct device reads.",
+        "Review the Device value together with process creation and surrounding file, network, and lifecycle telemetry to determine whether the access fits legitimate backup, imaging, security, or forensic activity.",
+        "Use ProcessGuid as the stable in-Sysmon pivot; PID alone should not be treated as globally unique.",
+        "Treat Event 9 as raw-device access observation telemetry, not standalone proof of credential theft, data exfiltration, or malicious bypass."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the event when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the raw-access read event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID identifying the process that performed the raw device read.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the raw device read.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the process performing the raw access."
+        },
+        {
+          "key": "device",
+          "section": "Target Device",
+          "native_name": "Device",
+          "type": "UnicodeString",
+          "meaning": "Drive or device path targeted by the raw read operation."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the process performing the raw read."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
