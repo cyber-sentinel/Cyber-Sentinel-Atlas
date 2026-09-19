@@ -49,7 +49,10 @@ This document summarizes the product/MVP progression and must not override those
 - [x] Verified content-pack install / trust / update / rollback path implemented
 - [x] Clean-Windows package smoke accepted
 - [x] Pack bootstrap gap `ATLAS_PACK_NOT_READY` closed for the engineering usable-data preview
-- [x] Search → Record → Graph → Provenance acceptance proved for Windows Security `4688` and Sysmon `1`
+- [x] Search → Record → Graph → Provenance clean-Windows acceptance proved for Windows Security `4688` and Sysmon `1`
+- [x] Engineering pack additionally contains Windows Security `4624` and Sysmon `3`
+- [x] Encyclopedia-grade content exists for Windows Security `4624`, Windows Security `4688`, and Sysmon `3`
+- [x] Controlled Sysmon `15.22` / schema `4.91` reference baseline validated and promoted
 
 The current engineering pack is **not** the complete Windows Security Corpus.
 
