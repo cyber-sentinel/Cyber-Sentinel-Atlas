@@ -52,7 +52,7 @@ Status timestamp: 2026-09-19
 
 `main` is the release authority. Phase 5.6 completed implementation, regression closure, merge, post-merge package/smoke verification, and documentation closure. `FIRST PREVIEW READY` denotes engineering readiness only; no signed Public Preview or GA release is claimed.
 
-Project continuity is now explicitly repository-backed. [`AGENTS.md`](../AGENTS.md) defines the contributor/agent execution contract, [`docs/operations/agent-engineering-operating-model.md`](operations/agent-engineering-operating-model.md) defines interim and future multi-agent execution, and [`docs/operations/handoff-template.md`](operations/handoff-template.md) defines the minimum durable handoff state. CI runners remain verification infrastructure rather than autonomous development nodes.
+Project continuity is now explicitly repository-backed. [`AGENTS.md`](../AGENTS.md) defines the contributor/agent execution contract, [`docs/operations/agent-engineering-operating-model.md`](operations/agent-engineering-operating-model.md) defines interim and future multi-agent execution, and [`docs/operations/session-handoff-guide.md`](operations/session-handoff-guide.md) defines the minimum durable handoff state. CI runners remain verification infrastructure rather than autonomous development nodes.
 
 The First Preview package evidence remains bound to `main@70afc6fdb9e5ce88afdb0dd4de139aa659606f1e`. Subsequent control-plane and release-governance work does not change those verified package bytes or the frozen Phase 5.5/5.6 architecture.
 
