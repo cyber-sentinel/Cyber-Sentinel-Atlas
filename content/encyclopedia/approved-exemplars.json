@@ -1888,6 +1888,150 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:13",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "13",
+      "title": "Sysmon Event 13 — Registry value set",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "13",
+      "aliases": [
+        "13",
+        "Sysmon 13",
+        "Sysmon Event 13",
+        "Registry value set",
+        "RegistryEvent Value Set"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 13: RegistryEvent (Value Set)",
+      "schema_locator": "SYSMONEVENT_REG_SETVALUE",
+      "overview": {
+        "summary": "Records registry value modifications with operation type, process identity, target registry value, recorded value details, user context, and event time.",
+        "event_class": "Registry Value Set",
+        "configuration_tag": "RegistryEvent",
+        "default_collection_state": "ruledefault-exclude",
+        "schema_event_version": 2,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify registry value modifications in persistence, service, startup, security-control, and application configuration locations",
+          "attribute value changes to a stable Sysmon process identity",
+          "inspect recorded Details for value context, especially documented DWORD and QWORD writes",
+          "distinguish suspicious registry changes from normal policy, installer, service, and application configuration activity"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "RegistryEvent value-set activity required by the investigation must be explicitly admitted by EventFiltering because the controlled schema records ruledefault=exclude."
+        ],
+        "configuration_note": "Use governed include filters for registry paths, processes, and value names relevant to persistence, security controls, services, startup behavior, and investigation objectives.",
+        "details_note": "Sysmon documentation explicitly states that the value written is recorded for DWORD and QWORD registry values. Do not assume equivalent payload detail for every registry value type without evidence.",
+        "interpretation_note": "Registry value modification is routine. Security significance depends on target path/value, process and user context, written data when available, and surrounding execution or persistence activity."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "resolve process creation, command-line, parent, image, hash, and user context for the process setting the registry value"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "bound the registry modification within the process lifetime"
+        },
+        {
+          "target": "Sysmon 12",
+          "key": "TargetObject + time",
+          "purpose": "review nearby registry object creation or deletion involving the same path",
+          "limitation": "Event 12 and Event 13 represent different operations and may be filtered independently."
+        },
+        {
+          "target": "Windows Security 4688",
+          "key": "ProcessId + Image + time",
+          "purpose": "corroborate process creation context outside Sysmon",
+          "limitation": "PID values can be reused; ProcessGuid remains the preferred in-Sysmon key."
+        }
+      ],
+      "analysis": [
+        "Prioritize modifications to autostart, service, security-control, shell, credential-provider, image-execution, and other persistence-relevant values when the responsible process is unexpected.",
+        "Interpret Details together with the registry value type and TargetObject; do not assume the field always contains a complete value representation for every registry data type.",
+        "Correlate ProcessGuid with process creation and lifecycle telemetry and compare TargetObject against known software, policy, and administration baselines.",
+        "Treat Event 13 as registry-value modification telemetry, not standalone proof of persistence or malicious configuration change."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the registry event when present."
+        },
+        {
+          "key": "eventtype",
+          "section": "Registry Operation",
+          "native_name": "EventType",
+          "type": "UnicodeString",
+          "meaning": "Operation type recorded by Sysmon for the registry value-set activity."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the registry value-set event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID identifying the process that modified the registry value.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the registry value modification.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the process performing the registry modification."
+        },
+        {
+          "key": "targetobject",
+          "section": "Registry Target",
+          "native_name": "TargetObject",
+          "type": "UnicodeString",
+          "meaning": "Registry value path targeted by the modification."
+        },
+        {
+          "key": "details",
+          "section": "Registry Value",
+          "native_name": "Details",
+          "type": "UnicodeString",
+          "meaning": "Value-detail context recorded by Sysmon for the registry modification; documentation explicitly describes written-value recording for DWORD and QWORD values."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the process modifying the registry value."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
