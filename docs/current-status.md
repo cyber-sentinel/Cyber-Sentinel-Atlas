@@ -6,7 +6,7 @@ Status timestamp: 2026-09-20
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Latest merged engineering/corpus baseline: `f08471a59649cec7fabb3bb6067509df9b368941` — PR #108 merged Sysmon Event 13 encyclopedia-grade coverage; machine-readable Sysmon coverage is now `13/30` with `17` remaining.
+- Latest merged engineering/corpus baseline: `ee2272d613396adac694deef906d94393c35cf57` — PR #111 merged Sysmon Event 15 encyclopedia-grade coverage; machine-readable Sysmon coverage is now `15/30` with `15` remaining.
 - PR #85 exact-head: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene run `35429390496`, Phase 5.3.4 Canaries run `35429390498`, and Phase 5.10.5 Usable Data Preview run `35429390479`: **SUCCESS**.
 - Post-merge verification on `main@4bfe222eb708347ea0769da400c40dbdaf289b69`: **SUCCESS** — Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` all completed successfully.
 - PR #89 exact-head `34225caf471b215717c3a8b1dcaa01799b01abd7`: all applicable checks completed successfully, including Foundation Hygiene `35437483777`, Phase 5.3.4 Canaries `35437483740`, Production Go Architecture `35437483746`, Shared Core Architecture `35437483749`, Governance Hygiene `35437483754`, Supply Chain Closure `35437483745`, Redistribution Closure `35437483753`, First-Party License Readiness `35437483751`, and Public Preview Readiness `35437483747`; merged as `4ea088e455462e66115d6887a472237171a96c94`.
@@ -46,6 +46,9 @@ Status timestamp: 2026-09-20
 - Phase 5.10.10 Sysmon Event 11 encyclopedia promotion: PR #106 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE POST-MERGE VERIFIED**
 - Phase 5.10.10 Sysmon Event 12 encyclopedia promotion: PR #107 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE POST-MERGE VERIFIED**
 - Phase 5.10.10 Sysmon Event 13 encyclopedia promotion: PR #108 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE POST-MERGE VERIFIED**
+- Phase 5.10.10 Event 13 README/control-plane synchronization: PR #109 — **MERGED / ALL APPLICABLE CI GREEN**
+- Phase 5.10.10 Sysmon Event 14 encyclopedia promotion: PR #110 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE POST-MERGE VERIFIED**; exact-head run `35527030910`, merged as `5736de53cca784bad76914b9c573e031bff7cf71`.
+- Phase 5.10.10 Sysmon Event 15 encyclopedia promotion: PR #111 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE POST-MERGE VERIFIED**; exact-head run `35529385005`, merged as `ee2272d613396adac694deef906d94393c35cf57`.
 - Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
@@ -127,7 +130,7 @@ Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that 
   - Windows Security denominator: `423` unique Event IDs / `488` provider event-version definitions
   - Windows Security encyclopedia-grade: `2/423` — Event IDs `4624`, `4688`; remaining `421`
   - Sysmon semantic release: `15.22`; controlled structural schema: `4.91`
-  - Sysmon denominator: `30`; encyclopedia-grade: `13/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`; remaining `17`
+  - Sysmon denominator: `30`; encyclopedia-grade: `15/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`; remaining `15`
   - machine-readable coverage authority: `content/encyclopedia/coverage-manifest.json`
   - global Windows denominator: **NOT FROZEN**
   - global Windows completion percentage: **intentionally undefined**
