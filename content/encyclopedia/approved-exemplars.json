@@ -2325,6 +2325,95 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:16",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "16",
+      "title": "Sysmon Event 16 — Sysmon config state changed",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "16",
+      "aliases": [
+        "16",
+        "Sysmon 16",
+        "Sysmon Event 16",
+        "ServiceConfigurationChange",
+        "Sysmon config state changed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 16: ServiceConfigurationChange",
+      "schema_locator": "SYSMONEVENT_SERVICE_CONFIGURATION_CHANGE",
+      "overview": {
+        "summary": "Records a Sysmon configuration state change, including event time, configuration context, and configuration-file hash.",
+        "event_class": "Sysmon Configuration Change",
+        "configuration_tag": null,
+        "schema_event_version": 3,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify when Sysmon filtering or other configuration state changes",
+          "track configuration drift that can alter security telemetry coverage",
+          "use configuration-file hash changes as integrity context",
+          "distinguish authorized monitoring changes from unexpected weakening or tampering"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running for configuration-change events to be emitted."
+        ],
+        "configuration_note": "The controlled schema exposes no EventFiltering configuration tag for Event 16. Treat it as Sysmon service/configuration state telemetry rather than a normal filterable activity class.",
+        "attribution_limit": "Event 16 does not contain process, user, or initiating-actor identity fields. Attribution requires external change-control, host, process, or administrative evidence.",
+        "interpretation_note": "Configuration changes can be legitimate maintenance or policy updates. Security significance depends on authorization, the resulting telemetry coverage, configuration content/hash changes, and surrounding operational evidence."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 4",
+          "key": "UtcTime + host context",
+          "purpose": "review nearby Sysmon service start/stop activity around configuration changes",
+          "limitation": "Temporal proximity does not prove the service event caused the configuration change."
+        },
+        {
+          "target": "change-control / configuration-management evidence",
+          "key": "ConfigurationFileHash + time + host",
+          "purpose": "compare the observed configuration state with approved deployment/change records",
+          "scope": "Explicit out-of-scope operational target rather than a Sysmon process-identity correlation."
+        }
+      ],
+      "analysis": [
+        "Prioritize unexpected configuration changes that reduce high-value telemetry, introduce broad exclusions, or occur outside approved maintenance windows.",
+        "Compare ConfigurationFileHash and configuration context with the previously approved or deployed configuration when such evidence is available.",
+        "Review nearby Sysmon service state changes and operational logs, but preserve that Event 16 itself does not identify the initiating process or user.",
+        "Treat Event 16 as monitoring-control state evidence, not standalone proof of tampering."
+      ],
+      "fields": [
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the Sysmon configuration state change."
+        },
+        {
+          "key": "configuration",
+          "section": "Configuration State",
+          "native_name": "Configuration",
+          "type": "UnicodeString",
+          "meaning": "Configuration-state context recorded by Sysmon for the change."
+        },
+        {
+          "key": "configurationfilehash",
+          "section": "Configuration Integrity",
+          "native_name": "ConfigurationFileHash",
+          "type": "UnicodeString/hash",
+          "meaning": "Hash value recorded for the Sysmon configuration file or configuration state represented by the event.",
+          "correlation": "Use with approved configuration-management evidence when validating expected versus unexpected change."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
