@@ -4,8 +4,8 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `931a489dfb3e88e53c275e7032f4980049a460ab`
-- Latest merged engineering/corpus baseline: `931a489dfb3e88e53c275e7032f4980049a460ab` — PR #99 merged Sysmon Event 7 encyclopedia-grade coverage after PR #98 synchronized the Event 6 documentation/control plane.
+- Last Reviewed Main SHA: `22cf7c9bf0feaebd50b5a248cbcad96c56c06211`
+- Latest merged engineering/corpus baseline: `22cf7c9bf0feaebd50b5a248cbcad96c56c06211` — PR #104 merged Sysmon Event 10 encyclopedia-grade coverage; machine-readable Sysmon coverage is `10/30` with `20` remaining.
 - PR #85 exact-head baseline: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene `35429390496`, Phase 5.3.4 Canaries `35429390498`, and Phase 5.10.5 Usable Data Preview `35429390479` all **SUCCESS**
 - PR #85 merged to `main` as `4bfe222eb708347ea0769da400c40dbdaf289b69`; post-merge Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` are all **SUCCESS / POST-MERGE VERIFIED**.
 - PR #89 exact-head `34225caf471b215717c3a8b1dcaa01799b01abd7`: all applicable checks completed successfully, including Foundation Hygiene `35437483777`, Phase 5.3.4 Canaries `35437483740`, Production Go Architecture `35437483746`, Shared Core Architecture `35437483749`, Governance Hygiene `35437483754`, Supply Chain Closure `35437483745`, Redistribution Closure `35437483753`, First-Party License Readiness `35437483751`, and Public Preview Readiness `35437483747`; merged as `4ea088e455462e66115d6887a472237171a96c94`.
@@ -40,6 +40,9 @@
 - Phase 5.10.10 Sysmon Event 5 encyclopedia promotion: PR #94 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / POST-MERGE VERIFIED**
 - Phase 5.10.10 Sysmon Event 6 encyclopedia promotion: PR #97 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / POST-MERGE VERIFIED**
 - Phase 5.10.10 Sysmon Event 7 encyclopedia promotion: PR #99 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / POST-MERGE CI IN PROGRESS**
+- Phase 5.10.10 Sysmon Event 8 encyclopedia promotion: PR #100 — **MERGED**
+- Phase 5.10.10 Sysmon Event 9 encyclopedia promotion: PR #103 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN**
+- Phase 5.10.10 Sysmon Event 10 encyclopedia promotion: PR #104 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / POST-MERGE VERIFICATION NOT YET RECORDED**
 - Approved Product Family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
@@ -127,7 +130,7 @@ ATLAS project continuity is repository-backed rather than chat-backed.
     - Windows Security controlled denominator: `423` unique Event IDs / `488` provider event-version definitions
     - Windows Security encyclopedia grade: `2/423` — Event IDs `4624`, `4688`; remaining `421`
     - Sysmon semantic release: `15.22`; controlled structural schema: `4.91`
-    - Sysmon denominator: `30` documented/current Event IDs; encyclopedia grade: `7/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`; remaining `23`
+    - Sysmon denominator: `30` documented/current Event IDs; encyclopedia grade: `10/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`; remaining `20`
     - global Windows denominator: **NOT FROZEN**; global completion percentage intentionally undefined
     - remaining mandatory families still require controlled denominators: PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
     - machine-readable authority: `content/encyclopedia/coverage-manifest.json`
