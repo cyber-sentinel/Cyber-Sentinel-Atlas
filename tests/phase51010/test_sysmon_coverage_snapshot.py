@@ -36,10 +36,11 @@ def test_02_sysmon_denominator_is_exactly_30_documented_ids():
 
 def test_03_only_approved_encyclopedia_grade_records_count():
     snapshot = builder.build_snapshot()
-    assert snapshot["encyclopedia_grade_count"] == 14
-    assert snapshot["remaining_count"] == 16
-    assert snapshot["completion_ratio"] == "14/30"
-    assert snapshot["completion_percent"] == 46.67
+    assert snapshot["encyclopedia_grade_count"] == 15
+    assert snapshot["remaining_count"] == 15
+    assert snapshot["completion_ratio"] == "15/30"
+    assert snapshot["completion_percent"] == 50.0
+    event15 = next(item for item in snapshot["events"] if item["event_id"] == "15")
     event14 = next(item for item in snapshot["events"] if item["event_id"] == "14")
     event13 = next(item for item in snapshot["events"] if item["event_id"] == "13")
     event12 = next(item for item in snapshot["events"] if item["event_id"] == "12")
@@ -54,6 +55,8 @@ def test_03_only_approved_encyclopedia_grade_records_count():
     event3 = next(item for item in snapshot["events"] if item["event_id"] == "3")
     event2 = next(item for item in snapshot["events"] if item["event_id"] == "2")
     event1 = next(item for item in snapshot["events"] if item["event_id"] == "1")
+    assert event15["coverage_state"] == "ENCYCLOPEDIA_GRADE"
+    assert event15["counts_toward_release_coverage"] is True
     assert event14["coverage_state"] == "ENCYCLOPEDIA_GRADE"
     assert event14["counts_toward_release_coverage"] is True
     assert event13["coverage_state"] == "ENCYCLOPEDIA_GRADE"
