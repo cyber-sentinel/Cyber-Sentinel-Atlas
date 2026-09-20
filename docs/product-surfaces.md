@@ -92,7 +92,7 @@ The current Phase 5.10.10 coverage control plane freezes two bounded denominator
 | Family | Frozen scope | Encyclopedia grade | Remaining |
 | --- | --- | ---: | ---: |
 | Windows Security Auditing | `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296` — 423 unique Event IDs / 488 provider event-version definitions | `2/423` — Event IDs `4624`, `4688` | 421 |
-| Sysmon | Sysmon `15.22`, 30 documented/current Event IDs with controlled schema `4.91` reference evidence | `7/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7` | 23 |
+| Sysmon | Sysmon `15.22`, 30 documented/current Event IDs with controlled schema `4.91` reference evidence | `10/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10` | 20 |
 
 The authoritative machine-readable ledger is `content/encyclopedia/coverage-manifest.json`.
 
