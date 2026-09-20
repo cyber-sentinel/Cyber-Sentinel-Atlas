@@ -33,3 +33,13 @@ Ingestion artifacts are not themselves canonical `AtlasRecord` truth. Promotion 
 - inventory completeness is measured against an explicit source/provider scope;
 - source licensing and redistribution state remain explicit release controls;
 - credentials and private acquisition secrets must never be committed.
+
+## Coverage authority
+
+This README describes the ingestion control plane and intentionally does not duplicate moving encyclopedia-coverage counters. Current accepted coverage is governed by:
+
+- `content/encyclopedia/coverage-manifest.json` — family-level denominator and numerator authority;
+- `content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json` — frozen Windows Security Auditing provider/channel/build scope;
+- `content/encyclopedia/sysmon-15.22-coverage.snapshot.json` — frozen Sysmon 15.22 denominator and current accepted numerator.
+
+Human-readable status is projected in `docs/current-status.md` and `README.md`. If a human-readable counter diverges, the machine-readable coverage state is authoritative and the documentation must be synchronized rather than the gate weakened.
