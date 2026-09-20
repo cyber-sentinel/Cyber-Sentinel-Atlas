@@ -48,8 +48,8 @@ The active Sysmon control plane is:
 - semantic release: `15.22`;
 - documented/current denominator: `30` Event IDs (`1..29` plus `255`);
 - controlled structural schema evidence: `4.91`;
-- encyclopedia-grade records: Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, and `10`;
-- remaining: `20`.
+- encyclopedia-grade records: Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, and `13`;
+- remaining: `17`.
 
 ### Global Windows boundary
 
