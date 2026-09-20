@@ -2174,6 +2174,157 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:15",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "15",
+      "title": "Sysmon Event 15 — File stream created",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "15",
+      "aliases": [
+        "15",
+        "Sysmon 15",
+        "Sysmon Event 15",
+        "FileCreateStreamHash",
+        "File stream created"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 15: FileCreateStreamHash",
+      "schema_locator": "SYSMONEVENT_FILE_CREATE_STREAM_HASH",
+      "overview": {
+        "summary": "Records creation of a named file stream and preserves process identity, target filename, creation time, a recorded hash, stream/file content context, user context, and event time.",
+        "event_class": "Named File Stream Creation",
+        "configuration_tag": "FileCreateStreamHash",
+        "default_collection_state": "ruledefault-exclude",
+        "schema_event_version": 2,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify creation of NTFS named streams, including Zone.Identifier mark-of-the-web metadata",
+          "associate named-stream creation with the responsible process and user",
+          "use hash/content context to support investigation of downloaded files, alternate data streams, and hidden configuration or payload material",
+          "distinguish suspicious alternate-stream use from normal browser, attachment, security, and operating-system metadata behavior"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "FileCreateStreamHash activity required by the investigation must be explicitly admitted by EventFiltering because the controlled schema records ruledefault=exclude."
+        ],
+        "configuration_note": "Use governed include filters for stream names, file paths, processes, extensions, and locations relevant to download provenance, alternate-data-stream abuse, and investigation objectives.",
+        "semantic_note": "Sysmon documentation states that Event 15 records named-stream creation and logs the hash of the unnamed file contents as well as content associated with the named stream. Zone.Identifier is a common legitimate example.",
+        "interpretation_note": "Named streams are not inherently malicious. Browsers and other applications legitimately attach metadata streams; suspiciousness depends on stream name/content, target path, process identity, and surrounding activity."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "resolve process creation, command-line, parent, image, hash, and user context for the process creating the stream"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "bound the stream-creation activity within the process lifetime"
+        },
+        {
+          "target": "Sysmon 11",
+          "key": "TargetFilename + time",
+          "purpose": "review creation or overwrite of the underlying file around the named-stream event",
+          "limitation": "FileCreate and FileCreateStreamHash can be filtered independently."
+        },
+        {
+          "target": "Windows Security 4688",
+          "key": "ProcessId + Image + time",
+          "purpose": "corroborate process-creation context outside Sysmon",
+          "limitation": "PID values can be reused; ProcessGuid remains the preferred in-Sysmon key."
+        }
+      ],
+      "analysis": [
+        "Prioritize unusual named streams, executable/configuration content in alternate streams, or stream creation by unexpected processes in user-writable or security-sensitive locations.",
+        "Treat Zone.Identifier and similar provenance streams as context, not as malicious indicators by themselves; use Contents, Hash, TargetFilename, and process provenance together.",
+        "Correlate with underlying file creation, subsequent image/process execution, and network/download activity when available.",
+        "Treat Event 15 as named-stream observation telemetry; ordinary browsers, mail clients, security tools, and Windows components can create legitimate streams."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the stream event when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the named-stream creation event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID identifying the process that created the named stream.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the stream creation.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the process creating the named stream."
+        },
+        {
+          "key": "targetfilename",
+          "section": "Target File",
+          "native_name": "TargetFilename",
+          "type": "UnicodeString/path",
+          "meaning": "File and stream path recorded as the target of the named-stream creation."
+        },
+        {
+          "key": "creationutctime",
+          "section": "Target File",
+          "native_name": "CreationUtcTime",
+          "type": "UTC timestamp",
+          "meaning": "Creation timestamp recorded for the target file context."
+        },
+        {
+          "key": "hash",
+          "section": "Content Integrity",
+          "native_name": "Hash",
+          "type": "UnicodeString/hash",
+          "meaning": "Hash value recorded by Sysmon for the file/stream context represented by this event."
+        },
+        {
+          "key": "contents",
+          "section": "Stream Content",
+          "native_name": "Contents",
+          "type": "UnicodeString",
+          "meaning": "Content context recorded for the named stream when available."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the process creating the stream."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
