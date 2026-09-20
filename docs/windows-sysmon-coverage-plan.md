@@ -26,7 +26,7 @@ Phase 5.10.10 now uses deterministic family-specific denominators rather than fi
 | Family | Controlled denominator | Encyclopedia grade | Remaining |
 | --- | ---: | ---: | ---: |
 | Windows Security Auditing | 423 unique Event IDs / 488 provider event-version definitions | 2 — `4624`, `4688` | 421 |
-| Sysmon 15.22 | 30 documented/current Event IDs | 7 — `1`, `2`, `3`, `4`, `5`, `6`, `7` | 23 |
+| Sysmon 15.22 | 30 documented/current Event IDs | 10 — `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10` | 20 |
 
 ### Windows Security Auditing scope
 
@@ -48,8 +48,8 @@ The active Sysmon control plane is:
 - semantic release: `15.22`;
 - documented/current denominator: `30` Event IDs (`1..29` plus `255`);
 - controlled structural schema evidence: `4.91`;
-- encyclopedia-grade records: Event IDs `1`, `2`, `3`, `4`, `5`, `6`, and `7`;
-- remaining: `23`.
+- encyclopedia-grade records: Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, and `10`;
+- remaining: `20`.
 
 ### Global Windows boundary
 
