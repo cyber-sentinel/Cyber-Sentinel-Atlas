@@ -921,6 +921,25 @@ def test_10aa_sysmon_29_field_dictionary_and_schema_evidence_are_complete():
         assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_FILE_EXE_DETECTED / ")
 
 
+def test_10ab_sysmon_255_field_dictionary_and_schema_evidence_are_complete():
+    prefix = "atlas:field:microsoft.sysmon:255."
+    fields = [record["subject"] for record in RECORDS if record.get("predicate") == "has_field" and record.get("subject", "").startswith(prefix)]
+    expected = {"utctime", "id", "description"}
+    assert {value.rsplit(":", 1)[-1].split(".", 1)[1] for value in fields} == expected
+    event = next(item for item in APPROVED["events"] if item["id"] == "atlas:event:microsoft.sysmon:255")
+    assert event["source_version"] == "15.22"
+    assert event["schema_locator"] == "SYSMONEVENT_ERROR"
+    assert event["overview"]["configuration_tag"] is None
+    for record in RECORDS:
+        if record.get("subject") not in fields:
+            continue
+        assert record["object"]["value"]["structural_refresh_state"] == "VALIDATED_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
+        schema_evidence = [item for item in record["evidence"] if item.get("source_id") == "atlas:source:atlas.source:microsoft-sysmon-schema-export"]
+        assert len(schema_evidence) == 1
+        assert schema_evidence[0]["source_version"] == "sysmon-15.22-schema-4.91"
+        assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_ERROR / ")
+
+
 def test_11_sysmon_approved_field_sets_match_controlled_15_22_structural_digests():
     approved = json.loads((ROOT / "content" / "encyclopedia" / "approved-exemplars.json").read_text(encoding="utf-8"))
     manifest = json.loads(SYSMON_STRUCTURAL_DIGESTS.read_text(encoding="utf-8"))
