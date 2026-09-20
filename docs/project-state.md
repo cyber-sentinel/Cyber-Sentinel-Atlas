@@ -39,8 +39,8 @@
 - Phase 5.10.10 Sysmon Event 4 encyclopedia promotion: PR #92 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / POST-MERGE VERIFIED**
 - Phase 5.10.10 Sysmon Event 5 encyclopedia promotion: PR #94 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / POST-MERGE VERIFIED**
 - Phase 5.10.10 Sysmon Event 6 encyclopedia promotion: PR #97 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / POST-MERGE VERIFIED**
-- Phase 5.10.10 Sysmon Event 7 encyclopedia promotion: PR #99 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / POST-MERGE CI IN PROGRESS**
-- Phase 5.10.10 Sysmon Event 8 encyclopedia promotion: PR #100 — **MERGED**
+- Phase 5.10.10 Sysmon Event 7 encyclopedia promotion: PR #99 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN**
+- Phase 5.10.10 Sysmon Event 8 encyclopedia promotion: PR #100 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN**
 - Phase 5.10.10 Sysmon Event 9 encyclopedia promotion: PR #103 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN**
 - Phase 5.10.10 Sysmon Event 10 encyclopedia promotion: PR #104 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE POST-MERGE VERIFIED**
 - Phase 5.10.10 Event 10 control-plane synchronization: PR #105 — **MERGED**
