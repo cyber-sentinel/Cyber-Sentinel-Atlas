@@ -1621,6 +1621,142 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:11",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "11",
+      "title": "Sysmon Event 11 — File created",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "11",
+      "aliases": [
+        "11",
+        "Sysmon 11",
+        "Sysmon Event 11",
+        "FileCreate",
+        "File created"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 11: FileCreate",
+      "schema_locator": "SYSMONEVENT_FILE_CREATE",
+      "overview": {
+        "summary": "Records file creation or overwrite activity with process identity, target filename, file creation time, user context, and event time.",
+        "event_class": "File Creation",
+        "configuration_tag": "FileCreate",
+        "default_collection_state": "ruledefault-exclude",
+        "schema_event_version": 2,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify files created or overwritten by a known process",
+          "monitor autostart, startup, temporary, download, and other security-relevant locations",
+          "pivot from file creation into later image load, driver load, persistence, or execution activity",
+          "distinguish suspicious file drops from normal software installation, update, build, extraction, or user activity"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "FileCreate telemetry required by the investigation must be explicitly admitted by the active EventFiltering policy because the controlled schema records ruledefault=exclude."
+        ],
+        "configuration_note": "Use governed include filters for paths, processes, extensions, or other conditions that preserve security-relevant FileCreate activity while controlling high-volume benign file churn.",
+        "interpretation_note": "File creation and overwrite are routine. Security significance depends on target location, process identity, user context, file type, subsequent execution/load behavior, and surrounding telemetry."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "resolve process creation, command-line, parent, hash, and user context for the process creating or overwriting the file"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "bound the file operation within the process lifetime"
+        },
+        {
+          "target": "Sysmon 7",
+          "key": "TargetFilename ↔ ImageLoaded + time",
+          "purpose": "identify a newly created file that is later loaded as a module",
+          "limitation": "Rename, path normalization, timing, and collection filters can prevent a direct match."
+        },
+        {
+          "target": "Sysmon 6",
+          "key": "TargetFilename ↔ ImageLoaded + time",
+          "purpose": "identify a newly created driver file that is later loaded",
+          "limitation": "Event 6 does not identify the initiating process; this is a file-path/time correlation."
+        }
+      ],
+      "analysis": [
+        "Prioritize files created in startup/autostart locations, temporary or download directories, user-writable application paths, security-tool exclusions, or other locations unusual for the creating process.",
+        "Correlate TargetFilename with later image-load, driver-load, process-creation, and persistence telemetry before assigning security significance.",
+        "Review CreationUtcTime when timestamp anomalies matter, while preserving that Event 11 records file creation/overwrite activity rather than proving timestamp tampering.",
+        "Treat Event 11 as file-system observation telemetry; installers, updaters, compilers, browsers, archive tools, and ordinary user workflows can generate high legitimate volume."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon filter rule that produced the FileCreate event when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the file-create event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated process GUID identifying the process that created or overwrote the file.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the file operation.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the process performing the file operation."
+        },
+        {
+          "key": "targetfilename",
+          "section": "Target File",
+          "native_name": "TargetFilename",
+          "type": "UnicodeString/path",
+          "meaning": "Path of the file created or overwritten."
+        },
+        {
+          "key": "creationutctime",
+          "section": "Target File",
+          "native_name": "CreationUtcTime",
+          "type": "UTC timestamp",
+          "meaning": "File creation timestamp recorded for the target file."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the process performing the file operation."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
