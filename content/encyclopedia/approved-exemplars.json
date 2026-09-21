@@ -2544,6 +2544,136 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:18",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "18",
+      "title": "Sysmon Event 18 — PipeEvent (Pipe Connected)",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "18",
+      "aliases": [
+        "18",
+        "Sysmon 18",
+        "Sysmon Event 18",
+        "Pipe Connected",
+        "Named pipe connected"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 18: PipeEvent (Pipe Connected)",
+      "schema_locator": "SYSMONEVENT_CONNECT_NAMEDPIPE",
+      "overview": {
+        "summary": "Records a named-pipe connection and the process context associated with the connection.",
+        "event_class": "Named Pipe Activity",
+        "configuration_tag": "PipeEvent",
+        "schema_event_version": 1,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "attribute named-pipe connection activity to a Sysmon process identity",
+          "correlate client/server IPC activity through a shared PipeName",
+          "identify unexpected process-to-pipe relationships when surrounding context warrants investigation",
+          "support IPC reconstruction without treating a pipe connection as malicious by itself"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active PipeEvent filtering policy must preserve named-pipe connection telemetry required by the investigation."
+        ],
+        "volume_note": "Named-pipe connections are common in Windows and legitimate applications. Baseline expected PipeName/Image combinations before escalating anomalies.",
+        "interpretation_note": "A named-pipe connection is normal IPC behavior in many environments. Evaluate PipeName, Image, User, ProcessGuid, Event 17 creation activity, and surrounding execution context together."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 17",
+          "key": "PipeName + host + time",
+          "purpose": "pair a pipe connection with observed named-pipe creation",
+          "limitation": "The same pipe name can be reused; time and host context are required."
+        },
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "associate the connecting process with process creation and command-line context"
+        },
+        {
+          "target": "Sysmon 5",
+          "key": "ProcessGuid",
+          "purpose": "bound the connecting process within its lifecycle when termination telemetry is available"
+        }
+      ],
+      "analysis": [
+        "Identify unexpected processes connecting to sensitive, uncommon, or application-inconsistent named pipes.",
+        "Correlate Event 18 with Event 17 on PipeName, host and time to reconstruct likely IPC relationships.",
+        "Use ProcessGuid as the preferred process key and preserve that PipeName correlation alone does not prove which endpoint initiated malicious activity.",
+        "Treat Event 18 as named-pipe connection observation telemetry, not standalone evidence of malicious activity."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon PipeEvent filter when present."
+        },
+        {
+          "key": "eventtype",
+          "section": "Event Context",
+          "native_name": "EventType",
+          "type": "UnicodeString",
+          "meaning": "Sysmon event-type value describing the named-pipe connection activity."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the named-pipe connection event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated GUID identifying the process associated with the connection.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the pipe connection.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "pipename",
+          "section": "Named Pipe",
+          "native_name": "PipeName",
+          "type": "UnicodeString",
+          "meaning": "Name of the named pipe involved in the connection.",
+          "correlation": "Primary pipe-level pivot for correlating Event 18 connections with Event 17 creation."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path associated with the process participating in the pipe connection."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the process."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
