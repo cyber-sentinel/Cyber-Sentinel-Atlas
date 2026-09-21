@@ -150,7 +150,7 @@ def test_05_every_field_has_one_semantics_claim_and_has_field_relationship():
     claim_subjects = {r["subject_id"] for r in claims if r["subject_id"] in field_ids}
     relationship_targets = {r["to"] for r in rels}
 
-    assert len(field_ids) == 308
+    assert len(field_ids) == 316
     assert claim_subjects == field_ids
     assert relationship_targets == field_ids
 
@@ -902,6 +902,24 @@ def test_10z_sysmon_28_field_dictionary_and_schema_evidence_are_complete():
         assert len(schema_evidence) == 1
         assert schema_evidence[0]["source_version"] == "sysmon-15.22-schema-4.91"
         assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_FILE_BLOCK_SHREDDING / ")
+
+def test_10aa_sysmon_29_field_dictionary_and_schema_evidence_are_complete():
+    prefix = "atlas:field:microsoft.sysmon:29."
+    fields = [record["subject"] for record in RECORDS if record.get("predicate") == "has_field" and record.get("subject", "").startswith(prefix)]
+    expected = {"rulename", "utctime", "processguid", "processid", "user", "image", "targetfilename", "hashes"}
+    assert {value.rsplit(":", 1)[-1].split(".", 1)[1] for value in fields} == expected
+    event = next(item for item in APPROVED["events"] if item["id"] == "atlas:event:microsoft.sysmon:29")
+    assert event["source_version"] == "15.22"
+    assert event["schema_locator"] == "SYSMONEVENT_FILE_EXE_DETECTED"
+    for record in RECORDS:
+        if record.get("subject") not in fields:
+            continue
+        assert record["object"]["value"]["structural_refresh_state"] == "VALIDATED_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
+        schema_evidence = [item for item in record["evidence"] if item.get("source_id") == "atlas:source:atlas.source:microsoft-sysmon-schema-export"]
+        assert len(schema_evidence) == 1
+        assert schema_evidence[0]["source_version"] == "sysmon-15.22-schema-4.91"
+        assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_FILE_EXE_DETECTED / ")
+
 
 def test_11_sysmon_approved_field_sets_match_controlled_15_22_structural_digests():
     approved = json.loads((ROOT / "content" / "encyclopedia" / "approved-exemplars.json").read_text(encoding="utf-8"))
