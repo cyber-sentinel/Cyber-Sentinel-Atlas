@@ -23,8 +23,8 @@
       "denominator_scope": "Sysmon 15.22 documented/current Event IDs with controlled schema 4.91 reference evidence",
       "snapshot": "content/encyclopedia/sysmon-15.22-coverage.snapshot.json",
       "denominator_count": 30,
-      "encyclopedia_grade_count": 17,
-      "remaining_count": 13
+      "encyclopedia_grade_count": 18,
+      "remaining_count": 12
     },
     {
       "id": "powershell-operational",

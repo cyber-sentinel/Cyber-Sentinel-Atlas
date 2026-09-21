@@ -77,6 +77,8 @@ def test_02_approved_event_identities_and_search_aliases():
     assert validator.resolve_query(records, "ServiceConfigurationChange") == ["atlas:event:microsoft.sysmon:16"]
     assert validator.resolve_query(records, "Sysmon 17") == ["atlas:event:microsoft.sysmon:17"]
     assert validator.resolve_query(records, "Pipe Created") == ["atlas:event:microsoft.sysmon:17"]
+    assert validator.resolve_query(records, "Sysmon 18") == ["atlas:event:microsoft.sysmon:18"]
+    assert validator.resolve_query(records, "Pipe Connected") == ["atlas:event:microsoft.sysmon:18"]
     assert validator.resolve_query(records, "FileCreateStreamHash") == ["atlas:event:microsoft.sysmon:15"]
 
 
@@ -128,7 +130,7 @@ def test_05_every_field_has_one_semantics_claim_and_has_field_relationship():
     claim_subjects = {r["subject_id"] for r in claims if r["subject_id"] in field_ids}
     relationship_targets = {r["to"] for r in rels}
 
-    assert len(field_ids) == 215
+    assert len(field_ids) == 223
     assert claim_subjects == field_ids
     assert relationship_targets == field_ids
 
@@ -621,6 +623,32 @@ def test_10o_sysmon_17_field_dictionary_and_schema_evidence_are_complete():
         assert len(schema_evidence) == 1
         assert schema_evidence[0]["source_version"] == "sysmon-15.22-schema-4.91"
         assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_CREATE_NAMEDPIPE / ")
+
+
+def test_10p_sysmon_18_field_dictionary_and_schema_evidence_are_complete():
+    records = by_id(records_with_paths())
+    prefix = "atlas:field:microsoft.sysmon:18."
+    fields = sorted(key for key in records if key.startswith(prefix))
+    assert len(fields) == 8
+    expected = {"rulename", "eventtype", "utctime", "processguid", "processid", "pipename", "image", "user"}
+    assert {value.rsplit(":", 1)[-1].split(".", 1)[1] for value in fields} == expected
+
+    claims = [
+        record for record in records.values()
+        if record.get("record_kind") == "claim"
+        and record.get("predicate") == "telemetry.field-semantics"
+        and record.get("subject_id", "").startswith(prefix)
+    ]
+    assert len(claims) == 8
+    for record in claims:
+        assert record["object"]["value"]["structural_refresh_state"] == "VALIDATED_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
+        schema_evidence = [
+            item for item in record["evidence"]
+            if item.get("source_id") == "atlas:source:atlas.source:microsoft-sysmon-schema-export"
+        ]
+        assert len(schema_evidence) == 1
+        assert schema_evidence[0]["source_version"] == "sysmon-15.22-schema-4.91"
+        assert schema_evidence[0]["locator"]["other"].startswith("SYSMONEVENT_CONNECT_NAMEDPIPE / ")
 
 def test_11_sysmon_approved_field_sets_match_controlled_15_22_structural_digests():
     approved = json.loads((ROOT / "content" / "encyclopedia" / "approved-exemplars.json").read_text(encoding="utf-8"))
