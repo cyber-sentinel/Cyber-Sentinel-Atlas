@@ -4703,6 +4703,134 @@
           "notes": "The field is commonly empty when the command-line inclusion policy is not enabled."
         }
       ]
+    },
+    {
+      "id": "atlas:event:microsoft.sysmon:29",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "29",
+      "title": "Sysmon Event 29 — FileExecutableDetected",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "29",
+      "aliases": [
+        "29",
+        "Sysmon 29",
+        "Sysmon Event 29",
+        "FileExecutableDetected",
+        "Executable file detected"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 29: FileExecutableDetected",
+      "schema_locator": "SYSMONEVENT_FILE_EXE_DETECTED",
+      "overview": {
+        "summary": "Records detection of creation of a new executable PE file, preserving process, user, target path, and hash context for investigation.",
+        "event_class": "Executable File Detection",
+        "configuration_tag": "FileExecutableDetected",
+        "schema_event_version": 5,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify newly created PE executable files observed by Sysmon",
+          "attribute executable-file creation to a process and security principal",
+          "pivot from target path and hashes to related file and process evidence",
+          "distinguish detection telemetry from a maliciousness or prevention verdict"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active Sysmon EventFiltering configuration must preserve FileExecutableDetected activity required by the investigation."
+        ],
+        "configuration_note": "FileExecutableDetected records detection of new PE executable-file creation. Filtering should be governed to retain required paths, processes, or investigation contexts.",
+        "interpretation_note": "Executable-file creation is common during legitimate installation, update, build, administrative, and application activity. Event 29 is observation telemetry and should be interpreted with process, user, path, hash, and surrounding evidence."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "resolve process creation, command line, parent and user context for the process associated with the detected executable creation"
+        },
+        {
+          "target": "Sysmon 11",
+          "key": "TargetFilename + time",
+          "purpose": "correlate general file-creation evidence for the same target path"
+        },
+        {
+          "target": "Sysmon 27",
+          "key": "TargetFilename / Hashes",
+          "purpose": "compare executable-file detection with executable-creation prevention evidence when both policies are deployed"
+        }
+      ],
+      "analysis": [
+        "Prioritize executable creation in user-writable, temporary, download, startup, service, or other security-sensitive paths when the responsible process is unexpected.",
+        "Correlate ProcessGuid, image, target path, hashes, signer or reputation context, parent process, and command line before assigning security meaning.",
+        "Treat Event 29 as executable-file detection evidence, not proof of malware or actor intent by itself."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon FileExecutableDetected filter when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the executable-file creation detection."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated GUID identifying the process associated with the detected executable-file creation.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the detected executable-file creation.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the process."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the process associated with the detected file creation."
+        },
+        {
+          "key": "targetfilename",
+          "section": "File Context",
+          "native_name": "TargetFilename",
+          "type": "UnicodeString/path",
+          "meaning": "Target path of the newly detected executable file."
+        },
+        {
+          "key": "hashes",
+          "section": "File Integrity",
+          "native_name": "Hashes",
+          "type": "UnicodeString/hash set",
+          "meaning": "Configured cryptographic hash values recorded for the detected executable-file content when available.",
+          "correlation": "Use as a stable file-content pivot where algorithm and value are present."
+        }
+      ]
     }
   ]
 }
