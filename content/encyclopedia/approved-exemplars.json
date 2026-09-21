@@ -3614,6 +3614,143 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:26",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "26",
+      "title": "Sysmon Event 26 — FileDeleteDetected (File Delete logged)",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "26",
+      "aliases": [
+        "26",
+        "Sysmon 26",
+        "Sysmon Event 26",
+        "FileDeleteDetected",
+        "File Delete logged"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 26: FileDeleteDetected (File Delete logged)",
+      "schema_locator": "SYSMONEVENT_FILE_DELETE_DETECTED",
+      "overview": {
+        "summary": "Records file deletion without archiving the deleted file, preserving process, user, target path, hash, and executable-context evidence for investigation.",
+        "event_class": "File Delete",
+        "configuration_tag": "FileDeleteDetected",
+        "schema_event_version": 5,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "attribute file deletion to a specific Sysmon process identity",
+          "pivot from deleted paths and hashes to earlier file-creation or execution evidence",
+          "investigate deletion of executable or security-relevant files without requiring archive retention",
+          "distinguish observed deletion from a malicious verdict by correlating process, user, path and surrounding telemetry"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active Sysmon EventFiltering configuration must preserve FileDeleteDetected activity required by the investigation."
+        ],
+        "configuration_note": "FileDeleteDetected records deletion telemetry without storing the deleted file in the Sysmon archive directory. Filtering should be governed to retain required paths or process contexts.",
+        "interpretation_note": "File deletion is common operating-system and application behavior. Event 26 is observation telemetry and should be interpreted with process identity, target path, hashes and surrounding activity."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "resolve process creation, command line, parent and hash context for the deleting process"
+        },
+        {
+          "target": "Sysmon 11",
+          "key": "TargetFilename + time",
+          "purpose": "correlate prior creation or overwrite of the deleted file when FileCreate telemetry is available",
+          "limitation": "Path changes, rename activity and filtering can prevent a direct match."
+        },
+        {
+          "target": "Sysmon 23",
+          "key": "TargetFilename + Hashes + time",
+          "purpose": "compare non-archived deletion with archived FileDelete evidence when both event types are collected"
+        }
+      ],
+      "analysis": [
+        "Prioritize deletion of executables, scripts, security artifacts, logs, persistence files, or files in unusual paths when the deleting process or user context is unexpected.",
+        "Use ProcessGuid as the preferred process pivot and TargetFilename plus Hashes as file-centric pivots.",
+        "Compare with FileCreate, process creation and archived FileDelete telemetry to reconstruct the file lifecycle.",
+        "Treat Event 26 as file-deletion observation telemetry rather than proof of malicious cleanup or anti-forensics by itself."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon FileDeleteDetected filter when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the file-deletion event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated GUID identifying the process associated with the deletion.",
+          "correlation": "Preferred process correlation key across Sysmon telemetry."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the deletion.",
+          "correlation": "Use with ProcessGuid and time because PID values can be reused."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the deleting process."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the process associated with the deletion."
+        },
+        {
+          "key": "targetfilename",
+          "section": "File Context",
+          "native_name": "TargetFilename",
+          "type": "UnicodeString/path",
+          "meaning": "Path of the file recorded as deleted."
+        },
+        {
+          "key": "hashes",
+          "section": "File Integrity",
+          "native_name": "Hashes",
+          "type": "UnicodeString/hash set",
+          "meaning": "Configured cryptographic hash values recorded for the deleted file when available.",
+          "correlation": "Use as a stable file-content pivot where algorithm and value are present."
+        },
+        {
+          "key": "isexecutable",
+          "section": "File Context",
+          "native_name": "IsExecutable",
+          "type": "Boolean",
+          "meaning": "Indicates whether Sysmon classified the deleted file as executable."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
