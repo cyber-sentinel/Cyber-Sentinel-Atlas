@@ -2802,6 +2802,134 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:20",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "20",
+      "title": "Sysmon Event 20 — WmiEvent (WmiEventConsumer activity detected)",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "20",
+      "aliases": [
+        "20",
+        "Sysmon 20",
+        "Sysmon Event 20",
+        "WmiEventConsumer",
+        "WMI event consumer"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 20: WmiEvent (WmiEventConsumer activity detected)",
+      "schema_locator": "SYSMONEVENT_WMI_CONSUMER",
+      "overview": {
+        "summary": "Records registration-related activity for a WMI event consumer, including consumer name, type and destination/action context.",
+        "event_class": "WMI Subscription Activity",
+        "configuration_tag": "WmiEvent",
+        "schema_event_version": 3,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify WMI event-consumer registration associated with automation or persistence",
+          "inspect consumer type and destination/action context for unexpected execution behavior",
+          "correlate consumer registration with filter and binding telemetry",
+          "support permanent-event-subscription reconstruction without treating every consumer as malicious"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active WmiEvent filtering policy must preserve consumer-registration telemetry required by the investigation."
+        ],
+        "attribution_limit": "Event 20 does not provide ProcessGuid or ProcessId. User and WMI object data provide context, but initiating process attribution requires other telemetry.",
+        "interpretation_note": "WMI consumers are used by legitimate administration and automation as well as persistence. Evaluate Name, Type, Destination, User, Operation and related filter/binding telemetry together."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 19",
+          "key": "subscription naming/context + host + time",
+          "purpose": "associate the consumer with WMI filter activity in the same subscription workflow",
+          "limitation": "Object names and timing require contextual validation."
+        },
+        {
+          "target": "Sysmon 21",
+          "key": "consumer identity/path + host + time",
+          "purpose": "confirm binding of the consumer to a WMI filter"
+        },
+        {
+          "target": "Windows WMI Activity telemetry",
+          "key": "consumer/object + time + host",
+          "purpose": "corroborate WMI operations and possible execution activity",
+          "scope": "Explicit out-of-scope target until the WMI Activity provider/channel denominator is frozen."
+        }
+      ],
+      "analysis": [
+        "Review consumers with unusual types or destinations, script/command execution content, and registrations outside approved management workflows.",
+        "Correlate Events 19, 20 and 21 to reconstruct permanent WMI subscription components and their relationships.",
+        "Use User and Operation as context but do not infer an initiating process because Event 20 lacks process identity fields.",
+        "Treat Event 20 as WMI subscription state telemetry, not standalone proof of persistence or malicious execution."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the WmiEvent filter when present."
+        },
+        {
+          "key": "eventtype",
+          "section": "Event Context",
+          "native_name": "EventType",
+          "type": "UnicodeString",
+          "meaning": "Sysmon event-type value describing WMI consumer activity."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the WMI consumer event."
+        },
+        {
+          "key": "operation",
+          "section": "WMI Operation",
+          "native_name": "Operation",
+          "type": "UnicodeString",
+          "meaning": "WMI operation/state action recorded for the consumer activity."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User context recorded for the WMI consumer activity."
+        },
+        {
+          "key": "name",
+          "section": "WMI Consumer",
+          "native_name": "Name",
+          "type": "UnicodeString",
+          "meaning": "Name of the WMI event consumer."
+        },
+        {
+          "key": "type",
+          "section": "WMI Consumer",
+          "native_name": "Type",
+          "type": "UnicodeString",
+          "meaning": "Consumer type recorded by Sysmon."
+        },
+        {
+          "key": "destination",
+          "section": "WMI Consumer",
+          "native_name": "Destination",
+          "type": "UnicodeString",
+          "meaning": "Destination or action context recorded for the WMI consumer."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
