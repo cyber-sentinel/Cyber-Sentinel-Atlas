@@ -3751,6 +3751,132 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:27",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "27",
+      "title": "Sysmon Event 27 — FileBlockExecutable",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "27",
+      "aliases": [
+        "27",
+        "Sysmon 27",
+        "Sysmon Event 27",
+        "FileBlockExecutable",
+        "Executable creation blocked"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 27: FileBlockExecutable",
+      "schema_locator": "SYSMONEVENT_FILE_BLOCK_EXE",
+      "overview": {
+        "summary": "Records Sysmon prevention of PE executable-file creation, preserving the responsible process, user, target path, and hash context for investigation.",
+        "event_class": "Executable Creation Block",
+        "configuration_tag": "FileBlockExecutable",
+        "schema_event_version": 5,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify executable-file creation attempts that Sysmon actively blocked",
+          "attribute blocked creation to a process and security principal",
+          "pivot from target path and hashes to related file or process evidence",
+          "distinguish prevention telemetry from a complete maliciousness or attribution verdict"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running."
+        ],
+        "configuration_note": "FileBlockExecutable is prevention telemetry. The active configuration must intentionally enable the blocking policy and should be governed to avoid disrupting legitimate software deployment or update activity.",
+        "interpretation_note": "A blocked executable creation can be caused by malicious, unwanted, administrative, development, installer, or update activity. Interpret the event with process, user, target path, hash, and policy context."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "resolve creation, command line, parent, hash and user context for the process that attempted the file creation"
+        },
+        {
+          "target": "Sysmon 11",
+          "key": "TargetFilename + time",
+          "purpose": "review nearby successful file creation or overwrite activity for the same path when collected",
+          "limitation": "A blocked creation may have no successful FileCreate counterpart."
+        },
+        {
+          "target": "Sysmon 29",
+          "key": "TargetFilename + Hashes + time",
+          "purpose": "compare blocked executable creation with detection-only executable creation telemetry"
+        }
+      ],
+      "analysis": [
+        "Prioritize blocked executable creation in user-writable, temporary, download, startup, service, or other security-sensitive paths when the responsible process is unexpected.",
+        "Use ProcessGuid for process lineage and TargetFilename plus Hashes for file-centric pivots.",
+        "Review whether the event represents intended enforcement against suspicious activity or an operational false positive affecting legitimate software.",
+        "Treat Event 27 as Sysmon prevention evidence, not proof of malware or actor intent by itself."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon FileBlockExecutable policy when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the blocked executable-file creation."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated GUID identifying the process associated with the blocked creation."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the blocked creation."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the process."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the process that attempted the creation."
+        },
+        {
+          "key": "targetfilename",
+          "section": "File Context",
+          "native_name": "TargetFilename",
+          "type": "UnicodeString/path",
+          "meaning": "Target path of the executable file whose creation was blocked."
+        },
+        {
+          "key": "hashes",
+          "section": "File Integrity",
+          "native_name": "Hashes",
+          "type": "UnicodeString/hash set",
+          "meaning": "Configured cryptographic hash values recorded for the executable-file content when available."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
