@@ -3877,6 +3877,138 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:28",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "28",
+      "title": "Sysmon Event 28 — FileBlockShredding",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "28",
+      "aliases": [
+        "28",
+        "Sysmon 28",
+        "Sysmon Event 28",
+        "FileBlockShredding",
+        "File shredding blocked"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 28: FileBlockShredding",
+      "schema_locator": "SYSMONEVENT_FILE_BLOCK_SHREDDING",
+      "overview": {
+        "summary": "Records Sysmon prevention of file-shredding behavior, preserving process, user, target path, hash, and executable context for investigation.",
+        "event_class": "File Shredding Block",
+        "configuration_tag": "FileBlockShredding",
+        "schema_event_version": 5,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify file-shredding attempts that Sysmon actively blocked",
+          "attribute the blocked operation to a process and security principal",
+          "preserve target-file and hash context for anti-forensics or destructive-activity investigations",
+          "separate prevention evidence from assumptions about malicious intent"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running."
+        ],
+        "configuration_note": "FileBlockShredding is prevention telemetry. The active policy must intentionally enable shredding protection and should be validated against legitimate secure-deletion or maintenance workflows.",
+        "interpretation_note": "Secure deletion can be legitimate. Event 28 records a Sysmon block decision and should be interpreted with the initiating process, target path, hashes, user, and business context."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 1",
+          "key": "ProcessGuid",
+          "purpose": "resolve process creation, command line, parent and user context for the shredding attempt"
+        },
+        {
+          "target": "Sysmon 26",
+          "key": "TargetFilename + Hashes + time",
+          "purpose": "review nearby non-archived deletion activity for the same file when present"
+        },
+        {
+          "target": "Sysmon 23",
+          "key": "TargetFilename + Hashes + time",
+          "purpose": "review archived FileDelete evidence for the same target when collected"
+        }
+      ],
+      "analysis": [
+        "Prioritize shredding attempts involving security logs, forensic artifacts, configuration files, backups, credential material, or other sensitive targets.",
+        "Distinguish approved secure-deletion utilities and maintenance workflows from unexpected destructive behavior.",
+        "Use ProcessGuid for process lineage and TargetFilename plus Hashes for file-centric pivots.",
+        "Treat Event 28 as blocked shredding telemetry rather than proof of malicious anti-forensics by itself."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the Sysmon FileBlockShredding policy when present."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the blocked shredding event."
+        },
+        {
+          "key": "processguid",
+          "section": "Process Context",
+          "native_name": "ProcessGuid",
+          "type": "GUID",
+          "meaning": "Sysmon-generated GUID identifying the process associated with the shredding attempt."
+        },
+        {
+          "key": "processid",
+          "section": "Process Context",
+          "native_name": "ProcessId",
+          "type": "UInt32/PID",
+          "meaning": "Windows process identifier associated with the shredding attempt."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User or security-principal context associated with the process."
+        },
+        {
+          "key": "image",
+          "section": "Process Context",
+          "native_name": "Image",
+          "type": "UnicodeString/path",
+          "meaning": "Executable image path of the process associated with the shredding attempt."
+        },
+        {
+          "key": "targetfilename",
+          "section": "File Context",
+          "native_name": "TargetFilename",
+          "type": "UnicodeString/path",
+          "meaning": "Path of the file targeted by the blocked shredding operation."
+        },
+        {
+          "key": "hashes",
+          "section": "File Integrity",
+          "native_name": "Hashes",
+          "type": "UnicodeString/hash set",
+          "meaning": "Configured cryptographic hash values recorded for the target file when available."
+        },
+        {
+          "key": "isexecutable",
+          "section": "File Context",
+          "native_name": "IsExecutable",
+          "type": "Boolean",
+          "meaning": "Indicates whether Sysmon classified the targeted file as executable."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
