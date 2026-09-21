@@ -2674,6 +2674,134 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.sysmon:19",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "19",
+      "title": "Sysmon Event 19 — WmiEvent (WmiEventFilter activity detected)",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "19",
+      "aliases": [
+        "19",
+        "Sysmon 19",
+        "Sysmon Event 19",
+        "WmiEventFilter",
+        "WMI event filter"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 19: WmiEvent (WmiEventFilter activity detected)",
+      "schema_locator": "SYSMONEVENT_WMI_FILTER",
+      "overview": {
+        "summary": "Records registration-related activity for a WMI event filter, including namespace, filter name and query expression.",
+        "event_class": "WMI Subscription Activity",
+        "configuration_tag": "WmiEvent",
+        "schema_event_version": 3,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify WMI event-filter registration used in legitimate automation or persistence mechanisms",
+          "inspect WMI namespace and query expressions for unusual trigger conditions",
+          "correlate filter creation with consumer and binding telemetry",
+          "support permanent-event-subscription investigation without treating every filter as malicious"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running.",
+          "The active WmiEvent filtering policy must preserve filter-registration telemetry required by the investigation."
+        ],
+        "attribution_limit": "Event 19 does not provide ProcessGuid or ProcessId. User and WMI object data provide context, but initiating process attribution requires other telemetry.",
+        "interpretation_note": "WMI event filters are used by legitimate management tooling as well as persistence and automation techniques. Evaluate namespace, query, user, operation and related consumer/binding events together."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 20",
+          "key": "Name / subscription context + host + time",
+          "purpose": "identify consumer registration associated with the same WMI subscription workflow",
+          "limitation": "Names and temporal proximity require contextual validation."
+        },
+        {
+          "target": "Sysmon 21",
+          "key": "filter identity/path + host + time",
+          "purpose": "identify binding of a consumer to the filter"
+        },
+        {
+          "target": "Windows WMI Activity telemetry",
+          "key": "WMI namespace/object + time + host",
+          "purpose": "corroborate WMI operations and potential initiating activity",
+          "scope": "Explicit out-of-scope target until the WMI Activity provider/channel denominator is frozen."
+        }
+      ],
+      "analysis": [
+        "Review filters in unusual namespaces, queries that trigger on security-sensitive conditions, and registrations outside approved management workflows.",
+        "Correlate Event 19 with Events 20 and 21 to reconstruct permanent WMI subscription components.",
+        "Use User and Operation as context, but do not infer an initiating process because Event 19 lacks process identity fields.",
+        "Treat Event 19 as WMI subscription state telemetry, not standalone proof of persistence or maliciousness."
+      ],
+      "fields": [
+        {
+          "key": "rulename",
+          "section": "Event Context",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Rule metadata associated with the WmiEvent filter when present."
+        },
+        {
+          "key": "eventtype",
+          "section": "Event Context",
+          "native_name": "EventType",
+          "type": "UnicodeString",
+          "meaning": "Sysmon event-type value describing WMI filter activity."
+        },
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the WMI filter event."
+        },
+        {
+          "key": "operation",
+          "section": "WMI Operation",
+          "native_name": "Operation",
+          "type": "UnicodeString",
+          "meaning": "WMI operation/state action recorded for the filter activity."
+        },
+        {
+          "key": "user",
+          "section": "Security Context",
+          "native_name": "User",
+          "type": "UnicodeString",
+          "meaning": "User context recorded for the WMI filter activity."
+        },
+        {
+          "key": "eventnamespace",
+          "section": "WMI Filter",
+          "native_name": "EventNamespace",
+          "type": "UnicodeString",
+          "meaning": "WMI namespace in which the event filter is registered."
+        },
+        {
+          "key": "name",
+          "section": "WMI Filter",
+          "native_name": "Name",
+          "type": "UnicodeString",
+          "meaning": "Name of the WMI event filter."
+        },
+        {
+          "key": "query",
+          "section": "WMI Filter",
+          "native_name": "Query",
+          "type": "UnicodeString",
+          "meaning": "WMI event query expression defining the filter trigger condition."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
