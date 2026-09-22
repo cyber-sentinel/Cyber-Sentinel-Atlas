@@ -12,6 +12,7 @@ Phase 5.10.1 release-scoped redistribution controls are maintained in:
 - [`tools/release/generate_public_preview_notice_bundle.py`](tools/release/generate_public_preview_notice_bundle.py) — deterministic draft/release notice metadata generator; release mode fails closed until exact PPR-04 closure and package binding;
 - [`third_party/license-material/manifest.json`](third_party/license-material/manifest.json) — exact upstream-revision/blob mapping for pinned third-party license material;
 - [`tools/release/validate_pinned_license_material.py`](tools/release/validate_pinned_license_material.py) — byte-identity validator and SHA-256 evidence generator for pinned license material.
+- [`tools/release/generate_go_license_material_evidence.py`](tools/release/generate_go_license_material_evidence.py) and [`tools/release/validate_go_license_material_evidence.py`](tools/release/validate_go_license_material_evidence.py) — preserve and byte-validate exact license/notice material for the Go modules actually linked into the Shared Core binary plus the Go toolchain; SBOM classifier labels remain non-authoritative.
 
 PPR-04 remains **BLOCKED** until the exact Public Preview corpus and software payload are frozen, all included entries are explicitly accepted, required notices are prepared, and the evidence is bound to the exact release package SHA-256.
 

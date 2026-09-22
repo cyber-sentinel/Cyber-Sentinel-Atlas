@@ -18,6 +18,9 @@ TAURI_EVIDENCE_WORKFLOW = ROOT / ".github" / "workflows" / "phase5101-redistribu
 NOTICE_GENERATOR = ROOT / "tools" / "release" / "generate_public_preview_notice_bundle.py"
 PINNED_LICENSE_MANIFEST = ROOT / "third_party" / "license-material" / "manifest.json"
 PINNED_LICENSE_VALIDATOR = ROOT / "tools" / "release" / "validate_pinned_license_material.py"
+GO_LICENSE_GENERATOR = ROOT / "tools" / "release" / "generate_go_license_material_evidence.py"
+GO_LICENSE_VALIDATOR = ROOT / "tools" / "release" / "validate_go_license_material_evidence.py"
+GO_SUPPLY_CHAIN_WORKFLOW = ROOT / ".github" / "workflows" / "phase554d-supply-chain-closure.yml"
 FREEZE_MANIFEST_GENERATOR = ROOT / "tools" / "release" / "generate_redistribution_freeze_manifest.py"
 FREEZE_MANIFEST_VALIDATOR = ROOT / "tools" / "release" / "validate_redistribution_freeze_manifest.py"
 ALLOWED_ENTRY_STATES = {
@@ -54,6 +57,9 @@ def validate_baseline(data: dict, errors: list[str]) -> None:
         NOTICE_GENERATOR,
         PINNED_LICENSE_MANIFEST,
         PINNED_LICENSE_VALIDATOR,
+        GO_LICENSE_GENERATOR,
+        GO_LICENSE_VALIDATOR,
+        GO_SUPPLY_CHAIN_WORKFLOW,
         FREEZE_MANIFEST_GENERATOR,
         FREEZE_MANIFEST_VALIDATOR,
     ):
@@ -204,6 +210,28 @@ def validate_baseline(data: dict, errors: list[str]) -> None:
         ):
             if token not in review_evidence:
                 fail(errors, f"tauri-rust-runtime review_evidence must reference {token}")
+
+    go_entries = [
+        entry for entry in entries
+        if isinstance(entry, dict) and entry.get("id") == "go-shared-core-runtime"
+    ]
+    if len(go_entries) != 1:
+        fail(errors, "redistribution inventory must contain exactly one go-shared-core-runtime entry")
+    else:
+        go_entry = go_entries[0]
+        review_evidence = go_entry.get("review_evidence", "")
+        for token in (
+            "phase554d-supply-chain-closure.yml",
+            "generate_go_license_material_evidence.py",
+            "validate_go_license_material_evidence.py",
+        ):
+            if token not in review_evidence:
+                fail(errors, f"go-shared-core-runtime review_evidence must reference {token}")
+        if "do not rely on SBOM classifier labels alone" not in go_entry.get("required_notices", ""):
+            fail(
+                errors,
+                "go-shared-core-runtime must preserve the non-authoritative SBOM-classifier boundary",
+            )
 
     notices = NOTICES.read_text(encoding="utf-8") if NOTICES.is_file() else ""
     if "non-waivable publication failure" not in notices:

@@ -107,11 +107,11 @@
       "class": "software-runtime",
       "included": true,
       "upstream_revision": "Go 1.25.13 + shared-core/go/go.mod/go.sum + exact linked binary",
-      "license_or_terms": "Generated linked-module license evidence",
-      "license_source": "Phase 5.5.4D SBOM/license evidence",
+      "license_or_terms": "Exact linked-module/toolchain license-material evidence plus SBOM metadata; scanner license classifications are non-authoritative pending review against preserved bytes",
+      "license_source": "Phase 5.5.4D exact linked-module/toolchain license-material evidence bound by go.sum and the exact linked binary",
       "redistribution_state": "BUILD_EVIDENCE_REQUIRED",
-      "required_notices": "Generated from exact release binary/module set",
-      "review_evidence": "Phase 5.5.4D supply-chain workflow"
+      "required_notices": "Generate from the exact release binary/module set and preserved module/toolchain license/notice bytes; do not rely on SBOM classifier labels alone",
+      "review_evidence": ".github/workflows/phase554d-supply-chain-closure.yml + tools/release/generate_go_license_material_evidence.py + tools/release/validate_go_license_material_evidence.py + tools/shared_core/phase554d_evidence.py"
     },
     {
       "id": "tauri-rust-runtime",
