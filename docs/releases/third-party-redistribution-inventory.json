@@ -4,6 +4,13 @@
   "state": "BLOCKED",
   "public_preview_corpus_frozen": false,
   "software_payload_frozen": false,
+  "freeze_evidence": {
+    "release_commit": null,
+    "public_preview_corpus_manifest_sha256": null,
+    "public_preview_corpus_manifest_evidence": null,
+    "software_payload_manifest_sha256": null,
+    "software_payload_manifest_evidence": null
+  },
   "release_package_sha256": null,
   "entries": [
     {
