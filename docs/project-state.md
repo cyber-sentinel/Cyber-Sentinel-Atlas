@@ -4,8 +4,8 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `294671a9f208a36f046dec75a23d3323a87c42d0`
-- Latest merged engineering/corpus baseline: `294671a9f208a36f046dec75a23d3323a87c42d0` — PR #117 merged Sysmon Event 20 encyclopedia-grade coverage; machine-readable Sysmon coverage is `20/30` with `10` remaining.
+- Last Reviewed Main SHA: `a12bb5bb5b8ec111ba4c6a76b818373a88e93b87`
+- Latest merged engineering/corpus baseline: `a12bb5bb5b8ec111ba4c6a76b818373a88e93b87` — PR #130 completed the frozen Sysmon 15.22 denominator; machine-readable Sysmon coverage is `30/30` with `0` remaining.
 - PR #85 exact-head baseline: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene `35429390496`, Phase 5.3.4 Canaries `35429390498`, and Phase 5.10.5 Usable Data Preview `35429390479` all **SUCCESS**
 - PR #85 merged to `main` as `4bfe222eb708347ea0769da400c40dbdaf289b69`; post-merge Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` are all **SUCCESS / POST-MERGE VERIFIED**.
 - PR #89 exact-head `34225caf471b215717c3a8b1dcaa01799b01abd7`: all applicable checks completed successfully, including Foundation Hygiene `35437483777`, Phase 5.3.4 Canaries `35437483740`, Production Go Architecture `35437483746`, Shared Core Architecture `35437483749`, Governance Hygiene `35437483754`, Supply Chain Closure `35437483745`, Redistribution Closure `35437483753`, First-Party License Readiness `35437483751`, and Public Preview Readiness `35437483747`; merged as `4ea088e455462e66115d6887a472237171a96c94`.
@@ -56,6 +56,18 @@
 - Phase 5.10.10 Sysmon Event 18 encyclopedia promotion: PR #115 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE POST-MERGE VERIFIED**; exact-head Foundation Hygiene `35558657618`; merged as `3f3c24fece3c00f3a2f24907f261e60cce101067`.
 - Phase 5.10.10 Sysmon Event 19 encyclopedia promotion: PR #116 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE POST-MERGE VERIFIED**; exact-head Foundation Hygiene `35558997836`; merged as `3bff0af742aa90faac22f38803e4174d6b2b42d5`.
 - Phase 5.10.10 Sysmon Event 20 encyclopedia promotion: PR #117 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE POST-MERGE VERIFIED**; exact-head Foundation Hygiene `35565142034`; merged as `294671a9f208a36f046dec75a23d3323a87c42d0`.
+- Phase 5.10.10 Event 20 README/control-plane synchronization: PR #118 — **MERGED / ALL APPLICABLE CI GREEN**; merged as `845f62c6ddd4b260c63ca76d6c3df9c7433355dd`.
+- Phase 5.10.10 Sysmon Event 21 encyclopedia promotion: PR #119 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE POST-MERGE VERIFIED**; exact-head Foundation Hygiene `35566014744`; merged as `c831025afeb949393d228e413122d1969e7853db`.
+- Phase 5.10.10 Sysmon Event 22 encyclopedia promotion: PR #120 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE POST-MERGE VERIFIED**; exact-head Foundation Hygiene `35566703978`; merged as `937018196d86839b97ca6284b91d13b02293d20d`.
+- Phase 5.10.10 Sysmon Event 23 encyclopedia promotion: PR #121 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN**; exact-head Foundation Hygiene `35586836916`; merged as `f6fe2e5f9592f6df6c0d2733e285ddcfa4c63d0e`.
+- Phase 5.10.10 Sysmon Event 24 encyclopedia promotion: PR #122 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN**; exact-head Foundation Hygiene `35587347608`; merged as `5bc1c1c86fef9e2565d3af8bd7127045223053b5`.
+- Phase 5.10.10 Sysmon Event 25 encyclopedia promotion: PR #123 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN**; exact-head Foundation Hygiene `35587872458`; merged as `a27cc1dfc39397e1f1fe435684fceb5eca1ee4c2`.
+- Phase 5.10.10 Sysmon Event 26 encyclopedia promotion: PR #124 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN**; exact-head Foundation Hygiene `35588454106`; merged as `203c36024ee973c39cd8265bce3688f520cfd44c`.
+- Phase 5.10.10 Sysmon Event 27 encyclopedia promotion: PR #125 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN**; exact-head Foundation Hygiene `35589941442`; merged as `169edea3596abf4218a1cb3d1bd6558ad90b2098`.
+- Phase 5.10.10 Sysmon Event 28 encyclopedia promotion: PR #126 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN**; exact-head Foundation Hygiene `35590322289`; merged as `330085bfcf131668a337c0a8a7cf32ca8afe03ee`.
+- Phase 5.10.10 Sysmon Event 29 preparation: PR #127 and PR #128 — **CLOSED / SUPERSEDED / NOT MERGED** after stale test-invariant defects were identified and corrected.
+- Phase 5.10.10 Sysmon Event 29 encyclopedia promotion: PR #129 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / CORRECTED TEST INVARIANTS**; exact-head Foundation Hygiene `35591771151`; merged as `f62819285e0235eac2062470399a901a70eebb9d`.
+- Phase 5.10.10 Sysmon Event 255 encyclopedia promotion and frozen-denominator completion: PR #130 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE 30/30 VERIFIED**; exact-head Foundation Hygiene `35749656509`; merged as `a12bb5bb5b8ec111ba4c6a76b818373a88e93b87`.
 - Approved Product Family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
@@ -143,7 +155,7 @@ ATLAS project continuity is repository-backed rather than chat-backed.
     - Windows Security controlled denominator: `423` unique Event IDs / `488` provider event-version definitions
     - Windows Security encyclopedia grade: `2/423` — Event IDs `4624`, `4688`; remaining `421`
     - Sysmon semantic release: `15.22`; controlled structural schema: `4.91`
-    - Sysmon denominator: `30` documented/current Event IDs; encyclopedia grade: `20/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20`; remaining `10`
+    - Sysmon denominator: `30` documented/current Event IDs; encyclopedia grade: `30/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20`, `21`, `22`, `23`, `24`, `25`, `26`, `27`, `28`, `29`, `255`; remaining `0`
     - global Windows denominator: **NOT FROZEN**; global completion percentage intentionally undefined
     - remaining mandatory families still require controlled denominators: PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
     - machine-readable authority: `content/encyclopedia/coverage-manifest.json`
