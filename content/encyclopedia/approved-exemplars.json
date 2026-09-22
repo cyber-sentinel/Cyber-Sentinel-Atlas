@@ -4831,6 +4831,95 @@
           "correlation": "Use as a stable file-content pivot where algorithm and value are present."
         }
       ]
+    },
+    {
+      "id": "atlas:event:microsoft.sysmon:255",
+      "namespace": "microsoft.sysmon",
+      "canonical_key": "255",
+      "title": "Sysmon Event 255 — Error",
+      "provider": "Microsoft-Windows-Sysmon",
+      "channel": "Microsoft-Windows-Sysmon/Operational",
+      "product": "Sysmon",
+      "platform": "Windows",
+      "native_event_id": "255",
+      "aliases": [
+        "255",
+        "Sysmon 255",
+        "Sysmon Event 255",
+        "Error",
+        "Sysmon Error"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-sysmon-docs",
+      "source_version": "15.22",
+      "source_url": "https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon",
+      "source_locator": "Events > Event ID 255: Error",
+      "schema_locator": "SYSMONEVENT_ERROR",
+      "overview": {
+        "summary": "Reports internal Sysmon errors or conditions that prevented expected work, including heavy-load, implementation, security, or integrity-related failures.",
+        "event_class": "Sysmon Internal Error",
+        "configuration_tag": null,
+        "schema_event_version": 3,
+        "schema_state": "STRUCTURAL_REFERENCE_VALIDATED_CONTROLLED_15_22_EXPORT",
+        "security_value": [
+          "identify Sysmon health or execution failures that can reduce expected telemetry",
+          "preserve the internal error identifier and description for operational diagnosis",
+          "correlate collection gaps with Sysmon service and configuration state",
+          "distinguish sensor-health evidence from a malicious verdict about activity on the host"
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Sysmon must be installed and running sufficiently to emit Operational-channel health or error telemetry."
+        ],
+        "configuration_note": "Event 255 is an internal Sysmon error/health event and has no normal EventFiltering configuration tag. Do not invent a filtering tag for this event.",
+        "interpretation_note": "An Event 255 record indicates a Sysmon error or condition that prevented expected work. Investigate repeated or security-relevant failures because they may create telemetry gaps, while avoiding unsupported assumptions about malicious intent."
+      },
+      "correlations": [
+        {
+          "target": "Sysmon 4",
+          "key": "host + time",
+          "purpose": "correlate internal errors with Sysmon service state changes"
+        },
+        {
+          "target": "Sysmon 16",
+          "key": "host + time",
+          "purpose": "correlate internal errors with Sysmon configuration changes"
+        },
+        {
+          "target": "Operational telemetry continuity",
+          "key": "host + time window",
+          "purpose": "identify collection gaps or degraded telemetry around the reported error"
+        }
+      ],
+      "analysis": [
+        "Prioritize repeated Event 255 records, errors coincident with telemetry loss, service instability, configuration changes, or resource pressure.",
+        "Use the error ID and Description together with host resource, service, and configuration evidence to determine operational impact.",
+        "Treat Event 255 as sensor-health and execution evidence; investigate possible interference when supported by corroborating telemetry rather than inferring maliciousness from the error alone."
+      ],
+      "fields": [
+        {
+          "key": "utctime",
+          "section": "Event Context",
+          "native_name": "UtcTime",
+          "type": "UTC timestamp",
+          "meaning": "UTC timestamp recorded for the Sysmon internal error."
+        },
+        {
+          "key": "id",
+          "section": "Error Context",
+          "native_name": "ID",
+          "type": "UnicodeString",
+          "meaning": "Sysmon-reported internal error identifier or code used to distinguish the failure condition."
+        },
+        {
+          "key": "description",
+          "section": "Error Context",
+          "native_name": "Description",
+          "type": "UnicodeString",
+          "meaning": "Human-readable Sysmon description of the internal error or condition that prevented expected work."
+        }
+      ]
     }
   ]
 }
