@@ -19,7 +19,7 @@ ATLAS is built for security teams that need investigation context to be **determ
 > **Current maturity:** Engineering-ready First Preview
 > **Release state:** Pre-preview / unreleased
 > **Repository visibility:** Public
-> **Active workstreams:** Phase 5.10.7 — Public Preview RC evidence closure; Phase 5.10.10 — controlled Windows & Sysmon knowledge-coverage expansion
+> **Active workstreams:** Phase 5.10.7 — Public Preview RC evidence closure; Phase 5.10.10 — controlled Windows knowledge-coverage expansion; Sysmon 15.22 frozen denominator complete at 30/30
 > **RC target:** `v0.1.0-rc.1` — functionally frozen; release evidence still blocked
 > **Public Preview state:** **BLOCKED** until every mandatory release gate passes
 > **Desktop:** Windows / Tauri 2.x — ADR-0026 Accepted
@@ -138,7 +138,7 @@ Current controlled Phase 5.10.10 coverage:
 | Family | Controlled denominator | Encyclopedia grade | Remaining |
 | --- | ---: | ---: | ---: |
 | Windows Security Auditing | 423 unique Event IDs on `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296` | 2 — `4624`, `4688` | 421 |
-| Sysmon 15.22 | 30 documented/current Event IDs with controlled schema 4.91 evidence | 20 — `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20` | 10 |
+| Sysmon 15.22 | 30 documented/current Event IDs with controlled schema 4.91 evidence | 30 — `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20`, `21`, `22`, `23`, `24`, `25`, `26`, `27`, `28`, `29`, `255` | 0 |
 
 The authoritative machine-readable ledger is [`content/encyclopedia/coverage-manifest.json`](content/encyclopedia/coverage-manifest.json).
 
