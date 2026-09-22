@@ -17,6 +17,27 @@ PPR-04 may move to `PASS` only when the exact Public Preview payload is frozen a
 
 Unknown, ambiguous, incompatible, or unverified rights remain a non-waivable publication failure.
 
+## Deterministic freeze evidence
+
+The two machine-readable freeze booleans are not self-authenticating. Setting
+`public_preview_corpus_frozen=true` or `software_payload_frozen=true` requires an
+exact release commit plus a SHA-256-bound freeze manifest and an immutable evidence
+reference recorded under `freeze_evidence` in
+`docs/releases/third-party-redistribution-inventory.json`.
+
+`tools/release/generate_redistribution_freeze_manifest.py` creates a deterministic
+manifest over explicitly supplied artifacts. The manifest records the release commit,
+freeze kind, artifact basename, size and SHA-256. It never grants publication authority.
+
+`tools/release/validate_redistribution_freeze_manifest.py` verifies that manifest
+against the exact artifact bytes and fails on path traversal, role/file duplication,
+size drift, digest drift, release-commit drift or evidence-class drift.
+
+The Phase 5.10.1 workflow performs a non-authoritative rehearsal for both corpus and
+software freeze kinds and includes a deliberate tamper test. Rehearsal evidence does
+not set either freeze boolean, does not change any redistribution classification and
+does not move PPR-04 from `BLOCKED`.
+
 ## A. Production software/runtime payload
 
 The Public Preview software inventory must be generated from the exact built artifacts, not inferred only from source manifests.

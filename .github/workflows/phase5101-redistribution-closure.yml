@@ -13,6 +13,8 @@ on:
       - 'tools/release/validate_redistribution_inventory.py'
       - 'tools/release/generate_tauri_redistribution_evidence.py'
       - 'tools/release/generate_public_preview_notice_bundle.py'
+      - 'tools/release/generate_redistribution_freeze_manifest.py'
+      - 'tools/release/validate_redistribution_freeze_manifest.py'
       - 'tools/release/validate_pinned_license_material.py'
       - 'third_party/license-material/**'
       - 'benchmarks/desktop/phase56/candidates/tauri/Cargo.toml'
@@ -31,6 +33,8 @@ on:
       - 'tools/release/validate_redistribution_inventory.py'
       - 'tools/release/generate_tauri_redistribution_evidence.py'
       - 'tools/release/generate_public_preview_notice_bundle.py'
+      - 'tools/release/generate_redistribution_freeze_manifest.py'
+      - 'tools/release/validate_redistribution_freeze_manifest.py'
       - 'tools/release/validate_pinned_license_material.py'
       - 'third_party/license-material/**'
       - 'benchmarks/desktop/phase56/candidates/tauri/Cargo.toml'
@@ -75,6 +79,87 @@ jobs:
           evidence="$RUNNER_TEMP/pinned-third-party-license-material.json"
           python tools/release/validate_pinned_license_material.py --evidence "$evidence"
           echo "PPR04_LICENSE_MATERIAL_EVIDENCE=$evidence" >> "$GITHUB_ENV"
+      - name: Rehearse deterministic redistribution freeze manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/ppr04-freeze-evidence"
+          corpus="$work/corpus"
+          software="$work/software"
+          mkdir -p "$corpus" "$software"
+          cp docs/releases/third-party-redistribution-inventory.json "$corpus/inventory.json"
+          cp third_party/license-material/manifest.json "$corpus/license-material-manifest.json"
+          cp benchmarks/desktop/phase56/candidates/tauri/Cargo.toml "$software/Cargo.toml"
+          cp benchmarks/desktop/phase56/candidates/tauri/Cargo.lock "$software/Cargo.lock"
+
+          corpus_one="$work/corpus-freeze-1.json"
+          corpus_two="$work/corpus-freeze-2.json"
+          software_one="$work/software-freeze-1.json"
+          software_two="$work/software-freeze-2.json"
+
+          python tools/release/generate_redistribution_freeze_manifest.py \
+            --kind PUBLIC_PREVIEW_CORPUS \
+            --release-commit "$GITHUB_SHA" \
+            --input inventory="$corpus/inventory.json" \
+            --input license-material="$corpus/license-material-manifest.json" \
+            --output "$corpus_one"
+          python tools/release/generate_redistribution_freeze_manifest.py \
+            --kind PUBLIC_PREVIEW_CORPUS \
+            --release-commit "$GITHUB_SHA" \
+            --input inventory="$corpus/inventory.json" \
+            --input license-material="$corpus/license-material-manifest.json" \
+            --output "$corpus_two"
+          cmp "$corpus_one" "$corpus_two"
+
+          python tools/release/generate_redistribution_freeze_manifest.py \
+            --kind SOFTWARE_PAYLOAD \
+            --release-commit "$GITHUB_SHA" \
+            --input cargo-manifest="$software/Cargo.toml" \
+            --input cargo-lock="$software/Cargo.lock" \
+            --output "$software_one"
+          python tools/release/generate_redistribution_freeze_manifest.py \
+            --kind SOFTWARE_PAYLOAD \
+            --release-commit "$GITHUB_SHA" \
+            --input cargo-manifest="$software/Cargo.toml" \
+            --input cargo-lock="$software/Cargo.lock" \
+            --output "$software_two"
+          cmp "$software_one" "$software_two"
+
+          python tools/release/validate_redistribution_freeze_manifest.py \
+            --manifest "$corpus_one" \
+            --artifacts-dir "$corpus" \
+            --expected-kind PUBLIC_PREVIEW_CORPUS \
+            --release-commit "$GITHUB_SHA"
+          python tools/release/validate_redistribution_freeze_manifest.py \
+            --manifest "$software_one" \
+            --artifacts-dir "$software" \
+            --expected-kind SOFTWARE_PAYLOAD \
+            --release-commit "$GITHUB_SHA"
+
+          printf '\n' >> "$corpus/inventory.json"
+          if python tools/release/validate_redistribution_freeze_manifest.py \
+              --manifest "$corpus_one" \
+              --artifacts-dir "$corpus" \
+              --expected-kind PUBLIC_PREVIEW_CORPUS \
+              --release-commit "$GITHUB_SHA"; then
+            echo "tampered corpus rehearsal unexpectedly validated" >&2
+            exit 1
+          fi
+
+          sha256sum "$corpus_one" "$software_one" > "$work/freeze-manifest-digests.txt"
+          echo "PPR04_FREEZE_REHEARSAL_DIR=$work" >> "$GITHUB_ENV"
+
+      - name: Upload freeze-manifest rehearsal evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase5101-redistribution-freeze-manifest-rehearsal
+          path: |
+            ${{ env.PPR04_FREEZE_REHEARSAL_DIR }}/corpus-freeze-1.json
+            ${{ env.PPR04_FREEZE_REHEARSAL_DIR }}/software-freeze-1.json
+            ${{ env.PPR04_FREEZE_REHEARSAL_DIR }}/freeze-manifest-digests.txt
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Prove deterministic Public Preview notice draft
         shell: bash
         run: |

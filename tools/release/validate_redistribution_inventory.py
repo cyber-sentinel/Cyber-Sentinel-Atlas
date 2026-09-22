@@ -18,6 +18,8 @@ TAURI_EVIDENCE_WORKFLOW = ROOT / ".github" / "workflows" / "phase5101-redistribu
 NOTICE_GENERATOR = ROOT / "tools" / "release" / "generate_public_preview_notice_bundle.py"
 PINNED_LICENSE_MANIFEST = ROOT / "third_party" / "license-material" / "manifest.json"
 PINNED_LICENSE_VALIDATOR = ROOT / "tools" / "release" / "validate_pinned_license_material.py"
+FREEZE_MANIFEST_GENERATOR = ROOT / "tools" / "release" / "generate_redistribution_freeze_manifest.py"
+FREEZE_MANIFEST_VALIDATOR = ROOT / "tools" / "release" / "validate_redistribution_freeze_manifest.py"
 ALLOWED_ENTRY_STATES = {
     "ACCEPTED",
     "CONDITIONALLY_CLEARABLE",
@@ -27,6 +29,7 @@ ALLOWED_ENTRY_STATES = {
     "EXCLUDED_CURRENT_MODEL",
 }
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+COMMIT40_RE = re.compile(r"^[0-9a-f]{40}$")
 
 
 def fail(errors: list[str], message: str) -> None:
@@ -42,7 +45,18 @@ def load_inventory(errors: list[str]) -> dict:
 
 
 def validate_baseline(data: dict, errors: list[str]) -> None:
-    for path in (INVENTORY, POLICY, NOTICES, TAURI_EVIDENCE_TOOL, TAURI_EVIDENCE_WORKFLOW, NOTICE_GENERATOR, PINNED_LICENSE_MANIFEST, PINNED_LICENSE_VALIDATOR):
+    for path in (
+        INVENTORY,
+        POLICY,
+        NOTICES,
+        TAURI_EVIDENCE_TOOL,
+        TAURI_EVIDENCE_WORKFLOW,
+        NOTICE_GENERATOR,
+        PINNED_LICENSE_MANIFEST,
+        PINNED_LICENSE_VALIDATOR,
+        FREEZE_MANIFEST_GENERATOR,
+        FREEZE_MANIFEST_VALIDATOR,
+    ):
         if not path.is_file():
             fail(errors, f"missing redistribution control artifact: {path.relative_to(ROOT)}")
 
@@ -55,6 +69,51 @@ def validate_baseline(data: dict, errors: list[str]) -> None:
     for field in ("public_preview_corpus_frozen", "software_payload_frozen"):
         if not isinstance(data.get(field), bool):
             fail(errors, f"{field} must be boolean")
+
+    freeze_evidence = data.get("freeze_evidence")
+    if not isinstance(freeze_evidence, dict):
+        fail(errors, "freeze_evidence must be an object")
+        freeze_evidence = {}
+
+    freeze_release_commit = freeze_evidence.get("release_commit")
+    if freeze_release_commit is not None and (
+        not isinstance(freeze_release_commit, str)
+        or not COMMIT40_RE.fullmatch(freeze_release_commit)
+    ):
+        fail(errors, "freeze_evidence.release_commit must be null or an exact 40-character lowercase SHA")
+
+    freeze_pairs = (
+        (
+            "public_preview_corpus_frozen",
+            "public_preview_corpus_manifest_sha256",
+            "public_preview_corpus_manifest_evidence",
+        ),
+        (
+            "software_payload_frozen",
+            "software_payload_manifest_sha256",
+            "software_payload_manifest_evidence",
+        ),
+    )
+    any_freeze_claimed = False
+    for flag_field, digest_field, evidence_field in freeze_pairs:
+        claimed = data.get(flag_field) is True
+        digest = freeze_evidence.get(digest_field)
+        evidence_ref = freeze_evidence.get(evidence_field)
+        if claimed:
+            any_freeze_claimed = True
+            if not isinstance(freeze_release_commit, str) or not COMMIT40_RE.fullmatch(freeze_release_commit):
+                fail(errors, f"{flag_field}=true requires freeze_evidence.release_commit")
+            if not isinstance(digest, str) or not SHA256_RE.fullmatch(digest):
+                fail(errors, f"{flag_field}=true requires {digest_field}")
+            if not isinstance(evidence_ref, str) or not evidence_ref.strip():
+                fail(errors, f"{flag_field}=true requires {evidence_field}")
+        else:
+            if digest is not None:
+                fail(errors, f"{digest_field} must be null while {flag_field}=false")
+            if evidence_ref is not None:
+                fail(errors, f"{evidence_field} must be null while {flag_field}=false")
+    if not any_freeze_claimed and freeze_release_commit is not None:
+        fail(errors, "freeze_evidence.release_commit must be null until at least one freeze claim is true")
 
     entries = data.get("entries")
     if not isinstance(entries, list) or not entries:
@@ -92,9 +151,22 @@ def validate_baseline(data: dict, errors: list[str]) -> None:
     if package_sha is not None and (not isinstance(package_sha, str) or not SHA256_RE.fullmatch(package_sha)):
         fail(errors, "release_package_sha256 must be null or 64 lowercase hex characters")
 
+    freeze_evidence_ready = (
+        isinstance(freeze_release_commit, str)
+        and bool(COMMIT40_RE.fullmatch(freeze_release_commit))
+        and isinstance(freeze_evidence.get("public_preview_corpus_manifest_sha256"), str)
+        and bool(SHA256_RE.fullmatch(freeze_evidence["public_preview_corpus_manifest_sha256"]))
+        and isinstance(freeze_evidence.get("public_preview_corpus_manifest_evidence"), str)
+        and bool(freeze_evidence["public_preview_corpus_manifest_evidence"].strip())
+        and isinstance(freeze_evidence.get("software_payload_manifest_sha256"), str)
+        and bool(SHA256_RE.fullmatch(freeze_evidence["software_payload_manifest_sha256"]))
+        and isinstance(freeze_evidence.get("software_payload_manifest_evidence"), str)
+        and bool(freeze_evidence["software_payload_manifest_evidence"].strip())
+    )
     ready_conditions = (
         data.get("public_preview_corpus_frozen") is True
         and data.get("software_payload_frozen") is True
+        and freeze_evidence_ready
         and isinstance(package_sha, str)
         and bool(SHA256_RE.fullmatch(package_sha))
         and not unresolved_included
@@ -145,6 +217,23 @@ def validate_release(data: dict, errors: list[str]) -> None:
         fail(errors, "strict redistribution release mode requires frozen Public Preview corpus")
     if data.get("software_payload_frozen") is not True:
         fail(errors, "strict redistribution release mode requires frozen software payload")
+    freeze_evidence = data.get("freeze_evidence")
+    if not isinstance(freeze_evidence, dict):
+        fail(errors, "strict redistribution release mode requires freeze_evidence")
+        freeze_evidence = {}
+    release_commit = freeze_evidence.get("release_commit")
+    if not isinstance(release_commit, str) or not COMMIT40_RE.fullmatch(release_commit):
+        fail(errors, "strict redistribution release mode requires freeze_evidence.release_commit")
+    for digest_field, evidence_field in (
+        ("public_preview_corpus_manifest_sha256", "public_preview_corpus_manifest_evidence"),
+        ("software_payload_manifest_sha256", "software_payload_manifest_evidence"),
+    ):
+        digest = freeze_evidence.get(digest_field)
+        evidence_ref = freeze_evidence.get(evidence_field)
+        if not isinstance(digest, str) or not SHA256_RE.fullmatch(digest):
+            fail(errors, f"strict redistribution release mode requires {digest_field}")
+        if not isinstance(evidence_ref, str) or not evidence_ref.strip():
+            fail(errors, f"strict redistribution release mode requires {evidence_field}")
     package_sha = data.get("release_package_sha256")
     if not isinstance(package_sha, str) or not SHA256_RE.fullmatch(package_sha):
         fail(errors, "strict redistribution release mode requires exact release package SHA-256")
