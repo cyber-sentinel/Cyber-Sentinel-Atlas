@@ -249,6 +249,8 @@ jobs:
             printf 'commit=%s\n' "$GITHUB_SHA"
           } > "$evidence/toolchain.txt"
           echo "TAURI_EVIDENCE_DIR=$evidence" >> "$GITHUB_ENV"
+      - name: Run Tauri redistribution evidence unit tests
+        run: python -m unittest tests.phase5101.test_tauri_redistribution_evidence -v
       - name: Generate fail-closed redistribution preflight
         shell: bash
         run: |

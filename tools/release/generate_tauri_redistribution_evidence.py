@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import re
+import struct
 import sys
 from pathlib import Path
 
@@ -15,6 +16,17 @@ WWW_ROOT = TAURI_ROOT / "www"
 REMOTE_REF_RE = re.compile(r"(?i)(?:https?:)?//[a-z0-9]")
 EXPECTED_FRONTEND = "www"
 EXPECTED_TARGET = "x86_64-pc-windows-msvc"
+ASSET_SUFFIXES = {".ico", ".icns", ".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".svg", ".ttf", ".otf", ".woff", ".woff2"}
+GENERATED_ICON_SHA256 = "0b7252a6c53ab6a2bec344c17ed74109760c907f68fa6fbe06baad85a78ae3a4"
+GENERATED_ICON_SIZE_BYTES = 1150
+GENERATED_ICON_RECIPE_TOKENS = (
+    'const WIDTH: u32 = 16;',
+    'const HEIGHT: u32 = 16;',
+    'icon_dir.join("icon.ico")',
+    'icon.extend_from_slice(&[0x20, 0x12, 0x0b, 0xff]);',
+    'icon.resize((IMAGE_OFFSET + DIB_BYTES) as usize, 0);',
+)
+
 
 
 def sha256_file(path: Path) -> str:
@@ -72,6 +84,109 @@ def inventory_assets(errors: list[str]) -> list[dict]:
     if not assets:
         fail(errors, "Tauri frontend asset inventory is empty")
     return assets
+
+
+def inventory_packaging_assets(errors: list[str]) -> list[dict]:
+    """Inventory asset-like files outside frontendDist that can affect packaging."""
+    if not TAURI_ROOT.is_dir():
+        fail(errors, f"missing Tauri root: {rel(TAURI_ROOT)}")
+        return []
+
+    assets: list[dict] = []
+    for path in sorted(p for p in TAURI_ROOT.rglob("*") if p.is_file()):
+        relative = path.relative_to(TAURI_ROOT)
+        if "target" in relative.parts:
+            continue
+        try:
+            path.relative_to(WWW_ROOT)
+            continue
+        except ValueError:
+            pass
+        if path.suffix.lower() not in ASSET_SUFFIXES:
+            continue
+
+        raw = path.read_bytes()
+        entry = {
+            "path": rel(path),
+            "size_bytes": len(raw),
+            "sha256": hashlib.sha256(raw).hexdigest(),
+        }
+        if path.suffix.lower() == ".svg":
+            try:
+                text = raw.decode("utf-8")
+            except UnicodeDecodeError:
+                fail(errors, f"SVG packaging asset is not valid UTF-8: {rel(path)}")
+                text = ""
+            remote_refs = sorted(set(match.group(0) for match in REMOTE_REF_RE.finditer(text)))
+            if remote_refs:
+                entry["remote_references"] = remote_refs
+                fail(errors, f"remote reference detected in packaging asset: {rel(path)}")
+        assets.append(entry)
+    return assets
+
+
+def deterministic_windows_icon_bytes() -> bytes:
+    """Reproduce the deterministic icon payload emitted by build.rs."""
+    width = 16
+    height = 16
+    pixel_bytes = width * height * 4
+    mask_row_bytes = ((width + 31) // 32) * 4
+    mask_bytes = mask_row_bytes * height
+    dib_bytes = 40 + pixel_bytes + mask_bytes
+    image_offset = 6 + 16
+
+    icon = bytearray()
+    icon.extend(struct.pack("<HHH", 0, 1, 1))
+    icon.extend(bytes((width, height, 0, 0)))
+    icon.extend(struct.pack("<HHII", 1, 32, dib_bytes, image_offset))
+    icon.extend(
+        struct.pack(
+            "<IiiHHIIiiII",
+            40,
+            width,
+            height * 2,
+            1,
+            32,
+            0,
+            pixel_bytes,
+            0,
+            0,
+            0,
+            0,
+        )
+    )
+    for _ in range(width * height):
+        icon.extend((0x20, 0x12, 0x0B, 0xFF))
+    icon.extend(b"\x00" * (image_offset + dib_bytes - len(icon)))
+    return bytes(icon)
+
+
+def deterministic_windows_icon_evidence(errors: list[str]) -> dict:
+    build_rs = TAURI_ROOT / "build.rs"
+    if not build_rs.is_file():
+        fail(errors, f"missing Tauri build script: {rel(build_rs)}")
+        return {}
+
+    source = build_rs.read_text(encoding="utf-8")
+    missing = [token for token in GENERATED_ICON_RECIPE_TOKENS if token not in source]
+    if missing:
+        fail(errors, "build.rs deterministic icon recipe drift: " + ", ".join(missing))
+
+    icon = deterministic_windows_icon_bytes()
+    digest = hashlib.sha256(icon).hexdigest()
+    if len(icon) != GENERATED_ICON_SIZE_BYTES:
+        fail(errors, f"deterministic icon size drift: expected {GENERATED_ICON_SIZE_BYTES}, got {len(icon)}")
+    if digest != GENERATED_ICON_SHA256:
+        fail(errors, f"deterministic icon digest drift: expected {GENERATED_ICON_SHA256}, got {digest}")
+
+    return {
+        "path": rel(TAURI_ROOT / "icons" / "icon.ico"),
+        "generated_at_build": True,
+        "generator_source": rel(build_rs),
+        "generator_source_sha256": sha256_file(build_rs),
+        "size_bytes": len(icon),
+        "sha256": digest,
+    }
 
 
 def inventory_packages(metadata: dict, errors: list[str]) -> tuple[list[dict], list[dict]]:
@@ -205,6 +320,8 @@ def main() -> int:
     metadata = load_json(args.cargo_metadata, errors)
     third_party, first_party = inventory_packages(metadata, errors) if metadata else ([], [])
     assets = inventory_assets(errors)
+    packaging_assets = inventory_packaging_assets(errors)
+    generated_icon = deterministic_windows_icon_evidence(errors)
     tauri = validate_tauri_configuration(errors)
 
     metadata_sha = sha256_file(args.cargo_metadata) if args.cargo_metadata.is_file() else None
@@ -220,10 +337,14 @@ def main() -> int:
         "first_party_packages": first_party,
         "third_party_packages": third_party,
         "frontend_assets": assets,
+        "packaging_assets": packaging_assets,
+        "generated_assets": [generated_icon] if generated_icon else [],
         "summary": {
             "third_party_package_count": len(third_party),
             "first_party_package_count": len(first_party),
             "frontend_asset_count": len(assets),
+            "packaging_asset_count": len(packaging_assets),
+            "generated_asset_count": 1 if generated_icon else 0,
             "error_count": len(errors),
         },
     }
@@ -240,7 +361,8 @@ def main() -> int:
 
     print(
         "PPR-04 Tauri/Rust redistribution preflight passed: "
-        f"{len(third_party)} third-party packages, {len(assets)} frontend assets."
+        f"{len(third_party)} third-party packages, {len(assets)} frontend assets, "
+        f"{len(packaging_assets)} packaging assets, {1 if generated_icon else 0} generated assets."
     )
     print(f"Evidence written to {args.output}")
     return 0
