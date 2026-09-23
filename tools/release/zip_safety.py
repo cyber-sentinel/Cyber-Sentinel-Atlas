@@ -3,10 +3,12 @@
 
 from __future__ import annotations
 
+import argparse
 import re
 import stat
+import sys
 import zipfile
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
 
 DRIVE_PREFIX_RE = re.compile(r"^[A-Za-z]:")
 RESERVED_DEVICE_NAMES = {
@@ -87,3 +89,32 @@ def validate_zip_members(infos: list[zipfile.ZipInfo]) -> tuple[list[str], int]:
         errors.append("package ZIP must contain at least one file entry")
 
     return errors, file_count
+
+
+def validate_zip_path(path: Path) -> tuple[list[str], int]:
+    if not path.is_file():
+        return [f"ZIP input does not exist: {path}"], 0
+    if not zipfile.is_zipfile(path):
+        return [f"input is not a valid ZIP archive: {path}"], 0
+    with zipfile.ZipFile(path, "r") as archive:
+        return validate_zip_members(archive.infolist())
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--zip", dest="zip_path", type=Path, required=True)
+    args = parser.parse_args()
+
+    errors, file_count = validate_zip_path(args.zip_path)
+    if errors:
+        print("Windows portable ZIP safety validation FAILED:")
+        for error in errors:
+            print(f"- {error}")
+        return 1
+
+    print(f"Windows portable ZIP safety validation passed: {file_count} file entries.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

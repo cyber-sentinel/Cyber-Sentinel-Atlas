@@ -8,6 +8,8 @@ on:
     paths:
       - 'benchmarks/desktop/phase56/candidates/tauri/**'
       - 'shared-core/go/**'
+      - 'tools/release/zip_safety.py'
+      - 'tests/phase5103/test_zip_safety.py'
       - '.github/workflows/phase564-windows-first-preview.yml'
   pull_request:
     branches:
@@ -15,6 +17,8 @@ on:
     paths:
       - 'benchmarks/desktop/phase56/candidates/tauri/**'
       - 'shared-core/go/**'
+      - 'tools/release/zip_safety.py'
+      - 'tests/phase5103/test_zip_safety.py'
       - '.github/workflows/phase564-windows-first-preview.yml'
   workflow_dispatch:
 
@@ -44,6 +48,14 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+
+      - name: Assert preprovisioned Python 3.12
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
+          if ($version -ne '3.12') { throw "Python 3.12 required on ATLAS Windows runner; found $version" }
+          python --version
 
       - name: Set up Go
         uses: actions/setup-go@v6
@@ -176,6 +188,14 @@ jobs:
           $ZipHash = (Get-FileHash -Algorithm SHA256 $Zip).Hash.ToLowerInvariant()
           "$ZipHash  $(Split-Path -Leaf $Zip)" | Set-Content -Encoding ascii "$Zip.sha256"
           Copy-Item (Join-Path $Stage 'PACKAGE-MANIFEST.json') $PackageRoot
+          "PHASE564_ZIP=$Zip" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Enforce Windows portable ZIP safety
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python tools/release/zip_safety.py --zip "$env:PHASE564_ZIP"
+          if ($LASTEXITCODE -ne 0) { throw 'Windows portable ZIP safety validation failed' }
 
       - name: Upload immutable preview package candidate
         uses: actions/upload-artifact@v4
