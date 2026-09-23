@@ -49,10 +49,13 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
+      - name: Assert preprovisioned Python 3.12
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')").Trim()
+          if ($version -ne '3.12') { throw "Python 3.12 required on ATLAS Windows runner; found $version" }
+          python --version
 
       - name: Set up Go
         uses: actions/setup-go@v6
