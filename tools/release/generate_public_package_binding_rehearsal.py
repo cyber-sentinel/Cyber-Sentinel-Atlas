@@ -9,7 +9,12 @@ import json
 import re
 import sys
 import zipfile
-from pathlib import Path, PurePosixPath
+from pathlib import Path
+
+try:
+    from tools.release.zip_safety import validate_zip_members
+except ModuleNotFoundError:  # direct script execution from tools/release
+    from zip_safety import validate_zip_members
 
 COMMIT40 = re.compile(r"^[0-9a-f]{40}$")
 
@@ -72,20 +77,9 @@ def main() -> int:
         if not zipfile.is_zipfile(package_path):
             errors.append("package input is not a valid ZIP archive")
         else:
-            seen_entries: set[str] = set()
             with zipfile.ZipFile(package_path, "r") as archive:
-                for info in archive.infolist():
-                    normalized = info.filename.replace("\\", "/")
-                    pure = PurePosixPath(normalized)
-                    if pure.is_absolute() or ".." in pure.parts:
-                        errors.append(f"unsafe ZIP entry path: {info.filename}")
-                    if normalized in seen_entries:
-                        errors.append(f"duplicate ZIP entry: {info.filename}")
-                    seen_entries.add(normalized)
-                    if not info.is_dir():
-                        zip_entry_count += 1
-            if zip_entry_count == 0:
-                errors.append("package ZIP must contain at least one file entry")
+                zip_errors, zip_entry_count = validate_zip_members(archive.infolist())
+                errors.extend(zip_errors)
 
     unique = {str(path) for path in resolved.values()}
     if len(unique) != len(resolved):

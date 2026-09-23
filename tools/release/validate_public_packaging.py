@@ -14,6 +14,7 @@ STATE = ROOT / "docs/releases/public-packaging-readiness.json"
 POLICY = ROOT / "docs/releases/public-packaging-and-distribution.md"
 REHEARSAL_GENERATOR = ROOT / "tools/release/generate_public_package_binding_rehearsal.py"
 REHEARSAL_VALIDATOR = ROOT / "tools/release/validate_public_package_binding_rehearsal.py"
+ZIP_SAFETY = ROOT / "tools/release/zip_safety.py"
 
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 COMMIT40 = re.compile(r"^[0-9a-f]{40}$")
@@ -35,7 +36,7 @@ def main() -> int:
         fail(errors, f"invalid/missing packaging readiness JSON: {exc}")
         data = {}
 
-    for path in (POLICY, REHEARSAL_GENERATOR, REHEARSAL_VALIDATOR):
+    for path in (POLICY, REHEARSAL_GENERATOR, REHEARSAL_VALIDATOR, ZIP_SAFETY):
         if not path.is_file():
             fail(errors, f"missing packaging control artifact: {path.relative_to(ROOT)}")
 
@@ -216,6 +217,7 @@ def main() -> int:
             "binary auto-update",
             "Package Binding Rehearsal",
             "release_authority=false",
+            "Windows ZIP entry safety",
         ):
             if token not in text:
                 fail(errors, f"packaging policy missing token: {token}")
