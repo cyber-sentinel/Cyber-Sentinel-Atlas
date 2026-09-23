@@ -9,7 +9,9 @@ on:
       - 'benchmarks/desktop/phase56/candidates/tauri/**'
       - 'shared-core/go/**'
       - 'tools/release/zip_safety.py'
+      - 'tools/release/validate_phase564_clean_windows_evidence.py'
       - 'tests/phase5103/test_zip_safety.py'
+      - 'tests/phase5103/test_phase564_clean_windows_evidence.py'
       - '.github/workflows/phase564-windows-first-preview.yml'
   pull_request:
     branches:
@@ -18,7 +20,9 @@ on:
       - 'benchmarks/desktop/phase56/candidates/tauri/**'
       - 'shared-core/go/**'
       - 'tools/release/zip_safety.py'
+      - 'tools/release/validate_phase564_clean_windows_evidence.py'
       - 'tests/phase5103/test_zip_safety.py'
+      - 'tests/phase5103/test_phase564_clean_windows_evidence.py'
       - '.github/workflows/phase564-windows-first-preview.yml'
   workflow_dispatch:
 
@@ -227,6 +231,9 @@ jobs:
           $expected = ((Get-Content -Raw $Checksum).Trim() -split '\s+')[0].ToLowerInvariant()
           $actual = (Get-FileHash -Algorithm SHA256 $Zip).Hash.ToLowerInvariant()
           if ($actual -ne $expected) { throw 'package ZIP SHA-256 mismatch' }
+          "PHASE564_PACKAGE_SHA256=$actual" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PHASE564_PACKAGE_FILE=$(Split-Path -Leaf $Zip)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PHASE564_PACKAGE_SIZE_BYTES=$((Get-Item -LiteralPath $Zip).Length)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           $Target = Join-Path $env:RUNNER_TEMP 'ATLAS First Preview Clean Machine\Portable Package'
           New-Item -ItemType Directory -Force -Path $Target | Out-Null
           Expand-Archive -LiteralPath $Zip -DestinationPath $Target -Force
@@ -408,10 +415,28 @@ jobs:
             }
           )
           $provisioned = $env:PHASE564_WEBVIEW2_PROVISIONED -eq 'true'
+          $ProbePath = Join-Path package-artifact 'phase564-probe.json'
+          $RecoveryProbePath = Join-Path package-artifact 'phase564-recovery-probe.json'
+          if (-not (Test-Path -LiteralPath $ProbePath -PathType Leaf)) { throw 'portable probe evidence is missing' }
+          if (-not (Test-Path -LiteralPath $RecoveryProbePath -PathType Leaf)) { throw 'recovery probe evidence is missing' }
+          $ProbeHash = (Get-FileHash -Algorithm SHA256 $ProbePath).Hash.ToLowerInvariant()
+          $RecoveryProbeHash = (Get-FileHash -Algorithm SHA256 $RecoveryProbePath).Hash.ToLowerInvariant()
           $evidence = [ordered]@{
-            evidence_version = 2
+            evidence_version = 3
             phase = '5.6.4'
             commit = $env:GITHUB_SHA
+            release_authority = $false
+            signed_candidate_claimed = $false
+            clean_windows_acceptance_claimed = $false
+            package = [ordered]@{
+              file = $env:PHASE564_PACKAGE_FILE
+              sha256 = $env:PHASE564_PACKAGE_SHA256
+              size_bytes = [int64]$env:PHASE564_PACKAGE_SIZE_BYTES
+            }
+            probe_evidence = [ordered]@{
+              portable_probe = [ordered]@{ file='phase564-probe.json'; sha256=$ProbeHash }
+              recovery_probe = [ordered]@{ file='phase564-recovery-probe.json'; sha256=$RecoveryProbeHash }
+            }
             clean_environment = [ordered]@{ runner='github-hosted'; image='windows-latest'; relocated_path=$Root }
             webview2 = [ordered]@{
               required=$true
@@ -444,3 +469,49 @@ jobs:
           path: package-artifact\phase564-*.json
           if-no-files-found: error
           retention-days: 30
+
+  validate-clean-windows-evidence:
+    name: validate package-bound clean-Windows evidence
+    needs:
+      - build-package
+      - clean-windows-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact head
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Download exact package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: phase564-first-preview-package
+          path: package-artifact
+
+      - name: Download clean-Windows evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: phase564-clean-windows-evidence
+          path: clean-evidence
+
+      - name: Run package-bound clean-Windows evidence unit tests
+        run: python -m unittest tests.phase5103.test_phase564_clean_windows_evidence -v
+
+      - name: Validate exact package-bound clean-Windows evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          package="$(find package-artifact -maxdepth 1 -type f -name '*.zip' -print -quit)"
+          test -n "$package"
+          python tools/release/validate_phase564_clean_windows_evidence.py \
+            --evidence clean-evidence/phase564-clean-windows-evidence.json \
+            --package "$package" \
+            --probe clean-evidence/phase564-probe.json \
+            --recovery-probe clean-evidence/phase564-recovery-probe.json \
+            --expected-commit "$GITHUB_SHA"
