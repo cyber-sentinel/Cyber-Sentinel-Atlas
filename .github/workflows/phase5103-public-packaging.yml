@@ -22,6 +22,8 @@ on:
       - 'tools/release/validate_public_packaging.py'
       - 'tools/release/generate_public_package_binding_rehearsal.py'
       - 'tools/release/validate_public_package_binding_rehearsal.py'
+      - 'tools/release/zip_safety.py'
+      - 'tests/phase5103/test_zip_safety.py'
       - '.github/workflows/phase5103-public-packaging.yml'
   workflow_dispatch:
 

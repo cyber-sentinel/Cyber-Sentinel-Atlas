@@ -11,7 +11,10 @@ import sys
 import zipfile
 from pathlib import Path
 
-from tools.release.zip_safety import validate_zip_members
+try:
+    from tools.release.zip_safety import validate_zip_members
+except ModuleNotFoundError:  # direct script execution from tools/release
+    from zip_safety import validate_zip_members
 
 COMMIT40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
