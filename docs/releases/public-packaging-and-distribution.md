@@ -78,6 +78,8 @@ For every artifact it records SHA-256 and exact byte size. The evidence is deter
 
 The rehearsal does **not** satisfy PPR-05 signing, PPR-06 signed-candidate acceptance, PPR-07 accessibility review, or publication evidence. Its purpose is to prove the exact-byte binding mechanism before the real signed package exists.
 
+The Phase 5.6.4 exact-head Windows engineering package now invokes the same Windows ZIP safety control on the actual portable ZIP before artifact upload. Because the uploaded package is subsequently hash-verified before clean-Windows extraction, this bridges the archive-safety policy to real package bytes without claiming production signing or PPR-06 acceptance.
+
 ## Required clean-machine acceptance
 
 For the exact Public Preview candidate:
