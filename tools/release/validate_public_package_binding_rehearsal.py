@@ -9,7 +9,9 @@ import json
 import re
 import sys
 import zipfile
-from pathlib import Path, PurePosixPath
+from pathlib import Path
+
+from tools.release.zip_safety import validate_zip_members
 
 COMMIT40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -97,21 +99,9 @@ def main() -> int:
             if not zipfile.is_zipfile(path):
                 errors.append("package: bound file is not a valid ZIP archive")
             else:
-                seen_entries: set[str] = set()
-                actual_file_entries = 0
                 with zipfile.ZipFile(path, "r") as archive:
-                    for info in archive.infolist():
-                        normalized = info.filename.replace("\\", "/")
-                        pure = PurePosixPath(normalized)
-                        if pure.is_absolute() or ".." in pure.parts:
-                            errors.append(f"package: unsafe ZIP entry path: {info.filename}")
-                        if normalized in seen_entries:
-                            errors.append(f"package: duplicate ZIP entry: {info.filename}")
-                        seen_entries.add(normalized)
-                        if not info.is_dir():
-                            actual_file_entries += 1
-                if actual_file_entries <= 0:
-                    errors.append("package: ZIP must contain at least one file entry")
+                    zip_errors, actual_file_entries = validate_zip_members(archive.infolist())
+                    errors.extend(f"package: {message}" for message in zip_errors)
                 if isinstance(zip_entry_count, int) and actual_file_entries != zip_entry_count:
                     errors.append(
                         "package: ZIP file-entry count does not match binding evidence"

@@ -24,6 +24,7 @@ exact release commit
 - exact source commit and build/run identity recorded;
 - every executable requiring trust is production-signed before publication;
 - final package has immutable SHA-256 and size evidence;
+- Windows ZIP entry safety is fail-closed: no traversal/absolute/drive/UNC paths, ADS-style colon names, trailing-dot/space aliases, reserved device names, case-insensitive collisions, encrypted members, symlinks, or special-file members;
 - SBOM, third-party notices and release notes are package-bound;
 - no production private signing material is included;
 - no hidden local HTTP/TCP/WebSocket service is introduced;
@@ -73,7 +74,7 @@ For every artifact it records SHA-256 and exact byte size. The evidence is deter
 - `publication_channel=GITHUB_RELEASES`;
 - `binary_auto_update_enabled=false`.
 
-`tools/release/validate_public_package_binding_rehearsal.py` independently recomputes every bound hash and size and rejects missing files, traversal-style names, role drift, format/channel drift or any release-authority claim.
+`tools/release/validate_public_package_binding_rehearsal.py` independently recomputes every bound hash and size and rejects missing files, role drift, format/channel drift or any release-authority claim. Shared `tools/release/zip_safety.py` validation also rejects Windows-unsafe archive members including traversal/absolute/drive/UNC paths, ADS/colon names, trailing-dot/space aliases, reserved device names, case-insensitive collisions, encrypted members, symlinks and special-file entries.
 
 The rehearsal does **not** satisfy PPR-05 signing, PPR-06 signed-candidate acceptance, PPR-07 accessibility review, or publication evidence. Its purpose is to prove the exact-byte binding mechanism before the real signed package exists.
 

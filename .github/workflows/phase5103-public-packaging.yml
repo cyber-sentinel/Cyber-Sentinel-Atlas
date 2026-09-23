@@ -11,6 +11,8 @@ on:
       - 'tools/release/validate_public_packaging.py'
       - 'tools/release/generate_public_package_binding_rehearsal.py'
       - 'tools/release/validate_public_package_binding_rehearsal.py'
+      - 'tools/release/zip_safety.py'
+      - 'tests/phase5103/test_zip_safety.py'
       - '.github/workflows/phase5103-public-packaging.yml'
   pull_request:
     branches: [main]
@@ -40,6 +42,8 @@ jobs:
           python-version: '3.12'
       - name: Validate PPR-06 control plane
         run: python tools/release/validate_public_packaging.py
+      - name: Run Windows portable ZIP safety unit tests
+        run: python -m unittest tests.phase5103.test_zip_safety -v
       - name: Prove deterministic non-authoritative package binding rehearsal
         shell: bash
         env:
