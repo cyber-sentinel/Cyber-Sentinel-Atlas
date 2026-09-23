@@ -143,6 +143,16 @@ The authoritative mapping is `third_party/license-material/manifest.json`. Each 
 
 This is **evidence only**. The local presence of upstream license material does not promote an inventory entry to `ACCEPTED`, does not determine legal compatibility, and does not authorize publication.
 
+## B.3 Exact Go linked-module and toolchain license material
+
+CycloneDX license-classifier output is useful metadata but is not redistribution authority. A classifier label can disagree with the exact upstream license bytes, so PPR-04 must preserve and review the material that is cryptographically bound to the linked module graph rather than accepting scanner labels at face value.
+
+Phase 5.5.4D therefore preserves root-level `LICENSE` / `LICENCE`, `COPYING`, `NOTICE`, `COPYRIGHT`, `PATENT(S)` and `UNLICENSE` files for every module reported by `go version -m` in the exact production Shared Core binary. Each module is cross-checked against `go list -m -json all`, requires an exact module `Sum`, and records SHA-256 plus size for every copied material file. The Go toolchain's own root license/notice material is preserved separately.
+
+The generated evidence also retains the SBOM-reported license metadata for comparison, but records `license_classification_authority=false`. Missing module material, missing module checksums, binary/module version drift, stale output, symlinks, oversized material, copy/hash drift, missing bound files or unbound extra files are fail-closed.
+
+This evidence remains **BUILD EVIDENCE ONLY**. It does not promote `go-shared-core-runtime` to `ACCEPTED`, decide license compatibility, or authorize release publication. Final release evidence must be regenerated against the frozen binary and bound to the exact Public Preview package.
+
 ## C. Public Preview pack construction rule
 
 The Public Preview corpus must be an allowlist, not a denylist. Pack build input must identify each included source target and its redistribution decision. A source target with any state other than an explicitly accepted redistributable state must cause pack publication to fail.
@@ -168,6 +178,7 @@ PPR-04 remains **BLOCKED** until all of the following are complete:
 
 - exact Public Preview knowledge-corpus allowlist is selected;
 - pinned byte-identical license material for ATT&CK/CAR/D3FEND/Sysmon is now available and CI-verified; the entries still require explicit reviewed promotion to exact `ACCEPTED` release entries with final attribution/material-selection evidence;
+- exact Go linked-module/toolchain license-material preservation is automated and independently byte-validated; final evidence must still be regenerated, reviewed and bound to the frozen release binary/package;
 - exact Rust/Tauri preflight dependency/license and frontend-asset evidence is automated; final evidence must still be regenerated and bound to the frozen release build/package;
 - final release assets/fonts/icons, including generated/bundled artifacts outside the source `www` tree, are inventoried;
 - deterministic draft notice generation is automated; the final third-party license/NOTICE bundle must still be generated in strict release mode and must include the separately pinned upstream license/notice material required by each accepted entry;

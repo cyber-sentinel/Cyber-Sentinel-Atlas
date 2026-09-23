@@ -8,6 +8,8 @@ on:
     paths:
       - 'shared-core/go/**'
       - 'tools/shared_core/phase554d_evidence.py'
+      - 'tools/release/generate_go_license_material_evidence.py'
+      - 'tools/release/validate_go_license_material_evidence.py'
       - 'tools/pack/**'
       - 'tests/phase55/**'
       - 'docs/architecture/phase-5.5.4-production-go-shared-core.md'
@@ -21,6 +23,8 @@ on:
     paths:
       - 'shared-core/go/**'
       - 'tools/shared_core/phase554d_evidence.py'
+      - 'tools/release/generate_go_license_material_evidence.py'
+      - 'tools/release/validate_go_license_material_evidence.py'
       - 'tools/pack/**'
       - 'tests/phase55/**'
       - 'docs/architecture/phase-5.5.4-production-go-shared-core.md'
@@ -244,6 +248,27 @@ jobs:
             --sbom "$PHASE554D_EVIDENCE/sbom.cdx.json" \
             --binary "$PHASE554D_EVIDENCE/atlas-core-a$ext" \
             --output "$PHASE554D_EVIDENCE/license-inventory.json"
+
+      - name: Preserve exact linked Go module and toolchain license material
+        shell: bash
+        run: |
+          set -euo pipefail
+          ext=""
+          if [ "$RUNNER_OS" = "Windows" ]; then ext=".exe"; fi
+          material="$PHASE554D_EVIDENCE/go-license-material"
+          evidence="$PHASE554D_EVIDENCE/go-license-material.json"
+          python tools/release/generate_go_license_material_evidence.py \
+            --module-root shared-core/go \
+            --binary "$PHASE554D_EVIDENCE/atlas-core-a$ext" \
+            --sbom-license-inventory "$PHASE554D_EVIDENCE/license-inventory.json" \
+            --material-dir "$material" \
+            --output "$evidence" \
+            --runner-os "$RUNNER_OS"
+          python tools/release/validate_go_license_material_evidence.py \
+            --evidence "$evidence" \
+            --material-dir "$material" \
+            --binary "$PHASE554D_EVIDENCE/atlas-core-a$ext" \
+            --sbom-license-inventory "$PHASE554D_EVIDENCE/license-inventory.json"
 
       - name: Run pinned Go vulnerability scan
         working-directory: shared-core/go
