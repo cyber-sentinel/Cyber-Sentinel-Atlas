@@ -80,6 +80,8 @@ The rehearsal does **not** satisfy PPR-05 signing, PPR-06 signed-candidate accep
 
 The Phase 5.6.4 exact-head Windows engineering package now invokes the same Windows ZIP safety control on the actual portable ZIP before artifact upload. Because the uploaded package is subsequently hash-verified before clean-Windows extraction, this bridges the archive-safety policy to real package bytes without claiming production signing or PPR-06 acceptance.
 
+The clean-Windows smoke evidence is also required to bind itself to the exact ZIP filename, byte size and SHA-256 plus the portable and recovery probe digests. A separate post-smoke validator re-downloads both artifacts and independently reproduces those bindings. The evidence explicitly records `release_authority=false`, `signed_candidate_claimed=false`, and `clean_windows_acceptance_claimed=false`; it is engineering acceptance evidence only until the exact production-signed package is reviewed under PPR-05/PPR-06.
+
 ## Required clean-machine acceptance
 
 For the exact Public Preview candidate:
