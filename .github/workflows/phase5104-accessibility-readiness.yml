@@ -10,6 +10,9 @@ on:
       - 'docs/releases/accessibility-readiness.json'
       - 'tools/release/validate_accessibility_readiness.py'
       - 'tools/release/validate_accessibility_preflight.py'
+      - 'tools/release/generate_accessibility_package_preflight_rehearsal.py'
+      - 'tools/release/validate_accessibility_package_preflight_rehearsal.py'
+      - 'tests/phase5104/test_accessibility_package_preflight_rehearsal.py'
       - 'benchmarks/desktop/phase56/candidates/tauri/www/**'
       - 'benchmarks/desktop/phase56/candidates/tauri/tauri.conf.json'
       - '.github/workflows/phase5104-accessibility-readiness.yml'
@@ -21,6 +24,9 @@ on:
       - 'docs/releases/accessibility-readiness.json'
       - 'tools/release/validate_accessibility_readiness.py'
       - 'tools/release/validate_accessibility_preflight.py'
+      - 'tools/release/generate_accessibility_package_preflight_rehearsal.py'
+      - 'tools/release/validate_accessibility_package_preflight_rehearsal.py'
+      - 'tests/phase5104/test_accessibility_package_preflight_rehearsal.py'
       - 'benchmarks/desktop/phase56/candidates/tauri/www/**'
       - 'benchmarks/desktop/phase56/candidates/tauri/tauri.conf.json'
       - '.github/workflows/phase5104-accessibility-readiness.yml'
@@ -44,3 +50,5 @@ jobs:
         run: python tools/release/validate_accessibility_preflight.py
       - name: Validate fail-closed accessibility evidence
         run: python tools/release/validate_accessibility_readiness.py
+      - name: Run package-bound accessibility preflight unit tests
+        run: python -m unittest tests.phase5104.test_accessibility_package_preflight_rehearsal -v

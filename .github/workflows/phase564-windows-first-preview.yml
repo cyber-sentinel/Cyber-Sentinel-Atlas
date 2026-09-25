@@ -10,6 +10,10 @@ on:
       - 'shared-core/go/**'
       - 'tools/release/zip_safety.py'
       - 'tools/release/validate_phase564_clean_windows_evidence.py'
+      - 'tools/release/generate_accessibility_package_preflight_rehearsal.py'
+      - 'tools/release/validate_accessibility_package_preflight_rehearsal.py'
+      - 'tools/release/validate_accessibility_preflight.py'
+      - 'tests/phase5104/test_accessibility_package_preflight_rehearsal.py'
       - 'tests/phase5103/test_zip_safety.py'
       - 'tests/phase5103/test_phase564_clean_windows_evidence.py'
       - '.github/workflows/phase564-windows-first-preview.yml'
@@ -21,6 +25,10 @@ on:
       - 'shared-core/go/**'
       - 'tools/release/zip_safety.py'
       - 'tools/release/validate_phase564_clean_windows_evidence.py'
+      - 'tools/release/generate_accessibility_package_preflight_rehearsal.py'
+      - 'tools/release/validate_accessibility_package_preflight_rehearsal.py'
+      - 'tools/release/validate_accessibility_preflight.py'
+      - 'tests/phase5104/test_accessibility_package_preflight_rehearsal.py'
       - 'tests/phase5103/test_zip_safety.py'
       - 'tests/phase5103/test_phase564_clean_windows_evidence.py'
       - '.github/workflows/phase564-windows-first-preview.yml'
@@ -515,3 +523,71 @@ jobs:
             --probe clean-evidence/phase564-probe.json \
             --recovery-probe clean-evidence/phase564-recovery-probe.json \
             --expected-commit "$GITHUB_SHA"
+
+  bind-accessibility-preflight:
+    name: bind accessibility preflight to exact package
+    needs:
+      - build-package
+      - clean-windows-smoke
+      - validate-clean-windows-evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact head
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Download exact package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: phase564-first-preview-package
+          path: package-artifact
+
+      - name: Download package-bound clean-Windows evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: phase564-clean-windows-evidence
+          path: clean-evidence
+
+      - name: Run source accessibility preflight
+        run: python tools/release/validate_accessibility_preflight.py
+
+      - name: Run accessibility package-preflight unit tests
+        run: python -m unittest tests.phase5104.test_accessibility_package_preflight_rehearsal -v
+
+      - name: Generate and validate package-bound accessibility preflight rehearsal
+        shell: bash
+        run: |
+          set -euo pipefail
+          package="$(find package-artifact -maxdepth 1 -type f -name '*.zip' -print -quit)"
+          test -n "$package"
+          out="$RUNNER_TEMP/phase564-accessibility-package-preflight.json"
+          python tools/release/generate_accessibility_package_preflight_rehearsal.py \
+            --release-commit "$GITHUB_SHA" \
+            --package "$package" \
+            --clean-windows-evidence clean-evidence/phase564-clean-windows-evidence.json \
+            --static-validator tools/release/validate_accessibility_preflight.py \
+            --output "$out"
+          python tools/release/validate_accessibility_package_preflight_rehearsal.py \
+            --evidence "$out" \
+            --package "$package" \
+            --clean-windows-evidence clean-evidence/phase564-clean-windows-evidence.json \
+            --static-validator tools/release/validate_accessibility_preflight.py \
+            --expected-commit "$GITHUB_SHA"
+          grep -F '"manual_review_complete": false' "$out"
+          grep -F '"ppr07_pass_claimed": false' "$out"
+          echo "PHASE564_A11Y_PREFLIGHT=$out" >> "$GITHUB_ENV"
+
+      - name: Upload package-bound accessibility preflight rehearsal
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase564-accessibility-package-preflight
+          path: ${{ env.PHASE564_A11Y_PREFLIGHT }}
+          if-no-files-found: error
+          retention-days: 30

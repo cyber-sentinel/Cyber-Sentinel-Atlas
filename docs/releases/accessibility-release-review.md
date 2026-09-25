@@ -14,6 +14,8 @@ The First Preview includes accessibility-oriented labels and high-contrast contr
 
 The source-level preflight now additionally enforces keyboard skip navigation, associated form labels, live status regions, visible focus styling, high-contrast support, responsive breakpoints, a resizable window, and logical minimum window dimensions suitable for 150–200% scaling review. The former fixed `body` minimum width and hidden responsive graph labels were removed. These controls reduce known reflow risk but do not replace executable assistive-technology testing.
 
+Phase 5.6.4 also produces a deliberately non-authoritative package-bound accessibility preflight rehearsal. It binds the exact portable ZIP filename/SHA-256/size, the package-bound clean-Windows evidence SHA-256, and the exact static accessibility validator SHA-256 to one evidence record after the source preflight has passed. The record explicitly keeps release authority, PPR-07 PASS, and manual-review claims false, while keeping the manual matrix at NOT_RUN. This proves automated preflight/package continuity but cannot substitute for the mandatory exact-candidate Windows Narrator/high-contrast/scaling review.
+
 ## Mandatory review matrix
 
 The Public Preview candidate must be tested on the exact packaged build for the following:
