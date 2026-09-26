@@ -110,6 +110,7 @@ def load_canonical_records() -> list[dict[str, Any]]:
         "atlas:event:microsoft.windows.security:4688",
         "atlas:event:microsoft.windows.security:4624",
         "atlas:event:microsoft.windows.security:4625",
+        "atlas:event:microsoft.windows.security:4672",
         "atlas:event:microsoft.sysmon:1",
         "atlas:event:microsoft.sysmon:3",
     ):
@@ -317,6 +318,7 @@ def make_signed_repository(repo: Path, pack_version: str) -> tuple[bytes, dict[s
         "contains_windows_4688": True,
         "contains_windows_4624": True,
         "contains_windows_4625": True,
+        "contains_windows_4672": True,
         "contains_sysmon_1": True,
         "contains_sysmon_3": True,
         "encyclopedia_exemplar_count": sum(
