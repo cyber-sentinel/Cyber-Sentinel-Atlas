@@ -59,12 +59,12 @@
       "id": "microsoft-windows-security-documentation",
       "class": "knowledge-content-source-only",
       "included": false,
-      "upstream_revision": "Microsoft Learn Event 4624, 4625 and 4688 documentation pages retained as source-only provenance references; source prose excluded from Public Preview pack",
+      "upstream_revision": "Microsoft Learn Event 4624, 4625, 4672 and 4688 documentation pages retained as source-only provenance references; source prose excluded from Public Preview pack",
       "license_or_terms": "Microsoft Learn Terms of Use; verbatim/substantial Microsoft documentation excluded from Public Preview pack unless separately cleared",
       "license_source": "https://learn.microsoft.com/en-us/legal/termsofuse",
       "redistribution_state": "EXCLUDED",
       "required_notices": "none for excluded Microsoft source text; retain source citation/provenance for independently authored ATLAS facts, field semantics and analysis",
-      "review_evidence": "content/encyclopedia/sources/microsoft-windows-security-event-4624.json + content/encyclopedia/sources/microsoft-windows-security-event-4625.json + ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.release.json"
+      "review_evidence": "content/encyclopedia/sources/microsoft-windows-security-event-4624.json + content/encyclopedia/sources/microsoft-windows-security-event-4625.json + content/encyclopedia/sources/microsoft-windows-security-event-4672.json + ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.release.json"
     },
     {
       "id": "ultimate-windows-security-encyclopedia",
