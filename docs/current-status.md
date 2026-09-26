@@ -1,12 +1,12 @@
 # Cyber-Sentinel-Atlas — Current Authoritative Status
 
-Status timestamp: 2026-09-22
+Status timestamp: 2026-09-26
 
 ## Control plane
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Latest merged engineering/corpus baseline: `a12bb5bb5b8ec111ba4c6a76b818373a88e93b87` — PR #130 completed the frozen Sysmon 15.22 denominator; machine-readable Sysmon coverage is now `30/30` with `0` remaining.
+- Current `main` HEAD: `02f37e7efa8733b75800d6ffd7e1401b3f3c3646` — PR #138 merged the exact-package-bound accessibility preflight rehearsal; exact-head workflows `35883251314` (Foundation Hygiene), `35883250911` (Phase 5.10.4 Accessibility Readiness), and `35883250815` (Phase 5.6.4 Windows First Preview Package) completed **SUCCESS**.\n- Latest corpus baseline: `a12bb5bb5b8ec111ba4c6a76b818373a88e93b87` — PR #130 completed the frozen Sysmon 15.22 denominator; machine-readable Sysmon coverage remains `30/30` with `0` remaining.
 - PR #85 exact-head: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene run `35429390496`, Phase 5.3.4 Canaries run `35429390498`, and Phase 5.10.5 Usable Data Preview run `35429390479`: **SUCCESS**.
 - Post-merge verification on `main@4bfe222eb708347ea0769da400c40dbdaf289b69`: **SUCCESS** — Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` all completed successfully.
 - PR #89 exact-head `34225caf471b215717c3a8b1dcaa01799b01abd7`: all applicable checks completed successfully, including Foundation Hygiene `35437483777`, Phase 5.3.4 Canaries `35437483740`, Production Go Architecture `35437483746`, Shared Core Architecture `35437483749`, Governance Hygiene `35437483754`, Supply Chain Closure `35437483745`, Redistribution Closure `35437483753`, First-Party License Readiness `35437483751`, and Public Preview Readiness `35437483747`; merged as `4ea088e455462e66115d6887a472237171a96c94`.
@@ -67,6 +67,14 @@ Status timestamp: 2026-09-22
 - Phase 5.10.10 Sysmon Event 29 preparation: PR #127 and PR #128 — **CLOSED / SUPERSEDED / NOT MERGED** after stale test-invariant defects were identified and corrected.
 - Phase 5.10.10 Sysmon Event 29 encyclopedia promotion: PR #129 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / CORRECTED TEST INVARIANTS**; exact-head Foundation Hygiene `35591771151`; merged as `f62819285e0235eac2062470399a901a70eebb9d`.
 - Phase 5.10.10 Sysmon Event 255 encyclopedia promotion and frozen-denominator completion: PR #130 — **MERGED / EXACT-HEAD FOUNDATION HYGIENE GREEN / MACHINE-READABLE 30/30 VERIFIED**; exact-head Foundation Hygiene `35749656509`; merged as `a12bb5bb5b8ec111ba4c6a76b818373a88e93b87`.
+- Control-plane documentation synchronization after Sysmon denominator completion: PR #131 — **MERGED**.
+- PPR-04 freeze-evidence hardening: PR #132 — **MERGED** as `6fb6912536bf1ad529759f0b0a5c8fb56a037057`.
+- Exact Go license-material preservation: PR #133 — **MERGED** as `a96e21ae9cf5d16badf427a610b5e0cfeb51f602`.
+- Tauri asset redistribution-evidence hardening: PR #134 — **MERGED** as `ded39093401082b55ff2202d1182b941131701f0`.
+- Windows portable ZIP safety hardening: PR #135 — **MERGED** as `7439822cba548281d177b2e38c22ba1b9c254f22`.
+- Phase 5.6.4 package ZIP-safety enforcement: PR #136 — **MERGED** as `f268e3a477c8034e5e0191e1be87759584f0d9f0`.
+- Phase 5.6.4 clean-Windows evidence exact-package binding: PR #137 — **MERGED** as `ca6c0238004d199726a493af47c59baa321aa2bf`.
+- Phase 5.6.4 exact-package-bound accessibility preflight rehearsal: PR #138 — **MERGED / EXACT-HEAD CI GREEN** as `02f37e7efa8733b75800d6ffd7e1401b3f3c3646`; manual PPR-07 review remains explicitly required and unclaimed.
 - Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
