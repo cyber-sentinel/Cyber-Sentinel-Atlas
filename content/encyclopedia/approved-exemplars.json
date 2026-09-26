@@ -4765,6 +4765,184 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4672",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4672",
+      "title": "Windows Security Event 4672 — Special privileges assigned to new logon",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4672",
+      "aliases": [
+        "4672",
+        "Event ID 4672",
+        "Windows 4672",
+        "Special Logon",
+        "Special privileges assigned to new logon"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4672",
+      "source_version": "event-4672-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4672",
+      "source_locator": "4672(S): Special privileges assigned to new logon",
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4672",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4672",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a successful logon session that receives one or more sensitive Windows privileges, preserving the account identity, Logon ID and privilege list needed to correlate the privileged session with its originating logon and later activity.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit Special Logon",
+        "event_type": "Success",
+        "minimum_supported_generation": "Windows Vista / Windows Server 2008",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Windows Vista / Windows Server 2008 and later documented generations",
+            "notes": "Documented Event 4672 structure for sensitive privileges assigned to a new logon session."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Audit Special Logon success auditing must be enabled for the applicable systems.",
+          "Collection should preserve Event 4624 and related session/process telemetry so the 4672 Logon ID can be correlated with the session that received the sensitive privileges."
+        ],
+        "interpretation_note": "Event 4672 is expected for many LocalSystem and legitimate administrative/service logons. Security interpretation must account for the principal, expected administrative role, privilege set, originating logon and subsequent activity rather than treating the event itself as malicious."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "Subject Logon ID ↔ New Logon Logon ID",
+          "purpose": "identify the successful logon session that received the sensitive privileges"
+        },
+        {
+          "target": "4627",
+          "key": "Logon ID",
+          "purpose": "review group membership associated with the same logon session when collected"
+        },
+        {
+          "target": "4688",
+          "key": "Logon ID + host + time",
+          "purpose": "associate privileged logon context with process creation activity"
+        },
+        {
+          "target": "4673 / 4674",
+          "key": "account/logon context + host + time",
+          "purpose": "correlate later privileged service calls or privileged-object operations where those audit events are collected"
+        },
+        {
+          "target": "4634 / 4647",
+          "key": "Logon ID",
+          "purpose": "bound the lifetime of the privileged session using logoff evidence"
+        }
+      ],
+      "analysis": [
+        "Prioritize 4672 records for unexpected human, service or application identities receiving sensitive privileges, while suppressing or baselining well-understood LocalSystem and approved administrative patterns.",
+        "Review rare or high-impact privilege combinations such as debug, TCB, delegation, driver-load, backup/restore, ownership and impersonation privileges in the context of the account and host role.",
+        "Correlate the Logon ID to Event 4624 and subsequent process/activity telemetry before determining whether the privileged session represents normal administration, service behavior or suspicious privilege use.",
+        "Treat Event 4672 as privileged-session telemetry, not proof that a privilege was actually exercised or that the logon is malicious."
+      ],
+      "value_dictionaries": {
+        "sensitive_privilege": [
+          {
+            "value": "SeAssignPrimaryTokenPrivilege",
+            "meaning": "Allows replacement or assignment of a process primary token in security-sensitive execution paths."
+          },
+          {
+            "value": "SeAuditPrivilege",
+            "meaning": "Allows generation of security audit records."
+          },
+          {
+            "value": "SeBackupPrivilege",
+            "meaning": "Permits backup-oriented read access that can bypass ordinary object access checks for backup operations."
+          },
+          {
+            "value": "SeCreateTokenPrivilege",
+            "meaning": "Allows creation of access-token objects and is normally restricted to highly trusted system contexts."
+          },
+          {
+            "value": "SeDebugPrivilege",
+            "meaning": "Allows powerful inspection or manipulation of processes outside the caller's normal ownership boundary."
+          },
+          {
+            "value": "SeEnableDelegationPrivilege",
+            "meaning": "Allows accounts or computers to be marked trusted for delegation when other authorization requirements are also met."
+          },
+          {
+            "value": "SeImpersonatePrivilege",
+            "meaning": "Allows a process to impersonate a client after authentication in applicable service/server flows."
+          },
+          {
+            "value": "SeLoadDriverPrivilege",
+            "meaning": "Allows loading or unloading device drivers and therefore represents kernel-impacting authority."
+          },
+          {
+            "value": "SeSecurityPrivilege",
+            "meaning": "Allows management of auditing/security-log related security functions and access to protected audit policy data."
+          },
+          {
+            "value": "SeSystemEnvironmentPrivilege",
+            "meaning": "Allows modification of firmware environment values where supported."
+          },
+          {
+            "value": "SeTcbPrivilege",
+            "meaning": "Identifies a highly trusted operating-system security context with broad authentication/impersonation authority."
+          },
+          {
+            "value": "SeRestorePrivilege",
+            "meaning": "Permits restore-oriented write operations that can bypass ordinary object access checks for restoration."
+          },
+          {
+            "value": "SeTakeOwnershipPrivilege",
+            "meaning": "Allows taking ownership of securable objects without normal discretionary permission to do so."
+          }
+        ]
+      },
+      "fields": [
+        {
+          "key": "subject.security-id",
+          "section": "Subject",
+          "native_name": "Security ID",
+          "type": "SID",
+          "meaning": "SID of the account whose new logon session received the sensitive privileges."
+        },
+        {
+          "key": "subject.account-name",
+          "section": "Subject",
+          "native_name": "Account Name",
+          "type": "UnicodeString",
+          "meaning": "Account name associated with the privileged logon session."
+        },
+        {
+          "key": "subject.account-domain",
+          "section": "Subject",
+          "native_name": "Account Domain",
+          "type": "UnicodeString",
+          "meaning": "Domain or local-computer context of the privileged account."
+        },
+        {
+          "key": "subject.logon-id",
+          "section": "Subject",
+          "native_name": "Logon ID",
+          "type": "HexInt64",
+          "meaning": "Identifier of the logon session that received the sensitive privileges.",
+          "correlation": "Primary pivot to Event 4624 and other events carrying the same session Logon ID."
+        },
+        {
+          "key": "privileges",
+          "section": "Privileges",
+          "native_name": "Privileges",
+          "type": "UnicodeString/list",
+          "meaning": "List of sensitive Windows privilege names assigned to the new logon session.",
+          "values_ref": "sensitive_privilege"
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4688",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4688",
