@@ -25,7 +25,9 @@ SOURCE_PATHS = [
     ROOT / "ingestion" / "source-profiles" / "microsoft-windows-provider-metadata.source.json",
     ROOT / "ingestion" / "source-profiles" / "microsoft-windows-security-auditing-4688-doc.source.json",
     ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4624.json",
+    ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4625.json",
     ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4624.json",
+    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4625.json",
     ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4688.json",
 ]
 
