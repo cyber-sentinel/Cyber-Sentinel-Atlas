@@ -4414,6 +4414,357 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4625",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4625",
+      "title": "Windows Security Event 4625 — An account failed to log on",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4625",
+      "aliases": [
+        "4625",
+        "Event ID 4625",
+        "Windows 4625",
+        "Failed logon",
+        "An account failed to log on"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4625",
+      "source_version": "event-4625-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4625",
+      "source_locator": "4625(F): An account failed to log on",
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4625",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4625",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a failed Windows logon attempt on the computer where the attempt was processed, with attempted identity, failure status, logon type, caller process, network origin and authentication-package context when available.",
+        "category": "Logon/Logoff",
+        "subcategories": [
+          "Audit Logon",
+          "Audit Account Lockout"
+        ],
+        "event_type": "Failure",
+        "minimum_supported_generation": "Windows Vista / Windows Server 2008",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Windows Vista / Windows Server 2008 and later documented generations",
+            "notes": "Documented Event 4625 structure for failed logon attempts."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Failure auditing must be enabled for the applicable Audit Logon and/or Audit Account Lockout policy path required by the environment.",
+          "The event is generated on the computer where the failed logon attempt is processed; collection architecture should account for workstations, member servers and domain controllers."
+        ],
+        "interpretation_note": "A failed logon can result from user error, stale credentials, service configuration, account restrictions, infrastructure conditions or hostile authentication activity. Interpret repeated patterns with identity, source, status/substatus and surrounding authentication telemetry."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "attempted account + source/workstation + time",
+          "purpose": "identify failed-to-success authentication sequences and validate whether repeated failures were followed by a successful session"
+        },
+        {
+          "target": "4740",
+          "key": "account + time",
+          "purpose": "correlate failed authentication with account lockout evidence when applicable"
+        },
+        {
+          "target": "4771",
+          "key": "account + client address + time",
+          "purpose": "correlate Kerberos pre-authentication failures on domain controllers when the authentication path is Kerberos"
+        },
+        {
+          "target": "4776",
+          "key": "account + workstation + time",
+          "purpose": "correlate NTLM credential-validation failures when the authentication path uses NTLM"
+        },
+        {
+          "target": "4688",
+          "key": "Caller Process ID + host + time",
+          "purpose": "resolve local process context associated with the failed logon attempt",
+          "limitation": "PID values can be reused; correlate with host and tight time context"
+        },
+        {
+          "target": "network telemetry",
+          "key": "Source Network Address + source port + time",
+          "purpose": "validate remote origin and surrounding connection activity"
+        }
+      ],
+      "analysis": [
+        "Investigate repeated failures for one account from many origins, many accounts from one origin, or high-rate failures involving privileged, service or otherwise sensitive identities.",
+        "Interpret Status and Sub Status together with Logon Type, authentication package, source address, workstation and caller process before assigning security meaning.",
+        "Differentiate password guessing and user-enumeration patterns from stale service credentials, scheduled tasks, mapped drives, cached sessions and infrastructure/authentication failures.",
+        "Treat Event 4625 as failed-authentication telemetry, not standalone proof of malicious activity."
+      ],
+      "value_dictionaries": {
+        "logon_type": [
+          {
+            "value": 2,
+            "name": "Interactive",
+            "meaning": "Local interactive logon attempt at the computer."
+          },
+          {
+            "value": 3,
+            "name": "Network",
+            "meaning": "Network logon attempt to access the computer or a resource hosted by it."
+          },
+          {
+            "value": 4,
+            "name": "Batch",
+            "meaning": "Batch-style logon attempt used by non-interactive processing such as scheduled execution."
+          },
+          {
+            "value": 5,
+            "name": "Service",
+            "meaning": "Service logon attempt for a service security context."
+          },
+          {
+            "value": 7,
+            "name": "Unlock",
+            "meaning": "Attempt to unlock an existing workstation or session."
+          },
+          {
+            "value": 8,
+            "name": "NetworkCleartext",
+            "meaning": "Network logon path where cleartext-capable credentials are supplied to the authentication package; this does not mean the password necessarily traverses the network as plaintext."
+          },
+          {
+            "value": 9,
+            "name": "NewCredentials",
+            "meaning": "A caller retains its local identity while supplying alternate credentials for outbound network connections."
+          },
+          {
+            "value": 10,
+            "name": "RemoteInteractive",
+            "meaning": "Remote interactive logon attempt such as Remote Desktop or Terminal Services."
+          },
+          {
+            "value": 11,
+            "name": "CachedInteractive",
+            "meaning": "Interactive logon attempt using cached domain credentials without contacting a domain controller for verification."
+          }
+        ],
+        "status_or_substatus": [
+          {
+            "value": "0xC000005E",
+            "meaning": "No logon servers are currently available to service the request; typically an availability/infrastructure condition rather than a security verdict."
+          },
+          {
+            "value": "0xC0000064",
+            "meaning": "The specified user account does not exist or was entered incorrectly; repeated patterns can support user-enumeration investigation."
+          },
+          {
+            "value": "0xC000006A",
+            "meaning": "The supplied password is incorrect."
+          },
+          {
+            "value": "0xC000006D",
+            "meaning": "Generic bad username or authentication-information failure."
+          },
+          {
+            "value": "0xC000006F",
+            "meaning": "The account attempted to log on outside authorized hours."
+          },
+          {
+            "value": "0xC0000070",
+            "meaning": "The account attempted to log on from an unauthorized workstation."
+          },
+          {
+            "value": "0xC0000072",
+            "meaning": "The account is disabled."
+          },
+          {
+            "value": "0xC000015B",
+            "meaning": "The account has not been granted the requested logon type at this computer."
+          },
+          {
+            "value": "0xC0000192",
+            "meaning": "The Netlogon service was not started; typically an infrastructure/availability condition."
+          },
+          {
+            "value": "0xC0000193",
+            "meaning": "The account is expired."
+          },
+          {
+            "value": "0xC0000234",
+            "meaning": "The account is locked out."
+          },
+          {
+            "value": "0xC0000413",
+            "meaning": "Authentication was blocked by an authentication firewall or policy restricting the account on the target computer."
+          }
+        ]
+      },
+      "fields": [
+        {
+          "key": "subject.security-id",
+          "section": "Subject",
+          "native_name": "Security ID",
+          "type": "SID",
+          "meaning": "SID of the account or security context that reported information about the failed logon."
+        },
+        {
+          "key": "subject.account-name",
+          "section": "Subject",
+          "native_name": "Account Name",
+          "type": "UnicodeString",
+          "meaning": "Account name associated with the subject context reporting or requesting the failed logon."
+        },
+        {
+          "key": "subject.account-domain",
+          "section": "Subject",
+          "native_name": "Account Domain",
+          "type": "UnicodeString",
+          "meaning": "Domain or local-computer context of the subject account."
+        },
+        {
+          "key": "subject.logon-id",
+          "section": "Subject",
+          "native_name": "Logon ID",
+          "type": "HexInt64",
+          "meaning": "Identifier of the subject logon session.",
+          "correlation": "Correlate with other events from the same subject session when populated consistently."
+        },
+        {
+          "key": "logon-information.logon-type",
+          "section": "Logon Information",
+          "native_name": "Logon Type",
+          "type": "UInt32",
+          "meaning": "Indicates the type of logon that was attempted.",
+          "values_ref": "logon_type"
+        },
+        {
+          "key": "failed-account.security-id",
+          "section": "Account For Which Logon Failed",
+          "native_name": "Security ID",
+          "type": "SID",
+          "meaning": "SID of the account specified in the failed logon attempt; unresolved attempts commonly use a null/unknown SID."
+        },
+        {
+          "key": "failed-account.account-name",
+          "section": "Account For Which Logon Failed",
+          "native_name": "Account Name",
+          "type": "UnicodeString",
+          "meaning": "Account name specified in the failed logon attempt."
+        },
+        {
+          "key": "failed-account.account-domain",
+          "section": "Account For Which Logon Failed",
+          "native_name": "Account Domain",
+          "type": "UnicodeString",
+          "meaning": "Domain or local-computer context supplied for the account in the failed logon attempt."
+        },
+        {
+          "key": "failure-information.failure-reason",
+          "section": "Failure Information",
+          "native_name": "Failure Reason",
+          "type": "UnicodeString",
+          "meaning": "Localized or rendered explanation associated with the authentication failure status."
+        },
+        {
+          "key": "failure-information.status",
+          "section": "Failure Information",
+          "native_name": "Status",
+          "type": "HexInt32",
+          "meaning": "Primary NTSTATUS value indicating why the logon failed.",
+          "values_ref": "status_or_substatus"
+        },
+        {
+          "key": "failure-information.sub-status",
+          "section": "Failure Information",
+          "native_name": "Sub Status",
+          "type": "HexInt32",
+          "meaning": "Additional NTSTATUS detail refining the reason for the failed logon when available.",
+          "values_ref": "status_or_substatus"
+        },
+        {
+          "key": "process-information.caller-process-id",
+          "section": "Process Information",
+          "native_name": "Caller Process ID",
+          "type": "Pointer/PID",
+          "meaning": "Process identifier of the local process associated with the logon attempt.",
+          "correlation": "Correlate with Event 4688 on the same host and within a tight time window; PID reuse requires time context."
+        },
+        {
+          "key": "process-information.caller-process-name",
+          "section": "Process Information",
+          "native_name": "Caller Process Name",
+          "type": "UnicodeString/path",
+          "meaning": "Executable path/name of the local process associated with the failed logon attempt."
+        },
+        {
+          "key": "network-information.workstation-name",
+          "section": "Network Information",
+          "native_name": "Workstation Name",
+          "type": "UnicodeString",
+          "meaning": "Originating workstation name when supplied by the authentication path."
+        },
+        {
+          "key": "network-information.source-network-address",
+          "section": "Network Information",
+          "native_name": "Source Network Address",
+          "type": "UnicodeString/IP",
+          "meaning": "Originating client IP address when supplied by the authentication path.",
+          "notes": "Loopback values and missing values are possible depending on logon path."
+        },
+        {
+          "key": "network-information.source-port",
+          "section": "Network Information",
+          "native_name": "Source Port",
+          "type": "UnicodeString/port",
+          "meaning": "Originating source port for applicable remote logon attempts; interactive/local attempts can report zero."
+        },
+        {
+          "key": "authentication.logon-process",
+          "section": "Detailed Authentication Information",
+          "native_name": "Logon Process",
+          "type": "UnicodeString",
+          "meaning": "Trusted logon process used for the authentication attempt."
+        },
+        {
+          "key": "authentication.authentication-package",
+          "section": "Detailed Authentication Information",
+          "native_name": "Authentication Package",
+          "type": "UnicodeString",
+          "meaning": "Authentication package used for the logon attempt, commonly Kerberos, NTLM or Negotiate."
+        },
+        {
+          "key": "authentication.transited-services",
+          "section": "Detailed Authentication Information",
+          "native_name": "Transited Services",
+          "type": "UnicodeString",
+          "meaning": "Services traversed in applicable Kerberos S4U/delegation authentication flows."
+        },
+        {
+          "key": "authentication.package-name-ntlm",
+          "section": "Detailed Authentication Information",
+          "native_name": "Package Name (NTLM only)",
+          "type": "UnicodeString",
+          "meaning": "NTLM-family subprotocol used for the attempt when the Authentication Package is NTLM.",
+          "values": [
+            "NTLM V1",
+            "NTLM V2",
+            "LM"
+          ]
+        },
+        {
+          "key": "authentication.key-length",
+          "section": "Detailed Authentication Information",
+          "native_name": "Key Length",
+          "type": "UInt32",
+          "meaning": "NTLM session-security key length when applicable; zero is expected for authentication paths where this NTLM-specific value is not applicable."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4688",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4688",

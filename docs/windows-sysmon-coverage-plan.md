@@ -25,7 +25,7 @@ Phase 5.10.10 now uses deterministic family-specific denominators rather than fi
 
 | Family | Controlled denominator | Encyclopedia grade | Remaining |
 | --- | ---: | ---: | ---: |
-| Windows Security Auditing | 423 unique Event IDs / 488 provider event-version definitions | 2 — `4624`, `4688` | 421 |
+| Windows Security Auditing | 423 unique Event IDs / 488 provider event-version definitions | 3 — `4624`, `4625`, `4688` | 420 |
 | Sysmon 15.22 | 30 documented/current Event IDs | 30 — `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20`, `21`, `22`, `23`, `24`, `25`, `26`, `27`, `28`, `29`, `255` | 0 |
 
 ### Windows Security Auditing scope

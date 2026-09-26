@@ -332,8 +332,8 @@ Current controlled coverage state:
 
 - Windows Security Auditing denominator is frozen to `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296`;
 - Windows Security denominator: **423 unique Event IDs** / **488 provider event-version definitions**;
-- Windows Security encyclopedia-grade numerator: **2/423** — Event IDs `4624` and `4688`;
-- Windows Security remaining: **421**;
+- Windows Security encyclopedia-grade numerator: **3/423** — Event IDs `4624`, `4625`, and `4688`;
+- Windows Security remaining: **420**;
 - Sysmon semantic release: **15.22**;
 - Sysmon controlled structural schema: **4.91**;
 - Sysmon documented/current denominator: **30** Event IDs (`1..29` plus `255`);

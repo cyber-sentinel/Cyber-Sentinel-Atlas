@@ -1,6 +1,6 @@
 {
   "coverage_contract_version": "1.0.0",
-  "as_of": "2026-09-19",
+  "as_of": "2026-09-26",
   "overall_state": "IN_PROGRESS",
   "global_windows_denominator_frozen": false,
   "global_windows_completion_percent": null,
@@ -13,8 +13,8 @@
       "denominator_scope": "Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296",
       "snapshot": "content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json",
       "denominator_count": 423,
-      "encyclopedia_grade_count": 2,
-      "remaining_count": 421
+      "encyclopedia_grade_count": 3,
+      "remaining_count": 420
     },
     {
       "id": "sysmon",
