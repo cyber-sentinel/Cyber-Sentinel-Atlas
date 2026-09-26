@@ -156,7 +156,7 @@ ATLAS project continuity is repository-backed rather than chat-backed.
   - 5.10.10 Windows & Sysmon Knowledge Coverage Expansion: **ACTIVE / CONTROLLED COVERAGE EXPANSION**
     - Windows Security Auditing denominator: **FROZEN** for `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296`
     - Windows Security controlled denominator: `423` unique Event IDs / `488` provider event-version definitions
-    - Windows Security encyclopedia grade: `2/423` — Event IDs `4624`, `4688`; remaining `421`
+    - Windows Security encyclopedia grade: `3/423` — Event IDs `4624`, `4625`, `4688`; remaining `420`
     - Sysmon semantic release: `15.22`; controlled structural schema: `4.91`
     - Sysmon denominator: `30` documented/current Event IDs; encyclopedia grade: `30/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20`, `21`, `22`, `23`, `24`, `25`, `26`, `27`, `28`, `29`, `255`; remaining `0`
     - global Windows denominator: **NOT FROZEN**; global completion percentage intentionally undefined
