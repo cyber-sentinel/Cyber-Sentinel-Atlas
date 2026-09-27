@@ -92,7 +92,7 @@ The engineering-ready Windows First Preview provides:
 - UTC, system-local, and Tehran/Jalali presentation;
 - operational dark UI with high-contrast/accessibility controls.
 
-The packaged clean-Windows acceptance path proves deterministic Search → Record behavior for the current Windows Security exemplars (`4624`, `4625`, `4672`, `4688`), Sysmon Event ID `1`, bounded Graph/Provenance behavior, and deliberate TUF target tampering rejected fail-closed.
+The packaged clean-Windows acceptance path is required to prove deterministic Search → Record behavior for the current Windows Security exemplars (`4624`, `4625`, `4672`, `4688`), Sysmon Event ID `1`, bounded Graph/Provenance behavior, and deliberate TUF target tampering rejected fail-closed.
 
 The selected desktop host exposes exactly seven application commands: `core_status`, `search_records`, `get_record`, `expand_graph`, `pack_status`, `pack_update`, and `pack_rollback`.
 
