@@ -6,8 +6,8 @@ Status timestamp: 2026-09-27
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Current `main` HEAD: `74121ee781f83dc078e588f6104d57b193fa5bbe` — PR #141 merged the Windows Security Event 4625 encyclopedia-grade promotion after all nine exact-head workflows completed **SUCCESS**.
-- Latest merged corpus baseline: `74121ee781f83dc078e588f6104d57b193fa5bbe` — PR #141 promoted Windows Security Event 4625; Windows Security coverage is `3/423` on `main`, while this branch advances the proposed next state to `4/423` with Event 4672; Sysmon remains `30/30`.
+- Current `main` HEAD: `d98cdea42197c57328e6b2f1aad5fb884d191c95` — PR #142 merged the Windows Security Event 4672 encyclopedia-grade promotion after all nine exact-head workflows completed **SUCCESS**.
+- Latest merged corpus baseline: `d98cdea42197c57328e6b2f1aad5fb884d191c95` — PR #142 promoted Windows Security Event 4672; Windows Security coverage is `4/423` on `main` with `419` remaining; Sysmon remains `30/30`.
 - PR #85 exact-head: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene run `35429390496`, Phase 5.3.4 Canaries run `35429390498`, and Phase 5.10.5 Usable Data Preview run `35429390479`: **SUCCESS**.
 - Post-merge verification on `main@4bfe222eb708347ea0769da400c40dbdaf289b69`: **SUCCESS** — Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` all completed successfully.
 - PR #89 exact-head `34225caf471b215717c3a8b1dcaa01799b01abd7`: all applicable checks completed successfully, including Foundation Hygiene `35437483777`, Phase 5.3.4 Canaries `35437483740`, Production Go Architecture `35437483746`, Shared Core Architecture `35437483749`, Governance Hygiene `35437483754`, Supply Chain Closure `35437483745`, Redistribution Closure `35437483753`, First-Party License Readiness `35437483751`, and Public Preview Readiness `35437483747`; merged as `4ea088e455462e66115d6887a472237171a96c94`.
@@ -77,6 +77,7 @@ Status timestamp: 2026-09-27
 - Phase 5.6.4 clean-Windows evidence exact-package binding: PR #137 — **MERGED** as `ca6c0238004d199726a493af47c59baa321aa2bf`.
 - Phase 5.6.4 exact-package-bound accessibility preflight rehearsal: PR #138 — **MERGED / EXACT-HEAD CI GREEN** as `02f37e7efa8733b75800d6ffd7e1401b3f3c3646`; manual PPR-07 review remains explicitly required and unclaimed.
 - Phase 5.10.10 Windows Event 4625 encyclopedia promotion: PR #141 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `74121ee781f83dc078e588f6104d57b193fa5bbe`; Windows Security coverage advanced to `3/423`.
+- Phase 5.10.10 Windows Event 4672 encyclopedia promotion: PR #142 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `d98cdea42197c57328e6b2f1aad5fb884d191c95`; Windows Security coverage advanced to `4/423` with `419` remaining.
 - Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
