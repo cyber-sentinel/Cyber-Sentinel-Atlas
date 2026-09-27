@@ -92,7 +92,7 @@ The engineering-ready Windows First Preview provides:
 - UTC, system-local, and Tehran/Jalali presentation;
 - operational dark UI with high-contrast/accessibility controls.
 
-Phase 5.10.5 additionally proves on clean Windows, from one packaged artifact, an end-to-end analyst flow for Windows Security Event ID `4688` and Sysmon Event ID `1` through Search → Record → Graph → Provenance, with deliberate TUF target tampering rejected fail-closed.
+The packaged clean-Windows acceptance path is required to prove deterministic Search → Record behavior for the current Windows Security exemplars (`4624`, `4625`, `4672`, `4688`), Sysmon Event ID `1`, bounded Graph/Provenance behavior, and deliberate TUF target tampering rejected fail-closed.
 
 The selected desktop host exposes exactly seven application commands: `core_status`, `search_records`, `get_record`, `expand_graph`, `pack_status`, `pack_update`, and `pack_rollback`.
 
@@ -137,7 +137,7 @@ Current controlled Phase 5.10.10 coverage:
 
 | Family | Controlled denominator | Encyclopedia grade | Remaining |
 | --- | ---: | ---: | ---: |
-| Windows Security Auditing | 423 unique Event IDs on `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296` | 3 — `4624`, `4625`, `4688` | 420 |
+| Windows Security Auditing | 423 unique Event IDs on `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296` | 4 — `4624`, `4625`, `4672`, `4688` | 419 |
 | Sysmon 15.22 | 30 documented/current Event IDs with controlled schema 4.91 evidence | 30 — `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20`, `21`, `22`, `23`, `24`, `25`, `26`, `27`, `28`, `29`, `255` | 0 |
 
 The authoritative machine-readable ledger is [`content/encyclopedia/coverage-manifest.json`](content/encyclopedia/coverage-manifest.json).

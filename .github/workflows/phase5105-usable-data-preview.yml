@@ -199,7 +199,7 @@ jobs:
             sidecar = [ordered]@{ file='atlas-core.exe'; sha256=(Get-FileHash -Algorithm SHA256 $Core).Hash.ToLowerInvariant(); size_bytes=(Get-Item $Core).Length; placement='adjacent-to-host' }
             baseline_pack = [ordered]@{ file='atlas-engineering-preview.atlaspack'; sha256=(Get-FileHash -Algorithm SHA256 $Pack).Hash.ToLowerInvariant(); size_bytes=(Get-Item $Pack).Length; scope='fixture-only'; first_run_activation='tuf-verified-fail-closed' }
             bootstrap_root = [ordered]@{ file='atlas-engineering-preview-root.json'; sha256=(Get-FileHash -Algorithm SHA256 $Root).Hash.ToLowerInvariant(); size_bytes=(Get-Item $Root).Length; private_keys_persisted=$false }
-            acceptance = [ordered]@{ windows_event_4688=$true; windows_event_4625=$true; sysmon_event_1=$true; record_detail=$true; bounded_graph=$true }
+            acceptance = [ordered]@{ windows_event_4688=$true; windows_event_4625=$true; windows_event_4672=$true; sysmon_event_1=$true; record_detail=$true; bounded_graph=$true }
             release_boundaries = [ordered]@{ public_preview=$false; production_signing=$false; production_pack_keys=$false; third_party_public_corpus=$false }
             security = [ordered]@{ default_network_listener=$false; csp_connect_src='none'; binary_auto_update=$false; sidecar_integrity='sha256-fail-closed'; pack_trust='TUF' }
           }
@@ -212,7 +212,7 @@ jobs:
           atlas-core activates the adjacent engineering fixture pack through the
           normal TUF verification, health gate, immutable-generation and LKG path.
 
-          Acceptance pivots include Windows Security Events 4688 and 4625, Sysmon Event 1,
+          Acceptance pivots include Windows Security Events 4688, 4625 and 4672, Sysmon Event 1,
           ATT&CK-oriented fixture context, record detail, deterministic search and
           bounded graph data. The baseline pack is synthetic/repository-owned test
           content and is NOT the Public Preview corpus.
@@ -319,7 +319,7 @@ jobs:
           python tools/release/probe_engineering_preview.py --core $Core --output $Evidence
           if ($LASTEXITCODE -ne 0) { throw 'packaged data acceptance probe failed' }
           $probe = Get-Content -Raw $Evidence | ConvertFrom-Json
-          if ($probe.pack_ready -ne $true -or $probe.windows_4688_search_ok -ne $true -or $probe.windows_4688_record_ok -ne $true -or $probe.windows_4625_search_ok -ne $true -or $probe.windows_4625_record_ok -ne $true -or $probe.sysmon_1_search_ok -ne $true -or $probe.sysmon_1_processcreate_alias_ok -ne $true -or $probe.sysmon_1_record_processcreate_alias_ok -ne $true -or $probe.sysmon_1_record_ok -ne $true -or $probe.graph_expand_ok -ne $true) {
+          if ($probe.pack_ready -ne $true -or $probe.windows_4688_search_ok -ne $true -or $probe.windows_4688_record_ok -ne $true -or $probe.windows_4625_search_ok -ne $true -or $probe.windows_4625_record_ok -ne $true -or $probe.windows_4672_search_ok -ne $true -or $probe.windows_4672_record_ok -ne $true -or $probe.sysmon_1_search_ok -ne $true -or $probe.sysmon_1_processcreate_alias_ok -ne $true -or $probe.sysmon_1_record_processcreate_alias_ok -ne $true -or $probe.sysmon_1_record_ok -ne $true -or $probe.graph_expand_ok -ne $true) {
             throw 'usable data preview acceptance invariant failed'
           }
           Copy-Item $Evidence package-artifact\phase5105-data-probe.json -Force

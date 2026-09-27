@@ -46,6 +46,8 @@ def test_02_approved_event_identities_and_search_aliases():
     assert validator.resolve_query(records, "Windows 4624") == ["atlas:event:microsoft.windows.security:4624"]
     assert validator.resolve_query(records, "4625") == ["atlas:event:microsoft.windows.security:4625"]
     assert validator.resolve_query(records, "Failed logon") == ["atlas:event:microsoft.windows.security:4625"]
+    assert validator.resolve_query(records, "4672") == ["atlas:event:microsoft.windows.security:4672"]
+    assert validator.resolve_query(records, "Special Logon") == ["atlas:event:microsoft.windows.security:4672"]
     assert validator.resolve_query(records, "Sysmon 1") == ["atlas:event:microsoft.sysmon:1"]
     assert validator.resolve_query(records, "ProcessCreate") == ["atlas:event:microsoft.sysmon:1"]
     assert validator.resolve_query(records, "Sysmon 2") == ["atlas:event:microsoft.sysmon:2"]
@@ -213,6 +215,68 @@ def test_04c_windows_4625_value_dictionaries_and_uws_boundary():
     assert uws_evidence[0]["object"]["value"]["redistribution"] == "source-link-and-coverage-benchmark-only"
 
 
+def test_04d_windows_4672_field_dictionary_matches_approved_exemplar():
+    records = by_id(records_with_paths())
+    prefix = "atlas:field:microsoft.windows.security:4672."
+    fields = sorted(key for key in records if key.startswith(prefix))
+    assert len(fields) == 5
+    expected = {
+        "4672.subject.security-id",
+        "4672.subject.account-name",
+        "4672.subject.account-domain",
+        "4672.subject.logon-id",
+        "4672.privileges",
+    }
+    actual = {value.rsplit(":", 1)[-1] for value in fields}
+    assert actual == expected
+
+
+def test_04e_windows_4672_privilege_dictionary_and_uws_boundary():
+    records = by_id(records_with_paths())
+    event_claims = [
+        r for r in records.values()
+        if r.get("record_kind") == "claim"
+        and r.get("subject_id") == "atlas:event:microsoft.windows.security:4672"
+        and r.get("predicate") == "telemetry.field-semantics"
+    ]
+    dictionaries = [
+        r["object"]["value"].get("event_value_dictionaries", {})
+        for r in event_claims
+        if r.get("object", {}).get("kind") == "json"
+    ]
+    privileges = next(
+        value["sensitive_privilege"]
+        for value in dictionaries
+        if "sensitive_privilege" in value
+    )
+    assert {row["value"] for row in privileges} == {
+        "SeAssignPrimaryTokenPrivilege",
+        "SeAuditPrivilege",
+        "SeBackupPrivilege",
+        "SeCreateTokenPrivilege",
+        "SeDebugPrivilege",
+        "SeEnableDelegationPrivilege",
+        "SeImpersonatePrivilege",
+        "SeLoadDriverPrivilege",
+        "SeSecurityPrivilege",
+        "SeSystemEnvironmentPrivilege",
+        "SeTcbPrivilege",
+        "SeRestorePrivilege",
+        "SeTakeOwnershipPrivilege",
+    }
+
+    source = records["atlas:source:atlas.source:ultimate-windows-security-event-4672"]
+    assert source["redistribution"]["policy"] == "prohibited"
+    uws_evidence = [
+        r for r in records.values()
+        if r.get("record_kind") == "claim"
+        and any(e.get("source_id") == source["id"] for e in r.get("evidence", []))
+    ]
+    assert len(uws_evidence) == 1
+    assert uws_evidence[0]["predicate"] == "telemetry.source"
+    assert uws_evidence[0]["object"]["value"]["redistribution"] == "source-link-and-coverage-benchmark-only"
+
+
 def test_05_every_field_has_one_semantics_claim_and_has_field_relationship():
     records = by_id(records_with_paths())
     fields = [r for r in records.values() if r.get("record_kind") == "entity" and r.get("entity_type") == "field"]
@@ -223,7 +287,7 @@ def test_05_every_field_has_one_semantics_claim_and_has_field_relationship():
     claim_subjects = {r["subject_id"] for r in claims if r["subject_id"] in field_ids}
     relationship_targets = {r["to"] for r in rels}
 
-    assert len(field_ids) == 340
+    assert len(field_ids) == 345
     assert claim_subjects == field_ids
     assert relationship_targets == field_ids
 
