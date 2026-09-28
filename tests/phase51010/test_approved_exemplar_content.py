@@ -50,6 +50,8 @@ def test_02_approved_event_identities_and_search_aliases():
     assert validator.resolve_query(records, "Explicit credentials") == ["atlas:event:microsoft.windows.security:4648"]
     assert validator.resolve_query(records, "4672") == ["atlas:event:microsoft.windows.security:4672"]
     assert validator.resolve_query(records, "Special Logon") == ["atlas:event:microsoft.windows.security:4672"]
+    assert validator.resolve_query(records, "4771") == ["atlas:event:microsoft.windows.security:4771"]
+    assert validator.resolve_query(records, "Kerberos preauth failure") == ["atlas:event:microsoft.windows.security:4771"]
     assert validator.resolve_query(records, "Sysmon 1") == ["atlas:event:microsoft.sysmon:1"]
     assert validator.resolve_query(records, "ProcessCreate") == ["atlas:event:microsoft.sysmon:1"]
     assert validator.resolve_query(records, "Sysmon 2") == ["atlas:event:microsoft.sysmon:2"]
@@ -318,6 +320,62 @@ def test_04g_windows_4672_privilege_dictionary_and_uws_boundary():
     assert uws_evidence[0]["object"]["value"]["redistribution"] == "source-link-and-coverage-benchmark-only"
 
 
+def test_04h_windows_4771_field_dictionary_matches_approved_exemplar():
+    records = by_id(records_with_paths())
+    prefix = "atlas:field:microsoft.windows.security:4771."
+    fields = sorted(key for key in records if key.startswith(prefix))
+    assert len(fields) == 11
+    expected = {
+        "4771.account-information.account-name",
+        "4771.account-information.security-id",
+        "4771.service-information.service-name",
+        "4771.network-information.client-address",
+        "4771.network-information.client-port",
+        "4771.additional-information.ticket-options",
+        "4771.additional-information.failure-code",
+        "4771.additional-information.pre-authentication-type",
+        "4771.certificate-information.certificate-issuer-name",
+        "4771.certificate-information.certificate-serial-number",
+        "4771.certificate-information.certificate-thumbprint",
+    }
+    actual = {value.rsplit(":", 1)[-1] for value in fields}
+    assert actual == expected
+
+
+def test_04i_windows_4771_value_dictionaries_and_uws_boundary():
+    records = by_id(records_with_paths())
+    event_claims = [
+        r for r in records.values()
+        if r.get("record_kind") == "claim"
+        and r.get("subject_id") == "atlas:event:microsoft.windows.security:4771"
+        and r.get("predicate") == "telemetry.field-semantics"
+    ]
+    dictionaries = [
+        r["object"]["value"].get("event_value_dictionaries", {})
+        for r in event_claims
+        if r.get("object", {}).get("kind") == "json"
+    ]
+    failures = next(value["failure_code"] for value in dictionaries if "failure_code" in value)
+    assert {"0x6", "0x12", "0x17", "0x18", "0x25"} <= {row["value"] for row in failures}
+    preauth = next(
+        value["pre_authentication_type"]
+        for value in dictionaries
+        if "pre_authentication_type" in value
+    )
+    assert {"0", "2", "15", "16", "17", "19", "20", "138"} <= {row["value"] for row in preauth}
+
+    source = records["atlas:source:atlas.source:ultimate-windows-security-event-4771"]
+    assert source["redistribution"]["policy"] == "prohibited"
+    uws_evidence = [
+        r for r in records.values()
+        if r.get("record_kind") == "claim"
+        and any(e.get("source_id") == source["id"] for e in r.get("evidence", []))
+    ]
+    assert len(uws_evidence) == 1
+    assert uws_evidence[0]["predicate"] == "telemetry.source"
+    assert uws_evidence[0]["object"]["value"]["redistribution"] == "source-link-and-coverage-benchmark-only"
+
+
 def test_05_every_field_has_one_semantics_claim_and_has_field_relationship():
     records = by_id(records_with_paths())
     fields = [r for r in records.values() if r.get("record_kind") == "entity" and r.get("entity_type") == "field"]
@@ -328,7 +386,7 @@ def test_05_every_field_has_one_semantics_claim_and_has_field_relationship():
     claim_subjects = {r["subject_id"] for r in claims if r["subject_id"] in field_ids}
     relationship_targets = {r["to"] for r in rels}
 
-    assert len(field_ids) == 359
+    assert len(field_ids) == 370
     assert claim_subjects == field_ids
     assert relationship_targets == field_ids
 
