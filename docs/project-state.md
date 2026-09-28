@@ -6,7 +6,7 @@
 - Release authority: `main`
 - Last Reviewed Main Baseline: `a2ce039ef8c2b24dfccc26d7fefb56f38efb859e`
 - Live `main` remains authoritative; this durable snapshot intentionally does not claim its own eventual merge SHA as the current HEAD.
-- Latest merged corpus baseline: `d98cdea42197c57328e6b2f1aad5fb884d191c95` — Windows Security is `5/423` on `main` with `419` remaining; Sysmon remains `30/30`.
+- Latest merged corpus baseline at branch start: `d98cdea42197c57328e6b2f1aad5fb884d191c95` — Windows Security is `4/423` with `419` remaining. This branch proposes Event 4648 as the next encyclopedia-grade increment, producing `5/423` with `418` remaining; Sysmon remains `30/30`.
 - PR #85 exact-head baseline: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene `35429390496`, Phase 5.3.4 Canaries `35429390498`, and Phase 5.10.5 Usable Data Preview `35429390479` all **SUCCESS**
 - PR #85 merged to `main` as `4bfe222eb708347ea0769da400c40dbdaf289b69`; post-merge Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` are all **SUCCESS / POST-MERGE VERIFIED**.
 - PR #89 exact-head `34225caf471b215717c3a8b1dcaa01799b01abd7`: all applicable checks completed successfully, including Foundation Hygiene `35437483777`, Phase 5.3.4 Canaries `35437483740`, Production Go Architecture `35437483746`, Shared Core Architecture `35437483749`, Governance Hygiene `35437483754`, Supply Chain Closure `35437483745`, Redistribution Closure `35437483753`, First-Party License Readiness `35437483751`, and Public Preview Readiness `35437483747`; merged as `4ea088e455462e66115d6887a472237171a96c94`.
