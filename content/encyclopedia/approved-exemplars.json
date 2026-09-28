@@ -5469,7 +5469,7 @@
           "Audit Kerberos Authentication Service failure auditing must be enabled on domain controllers where this telemetry is required.",
           "Collection should preserve related Kerberos, account-lockout and endpoint/network telemetry so account, client address and time pivots can be correlated."
         ],
-        "interpretation_note": "Event 4771 is domain-controller Kerberos failure telemetry. It can result from mistyped or stale passwords, expired or revoked credentials, clock or certificate problems, unsupported encryption/pre-authentication types, or hostile authentication attempts. Investigate the failure code, account, client address and surrounding authentication sequence before attributing intent.",
+        "interpretation_note": "Event 4771 is domain-controller Kerberos failure telemetry. It can result from mistyped or stale passwords, expired or revoked credentials, clock or certificate problems, unsupported encryption/pre-authentication types, or hostile authentication attempts. Investigate the failure code, account, client address and surrounding authentication sequence before attributing intent. The certificate issuer, serial-number and thumbprint fields are schema-visible but documented by Microsoft as empty for Event 4771.",
         "scope_note": "Microsoft documents Event 4771 as generated only on domain controllers and not generated for accounts configured to skip Kerberos pre-authentication."
       },
       "correlations": [
@@ -5651,21 +5651,21 @@
           "section": "Certificate Information",
           "native_name": "Certificate Issuer Name",
           "type": "UnicodeString",
-          "meaning": "Certificate authority issuer name field associated with certificate-based pre-authentication when present."
+          "meaning": "Certificate issuer field retained in the Event 4771 schema; Microsoft documents it as empty for this event."
         },
         {
           "key": "certificate-information.certificate-serial-number",
           "section": "Certificate Information",
           "native_name": "Certificate Serial Number",
           "type": "UnicodeString",
-          "meaning": "Certificate serial number field associated with certificate-based pre-authentication when present."
+          "meaning": "Certificate serial-number field retained in the Event 4771 schema; Microsoft documents it as empty for this event."
         },
         {
           "key": "certificate-information.certificate-thumbprint",
           "section": "Certificate Information",
           "native_name": "Certificate Thumbprint",
           "type": "UnicodeString",
-          "meaning": "Certificate thumbprint field associated with certificate-based pre-authentication when present."
+          "meaning": "Certificate thumbprint field retained in the Event 4771 schema; Microsoft documents it as empty for this event."
         }
       ]
     },
