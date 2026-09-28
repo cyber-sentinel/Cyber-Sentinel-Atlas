@@ -4,7 +4,7 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main Baseline: `a2ce039ef8c2b24dfccc26d7fefb56f38efb859e`
+- Last Reviewed Main SHA: `a2ce039ef8c2b24dfccc26d7fefb56f38efb859e`
 - Live `main` remains authoritative; this durable snapshot intentionally does not claim its own eventual merge SHA as the current HEAD.
 - Latest merged corpus baseline at branch start: `d98cdea42197c57328e6b2f1aad5fb884d191c95` — Windows Security is `4/423` with `419` remaining. This branch proposes Event 4648 as the next encyclopedia-grade increment, producing `5/423` with `418` remaining; Sysmon remains `30/30`.
 - PR #85 exact-head baseline: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene `35429390496`, Phase 5.3.4 Canaries `35429390498`, and Phase 5.10.5 Usable Data Preview `35429390479` all **SUCCESS**
