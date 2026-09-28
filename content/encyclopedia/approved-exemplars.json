@@ -5423,6 +5423,253 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4771",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4771",
+      "title": "Windows Security Event 4771 — Kerberos pre-authentication failed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4771",
+      "aliases": [
+        "4771",
+        "Event ID 4771",
+        "Windows 4771",
+        "Kerberos pre-authentication failed",
+        "Kerberos preauth failure"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4771",
+      "source_version": "event-4771-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4771",
+      "source_locator": "4771(F): Kerberos pre-authentication failed",
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4771",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4771",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a Kerberos Ticket Granting Ticket pre-authentication failure on a domain controller, preserving the target account, krbtgt service, client network origin, ticket options, failure code, pre-authentication type and certificate-related fields.",
+        "category": "Account Logon",
+        "subcategory": "Audit Kerberos Authentication Service",
+        "event_type": "Failure",
+        "minimum_supported_generation": "Windows Server 2008",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Windows Server 2008 and later documented generations",
+            "notes": "Documented Event 4771 structure for Kerberos TGT pre-authentication failure."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Audit Kerberos Authentication Service failure auditing must be enabled on domain controllers where this telemetry is required.",
+          "Collection should preserve related Kerberos, account-lockout and endpoint/network telemetry so account, client address and time pivots can be correlated."
+        ],
+        "interpretation_note": "Event 4771 is domain-controller Kerberos failure telemetry. It can result from mistyped or stale passwords, expired or revoked credentials, clock or certificate problems, unsupported encryption/pre-authentication types, or hostile authentication attempts. Investigate the failure code, account, client address and surrounding authentication sequence before attributing intent.",
+        "scope_note": "Microsoft documents Event 4771 as generated only on domain controllers and not generated for accounts configured to skip Kerberos pre-authentication."
+      },
+      "correlations": [
+        {
+          "target": "4768",
+          "key": "Account Name + Client Address + host/time",
+          "purpose": "compare failed pre-authentication with nearby TGT request activity and eventual Kerberos success/failure"
+        },
+        {
+          "target": "4625",
+          "key": "Account Name + source/client address + time",
+          "purpose": "correlate broader Windows failed-logon telemetry where the same authentication attempt also produces a logon failure"
+        },
+        {
+          "target": "4740",
+          "key": "Account Name + time",
+          "purpose": "determine whether repeated Kerberos failures culminate in an account lockout"
+        },
+        {
+          "target": "client endpoint telemetry",
+          "key": "Client Address + time",
+          "purpose": "identify the process, service, scheduled task, VPN client or stored-credential source generating repeated Kerberos failures"
+        },
+        {
+          "target": "network telemetry",
+          "key": "Client Address + Client Port + time",
+          "purpose": "validate source host and Kerberos traffic toward the domain controller"
+        }
+      ],
+      "analysis": [
+        "Prioritize repeated 4771 failures against privileged, service or high-value accounts, especially when many client systems target one account or one client targets many accounts.",
+        "Failure code 0x18 strongly indicates invalid pre-authentication data and commonly corresponds to an incorrect password; distinguish password guessing from stale service, scheduled-task, mapped-drive, VPN or cached-credential behavior.",
+        "Use Client Address and Client Port to pivot to the originating host, then correlate endpoint process and service telemetry rather than assuming the domain controller generated the faulty credentials.",
+        "Treat codes such as client-revoked, key-expired, policy-rejected, clock-skew, certificate or unsupported-encryption failures according to their own semantics; 4771 is not a single-condition bad-password event."
+      ],
+      "value_dictionaries": {
+        "failure_code": [
+          {
+            "value": "0x6",
+            "meaning": "KDC_ERR_C_PRINCIPAL_UNKNOWN — client principal was not found in the Kerberos database."
+          },
+          {
+            "value": "0xC",
+            "meaning": "KDC_ERR_POLICY — the KDC rejected the request because of policy."
+          },
+          {
+            "value": "0xE",
+            "meaning": "KDC_ERR_ETYPE_NOSUPP — the KDC does not support the requested encryption type."
+          },
+          {
+            "value": "0x10",
+            "meaning": "KDC_ERR_PADATA_TYPE_NOSUPP — the KDC does not support the requested pre-authentication data type."
+          },
+          {
+            "value": "0x12",
+            "meaning": "KDC_ERR_CLIENT_REVOKED — the client credentials are revoked or otherwise not currently usable."
+          },
+          {
+            "value": "0x17",
+            "meaning": "KDC_ERR_KEY_EXPIRED — the account password/key has expired."
+          },
+          {
+            "value": "0x18",
+            "meaning": "KDC_ERR_PREAUTH_FAILED — pre-authentication information was invalid; commonly caused by an incorrect password."
+          },
+          {
+            "value": "0x19",
+            "meaning": "KDC_ERR_PREAUTH_REQUIRED — additional pre-authentication is required."
+          },
+          {
+            "value": "0x25",
+            "meaning": "KRB_AP_ERR_SKEW — client and KDC clocks differ beyond the accepted Kerberos skew."
+          },
+          {
+            "value": "0x29",
+            "meaning": "KRB_AP_ERR_MODIFIED — integrity validation indicates the message stream was modified or could not be validated."
+          }
+        ],
+        "pre_authentication_type": [
+          {
+            "value": "0",
+            "meaning": "No Kerberos pre-authentication type was used."
+          },
+          {
+            "value": "2",
+            "meaning": "PA-ENC-TIMESTAMP — standard encrypted-timestamp password pre-authentication."
+          },
+          {
+            "value": "11",
+            "meaning": "PA-ETYPE-INFO — KDC information about encryption type requirements."
+          },
+          {
+            "value": "15",
+            "meaning": "PA-PK-AS-REP_OLD — legacy PKINIT/smart-card related pre-authentication response type."
+          },
+          {
+            "value": "16",
+            "meaning": "PA-PK-AS-REQ — PKINIT/smart-card pre-authentication request."
+          },
+          {
+            "value": "17",
+            "meaning": "PA-PK-AS-REP — PKINIT/smart-card pre-authentication response."
+          },
+          {
+            "value": "19",
+            "meaning": "PA-ETYPE-INFO2 — KDC encryption-type information used during pre-authentication negotiation."
+          },
+          {
+            "value": "20",
+            "meaning": "PA-SVR-REFERRAL-INFO — server referral information in Kerberos pre-authentication data."
+          },
+          {
+            "value": "138",
+            "meaning": "PA-ENCRYPTED-CHALLENGE — Kerberos armoring/FAST encrypted challenge."
+          }
+        ]
+      },
+      "fields": [
+        {
+          "key": "account-information.account-name",
+          "section": "Account Information",
+          "native_name": "Account Name",
+          "type": "UnicodeString",
+          "meaning": "Account name for which the Kerberos TGT pre-authentication attempt failed."
+        },
+        {
+          "key": "account-information.security-id",
+          "section": "Account Information",
+          "native_name": "Security ID",
+          "type": "SID",
+          "meaning": "SID of the account for which the TGT was requested."
+        },
+        {
+          "key": "service-information.service-name",
+          "section": "Service Information",
+          "native_name": "Service Name",
+          "type": "UnicodeString",
+          "meaning": "Kerberos service principal receiving the TGT request, normally the krbtgt service for the realm."
+        },
+        {
+          "key": "network-information.client-address",
+          "section": "Network Information",
+          "native_name": "Client Address",
+          "type": "UnicodeString/IP",
+          "meaning": "Network address of the client from which the TGT request reached the domain controller."
+        },
+        {
+          "key": "network-information.client-port",
+          "section": "Network Information",
+          "native_name": "Client Port",
+          "type": "UnicodeString/port",
+          "meaning": "Source port of the client network connection used for the TGT request; zero can occur for local requests."
+        },
+        {
+          "key": "additional-information.ticket-options",
+          "section": "Additional Information",
+          "native_name": "Ticket Options",
+          "type": "HexInt32",
+          "meaning": "Kerberos ticket-option bitmask requested by the client."
+        },
+        {
+          "key": "additional-information.failure-code",
+          "section": "Additional Information",
+          "native_name": "Failure Code",
+          "type": "HexInt32",
+          "meaning": "Kerberos error code explaining why the pre-authentication/TGT operation failed.",
+          "values_ref": "failure_code"
+        },
+        {
+          "key": "additional-information.pre-authentication-type",
+          "section": "Additional Information",
+          "native_name": "Pre-Authentication Type",
+          "type": "UnicodeString",
+          "meaning": "Kerberos pre-authentication mechanism/type associated with the request.",
+          "values_ref": "pre_authentication_type"
+        },
+        {
+          "key": "certificate-information.certificate-issuer-name",
+          "section": "Certificate Information",
+          "native_name": "Certificate Issuer Name",
+          "type": "UnicodeString",
+          "meaning": "Certificate authority issuer name field associated with certificate-based pre-authentication when present."
+        },
+        {
+          "key": "certificate-information.certificate-serial-number",
+          "section": "Certificate Information",
+          "native_name": "Certificate Serial Number",
+          "type": "UnicodeString",
+          "meaning": "Certificate serial number field associated with certificate-based pre-authentication when present."
+        },
+        {
+          "key": "certificate-information.certificate-thumbprint",
+          "section": "Certificate Information",
+          "native_name": "Certificate Thumbprint",
+          "type": "UnicodeString",
+          "meaning": "Certificate thumbprint field associated with certificate-based pre-authentication when present."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.sysmon:29",
       "namespace": "microsoft.sysmon",
       "canonical_key": "29",
