@@ -14,6 +14,7 @@ MAX_FRAME = 8 * 1024 * 1024
 EXPECTED_EVENT = "atlas:event:microsoft.windows.security:4688"
 EXPECTED_EVENT_4624 = "atlas:event:microsoft.windows.security:4624"
 EXPECTED_EVENT_4625 = "atlas:event:microsoft.windows.security:4625"
+EXPECTED_EVENT_4648 = "atlas:event:microsoft.windows.security:4648"
 EXPECTED_EVENT_4672 = "atlas:event:microsoft.windows.security:4672"
 EXPECTED_SYSMON = "atlas:event:microsoft.sysmon:1"
 EXPECTED_SYSMON_3 = "atlas:event:microsoft.sysmon:3"
@@ -250,10 +251,32 @@ def main() -> int:
         if record_4625.get("id") != EXPECTED_EVENT_4625:
             raise RuntimeError("Windows Event 4625 record identity mismatch")
 
-        search_4672 = request(
+        search_4648 = request(
             process.stdin,
             process.stdout,
             "q3b",
+            "search.query",
+            {"query": "4648", "graph_depth": 1, "limit": 10},
+        )
+        windows_4648_search_ok = search_contains_target(search_4648, EXPECTED_EVENT_4648)
+        if not windows_4648_search_ok:
+            raise RuntimeError(
+                f"Windows Event 4648 was not returned by deterministic search: {search_4648}"
+            )
+        record_4648 = request(
+            process.stdin,
+            process.stdout,
+            "r3b",
+            "record.get",
+            {"id": EXPECTED_EVENT_4648},
+        )
+        if record_4648.get("id") != EXPECTED_EVENT_4648:
+            raise RuntimeError("Windows Event 4648 record identity mismatch")
+
+        search_4672 = request(
+            process.stdin,
+            process.stdout,
+            "q3c",
             "search.query",
             {"query": "4672", "graph_depth": 1, "limit": 10},
         )
@@ -265,7 +288,7 @@ def main() -> int:
         record_4672 = request(
             process.stdin,
             process.stdout,
-            "r3b",
+            "r3c",
             "record.get",
             {"id": EXPECTED_EVENT_4672},
         )
@@ -328,6 +351,8 @@ def main() -> int:
             "windows_4624_record_ok": True,
             "windows_4625_search_ok": windows_4625_search_ok,
             "windows_4625_record_ok": True,
+            "windows_4648_search_ok": windows_4648_search_ok,
+            "windows_4648_record_ok": True,
             "windows_4672_search_ok": windows_4672_search_ok,
             "windows_4672_record_ok": True,
             "sysmon_3_search_ok": sysmon_3_search_ok,
