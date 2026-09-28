@@ -1,13 +1,13 @@
 # Cyber-Sentinel-Atlas — Current Authoritative Status
 
-Status timestamp: 2026-09-27
+Status timestamp: 2026-09-28
 
 ## Control plane
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Current `main` HEAD: `d98cdea42197c57328e6b2f1aad5fb884d191c95` — PR #142 merged the Windows Security Event 4672 encyclopedia-grade promotion after all nine exact-head workflows completed **SUCCESS**.
-- Latest merged corpus baseline: `d98cdea42197c57328e6b2f1aad5fb884d191c95` — PR #142 promoted Windows Security Event 4672; Windows Security coverage is `4/423` on `main` with `419` remaining; Sysmon remains `30/30`.
+- Live release authority: `main`. This file is a reviewed snapshot and does not treat its own eventual merge SHA as a stable `Current main HEAD`; fresh GitHub state supersedes the snapshot.
+- Latest merged corpus baseline: `d98cdea42197c57328e6b2f1aad5fb884d191c95` — PR #142 promoted Windows Security Event 4672; Windows Security coverage is `5/423` on `main` with `419` remaining; Sysmon remains `30/30`.
 - PR #85 exact-head: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene run `35429390496`, Phase 5.3.4 Canaries run `35429390498`, and Phase 5.10.5 Usable Data Preview run `35429390479`: **SUCCESS**.
 - Post-merge verification on `main@4bfe222eb708347ea0769da400c40dbdaf289b69`: **SUCCESS** — Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` all completed successfully.
 - PR #89 exact-head `34225caf471b215717c3a8b1dcaa01799b01abd7`: all applicable checks completed successfully, including Foundation Hygiene `35437483777`, Phase 5.3.4 Canaries `35437483740`, Production Go Architecture `35437483746`, Shared Core Architecture `35437483749`, Governance Hygiene `35437483754`, Supply Chain Closure `35437483745`, Redistribution Closure `35437483753`, First-Party License Readiness `35437483751`, and Public Preview Readiness `35437483747`; merged as `4ea088e455462e66115d6887a472237171a96c94`.
@@ -77,7 +77,7 @@ Status timestamp: 2026-09-27
 - Phase 5.6.4 clean-Windows evidence exact-package binding: PR #137 — **MERGED** as `ca6c0238004d199726a493af47c59baa321aa2bf`.
 - Phase 5.6.4 exact-package-bound accessibility preflight rehearsal: PR #138 — **MERGED / EXACT-HEAD CI GREEN** as `02f37e7efa8733b75800d6ffd7e1401b3f3c3646`; manual PPR-07 review remains explicitly required and unclaimed.
 - Phase 5.10.10 Windows Event 4625 encyclopedia promotion: PR #141 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `74121ee781f83dc078e588f6104d57b193fa5bbe`; Windows Security coverage advanced to `3/423`.
-- Phase 5.10.10 Windows Event 4672 encyclopedia promotion: PR #142 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `d98cdea42197c57328e6b2f1aad5fb884d191c95`; Windows Security coverage advanced to `4/423` with `419` remaining.
+- Phase 5.10.10 Windows Event 4672 encyclopedia promotion: PR #142 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `d98cdea42197c57328e6b2f1aad5fb884d191c95`; Windows Security coverage advanced to `5/423` with `419` remaining.
 - Approved product family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Repository visibility: **Public**
 - Release state: **First Preview engineering readiness READY / public release Pre-preview / unreleased**
@@ -157,7 +157,7 @@ Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that 
 - Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion: **ACTIVE / CONTROLLED COVERAGE EXPANSION**
   - Windows Security Auditing denominator: **FROZEN** to `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296`
   - Windows Security denominator: `423` unique Event IDs / `488` provider event-version definitions
-  - Windows Security encyclopedia-grade: `4/423` — Event IDs `4624`, `4625`, `4672`, `4688`; remaining `419`
+  - Windows Security encyclopedia-grade: `5/423` — Event IDs `4624`, `4625`, `4648`, `4672`, `4688`; remaining `418`
   - Sysmon semantic release: `15.22`; controlled structural schema: `4.91`
   - Sysmon denominator: `30`; encyclopedia-grade: `30/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20`, `21`, `22`, `23`, `24`, `25`, `26`, `27`, `28`, `29`, `255`; remaining `0`
   - machine-readable coverage authority: `content/encyclopedia/coverage-manifest.json`
