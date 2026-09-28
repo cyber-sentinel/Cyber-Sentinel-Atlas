@@ -13,8 +13,8 @@
       "denominator_scope": "Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296",
       "snapshot": "content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json",
       "denominator_count": 423,
-      "encyclopedia_grade_count": 5,
-      "remaining_count": 418
+      "encyclopedia_grade_count": 6,
+      "remaining_count": 417
     },
     {
       "id": "sysmon",
