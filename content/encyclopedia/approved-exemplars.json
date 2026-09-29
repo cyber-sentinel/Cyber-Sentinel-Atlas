@@ -5567,6 +5567,390 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4768",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4768",
+      "title": "Windows Security Event 4768 — A Kerberos authentication ticket (TGT) was requested",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4768",
+      "aliases": [
+        "4768",
+        "Event ID 4768",
+        "Windows 4768",
+        "Kerberos TGT requested",
+        "A Kerberos authentication ticket was requested"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4768",
+      "source_version": "event-4768-v0-v2-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4768",
+      "source_locator": "4768(S, F): A Kerberos authentication ticket (TGT) was requested",
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4768",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4768",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a Kerberos authentication-service TGT request on a domain controller, including account, krbtgt service, network origin, result, ticket/pre-authentication cryptography and—on updated Version 2 events—account/service/DC key capability context.",
+        "category": "Account Logon",
+        "subcategory": "Audit Kerberos Authentication Service",
+        "event_type": "Success/Failure",
+        "minimum_supported_generation": "Windows Server 2008",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Windows Server 2008 and later legacy shape",
+            "notes": "Legacy Event 4768 structure with account, service, network, result, ticket encryption, pre-authentication and certificate fields."
+          },
+          {
+            "version": "2",
+            "generation": "Windows Server 2016 and later after January 14, 2025 or later Security Cumulative Update",
+            "notes": "Updated Event 4768 adds ticket-response hash plus account/service/domain-controller encryption capability, client-advertised etype, session-key encryption and pre-authentication encryption fields."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Audit Kerberos Authentication Service success/failure auditing must be enabled on domain controllers where this telemetry is required.",
+          "Collection and normalization must preserve Event.Version because Version 2 contains security-relevant cryptographic capability fields absent from the legacy Version 0 event."
+        ],
+        "interpretation_note": "Event 4768 is high-volume domain-controller Kerberos TGT telemetry. Result Code 0x0 represents successful TGT issuance; non-zero results indicate failures except pre-authentication-specific codes 0x10 and 0x18, which Microsoft documents under Event 4771 instead. Interpret account, client address, result, pre-authentication type and encryption fields together.",
+        "scope_note": "Microsoft documents Event 4768 as generated only on Active Directory domain controllers."
+      },
+      "correlations": [
+        {
+          "target": "4771",
+          "key": "Account Name + Client Address + host/time",
+          "purpose": "correlate Kerberos pre-authentication failures that Microsoft emits separately from 4768 for applicable failure codes"
+        },
+        {
+          "target": "4740",
+          "key": "Account Name + time",
+          "purpose": "identify account lockout following repeated authentication-service failures"
+        },
+        {
+          "target": "4769",
+          "key": "Account/User + client + time",
+          "purpose": "follow successful TGT issuance into Kerberos service-ticket requests"
+        },
+        {
+          "target": "4624",
+          "key": "Account + client + time",
+          "purpose": "correlate Kerberos authentication to resulting Windows logon sessions"
+        },
+        {
+          "target": "endpoint/network telemetry",
+          "key": "Client Address + Client Port + time",
+          "purpose": "identify the originating system/process and validate Kerberos traffic"
+        }
+      ],
+      "analysis": [
+        "Use Result Code 0x6 bursts to investigate possible account enumeration, while distinguishing replication lag and legitimate stale principals.",
+        "Investigate TGTs using DES or RC4 in environments expected to use AES. Version 2 fields allow comparison of the ticket/session/pre-auth encryption actually selected with account, krbtgt service, domain-controller and client-advertised capabilities.",
+        "Prioritize high-value accounts with unusual Client Address, pre-authentication type, encryption downgrade, disabled/revoked account result codes or atypical ticket options.",
+        "Treat Version 0 and Version 2 separately in analytics: absence of Version 2 capability fields on a legacy event is not missing telemetry or evidence of downgrade."
+      ],
+      "value_dictionaries": {
+        "result_code": [
+          {
+            "value": "0x0",
+            "meaning": "KDC_ERR_NONE — TGT request completed without an error."
+          },
+          {
+            "value": "0x6",
+            "meaning": "KDC_ERR_C_PRINCIPAL_UNKNOWN — client principal/account was not found in the Kerberos database."
+          },
+          {
+            "value": "0x7",
+            "meaning": "KDC_ERR_S_PRINCIPAL_UNKNOWN — requested server/service principal was not found."
+          },
+          {
+            "value": "0x8",
+            "meaning": "KDC_ERR_PRINCIPAL_NOT_UNIQUE — multiple principal entries conflict."
+          },
+          {
+            "value": "0xC",
+            "meaning": "KDC_ERR_POLICY — request was rejected by KDC policy."
+          },
+          {
+            "value": "0xE",
+            "meaning": "KDC_ERR_ETYPE_NOTSUPP — requested encryption type is not supported."
+          },
+          {
+            "value": "0x12",
+            "meaning": "KDC_ERR_CLIENT_REVOKED — client credentials are revoked, disabled, expired, locked or otherwise restricted."
+          },
+          {
+            "value": "0x17",
+            "meaning": "KDC_ERR_KEY_EXPIRED — account password/key is expired."
+          },
+          {
+            "value": "0x19",
+            "meaning": "KDC_ERR_PREAUTH_REQUIRED — additional pre-authentication is required."
+          },
+          {
+            "value": "0x1F",
+            "meaning": "KRB_AP_ERR_BAD_INTEGRITY — integrity check failed."
+          },
+          {
+            "value": "0x22",
+            "meaning": "KRB_AP_ERR_REPEAT — replay was detected."
+          },
+          {
+            "value": "0x29",
+            "meaning": "KRB_AP_ERR_MODIFIED — message integrity/checksum did not match."
+          }
+        ],
+        "encryption_type": [
+          {
+            "value": "0x1",
+            "meaning": "DES-CBC-CRC — legacy DES; disabled by default on modern Windows."
+          },
+          {
+            "value": "0x3",
+            "meaning": "DES-CBC-MD5 — legacy DES; disabled by default on modern Windows."
+          },
+          {
+            "value": "0x11",
+            "meaning": "AES128-CTS-HMAC-SHA1-96."
+          },
+          {
+            "value": "0x12",
+            "meaning": "AES256-CTS-HMAC-SHA1-96."
+          },
+          {
+            "value": "0x17",
+            "meaning": "RC4-HMAC."
+          },
+          {
+            "value": "0x18",
+            "meaning": "RC4-HMAC-EXP."
+          },
+          {
+            "value": "0xFFFFFFFF",
+            "meaning": "Failure placeholder/no issued ticket encryption type."
+          }
+        ],
+        "pre_authentication_type": [
+          {
+            "value": "0",
+            "meaning": "No pre-authentication."
+          },
+          {
+            "value": "2",
+            "meaning": "PA-ENC-TIMESTAMP — standard password pre-authentication."
+          },
+          {
+            "value": "11",
+            "meaning": "PA-ETYPE-INFO."
+          },
+          {
+            "value": "15",
+            "meaning": "PA-PK-AS-REP_OLD — smart-card related."
+          },
+          {
+            "value": "16",
+            "meaning": "PA-PK-AS-REQ — smart-card/PKINIT request."
+          },
+          {
+            "value": "17",
+            "meaning": "PA-PK-AS-REP — smart-card/PKINIT response."
+          },
+          {
+            "value": "19",
+            "meaning": "PA-ETYPE-INFO2."
+          },
+          {
+            "value": "20",
+            "meaning": "PA-SVR-REFERRAL-INFO."
+          },
+          {
+            "value": "138",
+            "meaning": "PA-ENCRYPTED-CHALLENGE — Kerberos armoring/FAST."
+          }
+        ]
+      },
+      "fields": [
+        {
+          "key": "account-information.account-name",
+          "section": "Account Information",
+          "native_name": "Account Name",
+          "type": "UnicodeString",
+          "meaning": "Account for which the TGT was requested."
+        },
+        {
+          "key": "account-information.supplied-realm-name",
+          "section": "Account Information",
+          "native_name": "Supplied Realm Name",
+          "type": "UnicodeString",
+          "meaning": "Kerberos realm/domain supplied with the client principal."
+        },
+        {
+          "key": "account-information.user-id",
+          "section": "Account Information",
+          "native_name": "User ID",
+          "type": "SID",
+          "meaning": "SID of the account for which the TGT was requested; failure events can contain NULL SID."
+        },
+        {
+          "key": "service-information.service-name",
+          "section": "Service Information",
+          "native_name": "Service Name",
+          "type": "UnicodeString",
+          "meaning": "Kerberos TGT service principal, normally krbtgt or krbtgt/REALM on failures."
+        },
+        {
+          "key": "service-information.service-id",
+          "section": "Service Information",
+          "native_name": "Service ID",
+          "type": "SID",
+          "meaning": "SID of the Kerberos service account; failure events can contain NULL SID."
+        },
+        {
+          "key": "additional-information.ticket-options",
+          "section": "Additional Information",
+          "native_name": "Ticket Options",
+          "type": "HexInt32",
+          "meaning": "Kerberos ticket-option bitmask requested by the client."
+        },
+        {
+          "key": "additional-information.result-code",
+          "section": "Additional Information",
+          "native_name": "Result Code",
+          "type": "HexInt32",
+          "meaning": "KDC result code for the TGT request.",
+          "values_ref": "result_code"
+        },
+        {
+          "key": "additional-information.ticket-encryption-type",
+          "section": "Additional Information",
+          "native_name": "Ticket Encryption Type",
+          "type": "HexInt32",
+          "meaning": "Cryptographic suite used for the issued TGT; failure events can use 0xFFFFFFFF.",
+          "values_ref": "encryption_type"
+        },
+        {
+          "key": "additional-information.pre-authentication-type",
+          "section": "Additional Information",
+          "native_name": "Pre-Authentication Type",
+          "type": "UnicodeString",
+          "meaning": "Kerberos pre-authentication mechanism used for the TGT request.",
+          "values_ref": "pre_authentication_type"
+        },
+        {
+          "key": "network-information.client-address",
+          "section": "Network Information",
+          "native_name": "Client Address",
+          "type": "UnicodeString/IP",
+          "meaning": "IP address from which the TGT request reached the domain controller."
+        },
+        {
+          "key": "network-information.client-port",
+          "section": "Network Information",
+          "native_name": "Client Port",
+          "type": "UnicodeString/port",
+          "meaning": "Source port of the client Kerberos connection; zero can represent localhost."
+        },
+        {
+          "key": "certificate-information.certificate-issuer-name",
+          "section": "Certificate Information",
+          "native_name": "Certificate Issuer Name",
+          "type": "UnicodeString",
+          "meaning": "Issuing CA name when certificate/smart-card pre-authentication is used."
+        },
+        {
+          "key": "certificate-information.certificate-serial-number",
+          "section": "Certificate Information",
+          "native_name": "Certificate Serial Number",
+          "type": "UnicodeString",
+          "meaning": "Certificate serial number when certificate/smart-card pre-authentication is used."
+        },
+        {
+          "key": "certificate-information.certificate-thumbprint",
+          "section": "Certificate Information",
+          "native_name": "Certificate Thumbprint",
+          "type": "UnicodeString",
+          "meaning": "Certificate thumbprint when certificate/smart-card pre-authentication is used."
+        },
+        {
+          "key": "ticket-information.response-ticket-hash",
+          "section": "Ticket Information",
+          "native_name": "Response ticket hash",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: hash of the TGT response returned by the domain controller."
+        },
+        {
+          "key": "account-information.msds-supported-encryption-types",
+          "section": "Account Information",
+          "native_name": "MSDS-SupportedEncryptionTypes",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: account encryption types advertised/configured in Active Directory."
+        },
+        {
+          "key": "account-information.available-keys",
+          "section": "Account Information",
+          "native_name": "Available Keys",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: Kerberos keys available for the account based on password/key history."
+        },
+        {
+          "key": "service-information.msds-supported-encryption-types",
+          "section": "Service Information",
+          "native_name": "MSDS-SupportedEncryptionTypes",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: encryption types supported by the krbtgt service account."
+        },
+        {
+          "key": "service-information.available-keys",
+          "section": "Service Information",
+          "native_name": "Available Keys",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: Kerberos keys available for the service account."
+        },
+        {
+          "key": "domain-controller-information.msds-supported-encryption-types",
+          "section": "Domain Controller Information",
+          "native_name": "MSDS-SupportedEncryptionTypes",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: encryption types supported by the issuing domain controller."
+        },
+        {
+          "key": "domain-controller-information.available-keys",
+          "section": "Domain Controller Information",
+          "native_name": "Available Keys",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: Kerberos keys available to the issuing domain controller."
+        },
+        {
+          "key": "network-information.advertized-etypes",
+          "section": "Network Information",
+          "native_name": "Advertized Etypes",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: encryption types advertised by the Kerberos client."
+        },
+        {
+          "key": "additional-information.session-encryption-type",
+          "section": "Additional Information",
+          "native_name": "Session Encryption Type",
+          "type": "HexInt32",
+          "meaning": "Version 2 field: cryptographic suite selected for the TGT session key.",
+          "values_ref": "encryption_type"
+        },
+        {
+          "key": "additional-information.pre-authentication-encryption-type",
+          "section": "Additional Information",
+          "native_name": "Pre-Authentication EncryptionType",
+          "type": "HexInt32",
+          "meaning": "Version 2 field: cryptographic suite selected for the pre-authentication exchange.",
+          "values_ref": "encryption_type"
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4771",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4771",
