@@ -4,9 +4,9 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `a2ce039ef8c2b24dfccc26d7fefb56f38efb859e`
+- Last Reviewed Main SHA: `3f693d60aa06c27144ad8689d1371c379e14f4be`
 - Live `main` remains authoritative; this durable snapshot intentionally does not claim its own eventual merge SHA as the current HEAD.
-- Latest merged corpus baseline at branch start: `d98cdea42197c57328e6b2f1aad5fb884d191c95` — Windows Security is `4/423` with `419` remaining. This branch proposes Event 4648 as the next encyclopedia-grade increment, producing `5/423` with `418` remaining; Sysmon remains `30/30`.
+- Latest merged corpus baseline at branch start: `3f693d60aa06c27144ad8689d1371c379e14f4be` — Windows Security is `5/423` with `418` remaining after PR #144. This branch proposes Event 4771 as the next encyclopedia-grade increment, producing `6/423` with `417` remaining; Sysmon remains `30/30`.
 - PR #85 exact-head baseline: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene `35429390496`, Phase 5.3.4 Canaries `35429390498`, and Phase 5.10.5 Usable Data Preview `35429390479` all **SUCCESS**
 - PR #85 merged to `main` as `4bfe222eb708347ea0769da400c40dbdaf289b69`; post-merge Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` are all **SUCCESS / POST-MERGE VERIFIED**.
 - PR #89 exact-head `34225caf471b215717c3a8b1dcaa01799b01abd7`: all applicable checks completed successfully, including Foundation Hygiene `35437483777`, Phase 5.3.4 Canaries `35437483740`, Production Go Architecture `35437483746`, Shared Core Architecture `35437483749`, Governance Hygiene `35437483754`, Supply Chain Closure `35437483745`, Redistribution Closure `35437483753`, First-Party License Readiness `35437483751`, and Public Preview Readiness `35437483747`; merged as `4ea088e455462e66115d6887a472237171a96c94`.
@@ -72,7 +72,8 @@
 - Post-Sysmon control-plane/release hardening: PRs #131 through #138 — **MERGED**. This sequence synchronized status docs, hardened PPR-04 freeze evidence, preserved exact Go license material, hardened Tauri asset redistribution evidence, enforced portable-ZIP safety, bound clean-Windows evidence to exact package bytes, and bound automated accessibility preflight evidence to the exact package without claiming manual PPR-07 completion.
 - Current release-control baseline: PR #138 / `main@02f37e7efa8733b75800d6ffd7e1401b3f3c3646`; exact-head workflows `35883251314`, `35883250911`, and `35883250815` — **SUCCESS**.
 - Phase 5.10.10 Windows Event 4625 encyclopedia promotion: PR #141 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `74121ee781f83dc078e588f6104d57b193fa5bbe`; Windows Security coverage advanced to `3/423`.
-- Phase 5.10.10 Windows Event 4672 encyclopedia promotion: PR #142 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `d98cdea42197c57328e6b2f1aad5fb884d191c95`; Windows Security coverage advanced to `5/423` with `419` remaining.
+- Phase 5.10.10 Windows Event 4672 encyclopedia promotion: PR #142 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `d98cdea42197c57328e6b2f1aad5fb884d191c95`; Windows Security coverage advanced to `4/423` with `419` remaining.
+- Phase 5.10.10 Windows Event 4648 encyclopedia promotion: PR #144 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `3f693d60aa06c27144ad8689d1371c379e14f4be`; packaged clean-Windows 4648 acceptance and Supply Chain Closure both passed; Windows Security coverage advanced to `5/423` with `418` remaining.
 - Approved Product Family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
@@ -158,7 +159,7 @@ ATLAS project continuity is repository-backed rather than chat-backed.
   - 5.10.10 Windows & Sysmon Knowledge Coverage Expansion: **ACTIVE / CONTROLLED COVERAGE EXPANSION**
     - Windows Security Auditing denominator: **FROZEN** for `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296`
     - Windows Security controlled denominator: `423` unique Event IDs / `488` provider event-version definitions
-    - Windows Security encyclopedia grade: `5/423` — Event IDs `4624`, `4625`, `4648`, `4672`, `4688`; remaining `418`
+    - Windows Security encyclopedia grade: `6/423` — Event IDs `4624`, `4625`, `4648`, `4672`, `4688`, `4771`; remaining `417`
     - Sysmon semantic release: `15.22`; controlled structural schema: `4.91`
     - Sysmon denominator: `30` documented/current Event IDs; encyclopedia grade: `30/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20`, `21`, `22`, `23`, `24`, `25`, `26`, `27`, `28`, `29`, `255`; remaining `0`
     - global Windows denominator: **NOT FROZEN**; global completion percentage intentionally undefined
