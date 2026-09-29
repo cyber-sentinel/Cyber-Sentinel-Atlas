@@ -50,6 +50,8 @@ def test_02_approved_event_identities_and_search_aliases():
     assert validator.resolve_query(records, "Explicit credentials") == ["atlas:event:microsoft.windows.security:4648"]
     assert validator.resolve_query(records, "4672") == ["atlas:event:microsoft.windows.security:4672"]
     assert validator.resolve_query(records, "Special Logon") == ["atlas:event:microsoft.windows.security:4672"]
+    assert validator.resolve_query(records, "4740") == ["atlas:event:microsoft.windows.security:4740"]
+    assert validator.resolve_query(records, "Account lockout") == ["atlas:event:microsoft.windows.security:4740"]
     assert validator.resolve_query(records, "4771") == ["atlas:event:microsoft.windows.security:4771"]
     assert validator.resolve_query(records, "Kerberos preauth failure") == ["atlas:event:microsoft.windows.security:4771"]
     assert validator.resolve_query(records, "Sysmon 1") == ["atlas:event:microsoft.sysmon:1"]
@@ -320,6 +322,39 @@ def test_04g_windows_4672_privilege_dictionary_and_uws_boundary():
     assert uws_evidence[0]["object"]["value"]["redistribution"] == "source-link-and-coverage-benchmark-only"
 
 
+def test_04j_windows_4740_field_dictionary_matches_approved_exemplar():
+    records = by_id(records_with_paths())
+    prefix = "atlas:field:microsoft.windows.security:4740."
+    fields = sorted(key for key in records if key.startswith(prefix))
+    assert len(fields) == 8
+    expected = {
+        "4740.subject.security-id",
+        "4740.subject.account-name",
+        "4740.subject.account-domain",
+        "4740.subject.logon-id",
+        "4740.locked-out-account.security-id",
+        "4740.locked-out-account.account-name",
+        "4740.locked-out-account.account-domain",
+        "4740.additional-information.caller-computer-name",
+    }
+    actual = {value.rsplit(":", 1)[-1] for value in fields}
+    assert actual == expected
+
+
+def test_04k_windows_4740_uws_boundary():
+    records = by_id(records_with_paths())
+    source = records["atlas:source:atlas.source:ultimate-windows-security-event-4740"]
+    assert source["redistribution"]["policy"] == "prohibited"
+    uws_evidence = [
+        r for r in records.values()
+        if r.get("record_kind") == "claim"
+        and any(e.get("source_id") == source["id"] for e in r.get("evidence", []))
+    ]
+    assert len(uws_evidence) == 1
+    assert uws_evidence[0]["predicate"] == "telemetry.source"
+    assert uws_evidence[0]["object"]["value"]["redistribution"] == "source-link-and-coverage-benchmark-only"
+
+
 def test_04h_windows_4771_field_dictionary_matches_approved_exemplar():
     records = by_id(records_with_paths())
     prefix = "atlas:field:microsoft.windows.security:4771."
@@ -386,7 +421,7 @@ def test_05_every_field_has_one_semantics_claim_and_has_field_relationship():
     claim_subjects = {r["subject_id"] for r in claims if r["subject_id"] in field_ids}
     relationship_targets = {r["to"] for r in rels}
 
-    assert len(field_ids) == 370
+    assert len(field_ids) == 378
     assert claim_subjects == field_ids
     assert relationship_targets == field_ids
 
