@@ -5423,6 +5423,150 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4740",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4740",
+      "title": "Windows Security Event 4740 — A user account was locked out",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4740",
+      "aliases": [
+        "4740",
+        "Event ID 4740",
+        "Windows 4740",
+        "Account lockout",
+        "A user account was locked out"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4740",
+      "source_version": "event-4740-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4740",
+      "source_locator": "4740(S): A user account was locked out",
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4740",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4740",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records that a user account became locked out, preserving the subject context that performed the lockout, the affected account identity and the caller computer name associated with the triggering logon attempt when available.",
+        "category": "Account Management",
+        "subcategory": "Audit User Account Management",
+        "event_type": "Success",
+        "minimum_supported_generation": "Windows Vista / Windows Server 2008",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Windows Vista / Windows Server 2008 and later documented generations",
+            "notes": "Documented Event 4740 structure for account lockout telemetry."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Audit User Account Management success auditing must be enabled where account-lockout telemetry is required.",
+          "Collection should preserve preceding authentication failures and endpoint/service context so the lockout can be traced back to its credential source."
+        ],
+        "interpretation_note": "Event 4740 records the lockout outcome, not the complete cause. Repeated bad passwords, stale stored credentials, services, scheduled tasks, mapped resources, mobile/VPN clients or hostile password guessing can all precede the same lockout. Correlate earlier authentication failures before attributing intent.",
+        "scope_note": "Microsoft documents this event for user-account lockouts on domain controllers, member servers and workstations. Caller Computer Name is operationally useful but can be blank or incomplete and is a computer name rather than an IP address."
+      },
+      "correlations": [
+        {
+          "target": "4625",
+          "key": "Locked-out account + caller/source context + time",
+          "purpose": "identify failed logon attempts immediately preceding the lockout and extract logon type, process and network context"
+        },
+        {
+          "target": "4771",
+          "key": "Account Name + client/caller host + time",
+          "purpose": "identify Kerberos pre-authentication failures that accumulated before the lockout"
+        },
+        {
+          "target": "4776",
+          "key": "Account Name + workstation/source + time",
+          "purpose": "identify NTLM credential validation failures associated with the same lockout sequence"
+        },
+        {
+          "target": "4624",
+          "key": "Account + host + time",
+          "purpose": "determine whether a successful logon occurred before or after the lockout window"
+        },
+        {
+          "target": "endpoint telemetry",
+          "key": "Caller Computer Name + time",
+          "purpose": "trace stale credentials to services, scheduled tasks, scripts, mapped resources, VPN clients or stored credentials on the originating endpoint"
+        }
+      ],
+      "analysis": [
+        "Prioritize lockouts involving privileged, service, break-glass or otherwise high-value accounts, especially when the caller computer is unexpected.",
+        "Use Caller Computer Name as an origin pivot but do not treat it as a guaranteed source identity; the field can be blank, stale or insufficient by itself.",
+        "Correlate the minutes preceding 4740 with 4625, 4771 and 4776 to distinguish password guessing from a single stale-credential source repeatedly retrying authentication.",
+        "If the Subject Security ID is not the expected SYSTEM context, inspect the account-management path more closely because the lockout was not emitted under the common system context."
+      ],
+      "fields": [
+        {
+          "key": "subject.security-id",
+          "section": "Subject",
+          "native_name": "Security ID",
+          "type": "SID",
+          "meaning": "SID of the security context that performed or recorded the lockout operation."
+        },
+        {
+          "key": "subject.account-name",
+          "section": "Subject",
+          "native_name": "Account Name",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject associated with the lockout operation."
+        },
+        {
+          "key": "subject.account-domain",
+          "section": "Subject",
+          "native_name": "Account Domain",
+          "type": "UnicodeString",
+          "meaning": "Domain or local-computer context of the subject account."
+        },
+        {
+          "key": "subject.logon-id",
+          "section": "Subject",
+          "native_name": "Logon ID",
+          "type": "HexInt64",
+          "meaning": "Identifier of the subject logon session associated with the lockout operation.",
+          "correlation": "Correlate with nearby events carrying the same Logon ID on the same host."
+        },
+        {
+          "key": "locked-out-account.security-id",
+          "section": "Account That Was Locked Out",
+          "native_name": "Security ID",
+          "type": "SID",
+          "meaning": "SID of the account that became locked out."
+        },
+        {
+          "key": "locked-out-account.account-name",
+          "section": "Account That Was Locked Out",
+          "native_name": "Account Name",
+          "type": "UnicodeString",
+          "meaning": "Name of the user account that became locked out."
+        },
+        {
+          "key": "locked-out-account.account-domain",
+          "section": "Account That Was Locked Out",
+          "native_name": "Account Domain",
+          "type": "UnicodeString",
+          "meaning": "Domain/computer context carried in the raw target-domain field for the locked-out account."
+        },
+        {
+          "key": "additional-information.caller-computer-name",
+          "section": "Additional Information",
+          "native_name": "Caller Computer Name",
+          "type": "UnicodeString",
+          "meaning": "Computer name associated with the logon attempt after which the target account was locked out.",
+          "notes": "May be blank or incomplete. This is a computer-name pivot, not an IP address."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4771",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4771",

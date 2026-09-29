@@ -16,6 +16,7 @@ EXPECTED_EVENT_4624 = "atlas:event:microsoft.windows.security:4624"
 EXPECTED_EVENT_4625 = "atlas:event:microsoft.windows.security:4625"
 EXPECTED_EVENT_4648 = "atlas:event:microsoft.windows.security:4648"
 EXPECTED_EVENT_4672 = "atlas:event:microsoft.windows.security:4672"
+EXPECTED_EVENT_4740 = "atlas:event:microsoft.windows.security:4740"
 EXPECTED_EVENT_4771 = "atlas:event:microsoft.windows.security:4771"
 EXPECTED_SYSMON = "atlas:event:microsoft.sysmon:1"
 EXPECTED_SYSMON_3 = "atlas:event:microsoft.sysmon:3"
@@ -296,10 +297,32 @@ def main() -> int:
         if record_4672.get("id") != EXPECTED_EVENT_4672:
             raise RuntimeError("Windows Event 4672 record identity mismatch")
 
-        search_4771 = request(
+        search_4740 = request(
             process.stdin,
             process.stdout,
             "q3d",
+            "search.query",
+            {"query": "4740", "graph_depth": 1, "limit": 10},
+        )
+        windows_4740_search_ok = search_contains_target(search_4740, EXPECTED_EVENT_4740)
+        if not windows_4740_search_ok:
+            raise RuntimeError(
+                f"Windows Event 4740 was not returned by deterministic search: {search_4740}"
+            )
+        record_4740 = request(
+            process.stdin,
+            process.stdout,
+            "r3d",
+            "record.get",
+            {"id": EXPECTED_EVENT_4740},
+        )
+        if record_4740.get("id") != EXPECTED_EVENT_4740:
+            raise RuntimeError("Windows Event 4740 record identity mismatch")
+
+        search_4771 = request(
+            process.stdin,
+            process.stdout,
+            "q3e",
             "search.query",
             {"query": "4771", "graph_depth": 1, "limit": 10},
         )
@@ -311,7 +334,7 @@ def main() -> int:
         record_4771 = request(
             process.stdin,
             process.stdout,
-            "r3d",
+            "r3e",
             "record.get",
             {"id": EXPECTED_EVENT_4771},
         )
@@ -378,6 +401,8 @@ def main() -> int:
             "windows_4648_record_ok": True,
             "windows_4672_search_ok": windows_4672_search_ok,
             "windows_4672_record_ok": True,
+            "windows_4740_search_ok": windows_4740_search_ok,
+            "windows_4740_record_ok": True,
             "windows_4771_search_ok": windows_4771_search_ok,
             "windows_4771_record_ok": True,
             "sysmon_3_search_ok": sysmon_3_search_ok,
