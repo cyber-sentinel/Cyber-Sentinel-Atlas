@@ -4,9 +4,9 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `489609b2ae1fed5a6fe597b575ff737f29de5439`
+- Last Reviewed Main SHA: `9d54501bd3d7013637d7e83c9174d3f91a683aac`
 - Live `main` remains authoritative; this durable snapshot intentionally does not claim its own eventual merge SHA as the current HEAD.
-- Latest merged corpus baseline at branch start: `489609b2ae1fed5a6fe597b575ff737f29de5439` — Windows Security is `7/423` with `416` remaining after PR #146. This branch proposes Event 4768 as the next encyclopedia-grade increment, producing `8/423` with `415` remaining; Sysmon remains `30/30`.
+- Latest reviewed merged corpus baseline: `9d54501bd3d7013637d7e83c9174d3f91a683aac` — PR #148 promoted Event 4768; Windows Security is `8/423` with `415` remaining and Sysmon remains `30/30`.
 - PR #85 exact-head baseline: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene `35429390496`, Phase 5.3.4 Canaries `35429390498`, and Phase 5.10.5 Usable Data Preview `35429390479` all **SUCCESS**
 - PR #85 merged to `main` as `4bfe222eb708347ea0769da400c40dbdaf289b69`; post-merge Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` are all **SUCCESS / POST-MERGE VERIFIED**.
 - PR #89 exact-head `34225caf471b215717c3a8b1dcaa01799b01abd7`: all applicable checks completed successfully, including Foundation Hygiene `35437483777`, Phase 5.3.4 Canaries `35437483740`, Production Go Architecture `35437483746`, Shared Core Architecture `35437483749`, Governance Hygiene `35437483754`, Supply Chain Closure `35437483745`, Redistribution Closure `35437483753`, First-Party License Readiness `35437483751`, and Public Preview Readiness `35437483747`; merged as `4ea088e455462e66115d6887a472237171a96c94`.
@@ -76,6 +76,7 @@
 - Phase 5.10.10 Windows Event 4648 encyclopedia promotion: PR #144 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `3f693d60aa06c27144ad8689d1371c379e14f4be`; packaged clean-Windows 4648 acceptance and Supply Chain Closure both passed; Windows Security coverage advanced to `5/423` with `418` remaining.
 - Phase 5.10.10 Windows Event 4771 encyclopedia promotion: PR #145 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `9204064a8f1e78394a89b89c4665a53c66560591`; packaged clean-Windows 4771 acceptance and Supply Chain Closure both passed; Windows Security coverage advanced to `6/423` with `417` remaining.
 - Phase 5.10.10 Windows Event 4740 encyclopedia promotion: PR #146 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `489609b2ae1fed5a6fe597b575ff737f29de5439`; packaged clean-Windows 4740 acceptance passed; Windows Security coverage advanced to `7/423` with `416` remaining.
+- Phase 5.10.10 Windows Event 4768 encyclopedia promotion: PR #148 — **MERGED / ALL NINE EXACT-HEAD WORKFLOWS SUCCESS**; merged as `9d54501bd3d7013637d7e83c9174d3f91a683aac`; version-aware Event 4768 (`v0` + updated `v2`) is enforced by deterministic corpus, package/probe and clean-Windows acceptance; Windows Security coverage advanced to `8/423` with `415` remaining.
 - Approved Product Family: Desktop (Windows/Linux/macOS), CLI (Windows/Linux/macOS), Web, PWA (iOS Safari), API, Native Mobile (iOS/Android)
 - Architecture Sync Status: **GREEN**
 - Repository visibility: **Public**
