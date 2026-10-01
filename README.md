@@ -156,6 +156,24 @@ Telemetry content-depth contract: [`docs/content/telemetry-record-content-contra
 
 Workspace UX authority: [`docs/ux/ux-information-architecture.md`](docs/ux/ux-information-architecture.md) and [`docs/ux/workspace-product-review.md`](docs/ux/workspace-product-review.md).
 
+## Documentation Hub
+
+The repository documentation is organized around durable product, architecture, coverage, release, and operating-state authorities:
+
+| Area | Primary document |
+| --- | --- |
+| Documentation index | [`docs/README.md`](docs/README.md) |
+| Current authoritative project snapshot | [`docs/current-status.md`](docs/current-status.md) |
+| Durable project state | [`docs/project-state.md`](docs/project-state.md) |
+| Delivery roadmap | [`docs/roadmap.md`](docs/roadmap.md) |
+| Product surfaces | [`docs/product-surfaces.md`](docs/product-surfaces.md) |
+| Windows / Sysmon coverage plan | [`docs/windows-sysmon-coverage-plan.md`](docs/windows-sysmon-coverage-plan.md) |
+| Public Preview readiness | [`docs/releases/phase-5.10-public-preview-readiness.md`](docs/releases/phase-5.10-public-preview-readiness.md) |
+| Architecture decisions | [`docs/adr/`](docs/adr/) |
+| UX / analyst workspace | [`docs/ux/`](docs/ux/) |
+
+Machine-readable coverage and release-state files remain authoritative where a human-readable page and a generated ledger ever disagree.
+
 ## Architecture
 
 <p align="center">
