@@ -1,6 +1,6 @@
-# ATLAS Session / Agent Handoff Template
+# ATLAS Engineering Handoff Template
 
-Use this template when work moves between chats, agents, machines, or engineering shifts.
+Use this template when work moves between engineering workers, machines, worktrees, shifts, or execution processes.
 
 ## Control plane
 
@@ -60,7 +60,7 @@ For each blocker, include the exact failing gate, job, command, or decision depe
 
 ## Next safe action
 
-Write one concrete next action that can be executed without reconstructing the previous conversation.
+Write one concrete next action that can be executed directly from the durable project record without reconstructing undocumented prior context.
 
 ## Decisions requiring Product Owner
 
