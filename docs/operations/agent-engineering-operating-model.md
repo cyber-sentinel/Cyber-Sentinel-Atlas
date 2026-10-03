@@ -1,14 +1,14 @@
-# ATLAS Agent Engineering Operating Model
+# ATLAS Engineering Orchestration Operating Model
 
 Status: **ACTIVE OPERATING STANDARD**
 
-This document defines how human decision-making, AI-assisted engineering, GitHub, and CI runners are separated so ATLAS development can continue safely across chat limits, machines, and future multi-agent execution.
+This document defines how product decisions, engineering orchestration, isolated implementation work, GitHub and CI verification are separated so ATLAS development remains resumable, reviewable and auditable across machines, sessions and parallel workstreams.
 
 ## Operating principle
 
-The repository is the durable control plane. A chat session is not the project database.
+The repository-backed engineering record is durable; individual interactive sessions are not project databases.
 
-Architecture decisions, current state, implementation evidence, release gates, branch history, pull requests, and CI results must be reconstructible from GitHub.
+Architecture decisions, current state, implementation evidence, release gates, branch history, pull requests and CI results must be reconstructible from repository state and controlled project records.
 
 ## Roles
 
@@ -25,7 +25,7 @@ Owns product intent and explicit business/security decisions, including:
 
 ### Technical Lead / Orchestrator
 
-Owns execution sequencing:
+Owns execution sequencing and engineering control:
 
 - reads authoritative project state;
 - decomposes work into bounded tasks;
@@ -33,13 +33,14 @@ Owns execution sequencing:
 - enforces architectural invariants;
 - reviews implementation and evidence;
 - controls merge ordering;
-- synchronizes project-state documentation.
+- synchronizes project-state documentation;
+- prevents duplicate or conflicting work.
 
-The orchestrator does not bypass CI or release gates.
+The orchestrator does not bypass CI, release gates or source-of-truth controls.
 
-### Implementation Agents
+### Engineering Workers
 
-Implementation agents work only on assigned bounded scopes. Each agent receives:
+Engineering workers operate only on assigned bounded scopes. Each work unit receives:
 
 - objective;
 - authoritative inputs;
@@ -48,11 +49,11 @@ Implementation agents work only on assigned bounded scopes. Each agent receives:
 - prohibited changes;
 - Definition of Done.
 
-Agents use isolated branches/worktrees or containers and do not share an uncommitted working directory.
+Workers use isolated branches/worktrees or containers and do not share an uncommitted mutable working directory.
 
 ### CI Runners
 
-CI runners are verification infrastructure, not development agents.
+CI runners are verification infrastructure, not development workspaces.
 
 Their responsibilities are:
 
@@ -63,71 +64,33 @@ Their responsibilities are:
 - evidence generation;
 - clean-machine acceptance where defined.
 
-Do not install a general-purpose autonomous development agent on production CI runners unless a separately reviewed design explicitly requires it.
+General development tooling, persistent orchestration state and broad credentials must remain outside the CI runner boundary unless a separately reviewed design explicitly requires otherwise.
 
-## Current interim execution mode
+## Current execution model
 
-Until a dedicated agent-control server is deployed:
-
-```text
-Product Owner
-      ↓
-Technical Lead / Chat Orchestrator
-      ↓
-GitHub branches + PRs
-      ↓
-Existing Linux / Windows CI runners
-      ↓
-Review → Merge → Post-merge verification
-```
-
-This mode remains valid even if a chat reaches its context limit because authoritative state is written back to the repository.
-
-## Target multi-agent execution mode
-
-A future dedicated Agent Control Node may run the engineering workers:
+ATLAS uses a repository-backed control model in which product intent, engineering coordination and verification remain separated:
 
 ```text
 Product Owner
       ↓
 Technical Lead / Orchestrator
       ↓
-Agent Control Node
-      ├── Planner / Coordinator
-      ├── Implementation Agent A → isolated worktree/container
-      ├── Implementation Agent B → isolated worktree/container
-      ├── Test / Review Agent      → read-only or review branch
-      └── Documentation Agent      → bounded documentation branch
-                    ↓
-                  GitHub
-                    ↓
-          Linux / Windows CI Runners
-                    ↓
-          Review → Merge → Verification
+Engineering Control Plane
+      ↓
+isolated work units / branches / worktrees
+      ↓
+GitHub PRs
+      ↓
+Linux / Windows CI runners
+      ↓
+Review → Merge → Post-merge Verification
 ```
 
-The Agent Control Node must not replace GitHub as source of truth and must not bypass branch/PR/CI controls.
-
-## Recommended initial Agent Control Node
-
-A practical starting point for parallel repository engineering:
-
-- Ubuntu 24.04 LTS;
-- 16 vCPU;
-- 64 GB RAM;
-- 500 GB NVMe minimum;
-- 1 TB NVMe preferred if multiple concurrent worktrees, Rust/Tauri caches, artifacts, and containers are retained;
-- no GPU required for Codex-style code agents;
-- encrypted storage where supported;
-- SSH restricted to administrative identities;
-- outbound network access limited to required GitHub/package registries;
-- no production secrets on the node.
-
-Capacity should scale from observed concurrency rather than from agent count alone.
+The engineering control plane may coordinate multiple bounded work units, but GitHub remains authoritative for committed source, branch/PR history and review evidence. Canonical task coordination must not weaken repository governance or CI gates.
 
 ## Work isolation
 
-One task equals one branch. One mutable worktree belongs to one active implementation agent.
+One mutable work unit maps to one isolated branch/worktree. A worker must not share an uncommitted working directory with another concurrent writer.
 
 Recommended naming:
 
@@ -139,7 +102,7 @@ test/<objective>
 chore/<objective>
 ```
 
-Concurrent agents may work in parallel only when their write sets are independent. If two tasks touch the same core files or generated artifacts, sequence them or explicitly define dependency branches.
+Concurrent work is allowed only when write sets are independent. If two tasks touch the same core files or generated artifacts, sequence them or define an explicit dependency order.
 
 ## Task state machine
 
@@ -167,11 +130,11 @@ POST_MERGE_VERIFIED
 DONE
 ```
 
-Any failed mandatory gate moves the task back to `IN_PROGRESS` or `BLOCKED`; it does not permit weakening the gate.
+Any failed mandatory gate moves the task back to `IN_PROGRESS` or `BLOCKED`; it never authorizes weakening the gate.
 
 ## Long-running work
 
-Long-running work must be checkpointed through durable artifacts:
+Long-running work must be checkpointed through durable artifacts such as:
 
 - commits;
 - branches;
@@ -180,13 +143,14 @@ Long-running work must be checkpointed through durable artifacts:
 - CI artifacts;
 - machine-readable coverage/readiness files;
 - `docs/project-state.md`;
-- `docs/current-status.md`.
+- `docs/current-status.md`;
+- controlled orchestration evidence where applicable.
 
-No task should depend on an uninterrupted chat stream to remain recoverable.
+No workstream should depend on an uninterrupted interactive session to remain recoverable.
 
 ## Handoff protocol
 
-When a session, agent, or machine changes, the next executor should need only:
+A replacement executor should be able to recover the required project state from:
 
 1. repository URL;
 2. current `main` SHA;
@@ -195,29 +159,32 @@ When a session, agent, or machine changes, the next executor should need only:
 5. `docs/current-status.md`;
 6. `docs/roadmap.md`;
 7. relevant open PR/issue links;
-8. relevant ADR and gate documents.
+8. relevant ADR and gate documents;
+9. any required controlled orchestration checkpoint/evidence references.
 
 If additional private context is required, that dependency must be explicit rather than silently assumed.
 
-## Security controls for agent execution
+## Security controls for engineering orchestration
 
 - use least-privilege GitHub credentials;
 - separate read/review credentials from write/merge authority where practical;
-- never expose signing keys or production credentials to general implementation agents;
-- require human authorization for licensing, signing-provider, key-custody, and public-release decisions;
+- never expose signing keys or production credentials to general implementation workers;
+- require explicit authorization for licensing, signing-provider, key-custody and public-release decisions;
 - keep branch protection and CI gates authoritative;
-- log agent actions and preserve commit attribution;
-- pin or verify toolchain/dependency versions where the existing ATLAS supply-chain model requires it;
-- prefer ephemeral workspaces for untrusted or experimental tasks.
+- preserve commit attribution and engineering evidence;
+- pin or verify toolchain/dependency versions where the ATLAS supply-chain model requires it;
+- prefer ephemeral workspaces for untrusted or experimental tasks;
+- prevent duplicate task execution and conflicting concurrent writes;
+- keep canonical coordination state separate from transient worker state.
 
 ## Failure and rollback
 
-If an agent produces unsafe or conflicting work:
+If a work unit produces unsafe or conflicting changes:
 
-1. stop further writes to the affected branch;
+1. stop further writes to the affected branch/worktree;
 2. preserve evidence;
 3. do not merge;
-4. reset by creating a clean branch from the last verified base;
+4. create a clean recovery branch from the last verified base when necessary;
 5. reapply only reviewed changes;
 6. rerun exact-head CI.
 
@@ -225,6 +192,6 @@ If an already merged change violates an invariant, use a dedicated revert/fix PR
 
 ## Continuity guarantee
 
-The goal of this operating model is not to make an individual chat or agent immortal. It is to make the project resumable.
+The objective of this operating model is resumability, not dependence on any single process, machine or interactive session.
 
-A new chat, a new technical lead process, or a new Agent Control Node should be able to recover the exact project state from GitHub and continue from the last verified boundary.
+A new authorized engineering process should be able to recover the exact project state from repository-backed evidence and continue from the last verified boundary without weakening security, governance or release controls.
