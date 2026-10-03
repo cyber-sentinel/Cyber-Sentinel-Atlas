@@ -4,6 +4,8 @@ This directory contains machine-readable inventories used to measure source comp
 
 ATLAS keeps documentation inventories separate from telemetry/provider inventories. Current evidence includes Windows Security Auditing provider scope, Sysmon documentation scope, and controlled Sysmon schema inventories, with historical baselines preserved for drift analysis.
 
+The frozen Windows Security Auditing denominator currently contains **423 unique Event IDs / 488 provider event-version definitions** for `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296`. Sysmon 15.22 has a frozen denominator of **30** documented/current Event IDs with controlled schema 4.91 evidence.
+
 ## Rules
 
 - every inventory declares its exact source/provider/version scope;
