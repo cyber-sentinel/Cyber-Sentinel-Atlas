@@ -1,24 +1,15 @@
 name: Phase 5.5.4D Supply Chain Closure
 
 on:
+  # supply-chain-closure (<os>) is required by the main ruleset. The workflow
+  # must therefore report those contexts for every pull request. Heavy supply-
+  # chain validation runs only when its governed paths are actually affected.
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - fix/phase-5.5.4d-supply-chain-closure-v2
-      - main
-    paths:
-      - 'shared-core/go/**'
-      - 'tools/shared_core/phase554d_evidence.py'
-      - 'tools/release/generate_go_license_material_evidence.py'
-      - 'tools/release/validate_go_license_material_evidence.py'
-      - 'tools/pack/**'
-      - 'tests/phase55/**'
-      - 'docs/architecture/phase-5.5.4-production-go-shared-core.md'
-      - 'docs/current-status.md'
-      - 'docs/project-state.md'
-      - 'docs/roadmap.md'
-      - '.github/workflows/phase554d-supply-chain-closure.yml'
-  pull_request:
-    branches:
       - main
     paths:
       - 'shared-core/go/**'
@@ -41,8 +32,75 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  supply-chain-closure:
-    name: supply-chain-closure (${{ matrix.os }})
+  detect-scope:
+    name: detect-supply-chain-scope
+    runs-on: [self-hosted, linux, x64, atlas-ci, atlas-linux]
+    timeout-minutes: 5
+    outputs:
+      relevant: ${{ steps.scope.outputs.relevant }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Determine whether governed supply-chain paths changed
+        id: scope
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          import subprocess
+
+          if os.environ.get("GITHUB_EVENT_NAME") != "pull_request":
+              relevant = True
+              changed = []
+          else:
+              base = os.environ["BASE_SHA"]
+              head = os.environ["HEAD_SHA"]
+              changed = subprocess.check_output(
+                  ["git", "diff", "--name-only", f"{base}...{head}"],
+                  text=True,
+              ).splitlines()
+
+              prefixes = (
+                  "shared-core/go/",
+                  "tools/pack/",
+                  "tests/phase55/",
+              )
+              exact = {
+                  "tools/shared_core/phase554d_evidence.py",
+                  "tools/release/generate_go_license_material_evidence.py",
+                  "tools/release/validate_go_license_material_evidence.py",
+                  "docs/architecture/phase-5.5.4-production-go-shared-core.md",
+                  "docs/current-status.md",
+                  "docs/project-state.md",
+                  "docs/roadmap.md",
+                  ".github/workflows/phase554d-supply-chain-closure.yml",
+              }
+              relevant = any(
+                  path in exact or path.startswith(prefixes)
+                  for path in changed
+              )
+
+          print("changed paths:")
+          for path in changed:
+              print(f"  {path}")
+          print(f"supply_chain_relevant={str(relevant).lower()}")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"relevant={str(relevant).lower()}\n")
+          PY
+
+  supply-chain-validation:
+    name: supply-chain-validation (${{ matrix.os }})
+    needs: detect-scope
+    if: needs.detect-scope.outputs.relevant == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -277,10 +335,6 @@ jobs:
           set -euo pipefail
           out="../../$PHASE554D_EVIDENCE"
           scanner="golang.org/x/vuln/cmd/govulncheck@v1.7.0"
-          # JSON is evidence only: govulncheck intentionally exits 0 for JSON
-          # even when vulnerabilities are detected. The second invocation is
-          # the actual fail-closed gate and its exit status is preserved by
-          # pipefail while tee records the human-readable evidence.
           go run "$scanner" -json ./... \
             > "$out/govulncheck.json" \
             2> "$out/govulncheck-json.stderr.txt"
@@ -318,3 +372,35 @@ jobs:
           path: .phase554d-evidence/${{ matrix.runner_os }}/
           if-no-files-found: error
           include-hidden-files: true
+
+  supply-chain-closure:
+    name: supply-chain-closure (${{ matrix.os }})
+    needs: [detect-scope, supply-chain-validation]
+    if: always()
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            runner: atlas-linux
+            runner_os: linux
+          - os: windows-latest
+            runner: atlas-windows
+            runner_os: windows
+    runs-on: [self-hosted, "${{ matrix.runner_os }}", x64, atlas-ci, "${{ matrix.runner }}"]
+    timeout-minutes: 5
+    steps:
+      - name: Pass when supply-chain scope is not affected
+        if: needs.detect-scope.outputs.relevant != 'true'
+        run: echo "No governed supply-chain paths changed; required context satisfied."
+
+      - name: Require heavy validation when supply-chain scope is affected
+        if: needs.detect-scope.outputs.relevant == 'true'
+        shell: bash
+        env:
+          VALIDATION_RESULT: ${{ needs.supply-chain-validation.result }}
+        run: |
+          set -euo pipefail
+          test "$VALIDATION_RESULT" = "success"
+          echo "Supply-chain validation completed successfully."

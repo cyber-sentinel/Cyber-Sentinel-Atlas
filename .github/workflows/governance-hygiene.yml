@@ -1,22 +1,12 @@
 name: Governance Hygiene
 
 on:
+  # validate-governance is a required status context on main. The workflow must
+  # therefore report that context for every pull request, even when the change
+  # does not touch governance files.
   pull_request:
-    paths:
-      - ".github/CODEOWNERS"
-      - "CONTRIBUTING.md"
-      - "SECURITY.md"
-      - "THIRD_PARTY_NOTICES.md"
-      - "CITATION.cff"
-      - "TRADEMARKS.md"
-      - "docs/governance/**"
-      - "docs/current-status.md"
-      - "LICENSE"
-      - "LICENSE.txt"
-      - "LICENSE.md"
-      - "COPYING"
-      - "tools/validate_governance.py"
-      - ".github/workflows/governance-hygiene.yml"
+    branches:
+      - main
   push:
     branches:
       - main

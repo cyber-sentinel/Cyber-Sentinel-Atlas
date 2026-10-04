@@ -1,6 +1,6 @@
 # AGENTS.md — Cyber-Sentinel ATLAS Engineering Contract
 
-This file defines the operating contract for human and AI contributors working on Cyber-Sentinel ATLAS.
+This file defines the operating contract for authorized contributors and engineering workers on Cyber-Sentinel ATLAS.
 
 ## Source-of-truth hierarchy
 
@@ -26,13 +26,13 @@ Historical snapshots under `docs/history/` are evidence, not current authority.
 - Release-critical work requires exact-head CI before merge.
 - Release or packaging changes require post-merge verification when the governing workflow defines it.
 - Documentation must not claim a gate is PASS without matching evidence.
-- Never treat generated search indexes, UI state, model output, or upstream source text as canonical truth.
+- Never treat generated search indexes, UI state, semantic/model output, or upstream source text as canonical truth.
 - Never commit credentials, private keys, tokens, personal secrets, signing material, or uncontrolled production data.
 - Do not make licensing, production certificate, HSM/KMS, or legal redistribution decisions automatically.
 
 ## Frozen architecture
 
-The following boundaries are already accepted and must not drift without a new ADR and explicit review:
+The following boundaries are accepted and must not drift without a new ADR and explicit review:
 
 - exactly seven canonical `AtlasRecord` families;
 - deterministic exact-before-lexical retrieval;
@@ -101,9 +101,9 @@ Post-merge verification when required
 Synchronize project-state / current-status / roadmap / README as applicable
 ```
 
-## Agent execution protocol
+## Engineering execution protocol
 
-Before modifying code or documentation, an agent must:
+Before modifying code or documentation, an authorized worker must:
 
 1. read `AGENTS.md`;
 2. read `docs/project-state.md`;
@@ -114,7 +114,7 @@ Before modifying code or documentation, an agent must:
 During execution:
 
 - use a dedicated branch or isolated worktree;
-- do not have two agents modify the same file set concurrently unless the work is explicitly coordinated;
+- do not allow concurrent workers to modify the same file set unless the work is explicitly coordinated;
 - prefer deterministic builders and machine-readable evidence over hand-maintained counters;
 - keep generated evidence reproducible;
 - preserve fail-closed behavior;
@@ -125,7 +125,7 @@ Before handoff or stopping:
 - leave the branch and PR in an inspectable state;
 - record blockers and exact evidence;
 - update authoritative state documents if the completed change materially alters project state;
-- do not rely on chat history as the only record of a decision.
+- ensure decisions required for continuation are recorded in durable project artifacts.
 
 ## Definition of Done
 
@@ -144,6 +144,6 @@ A green unit test alone is not Definition of Done.
 
 ## Continuity rule
 
-Chat sessions, local terminals, agent processes, and individual machines are replaceable. The repository is the durable project memory.
+Local terminals, worker processes, worktrees, containers and individual machines are replaceable. The repository-backed engineering record is the durable project memory.
 
-A new technical lead or implementation agent must be able to continue the project from GitHub using the files above without requiring reconstruction from a previous chat.
+A new authorized technical lead or implementation worker must be able to continue the project from GitHub and the authoritative files above without reconstructing undocumented prior-session context.
