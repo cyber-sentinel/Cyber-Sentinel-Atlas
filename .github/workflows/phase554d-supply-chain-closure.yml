@@ -391,6 +391,15 @@ jobs:
     runs-on: [self-hosted, "${{ matrix.runner_os }}", x64, atlas-ci, "${{ matrix.runner }}"]
     timeout-minutes: 5
     steps:
+      - name: Require successful supply-chain scope detection
+        shell: bash
+        env:
+          DETECTION_RESULT: ${{ needs.detect-scope.result }}
+        run: |
+          set -euo pipefail
+          test "$DETECTION_RESULT" = "success"
+          echo "Supply-chain scope detection completed successfully."
+
       - name: Pass when supply-chain scope is not affected
         if: needs.detect-scope.outputs.relevant != 'true'
         run: echo "No governed supply-chain paths changed; required context satisfied."
