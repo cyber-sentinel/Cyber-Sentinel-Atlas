@@ -11,7 +11,7 @@ A connector does not grant canonical or release authority by itself. Acquired ma
 
 ## Relationship to current Windows exemplars
 
-The reviewed Windows Security encyclopedia currently includes Event IDs `4624`, `4625`, `4648`, `4672`, `4688`, `4740`, `4768`, and `4771`.
+The reviewed Windows Security encyclopedia currently includes Event IDs `4624`, `4625`, `4648`, `4672`, `4688`, `4740`, `4768`, `4769`, and `4771`.
 
 Only Event 4688 currently has a dedicated acquisition connector in this directory. The remaining curated exemplars use controlled source records plus the authoritative provider inventory; this is intentional and must not be interpreted as missing provenance.
 

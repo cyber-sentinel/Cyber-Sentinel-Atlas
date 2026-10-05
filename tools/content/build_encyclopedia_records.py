@@ -30,6 +30,7 @@ SOURCE_PATHS = [
     ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4672.json",
     ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4740.json",
     ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4768.json",
+    ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4769.json",
     ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4771.json",
     ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4624.json",
     ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4625.json",
@@ -37,6 +38,7 @@ SOURCE_PATHS = [
     ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4672.json",
     ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4740.json",
     ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4768.json",
+    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4769.json",
     ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4771.json",
     ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4688.json",
 ]

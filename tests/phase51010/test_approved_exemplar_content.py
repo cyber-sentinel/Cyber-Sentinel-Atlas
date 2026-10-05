@@ -54,6 +54,8 @@ def test_02_approved_event_identities_and_search_aliases():
     assert validator.resolve_query(records, "Account lockout") == ["atlas:event:microsoft.windows.security:4740"]
     assert validator.resolve_query(records, "4768") == ["atlas:event:microsoft.windows.security:4768"]
     assert validator.resolve_query(records, "Kerberos TGT requested") == ["atlas:event:microsoft.windows.security:4768"]
+    assert validator.resolve_query(records, "4769") == ["atlas:event:microsoft.windows.security:4769"]
+    assert validator.resolve_query(records, "Kerberos TGS requested") == ["atlas:event:microsoft.windows.security:4769"]
     assert validator.resolve_query(records, "4771") == ["atlas:event:microsoft.windows.security:4771"]
     assert validator.resolve_query(records, "Kerberos preauth failure") == ["atlas:event:microsoft.windows.security:4771"]
     assert validator.resolve_query(records, "Sysmon 1") == ["atlas:event:microsoft.sysmon:1"]
@@ -426,6 +428,81 @@ def test_04m_windows_4768_dictionaries_and_uws_boundary():
     assert uws_evidence[0]["object"]["value"]["redistribution"] == "source-link-and-coverage-benchmark-only"
 
 
+def test_04n_windows_4769_field_dictionary_matches_version_aware_exemplar():
+    records = by_id(records_with_paths())
+    prefix = "atlas:field:microsoft.windows.security:4769."
+    fields = sorted(key for key in records if key.startswith(prefix))
+    assert len(fields) == 21
+    required = {
+        "4769.account-information.account-name",
+        "4769.account-information.account-domain",
+        "4769.account-information.logon-guid",
+        "4769.service-information.service-name",
+        "4769.service-information.service-id",
+        "4769.network-information.client-address",
+        "4769.network-information.client-port",
+        "4769.additional-information.ticket-options",
+        "4769.additional-information.ticket-encryption-type",
+        "4769.additional-information.failure-code",
+        "4769.additional-information.transited-services",
+        "4769.ticket-information.request-ticket-hash",
+        "4769.ticket-information.response-ticket-hash",
+        "4769.account-information.msds-supported-encryption-types",
+        "4769.account-information.available-keys",
+        "4769.service-information.msds-supported-encryption-types",
+        "4769.service-information.available-keys",
+        "4769.domain-controller-information.msds-supported-encryption-types",
+        "4769.domain-controller-information.available-keys",
+        "4769.network-information.advertized-etypes",
+        "4769.additional-information.session-encryption-type",
+    }
+    actual = {value.rsplit(":", 1)[-1] for value in fields}
+    assert required == actual
+
+
+def test_04o_windows_4769_versions_dictionaries_and_uws_boundary():
+    records = by_id(records_with_paths())
+    event = next(item for item in json.loads((ROOT / "content/encyclopedia/approved-exemplars.json").read_text(encoding="utf-8"))["events"] if item["native_event_id"] == "4769")
+    versions = {row["version"]: row["field_count"] for row in event["overview"]["event_versions"]}
+    assert versions == {"0": 11, "2": 21}
+
+    event_claims = [r for r in records.values() if r.get("record_kind") == "claim" and r.get("subject_id") == "atlas:event:microsoft.windows.security:4769" and r.get("predicate") == "telemetry.field-semantics"]
+    dictionaries = [r["object"]["value"].get("event_value_dictionaries", {}) for r in event_claims if r.get("object", {}).get("kind") == "json"]
+    result_codes = next(value["result_code"] for value in dictionaries if "result_code" in value)
+    assert {"0x0", "0x6", "0x7", "0xD", "0xE", "0x12", "0x13", "0x20", "0x25"} <= {row["value"] for row in result_codes}
+    etypes = next(value["encryption_type"] for value in dictionaries if "encryption_type" in value)
+    assert {"0x1", "0x3", "0x11", "0x12", "0x17", "0x18", "0xFFFFFFFF"} <= {row["value"] for row in etypes}
+    ticket_options = next(value["ticket_options_common"] for value in dictionaries if "ticket_options_common" in value)
+    assert {"0x40810010", "0x40810000", "0x60810010"} == {row["value"] for row in ticket_options}
+
+    v2_field_ids = {
+        "4769.account-information.msds-supported-encryption-types",
+        "4769.account-information.available-keys",
+        "4769.service-information.msds-supported-encryption-types",
+        "4769.service-information.available-keys",
+        "4769.domain-controller-information.msds-supported-encryption-types",
+        "4769.domain-controller-information.available-keys",
+        "4769.network-information.advertized-etypes",
+        "4769.additional-information.session-encryption-type",
+        "4769.ticket-information.request-ticket-hash",
+        "4769.ticket-information.response-ticket-hash",
+    }
+    for field_key in v2_field_ids:
+        field_id = f"atlas:field:microsoft.windows.security:{field_key}"
+        claims = [r for r in records.values() if r.get("record_kind") == "claim" and r.get("subject_id") == field_id and r.get("predicate") == "telemetry.field-semantics"]
+        assert len(claims) == 1
+        assert claims[0]["object"]["value"]["versions"] == ["2"]
+        locators = [e["locator"]["other"] for e in claims[0]["evidence"]]
+        assert any("4769(S, F)" in locator and "/" in locator for locator in locators)
+
+    source = records["atlas:source:atlas.source:ultimate-windows-security-event-4769"]
+    assert source["redistribution"]["policy"] == "prohibited"
+    uws_evidence = [r for r in records.values() if r.get("record_kind") == "claim" and any(e.get("source_id") == source["id"] for e in r.get("evidence", []))]
+    assert len(uws_evidence) == 1
+    assert uws_evidence[0]["predicate"] == "telemetry.source"
+    assert uws_evidence[0]["object"]["value"]["redistribution"] == "source-link-and-coverage-benchmark-only"
+
+
 def test_04h_windows_4771_field_dictionary_matches_approved_exemplar():
     records = by_id(records_with_paths())
     prefix = "atlas:field:microsoft.windows.security:4771."
@@ -492,7 +569,7 @@ def test_05_every_field_has_one_semantics_claim_and_has_field_relationship():
     claim_subjects = {r["subject_id"] for r in claims if r["subject_id"] in field_ids}
     relationship_targets = {r["to"] for r in rels}
 
-    assert len(field_ids) == 402
+    assert len(field_ids) == 423
     assert claim_subjects == field_ids
     assert relationship_targets == field_ids
 

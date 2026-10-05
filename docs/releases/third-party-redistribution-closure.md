@@ -89,7 +89,7 @@ Existing Phase 5.5.4D supply-chain controls already generate CycloneDX evidence 
 
 ### Microsoft Windows Security documentation
 
-- Current source-only references cover the maintained Windows Security exemplars for Event IDs `4624`, `4625`, `4648`, `4672`, `4688`, `4740`, `4768`, and `4771`.
+- Current source-only references cover the maintained Windows Security exemplars for Event IDs `4624`, `4625`, `4648`, `4672`, `4688`, `4740`, `4768`, `4769`, and `4771`.
 - Controlled evidence is recorded in `content/encyclopedia/sources/microsoft-windows-security-event-4624.json`, `content/encyclopedia/sources/microsoft-windows-security-event-4625.json`, `content/encyclopedia/sources/microsoft-windows-security-event-4648.json`, `content/encyclopedia/sources/microsoft-windows-security-event-4672.json`, `content/encyclopedia/sources/microsoft-windows-security-event-4740.json`, `content/encyclopedia/sources/microsoft-windows-security-event-4768.json`, `content/encyclopedia/sources/microsoft-windows-security-event-4771.json`, and `ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.release.json`.
 - The authoritative semantic references are Microsoft Learn pages rather than repository revisions with an explicit content license pinned by Atlas.
 - Current state: **SOURCE TEXT EXCLUDED FROM PUBLIC PACK**.
