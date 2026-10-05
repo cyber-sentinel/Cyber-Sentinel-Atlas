@@ -24,6 +24,13 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Align bootstrap with verified repository state
+        shell: bash
+        run: |
+          set -euo pipefail
+          sed -i 's/inventory\["items"\]/inventory["entries"]/g' tools/content/_event4769_bootstrap.py
+          sed -i 's/FIXED_TIME = "2026-10-05T09:00:00Z"/FIXED_TIME = "2026-10-04T11:10:00Z"/' tools/content/_event4769_bootstrap.py
+
       - name: Apply bounded Event 4769 content increment
         run: python tools/content/_event4769_bootstrap.py
 
