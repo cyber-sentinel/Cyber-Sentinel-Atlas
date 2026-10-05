@@ -1,0 +1,105 @@
+name: Finalize exemplar-driven refactor
+
+on:
+  push:
+    branches:
+      - refactor/exemplar-driven-preview-acceptance
+    paths:
+      - .github/workflows/finalize-exemplar-refactor.yml
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  prepare-candidate-commit:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: refactor/exemplar-driven-preview-acceptance
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download validated generated workflow files
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh run download 37320809569 --repo "$GH_REPO" --name exemplar-driven-generated-workflows --dir generated-workflows
+          test -s generated-workflows/foundation-hygiene.yml
+          test -s generated-workflows/phase5105-usable-data-preview.yml
+
+      - name: Create immutable candidate Git commit without moving branch ref
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64
+          import json
+          import os
+          import subprocess
+          import urllib.request
+          from pathlib import Path
+
+          token = os.environ['GH_TOKEN']
+          repo = os.environ['GH_REPO']
+          api = f'https://api.github.com/repos/{repo}'
+
+          def request(method, url, body=None):
+              data = None if body is None else json.dumps(body).encode('utf-8')
+              req = urllib.request.Request(
+                  url,
+                  data=data,
+                  method=method,
+                  headers={
+                      'Authorization': f'Bearer {token}',
+                      'Accept': 'application/vnd.github+json',
+                      'X-GitHub-Api-Version': '2022-11-28',
+                      'Content-Type': 'application/json',
+                  },
+              )
+              with urllib.request.urlopen(req) as response:
+                  return json.loads(response.read())
+
+          def blob(path):
+              raw = Path(path).read_bytes()
+              result = request('POST', f'{api}/git/blobs', {
+                  'content': base64.b64encode(raw).decode('ascii'),
+                  'encoding': 'base64',
+              })
+              return result['sha']
+
+          parent = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          base_tree = subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], text=True).strip()
+          foundation = blob('generated-workflows/foundation-hygiene.yml')
+          preview = blob('generated-workflows/phase5105-usable-data-preview.yml')
+
+          tree = request('POST', f'{api}/git/trees', {
+              'base_tree': base_tree,
+              'tree': [
+                  {'path': '.github/workflows/foundation-hygiene.yml', 'mode': '100644', 'type': 'blob', 'sha': foundation},
+                  {'path': '.github/workflows/phase5105-usable-data-preview.yml', 'mode': '100644', 'type': 'blob', 'sha': preview},
+                  {'path': '.github/workflows/exemplar-driven-preview-refactor.yml', 'mode': '100644', 'type': 'blob', 'sha': None},
+                  {'path': '.github/workflows/finalize-exemplar-refactor.yml', 'mode': '100644', 'type': 'blob', 'sha': None},
+                  {'path': 'tools/tmp_exemplar_driven_refactor.py', 'mode': '100644', 'type': 'blob', 'sha': None},
+              ],
+          })
+          commit = request('POST', f'{api}/git/commits', {
+              'message': 'CI: bind preview acceptance to approved exemplars',
+              'tree': tree['sha'],
+              'parents': [parent],
+          })
+          Path('candidate-commit.txt').write_text(commit['sha'] + '\n', encoding='ascii')
+          print('candidate_commit_created=true')
+          PY
+
+      - name: Upload candidate commit reference
+        uses: actions/upload-artifact@v4
+        with:
+          name: exemplar-driven-candidate-commit
+          path: candidate-commit.txt
+          if-no-files-found: error
+          retention-days: 1
