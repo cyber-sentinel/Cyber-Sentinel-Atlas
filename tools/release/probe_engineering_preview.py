@@ -18,6 +18,7 @@ EXPECTED_EVENT_4648 = "atlas:event:microsoft.windows.security:4648"
 EXPECTED_EVENT_4672 = "atlas:event:microsoft.windows.security:4672"
 EXPECTED_EVENT_4740 = "atlas:event:microsoft.windows.security:4740"
 EXPECTED_EVENT_4768 = "atlas:event:microsoft.windows.security:4768"
+EXPECTED_EVENT_4769 = "atlas:event:microsoft.windows.security:4769"
 EXPECTED_EVENT_4771 = "atlas:event:microsoft.windows.security:4771"
 EXPECTED_SYSMON = "atlas:event:microsoft.sysmon:1"
 EXPECTED_SYSMON_3 = "atlas:event:microsoft.sysmon:3"
@@ -342,6 +343,28 @@ def main() -> int:
         if record_4768.get("id") != EXPECTED_EVENT_4768:
             raise RuntimeError("Windows Event 4768 record identity mismatch")
 
+        search_4769 = request(
+            process.stdin,
+            process.stdout,
+            "q3f",
+            "search.query",
+            {"query": "4769", "graph_depth": 1, "limit": 10},
+        )
+        windows_4769_search_ok = search_contains_target(search_4769, EXPECTED_EVENT_4769)
+        if not windows_4769_search_ok:
+            raise RuntimeError(
+                f"Windows Event 4769 was not returned by deterministic search: {search_4769}"
+            )
+        record_4769 = request(
+            process.stdin,
+            process.stdout,
+            "r3f",
+            "record.get",
+            {"id": EXPECTED_EVENT_4769},
+        )
+        if record_4769.get("id") != EXPECTED_EVENT_4769:
+            raise RuntimeError("Windows Event 4769 record identity mismatch")
+
         search_4771 = request(
             process.stdin,
             process.stdout,
@@ -428,6 +451,8 @@ def main() -> int:
             "windows_4740_record_ok": True,
             "windows_4768_search_ok": windows_4768_search_ok,
             "windows_4768_record_ok": True,
+            "windows_4769_search_ok": windows_4769_search_ok,
+            "windows_4769_record_ok": True,
             "windows_4771_search_ok": windows_4771_search_ok,
             "windows_4771_record_ok": True,
             "sysmon_3_search_ok": sysmon_3_search_ok,

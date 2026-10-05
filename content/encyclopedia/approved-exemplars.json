@@ -5951,6 +5951,385 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4769",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4769",
+      "title": "Windows Security Event 4769 — A Kerberos service ticket was requested",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4769",
+      "aliases": [
+        "4769",
+        "Event ID 4769",
+        "Windows 4769",
+        "Kerberos TGS requested",
+        "A Kerberos service ticket was requested"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4769",
+      "source_version": "event-4769-v0-v2-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4769",
+      "source_locator": "4769(S, F): A Kerberos service ticket was requested",
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4769",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4769",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a Kerberos Ticket Granting Service (TGS) service-ticket request on a domain controller, including requesting account, target service, network origin, result and ticket cryptography plus Version 2 encryption-capability and request/response-ticket hash context.",
+        "category": "Account Logon",
+        "subcategory": "Audit Kerberos Service Ticket Operations",
+        "event_type": "Success/Failure",
+        "minimum_supported_generation": "Windows Server 2008",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Windows Server 2008 and later legacy shape",
+            "field_count": 11,
+            "notes": "Legacy Event 4769 structure with account, service, network, ticket options/encryption, result, Logon GUID and transited-services fields."
+          },
+          {
+            "version": "2",
+            "generation": "Windows Server 2016 and later after January 14, 2025 or later Security Cumulative Update",
+            "field_count": 21,
+            "notes": "Updated Event 4769 adds request/response ticket hashes plus account/service/domain-controller encryption capability, client-advertised etype and session-key encryption fields."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Audit Kerberos Service Ticket Operations success/failure auditing must be enabled on domain controllers where this telemetry is required.",
+          "Collection and normalization must preserve Event.Version because Version 2 contains security-relevant cryptographic capability and ticket-hash fields absent from the legacy Version 0 event."
+        ],
+        "interpretation_note": "Event 4769 is high-volume domain-controller Kerberos service-ticket telemetry. Failure Code 0x0 represents successful ticket issuance; non-zero values represent failures. Microsoft notes that 0x20 ticket-expiration failures are commonly informational, so result code, account, service, client and encryption context must be evaluated together.",
+        "scope_note": "Microsoft documents Event 4769 as generated only on Active Directory domain controllers."
+      },
+      "correlations": [
+        {
+          "target": "4768",
+          "key": "Account Name + Client Address + host/time",
+          "purpose": "follow Kerberos TGT issuance into subsequent service-ticket requests"
+        },
+        {
+          "target": "4624",
+          "key": "Logon GUID",
+          "purpose": "correlate service-ticket activity with the resulting logon session on the accessed system when the GUID is populated"
+        },
+        {
+          "target": "4648 / 4964",
+          "key": "Logon GUID",
+          "purpose": "pivot to explicit-credential or special-group logon context when those events contain the same GUID"
+        },
+        {
+          "target": "service endpoint telemetry",
+          "key": "Service Name + Client Address + time",
+          "purpose": "corroborate access to the requested Kerberos service with endpoint/network observations"
+        },
+        {
+          "target": "4740 / authentication failures",
+          "key": "Account Name + time",
+          "purpose": "place repeated failed service-ticket activity in broader account/authentication context"
+        }
+      ],
+      "analysis": [
+        "Investigate service tickets using DES or RC4 where account, service, domain-controller and client capability context indicates AES should normally be available; distinguish compatibility requirements from an actual downgrade.",
+        "Prioritize unusual or bursty requests for high-value service principals, uncommon Service Name values and anomalous client origins; repeated service-ticket requests can support Kerberoasting hypotheses only when surrounding identity and service context also aligns.",
+        "Use Logon GUID to pivot to 4624, 4648 and 4964 when populated, while treating an all-zero or absent GUID as a correlation limitation rather than missing proof.",
+        "Treat Version 0 and Version 2 separately in analytics: absence of Version 2 capability/hash fields on a legacy event is not missing telemetry, and common 0x20 ticket-expiration failures should not be elevated without additional evidence."
+      ],
+      "value_dictionaries": {
+        "result_code": [
+          {
+            "value": "0x0",
+            "meaning": "KDC_ERR_NONE — service-ticket request completed without an error."
+          },
+          {
+            "value": "0x6",
+            "meaning": "KDC_ERR_C_PRINCIPAL_UNKNOWN — client principal/account was not found in the Kerberos database."
+          },
+          {
+            "value": "0x7",
+            "meaning": "KDC_ERR_S_PRINCIPAL_UNKNOWN — requested server/service principal was not found."
+          },
+          {
+            "value": "0xC",
+            "meaning": "KDC_ERR_POLICY — request was rejected by KDC policy."
+          },
+          {
+            "value": "0xD",
+            "meaning": "KDC_ERR_BADOPTION — KDC cannot accommodate the requested option."
+          },
+          {
+            "value": "0xE",
+            "meaning": "KDC_ERR_ETYPE_NOTSUPP — requested encryption type is not supported."
+          },
+          {
+            "value": "0x12",
+            "meaning": "KDC_ERR_CLIENT_REVOKED — client credentials are revoked or otherwise restricted."
+          },
+          {
+            "value": "0x13",
+            "meaning": "KDC_ERR_SERVICE_REVOKED — credentials for the requested service are revoked."
+          },
+          {
+            "value": "0x17",
+            "meaning": "KDC_ERR_KEY_EXPIRED — password/key is expired."
+          },
+          {
+            "value": "0x20",
+            "meaning": "KRB_AP_ERR_TKT_EXPIRED — presented ticket has expired; Microsoft notes this is commonly informational."
+          },
+          {
+            "value": "0x21",
+            "meaning": "KRB_AP_ERR_TKT_NYV — ticket is not yet valid."
+          },
+          {
+            "value": "0x22",
+            "meaning": "KRB_AP_ERR_REPEAT — replay was detected."
+          },
+          {
+            "value": "0x25",
+            "meaning": "KRB_AP_ERR_SKEW — clock skew is too great."
+          },
+          {
+            "value": "0x29",
+            "meaning": "KRB_AP_ERR_MODIFIED — message integrity/checksum did not match."
+          }
+        ],
+        "encryption_type": [
+          {
+            "value": "0x1",
+            "meaning": "DES-CBC-CRC — legacy DES; disabled by default on modern Windows."
+          },
+          {
+            "value": "0x3",
+            "meaning": "DES-CBC-MD5 — legacy DES; disabled by default on modern Windows."
+          },
+          {
+            "value": "0x11",
+            "meaning": "AES128-CTS-HMAC-SHA1-96."
+          },
+          {
+            "value": "0x12",
+            "meaning": "AES256-CTS-HMAC-SHA1-96."
+          },
+          {
+            "value": "0x17",
+            "meaning": "RC4-HMAC."
+          },
+          {
+            "value": "0x18",
+            "meaning": "RC4-HMAC-EXP."
+          },
+          {
+            "value": "0xFFFFFFFF",
+            "meaning": "Failure placeholder/no issued ticket encryption type."
+          }
+        ],
+        "ticket_options_common": [
+          {
+            "value": "0x40810010",
+            "meaning": "Common combination: Forwardable, Renewable, Canonicalize, Renewable-ok."
+          },
+          {
+            "value": "0x40810000",
+            "meaning": "Common combination: Forwardable, Renewable, Canonicalize."
+          },
+          {
+            "value": "0x60810010",
+            "meaning": "Common combination: Forwardable, Forwarded, Renewable, Canonicalize, Renewable-ok."
+          }
+        ]
+      },
+      "fields": [
+        {
+          "key": "account-information.account-name",
+          "section": "Account Information",
+          "native_name": "Account Name",
+          "type": "UnicodeString",
+          "meaning": "Account principal that requested the service ticket."
+        },
+        {
+          "key": "account-information.account-domain",
+          "section": "Account Information",
+          "native_name": "Account Domain",
+          "type": "UnicodeString",
+          "meaning": "Kerberos realm/domain associated with the requesting account."
+        },
+        {
+          "key": "account-information.logon-guid",
+          "section": "Account Information",
+          "native_name": "Logon GUID",
+          "type": "GUID",
+          "meaning": "Correlation GUID that can link the domain-controller ticket request to logon/security events on the accessed system when populated.",
+          "correlation": "Use with 4624, 4648 and 4964 when the same non-zero GUID is present."
+        },
+        {
+          "key": "account-information.msds-supported-encryption-types",
+          "section": "Account Information",
+          "native_name": "MSDS-SupportedEncryptionTypes",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: encryption types supported/configured for the requesting account in Active Directory.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "account-information.available-keys",
+          "section": "Account Information",
+          "native_name": "Available Keys",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: Kerberos keys available for the requesting account.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "service-information.service-name",
+          "section": "Service Information",
+          "native_name": "Service Name",
+          "type": "UnicodeString",
+          "meaning": "Account/computer service principal for which the Kerberos service ticket was requested."
+        },
+        {
+          "key": "service-information.service-id",
+          "section": "Service Information",
+          "native_name": "Service ID",
+          "type": "SID",
+          "meaning": "SID of the account/computer object for the requested service; failure events can contain NULL SID."
+        },
+        {
+          "key": "service-information.msds-supported-encryption-types",
+          "section": "Service Information",
+          "native_name": "MSDS-SupportedEncryptionTypes",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: encryption types supported by the Active Directory account on which the requested service is registered.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "service-information.available-keys",
+          "section": "Service Information",
+          "native_name": "Available Keys",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: Kerberos keys available for the service account.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "domain-controller-information.msds-supported-encryption-types",
+          "section": "Domain Controller Information",
+          "native_name": "MSDS-SupportedEncryptionTypes",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: encryption types supported by the issuing domain controller.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "domain-controller-information.available-keys",
+          "section": "Domain Controller Information",
+          "native_name": "Available Keys",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: Kerberos keys available to the issuing domain controller.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "network-information.client-address",
+          "section": "Network Information",
+          "native_name": "Client Address",
+          "type": "UnicodeString/IP",
+          "meaning": "IP address from which the TGS request reached the domain controller."
+        },
+        {
+          "key": "network-information.client-port",
+          "section": "Network Information",
+          "native_name": "Client Port",
+          "type": "UnicodeString/port",
+          "meaning": "Source port of the client Kerberos connection; zero can represent localhost."
+        },
+        {
+          "key": "network-information.advertized-etypes",
+          "section": "Network Information",
+          "native_name": "Advertized Etypes",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: encryption types advertised by the Kerberos client.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "additional-information.ticket-options",
+          "section": "Additional Information",
+          "native_name": "Ticket Options",
+          "type": "HexInt32",
+          "meaning": "Kerberos ticket-option bitmask requested by the client.",
+          "values_ref": "ticket_options_common"
+        },
+        {
+          "key": "additional-information.ticket-encryption-type",
+          "section": "Additional Information",
+          "native_name": "Ticket Encryption Type",
+          "type": "HexInt32",
+          "meaning": "Cryptographic suite used for the issued service ticket; failure events can use 0xFFFFFFFF.",
+          "values_ref": "encryption_type"
+        },
+        {
+          "key": "additional-information.session-encryption-type",
+          "section": "Additional Information",
+          "native_name": "Session Encryption Type",
+          "type": "HexInt32",
+          "meaning": "Version 2 field: cryptographic suite selected for the issued service-ticket session key.",
+          "values_ref": "encryption_type",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "additional-information.failure-code",
+          "section": "Additional Information",
+          "native_name": "Failure Code",
+          "type": "HexInt32",
+          "meaning": "KDC/Kerberos result code for the service-ticket request; 0x0 indicates success.",
+          "values_ref": "result_code"
+        },
+        {
+          "key": "additional-information.transited-services",
+          "section": "Additional Information",
+          "native_name": "Transited Services",
+          "type": "UnicodeString",
+          "meaning": "Intermediate services represented in the Kerberos delegation/transited-services context when applicable."
+        },
+        {
+          "key": "ticket-information.request-ticket-hash",
+          "section": "Ticket Information",
+          "native_name": "Request ticket hash",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: hash associated with the Kerberos ticket request.",
+          "versions": [
+            "2"
+          ]
+        },
+        {
+          "key": "ticket-information.response-ticket-hash",
+          "section": "Ticket Information",
+          "native_name": "Response ticket hash",
+          "type": "UnicodeString",
+          "meaning": "Version 2 field: hash associated with the issued Kerberos service ticket response.",
+          "versions": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4771",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4771",

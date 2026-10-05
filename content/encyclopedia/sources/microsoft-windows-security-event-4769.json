@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "source",
+  "id": "atlas:source:atlas.source:microsoft-windows-security-event-4769",
+  "record_revision": 1,
+  "created_at": "2026-10-04T11:10:00Z",
+  "updated_at": "2026-10-04T11:10:00Z",
+  "curation_status": "validated",
+  "namespace": "atlas.source",
+  "canonical_key": "microsoft-windows-security-event-4769",
+  "title": "Microsoft Windows Security Auditing Event 4769 Documentation",
+  "publisher": "Microsoft",
+  "source_class": "tier-a-authoritative",
+  "canonical_urls": [
+    "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4769"
+  ],
+  "official_status": "official",
+  "license": {
+    "status": "unknown"
+  },
+  "redistribution": {
+    "policy": "restricted",
+    "notes": "ATLAS stores independently authored normalized facts and source locators; substantial Microsoft documentation prose is not redistributed by this exemplar."
+  },
+  "freshness_policy": {
+    "expected_update_cadence": "documentation-maintained",
+    "stale_after_days": 180
+  },
+  "change_detection_policy": {
+    "strategy": "content-diff",
+    "notes": "Event 4769 has a legacy Version 0 shape and an updated Version 2 shape on supported post-January-2025 Windows Server builds; both are modeled explicitly."
+  }
+}

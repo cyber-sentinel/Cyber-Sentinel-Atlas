@@ -10,8 +10,8 @@ ATLAS is the **KNOW** layer of the Cyber-Sentinel ecosystem: a provenance-first,
 - Windows Desktop: **release-critical surface**
 - Public Preview: **BLOCKED / fail-closed**
 - Phase 5.10.10: **ACTIVE / CONTROLLED COVERAGE EXPANSION**
-- Windows Security Auditing: **8/423 encyclopedia-grade**, `415` remaining
-- Current Windows Security exemplars: `4624`, `4625`, `4648`, `4672`, `4688`, `4740`, `4768`, `4771`
+- Windows Security Auditing: **9/423 encyclopedia-grade**, `414` remaining
+- Current Windows Security exemplars: `4624`, `4625`, `4648`, `4672`, `4688`, `4740`, `4768`, `4769`, `4771`
 - Sysmon 15.22: **30/30 COMPLETE**
 - Global Windows denominator: **NOT FROZEN**
 
