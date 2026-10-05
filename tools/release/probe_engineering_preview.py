@@ -11,15 +11,26 @@ from pathlib import Path
 from typing import Any, BinaryIO
 
 MAX_FRAME = 8 * 1024 * 1024
-EXPECTED_EVENT = "atlas:event:microsoft.windows.security:4688"
-EXPECTED_EVENT_4624 = "atlas:event:microsoft.windows.security:4624"
-EXPECTED_EVENT_4625 = "atlas:event:microsoft.windows.security:4625"
-EXPECTED_EVENT_4648 = "atlas:event:microsoft.windows.security:4648"
-EXPECTED_EVENT_4672 = "atlas:event:microsoft.windows.security:4672"
-EXPECTED_EVENT_4740 = "atlas:event:microsoft.windows.security:4740"
-EXPECTED_EVENT_4768 = "atlas:event:microsoft.windows.security:4768"
-EXPECTED_EVENT_4769 = "atlas:event:microsoft.windows.security:4769"
-EXPECTED_EVENT_4771 = "atlas:event:microsoft.windows.security:4771"
+ROOT = Path(__file__).resolve().parents[2]
+APPROVED_EXEMPLARS = ROOT / "content" / "encyclopedia" / "approved-exemplars.json"
+
+
+def approved_windows_event_ids() -> list[str]:
+    data = json.loads(APPROVED_EXEMPLARS.read_text(encoding="utf-8"))
+    if data.get("status") != "MAINTAINER_APPROVED_PRODUCTION_EXEMPLARS" or not isinstance(data.get("events"), list):
+        raise RuntimeError("Windows Security exemplar blueprint is not approved or is malformed")
+    event_ids = [
+        item["native_event_id"]
+        for item in data["events"]
+        if item.get("namespace") == "microsoft.windows.security"
+    ]
+    if (not event_ids or len(event_ids) > 423
+            or any(not isinstance(event_id, str) or not event_id.isdecimal() for event_id in event_ids)
+            or len(event_ids) != len(set(event_ids))):
+        raise RuntimeError("approved Windows Security exemplar IDs are invalid or duplicated")
+    return sorted(event_ids, key=int)
+
+
 EXPECTED_SYSMON = "atlas:event:microsoft.sysmon:1"
 EXPECTED_SYSMON_3 = "atlas:event:microsoft.sysmon:3"
 EXPECTED_SEARCH_CONTRACT = "1.0.0"
@@ -140,27 +151,42 @@ def main() -> int:
         if status.get("ready") is not True or status.get("state") != "read_model_ready":
             raise RuntimeError(f"engineering preview pack is not active: {status}")
 
-        search_4688 = request(
-            process.stdin,
-            process.stdout,
-            "q1",
-            "search.query",
-            {"query": "4688", "graph_depth": 1, "limit": 10},
-        )
-        windows_4688_search_ok = search_contains_target(search_4688, EXPECTED_EVENT)
-        if not windows_4688_search_ok:
-            raise RuntimeError(
-                f"Windows Event 4688 was not returned by deterministic search: {search_4688}"
+        windows_security_results: dict[str, dict[str, bool]] = {}
+        windows_security_event_ids = approved_windows_event_ids()
+        if not windows_security_event_ids:
+            raise RuntimeError("approved Windows Security exemplar set is unexpectedly empty")
+        for index, event_id in enumerate(windows_security_event_ids):
+            target_id = f"atlas:event:microsoft.windows.security:{event_id}"
+            search_result = request(
+                process.stdin,
+                process.stdout,
+                f"qw{index}",
+                "search.query",
+                {"query": event_id, "graph_depth": 1, "limit": 10},
             )
-        record_4688 = request(
-            process.stdin,
-            process.stdout,
-            "r1",
-            "record.get",
-            {"id": EXPECTED_EVENT},
+            search_ok = search_contains_target(search_result, target_id)
+            if not search_ok:
+                raise RuntimeError(
+                    f"Windows Event {event_id} was not returned by deterministic search: {search_result}"
+                )
+            record = request(
+                process.stdin,
+                process.stdout,
+                f"rw{index}",
+                "record.get",
+                {"id": target_id},
+            )
+            record_ok = isinstance(record, dict) and record.get("id") == target_id
+            if not record_ok:
+                raise RuntimeError(f"Windows Event {event_id} record identity mismatch")
+            windows_security_results[event_id] = {
+                "search_ok": search_ok,
+                "record_ok": record_ok,
+            }
+        windows_security_exemplars_all_ok = all(
+            item["search_ok"] and item["record_ok"]
+            for item in windows_security_results.values()
         )
-        if record_4688.get("id") != EXPECTED_EVENT:
-            raise RuntimeError("Windows Event 4688 record identity mismatch")
 
         search_sysmon = request(
             process.stdin,
@@ -211,182 +237,6 @@ def main() -> int:
                 f"Sysmon Event 1 canonical record is missing ProcessCreate alias: {record_sysmon}"
             )
 
-        search_4624 = request(
-            process.stdin,
-            process.stdout,
-            "q3",
-            "search.query",
-            {"query": "4624", "graph_depth": 1, "limit": 10},
-        )
-        windows_4624_search_ok = search_contains_target(search_4624, EXPECTED_EVENT_4624)
-        if not windows_4624_search_ok:
-            raise RuntimeError(
-                f"Windows Event 4624 was not returned by deterministic search: {search_4624}"
-            )
-        record_4624 = request(
-            process.stdin,
-            process.stdout,
-            "r3",
-            "record.get",
-            {"id": EXPECTED_EVENT_4624},
-        )
-        if record_4624.get("id") != EXPECTED_EVENT_4624:
-            raise RuntimeError("Windows Event 4624 record identity mismatch")
-
-        search_4625 = request(
-            process.stdin,
-            process.stdout,
-            "q3a",
-            "search.query",
-            {"query": "4625", "graph_depth": 1, "limit": 10},
-        )
-        windows_4625_search_ok = search_contains_target(search_4625, EXPECTED_EVENT_4625)
-        if not windows_4625_search_ok:
-            raise RuntimeError(
-                f"Windows Event 4625 was not returned by deterministic search: {search_4625}"
-            )
-        record_4625 = request(
-            process.stdin,
-            process.stdout,
-            "r3a",
-            "record.get",
-            {"id": EXPECTED_EVENT_4625},
-        )
-        if record_4625.get("id") != EXPECTED_EVENT_4625:
-            raise RuntimeError("Windows Event 4625 record identity mismatch")
-
-        search_4648 = request(
-            process.stdin,
-            process.stdout,
-            "q3b",
-            "search.query",
-            {"query": "4648", "graph_depth": 1, "limit": 10},
-        )
-        windows_4648_search_ok = search_contains_target(search_4648, EXPECTED_EVENT_4648)
-        if not windows_4648_search_ok:
-            raise RuntimeError(
-                f"Windows Event 4648 was not returned by deterministic search: {search_4648}"
-            )
-        record_4648 = request(
-            process.stdin,
-            process.stdout,
-            "r3b",
-            "record.get",
-            {"id": EXPECTED_EVENT_4648},
-        )
-        if record_4648.get("id") != EXPECTED_EVENT_4648:
-            raise RuntimeError("Windows Event 4648 record identity mismatch")
-
-        search_4672 = request(
-            process.stdin,
-            process.stdout,
-            "q3c",
-            "search.query",
-            {"query": "4672", "graph_depth": 1, "limit": 10},
-        )
-        windows_4672_search_ok = search_contains_target(search_4672, EXPECTED_EVENT_4672)
-        if not windows_4672_search_ok:
-            raise RuntimeError(
-                f"Windows Event 4672 was not returned by deterministic search: {search_4672}"
-            )
-        record_4672 = request(
-            process.stdin,
-            process.stdout,
-            "r3c",
-            "record.get",
-            {"id": EXPECTED_EVENT_4672},
-        )
-        if record_4672.get("id") != EXPECTED_EVENT_4672:
-            raise RuntimeError("Windows Event 4672 record identity mismatch")
-
-        search_4740 = request(
-            process.stdin,
-            process.stdout,
-            "q3d",
-            "search.query",
-            {"query": "4740", "graph_depth": 1, "limit": 10},
-        )
-        windows_4740_search_ok = search_contains_target(search_4740, EXPECTED_EVENT_4740)
-        if not windows_4740_search_ok:
-            raise RuntimeError(
-                f"Windows Event 4740 was not returned by deterministic search: {search_4740}"
-            )
-        record_4740 = request(
-            process.stdin,
-            process.stdout,
-            "r3d",
-            "record.get",
-            {"id": EXPECTED_EVENT_4740},
-        )
-        if record_4740.get("id") != EXPECTED_EVENT_4740:
-            raise RuntimeError("Windows Event 4740 record identity mismatch")
-
-        search_4768 = request(
-            process.stdin,
-            process.stdout,
-            "q3e",
-            "search.query",
-            {"query": "4768", "graph_depth": 1, "limit": 10},
-        )
-        windows_4768_search_ok = search_contains_target(search_4768, EXPECTED_EVENT_4768)
-        if not windows_4768_search_ok:
-            raise RuntimeError(
-                f"Windows Event 4768 was not returned by deterministic search: {search_4768}"
-            )
-        record_4768 = request(
-            process.stdin,
-            process.stdout,
-            "r3e",
-            "record.get",
-            {"id": EXPECTED_EVENT_4768},
-        )
-        if record_4768.get("id") != EXPECTED_EVENT_4768:
-            raise RuntimeError("Windows Event 4768 record identity mismatch")
-
-        search_4769 = request(
-            process.stdin,
-            process.stdout,
-            "q3f",
-            "search.query",
-            {"query": "4769", "graph_depth": 1, "limit": 10},
-        )
-        windows_4769_search_ok = search_contains_target(search_4769, EXPECTED_EVENT_4769)
-        if not windows_4769_search_ok:
-            raise RuntimeError(
-                f"Windows Event 4769 was not returned by deterministic search: {search_4769}"
-            )
-        record_4769 = request(
-            process.stdin,
-            process.stdout,
-            "r3f",
-            "record.get",
-            {"id": EXPECTED_EVENT_4769},
-        )
-        if record_4769.get("id") != EXPECTED_EVENT_4769:
-            raise RuntimeError("Windows Event 4769 record identity mismatch")
-
-        search_4771 = request(
-            process.stdin,
-            process.stdout,
-            "q3e",
-            "search.query",
-            {"query": "4771", "graph_depth": 1, "limit": 10},
-        )
-        windows_4771_search_ok = search_contains_target(search_4771, EXPECTED_EVENT_4771)
-        if not windows_4771_search_ok:
-            raise RuntimeError(
-                f"Windows Event 4771 was not returned by deterministic search: {search_4771}"
-            )
-        record_4771 = request(
-            process.stdin,
-            process.stdout,
-            "r3e",
-            "record.get",
-            {"id": EXPECTED_EVENT_4771},
-        )
-        if record_4771.get("id") != EXPECTED_EVENT_4771:
-            raise RuntimeError("Windows Event 4771 record identity mismatch")
-
         search_sysmon_3 = request(
             process.stdin,
             process.stdout,
@@ -433,28 +283,13 @@ def main() -> int:
             "pack_id": status.get("pack_id"),
             "pack_version": status.get("pack_version"),
             "generation_id": status.get("generation_id"),
-            "windows_4688_search_ok": windows_4688_search_ok,
-            "windows_4688_record_ok": True,
+            "windows_security_exemplar_event_ids": windows_security_event_ids,
+            "windows_security_exemplars": windows_security_results,
+            "windows_security_exemplars_all_ok": windows_security_exemplars_all_ok,
             "sysmon_1_search_ok": sysmon_1_search_ok,
             "sysmon_1_processcreate_alias_ok": sysmon_1_processcreate_alias_ok,
             "sysmon_1_record_processcreate_alias_ok": sysmon_1_record_processcreate_alias_ok,
             "sysmon_1_record_ok": True,
-            "windows_4624_search_ok": windows_4624_search_ok,
-            "windows_4624_record_ok": True,
-            "windows_4625_search_ok": windows_4625_search_ok,
-            "windows_4625_record_ok": True,
-            "windows_4648_search_ok": windows_4648_search_ok,
-            "windows_4648_record_ok": True,
-            "windows_4672_search_ok": windows_4672_search_ok,
-            "windows_4672_record_ok": True,
-            "windows_4740_search_ok": windows_4740_search_ok,
-            "windows_4740_record_ok": True,
-            "windows_4768_search_ok": windows_4768_search_ok,
-            "windows_4768_record_ok": True,
-            "windows_4769_search_ok": windows_4769_search_ok,
-            "windows_4769_record_ok": True,
-            "windows_4771_search_ok": windows_4771_search_ok,
-            "windows_4771_record_ok": True,
             "sysmon_3_search_ok": sysmon_3_search_ok,
             "sysmon_3_record_ok": True,
             "graph_expand_ok": True,
