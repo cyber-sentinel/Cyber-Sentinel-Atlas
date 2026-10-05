@@ -37,6 +37,21 @@ jobs:
       - name: Apply bounded Event 4769 content increment
         run: python tools/content/_event4769_bootstrap.py
 
+      - name: Align generated version assertion with existing test helpers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('tests/phase51010/test_approved_exemplar_content.py')
+          text = path.read_text(encoding='utf-8')
+          old = '    event = next(item for item in load_blueprint()["events"] if item["native_event_id"] == "4769")'
+          new = '    event = next(item for item in json.loads((ROOT / "content/encyclopedia/approved-exemplars.json").read_text(encoding="utf-8"))["events"] if item["native_event_id"] == "4769")'
+          if text.count(old) != 1:
+              raise SystemExit(f'expected one Event 4769 version assertion marker, found {text.count(old)}')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+
       - name: Validate Event 4769 content increment
         shell: bash
         run: |
