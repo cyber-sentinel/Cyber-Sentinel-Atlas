@@ -24,6 +24,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install repository validation dependencies
+        run: python -m pip install --disable-pip-version-check -r tools/requirements-validation.txt
+
       - name: Align bootstrap with verified repository state
         shell: bash
         run: |
@@ -38,7 +41,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m pytest -q tests/phase51010/test_windows_security_coverage_snapshot.py tests/phase51010/test_approved_exemplar_content.py
+          python tests/phase51010/test_windows_security_coverage_snapshot.py
+          python tests/phase51010/test_approved_exemplar_content.py
           python tools/content/build_encyclopedia_records.py --output /tmp/atlas-encyclopedia-records.jsonl
           python -m py_compile tools/content/build_encyclopedia_records.py tools/release/build_engineering_preview_pack.py tools/release/probe_engineering_preview.py
           git diff --check
