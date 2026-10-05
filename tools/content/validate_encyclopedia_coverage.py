@@ -39,6 +39,22 @@ def validate() -> list[str]:
     if manifest.get("global_windows_completion_percent") is not None:
         errors.append("global Windows completion percent must remain null until a legitimate global denominator exists")
 
+    security_log_benchmark = manifest.get("windows_security_log_review_benchmark", {})
+    expected_security_log_benchmark = {
+        "state": "CONTROLLED_REVIEW_BENCHMARK_DEFINED",
+        "source": "Ultimate Windows Security — Windows Security Log Encyclopedia",
+        "source_url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/default.aspx",
+        "scope_role": "coverage-and-quick-detail-review-benchmark-only",
+        "minimum_listed_event_id": 1100,
+        "maximum_listed_event_id": 8191,
+        "listed_unique_event_id_count": 422,
+        "continuous_numeric_range": False,
+        "semantic_authority": "Microsoft official documentation plus controlled provider/channel/version evidence",
+        "ingestion_policy": "Do not bulk-ingest third-party prose. UWS remains a controlled Quick Detail and coverage benchmark; every promoted Event ID requires independent Microsoft/provider evidence and provenance review.",
+    }
+    if security_log_benchmark != expected_security_log_benchmark:
+        errors.append("Windows Security Log review benchmark drifted from the controlled 1100..8191 sparse UWS index scope")
+
     families = manifest.get("families", [])
     by_id = {item.get("id"): item for item in families}
     if set(by_id) != REQUIRED_FAMILIES:
@@ -116,9 +132,12 @@ def main() -> int:
         return 1
     manifest = load(MANIFEST)
     by_id = {item["id"]: item for item in manifest["families"]}
+    benchmark = manifest["windows_security_log_review_benchmark"]
     print(
         "ATLAS coverage manifest PASSED: "
-        f"Windows Security={by_id['windows-security-auditing']['encyclopedia_grade_count']}/"
+        f"Windows Security Log review benchmark={benchmark['listed_unique_event_id_count']} listed IDs/"
+        f"{benchmark['minimum_listed_event_id']}..{benchmark['maximum_listed_event_id']} sparse range; "
+        f"Windows Security Auditing={by_id['windows-security-auditing']['encyclopedia_grade_count']}/"
         f"{by_id['windows-security-auditing']['denominator_count']}; "
         f"Sysmon={by_id['sysmon']['encyclopedia_grade_count']}/"
         f"{by_id['sysmon']['denominator_count']}; "
