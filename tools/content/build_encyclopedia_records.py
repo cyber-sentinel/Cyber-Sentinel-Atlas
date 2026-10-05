@@ -19,29 +19,20 @@ ROOT = Path(__file__).resolve().parents[2]
 BLUEPRINT = ROOT / "content" / "encyclopedia" / "approved-exemplars.json"
 FIXED_TIME = "2026-09-18T18:20:00Z"
 
-SOURCE_PATHS = [
+FIXED_SOURCE_PATHS = [
     ROOT / "ingestion" / "source-profiles" / "microsoft-sysmon-docs.source.json",
     ROOT / "ingestion" / "source-profiles" / "microsoft-sysmon-schema-export.source.json",
     ROOT / "ingestion" / "source-profiles" / "microsoft-windows-provider-metadata.source.json",
     ROOT / "ingestion" / "source-profiles" / "microsoft-windows-security-auditing-4688-doc.source.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4624.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4625.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4648.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4672.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4740.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4768.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4769.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "microsoft-windows-security-event-4771.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4624.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4625.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4648.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4672.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4740.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4768.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4769.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4771.json",
-    ROOT / "content" / "encyclopedia" / "sources" / "ultimate-windows-security-event-4688.json",
 ]
+ENCYCLOPEDIA_SOURCE_DIR = ROOT / "content" / "encyclopedia" / "sources"
+
+
+def source_paths() -> list[Path]:
+    """Return fixed ingestion authorities plus every governed encyclopedia source record."""
+    content_sources = sorted(ENCYCLOPEDIA_SOURCE_DIR.glob("*.json"), key=lambda item: item.as_posix())
+    return [*FIXED_SOURCE_PATHS, *content_sources]
+
 
 SYSMON_SCHEMA_SOURCE = "atlas:source:atlas.source:microsoft-sysmon-schema-export"
 SYSMON_SCHEMA_SOURCE_VERSION = "sysmon-15.22-schema-4.91"
@@ -115,7 +106,7 @@ def relationship(from_id: str, to_id: str, relationship_type: str, *, confidence
 
 def source_records() -> list[dict[str, Any]]:
     out = []
-    for path in SOURCE_PATHS:
+    for path in source_paths():
         value = json.loads(path.read_text(encoding="utf-8"))
         # Source identity/rights data are authoritative control records. Do not
         # mutate them here: deterministic dedupe relies on exact bytes/semantics.

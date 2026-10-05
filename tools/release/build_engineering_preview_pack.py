@@ -42,6 +42,19 @@ from tools.search.sqlite_search import build_index
 from tools.content.build_encyclopedia_records import build_records as build_encyclopedia_records
 
 ROOT = Path(__file__).resolve().parents[2]
+APPROVED_EXEMPLARS = ROOT / "content" / "encyclopedia" / "approved-exemplars.json"
+
+
+def approved_windows_event_ids() -> list[str]:
+    data = json.loads(APPROVED_EXEMPLARS.read_text(encoding="utf-8"))
+    event_ids = [
+        str(item["native_event_id"])
+        for item in data.get("events", [])
+        if item.get("namespace") == "microsoft.windows.security"
+    ]
+    if len(event_ids) != len(set(event_ids)) or any(not event_id.isdecimal() for event_id in event_ids):
+        raise RuntimeError("approved Windows Security exemplar IDs are invalid or duplicated")
+    return sorted(event_ids, key=int)
 PACK_ID = "atlas:pack:engineering-preview-fixture"
 PACK_VERSION = "0.1.0-preview.1"
 CREATED_AT = "2026-09-17T12:00:00Z"
@@ -106,19 +119,15 @@ def load_canonical_records() -> list[dict[str, Any]]:
             raise RuntimeError(f"conflicting encyclopedia exemplar id: {record_id}")
         by_id[record_id] = value
 
-    for required in (
-        "atlas:event:microsoft.windows.security:4688",
-        "atlas:event:microsoft.windows.security:4624",
-        "atlas:event:microsoft.windows.security:4625",
-        "atlas:event:microsoft.windows.security:4648",
-        "atlas:event:microsoft.windows.security:4672",
-        "atlas:event:microsoft.windows.security:4740",
-        "atlas:event:microsoft.windows.security:4768",
-        "atlas:event:microsoft.windows.security:4769",
-        "atlas:event:microsoft.windows.security:4771",
+    required_records = [
         "atlas:event:microsoft.sysmon:1",
         "atlas:event:microsoft.sysmon:3",
-    ):
+    ]
+    required_records.extend(
+        f"atlas:event:microsoft.windows.security:{event_id}"
+        for event_id in approved_windows_event_ids()
+    )
+    for required in required_records:
         if required not in by_id:
             raise RuntimeError(f"required engineering-preview record is missing: {required}")
     return [by_id[key] for key in sorted(by_id)]
