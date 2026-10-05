@@ -62,14 +62,25 @@ jobs:
           python -m py_compile tools/content/build_encyclopedia_records.py tools/release/build_engineering_preview_pack.py tools/release/probe_engineering_preview.py
           git diff --check
 
-      - name: Commit validated Event 4769 increment
+      - name: Commit validated non-workflow content increment
         shell: bash
         run: |
           set -euo pipefail
-          rm -f .github/workflows/event4769-content-maintenance.yml tools/content/_event4769_bootstrap.py
+          git restore --source=HEAD -- .github/workflows/phase5105-usable-data-preview.yml
+          rm -f tools/content/_event4769_bootstrap.py
+          find tools -type d -name '__pycache__' -prune -exec rm -rf {} +
+          find tools -type f -name '*.pyc' -delete
           git config user.name 'Ali RahimDabagh'
           git config user.email '118610577+cyber-sentinel@users.noreply.github.com'
           git add -A
+          if git diff --cached --name-only | grep -E '^\.github/workflows/'; then
+            echo 'Refusing runner-side workflow mutation'
+            exit 1
+          fi
+          if git diff --cached --name-only | grep -E '(^|/)__pycache__/|\.pyc$'; then
+            echo 'Refusing generated Python cache artifacts'
+            exit 1
+          fi
           git diff --cached --check
           git commit -m 'Content: add Windows Security Event 4769'
           git push origin HEAD:feature/windows-security-event-4769
