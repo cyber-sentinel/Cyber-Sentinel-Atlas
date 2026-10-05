@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -45,6 +46,50 @@ def test_03_workflow_uses_aggregate_exemplar_contract():
     assert "windows_security_event_ids=$WindowsExemplars" in workflow
     assert "$probe.windows_security_exemplars_all_ok" in workflow
     assert "$probe.windows_4769_search_ok" not in workflow
+
+
+def test_04_conflicting_source_identity_fails_closed():
+    original = content_builder.ENCYCLOPEDIA_SOURCE_DIR
+    with tempfile.TemporaryDirectory() as directory:
+        content_builder.ENCYCLOPEDIA_SOURCE_DIR = Path(directory)
+        try:
+            for name, title in (("first.json", "First"), ("second.json", "Conflicting")):
+                (Path(directory) / name).write_text(json.dumps({
+                    "record_kind": "source",
+                    "id": "atlas:source:atlas.source:duplicate-test",
+                    "title": title,
+                }), encoding="utf-8")
+            try:
+                content_builder.source_records()
+            except ValueError as error:
+                assert "conflicting governed source identity" in str(error)
+            else:
+                raise AssertionError("conflicting source records were silently accepted")
+        finally:
+            content_builder.ENCYCLOPEDIA_SOURCE_DIR = original
+
+
+def test_05_duplicate_approved_event_id_fails_closed():
+    original = probe.APPROVED_EXEMPLARS
+    with tempfile.TemporaryDirectory() as directory:
+        path = Path(directory) / "approved-exemplars.json"
+        path.write_text(json.dumps({
+            "status": "MAINTAINER_APPROVED_PRODUCTION_EXEMPLARS",
+            "events": [
+                {"namespace": "microsoft.windows.security", "native_event_id": "4769"},
+                {"namespace": "microsoft.windows.security", "native_event_id": "4769"},
+            ],
+        }), encoding="utf-8")
+        probe.APPROVED_EXEMPLARS = path
+        try:
+            try:
+                probe.approved_windows_event_ids()
+            except RuntimeError as error:
+                assert "invalid or duplicated" in str(error)
+            else:
+                raise AssertionError("duplicate approved Windows Event IDs were accepted")
+        finally:
+            probe.APPROVED_EXEMPLARS = original
 
 
 if __name__ == "__main__":

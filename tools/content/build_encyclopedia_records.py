@@ -30,6 +30,8 @@ ENCYCLOPEDIA_SOURCE_DIR = ROOT / "content" / "encyclopedia" / "sources"
 
 def source_paths() -> list[Path]:
     """Return fixed ingestion authorities plus every governed encyclopedia source record."""
+    if not ENCYCLOPEDIA_SOURCE_DIR.is_dir() or ENCYCLOPEDIA_SOURCE_DIR.is_symlink():
+        raise ValueError("governed encyclopedia source directory is absent or a symlink")
     content_sources = sorted(ENCYCLOPEDIA_SOURCE_DIR.glob("*.json"), key=lambda item: item.as_posix())
     return [*FIXED_SOURCE_PATHS, *content_sources]
 
@@ -106,8 +108,19 @@ def relationship(from_id: str, to_id: str, relationship_type: str, *, confidence
 
 def source_records() -> list[dict[str, Any]]:
     out = []
+    seen: dict[str, dict[str, Any]] = {}
     for path in source_paths():
+        if path.is_symlink() or not path.is_file() or path.stat().st_size > 1024 * 1024:
+            raise ValueError(f"governed source path is invalid or oversized: {path}")
         value = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(value, dict) or value.get("record_kind") != "source" or not isinstance(value.get("id"), str):
+            raise ValueError(f"governed source record is malformed: {path}")
+        source_id = value["id"]
+        if source_id in seen:
+            if value != seen[source_id]:
+                raise ValueError(f"conflicting governed source identity: {source_id}")
+            continue
+        seen[source_id] = value
         # Source identity/rights data are authoritative control records. Do not
         # mutate them here: deterministic dedupe relies on exact bytes/semantics.
         out.append(value)

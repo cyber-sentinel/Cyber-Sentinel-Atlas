@@ -47,14 +47,20 @@ APPROVED_EXEMPLARS = ROOT / "content" / "encyclopedia" / "approved-exemplars.jso
 
 def approved_windows_event_ids() -> list[str]:
     data = json.loads(APPROVED_EXEMPLARS.read_text(encoding="utf-8"))
+    if data.get("status") != "MAINTAINER_APPROVED_PRODUCTION_EXEMPLARS" or not isinstance(data.get("events"), list):
+        raise RuntimeError("Windows Security exemplar blueprint is not approved or is malformed")
     event_ids = [
-        str(item["native_event_id"])
-        for item in data.get("events", [])
+        item["native_event_id"]
+        for item in data["events"]
         if item.get("namespace") == "microsoft.windows.security"
     ]
-    if len(event_ids) != len(set(event_ids)) or any(not event_id.isdecimal() for event_id in event_ids):
+    if (not event_ids or len(event_ids) > 423
+            or any(not isinstance(event_id, str) or not event_id.isdecimal() for event_id in event_ids)
+            or len(event_ids) != len(set(event_ids))):
         raise RuntimeError("approved Windows Security exemplar IDs are invalid or duplicated")
     return sorted(event_ids, key=int)
+
+
 PACK_ID = "atlas:pack:engineering-preview-fixture"
 PACK_VERSION = "0.1.0-preview.1"
 CREATED_AT = "2026-09-17T12:00:00Z"
