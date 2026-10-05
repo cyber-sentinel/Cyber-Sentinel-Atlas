@@ -4,9 +4,14 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `6de84bf13010ca869587eaa49ef24ce5017bad07`
+- Last Reviewed Main SHA: `689b0250664e92d288a117af2c26b26e11fae5a8`
 - Live `main` remains authoritative; this durable snapshot intentionally does not claim its own eventual merge SHA as the current HEAD.
-- Latest reviewed merged corpus baseline: `9d54501bd3d7013637d7e83c9174d3f91a683aac` — PR #148 promoted Event 4768; Windows Security is `8/423` with `415` remaining on merged `main`. This branch proposes Event 4769 as the next encyclopedia-grade increment, producing `9/423` with `414` remaining pending review and merge; Sysmon remains `30/30`.
+- Latest reviewed merged corpus baseline: `14a80d0b1d830a207d3d77d0ffc4bae07599524c` — PR #153 promoted Windows Security Event 4769 after exact-head CI completed successfully; Windows Security is `9/423` with `414` remaining and Sysmon remains `30/30`.
+- PR #149 documentation hub refresh — **MERGED**.
+- PR #150 public documentation / CI reporting consistency — **MERGED / EXACT-HEAD CI GREEN**.
+- PR #151 supply-chain scope detection fail-closed hardening — **MERGED / POST-MERGE CI GREEN**.
+- PR #152 deterministic Windows Security review queue — **MERGED / EXACT-HEAD CI GREEN** as `689b0250664e92d288a117af2c26b26e11fae5a8`; planning is bound to the frozen inventory and exact coverage snapshot and has no promotion/execution authority.
+- PR #153 Windows Security Event 4769 encyclopedia promotion — **MERGED / EXACT-HEAD CI GREEN** as `14a80d0b1d830a207d3d77d0ffc4bae07599524c`; coverage is `9/423`.
 - PR #85 exact-head baseline: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene `35429390496`, Phase 5.3.4 Canaries `35429390498`, and Phase 5.10.5 Usable Data Preview `35429390479` all **SUCCESS**
 - PR #85 merged to `main` as `4bfe222eb708347ea0769da400c40dbdaf289b69`; post-merge Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` are all **SUCCESS / POST-MERGE VERIFIED**.
 - PR #89 exact-head `34225caf471b215717c3a8b1dcaa01799b01abd7`: all applicable checks completed successfully, including Foundation Hygiene `35437483777`, Phase 5.3.4 Canaries `35437483740`, Production Go Architecture `35437483746`, Shared Core Architecture `35437483749`, Governance Hygiene `35437483754`, Supply Chain Closure `35437483745`, Redistribution Closure `35437483753`, First-Party License Readiness `35437483751`, and Public Preview Readiness `35437483747`; merged as `4ea088e455462e66115d6887a472237171a96c94`.
