@@ -1,0 +1,87 @@
+name: Event 4769 snapshot normalization
+
+on:
+  push:
+    branches:
+      - feature/windows-security-event-4769
+    paths:
+      - .github/workflows/event4769-snapshot-normalize.yml
+
+permissions:
+  contents: write
+
+jobs:
+  normalize-snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: feature/windows-security-event-4769
+          fetch-depth: 0
+          persist-credentials: true
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Restore baseline ordering and apply only Event 4769 semantic delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+
+          path = 'content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json'
+          baseline_text = subprocess.check_output(
+              ['git', 'show', f'origin/main:{path}'], text=True
+          )
+          snapshot = json.loads(baseline_text)
+          if (
+              snapshot['denominator_count'],
+              snapshot['encyclopedia_grade_count'],
+              snapshot['remaining_count'],
+              snapshot['completion_ratio'],
+          ) != (423, 8, 415, '8/423'):
+              raise SystemExit('unexpected main coverage snapshot baseline')
+
+          snapshot['encyclopedia_grade_count'] = 9
+          snapshot['remaining_count'] = 414
+          snapshot['completion_ratio'] = '9/423'
+          snapshot['completion_percent'] = 2.13
+
+          matches = [row for row in snapshot['events'] if row['event_id'] == '4769']
+          if len(matches) != 1:
+              raise SystemExit(f'expected one Event 4769 row, found {len(matches)}')
+          row = matches[0]
+          if row['coverage_state'] != 'IDENTIFIED_PROVIDER_SCOPE' or row['counts_toward_release_coverage'] is not False:
+              raise SystemExit('unexpected Event 4769 baseline state')
+          row['coverage_state'] = 'ENCYCLOPEDIA_GRADE'
+          row['counts_toward_release_coverage'] = True
+
+          Path(path).write_text(
+              json.dumps(snapshot, ensure_ascii=False, indent=2) + '\n',
+              encoding='utf-8',
+          )
+          PY
+
+      - name: Verify snapshot remains semantically deterministic
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tests/phase51010/test_windows_security_coverage_snapshot.py
+          git diff --check -- content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json
+
+      - name: Commit semantic snapshot delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Ali RahimDabagh'
+          git config user.email '118610577+cyber-sentinel@users.noreply.github.com'
+          git add content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json
+          changed=$(git diff --cached --name-only)
+          test "$changed" = 'content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json'
+          git diff --cached --check
+          git commit -m 'Content: minimize Event 4769 coverage snapshot diff'
+          git push origin HEAD:feature/windows-security-event-4769
