@@ -73,6 +73,16 @@ Authoritative machine-readable state:
 - `content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json`;
 - `content/encyclopedia/sysmon-15.22-coverage.snapshot.json`.
 
+For bounded review planning, run
+`python3 tools/content/build_windows_security_review_queue.py --batch-size 10 --batch-index 0`.
+The deterministic queue binds each batch to the frozen inventory and exact coverage
+snapshot. It includes only currently uncovered Windows Security IDs and never
+creates tasks, promotes content, or changes release coverage. Rebuild it after
+each merged content promotion; before assigning a batch, check the live branch,
+open PRs, and canonical orchestrator task/lease state to avoid duplicate work.
+Each ID still requires controlled source review, field-level semantics,
+provenance, tests, packaged acceptance, and the normal PR/release gates.
+
 The packaged engineering preview remains a proof of the bounded product path. Coverage progress does not by itself grant Public Preview corpus or release authority.
 
 ## Approved mandatory Windows Security Corpus scope
