@@ -42,6 +42,8 @@ def test_01_exemplar_records_validate_canonical_v1():
 
 def test_02_approved_event_identities_and_search_aliases():
     records = records_with_paths()
+    assert validator.resolve_query(records, "4608") == ["atlas:event:microsoft.windows.security:4608"]
+    assert validator.resolve_query(records, "Windows startup") == ["atlas:event:microsoft.windows.security:4608"]
     assert validator.resolve_query(records, "4624") == ["atlas:event:microsoft.windows.security:4624"]
     assert validator.resolve_query(records, "Windows 4624") == ["atlas:event:microsoft.windows.security:4624"]
     assert validator.resolve_query(records, "4625") == ["atlas:event:microsoft.windows.security:4625"]
@@ -128,6 +130,25 @@ def test_03_sysmon_3_field_dictionary_is_complete_for_approved_exemplar():
         "destinationhostname", "destinationport", "destinationportname",
     }
     assert {value.rsplit(":", 1)[-1].split(".", 1)[1] for value in fields} == expected
+
+
+def test_03b_windows_4608_fieldless_shape_and_uws_boundary():
+    records = by_id(records_with_paths())
+    prefix = "atlas:field:microsoft.windows.security:4608."
+    assert not any(key.startswith(prefix) for key in records)
+    event = records["atlas:event:microsoft.windows.security:4608"]
+    assert event["native_identifiers"][0]["value"] == "4608"
+    source = records["atlas:source:atlas.source:ultimate-windows-security-event-4608"]
+    assert source["redistribution"]["policy"] == "prohibited"
+    uws_claims = [
+        r for r in records.values()
+        if r.get("record_kind") == "claim"
+        and r.get("subject_id") == "atlas:event:microsoft.windows.security:4608"
+        and r.get("predicate") == "telemetry.source"
+        and any(e.get("source_id") == source["id"] for e in r.get("evidence", []))
+    ]
+    assert len(uws_claims) == 1
+    assert uws_claims[0]["object"]["value"]["redistribution"] == "source-link-and-coverage-benchmark-only"
 
 
 def test_04_windows_4624_field_dictionary_matches_approved_exemplar():
