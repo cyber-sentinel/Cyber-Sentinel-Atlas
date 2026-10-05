@@ -45,12 +45,12 @@ def test_02_denominator_is_exact_controlled_provider_scope():
 
 def test_03_only_current_approved_windows_exemplars_count():
     snapshot = builder.build_snapshot()
-    assert snapshot["encyclopedia_grade_count"] == 9
-    assert snapshot["remaining_count"] == 414
-    assert snapshot["completion_ratio"] == "9/423"
-    assert snapshot["completion_percent"] == 2.13
+    assert snapshot["encyclopedia_grade_count"] == 10
+    assert snapshot["remaining_count"] == 413
+    assert snapshot["completion_ratio"] == "10/423"
+    assert snapshot["completion_percent"] == 2.36
     by_id = {item["event_id"]: item for item in snapshot["events"]}
-    for event_id in ("4624", "4625", "4648", "4672", "4688", "4740", "4768", "4769", "4771"):
+    for event_id in ("4608", "4624", "4625", "4648", "4672", "4688", "4740", "4768", "4769", "4771"):
         assert by_id[event_id]["coverage_state"] == "ENCYCLOPEDIA_GRADE"
         assert by_id[event_id]["counts_toward_release_coverage"] is True
 
