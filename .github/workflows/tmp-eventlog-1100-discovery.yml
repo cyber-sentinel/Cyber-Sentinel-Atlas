@@ -27,11 +27,14 @@ jobs:
       - name: Install pinned validation dependencies
         run: python -m pip install --disable-pip-version-check pytest==8.4.2 jsonschema==4.25.1
 
+      - name: Patch bounded validation assumptions
+        run: python tools/tmp_patch_eventlog_1100_batch.py
+
       - name: Apply bounded 1100-series content batch
         run: python tools/tmp_apply_eventlog_1100_batch.py
 
       - name: Compile changed Python
-        run: python -m py_compile tools/content/build_encyclopedia_records.py tools/content/validate_encyclopedia_coverage.py tests/phase51010/test_windows_security_eventlog_1100_series.py
+        run: python -m py_compile tools/content/build_encyclopedia_records.py tools/content/validate_encyclopedia_coverage.py tests/phase51010/test_windows_security_eventlog_1100_series.py tests/phase51010/test_approved_exemplar_content.py
 
       - name: Validate coverage contract
         run: python tools/content/validate_encyclopedia_coverage.py
@@ -67,6 +70,7 @@ jobs:
             tools/content/build_encyclopedia_records.py \
             tools/content/validate_encyclopedia_coverage.py \
             tests/phase51010/test_windows_security_eventlog_1100_series.py \
+            tests/phase51010/test_approved_exemplar_content.py \
             docs/releases/third-party-redistribution-inventory.json \
             docs/windows-security-log-scope.md
           if git diff --cached --quiet; then
