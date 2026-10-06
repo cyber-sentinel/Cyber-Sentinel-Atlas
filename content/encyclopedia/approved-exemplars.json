@@ -4675,6 +4675,1117 @@
       "fields": []
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4609",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4609",
+      "title": "Windows Security Event 4609 — Windows is shutting down",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4609",
+      "aliases": [
+        "4609",
+        "Event ID 4609",
+        "Windows 4609",
+        "Windows shutdown",
+        "Windows is shutting down"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4609",
+      "source_version": "audit-security-state-change-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-security-state-change",
+      "source_locator": "4609(S): Windows is shutting down",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4609-4622",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4609-4622",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4609 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4609",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4609",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Represents the defined Windows Security-Auditing shutdown event. Microsoft documents the identity but notes that current Windows does not invoke it, while the Server 2025 provider still exposes a Version 0 zero-field structural definition.",
+        "category": "System",
+        "subcategory": "Audit Security State Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 0,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ],
+        "generation_note": "Microsoft documents Event 4609 as defined but not currently invoked by the operating system."
+      },
+      "collection": {
+        "requirements": [
+          "Preserve the Security provider/system envelope if Event 4609 is ever observed.",
+          "Use independent shutdown/startup telemetry for operational conclusions because Microsoft documents this event as defined but not currently generated."
+        ],
+        "interpretation_note": "The identity is valid and provider-defined, but present-day absence is expected. Detection logic must not require this event as proof that Windows shut down cleanly."
+      },
+      "correlations": [
+        {
+          "target": "4608",
+          "key": "Computer + time",
+          "purpose": "compare a defined audited shutdown boundary with the next audited startup",
+          "limitation": "Absence of 4609 is expected on current Windows and is not proof of an abnormal shutdown."
+        }
+      ],
+      "analysis": [
+        "Treat Event 4609 as a defined shutdown identity, not as a guaranteed shutdown marker: Microsoft states that the operating system does not currently invoke it.",
+        "Do not infer an unclean shutdown merely because 4609 is absent; correlate 4608 and independent System/uptime telemetry instead.",
+        "Do not invent EventData fields for the controlled Version 0 provider shape; field count is zero."
+      ],
+      "fields": []
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4610",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4610",
+      "title": "Windows Security Event 4610 — An authentication package has been loaded by the Local Security Authority",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4610",
+      "aliases": [
+        "4610",
+        "Event ID 4610",
+        "Windows 4610",
+        "An authentication package has been loaded by the Local Security Authority"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4610",
+      "source_version": "event-4610-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4610",
+      "source_locator": "4610(S): An authentication package has been loaded by the Local Security Authority",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4609-4622",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4609-4622",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4610 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4610",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4610",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records loading of an authentication package by the Local Security Authority, exposing the loaded authentication-package identity.",
+        "category": "System",
+        "subcategory": "Audit Security System Extension",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 1,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Audit Security System Extension success auditing should be enabled where package-load visibility is required.",
+          "Collectors must preserve AuthenticationPackageName."
+        ],
+        "interpretation_note": "Common packages can load during normal startup. Prioritize deviations from an approved baseline and unexpected dynamic additions."
+      },
+      "correlations": [
+        {
+          "target": "4622",
+          "key": "Computer + time + package identity",
+          "purpose": "compare authentication-package and security-package loading activity around LSA initialization"
+        }
+      ],
+      "analysis": [
+        "Baseline expected authentication packages and investigate newly introduced or unexpected package DLL/name combinations.",
+        "Correlate unexpected package loading with startup context, software installation, registry changes, code-signing evidence and process/module telemetry.",
+        "Treat package loading as security-extension telemetry; it can be legitimate and is not a malicious verdict by itself."
+      ],
+      "fields": [
+        {
+          "key": "authentication-package-name",
+          "section": "Security Extension",
+          "native_name": "AuthenticationPackageName",
+          "type": "UnicodeString",
+          "meaning": "Name of the authentication package loaded by LSA.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4611",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4611",
+      "title": "Windows Security Event 4611 — A trusted logon process has been registered with the Local Security Authority",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4611",
+      "aliases": [
+        "4611",
+        "Event ID 4611",
+        "Windows 4611",
+        "A trusted logon process has been registered with the Local Security Authority"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4611",
+      "source_version": "event-4611-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4611",
+      "source_locator": "4611(S): A trusted logon process has been registered with the Local Security Authority",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4609-4622",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4609-4622",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4611 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4611",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4611",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records confirmation/registration of a trusted logon process with LSA and preserves the subject plus logon-process name.",
+        "category": "System",
+        "subcategory": "Audit Security System Extension",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 5,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Audit Security System Extension success auditing should be enabled.",
+          "Collectors must preserve the four Subject fields and LogonProcessName."
+        ],
+        "interpretation_note": "SYSTEM-context registrations and known Windows logon processes are commonly legitimate; unexpected subject or process values warrant investigation."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "SubjectLogonId + Computer + time",
+          "purpose": "correlate trusted logon-process registration with nearby successful logon sessions"
+        }
+      ],
+      "analysis": [
+        "Review trusted logon-process names against an approved baseline and prioritize registrations under unexpected subject identities.",
+        "Use SubjectLogonId to pivot to authentication context and correlate the process name with endpoint process/module telemetry.",
+        "Microsoft notes this event commonly appears during startup or authentication activity, so baseline context is essential."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject associated with the event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject associated with the event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier for correlation with authentication activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with logon events such as 4624 when the same Logon ID is available."
+        },
+        {
+          "key": "logon-process-name",
+          "section": "Logon Process",
+          "native_name": "LogonProcessName",
+          "type": "UnicodeString",
+          "meaning": "Name of the trusted logon process registered/confirmed with LSA.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4612",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4612",
+      "title": "Windows Security Event 4612 — Internal resources allocated for the queuing of audit messages have been exhausted, leading to the loss of some audits",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4612",
+      "aliases": [
+        "4612",
+        "Event ID 4612",
+        "Windows 4612",
+        "Internal resources allocated for the queuing of audit messages have been exhausted, leading to the loss of some audits"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4612",
+      "source_version": "event-4612-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4612",
+      "source_locator": "4612(S): Internal resources allocated for the queuing of audit messages have been exhausted, leading to the loss of some audits",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4609-4622",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4609-4622",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4612 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4612",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4612",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Signals exhaustion of internal resources used to queue audit messages, with a count of discarded audits and therefore a potential Security-log completeness gap.",
+        "category": "System",
+        "subcategory": "Audit System Integrity",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 1,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Audit System Integrity success auditing and Security-log collection must preserve Event 4612.",
+          "Collectors must preserve AuditsDiscarded and surrounding timestamps."
+        ],
+        "interpretation_note": "This is a logging-integrity signal and may result from resource or throughput problems; investigate root cause without assuming attacker activity."
+      },
+      "correlations": [
+        {
+          "target": "1101",
+          "key": "Computer + time",
+          "purpose": "compare audit-queue loss with EventLog transport-drop evidence when both are present"
+        },
+        {
+          "target": "1108",
+          "key": "Computer + time",
+          "purpose": "check for nearby Event Log processing failures"
+        }
+      ],
+      "analysis": [
+        "Treat every 4612 as an audit-integrity issue because it explicitly indicates lost audit records.",
+        "Investigate event-generation rate, disk/event-log throughput, memory/resource pressure and event-log service connectivity around the occurrence.",
+        "Quantify the potential visibility gap using AuditsDiscarded and surrounding collector/service telemetry."
+      ],
+      "fields": [
+        {
+          "key": "audits-discarded",
+          "section": "Audit Queue",
+          "native_name": "AuditsDiscarded",
+          "type": "UInt32",
+          "meaning": "Number of audit messages discarded when audit queuing resources were exhausted.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4614",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4614",
+      "title": "Windows Security Event 4614 — A notification package has been loaded by the Security Account Manager",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4614",
+      "aliases": [
+        "4614",
+        "Event ID 4614",
+        "Windows 4614",
+        "A notification package has been loaded by the Security Account Manager"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4614",
+      "source_version": "event-4614-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4614",
+      "source_locator": "4614(S): A notification package has been loaded by the Security Account Manager",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4609-4622",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4609-4622",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4614 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4614",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4614",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records loading of a notification package by the Security Account Manager; on modern Windows this is closely associated with password-filter notification packages.",
+        "category": "System",
+        "subcategory": "Audit Security System Extension",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 1,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Audit Security System Extension success auditing should be enabled.",
+          "Collectors must preserve NotificationPackageName."
+        ],
+        "interpretation_note": "Notification packages can be legitimate password filters. Unexpected package identities or unapproved changes are the primary investigation signal."
+      },
+      "correlations": [
+        {
+          "target": "4610",
+          "key": "Computer + time",
+          "purpose": "review adjacent LSA security-extension loading during startup or configuration change"
+        },
+        {
+          "target": "4622",
+          "key": "Computer + time",
+          "purpose": "review adjacent security-package loading"
+        }
+      ],
+      "analysis": [
+        "Maintain an approved notification/password-filter package baseline and investigate unexpected additions or path/name changes.",
+        "Correlate package changes with LSA Notification Packages registry changes, software installation and code-signing/module evidence.",
+        "Treat known enterprise password-filter products as expected only when approved and integrity-validated."
+      ],
+      "fields": [
+        {
+          "key": "notification-package-name",
+          "section": "Security Extension",
+          "native_name": "NotificationPackageName",
+          "type": "UnicodeString",
+          "meaning": "Name of the notification package loaded by SAM.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4615",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4615",
+      "title": "Windows Security Event 4615 — Invalid use of LPC port",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4615",
+      "aliases": [
+        "4615",
+        "Event ID 4615",
+        "Windows 4615",
+        "Invalid use of LPC port"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4615",
+      "source_version": "event-4615-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4615",
+      "source_locator": "4615(S): Invalid use of LPC port",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4609-4622",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4609-4622",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4615 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4615",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4615",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Represents invalid use of the LPC port reserved for Local Security Authority communication and exposes subject, invalid call, server-port and process context.",
+        "category": "System",
+        "subcategory": "Audit System Integrity",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 8,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ],
+        "generation_note": "Microsoft documentation states that this event appears never to occur."
+      },
+      "collection": {
+        "requirements": [
+          "Audit System Integrity success auditing should be enabled where this identity is relevant.",
+          "Collectors should preserve all subject, LPC and process fields if the event occurs."
+        ],
+        "interpretation_note": "Microsoft notes that this event appears never to occur. If observed, first validate authenticity/collection integrity, then investigate the process and LPC interaction."
+      },
+      "correlations": [
+        {
+          "target": "4688",
+          "key": "ProcessId + Computer + time",
+          "purpose": "resolve process creation context for the process named in Event 4615",
+          "limitation": "PID reuse requires tight time correlation."
+        }
+      ],
+      "analysis": [
+        "If observed, investigate the reported process, image integrity, signer, parent/command line and access to the LSA communication channel.",
+        "Use ProcessId with event time and independent process-creation telemetry because PID reuse can otherwise misattribute activity.",
+        "Microsoft documentation states that this event appears not to occur normally, so any real observation deserves validation and triage."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject associated with the event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject associated with the event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier for correlation with authentication activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with logon events such as 4624 when the same Logon ID is available."
+        },
+        {
+          "key": "invalid-call-name",
+          "section": "LPC Context",
+          "native_name": "InvalidCallName",
+          "type": "UnicodeString",
+          "meaning": "Name or classification of the invalid LPC call recorded by the provider.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "server-port-name",
+          "section": "LPC Context",
+          "native_name": "ServerPortName",
+          "type": "UnicodeString",
+          "meaning": "LPC server port name involved in the invalid-use condition.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the invalid LPC-port use.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString/path",
+          "meaning": "Process image name/path associated with the invalid LPC-port use.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4616",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4616",
+      "title": "Windows Security Event 4616 — The system time was changed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4616",
+      "aliases": [
+        "4616",
+        "Event ID 4616",
+        "Windows 4616",
+        "The system time was changed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4616",
+      "source_version": "event-4616-v1-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4616",
+      "source_locator": "4616(S): The system time was changed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4609-4622",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4609-4622",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4616 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4616",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4616",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a system-time change. Controlled Server 2025 provider evidence preserves distinct Version 0 and Version 1 payloads rather than flattening them.",
+        "category": "System",
+        "subcategory": "Audit Security State Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 10,
+            "notes": "Controlled provider v0 exposes separate PreviousDate/PreviousTime and NewDate/NewTime fields plus process context; this current provider shape is preserved explicitly rather than flattened into the v1 documentation shape."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 8,
+            "notes": "Microsoft documentation and controlled provider evidence align on FILETIME PreviousTime/NewTime plus process context."
+          }
+        ],
+        "version_reconciliation_note": "Microsoft's published Event 4616 page illustrates Version 1; controlled Windows Server 2025 provider metadata also exposes Version 0 with 10 fields and Version 1 with 8 fields. ATLAS preserves both shapes explicitly."
+      },
+      "collection": {
+        "requirements": [
+          "Audit Security State Change success auditing should be enabled.",
+          "Collectors must preserve Event.Version and all native fields so v0/v1 shapes can be interpreted correctly."
+        ],
+        "interpretation_note": "Normal Windows Time corrections are common. Unexpected subject identity, process image, magnitude/frequency, or timing relative to suspicious activity increases security relevance."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "SubjectLogonId + Computer + time",
+          "purpose": "resolve the subject logon context for an interactive/admin-driven time change"
+        },
+        {
+          "target": "4688",
+          "key": "ProcessId + Computer + time",
+          "purpose": "resolve process creation context for the process associated with the time change",
+          "limitation": "PID reuse requires time-bounded correlation."
+        }
+      ],
+      "analysis": [
+        "Prioritize time changes performed by identities or processes outside the expected Windows Time service baseline.",
+        "Correlate PreviousTime/NewTime with surrounding authentication, process, service and log timestamps because clock changes can affect timeline analysis.",
+        "Preserve the Event.Version: v0 and v1 have materially different field sets and time encodings.",
+        "Do not assume every time correction is suspicious; normal synchronization commonly occurs under service context."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the account associated with the system-time change.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name associated with the system-time change.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject account.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier for the account associated with the time change.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with logon telemetry such as 4624."
+        },
+        {
+          "key": "previous-date",
+          "section": "Time Change",
+          "native_name": "PreviousDate",
+          "type": "UnicodeString",
+          "meaning": "Provider-native Version 0 previous-date component; Version 1 no longer exposes this separate field.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "previous-time",
+          "section": "Time Change",
+          "native_name": "PreviousTime",
+          "type": "Version-dependent: UnicodeString (v0) / FILETIME (v1)",
+          "meaning": "Previous system time. The controlled provider encodes it as UnicodeString in v0 and FILETIME/xs:dateTime in v1.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "notes": "Do not flatten v0 and v1 types."
+        },
+        {
+          "key": "new-date",
+          "section": "Time Change",
+          "native_name": "NewDate",
+          "type": "UnicodeString",
+          "meaning": "Provider-native Version 0 new-date component; Version 1 no longer exposes this separate field.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "new-time",
+          "section": "Time Change",
+          "native_name": "NewTime",
+          "type": "Version-dependent: UnicodeString (v0) / FILETIME (v1)",
+          "meaning": "New system time. The controlled provider encodes it as UnicodeString in v0 and FILETIME/xs:dateTime in v1.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "notes": "Do not flatten v0 and v1 types."
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the system-time change in the controlled provider shapes.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString/path",
+          "meaning": "Process image name/path associated with the system-time change in the controlled provider shapes.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4618",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4618",
+      "title": "Windows Security Event 4618 — A monitored security event pattern has occurred",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4618",
+      "aliases": [
+        "4618",
+        "Event ID 4618",
+        "Windows 4618",
+        "A monitored security event pattern has occurred"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4618",
+      "source_version": "event-4618-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4618",
+      "source_locator": "4618(S): A monitored security event pattern has occurred",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4609-4622",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4609-4622",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4618 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4618",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4618",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records an intentionally generated monitored-security-event pattern carrying an organization-defined event identifier, computer/user context, count and duration.",
+        "category": "System",
+        "subcategory": "Audit System Integrity",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 8,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ],
+        "generation_note": "Microsoft documents invocation through AuthziGenerateAdminAlertAudit with SeAuditPrivilege."
+      },
+      "collection": {
+        "requirements": [
+          "Audit System Integrity success auditing and collection must preserve Event 4618 where custom monitored-pattern events are used.",
+          "Collectors must preserve all eight payload fields and must not map the inner EventId over the outer Event ID."
+        ],
+        "interpretation_note": "Microsoft documents Event 4618 as intentionally/external generated. Its security meaning depends on the producer and supplied pattern data rather than the event number alone."
+      },
+      "correlations": [
+        {
+          "target": "Payload EventId",
+          "key": "EventId",
+          "purpose": "resolve the organization-defined monitored event/pattern referenced inside the 4618 payload",
+          "limitation": "The payload EventId is not the outer Windows Event ID."
+        }
+      ],
+      "analysis": [
+        "Interpret 4618 according to the organization/application that intentionally generated it; Microsoft documents external invocation rather than an autonomous Windows detection verdict.",
+        "Preserve the inner EventId separately from the outer Windows Event ID 4618 to prevent identity confusion.",
+        "Validate the generator's SeAuditPrivilege use and application context when unexpected 4618 events appear."
+      ],
+      "fields": [
+        {
+          "key": "event-id",
+          "section": "Pattern Context",
+          "native_name": "EventId",
+          "type": "UInt32",
+          "meaning": "Payload-defined monitored pattern identifier supplied to the audit-generation API; it is not the outer Windows Event ID 4618.",
+          "versions": [
+            "0"
+          ],
+          "notes": "This inner EventId is payload context and must not be confused with the record identity 4618."
+        },
+        {
+          "key": "computer-name",
+          "section": "Pattern Context",
+          "native_name": "ComputerName",
+          "type": "UnicodeString",
+          "meaning": "Computer name supplied as monitored-pattern context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-sid",
+          "section": "Target Account",
+          "native_name": "TargetUserSid",
+          "type": "SID",
+          "meaning": "Target/user SID supplied with the monitored pattern when present.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Target/user name supplied with the monitored pattern when present.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-domain",
+          "section": "Target Account",
+          "native_name": "TargetUserDomain",
+          "type": "UnicodeString",
+          "meaning": "Target/user domain supplied with the monitored pattern when present.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-logon-id",
+          "section": "Target Account",
+          "native_name": "TargetLogonId",
+          "type": "HexInt64",
+          "meaning": "Target/user logon identifier supplied with the monitored pattern when present.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "event-count",
+          "section": "Pattern Context",
+          "native_name": "EventCount",
+          "type": "UInt32",
+          "meaning": "Count supplied for the monitored security event pattern.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "duration",
+          "section": "Pattern Context",
+          "native_name": "Duration",
+          "type": "UnicodeString",
+          "meaning": "Duration/context string supplied for the monitored pattern.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4621",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4621",
+      "title": "Windows Security Event 4621 — Administrator recovered system from CrashOnAuditFail",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4621",
+      "aliases": [
+        "4621",
+        "Event ID 4621",
+        "Windows 4621",
+        "Administrator recovered system from CrashOnAuditFail"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4621",
+      "source_version": "event-4621-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4621",
+      "source_locator": "4621(S): Administrator recovered system from CrashOnAuditFail",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4609-4622",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4609-4622",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4621 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4621",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4621",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records administrator recovery after a CrashOnAuditFail-triggered system halt/reboot and exposes the CrashOnAuditFail value.",
+        "category": "System",
+        "subcategory": "Audit Security State Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 1,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Audit Security State Change success auditing and Security-log forwarding should preserve Event 4621.",
+          "Collectors must preserve CrashOnAuditFailValue and nearby reboot/audit-integrity telemetry."
+        ],
+        "interpretation_note": "Microsoft recommends alerting on any occurrence. The event indicates recovery from a state in which audit recording failed sufficiently to trigger CrashOnAuditFail behavior."
+      },
+      "correlations": [
+        {
+          "target": "4608",
+          "key": "Computer + time",
+          "purpose": "correlate recovery with the subsequent audited startup boundary"
+        },
+        {
+          "target": "4612",
+          "key": "Computer + time",
+          "purpose": "check for audit-queue exhaustion preceding the CrashOnAuditFail condition"
+        },
+        {
+          "target": "1104",
+          "key": "Computer + time",
+          "purpose": "check whether Security-log capacity problems contributed to the condition"
+        }
+      ],
+      "analysis": [
+        "Treat any 4621 as high-priority audit-integrity evidence because Microsoft states auditable activity might have been lost before recovery.",
+        "Investigate why Security auditing could not be sustained, whether CrashOnAuditFail policy was expected, and the period of possible telemetry loss.",
+        "Correlate with reboot/startup, Security log capacity, Event Log service and audit-loss events."
+      ],
+      "fields": [
+        {
+          "key": "crash-on-audit-fail-value",
+          "section": "Recovery Context",
+          "native_name": "CrashOnAuditFailValue",
+          "type": "UnicodeString",
+          "meaning": "CrashOnAuditFail configuration/state value recorded during recovery.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4622",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4622",
+      "title": "Windows Security Event 4622 — A security package has been loaded by the Local Security Authority",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4622",
+      "aliases": [
+        "4622",
+        "Event ID 4622",
+        "Windows 4622",
+        "A security package has been loaded by the Local Security Authority"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4622",
+      "source_version": "event-4622-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4622",
+      "source_locator": "4622(S): A security package has been loaded by the Local Security Authority",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4609-4622",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4609-4622",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4622 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4622",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4622",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records loading of a security package by the Local Security Authority and exposes the package identity.",
+        "category": "System",
+        "subcategory": "Audit Security System Extension",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 1,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Audit Security System Extension success auditing should be enabled.",
+          "Collectors must preserve SecurityPackageName."
+        ],
+        "interpretation_note": "Known Windows security packages load legitimately. Focus on deviation from an approved package baseline, integrity/signature anomalies and unexpected dynamic loading."
+      },
+      "correlations": [
+        {
+          "target": "4610",
+          "key": "Computer + time + package identity",
+          "purpose": "compare security-package and authentication-package loading around LSA initialization"
+        },
+        {
+          "target": "4614",
+          "key": "Computer + time",
+          "purpose": "review adjacent notification/password-filter package loading"
+        }
+      ],
+      "analysis": [
+        "Baseline expected LSA security packages and investigate new, unsigned, unusual-path or otherwise unapproved package identities.",
+        "Correlate unexpected package loading with LSA registry/configuration changes, process/module telemetry and software installation.",
+        "Dynamic package loading is possible, so an occurrence outside startup context can be especially relevant when unapproved."
+      ],
+      "fields": [
+        {
+          "key": "security-package-name",
+          "section": "Security Extension",
+          "native_name": "SecurityPackageName",
+          "type": "UnicodeString",
+          "meaning": "Name/path and security-package identity loaded by LSA.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4624",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4624",
