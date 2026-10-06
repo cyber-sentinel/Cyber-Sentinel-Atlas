@@ -45,6 +45,29 @@ jobs:
           ATLAS_DISCOVERY_JSON: /tmp/atlas-batch03/evidence/security-auditing-4626-4653.json
         run: python tools/tmp_apply_security_auditing_4626_4653.py
 
+      - name: Preserve authoritative titles while disambiguating search aliases
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("content/encyclopedia/approved-exemplars.json")
+          doc = json.loads(path.read_text(encoding="utf-8"))
+          aliases = {
+              "4652": ["4652", "Event ID 4652", "Windows 4652", "IPsec Main Mode negotiation failed — certificate context"],
+              "4653": ["4653", "Event ID 4653", "Windows 4653", "IPsec Main Mode negotiation failed — non-certificate-detail context"],
+          }
+          seen = set()
+          for item in doc["events"]:
+              event_id = str(item.get("native_event_id", ""))
+              if event_id in aliases and item.get("namespace") == "microsoft.windows.security":
+                  item["aliases"] = aliases[event_id]
+                  seen.add(event_id)
+          if seen != set(aliases):
+              raise SystemExit(f"Expected both IPsec failure identities, found {sorted(seen)}")
+          path.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          PY
+
       - name: Validate focused Phase 5.10.10 contracts
         shell: bash
         run: |
