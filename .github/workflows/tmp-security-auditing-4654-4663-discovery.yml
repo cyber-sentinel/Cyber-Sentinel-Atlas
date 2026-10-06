@@ -1,0 +1,69 @@
+name: Temporary Security-Auditing 4654-4663 discovery
+
+on:
+  push:
+    branches:
+      - content/windows-security-auditing-4654-4663
+
+permissions:
+  contents: read
+
+jobs:
+  capture-provider-metadata:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact branch head
+        uses: actions/checkout@v7
+
+      - name: Capture bounded structural metadata
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $ids = @(4654,4655,4656,4657,4658,4659,4660,4661,4662,4663)
+          $providerName = 'Microsoft-Windows-Security-Auditing'
+          $os = Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, OsBuildNumber, OsArchitecture
+          if ([string]$os.OsBuildNumber -ne '26100') {
+            throw "Controlled provider build mismatch: $($os.OsBuildNumber)"
+          }
+          $provider = Get-WinEvent -ListProvider $providerName
+          $selected = @($provider.Events | Where-Object { $ids -contains [int]$_.Id } | Sort-Object Id, Version)
+          $present = @($selected | ForEach-Object { [int]$_.Id } | Sort-Object -Unique)
+          if ($present.Count -ne $ids.Count -or @($ids | Where-Object { $_ -notin $present }).Count -gt 0) {
+            throw "Provider identity mismatch. Expected=$($ids -join ',') actual=$($present -join ',')"
+          }
+          $records = foreach ($event in $selected) {
+            [ordered]@{
+              id = [int]$event.Id
+              version = [int]$event.Version
+              provider = $providerName
+              log_links = @($event.LogLink | ForEach-Object { $_.LogName })
+              level = if ($event.Level) { $event.Level.Name } else { $null }
+              task = if ($event.Task) { $event.Task.Name } else { $null }
+              opcode = if ($event.Opcode) { $event.Opcode.Name } else { $null }
+              keywords = @($event.Keywords | ForEach-Object { $_.Name })
+              template = $event.Template
+            }
+          }
+          [ordered]@{
+            schema = 'atlas.windows-provider-structural-discovery/v1'
+            structural_only = $true
+            captured_at_utc = (Get-Date).ToUniversalTime().ToString('o')
+            runner_os = $os
+            provider = $providerName
+            channel_scope = 'Security'
+            requested_ids = $ids
+            unique_event_id_count = $present.Count
+            event_version_definition_count = $selected.Count
+            events = @($records)
+          } | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 security-auditing-4654-4663.json
+          $digest = (Get-FileHash security-auditing-4654-4663.json -Algorithm SHA256).Hash.ToLowerInvariant()
+          Write-Output "bounded_metadata_sha256=$digest ids=$($present.Count) versions=$($selected.Count)"
+
+      - name: Upload bounded discovery evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-auditing-4654-4663-provider-metadata
+          path: security-auditing-4654-4663.json
+          if-no-files-found: error
+          retention-days: 7
