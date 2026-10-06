@@ -1,4 +1,4 @@
-name: Temporary EventLog 1100-series discovery
+name: Temporary EventLog 1100-series batch validation
 
 on:
   push:
@@ -7,61 +7,71 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  capture-provider-metadata:
-    runs-on: windows-latest
-    timeout-minutes: 15
+  apply-and-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Capture bounded Microsoft-Windows-Eventlog metadata
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $ids = @(1100,1101,1102,1104,1105,1108)
-          $provider = Get-WinEvent -ListProvider 'Microsoft-Windows-Eventlog'
-          $selected = @($provider.Events | Where-Object { $ids -contains [int]$_.Id } | Sort-Object Id, Version)
-          if (-not $selected -or $selected.Count -lt 6) {
-            throw "Expected provider metadata for all six bounded IDs; found $($selected.Count) event/version definitions"
-          }
-          $present = @($selected | ForEach-Object { [int]$_.Id } | Sort-Object -Unique)
-          if (Compare-Object -ReferenceObject $ids -DifferenceObject $present) {
-            throw "Provider identity set mismatch. Expected=$($ids -join ',') actual=$($present -join ',')"
-          }
-          $os = Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, OsBuildNumber, OsArchitecture
-          $records = foreach ($event in $selected) {
-            [ordered]@{
-              id = [int]$event.Id
-              version = [int]$event.Version
-              provider = 'Microsoft-Windows-Eventlog'
-              log_links = @($event.LogLink | ForEach-Object { $_.LogName })
-              level = if ($event.Level) { $event.Level.Name } else { $null }
-              task = if ($event.Task) { $event.Task.Name } else { $null }
-              opcode = if ($event.Opcode) { $event.Opcode.Name } else { $null }
-              keywords = @($event.Keywords | ForEach-Object { $_.Name })
-              description = $event.Description
-              template = $event.Template
-            }
-          }
-          [ordered]@{
-            schema = 'atlas.windows-eventlog-provider-discovery/v1'
-            captured_at_utc = (Get-Date).ToUniversalTime().ToString('o')
-            runner_os = $os
-            provider = 'Microsoft-Windows-Eventlog'
-            channel_scope = 'Security'
-            requested_ids = $ids
-            events = @($records)
-          } | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 eventlog-1100-series.json
-          Get-FileHash eventlog-1100-series.json -Algorithm SHA256 | Format-List
-          Get-Content eventlog-1100-series.json
-
-      - name: Upload bounded discovery evidence
-        uses: actions/upload-artifact@v4
         with:
-          name: eventlog-1100-series-provider-metadata
-          path: eventlog-1100-series.json
-          if-no-files-found: error
-          retention-days: 7
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned validation dependencies
+        run: python -m pip install --disable-pip-version-check pytest==8.4.2 jsonschema==4.25.1
+
+      - name: Apply bounded 1100-series content batch
+        run: python tools/tmp_apply_eventlog_1100_batch.py
+
+      - name: Compile changed Python
+        run: python -m py_compile tools/content/build_encyclopedia_records.py tools/content/validate_encyclopedia_coverage.py tests/phase51010/test_windows_security_eventlog_1100_series.py
+
+      - name: Validate coverage contract
+        run: python tools/content/validate_encyclopedia_coverage.py
+
+      - name: Validate canonical encyclopedia records and batch semantics
+        run: >-
+          python -m pytest -q
+          tests/phase51010/test_windows_security_eventlog_1100_series.py
+          tests/phase51010/test_approved_exemplar_content.py
+          tests/phase51010/test_exemplar_driven_preview_contract.py
+
+      - name: Build deterministic encyclopedia records
+        run: |
+          python tools/content/build_encyclopedia_records.py --output "$RUNNER_TEMP/encyclopedia-a.jsonl"
+          python tools/content/build_encyclopedia_records.py --output "$RUNNER_TEMP/encyclopedia-b.jsonl"
+          cmp "$RUNNER_TEMP/encyclopedia-a.jsonl" "$RUNNER_TEMP/encyclopedia-b.jsonl"
+          sha256sum "$RUNNER_TEMP/encyclopedia-a.jsonl"
+
+      - name: Check patch hygiene
+        run: git diff --check
+
+      - name: Commit validated durable product changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "cyber-sentinel"
+          git config user.email "118610577+cyber-sentinel@users.noreply.github.com"
+          git add \
+            content/encyclopedia/approved-exemplars.json \
+            content/encyclopedia/coverage-manifest.json \
+            content/encyclopedia/sources \
+            ingestion/inventories/windows-eventlog-security-1100-series-26100.telemetry.json \
+            tools/content/build_encyclopedia_records.py \
+            tools/content/validate_encyclopedia_coverage.py \
+            tests/phase51010/test_windows_security_eventlog_1100_series.py \
+            docs/releases/third-party-redistribution-inventory.json \
+            docs/windows-security-log-scope.md
+          if git diff --cached --quiet; then
+            echo "No durable product changes to commit"
+            exit 1
+          fi
+          git commit -m "Content: add Windows Security EventLog 1100-series coverage"
+          git push origin HEAD:content/windows-security-eventlog-batch-01-1100-1108
