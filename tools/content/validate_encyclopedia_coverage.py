@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "content" / "encyclopedia" / "coverage-manifest.json"
+APPROVED = ROOT / "content" / "encyclopedia" / "approved-exemplars.json"
 
 REQUIRED_FAMILIES = {
     "windows-security-auditing",
@@ -40,7 +41,7 @@ def validate() -> list[str]:
         errors.append("global Windows completion percent must remain null until a legitimate global denominator exists")
 
     security_log_benchmark = manifest.get("windows_security_log_review_benchmark", {})
-    expected_security_log_benchmark = {
+    expected_security_log_static = {
         "state": "CONTROLLED_REVIEW_BENCHMARK_DEFINED",
         "source": "Ultimate Windows Security — Windows Security Log Encyclopedia",
         "source_url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/default.aspx",
@@ -52,8 +53,29 @@ def validate() -> list[str]:
         "semantic_authority": "Microsoft official documentation plus controlled provider/channel/version evidence",
         "ingestion_policy": "Do not bulk-ingest third-party prose. UWS remains a controlled Quick Detail and coverage benchmark; every promoted Event ID requires independent Microsoft/provider evidence and provenance review.",
     }
-    if security_log_benchmark != expected_security_log_benchmark:
-        errors.append("Windows Security Log review benchmark drifted from the controlled 1100..8191 sparse UWS index scope")
+    for key, expected in expected_security_log_static.items():
+        if security_log_benchmark.get(key) != expected:
+            errors.append(f"Windows Security Log review benchmark drifted at {key}")
+    covered = security_log_benchmark.get("covered_event_ids")
+    grade = security_log_benchmark.get("encyclopedia_grade_listed_id_count")
+    remaining_benchmark = security_log_benchmark.get("remaining_listed_id_count")
+    listed = security_log_benchmark.get("listed_unique_event_id_count")
+    if not isinstance(covered, list) or not all(isinstance(item, str) and item.isdigit() for item in covered):
+        errors.append("Windows Security Log covered_event_ids must be a list of numeric strings"); covered = []
+    if covered != sorted(set(covered), key=int): errors.append("Windows Security Log covered_event_ids must be unique and numerically sorted")
+    if not isinstance(grade, int) or grade != len(covered): errors.append("Windows Security Log benchmark numerator must equal covered_event_ids length")
+    if not isinstance(remaining_benchmark, int) or not isinstance(listed, int) or not isinstance(grade, int) or grade + remaining_benchmark != listed: errors.append("Windows Security Log benchmark coverage arithmetic is invalid")
+    if isinstance(grade, int) and isinstance(listed, int):
+        if security_log_benchmark.get("completion_ratio") != f"{grade}/{listed}": errors.append("Windows Security Log benchmark completion ratio drifted")
+        expected_percent = round(grade * 100 / listed, 2) if listed else None
+        if security_log_benchmark.get("completion_percent") != expected_percent: errors.append("Windows Security Log benchmark completion percent drifted")
+    approved = load(APPROVED)
+    approved_by_native = {str(item.get("native_event_id")): item for item in approved.get("events", []) if item.get("namespace") == "microsoft.windows.security"}
+    for event_id in covered:
+        item = approved_by_native.get(event_id)
+        if not item: errors.append(f"Windows Security Log covered Event ID {event_id} lacks an approved exemplar"); continue
+        external = item.get("external_reference", {})
+        if "ultimatewindowssecurity.com/securitylog/encyclopedia/" not in str(external.get("url", "")): errors.append(f"Windows Security Log covered Event ID {event_id} lacks controlled UWS Quick Detail reference")
 
     families = manifest.get("families", [])
     by_id = {item.get("id"): item for item in families}
@@ -135,8 +157,9 @@ def main() -> int:
     benchmark = manifest["windows_security_log_review_benchmark"]
     print(
         "ATLAS coverage manifest PASSED: "
-        f"Windows Security Log review benchmark={benchmark['listed_unique_event_id_count']} listed IDs/"
-        f"{benchmark['minimum_listed_event_id']}..{benchmark['maximum_listed_event_id']} sparse range; "
+        f"Windows Security Log review benchmark={benchmark['encyclopedia_grade_listed_id_count']}/"
+        f"{benchmark['listed_unique_event_id_count']} encyclopedia-grade listed IDs "
+        f"({benchmark['minimum_listed_event_id']}..{benchmark['maximum_listed_event_id']} sparse range); "
         f"Windows Security Auditing={by_id['windows-security-auditing']['encyclopedia_grade_count']}/"
         f"{by_id['windows-security-auditing']['denominator_count']}; "
         f"Sysmon={by_id['sysmon']['encyclopedia_grade_count']}/"

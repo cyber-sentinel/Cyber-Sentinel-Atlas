@@ -4009,6 +4009,594 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:1100",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "1100",
+      "title": "Windows Security Event 1100 — The event logging service has shut down",
+      "provider": "Microsoft-Windows-Eventlog",
+      "channel": "Security",
+      "product": "Windows Security Log",
+      "platform": "Windows",
+      "native_event_id": "1100",
+      "aliases": [
+        "1100",
+        "Event ID 1100",
+        "Windows 1100",
+        "The event logging service has shut down"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-eventlog-event-1100",
+      "source_version": "event-1100-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-1100",
+      "source_locator": "1100(S): The event logging service has shut down",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-eventlog-provider-26100-1100-series",
+        "source_version": "windows-server-2025-build-26100-eventlog-provider-1100-series",
+        "locator": "Microsoft-Windows-Eventlog / Security / Event ID 1100 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-1100",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=1100",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records shutdown of the Windows Event Log service in the Security log. It is expected during normal system shutdown and is useful as a timeline boundary, but the event alone does not establish malicious activity.",
+        "category": "System",
+        "subcategory": "Other Events",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "provider_task": "Shutdown",
+        "minimum_supported_generation": "Windows Server 2008 / Windows Vista",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 0,
+            "notes": "No event-specific payload fields are present in the controlled provider template."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Security log collection must preserve Microsoft-Windows-Eventlog Event ID 1100 and its standard Event/System envelope."
+        ],
+        "interpretation_note": "Normal shutdown generates this event. Unexpected occurrence should be correlated with system shutdown/restart evidence and administrative activity before escalation."
+      },
+      "correlations": [
+        {
+          "target": "4608",
+          "key": "Computer + time",
+          "purpose": "compare Event Log service shutdown with the next audited Windows startup boundary",
+          "limitation": "Timeline correlation does not prove the cause of a restart."
+        },
+        {
+          "target": "Windows System shutdown/startup telemetry",
+          "key": "Computer + time",
+          "purpose": "corroborate whether the service shutdown aligned with an expected operating-system shutdown"
+        }
+      ],
+      "analysis": [
+        "Use Event 1100 as a low-volume Security-log timeline marker for Event Log service shutdown.",
+        "Investigate unexpected or repeated service shutdowns when they coincide with outages, suspicious administration, log-integrity anomalies or other reboot evidence.",
+        "Do not classify Event 1100 as malicious by itself because Microsoft documents it during normal shutdown."
+      ],
+      "fields": []
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:1101",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "1101",
+      "title": "Windows Security Event 1101 — Audit events have been dropped by the transport",
+      "provider": "Microsoft-Windows-Eventlog",
+      "channel": "Security",
+      "product": "Windows Security Log",
+      "platform": "Windows",
+      "native_event_id": "1101",
+      "aliases": [
+        "1101",
+        "Event ID 1101",
+        "Windows 1101",
+        "Audit events have been dropped by the transport"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-eventlog-provider-26100-1100-series",
+      "source_version": "windows-server-2025-build-26100-eventlog-provider-1100-series",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "Microsoft-Windows-Eventlog / Security / Event ID 1101 / Version 0",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-eventlog-provider-26100-1100-series",
+        "source_version": "windows-server-2025-build-26100-eventlog-provider-1100-series",
+        "locator": "Microsoft-Windows-Eventlog / Security / Event ID 1101 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-1101",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=1101",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records that the Windows Event Log transport dropped audit events. Controlled Windows Server 2025 provider metadata exposes one Reason byte but does not provide a reviewed authoritative value dictionary for that byte.",
+        "category": "System",
+        "subcategory": "Other Events",
+        "event_type": "Success audit keyword",
+        "provider_level": "Error",
+        "provider_task": "EventProcessing",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Windows Server 2025 provider-validated shape",
+            "field_count": 1,
+            "notes": "Provider metadata exposes Reason as UInt8."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Security log collection must preserve Microsoft-Windows-Eventlog Event ID 1101 and the Reason field."
+        ],
+        "interpretation_note": "Treat this event as an audit-visibility loss signal. No ATLAS Reason-code mapping is published until an authoritative value dictionary is independently verified."
+      },
+      "correlations": [
+        {
+          "target": "1108",
+          "key": "Computer + time",
+          "purpose": "look for nearby Event Log processing errors that may explain audit transport loss",
+          "limitation": "Temporal proximity is not proof of causation."
+        },
+        {
+          "target": "1100 / 4608",
+          "key": "Computer + time",
+          "purpose": "place dropped audit transport events around shutdown/startup boundaries"
+        }
+      ],
+      "analysis": [
+        "Prioritize Event 1101 as a telemetry-integrity signal because audit records were dropped before durable logging.",
+        "Correlate with system stability, Event Log service state, forwarding health and nearby Event Log processing errors.",
+        "Do not invent a Reason value dictionary; the reviewed provider metadata establishes the field shape, not undocumented value semantics."
+      ],
+      "fields": [
+        {
+          "key": "reason",
+          "section": "Transport Status",
+          "native_name": "Reason",
+          "type": "UInt8",
+          "meaning": "Provider-supplied reason value associated with audit events dropped by the Event Log transport.",
+          "versions": [
+            "0"
+          ],
+          "notes": "No authoritative Reason-code dictionary was established during this review; retain the raw value."
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:1102",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "1102",
+      "title": "Windows Security Event 1102 — The audit log was cleared",
+      "provider": "Microsoft-Windows-Eventlog",
+      "channel": "Security",
+      "product": "Windows Security Log",
+      "platform": "Windows",
+      "native_event_id": "1102",
+      "aliases": [
+        "1102",
+        "Event ID 1102",
+        "Windows 1102",
+        "The audit log was cleared"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-eventlog-event-1102",
+      "source_version": "event-1102-v0-doc+provider-v1",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-1102",
+      "source_locator": "1102(S): The audit log was cleared",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-eventlog-provider-26100-1100-series",
+        "source_version": "windows-server-2025-build-26100-eventlog-provider-1100-series",
+        "locator": "Microsoft-Windows-Eventlog / Security / Event ID 1102 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-1102",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=1102",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records clearing of the Security audit log and identifies the subject that performed the action. Windows Server 2025 provider metadata adds Version 1 process-correlation fields beyond the older documented Version 0 payload.",
+        "category": "System",
+        "subcategory": "Other Events",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "provider_task": "LogClear",
+        "minimum_supported_generation": "Windows Server 2008 / Windows Vista",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Microsoft documentation / legacy documented shape",
+            "field_count": 4,
+            "notes": "Subject identity and SubjectLogonId."
+          },
+          {
+            "version": "1",
+            "generation": "Windows Server 2025 build 26100 provider-validated shape",
+            "field_count": 6,
+            "notes": "Adds ClientProcessId and ClientProcessStartKey."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Security log collection must preserve Event.Version because Version 1 adds client-process correlation fields.",
+          "Forwarding/retention controls should protect Event 1102 from loss when the local Security log is cleared."
+        ],
+        "interpretation_note": "Security log clearing is high-value administrative telemetry but is not, by itself, proof of malicious intent."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "SubjectLogonId + Computer + time",
+          "purpose": "correlate the clearing subject to the associated logon session where available"
+        },
+        {
+          "target": "4688 / process telemetry",
+          "key": "ClientProcessId + time",
+          "purpose": "investigate the client process responsible for Version 1 log clearing",
+          "limitation": "PIDs can be reused; use time and additional process evidence."
+        }
+      ],
+      "analysis": [
+        "Treat Event 1102 as a high-priority audit-integrity event and establish who cleared the log, from which session, and under what change/incident context.",
+        "For Version 1, use ClientProcessId and ClientProcessStartKey as additional process pivots while retaining subject/logon correlation.",
+        "Do not assume maliciousness when log clearing is authorized maintenance; verify change context and surrounding activity."
+      ],
+      "fields": [
+        {
+          "key": "subject.security-id",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the account that cleared the audit log.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject.account-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject that cleared the audit log.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject.domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or authority associated with the subject account.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject.logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject that cleared the audit log.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with Security logon events such as 4624 on the same computer and time window."
+        },
+        {
+          "key": "process.client-process-id",
+          "section": "Process Information",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Client process identifier exposed by the Version 1 provider payload.",
+          "versions": [
+            "1"
+          ],
+          "correlation": "Use with time and independent process telemetry because process IDs can be reused."
+        },
+        {
+          "key": "process.client-process-start-key",
+          "section": "Process Information",
+          "native_name": "ClientProcessStartKey",
+          "type": "UInt64",
+          "meaning": "Provider-supplied process start key exposed by the Version 1 payload for stronger client-process correlation.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:1104",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "1104",
+      "title": "Windows Security Event 1104 — The security log is now full",
+      "provider": "Microsoft-Windows-Eventlog",
+      "channel": "Security",
+      "product": "Windows Security Log",
+      "platform": "Windows",
+      "native_event_id": "1104",
+      "aliases": [
+        "1104",
+        "Event ID 1104",
+        "Windows 1104",
+        "The security log is now full"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-eventlog-event-1104",
+      "source_version": "event-1104-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-1104",
+      "source_locator": "1104(S): The security log is now full",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-eventlog-provider-26100-1100-series",
+        "source_version": "windows-server-2025-build-26100-eventlog-provider-1100-series",
+        "locator": "Microsoft-Windows-Eventlog / Security / Event ID 1104 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-1104",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=1104",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records that the Security event log reached its configured capacity. This is an audit-availability condition and can precede loss of new Security events depending on retention policy.",
+        "category": "System",
+        "subcategory": "Other Events",
+        "event_type": "Success audit keyword",
+        "provider_level": "Error",
+        "provider_task": "EventProcessing",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 0,
+            "notes": "No event-specific payload fields are present in the controlled provider template."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Security log sizing and retention policy should be governed so the log does not silently stop accepting required audit data.",
+          "Collection should preserve Event 1104 as an audit-availability alert."
+        ],
+        "interpretation_note": "A full Security log is a visibility and operations problem; it is not proof of deliberate tampering."
+      },
+      "correlations": [
+        {
+          "target": "1105",
+          "key": "Computer + time",
+          "purpose": "determine whether archive-on-full behavior created a backup log"
+        },
+        {
+          "target": "1101 / 1108",
+          "key": "Computer + time",
+          "purpose": "check for nearby audit loss or Event Log processing errors"
+        }
+      ],
+      "analysis": [
+        "Investigate Event 1104 promptly because full-log conditions can create an audit visibility gap under some retention policies.",
+        "Verify Security log maximum size, retention mode, archival/forwarding health and disk capacity.",
+        "Distinguish configuration/capacity failures from deliberate log-integrity interference using surrounding evidence."
+      ],
+      "fields": []
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:1105",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "1105",
+      "title": "Windows Security Event 1105 — Event log automatic backup",
+      "provider": "Microsoft-Windows-Eventlog",
+      "channel": "Security",
+      "product": "Windows Security Log",
+      "platform": "Windows",
+      "native_event_id": "1105",
+      "aliases": [
+        "1105",
+        "Event ID 1105",
+        "Windows 1105",
+        "Event log automatic backup"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-eventlog-event-1105",
+      "source_version": "event-1105-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-1105",
+      "source_locator": "1105(S): Event log automatic backup",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-eventlog-provider-26100-1100-series",
+        "source_version": "windows-server-2025-build-26100-eventlog-provider-1100-series",
+        "locator": "Microsoft-Windows-Eventlog / Security / Event ID 1105 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-1105",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=1105",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records automatic creation of an archived event-log file when the log becomes full under archive-on-full retention behavior, including the channel and backup path.",
+        "category": "System",
+        "subcategory": "Other Events",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "provider_task": "AutoBackup",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 2,
+            "notes": "Provider-native fields are Channel and BackupPath."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Archive-on-full behavior must be configured for this event to represent automatic backup of a full log.",
+          "Collectors should preserve the Channel and BackupPath values."
+        ],
+        "interpretation_note": "The event can be normal under deliberate retention policy. Investigate unusual frequency, unexpected paths, or paired capacity problems rather than treating the backup itself as malicious."
+      },
+      "correlations": [
+        {
+          "target": "1104",
+          "key": "Computer + time",
+          "purpose": "correlate automatic backup with the Security log reaching capacity"
+        },
+        {
+          "target": "Archived EVTX file",
+          "key": "BackupPath",
+          "purpose": "locate the archived log for retention and forensic review"
+        }
+      ],
+      "analysis": [
+        "Use Channel and BackupPath to verify that the expected Security log was archived to an expected location.",
+        "Repeated backups in short intervals can indicate undersized logs, excessive audit volume or retention problems.",
+        "Preserve archived EVTX files according to evidence and retention requirements when an investigation is active."
+      ],
+      "fields": [
+        {
+          "key": "channel",
+          "section": "Backup Context",
+          "native_name": "Channel",
+          "type": "UnicodeString",
+          "meaning": "Name of the event-log channel that was automatically backed up.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "backup-path",
+          "section": "Backup Context",
+          "native_name": "BackupPath",
+          "type": "UnicodeString/path",
+          "meaning": "Path of the archived event-log file created by automatic backup.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Use as the file-system pivot for the archived EVTX artifact."
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:1108",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "1108",
+      "title": "Windows Security Event 1108 — The event logging service encountered an error while processing an incoming event",
+      "provider": "Microsoft-Windows-Eventlog",
+      "channel": "Security",
+      "product": "Windows Security Log",
+      "platform": "Windows",
+      "native_event_id": "1108",
+      "aliases": [
+        "1108",
+        "Event ID 1108",
+        "Windows 1108",
+        "The event logging service encountered an error while processing an incoming event"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-eventlog-event-1108",
+      "source_version": "event-1108-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-1108",
+      "source_locator": "1108(S): The event logging service encountered an error while processing an incoming event",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-eventlog-provider-26100-1100-series",
+        "source_version": "windows-server-2025-build-26100-eventlog-provider-1100-series",
+        "locator": "Microsoft-Windows-Eventlog / Security / Event ID 1108 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-1108",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=1108",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records an Event Log service error while processing an incoming event. Controlled provider metadata exposes ErrorCode, EventID and PubID; older Microsoft rendering labels the publisher field as PublisherID.",
+        "category": "System",
+        "subcategory": "Other Events",
+        "event_type": "Success audit keyword",
+        "provider_level": "Error",
+        "provider_task": "EventProcessing",
+        "minimum_supported_generation": "Windows Server 2008 R2 / Windows 7",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 3,
+            "notes": "Provider-native fields: ErrorCode, EventID, PubID."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Security log collection must preserve Event 1108 and all three provider-native fields.",
+          "Investigation should retain the nearby event that failed processing when available."
+        ],
+        "interpretation_note": "This is a logging-integrity/error signal. It can follow a malformed or otherwise unprocessable incoming event and should be investigated without assuming malicious intent."
+      },
+      "correlations": [
+        {
+          "target": "Referenced incoming event",
+          "key": "EventID + PubID + time",
+          "purpose": "identify the event/publisher associated with the processing failure"
+        },
+        {
+          "target": "1101",
+          "key": "Computer + time",
+          "purpose": "check whether Event Log processing problems coincided with dropped audit transport records"
+        }
+      ],
+      "analysis": [
+        "Monitor Event 1108 because it indicates that an incoming event could not be processed correctly by the Event Log service.",
+        "Use ErrorCode, EventID, PubID and nearby log entries to identify the defective or incompatible publisher/event.",
+        "Preserve the provider-native field name PubID in ATLAS; document that older Microsoft rendered examples may label the same publisher concept as PublisherID."
+      ],
+      "fields": [
+        {
+          "key": "error-code",
+          "section": "Processing Failure",
+          "native_name": "ErrorCode",
+          "type": "UInt32",
+          "meaning": "Provider error code associated with the incoming-event processing failure.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "event-id",
+          "section": "Processing Failure",
+          "native_name": "EventID",
+          "type": "UInt16",
+          "meaning": "Native event identifier of the incoming event associated with the processing failure.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Use with PubID and time to locate the related event."
+        },
+        {
+          "key": "publisher-id",
+          "section": "Processing Failure",
+          "native_name": "PubID",
+          "type": "UnicodeString",
+          "meaning": "Provider/publisher identifier associated with the incoming event that could not be processed.",
+          "versions": [
+            "0"
+          ],
+          "notes": "The Windows Server 2025 provider template names this field PubID; older Microsoft rendered XML examples label the publisher element PublisherID."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4608",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4608",

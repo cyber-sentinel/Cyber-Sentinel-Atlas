@@ -14,7 +14,29 @@
     "listed_unique_event_id_count": 422,
     "continuous_numeric_range": false,
     "semantic_authority": "Microsoft official documentation plus controlled provider/channel/version evidence",
-    "ingestion_policy": "Do not bulk-ingest third-party prose. UWS remains a controlled Quick Detail and coverage benchmark; every promoted Event ID requires independent Microsoft/provider evidence and provenance review."
+    "ingestion_policy": "Do not bulk-ingest third-party prose. UWS remains a controlled Quick Detail and coverage benchmark; every promoted Event ID requires independent Microsoft/provider evidence and provenance review.",
+    "encyclopedia_grade_listed_id_count": 16,
+    "remaining_listed_id_count": 406,
+    "completion_ratio": "16/422",
+    "completion_percent": 3.79,
+    "covered_event_ids": [
+      "1100",
+      "1101",
+      "1102",
+      "1104",
+      "1105",
+      "1108",
+      "4608",
+      "4624",
+      "4625",
+      "4648",
+      "4672",
+      "4688",
+      "4740",
+      "4768",
+      "4769",
+      "4771"
+    ]
   },
   "completion_rule": "A telemetry family may be declared complete only after its provider/channel/version denominator is frozen and every required identity reaches the declared encyclopedia-grade and release acceptance level. The Windows Security Log review benchmark spans listed Event IDs 1100 through 8191 but is sparse and is not itself a provider denominator. No family-specific percentage may be presented as all-Windows completeness.",
   "families": [

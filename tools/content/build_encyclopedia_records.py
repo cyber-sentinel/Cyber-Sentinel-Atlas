@@ -217,6 +217,13 @@ def field_semantics(event: dict[str, Any], field: dict[str, Any], field_id: str)
         value["structural_refresh_state"] = "VALIDATED_CONTROLLED_SYSMON_15_22_SCHEMA_EXPORT"
     else:
         ev = [evidence(event["source_id"], event["source_version"], f"{event['source_locator']} / {field['section']} / {field['native_name']}")]
+        structural = event.get("structural_source")
+        if structural:
+            ev.append(evidence(
+                structural["source_id"], structural["source_version"],
+                f"{structural['locator']} / {field['native_name']}",
+                transformation="normalized-fact",
+            ))
         if field.get("provider_scope"):
             ev.append(evidence(
                 WINDOWS_PROVIDER_SOURCE,
@@ -229,6 +236,12 @@ def field_semantics(event: dict[str, Any], field: dict[str, Any], field_id: str)
 
 def event_claims(item: dict[str, Any]) -> list[dict[str, Any]]:
     base_ev = [evidence(item["source_id"], item["source_version"], item["source_locator"])]
+    structural = item.get("structural_source")
+    if structural:
+        base_ev.append(evidence(
+            structural["source_id"], structural["source_version"], structural["locator"],
+            transformation="normalized-fact",
+        ))
     claims = [
         claim(item["id"], "telemetry.represents", item["overview"], base_ev),
         claim(item["id"], "telemetry.requires-policy", item["collection"], base_ev),

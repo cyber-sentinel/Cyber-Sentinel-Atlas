@@ -1,0 +1,207 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-eventlog-security-1100-series-26100",
+  "inventory_kind": "telemetry",
+  "declared_scope": "Microsoft-Windows-Eventlog provider Event IDs 1100, 1101, 1102, 1104, 1105 and 1108 linked to the Security channel on a controlled Windows Server 2025 Datacenter build 26100 GitHub runner",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-eventlog-provider-26100-1100-series"
+  ],
+  "inventory_method": "provider-runtime-metadata",
+  "inventory_source_version": "windows-server-2025-build-26100-eventlog-provider-1100-series",
+  "expected_identity_count": 6,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Eventlog",
+    "channel": "Security",
+    "product": "Windows Server 2025 Datacenter",
+    "platform": "Windows",
+    "windows_build": "26100",
+    "architecture": "64-bit",
+    "workflow_run_id": 37458952335,
+    "artifact_id": 11411012754,
+    "artifact_digest": "sha256:cc93b81627495898362de99e71a39fa7f213a57cc9ed842e6deee779c52968f0",
+    "raw_artifact_sha256": "sha256-6b8bd9a58483296a67e6762fb4840ca7275e83c3109d74b99f6ca6d393d230b0",
+    "provider_event_version_definition_count": 7,
+    "provider_unique_event_id_count": 6,
+    "expected_identities": [
+      {
+        "event_id": "1100",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 0,
+            "level": "win:Informational",
+            "task": "el:Shutdown",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "1101",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 1,
+            "level": "win:Error",
+            "task": "el:EventProcessing",
+            "fields": [
+              {
+                "name": "Reason",
+                "in_type": "win:UInt8",
+                "out_type": "xs:unsignedByte"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "1102",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 4,
+            "level": "win:Informational",
+            "task": "el:LogClear",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 6,
+            "level": "win:Informational",
+            "task": "el:LogClear",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ClientProcessId",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "ClientProcessStartKey",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "1104",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 0,
+            "level": "win:Error",
+            "task": "el:EventProcessing",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "1105",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 2,
+            "level": "win:Informational",
+            "task": "el:AutoBackup",
+            "fields": [
+              {
+                "name": "Channel",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "BackupPath",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "1108",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Error",
+            "task": "el:EventProcessing",
+            "fields": [
+              {
+                "name": "ErrorCode",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "EventID",
+                "in_type": "win:UInt16",
+                "out_type": "xs:unsignedShort"
+              },
+              {
+                "name": "PubID",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "completeness_semantics": "bounded structural evidence for the six UWS benchmark identities omitted from the Microsoft-Windows-Security-Auditing provider denominator; not a global Windows EventLog denominator"
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-43186dae93eedc0830414162a293c177b7336fc7cec19ce309ae237f8478e57a"
+}
