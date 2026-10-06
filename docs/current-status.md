@@ -1,15 +1,17 @@
 # Cyber-Sentinel-Atlas — Current Authoritative Status
 
-Status timestamp: 2026-10-05
+Status timestamp: 2026-10-06
 
 ## Control plane
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
 - Live release authority: `main`. This file is a reviewed snapshot and does not treat its own eventual merge SHA as a stable `Current main HEAD`; fresh GitHub state supersedes the snapshot.
-- Reviewed `main` corpus baseline: `14a80d0b1d830a207d3d77d0ffc4bae07599524c` — PR #153 promoted Event 4769 after all exact-head workflows completed **SUCCESS**. Windows Security is `9/423` with `414` remaining; Sysmon remains `30/30`. PR #152 subsequently merged deterministic bounded review planning as `689b0250664e92d288a117af2c26b26e11fae5a8` without changing coverage.
+- Reviewed `main` corpus baseline: `af1b14e66ef0d0b1c1d6015d4d0fe687269ebad8` — PR #159 promoted Security-Auditing Event IDs 4609–4622 after all six exact-head workflows completed **SUCCESS**; Windows Security Log UWS benchmark is `26/422`, Windows Security Auditing is `20/423` with `403` remaining, Sysmon remains `30/30`, and the global Windows denominator remains unfrozen.
 - PR #152 deterministic Windows Security review queue — **MERGED / EXACT-HEAD CI GREEN**; planning-only, fail-closed, inventory/snapshot-bound.
 - PR #153 Windows Security Event 4769 encyclopedia promotion — **MERGED / EXACT-HEAD CI GREEN**; Windows Security advanced to `9/423`.
+- PR #158 Windows Security EventLog 1100-series promotion — **MERGED / EXACT-HEAD CI GREEN** as `a5d8f99b9ae47ff820a1594b91116465dfce9096`; UWS review benchmark advanced to `16/422` while Security-Auditing remained `10/423`.
+- PR #159 Windows Security-Auditing 4609–4622 encyclopedia promotion — **MERGED / ALL SIX EXACT-HEAD WORKFLOWS SUCCESS** as `af1b14e66ef0d0b1c1d6015d4d0fe687269ebad8`; UWS review benchmark advanced to `26/422` and Security-Auditing to `20/423`.
 - PR #85 exact-head: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene run `35429390496`, Phase 5.3.4 Canaries run `35429390498`, and Phase 5.10.5 Usable Data Preview run `35429390479`: **SUCCESS**.
 - Post-merge verification on `main@4bfe222eb708347ea0769da400c40dbdaf289b69`: **SUCCESS** — Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` all completed successfully.
 - PR #89 exact-head `34225caf471b215717c3a8b1dcaa01799b01abd7`: all applicable checks completed successfully, including Foundation Hygiene `35437483777`, Phase 5.3.4 Canaries `35437483740`, Production Go Architecture `35437483746`, Shared Core Architecture `35437483749`, Governance Hygiene `35437483754`, Supply Chain Closure `35437483745`, Redistribution Closure `35437483753`, First-Party License Readiness `35437483751`, and Public Preview Readiness `35437483747`; merged as `4ea088e455462e66115d6887a472237171a96c94`.
@@ -163,7 +165,8 @@ Phase 5.10.5 is a separate engineering usability/evidence slice. It proves that 
 - Phase 5.10.10 — Windows & Sysmon Knowledge Coverage Expansion: **ACTIVE / CONTROLLED COVERAGE EXPANSION**
   - Windows Security Auditing denominator: **FROZEN** to `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296`
   - Windows Security denominator: `423` unique Event IDs / `488` provider event-version definitions
-  - Windows Security encyclopedia-grade: `9/423` — Event IDs `4624`, `4625`, `4648`, `4672`, `4688`, `4740`, `4768`, `4769`, `4771`; remaining `414`
+  - Windows Security Log UWS review benchmark: `26/422` listed identities encyclopedia-grade; remaining `396`
+  - Windows Security encyclopedia-grade: `20/423` — Event IDs `4608`, `4609`, `4610`, `4611`, `4612`, `4614`, `4615`, `4616`, `4618`, `4621`, `4622`, `4624`, `4625`, `4648`, `4672`, `4688`, `4740`, `4768`, `4769`, `4771`; remaining `403`
   - Sysmon semantic release: `15.22`; controlled structural schema: `4.91`
   - Sysmon denominator: `30`; encyclopedia-grade: `30/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20`, `21`, `22`, `23`, `24`, `25`, `26`, `27`, `28`, `29`, `255`; remaining `0`
   - machine-readable coverage authority: `content/encyclopedia/coverage-manifest.json`

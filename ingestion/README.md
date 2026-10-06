@@ -33,7 +33,7 @@ The Windows ingestion control plane and the encyclopedia corpus are related but 
 - canonical encyclopedia records under the Phase 5.10.10 content pipeline determine whether an Event ID reaches `ENCYCLOPEDIA_GRADE`;
 - release/package acceptance independently proves that approved records are usable through the production Search/Record/Graph/Provenance path.
 
-As of the reviewed `main` baseline after PR #148, Windows Security Auditing has **8/423** encyclopedia-grade Event IDs while Sysmon 15.22 remains **30/30** complete. The moving counters remain authoritative only in the machine-readable coverage ledgers.
+Current reviewed `main` coverage is **20/423** encyclopedia-grade Event IDs for `Microsoft-Windows-Security-Auditing`, while the cross-provider Security Log UWS review benchmark is **26/422** and Sysmon 15.22 remains **30/30** complete. Moving counters remain authoritative only in the machine-readable coverage ledgers.
 ## Determinism and security
 
 - deterministic parser/normalizer execution is offline and must not depend on AI;
