@@ -6542,6 +6542,722 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4626",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4626",
+      "title": "Windows Security Event 4626 — User/Device claims information",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4626",
+      "aliases": [
+        "4626",
+        "Event ID 4626",
+        "Windows 4626",
+        "User/Device claims information"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4626",
+      "source_version": "event-4626-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4626",
+      "source_locator": "4626(S): User/Device claims information",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4626-4653",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4626-4653",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4626 / version 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4626",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4626",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records user and device claims attached to a new logon session when claims are present.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit User/Device Claims",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 13,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit User/Device Claims success auditing where claims visibility is required.",
+          "Preserve Subject, Target/New Logon, sequence, UserClaims and DeviceClaims fields."
+        ],
+        "interpretation_note": "Absence of 4626 is expected when the logon has no claims and is not by itself a collection failure."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "TargetLogonId + Computer + time",
+          "purpose": "bind claims to the successful logon"
+        }
+      ],
+      "analysis": [
+        "Correlate TargetLogonId with 4624 to bind claims to the correct logon.",
+        "Reassemble multiple records using EventIdx/EventCountTotal before evaluating the complete claims set.",
+        "Use claims as authorization context rather than treating the event itself as malicious."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Subject logon-session identifier for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "target-user-sid",
+          "section": "Target Account",
+          "native_name": "TargetUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the target/logged-on account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target/logged-on account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name of the target account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-logon-id",
+          "section": "Target Account",
+          "native_name": "TargetLogonId",
+          "type": "HexInt64",
+          "meaning": "Target logon-session identifier for session correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "logon-type",
+          "section": "Logon Context",
+          "native_name": "LogonType",
+          "type": "UInt32",
+          "meaning": "Numeric Windows logon type.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "event-index",
+          "section": "Sequence",
+          "native_name": "EventIdx",
+          "type": "UInt32",
+          "meaning": "Position of this record in a multi-event logical set.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "event-count-total",
+          "section": "Sequence",
+          "native_name": "EventCountTotal",
+          "type": "UInt32",
+          "meaning": "Total records in the multi-event logical set.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "user-claims",
+          "section": "Claims",
+          "native_name": "UserClaims",
+          "type": "UnicodeString",
+          "meaning": "Serialized user claims for the logon session.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-claims",
+          "section": "Claims",
+          "native_name": "DeviceClaims",
+          "type": "UnicodeString",
+          "meaning": "Serialized device claims for the logon session.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4627",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4627",
+      "title": "Windows Security Event 4627 — Group membership information",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4627",
+      "aliases": [
+        "4627",
+        "Event ID 4627",
+        "Windows 4627",
+        "Group membership information"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4627",
+      "source_version": "event-4627-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4627",
+      "source_locator": "4627(S): Group membership information",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4626-4653",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4626-4653",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4627 / version 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4627",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4627",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records group-membership information for the account associated with a successful logon session.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit Group Membership",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 12,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Group Membership success auditing and the required Audit Logon success auditing.",
+          "Preserve TargetLogonId, sequence fields and GroupMembership."
+        ],
+        "interpretation_note": "Large memberships can span multiple 4627 records; sequence fields must be preserved before interpretation."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "TargetLogonId + Computer + time",
+          "purpose": "bind memberships to the successful logon"
+        }
+      ],
+      "analysis": [
+        "Correlate TargetLogonId with 4624.",
+        "Reassemble the complete membership set when EventCountTotal is greater than one.",
+        "Use membership changes as authorization context and baseline deviations."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Subject logon-session identifier for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "target-user-sid",
+          "section": "Target Account",
+          "native_name": "TargetUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the target/logged-on account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target/logged-on account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name of the target account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-logon-id",
+          "section": "Target Account",
+          "native_name": "TargetLogonId",
+          "type": "HexInt64",
+          "meaning": "Target logon-session identifier for session correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "logon-type",
+          "section": "Logon Context",
+          "native_name": "LogonType",
+          "type": "UInt32",
+          "meaning": "Numeric Windows logon type.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "event-index",
+          "section": "Sequence",
+          "native_name": "EventIdx",
+          "type": "UInt32",
+          "meaning": "Position of this record in a multi-event logical set.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "event-count-total",
+          "section": "Sequence",
+          "native_name": "EventCountTotal",
+          "type": "UInt32",
+          "meaning": "Total records in the multi-event logical set.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "group-membership",
+          "section": "Group Membership",
+          "native_name": "GroupMembership",
+          "type": "UnicodeString",
+          "meaning": "Serialized group-membership information for the logged-on account.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4634",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4634",
+      "title": "Windows Security Event 4634 — An account was logged off",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4634",
+      "aliases": [
+        "4634",
+        "Event ID 4634",
+        "Windows 4634",
+        "An account was logged off"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4634",
+      "source_version": "event-4634-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4634",
+      "source_locator": "4634(S): An account was logged off",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4626-4653",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4626-4653",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4634 / version 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4634",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4634",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records termination of a logon session when that session no longer exists.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit Logoff",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 5,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Logoff success auditing where session-end visibility is required.",
+          "Preserve TargetLogonId and LogonType."
+        ],
+        "interpretation_note": "Logoff events are not guaranteed for abrupt shutdowns or every session-ending condition."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "TargetLogonId + Computer",
+          "purpose": "correlate termination with the originating logon"
+        },
+        {
+          "target": "4647",
+          "key": "TargetLogonId + Computer + time",
+          "purpose": "distinguish user initiation from final termination"
+        }
+      ],
+      "analysis": [
+        "Correlate TargetLogonId with 4624 to resolve the originating session.",
+        "Use LogonType to distinguish interactive, network and other sessions.",
+        "Review 4647 alongside 4634 for user-initiated interactive logoff."
+      ],
+      "fields": [
+        {
+          "key": "target-user-sid",
+          "section": "Target Account",
+          "native_name": "TargetUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the target/logged-on account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target/logged-on account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name of the target account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-logon-id",
+          "section": "Target Account",
+          "native_name": "TargetLogonId",
+          "type": "HexInt64",
+          "meaning": "Target logon-session identifier for session correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "logon-type",
+          "section": "Logon Context",
+          "native_name": "LogonType",
+          "type": "UInt32",
+          "meaning": "Numeric Windows logon type.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4646",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4646",
+      "title": "Windows Security Event 4646 — IKE DoS-prevention mode started",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4646",
+      "aliases": [
+        "4646",
+        "Event ID 4646",
+        "Windows 4646",
+        "IKE DoS-prevention mode started"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4646",
+      "source_version": "audit-ipsec-main-mode-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-ipsec-main-mode",
+      "source_locator": "4646(S): IKE DoS-prevention mode started",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4626-4653",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4626-4653",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4646 / version 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4646",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4646",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Signals that IKE DoS-prevention mode started within IPsec Main Mode processing.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit IPsec Main Mode",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 1,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit IPsec Main Mode success auditing where IPsec/IKE visibility is required.",
+          "Preserve the provider-native notification field and surrounding IKE/IPsec telemetry."
+        ],
+        "interpretation_note": "Investigate unexpected occurrences in the context of negotiation volume, peer behavior and network conditions."
+      },
+      "correlations": [
+        {
+          "target": "4652",
+          "key": "Computer + time",
+          "purpose": "review nearby Main Mode failures"
+        },
+        {
+          "target": "4653",
+          "key": "Computer + time",
+          "purpose": "review nearby Main Mode failures"
+        }
+      ],
+      "analysis": [
+        "Review surrounding Main Mode failures and connection volume for negotiation pressure or repeated/malformed traffic.",
+        "Correlate with IKEEXT/service and network telemetry before attributing the condition to hostile activity.",
+        "Treat the provider-native notification value conservatively because event-specific field semantics are limited."
+      ],
+      "fields": [
+        {
+          "key": "notification",
+          "section": "IPsec Main Mode",
+          "native_name": "notification",
+          "type": "UnicodeString",
+          "meaning": "Provider-native notification/security-identifier string for the IKE DoS-prevention event.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4647",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4647",
+      "title": "Windows Security Event 4647 — User initiated logoff",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4647",
+      "aliases": [
+        "4647",
+        "Event ID 4647",
+        "Windows 4647",
+        "User initiated logoff"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4647",
+      "source_version": "event-4647-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4647",
+      "source_locator": "4647(S): User initiated logoff",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4626-4653",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4626-4653",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4647 / version 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4647",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4647",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records initiation of logoff by a specific account using the logoff function.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit Logoff",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 4,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Logoff success auditing.",
+          "Preserve TargetLogonId for session correlation."
+        ],
+        "interpretation_note": "4647 represents initiation of logoff; 4634 represents the session having terminated."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "TargetLogonId + Computer",
+          "purpose": "bind logoff to the originating session"
+        },
+        {
+          "target": "4634",
+          "key": "TargetLogonId + Computer + time",
+          "purpose": "confirm subsequent termination"
+        }
+      ],
+      "analysis": [
+        "Correlate TargetLogonId with 4624.",
+        "Compare 4647 with 4634 to distinguish initiation from final session termination.",
+        "Do not expect 4647 for every network-session teardown or abrupt shutdown."
+      ],
+      "fields": [
+        {
+          "key": "target-user-sid",
+          "section": "Target Account",
+          "native_name": "TargetUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the target/logged-on account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target/logged-on account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name of the target account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-logon-id",
+          "section": "Target Account",
+          "native_name": "TargetLogonId",
+          "type": "HexInt64",
+          "meaning": "Target logon-session identifier for session correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4648",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4648",
@@ -6727,6 +7443,1269 @@
           "native_name": "Port",
           "type": "UnicodeString/port",
           "meaning": "Source port reported for applicable remote authentication attempts; zero can occur for local or interactive contexts."
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4649",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4649",
+      "title": "Windows Security Event 4649 — A replay attack was detected",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4649",
+      "aliases": [
+        "4649",
+        "Event ID 4649",
+        "Windows 4649",
+        "A replay attack was detected"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4649",
+      "source_version": "event-4649-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4649",
+      "source_locator": "4649(S): A replay attack was detected",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4626-4653",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4626-4653",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4649 / version 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4649",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4649",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records detection of a Kerberos replay condition when a domain controller returns KRB_AP_ERR_REPEAT for duplicated authenticator information.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit Other Logon/Logoff Events",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 13,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Other Logon/Logoff Events success auditing on relevant domain controllers.",
+          "Preserve subject, replayed-credential, process, workstation and authentication fields."
+        ],
+        "interpretation_note": "Microsoft notes that duplicated packets caused by network-device or routing problems can also produce this condition; investigate every occurrence without treating the event alone as proof of hostile replay."
+      },
+      "correlations": [
+        {
+          "target": "4769",
+          "key": "TargetUserName + domain + time",
+          "purpose": "review nearby Kerberos service-ticket activity",
+          "limitation": "Ticket telemetry may be on another system."
+        }
+      ],
+      "analysis": [
+        "Prioritize investigation because this is a replay-detection signal.",
+        "Validate whether duplicate packets, routing or load-balancer behavior can explain the repeated authenticator.",
+        "Correlate account, workstation, process and Kerberos activity to distinguish operational duplication from suspicious replay."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Subject logon-session identifier for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target/logged-on account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name of the target account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "request-type",
+          "section": "Authentication",
+          "native_name": "RequestType",
+          "type": "UnicodeString",
+          "meaning": "Request type associated with replayed authentication material.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "logon-process-name",
+          "section": "Authentication",
+          "native_name": "LogonProcessName",
+          "type": "UnicodeString",
+          "meaning": "Logon process associated with replay detection.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-package",
+          "section": "Authentication",
+          "native_name": "AuthenticationPackage",
+          "type": "UnicodeString",
+          "meaning": "Authentication package associated with replay detection.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "workstation-name",
+          "section": "Network",
+          "native_name": "WorkstationName",
+          "type": "UnicodeString",
+          "meaning": "Workstation name supplied with the authentication request.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "transmitted-services",
+          "section": "Authentication",
+          "native_name": "TransmittedServices",
+          "type": "UnicodeString",
+          "meaning": "Transited/transmitted services associated with authentication.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name/path associated with the audited activity.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4650",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4650",
+      "title": "Windows Security Event 4650 — An IPsec Main Mode security association was established. Extended Mode was not enabled. Certificate authentication was not used",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4650",
+      "aliases": [
+        "4650",
+        "Event ID 4650",
+        "Windows 4650",
+        "An IPsec Main Mode security association was established. Extended Mode was not enabled. Certificate authentication was not used"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4650",
+      "source_version": "audit-ipsec-main-mode-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-ipsec-main-mode",
+      "source_locator": "4650(S): An IPsec Main Mode security association was established. Extended Mode was not enabled. Certificate authentication was not used",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4626-4653",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4626-4653",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4650 / version 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4650",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4650",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records successful establishment of an IPsec Main Mode security association without Extended Mode and without certificate authentication.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit IPsec Main Mode",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 17,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit IPsec Main Mode success auditing where IPsec visibility is required.",
+          "Preserve endpoint, keying-module, authentication, cryptographic and SA fields."
+        ],
+        "interpretation_note": "A successful association is normally operational telemetry; relevance depends on expected peer identity, policy and algorithms."
+      },
+      "correlations": [
+        {
+          "target": "4655",
+          "key": "MMSAID + Computer",
+          "purpose": "correlate the association with later termination"
+        }
+      ],
+      "analysis": [
+        "Baseline expected local/remote principals and addresses.",
+        "Review authentication method, cipher, integrity algorithm and DH group against policy.",
+        "Use MMSAID/MMFilterID and endpoint tuple for lifecycle correlation."
+      ],
+      "fields": [
+        {
+          "key": "local-mm-principal-name",
+          "section": "Local Endpoint",
+          "native_name": "LocalMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Local Main Mode principal identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mm-principal-name",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Remote Main Mode principal identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-address",
+          "section": "Local Endpoint",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Local network address in the Main Mode negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-key-module-port",
+          "section": "Local Endpoint",
+          "native_name": "LocalKeyModPort",
+          "type": "UInt32",
+          "meaning": "Local keying-module port.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Remote network address in the Main Mode negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-key-module-port",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteKeyModPort",
+          "type": "UInt32",
+          "meaning": "Remote keying-module port.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "key-module-name",
+          "section": "Additional Information",
+          "native_name": "KeyModName",
+          "type": "UnicodeString",
+          "meaning": "Keying-module name for the negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-auth-method",
+          "section": "Authentication",
+          "native_name": "MMAuthMethod",
+          "type": "UnicodeString",
+          "meaning": "Main Mode authentication method.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-cipher-algorithm",
+          "section": "Cryptographic Information",
+          "native_name": "MMCipherAlg",
+          "type": "UnicodeString",
+          "meaning": "Cipher algorithm selected for the Main Mode SA.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-integrity-algorithm",
+          "section": "Cryptographic Information",
+          "native_name": "MMIntegrityAlg",
+          "type": "UnicodeString",
+          "meaning": "Integrity algorithm selected for the Main Mode SA.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "diffie-hellman-group",
+          "section": "Cryptographic Information",
+          "native_name": "DHGroup",
+          "type": "UnicodeString",
+          "meaning": "Diffie-Hellman group used during negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-lifetime",
+          "section": "Security Association",
+          "native_name": "MMLifetime",
+          "type": "UInt32",
+          "meaning": "Main Mode SA lifetime in minutes.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quick-mode-limit",
+          "section": "Security Association",
+          "native_name": "QMLimit",
+          "type": "UInt32",
+          "meaning": "Quick Mode limit associated with the Main Mode SA.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "Additional Information",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Negotiation role such as initiator or responder.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-impersonation-state",
+          "section": "Additional Information",
+          "native_name": "MMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Main Mode impersonation state.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-filter-id",
+          "section": "Additional Information",
+          "native_name": "MMFilterID",
+          "type": "UInt64",
+          "meaning": "Main Mode filter identifier.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-sa-id",
+          "section": "Security Association",
+          "native_name": "MMSAID",
+          "type": "UInt64",
+          "meaning": "Main Mode security-association identifier.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4651",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4651",
+      "title": "Windows Security Event 4651 — An IPsec Main Mode security association was established. Extended Mode was not enabled. A certificate was used for authentication",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4651",
+      "aliases": [
+        "4651",
+        "Event ID 4651",
+        "Windows 4651",
+        "An IPsec Main Mode security association was established. Extended Mode was not enabled. A certificate was used for authentication"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4651",
+      "source_version": "audit-ipsec-main-mode-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-ipsec-main-mode",
+      "source_locator": "4651(S): An IPsec Main Mode security association was established. Extended Mode was not enabled. A certificate was used for authentication",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4626-4653",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4626-4653",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4651 / version 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4651",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4651",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records successful establishment of an IPsec Main Mode security association when certificate authentication was used.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit IPsec Main Mode",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 23,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit IPsec Main Mode success auditing where IPsec visibility is required.",
+          "Preserve certificate identity/chain context plus endpoint and cryptographic fields."
+        ],
+        "interpretation_note": "Investigate unexpected peers, certificate identities/chains or cryptographic-policy deviations."
+      },
+      "correlations": [
+        {
+          "target": "4655",
+          "key": "MMSAID + Computer",
+          "purpose": "correlate the association with later termination"
+        }
+      ],
+      "analysis": [
+        "Validate local and remote certificate thumbprints and issuing/root CAs.",
+        "Review endpoint identities, authentication method and cryptographic parameters against policy.",
+        "Use MMSAID/MMFilterID and endpoint tuple for lifecycle correlation."
+      ],
+      "fields": [
+        {
+          "key": "local-mm-principal-name",
+          "section": "Local Endpoint",
+          "native_name": "LocalMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Local Main Mode principal identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-mm-cert-hash",
+          "section": "Local Certificate",
+          "native_name": "LocalMMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Local certificate thumbprint/hash.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-mm-issuing-ca",
+          "section": "Local Certificate",
+          "native_name": "LocalMMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Issuing CA for the local certificate.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-mm-root-ca",
+          "section": "Local Certificate",
+          "native_name": "LocalMMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Root CA for the local certificate.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mm-principal-name",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Remote Main Mode principal identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mm-cert-hash",
+          "section": "Remote Certificate",
+          "native_name": "RemoteMMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Remote certificate thumbprint/hash.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mm-issuing-ca",
+          "section": "Remote Certificate",
+          "native_name": "RemoteMMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Issuing CA for the remote certificate.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mm-root-ca",
+          "section": "Remote Certificate",
+          "native_name": "RemoteMMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Root CA for the remote certificate.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-address",
+          "section": "Local Endpoint",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Local network address in the Main Mode negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-key-module-port",
+          "section": "Local Endpoint",
+          "native_name": "LocalKeyModPort",
+          "type": "UInt32",
+          "meaning": "Local keying-module port.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Remote network address in the Main Mode negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-key-module-port",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteKeyModPort",
+          "type": "UInt32",
+          "meaning": "Remote keying-module port.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "key-module-name",
+          "section": "Additional Information",
+          "native_name": "KeyModName",
+          "type": "UnicodeString",
+          "meaning": "Keying-module name for the negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-auth-method",
+          "section": "Authentication",
+          "native_name": "MMAuthMethod",
+          "type": "UnicodeString",
+          "meaning": "Main Mode authentication method.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-cipher-algorithm",
+          "section": "Cryptographic Information",
+          "native_name": "MMCipherAlg",
+          "type": "UnicodeString",
+          "meaning": "Cipher algorithm selected for the Main Mode SA.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-integrity-algorithm",
+          "section": "Cryptographic Information",
+          "native_name": "MMIntegrityAlg",
+          "type": "UnicodeString",
+          "meaning": "Integrity algorithm selected for the Main Mode SA.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "diffie-hellman-group",
+          "section": "Cryptographic Information",
+          "native_name": "DHGroup",
+          "type": "UnicodeString",
+          "meaning": "Diffie-Hellman group used during negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-lifetime",
+          "section": "Security Association",
+          "native_name": "MMLifetime",
+          "type": "UInt32",
+          "meaning": "Main Mode SA lifetime in minutes.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quick-mode-limit",
+          "section": "Security Association",
+          "native_name": "QMLimit",
+          "type": "UInt32",
+          "meaning": "Quick Mode limit associated with the Main Mode SA.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "Additional Information",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Negotiation role such as initiator or responder.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-impersonation-state",
+          "section": "Additional Information",
+          "native_name": "MMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Main Mode impersonation state.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-filter-id",
+          "section": "Additional Information",
+          "native_name": "MMFilterID",
+          "type": "UInt64",
+          "meaning": "Main Mode filter identifier.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-sa-id",
+          "section": "Security Association",
+          "native_name": "MMSAID",
+          "type": "UInt64",
+          "meaning": "Main Mode security-association identifier.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4652",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4652",
+      "title": "Windows Security Event 4652 — An IPsec Main Mode negotiation failed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4652",
+      "aliases": [
+        "4652",
+        "Event ID 4652",
+        "Windows 4652",
+        "IPsec Main Mode negotiation failed — certificate context"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4652",
+      "source_version": "audit-ipsec-main-mode-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-ipsec-main-mode",
+      "source_locator": "4652(F): An IPsec Main Mode negotiation failed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4626-4653",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4626-4653",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4652 / version 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4652",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4652",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records failure of an IPsec Main Mode negotiation with certificate context available for both endpoints.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit IPsec Main Mode",
+        "event_type": "Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 22,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit IPsec Main Mode failure auditing where negotiation troubleshooting or monitoring is required.",
+          "Preserve certificate, endpoint, FailurePoint, FailureReason, State and cookie fields."
+        ],
+        "interpretation_note": "Failures can result from policy, trust, certificate, reachability or interoperability problems; repetition or unexpected peers increases security relevance."
+      },
+      "correlations": [
+        {
+          "target": "4651",
+          "key": "local/remote endpoint + certificate + time",
+          "purpose": "compare failures with successful certificate-backed associations"
+        }
+      ],
+      "analysis": [
+        "Use FailurePoint, FailureReason and State to localize the failed phase.",
+        "Validate local/remote certificate hashes and CA chains when trust or identity is implicated.",
+        "Cluster failures by endpoint, keying module, cookies and time."
+      ],
+      "fields": [
+        {
+          "key": "local-mm-principal-name",
+          "section": "Local Endpoint",
+          "native_name": "LocalMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Local Main Mode principal identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-mm-cert-hash",
+          "section": "Local Certificate",
+          "native_name": "LocalMMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Local certificate thumbprint/hash.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-mm-issuing-ca",
+          "section": "Local Certificate",
+          "native_name": "LocalMMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Issuing CA for the local certificate.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-mm-root-ca",
+          "section": "Local Certificate",
+          "native_name": "LocalMMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Root CA for the local certificate.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mm-principal-name",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Remote Main Mode principal identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mm-cert-hash",
+          "section": "Remote Certificate",
+          "native_name": "RemoteMMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Remote certificate thumbprint/hash.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mm-issuing-ca",
+          "section": "Remote Certificate",
+          "native_name": "RemoteMMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Issuing CA for the remote certificate.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mm-root-ca",
+          "section": "Remote Certificate",
+          "native_name": "RemoteMMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Root CA for the remote certificate.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-address",
+          "section": "Local Endpoint",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Local network address in the Main Mode negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-key-module-port",
+          "section": "Local Endpoint",
+          "native_name": "LocalKeyModPort",
+          "type": "UInt32",
+          "meaning": "Local keying-module port.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Remote network address in the Main Mode negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-key-module-port",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteKeyModPort",
+          "type": "UInt32",
+          "meaning": "Remote keying-module port.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "key-module-name",
+          "section": "Additional Information",
+          "native_name": "KeyModName",
+          "type": "UnicodeString",
+          "meaning": "Keying-module name for the negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-point",
+          "section": "Failure Information",
+          "native_name": "FailurePoint",
+          "type": "UnicodeString",
+          "meaning": "Point at which Main Mode negotiation failed.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-reason",
+          "section": "Failure Information",
+          "native_name": "FailureReason",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported failure reason.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-auth-method",
+          "section": "Authentication",
+          "native_name": "MMAuthMethod",
+          "type": "UnicodeString",
+          "meaning": "Main Mode authentication method.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "state",
+          "section": "Failure Information",
+          "native_name": "State",
+          "type": "UnicodeString",
+          "meaning": "Negotiation state at failure.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "Additional Information",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Negotiation role such as initiator or responder.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-impersonation-state",
+          "section": "Additional Information",
+          "native_name": "MMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Main Mode impersonation state.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-filter-id",
+          "section": "Additional Information",
+          "native_name": "MMFilterID",
+          "type": "UInt64",
+          "meaning": "Main Mode filter identifier.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "initiator-cookie",
+          "section": "Failure Information",
+          "native_name": "InitiatorCookie",
+          "type": "UnicodeString",
+          "meaning": "IKE initiator cookie.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "responder-cookie",
+          "section": "Failure Information",
+          "native_name": "ResponderCookie",
+          "type": "UnicodeString",
+          "meaning": "IKE responder cookie.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4653",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4653",
+      "title": "Windows Security Event 4653 — An IPsec Main Mode negotiation failed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4653",
+      "aliases": [
+        "4653",
+        "Event ID 4653",
+        "Windows 4653",
+        "IPsec Main Mode negotiation failed — non-certificate-detail context"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4653",
+      "source_version": "audit-ipsec-main-mode-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-ipsec-main-mode",
+      "source_locator": "4653(F): An IPsec Main Mode negotiation failed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4626-4653",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4626-4653",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4653 / version 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4653",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4653",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records failure of an IPsec Main Mode negotiation without the certificate-detail fields present in 4652.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit IPsec Main Mode",
+        "event_type": "Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and provider-validated shape",
+            "field_count": 16,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit IPsec Main Mode failure auditing where negotiation troubleshooting or monitoring is required.",
+          "Preserve endpoint, FailurePoint, FailureReason, State and cookie fields."
+        ],
+        "interpretation_note": "Repeated failures, unexpected peers or unusual failure reasons should be investigated with network and IPsec-policy context."
+      },
+      "correlations": [
+        {
+          "target": "4650",
+          "key": "local/remote endpoint + time",
+          "purpose": "compare failures with non-certificate successes"
+        },
+        {
+          "target": "4651",
+          "key": "local/remote endpoint + time",
+          "purpose": "compare failures with certificate-backed successes"
+        }
+      ],
+      "analysis": [
+        "Use FailurePoint, FailureReason and State to localize the failed phase.",
+        "Cluster failures by local/remote endpoint, keying module, cookies and time.",
+        "Compare repeated failures with successful 4650/4651 negotiations and IKE telemetry."
+      ],
+      "fields": [
+        {
+          "key": "local-mm-principal-name",
+          "section": "Local Endpoint",
+          "native_name": "LocalMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Local Main Mode principal identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mm-principal-name",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Remote Main Mode principal identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-address",
+          "section": "Local Endpoint",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Local network address in the Main Mode negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-key-module-port",
+          "section": "Local Endpoint",
+          "native_name": "LocalKeyModPort",
+          "type": "UInt32",
+          "meaning": "Local keying-module port.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Remote network address in the Main Mode negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-key-module-port",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteKeyModPort",
+          "type": "UInt32",
+          "meaning": "Remote keying-module port.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "key-module-name",
+          "section": "Additional Information",
+          "native_name": "KeyModName",
+          "type": "UnicodeString",
+          "meaning": "Keying-module name for the negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-point",
+          "section": "Failure Information",
+          "native_name": "FailurePoint",
+          "type": "UnicodeString",
+          "meaning": "Point at which Main Mode negotiation failed.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-reason",
+          "section": "Failure Information",
+          "native_name": "FailureReason",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported failure reason.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-auth-method",
+          "section": "Authentication",
+          "native_name": "MMAuthMethod",
+          "type": "UnicodeString",
+          "meaning": "Main Mode authentication method.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "state",
+          "section": "Failure Information",
+          "native_name": "State",
+          "type": "UnicodeString",
+          "meaning": "Negotiation state at failure.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "Additional Information",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Negotiation role such as initiator or responder.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-impersonation-state",
+          "section": "Additional Information",
+          "native_name": "MMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Main Mode impersonation state.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-filter-id",
+          "section": "Additional Information",
+          "native_name": "MMFilterID",
+          "type": "UInt64",
+          "meaning": "Main Mode filter identifier.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "initiator-cookie",
+          "section": "Failure Information",
+          "native_name": "InitiatorCookie",
+          "type": "UnicodeString",
+          "meaning": "IKE initiator cookie.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "responder-cookie",
+          "section": "Failure Information",
+          "native_name": "ResponderCookie",
+          "type": "UnicodeString",
+          "meaning": "IKE responder cookie.",
+          "versions": [
+            "0"
+          ]
         }
       ]
     },
