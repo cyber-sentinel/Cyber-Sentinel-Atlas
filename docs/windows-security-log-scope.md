@@ -52,11 +52,12 @@ In particular, the Security Log benchmark contains the `1100`-series Event IDs b
 
 ## Current controlled coverage
 
-Current controlled progress after the first EventLog-provider batch:
+Current controlled progress after the second bounded Windows Security Log batch:
 
-- Windows Security Log UWS review benchmark: `16/422` listed identities encyclopedia-grade (`3.79%`), `406` remaining;
-- benchmark-covered IDs: `1100`, `1101`, `1102`, `1104`, `1105`, `1108`, `4608`, `4624`, `4625`, `4648`, `4672`, `4688`, `4740`, `4768`, `4769`, `4771`;
-- Windows Security Auditing provider coverage remains independently `10/423` encyclopedia-grade with `413` provider-specific identities remaining;
+- Windows Security Log UWS review benchmark: `26/422` listed identities encyclopedia-grade (`6.16%`), `396` remaining;
+- newly promoted Security-Auditing IDs in this batch: `4609`, `4610`, `4611`, `4612`, `4614`, `4615`, `4616`, `4618`, `4621`, `4622`;
+- Windows Security Auditing provider coverage: `20/423` encyclopedia-grade with `403` provider-specific identities remaining;
+- the provider denominator itself remains frozen at `423` unique IDs / `488` Event ID-version definitions;
 - Sysmon 15.22: `30/30` complete;
 - global Windows denominator: intentionally unfrozen.
 
@@ -64,4 +65,4 @@ The benchmark progress counter is an analyst-facing Security-log coverage measur
 
 ## Planning rule
 
-After the `1100`-series identities are promoted, rebuild the UWS benchmark queue and continue with the next uncovered listed identity. Because `4608` is already encyclopedia-grade, the next numeric benchmark candidate is `4609`, subject to the same Microsoft/provider/UWS controlled review and provider-specific denominator rules.
+After each bounded batch is promoted, rebuild the controlled UWS benchmark queue from fresh `main` and select only identities actually listed by the benchmark and independently supported by Microsoft/provider evidence. The next batch must be derived from that rebuilt queue rather than from a continuous numeric range.
