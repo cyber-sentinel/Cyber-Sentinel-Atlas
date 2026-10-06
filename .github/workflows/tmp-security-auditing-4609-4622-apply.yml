@@ -59,9 +59,9 @@ jobs:
           python tools/content/validate_encyclopedia_coverage.py
           python tools/content/build_encyclopedia_records.py --output /tmp/encyclopedia-records.jsonl
 
-      - name: Validate ingestion foundation and syntax
+      - name: Validate ingestion authorization and syntax
         run: |
-          python tools/ingestion/validate_ingestion_foundation.py
+          python tools/ingestion/validate_ingestion_authorization.py
           python -m compileall -q tools/content tests/phase51010 tools/tmp_apply_security_auditing_4609_4622.py
           git diff --check
 
