@@ -4,7 +4,19 @@
   "overall_state": "IN_PROGRESS",
   "global_windows_denominator_frozen": false,
   "global_windows_completion_percent": null,
-  "completion_rule": "A telemetry family may be declared complete only after its provider/channel/version denominator is frozen and every required identity reaches the declared encyclopedia-grade and release acceptance level. No family-specific percentage may be presented as all-Windows completeness.",
+  "windows_security_log_review_benchmark": {
+    "state": "CONTROLLED_REVIEW_BENCHMARK_DEFINED",
+    "source": "Ultimate Windows Security — Windows Security Log Encyclopedia",
+    "source_url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/default.aspx",
+    "scope_role": "coverage-and-quick-detail-review-benchmark-only",
+    "minimum_listed_event_id": 1100,
+    "maximum_listed_event_id": 8191,
+    "listed_unique_event_id_count": 422,
+    "continuous_numeric_range": false,
+    "semantic_authority": "Microsoft official documentation plus controlled provider/channel/version evidence",
+    "ingestion_policy": "Do not bulk-ingest third-party prose. UWS remains a controlled Quick Detail and coverage benchmark; every promoted Event ID requires independent Microsoft/provider evidence and provenance review."
+  },
+  "completion_rule": "A telemetry family may be declared complete only after its provider/channel/version denominator is frozen and every required identity reaches the declared encyclopedia-grade and release acceptance level. The Windows Security Log review benchmark spans listed Event IDs 1100 through 8191 but is sparse and is not itself a provider denominator. No family-specific percentage may be presented as all-Windows completeness.",
   "families": [
     {
       "id": "windows-security-auditing",
