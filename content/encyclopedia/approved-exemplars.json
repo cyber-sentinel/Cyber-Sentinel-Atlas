@@ -8710,6 +8710,2138 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4654",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4654",
+      "title": "Windows Security Event 4654 — An IPsec Quick Mode negotiation failed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4654",
+      "aliases": [
+        "4654",
+        "Event ID 4654",
+        "Windows 4654",
+        "An IPsec Quick Mode negotiation failed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4654",
+      "source_version": "audit-ipsec-quick-mode-current-doc",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/fwp/auditing-and-logging",
+      "source_locator": "4654(F): An IPsec Quick Mode negotiation failed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4654-4663",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4654-4663",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4654 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4654",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4654",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records failure of an IPsec Quick Mode negotiation. Controlled provider evidence preserves both Version 0 and Version 1 payloads, with Version 1 adding TunnelId and TrafficSelectorId.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit IPsec Quick Mode",
+        "event_type": "Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 19,
+            "notes": "Version 0 provider shape contains 19 fields."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 21,
+            "notes": "Version 1 adds TunnelId and TrafficSelectorId to the Version 0 shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit IPsec Quick Mode failure auditing where IPsec negotiation visibility is required.",
+          "Preserve endpoint, protocol, failure-state, filter and security-association identifiers; preserve version identity."
+        ],
+        "interpretation_note": "A negotiation failure can be caused by policy mismatch, reachability, peer configuration or hostile/abnormal traffic. Repetition and unexpected peers increase security relevance."
+      },
+      "correlations": [
+        {
+          "target": "5451",
+          "key": "endpoint tuple + time",
+          "purpose": "compare failed Quick Mode negotiations with successful Quick Mode security-association establishment where available"
+        }
+      ],
+      "analysis": [
+        "Use FailurePoint, FailureReason, Mode and State to localize the failed negotiation phase.",
+        "Cluster failures by endpoint tuple, protocol, QMFilterID, MMSAID and time.",
+        "For Version 1, retain TunnelId and TrafficSelectorId rather than flattening to Version 0."
+      ],
+      "fields": [
+        {
+          "key": "local-address",
+          "section": "Local Endpoint",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Local address associated with the IPsec negotiation.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "local-address-mask",
+          "section": "Local Endpoint",
+          "native_name": "LocalAddressMask",
+          "type": "UnicodeString",
+          "meaning": "Local address mask associated with the IPsec traffic selector.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "local-port",
+          "section": "Local Endpoint",
+          "native_name": "LocalPort",
+          "type": "UInt32",
+          "meaning": "Local port associated with the IPsec traffic selector.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "local-tunnel-endpoint",
+          "section": "Local Endpoint",
+          "native_name": "LocalTunnelEndpoint",
+          "type": "UnicodeString",
+          "meaning": "Local tunnel endpoint associated with the IPsec negotiation.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Remote address associated with the IPsec negotiation.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "remote-address-mask",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteAddressMask",
+          "type": "UnicodeString",
+          "meaning": "Remote address mask associated with the IPsec traffic selector.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "remote-port",
+          "section": "Remote Endpoint",
+          "native_name": "RemotePort",
+          "type": "UInt32",
+          "meaning": "Remote port associated with the IPsec traffic selector.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "remote-tunnel-endpoint",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteTunnelEndpoint",
+          "type": "UnicodeString",
+          "meaning": "Remote tunnel endpoint associated with the IPsec negotiation.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "protocol",
+          "section": "Network",
+          "native_name": "Protocol",
+          "type": "UInt32",
+          "meaning": "Numeric protocol identifier associated with the traffic selector.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "remote-private-address",
+          "section": "Remote Endpoint",
+          "native_name": "RemotePrivateAddress",
+          "type": "UnicodeString",
+          "meaning": "Remote private address exposed by the provider for the IPsec negotiation.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "key-module-name",
+          "section": "IPsec",
+          "native_name": "KeyModName",
+          "type": "UnicodeString",
+          "meaning": "Keying module name associated with the IPsec negotiation.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "failure-point",
+          "section": "Failure Information",
+          "native_name": "FailurePoint",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported point at which negotiation failed.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "failure-reason",
+          "section": "Failure Information",
+          "native_name": "FailureReason",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported reason for negotiation failure.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "mode",
+          "section": "Failure Information",
+          "native_name": "Mode",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported negotiation mode.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "state",
+          "section": "Failure Information",
+          "native_name": "State",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported negotiation state.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "IPsec",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Negotiation role, such as initiator or responder, as reported by the provider.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "message-id",
+          "section": "IPsec",
+          "native_name": "MessageID",
+          "type": "UInt32",
+          "meaning": "Provider-reported IKE/IPsec message identifier.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "quick-mode-filter-id",
+          "section": "Security Association",
+          "native_name": "QMFilterID",
+          "type": "UInt64",
+          "meaning": "Quick Mode filter identifier used for correlation.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "main-mode-sa-id",
+          "section": "Security Association",
+          "native_name": "MMSAID",
+          "type": "UInt64",
+          "meaning": "Main Mode security-association identifier used for correlation.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "tunnel-id",
+          "section": "Security Association",
+          "native_name": "TunnelId",
+          "type": "UInt64",
+          "meaning": "Version 1 tunnel identifier exposed by the provider.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "traffic-selector-id",
+          "section": "Security Association",
+          "native_name": "TrafficSelectorId",
+          "type": "UInt64",
+          "meaning": "Version 1 traffic-selector identifier exposed by the provider.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4655",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4655",
+      "title": "Windows Security Event 4655 — An IPsec Main Mode security association ended",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4655",
+      "aliases": [
+        "4655",
+        "Event ID 4655",
+        "Windows 4655",
+        "An IPsec Main Mode security association ended"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4655",
+      "source_version": "audit-ipsec-main-mode-current-doc",
+      "source_url": "https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/audit-ipsec-main-mode",
+      "source_locator": "4655(S): An IPsec Main Mode security association ended",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4654-4663",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4654-4663",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4655 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4655",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4655",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records termination of an IPsec Main Mode security association and exposes the local/remote addresses, keying module and Main Mode SA identifier needed for lifecycle correlation.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit IPsec Main Mode",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 4,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit IPsec Main Mode success auditing where Main Mode lifecycle visibility is required.",
+          "Preserve LocalAddress, RemoteAddress, KeyModName and MMSAID."
+        ],
+        "interpretation_note": "Association termination is normally lifecycle telemetry. Unexpected peers, timing or repeated churn should be investigated in surrounding IPsec context."
+      },
+      "correlations": [
+        {
+          "target": "4650",
+          "key": "MMSAID + Computer",
+          "purpose": "correlate non-certificate Main Mode SA establishment with termination"
+        },
+        {
+          "target": "4651",
+          "key": "MMSAID + Computer",
+          "purpose": "correlate certificate-backed Main Mode SA establishment with termination"
+        }
+      ],
+      "analysis": [
+        "Correlate MMSAID with establishment events 4650 or 4651.",
+        "Review rapid establishment/termination cycles and unexpected remote addresses.",
+        "Use KeyModName and endpoint identity to separate normal lifecycle from policy/interoperability issues."
+      ],
+      "fields": [
+        {
+          "key": "local-address",
+          "section": "Local Endpoint",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Local address associated with the IPsec negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Remote Endpoint",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Remote address associated with the IPsec negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "key-module-name",
+          "section": "IPsec",
+          "native_name": "KeyModName",
+          "type": "UnicodeString",
+          "meaning": "Keying module name associated with the IPsec negotiation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "main-mode-sa-id",
+          "section": "Security Association",
+          "native_name": "MMSAID",
+          "type": "UInt64",
+          "meaning": "Main Mode security-association identifier used for correlation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4656",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4656",
+      "title": "Windows Security Event 4656 — A handle to an object was requested",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4656",
+      "aliases": [
+        "4656",
+        "Event ID 4656",
+        "Windows 4656",
+        "A handle to an object was requested (general object access)"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4656",
+      "source_version": "event-4656-v1-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4656",
+      "source_locator": "4656(S,F): A handle to an object was requested",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4654-4663",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4654-4663",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4656 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4656",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4656",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a request for specific access to an audited object. Failure is generated when access is declined; the event shows requested access and the result but not whether a later operation was performed.",
+        "category": "Object Access",
+        "subcategory": "Audit File System / Kernel Object / Registry / Removable Storage",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 15,
+            "notes": "Version 0 provider shape contains 15 fields."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 17,
+            "notes": "Version 1 adds AccessReason and ResourceAttributes."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Configure the relevant Object Access audit subcategory and an object SACL matching the access to be audited.",
+          "Preserve object identity, handle, requested rights, subject and process context."
+        ],
+        "interpretation_note": "High volume is possible. Security value depends on object sensitivity, requested rights, success/failure result and process context."
+      },
+      "correlations": [
+        {
+          "target": "4663",
+          "key": "HandleId + Computer + time",
+          "purpose": "determine whether requested access was subsequently exercised"
+        },
+        {
+          "target": "4660",
+          "key": "TransactionId or HandleId + Computer + time",
+          "purpose": "correlate deletion activity"
+        },
+        {
+          "target": "4688",
+          "key": "ProcessId + Computer + time",
+          "purpose": "resolve process creation context"
+        }
+      ],
+      "analysis": [
+        "Prioritize sensitive ObjectName values and write/delete/permission-change rights.",
+        "Use HandleId and TransactionId to correlate later object operations.",
+        "Correlate ProcessId with process creation telemetry using event time because PIDs are reusable.",
+        "Do not flatten Version 0 and Version 1: Version 1 adds AccessReason and ResourceAttributes."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "object-server",
+          "section": "Object",
+          "native_name": "ObjectServer",
+          "type": "UnicodeString",
+          "meaning": "Security subsystem or service responsible for the audited object.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "object-type",
+          "section": "Object",
+          "native_name": "ObjectType",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported type or class of the audited object.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "object-name",
+          "section": "Object",
+          "native_name": "ObjectName",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported name or identifying path of the audited object.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "handle-id",
+          "section": "Object",
+          "native_name": "HandleId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Object handle identifier used to correlate related access events.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "transaction-id",
+          "section": "Object",
+          "native_name": "TransactionId",
+          "type": "GUID",
+          "meaning": "Transaction GUID used to correlate related transactional object operations.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "access-list",
+          "section": "Access Request Information",
+          "native_name": "AccessList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered list of access rights requested or exercised.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "access-mask",
+          "section": "Access Request Information",
+          "native_name": "AccessMask",
+          "type": "HexInt32",
+          "meaning": "Bit mask representing requested or exercised access rights.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Access Request Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Privileges associated with the audited access request.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "restricted-sid-count",
+          "section": "Access Request Information",
+          "native_name": "RestrictedSidCount",
+          "type": "UInt32",
+          "meaning": "Count of restricted SIDs associated with the access token.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name or path associated with the audited activity.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "access-reason",
+          "section": "Access Request Information",
+          "native_name": "AccessReason",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered explanation of why requested access was granted or denied.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "resource-attributes",
+          "section": "Access Request Information",
+          "native_name": "ResourceAttributes",
+          "type": "UnicodeString",
+          "meaning": "Resource attributes associated with the audited object in provider versions that expose them.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4657",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4657",
+      "title": "Windows Security Event 4657 — A registry value was modified",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4657",
+      "aliases": [
+        "4657",
+        "Event ID 4657",
+        "Windows 4657",
+        "A registry value was modified"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4657",
+      "source_version": "event-4657-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4657",
+      "source_locator": "4657(S): A registry value was modified",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4654-4663",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4654-4663",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4657 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4657",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4657",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records modification of a registry value when the registry key SACL audits Set Value access, including old/new value type and data plus process context.",
+        "category": "Object Access",
+        "subcategory": "Audit Registry",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 14,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Registry success auditing and configure an appropriate registry SACL for Set Value access.",
+          "Preserve registry object/value names, old/new values, subject and process context."
+        ],
+        "interpretation_note": "Registry changes are common; prioritize sensitive persistence, security-policy, service, authentication and startup locations and deviations from expected writers."
+      },
+      "correlations": [
+        {
+          "target": "4688",
+          "key": "ProcessId + Computer + time",
+          "purpose": "resolve process creation context for the registry writer"
+        }
+      ],
+      "analysis": [
+        "Compare OldValue and NewValue and assess whether the change affects security or persistence.",
+        "Baseline expected ProcessName values for sensitive keys.",
+        "Correlate ProcessId with 4688 and related process telemetry."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "object-name",
+          "section": "Object",
+          "native_name": "ObjectName",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported name or identifying path of the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-value-name",
+          "section": "Object",
+          "native_name": "ObjectValueName",
+          "type": "UnicodeString",
+          "meaning": "Registry value name affected by the operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "handle-id",
+          "section": "Object",
+          "native_name": "HandleId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Object handle identifier used to correlate related access events.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "operation-type",
+          "section": "Operation",
+          "native_name": "OperationType",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported type of object or registry operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "old-value-type",
+          "section": "Change Information",
+          "native_name": "OldValueType",
+          "type": "UnicodeString",
+          "meaning": "Registry value type before the modification.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "old-value",
+          "section": "Change Information",
+          "native_name": "OldValue",
+          "type": "UnicodeString",
+          "meaning": "Registry value data before the modification.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "new-value-type",
+          "section": "Change Information",
+          "native_name": "NewValueType",
+          "type": "UnicodeString",
+          "meaning": "Registry value type after the modification.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "new-value",
+          "section": "Change Information",
+          "native_name": "NewValue",
+          "type": "UnicodeString",
+          "meaning": "Registry value data after the modification.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name or path associated with the audited activity.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4658",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4658",
+      "title": "Windows Security Event 4658 — The handle to an object was closed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4658",
+      "aliases": [
+        "4658",
+        "Event ID 4658",
+        "Windows 4658",
+        "The handle to an object was closed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4658",
+      "source_version": "event-4658-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4658",
+      "source_locator": "4658(S): The handle to an object was closed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4654-4663",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4654-4663",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4658 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4658",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4658",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records closure of an audited object handle. It is primarily useful for handle-lifecycle correlation and can help determine how long a handle remained open.",
+        "category": "Object Access",
+        "subcategory": "Audit Handle Manipulation / Object Access",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 8,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Handle Manipulation success auditing where handle close visibility is required.",
+          "Preserve HandleId, subject and process context."
+        ],
+        "interpretation_note": "This event often has little standalone security relevance; its value is strongest when correlated to the same handle in related object-access events."
+      },
+      "correlations": [
+        {
+          "target": "4656",
+          "key": "HandleId + Computer",
+          "purpose": "correlate general object handle request with closure"
+        },
+        {
+          "target": "4661",
+          "key": "HandleId + Computer",
+          "purpose": "correlate SAM/AD object handle request with closure"
+        }
+      ],
+      "analysis": [
+        "Track HandleId across the object-access lifecycle.",
+        "Correlate ProcessId/ProcessName with the process that held the handle.",
+        "Use timing between handle request and close only when collection completeness is sufficient."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "object-server",
+          "section": "Object",
+          "native_name": "ObjectServer",
+          "type": "UnicodeString",
+          "meaning": "Security subsystem or service responsible for the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "handle-id",
+          "section": "Object",
+          "native_name": "HandleId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Object handle identifier used to correlate related access events.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name or path associated with the audited activity.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4659",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4659",
+      "title": "Windows Security Event 4659 — A handle to an object was requested with intent to delete",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4659",
+      "aliases": [
+        "4659",
+        "Event ID 4659",
+        "Windows 4659",
+        "A handle to an object was requested with intent to delete"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4659",
+      "source_version": "advanced-audit-policy-current-doc",
+      "source_url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/advanced-audit-policy-configuration",
+      "source_locator": "4659(S): A handle to an object was requested with intent to delete",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4654-4663",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4654-4663",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4659 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4659",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4659",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a handle request made with intent to delete an audited object, preserving subject, object, handle, transaction, requested rights and process identifiers.",
+        "category": "Object Access",
+        "subcategory": "Audit Kernel Object / Object Access",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 13,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Object Access auditing and SACL policy for the target object class.",
+          "Preserve ObjectType/ObjectName, HandleId, TransactionId, AccessList/AccessMask and process context."
+        ],
+        "interpretation_note": "Intent to delete is not identical to confirmed deletion. Correlate with subsequent deletion evidence before asserting that the object was removed."
+      },
+      "correlations": [
+        {
+          "target": "4660",
+          "key": "HandleId or TransactionId + Computer + time",
+          "purpose": "confirm a subsequent object deletion"
+        },
+        {
+          "target": "4688",
+          "key": "ProcessId + Computer + time",
+          "purpose": "resolve requesting process context"
+        }
+      ],
+      "analysis": [
+        "Prioritize sensitive objects and unexpected deleting processes.",
+        "Correlate HandleId/TransactionId with Event 4660 and other object events.",
+        "Use AccessList/AccessMask to confirm requested delete-related rights."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "object-server",
+          "section": "Object",
+          "native_name": "ObjectServer",
+          "type": "UnicodeString",
+          "meaning": "Security subsystem or service responsible for the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-type",
+          "section": "Object",
+          "native_name": "ObjectType",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported type or class of the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-name",
+          "section": "Object",
+          "native_name": "ObjectName",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported name or identifying path of the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "handle-id",
+          "section": "Object",
+          "native_name": "HandleId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Object handle identifier used to correlate related access events.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "transaction-id",
+          "section": "Object",
+          "native_name": "TransactionId",
+          "type": "GUID",
+          "meaning": "Transaction GUID used to correlate related transactional object operations.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "access-list",
+          "section": "Access Request Information",
+          "native_name": "AccessList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered list of access rights requested or exercised.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "access-mask",
+          "section": "Access Request Information",
+          "native_name": "AccessMask",
+          "type": "HexInt32",
+          "meaning": "Bit mask representing requested or exercised access rights.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Access Request Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Privileges associated with the audited access request.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4660",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4660",
+      "title": "Windows Security Event 4660 — An object was deleted",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4660",
+      "aliases": [
+        "4660",
+        "Event ID 4660",
+        "Windows 4660",
+        "An object was deleted"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4660",
+      "source_version": "event-4660-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4660",
+      "source_locator": "4660(S): An object was deleted",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4654-4663",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4654-4663",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4660 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4660",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4660",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records confirmed deletion of an audited object. The event carries HandleId rather than the deleted object name, so object identity is normally recovered through correlated access telemetry.",
+        "category": "Object Access",
+        "subcategory": "Audit File System / Kernel Object / Registry",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 9,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the relevant Object Access audit subcategory and configure Delete auditing in the object SACL.",
+          "Preserve HandleId, TransactionId, subject and process context."
+        ],
+        "interpretation_note": "Unlike an access attempt, this event represents an actual delete operation, but it does not itself carry ObjectName."
+      },
+      "correlations": [
+        {
+          "target": "4663",
+          "key": "HandleId + Computer + time",
+          "purpose": "recover ObjectName and DELETE access context"
+        },
+        {
+          "target": "4656",
+          "key": "TransactionId or HandleId + Computer + time",
+          "purpose": "recover earlier handle-request context"
+        }
+      ],
+      "analysis": [
+        "Correlate HandleId to Event 4663 or 4656 to recover the object name and access context.",
+        "Investigate unexpected deleting processes or sensitive objects.",
+        "Correlate ProcessId with process creation telemetry using tight time bounds."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "object-server",
+          "section": "Object",
+          "native_name": "ObjectServer",
+          "type": "UnicodeString",
+          "meaning": "Security subsystem or service responsible for the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "handle-id",
+          "section": "Object",
+          "native_name": "HandleId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Object handle identifier used to correlate related access events.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name or path associated with the audited activity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "transaction-id",
+          "section": "Object",
+          "native_name": "TransactionId",
+          "type": "GUID",
+          "meaning": "Transaction GUID used to correlate related transactional object operations.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4661",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4661",
+      "title": "Windows Security Event 4661 — A handle to an object was requested",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4661",
+      "aliases": [
+        "4661",
+        "Event ID 4661",
+        "Windows 4661",
+        "A handle to an object was requested (SAM or directory service)"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4661",
+      "source_version": "event-4661-current-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4661",
+      "source_locator": "4661(S,F): A handle to an object was requested",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4654-4663",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4654-4663",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4661 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4661",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4661",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a handle request for an Active Directory or Security Account Manager object. If access is declined, a Failure event is generated.",
+        "category": "Object Access",
+        "subcategory": "Audit Directory Service Access / Audit SAM",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 16,
+            "notes": "Version 0 provider shape contains 16 fields."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 17,
+            "notes": "Version 1 adds AccessReason."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Directory Service Access or SAM/Object Access auditing and required SACLs.",
+          "Preserve object identity, Properties, access rights, subject and process context."
+        ],
+        "interpretation_note": "This event can be high volume and overlaps semantically with later operation telemetry. Prioritize sensitive SAM/AD objects and privileged access rights."
+      },
+      "correlations": [
+        {
+          "target": "4662",
+          "key": "HandleId + ObjectName + Computer + time",
+          "purpose": "correlate the requested handle with an operation performed on the object"
+        },
+        {
+          "target": "4658",
+          "key": "HandleId + Computer",
+          "purpose": "track handle closure"
+        }
+      ],
+      "analysis": [
+        "Use ObjectType/ObjectName and Properties to identify the targeted directory/SAM object.",
+        "Correlate HandleId with Event 4662 operations and 4658 closure.",
+        "Do not flatten versions: Version 1 adds AccessReason."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "object-server",
+          "section": "Object",
+          "native_name": "ObjectServer",
+          "type": "UnicodeString",
+          "meaning": "Security subsystem or service responsible for the audited object.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "object-type",
+          "section": "Object",
+          "native_name": "ObjectType",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported type or class of the audited object.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "object-name",
+          "section": "Object",
+          "native_name": "ObjectName",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported name or identifying path of the audited object.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "handle-id",
+          "section": "Object",
+          "native_name": "HandleId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Object handle identifier used to correlate related access events.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "transaction-id",
+          "section": "Object",
+          "native_name": "TransactionId",
+          "type": "GUID",
+          "meaning": "Transaction GUID used to correlate related transactional object operations.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "access-list",
+          "section": "Access Request Information",
+          "native_name": "AccessList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered list of access rights requested or exercised.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "access-mask",
+          "section": "Access Request Information",
+          "native_name": "AccessMask",
+          "type": "HexInt32",
+          "meaning": "Bit mask representing requested or exercised access rights.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Access Request Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Privileges associated with the audited access request.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "properties",
+          "section": "Access Request Information",
+          "native_name": "Properties",
+          "type": "UnicodeString",
+          "meaning": "Object properties or property identifiers associated with the audited operation.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "restricted-sid-count",
+          "section": "Access Request Information",
+          "native_name": "RestrictedSidCount",
+          "type": "UInt32",
+          "meaning": "Count of restricted SIDs associated with the access token.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name or path associated with the audited activity.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "access-reason",
+          "section": "Access Request Information",
+          "native_name": "AccessReason",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered explanation of why requested access was granted or denied.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4662",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4662",
+      "title": "Windows Security Event 4662 — An operation was performed on an object",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4662",
+      "aliases": [
+        "4662",
+        "Event ID 4662",
+        "Windows 4662",
+        "An operation was performed on an object"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4662",
+      "source_version": "event-4662-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4662",
+      "source_locator": "4662(S,F): An operation was performed on an object",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4654-4663",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4654-4663",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4662 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4662",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4662",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records an operation performed on an Active Directory object when the object SACL matches the operation. A Failure event is generated when the operation fails.",
+        "category": "DS Access",
+        "subcategory": "Audit Directory Service Access",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 14,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Directory Service Access and configure appropriate SACLs on the Active Directory objects to be monitored.",
+          "Preserve ObjectType/ObjectName, OperationType, AccessList/AccessMask, Properties and additional information."
+        ],
+        "interpretation_note": "Security relevance is driven by the target object/property and access type. Privileged write, control, delete or permissions-changing operations deserve higher scrutiny."
+      },
+      "correlations": [
+        {
+          "target": "4661",
+          "key": "HandleId + ObjectName + Computer + time",
+          "purpose": "correlate object operation with the preceding handle request"
+        }
+      ],
+      "analysis": [
+        "Resolve property GUIDs in Properties when necessary to understand the affected AD attributes.",
+        "Prioritize Write Property, Control Access, DELETE, WRITE_DAC and WRITE_OWNER on sensitive objects.",
+        "Correlate HandleId with 4661 where available."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "object-server",
+          "section": "Object",
+          "native_name": "ObjectServer",
+          "type": "UnicodeString",
+          "meaning": "Security subsystem or service responsible for the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-type",
+          "section": "Object",
+          "native_name": "ObjectType",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported type or class of the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-name",
+          "section": "Object",
+          "native_name": "ObjectName",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported name or identifying path of the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "operation-type",
+          "section": "Operation",
+          "native_name": "OperationType",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported type of object or registry operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "handle-id",
+          "section": "Object",
+          "native_name": "HandleId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Object handle identifier used to correlate related access events.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "access-list",
+          "section": "Access Request Information",
+          "native_name": "AccessList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered list of access rights requested or exercised.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "access-mask",
+          "section": "Access Request Information",
+          "native_name": "AccessMask",
+          "type": "HexInt32",
+          "meaning": "Bit mask representing requested or exercised access rights.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "properties",
+          "section": "Access Request Information",
+          "native_name": "Properties",
+          "type": "UnicodeString",
+          "meaning": "Object properties or property identifiers associated with the audited operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "additional-info",
+          "section": "Additional Information",
+          "native_name": "AdditionalInfo",
+          "type": "UnicodeString",
+          "meaning": "Provider-native additional context for the audited operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "additional-info-2",
+          "section": "Additional Information",
+          "native_name": "AdditionalInfo2",
+          "type": "UnicodeString",
+          "meaning": "Second provider-native additional context value for the audited operation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4663",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4663",
+      "title": "Windows Security Event 4663 — An attempt was made to access an object",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4663",
+      "aliases": [
+        "4663",
+        "Event ID 4663",
+        "Windows 4663",
+        "An attempt was made to access an object"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4663",
+      "source_version": "event-4663-v1-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4663",
+      "source_locator": "4663(S): An attempt was made to access an object",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4654-4663",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4654-4663",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4663 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4663",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4663",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records an audited access operation that was actually attempted against an object, including object identity, handle, requested access rights and process context.",
+        "category": "Object Access",
+        "subcategory": "Audit File System / Kernel Object / Registry / Removable Storage",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 12,
+            "notes": "Version 0 provider shape contains 12 fields."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 13,
+            "notes": "Version 1 adds ResourceAttributes."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Object Access audit subcategory and configure an object SACL matching the access to be audited.",
+          "Preserve ObjectName, HandleId, AccessList/AccessMask and process context."
+        ],
+        "interpretation_note": "This event confirms use of the requested access rather than merely a handle request. Analyze in the context of object sensitivity and the access rights exercised."
+      },
+      "correlations": [
+        {
+          "target": "4656",
+          "key": "HandleId + Computer + time",
+          "purpose": "correlate performed access with the preceding handle request"
+        },
+        {
+          "target": "4660",
+          "key": "HandleId + Computer + time",
+          "purpose": "confirm deletion when DELETE access is followed by an actual delete"
+        }
+      ],
+      "analysis": [
+        "Prioritize write/delete/permission-changing access to sensitive files, registry keys and other objects.",
+        "Use HandleId to correlate with Event 4656 and 4660.",
+        "Do not flatten versions: Version 1 adds ResourceAttributes."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "object-server",
+          "section": "Object",
+          "native_name": "ObjectServer",
+          "type": "UnicodeString",
+          "meaning": "Security subsystem or service responsible for the audited object.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "object-type",
+          "section": "Object",
+          "native_name": "ObjectType",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported type or class of the audited object.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "object-name",
+          "section": "Object",
+          "native_name": "ObjectName",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported name or identifying path of the audited object.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "handle-id",
+          "section": "Object",
+          "native_name": "HandleId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Object handle identifier used to correlate related access events.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "access-list",
+          "section": "Access Request Information",
+          "native_name": "AccessList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered list of access rights requested or exercised.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "access-mask",
+          "section": "Access Request Information",
+          "native_name": "AccessMask",
+          "type": "HexInt32",
+          "meaning": "Bit mask representing requested or exercised access rights.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name or path associated with the audited activity.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "resource-attributes",
+          "section": "Access Request Information",
+          "native_name": "ResourceAttributes",
+          "type": "UnicodeString",
+          "meaning": "Resource attributes associated with the audited object in provider versions that expose them.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4672",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4672",

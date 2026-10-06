@@ -1,0 +1,1151 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-auditing-4654-4663-26100",
+  "inventory_kind": "telemetry",
+  "declared_scope": "Microsoft-Windows-Security-Auditing provider Event IDs 4654 through 4663 linked to Security on controlled Windows Server 2025 Datacenter build 26100",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4654-4663"
+  ],
+  "inventory_method": "provider-runtime-metadata",
+  "inventory_source_version": "windows-server-2025-build-26100-security-auditing-4654-4663",
+  "expected_identity_count": 10,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "channel": "Security",
+    "product": "Windows Server 2025 Datacenter",
+    "platform": "Windows",
+    "windows_build": "26100",
+    "architecture": "64-bit",
+    "workflow_run_id": 37501843050,
+    "artifact_id": 11430091652,
+    "artifact_digest": "sha256:d22a526b900daaa1ffe82773075b5945c30b1411d5a4c18df9b3ef5d19abf898",
+    "raw_artifact_sha256": "sha256-135c03313f17821eb27e163a18c352cdd4f036ecb2b41ef361e977073311c050",
+    "provider_event_version_definition_count": 14,
+    "provider_unique_event_id_count": 10,
+    "expected_identities": [
+      {
+        "event_id": "4654",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 19,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "LocalAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalAddressMask",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalPort",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "LocalTunnelEndpoint",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteAddressMask",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemotePort",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "RemoteTunnelEndpoint",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "RemotePrivateAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "KeyModName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FailurePoint",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FailureReason",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Mode",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "State",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Role",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MessageID",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "QMFilterID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "MMSAID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 21,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "LocalAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalAddressMask",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalPort",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "LocalTunnelEndpoint",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteAddressMask",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemotePort",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "RemoteTunnelEndpoint",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "RemotePrivateAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "KeyModName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FailurePoint",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FailureReason",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Mode",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "State",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Role",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MessageID",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "QMFilterID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "MMSAID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "TunnelId",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "TrafficSelectorId",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4655",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 4,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "LocalAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "KeyModName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMSAID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4656",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 15,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ObjectServer",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "HandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TransactionId",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "AccessList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AccessMask",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "PrivilegeList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RestrictedSidCount",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 17,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ObjectServer",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "HandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TransactionId",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "AccessList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AccessReason",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AccessMask",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "PrivilegeList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RestrictedSidCount",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ResourceAttributes",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4657",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 14,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ObjectName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectValueName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "HandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "OperationType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "OldValueType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "OldValue",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "NewValueType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "NewValue",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4658",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 8,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ObjectServer",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "HandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4659",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 13,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ObjectServer",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "HandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TransactionId",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "AccessList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AccessMask",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "PrivilegeList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4660",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 9,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ObjectServer",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "HandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TransactionId",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4661",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 16,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ObjectServer",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "HandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TransactionId",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "AccessList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AccessMask",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "PrivilegeList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Properties",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RestrictedSidCount",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 17,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ObjectServer",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "HandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TransactionId",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "AccessList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AccessReason",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AccessMask",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "PrivilegeList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Properties",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RestrictedSidCount",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4662",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 14,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ObjectServer",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "OperationType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "HandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "AccessList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AccessMask",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "Properties",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AdditionalInfo",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AdditionalInfo2",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4663",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 12,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ObjectServer",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "HandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "AccessList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AccessMask",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 13,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ObjectServer",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "HandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "AccessList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AccessMask",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ResourceAttributes",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "completeness_semantics": "bounded structural evidence for ten identities already inside the separately frozen 423-ID provider denominator; version definitions are preserved and do not alter that denominator"
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-a54afaa6d00bfccac172b9b41a43dc896d288c209364ea5f79161598b2dc0495"
+}
