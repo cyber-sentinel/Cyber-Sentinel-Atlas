@@ -1,0 +1,67 @@
+name: Temporary EventLog 1100-series discovery
+
+on:
+  push:
+    branches:
+      - content/windows-security-eventlog-batch-01-1100-1108
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture-provider-metadata:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Capture bounded Microsoft-Windows-Eventlog metadata
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $ids = @(1100,1101,1102,1104,1105,1108)
+          $provider = Get-WinEvent -ListProvider 'Microsoft-Windows-Eventlog'
+          $selected = @($provider.Events | Where-Object { $ids -contains [int]$_.Id } | Sort-Object Id, Version)
+          if (-not $selected -or $selected.Count -lt 6) {
+            throw "Expected provider metadata for all six bounded IDs; found $($selected.Count) event/version definitions"
+          }
+          $present = @($selected | ForEach-Object { [int]$_.Id } | Sort-Object -Unique)
+          if (Compare-Object -ReferenceObject $ids -DifferenceObject $present) {
+            throw "Provider identity set mismatch. Expected=$($ids -join ',') actual=$($present -join ',')"
+          }
+          $os = Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, OsBuildNumber, OsArchitecture
+          $records = foreach ($event in $selected) {
+            [ordered]@{
+              id = [int]$event.Id
+              version = [int]$event.Version
+              provider = 'Microsoft-Windows-Eventlog'
+              log_links = @($event.LogLink | ForEach-Object { $_.LogName })
+              level = if ($event.Level) { $event.Level.Name } else { $null }
+              task = if ($event.Task) { $event.Task.Name } else { $null }
+              opcode = if ($event.Opcode) { $event.Opcode.Name } else { $null }
+              keywords = @($event.Keywords | ForEach-Object { $_.Name })
+              description = $event.Description
+              template = $event.Template
+            }
+          }
+          [ordered]@{
+            schema = 'atlas.windows-eventlog-provider-discovery/v1'
+            captured_at_utc = (Get-Date).ToUniversalTime().ToString('o')
+            runner_os = $os
+            provider = 'Microsoft-Windows-Eventlog'
+            channel_scope = 'Security'
+            requested_ids = $ids
+            events = @($records)
+          } | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 eventlog-1100-series.json
+          Get-FileHash eventlog-1100-series.json -Algorithm SHA256 | Format-List
+          Get-Content eventlog-1100-series.json
+
+      - name: Upload bounded discovery evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: eventlog-1100-series-provider-metadata
+          path: eventlog-1100-series.json
+          if-no-files-found: error
+          retention-days: 7
