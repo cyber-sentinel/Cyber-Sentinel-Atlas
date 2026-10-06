@@ -52,15 +52,16 @@ In particular, the Security Log benchmark contains the `1100`-series Event IDs b
 
 ## Current controlled coverage
 
-At the time this scope correction was introduced:
+Current controlled progress after the first EventLog-provider batch:
 
-- Windows Security Auditing provider coverage: `10/423` encyclopedia-grade;
-- remaining provider-specific identities: `413`;
+- Windows Security Log UWS review benchmark: `16/422` listed identities encyclopedia-grade (`3.79%`), `406` remaining;
+- benchmark-covered IDs: `1100`, `1101`, `1102`, `1104`, `1105`, `1108`, `4608`, `4624`, `4625`, `4648`, `4672`, `4688`, `4740`, `4768`, `4769`, `4771`;
+- Windows Security Auditing provider coverage remains independently `10/423` encyclopedia-grade with `413` provider-specific identities remaining;
 - Sysmon 15.22: `30/30` complete;
 - global Windows denominator: intentionally unfrozen.
 
-This document changes the **review and product scope framing**; it does not falsely convert the external benchmark into a release denominator and does not grant encyclopedia-grade status to any newly admitted Event ID.
+The benchmark progress counter is an analyst-facing Security-log coverage measure, not a replacement for provider-specific denominators and not an all-Windows completion percentage.
 
 ## Planning rule
 
-The next Security Log coverage work must prioritize the previously omitted `1100`-series identities (`1100`, `1101`, `1102`, `1104`, `1105`, `1108`) before continuing the later uncovered Security-Auditing queue, while preserving provider-specific denominators and provenance.
+After the `1100`-series identities are promoted, rebuild the UWS benchmark queue and continue with the next uncovered listed identity. Because `4608` is already encyclopedia-grade, the next numeric benchmark candidate is `4609`, subject to the same Microsoft/provider/UWS controlled review and provider-specific denominator rules.

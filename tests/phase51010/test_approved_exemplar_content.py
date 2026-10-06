@@ -590,7 +590,9 @@ def test_05_every_field_has_one_semantics_claim_and_has_field_relationship():
     claim_subjects = {r["subject_id"] for r in claims if r["subject_id"] in field_ids}
     relationship_targets = {r["to"] for r in rels}
 
-    assert len(field_ids) == 423
+    blueprint = json.loads((ROOT / "content/encyclopedia/approved-exemplars.json").read_text(encoding="utf-8"))
+    expected_field_count = sum(len(item.get("fields", [])) for item in blueprint["events"])
+    assert len(field_ids) == expected_field_count
     assert claim_subjects == field_ids
     assert relationship_targets == field_ids
 

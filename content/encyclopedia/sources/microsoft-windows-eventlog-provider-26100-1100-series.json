@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "source",
+  "id": "atlas:source:atlas.source:microsoft-windows-eventlog-provider-26100-1100-series",
+  "record_revision": 1,
+  "created_at": "2026-10-06T11:49:30Z",
+  "updated_at": "2026-10-06T11:49:30Z",
+  "curation_status": "validated",
+  "namespace": "atlas.source",
+  "canonical_key": "microsoft-windows-eventlog-provider-26100-1100-series",
+  "title": "Microsoft-Windows-Eventlog Security Provider Metadata — Windows Server 2025 build 26100 — Event IDs 1100/1101/1102/1104/1105/1108",
+  "publisher": "Microsoft",
+  "source_class": "tier-a-authoritative",
+  "canonical_urls": [
+    "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log"
+  ],
+  "official_status": "official",
+  "license": {
+    "status": "unknown"
+  },
+  "redistribution": {
+    "policy": "restricted",
+    "notes": "ATLAS stores independently authored normalized provider facts, hashes and locators. Raw Microsoft message/template prose is not packaged as encyclopedia content."
+  },
+  "freshness_policy": {
+    "expected_update_cadence": "provider-build-bound",
+    "stale_after_days": 180
+  },
+  "change_detection_policy": {
+    "strategy": "checksum",
+    "notes": "Bound to GitHub workflow run 37458952335, artifact 11411012754, artifact digest sha256:cc93b81627495898362de99e71a39fa7f213a57cc9ed842e6deee779c52968f0 and normalized inventory ingestion/inventories/windows-eventlog-security-1100-series-26100.telemetry.json. Raw discovery JSON sha256 is 6b8bd9a58483296a67e6762fb4840ca7275e83c3109d74b99f6ca6d393d230b0."
+  }
+}
