@@ -1,0 +1,793 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-auditing-4626-4653-26100",
+  "inventory_kind": "telemetry",
+  "declared_scope": "Microsoft-Windows-Security-Auditing provider Event IDs 4626, 4627, 4634, 4646, 4647, 4649, 4650, 4651, 4652 and 4653 linked to Security on controlled Windows Server 2025 Datacenter build 26100",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4626-4653"
+  ],
+  "inventory_method": "provider-runtime-metadata",
+  "inventory_source_version": "windows-server-2025-build-26100-security-auditing-4626-4653",
+  "expected_identity_count": 10,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "channel": "Security",
+    "product": "Windows Server 2025 Datacenter",
+    "platform": "Windows",
+    "windows_build": "26100",
+    "architecture": "64-bit",
+    "workflow_run_id": 37489364839,
+    "artifact_id": 11425305259,
+    "artifact_digest": "sha256:867925039bbf2338fcb87574f2ab788434df233528a0c3f41f9d8b38521d7417",
+    "raw_artifact_sha256": "sha256-dda97115ed3461171de433b0bfb7d2c52d45032aa7d004f27facf7d1fd52356a",
+    "provider_event_version_definition_count": 10,
+    "provider_unique_event_id_count": 10,
+    "expected_identities": [
+      {
+        "event_id": "4626",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 13,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TargetUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "LogonType",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "EventIdx",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "EventCountTotal",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "UserClaims",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DeviceClaims",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4627",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 12,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TargetUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "LogonType",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "EventIdx",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "EventCountTotal",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "GroupMembership",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4634",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 5,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "TargetUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "LogonType",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4646",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 1,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "notification",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4647",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 4,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "TargetUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4649",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 13,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TargetUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RequestType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LogonProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AuthenticationPackage",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "WorkstationName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TransmittedServices",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4650",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 17,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "LocalMMPrincipalName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMMPrincipalName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalKeyModPort",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "RemoteAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteKeyModPort",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "KeyModName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMAuthMethod",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMCipherAlg",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMIntegrityAlg",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DHGroup",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMLifetime",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "QMLimit",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "Role",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMImpersonationState",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMFilterID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "MMSAID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4651",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 23,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "LocalMMPrincipalName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalMMCertHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalMMIssuingCA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalMMRootCA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMMPrincipalName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMMCertHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMMIssuingCA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMMRootCA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalKeyModPort",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "RemoteAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteKeyModPort",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "KeyModName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMAuthMethod",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMCipherAlg",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMIntegrityAlg",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DHGroup",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMLifetime",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "QMLimit",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "Role",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMImpersonationState",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMFilterID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "MMSAID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4652",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 22,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "LocalMMPrincipalName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalMMCertHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalMMIssuingCA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalMMRootCA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMMPrincipalName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMMCertHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMMIssuingCA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMMRootCA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalKeyModPort",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "RemoteAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteKeyModPort",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "KeyModName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FailurePoint",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FailureReason",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMAuthMethod",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "State",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Role",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMImpersonationState",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMFilterID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "InitiatorCookie",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ResponderCookie",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4653",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 16,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "LocalMMPrincipalName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMMPrincipalName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LocalKeyModPort",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "RemoteAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteKeyModPort",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "KeyModName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FailurePoint",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FailureReason",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMAuthMethod",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "State",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Role",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMImpersonationState",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MMFilterID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "InitiatorCookie",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ResponderCookie",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "completeness_semantics": "bounded structural evidence for ten identities already inside the separately frozen 423-ID provider denominator"
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-b80cf42b8fba9f275ff63b7e3063e9a14e8b5c02268cb0af38ffac4db2cb48f2"
+}
