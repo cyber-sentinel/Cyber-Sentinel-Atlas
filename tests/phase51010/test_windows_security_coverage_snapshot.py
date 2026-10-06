@@ -55,6 +55,15 @@ def test_03_only_current_approved_windows_exemplars_count():
         assert by_id[event_id]["counts_toward_release_coverage"] is True
 
 
+def test_03b_other_security_log_providers_do_not_enter_security_auditing_denominator():
+    snapshot = builder.build_snapshot()
+    ids = {item["event_id"] for item in snapshot["events"]}
+    for event_id in ("1100", "1101", "1102", "1104", "1105", "1108"):
+        assert event_id not in ids
+    assert snapshot["denominator_count"] == 423
+    assert snapshot["encyclopedia_grade_count"] == 10
+
+
 def test_04_inventory_binding_and_legacy_boundary_are_explicit():
     snapshot = builder.build_snapshot()
     assert snapshot["inventory_id"] == "atlas:inventory:atlas.ingestion:windows-security-auditing-provider-26100.33296"

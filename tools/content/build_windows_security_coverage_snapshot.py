@@ -44,14 +44,19 @@ def build_snapshot() -> dict[str, Any]:
     if len(event_ids) != scope["provider_unique_event_id_count"]:
         raise ValueError("Windows Security provider unique-ID count drift")
 
+    # This snapshot is provider-scoped, not namespace-scoped. The shared
+    # microsoft.windows.security namespace also contains Security-channel
+    # events emitted by other providers (for example Microsoft-Windows-Eventlog).
     approved_windows = {
         str(item["native_event_id"]): item
         for item in approved["events"]
         if item.get("namespace") == "microsoft.windows.security"
+        and item.get("provider") == scope["provider"]
+        and item.get("channel") == scope["channel"]
     }
     unknown = sorted(set(approved_windows) - set(event_ids), key=int)
     if unknown:
-        raise ValueError(f"approved Windows exemplars outside controlled denominator: {unknown}")
+        raise ValueError(f"approved Security-Auditing exemplars outside controlled denominator: {unknown}")
 
     events = []
     for event_id in sorted(event_ids, key=int):
