@@ -14497,6 +14497,1659 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4699",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4699",
+      "title": "Windows Security Event 4699 — A scheduled task was deleted",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4699",
+      "aliases": [
+        "4699",
+        "Event ID 4699",
+        "Windows 4699",
+        "A scheduled task was deleted"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4699",
+      "source_version": "event-4699-v0-doc-plus-provider-v1",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4699",
+      "source_locator": "4699(S): A scheduled task was deleted",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4699-4709",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4699-4709",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4699 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4699",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4699",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records deletion of a scheduled task. Controlled provider evidence preserves Version 0 and Version 1; Version 1 adds client process identity/lineage plus RPC locality and FQDN context.",
+        "category": "Object Access",
+        "subcategory": "Audit Other Object Access Events",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 11,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Other Object Access Events success auditing where scheduled-task lifecycle visibility is required.",
+          "Preserve TaskName, TaskContent and the exact event version; retain Version 1 client/RPC/FQDN context."
+        ],
+        "interpretation_note": "Scheduled-task deletion can be routine administration or cleanup, but unexpected deletion of critical or suspicious tasks can indicate anti-forensics, defense evasion or persistence cleanup."
+      },
+      "correlations": [
+        {
+          "target": "4698",
+          "key": "TaskName + Computer",
+          "purpose": "pair task deletion with prior task creation"
+        },
+        {
+          "target": "4702",
+          "key": "TaskName + Computer + time",
+          "purpose": "review task updates before deletion"
+        }
+      ],
+      "analysis": [
+        "Review TaskName and TaskContent against approved automation and known persistence mechanisms.",
+        "For Version 1, correlate ClientProcessId/ParentProcessId with process creation telemetry and use RPC/FQDN context to distinguish local from remote administration."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "task-name",
+          "section": "Task",
+          "native_name": "TaskName",
+          "type": "UnicodeString",
+          "meaning": "Task Scheduler path/name of the newly created scheduled task.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "task-content",
+          "section": "Task",
+          "native_name": "TaskContent",
+          "type": "UnicodeString",
+          "meaning": "XML task definition captured when the scheduled task was created.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-start-key",
+          "section": "Client Process",
+          "native_name": "ClientProcessStartKey",
+          "type": "UInt64",
+          "meaning": "Stable process-start key added by newer provider versions for process correlation.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-id",
+          "section": "Client Process",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Client process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "parent-process-id",
+          "section": "Client Process",
+          "native_name": "ParentProcessId",
+          "type": "UInt32",
+          "meaning": "Parent process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "rpc-call-client-locality",
+          "section": "RPC Context",
+          "native_name": "RpcCallClientLocality",
+          "type": "UInt32",
+          "meaning": "Provider-native locality indicator for the RPC client that created the task.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "fqdn",
+          "section": "RPC Context",
+          "native_name": "FQDN",
+          "type": "UnicodeString",
+          "meaning": "FQDN context supplied by the newer scheduled-task event version.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4700",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4700",
+      "title": "Windows Security Event 4700 — A scheduled task was enabled",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4700",
+      "aliases": [
+        "4700",
+        "Event ID 4700",
+        "Windows 4700",
+        "A scheduled task was enabled"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4700",
+      "source_version": "event-4700-v0-doc-plus-provider-v1",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4700",
+      "source_locator": "4700(S): A scheduled task was enabled",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4699-4709",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4699-4709",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4700 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4700",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4700",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records enablement of a scheduled task. Controlled provider evidence preserves Version 0 and Version 1; Version 1 adds client process identity/lineage plus RPC locality and FQDN context.",
+        "category": "Object Access",
+        "subcategory": "Audit Other Object Access Events",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 11,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Other Object Access Events success auditing where scheduled-task state changes require visibility.",
+          "Preserve TaskName, TaskContent and the exact event version; retain Version 1 client/RPC/FQDN context."
+        ],
+        "interpretation_note": "Enabling a previously disabled scheduled task may reactivate legitimate automation or persistence. Prioritize critical tasks, unexpected principals, remote changes and unusual task actions."
+      },
+      "correlations": [
+        {
+          "target": "4701",
+          "key": "TaskName + Computer",
+          "purpose": "track enable/disable transitions"
+        },
+        {
+          "target": "4698",
+          "key": "TaskName + Computer",
+          "purpose": "resolve original task creation"
+        }
+      ],
+      "analysis": [
+        "Inspect task XML and baseline whether the task should normally be enabled.",
+        "For Version 1, correlate ClientProcessId/ParentProcessId with 4688 and evaluate RPC/FQDN context."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "task-name",
+          "section": "Task",
+          "native_name": "TaskName",
+          "type": "UnicodeString",
+          "meaning": "Task Scheduler path/name of the newly created scheduled task.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "task-content",
+          "section": "Task",
+          "native_name": "TaskContent",
+          "type": "UnicodeString",
+          "meaning": "XML task definition captured when the scheduled task was created.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-start-key",
+          "section": "Client Process",
+          "native_name": "ClientProcessStartKey",
+          "type": "UInt64",
+          "meaning": "Stable process-start key added by newer provider versions for process correlation.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-id",
+          "section": "Client Process",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Client process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "parent-process-id",
+          "section": "Client Process",
+          "native_name": "ParentProcessId",
+          "type": "UInt32",
+          "meaning": "Parent process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "rpc-call-client-locality",
+          "section": "RPC Context",
+          "native_name": "RpcCallClientLocality",
+          "type": "UInt32",
+          "meaning": "Provider-native locality indicator for the RPC client that created the task.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "fqdn",
+          "section": "RPC Context",
+          "native_name": "FQDN",
+          "type": "UnicodeString",
+          "meaning": "FQDN context supplied by the newer scheduled-task event version.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4701",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4701",
+      "title": "Windows Security Event 4701 — A scheduled task was disabled",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4701",
+      "aliases": [
+        "4701",
+        "Event ID 4701",
+        "Windows 4701",
+        "A scheduled task was disabled"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4701",
+      "source_version": "event-4701-v0-doc-plus-provider-v1",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4701",
+      "source_locator": "4701(S): A scheduled task was disabled",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4699-4709",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4699-4709",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4701 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4701",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4701",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records disabling of a scheduled task. Controlled provider evidence preserves Version 0 and Version 1; Version 1 adds client process identity/lineage plus RPC locality and FQDN context.",
+        "category": "Object Access",
+        "subcategory": "Audit Other Object Access Events",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 11,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Other Object Access Events success auditing where scheduled-task state changes require visibility.",
+          "Preserve TaskName, TaskContent and the exact event version; retain Version 1 client/RPC/FQDN context."
+        ],
+        "interpretation_note": "Disabling a critical scheduled task can disrupt controls or operations; unexpected changes should be compared with approved administration and the task's security role."
+      },
+      "correlations": [
+        {
+          "target": "4700",
+          "key": "TaskName + Computer",
+          "purpose": "track disable/enable transitions"
+        },
+        {
+          "target": "4698",
+          "key": "TaskName + Computer",
+          "purpose": "resolve original task creation"
+        }
+      ],
+      "analysis": [
+        "Review TaskName and task XML for security-sensitive or persistence-related actions.",
+        "For Version 1, resolve the modifying client process and whether the change was local or remote."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "task-name",
+          "section": "Task",
+          "native_name": "TaskName",
+          "type": "UnicodeString",
+          "meaning": "Task Scheduler path/name of the newly created scheduled task.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "task-content",
+          "section": "Task",
+          "native_name": "TaskContent",
+          "type": "UnicodeString",
+          "meaning": "XML task definition captured when the scheduled task was created.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-start-key",
+          "section": "Client Process",
+          "native_name": "ClientProcessStartKey",
+          "type": "UInt64",
+          "meaning": "Stable process-start key added by newer provider versions for process correlation.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-id",
+          "section": "Client Process",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Client process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "parent-process-id",
+          "section": "Client Process",
+          "native_name": "ParentProcessId",
+          "type": "UInt32",
+          "meaning": "Parent process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "rpc-call-client-locality",
+          "section": "RPC Context",
+          "native_name": "RpcCallClientLocality",
+          "type": "UInt32",
+          "meaning": "Provider-native locality indicator for the RPC client that created the task.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "fqdn",
+          "section": "RPC Context",
+          "native_name": "FQDN",
+          "type": "UnicodeString",
+          "meaning": "FQDN context supplied by the newer scheduled-task event version.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4702",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4702",
+      "title": "Windows Security Event 4702 — A scheduled task was updated",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4702",
+      "aliases": [
+        "4702",
+        "Event ID 4702",
+        "Windows 4702",
+        "A scheduled task was updated"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4702",
+      "source_version": "event-4702-v0-doc-plus-provider-v1",
+      "source_url": "https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4702",
+      "source_locator": "4702(S): A scheduled task was updated",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4699-4709",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4699-4709",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4702 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4702",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4702",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records modification of a scheduled task and captures the new XML definition. Controlled provider evidence preserves Version 0 and Version 1; Version 1 adds client process identity/lineage plus RPC locality and FQDN context.",
+        "category": "Object Access",
+        "subcategory": "Audit Other Object Access Events",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 11,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Other Object Access Events success auditing where scheduled-task modification visibility is required.",
+          "Preserve TaskName, TaskContentNew and the exact event version; retain Version 1 client/RPC/FQDN context."
+        ],
+        "interpretation_note": "Scheduled-task updates are high-value persistence and execution telemetry because an existing trusted task can be repurposed by changing actions, principals, triggers or credentials."
+      },
+      "correlations": [
+        {
+          "target": "4698",
+          "key": "TaskName + Computer",
+          "purpose": "compare current update with task creation"
+        },
+        {
+          "target": "4699",
+          "key": "TaskName + Computer + time",
+          "purpose": "track later task deletion"
+        }
+      ],
+      "analysis": [
+        "Parse TaskContentNew XML for executable/script actions, principals, logon type, hidden settings and suspicious triggers.",
+        "For Version 1, correlate the client and parent PIDs with 4688 and evaluate remote RPC/FQDN context."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "task-name",
+          "section": "Task",
+          "native_name": "TaskName",
+          "type": "UnicodeString",
+          "meaning": "Task Scheduler path/name of the newly created scheduled task.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "task-content-new",
+          "section": "Task",
+          "native_name": "TaskContentNew",
+          "type": "UnicodeString",
+          "meaning": "Updated XML task definition captured when the scheduled task was changed.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-start-key",
+          "section": "Client Process",
+          "native_name": "ClientProcessStartKey",
+          "type": "UInt64",
+          "meaning": "Stable process-start key added by newer provider versions for process correlation.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-id",
+          "section": "Client Process",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Client process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "parent-process-id",
+          "section": "Client Process",
+          "native_name": "ParentProcessId",
+          "type": "UInt32",
+          "meaning": "Parent process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "rpc-call-client-locality",
+          "section": "RPC Context",
+          "native_name": "RpcCallClientLocality",
+          "type": "UInt32",
+          "meaning": "Provider-native locality indicator for the RPC client that created the task.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "fqdn",
+          "section": "RPC Context",
+          "native_name": "FQDN",
+          "type": "UnicodeString",
+          "meaning": "FQDN context supplied by the newer scheduled-task event version.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4703",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4703",
+      "title": "Windows Security Event 4703 — A user right was adjusted",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4703",
+      "aliases": [
+        "4703",
+        "Event ID 4703",
+        "Windows 4703",
+        "A user right was adjusted"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4703",
+      "source_version": "event-4703-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4703",
+      "source_locator": "4703(S): A user right was adjusted",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4699-4709",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4699-4709",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4703 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4703",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4703",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records token privilege adjustment for a target account, including the requesting subject, target logon context, process and enabled/disabled privilege lists.",
+        "category": "Policy Change",
+        "subcategory": "Audit Authorization Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 12,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Authorization Policy Change success auditing only where token-privilege adjustment visibility is intentionally required because event volume can be high.",
+          "Preserve target logon context, ProcessId/ProcessName and both enabled and disabled privilege lists."
+        ],
+        "interpretation_note": "This event can be noisy because applications and services legitimately adjust token privileges. Security value is highest for unusual principals, processes or sensitive privileges outside expected baselines."
+      },
+      "correlations": [
+        {
+          "target": "4688",
+          "key": "ProcessId + ProcessName + Computer + time",
+          "purpose": "resolve the process adjusting token privileges"
+        },
+        {
+          "target": "4624",
+          "key": "TargetLogonId or SubjectLogonId + Computer",
+          "purpose": "resolve logon context"
+        }
+      ],
+      "analysis": [
+        "Baseline frequent service/application privilege adjustments before alerting.",
+        "Correlate ProcessId with 4688 and target/subject LogonId values with authentication telemetry before attributing the action."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "target-user-sid",
+          "section": "Target Account",
+          "native_name": "TargetUserSid",
+          "type": "SID",
+          "meaning": "SID of the target account whose token privileges were adjusted.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target account whose token privileges were adjusted.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer context for the target account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-logon-id",
+          "section": "Target Account",
+          "native_name": "TargetLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier associated with the target account/token.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name or path associated with the audited activity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "enabled-privilege-list",
+          "section": "Privileges",
+          "native_name": "EnabledPrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Privileges enabled on the target token by the adjustment.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "disabled-privilege-list",
+          "section": "Privileges",
+          "native_name": "DisabledPrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Privileges disabled on the target token by the adjustment.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4704",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4704",
+      "title": "Windows Security Event 4704 — A user right was assigned",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4704",
+      "aliases": [
+        "4704",
+        "Event ID 4704",
+        "Windows 4704",
+        "A user right was assigned"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4704",
+      "source_version": "event-4704-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4704",
+      "source_locator": "4704(S): A user right was assigned",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4699-4709",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4699-4709",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4704 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4704",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4704",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records assignment of one or more local user rights to a security principal.",
+        "category": "Policy Change",
+        "subcategory": "Audit Authorization Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Authorization Policy Change success auditing on systems where local user-right changes require monitoring.",
+          "Preserve TargetSid, PrivilegeList and subject logon context."
+        ],
+        "interpretation_note": "Assignment of powerful rights can materially change privilege and persistence opportunities. Compare the target principal and granted rights with approved security policy."
+      },
+      "correlations": [
+        {
+          "target": "4705",
+          "key": "TargetSid + PrivilegeList + Computer",
+          "purpose": "track later removal of the assigned user right"
+        },
+        {
+          "target": "4624",
+          "key": "SubjectLogonId + Computer",
+          "purpose": "resolve the administrator logon context"
+        }
+      ],
+      "analysis": [
+        "Prioritize restricted rights and assignments to unexpected, external, dormant or non-administrative principals.",
+        "Correlate SubjectLogonId with authentication and administrative change records."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "target-sid",
+          "section": "Target Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "SID of the security principal whose local user-right assignment changed.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "User Rights",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered list of user rights assigned to or removed from the target principal.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4705",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4705",
+      "title": "Windows Security Event 4705 — A user right was removed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4705",
+      "aliases": [
+        "4705",
+        "Event ID 4705",
+        "Windows 4705",
+        "A user right was removed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4705",
+      "source_version": "event-4705-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4705",
+      "source_locator": "4705(S): A user right was removed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4699-4709",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4699-4709",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4705 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4705",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4705",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records removal of one or more local user rights from a security principal.",
+        "category": "Policy Change",
+        "subcategory": "Audit Authorization Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Authorization Policy Change success auditing on systems where local user-right changes require monitoring.",
+          "Preserve TargetSid, PrivilegeList and subject logon context."
+        ],
+        "interpretation_note": "Removal may be legitimate hardening or deprovisioning, but unexpected changes to critical accounts or rights can disrupt operations or conceal earlier unauthorized grants."
+      },
+      "correlations": [
+        {
+          "target": "4704",
+          "key": "TargetSid + PrivilegeList + Computer",
+          "purpose": "identify prior assignment of the removed right"
+        },
+        {
+          "target": "4624",
+          "key": "SubjectLogonId + Computer",
+          "purpose": "resolve the administrator logon context"
+        }
+      ],
+      "analysis": [
+        "Validate removed rights against approved change records and expected target-account policy.",
+        "Correlate SubjectLogonId with authentication and compare with preceding 4704 events for the same target/right."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "target-sid",
+          "section": "Target Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "SID of the security principal whose local user-right assignment changed.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "User Rights",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered list of user rights assigned to or removed from the target principal.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4706",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4706",
+      "title": "Windows Security Event 4706 — A new trust was created to a domain",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4706",
+      "aliases": [
+        "4706",
+        "Event ID 4706",
+        "Windows 4706",
+        "A new trust was created to a domain"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4706",
+      "source_version": "event-4706-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4706",
+      "source_locator": "4706(S): A new trust was created to a domain",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4699-4709",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4699-4709",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4706 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4706",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4706",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records creation of an Active Directory domain trust on a domain controller, including trusted-domain identity and provider-native trust type/direction/attributes and SID-filtering state.",
+        "category": "Policy Change",
+        "subcategory": "Audit Authentication Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 10,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Collect this event from domain controllers and monitor all domain-trust creation.",
+          "Preserve DomainName, DomainSid, TdoType, TdoDirection, TdoAttributes, SidFilteringEnabled and subject context."
+        ],
+        "interpretation_note": "Domain-trust creation is a high-impact authentication-policy change. Any unplanned trust should be investigated for authorization, trust direction/type and SID-filtering implications."
+      },
+      "correlations": [
+        {
+          "target": "4707",
+          "key": "DomainSid + DomainName",
+          "purpose": "track later removal of the trust"
+        },
+        {
+          "target": "4624",
+          "key": "SubjectLogonId + Computer",
+          "purpose": "resolve the administrative logon"
+        }
+      ],
+      "analysis": [
+        "Validate the trusted domain, direction and attributes against approved forest/domain architecture.",
+        "Review SID-filtering state and the subject account that created the trust."
+      ],
+      "fields": [
+        {
+          "key": "domain-name",
+          "section": "Trusted Domain",
+          "native_name": "DomainName",
+          "type": "UnicodeString",
+          "meaning": "Name of the trusted domain associated with the trust change.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "domain-sid",
+          "section": "Trusted Domain",
+          "native_name": "DomainSid",
+          "type": "SID",
+          "meaning": "SID of the trusted domain associated with the trust change.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "tdo-type",
+          "section": "Trusted Domain",
+          "native_name": "TdoType",
+          "type": "UInt32",
+          "meaning": "Provider-native trusted-domain object type value.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "tdo-direction",
+          "section": "Trusted Domain",
+          "native_name": "TdoDirection",
+          "type": "UInt32",
+          "meaning": "Provider-native trust direction value.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "tdo-attributes",
+          "section": "Trusted Domain",
+          "native_name": "TdoAttributes",
+          "type": "UInt32",
+          "meaning": "Provider-native trusted-domain attribute bitmask.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sid-filtering-enabled",
+          "section": "Trusted Domain",
+          "native_name": "SidFilteringEnabled",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered SID-filtering state for the trust.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4707",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4707",
+      "title": "Windows Security Event 4707 — A trust to a domain was removed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4707",
+      "aliases": [
+        "4707",
+        "Event ID 4707",
+        "Windows 4707",
+        "A trust to a domain was removed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4707",
+      "source_version": "event-4707-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4707",
+      "source_locator": "4707(S): A trust to a domain was removed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4699-4709",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4699-4709",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4707 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4707",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4707",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records removal of an Active Directory domain trust on a domain controller.",
+        "category": "Policy Change",
+        "subcategory": "Audit Authentication Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Collect this event from domain controllers and monitor all domain-trust removal.",
+          "Preserve DomainName, DomainSid and subject logon context."
+        ],
+        "interpretation_note": "Domain-trust removal is a material authentication-policy change. Unplanned removal can disrupt cross-domain access and may indicate unauthorized administrative activity."
+      },
+      "correlations": [
+        {
+          "target": "4706",
+          "key": "DomainSid + DomainName",
+          "purpose": "identify creation history for the removed trust"
+        },
+        {
+          "target": "4624",
+          "key": "SubjectLogonId + Computer",
+          "purpose": "resolve the administrative logon"
+        }
+      ],
+      "analysis": [
+        "Validate the removed trust against approved architecture and change records.",
+        "Identify the subject account and correlate with trust creation/modification history."
+      ],
+      "fields": [
+        {
+          "key": "domain-name",
+          "section": "Trusted Domain",
+          "native_name": "DomainName",
+          "type": "UnicodeString",
+          "meaning": "Name of the trusted domain associated with the trust change.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "domain-sid",
+          "section": "Trusted Domain",
+          "native_name": "DomainSid",
+          "type": "SID",
+          "meaning": "SID of the trusted domain associated with the trust change.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4709",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4709",
+      "title": "Windows Security Event 4709 — IPsec Services was started",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4709",
+      "aliases": [
+        "4709",
+        "Event ID 4709",
+        "Windows 4709",
+        "IPsec Services was started"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4709",
+      "source_version": "audit-filtering-platform-policy-change-event-4709-provider-v0",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-filtering-platform-policy-change",
+      "source_locator": "4709(S): IPsec Services was started",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4699-4709",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4699-4709",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4709 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4709",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4709",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft identifies Event 4709 as the success audit for IPsec Services start status. Controlled provider evidence preserves three provider-rendered parameter fields without assigning undocumented meanings to those slots.",
+        "category": "Policy Change",
+        "subcategory": "Audit Filtering Platform Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 3,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Filtering Platform Policy Change success auditing where IPsec service status changes require visibility.",
+          "Preserve param1, param2 and param3 exactly as provider-rendered strings together with host and event context."
+        ],
+        "interpretation_note": "Treat this as IPsec service-state telemetry. Unexpected starts or restarts should be correlated with service configuration, policy deployment and administrative activity; the three provider parameters remain opaque unless separately documented."
+      },
+      "correlations": [
+        {
+          "target": "4710",
+          "key": "Computer + time",
+          "purpose": "track later IPsec Services disablement"
+        }
+      ],
+      "analysis": [
+        "Baseline expected IPsec service startup behavior and investigate unexpected state transitions.",
+        "Do not infer semantic meaning for param1/param2/param3 beyond their provider-rendered values without authoritative documentation."
+      ],
+      "fields": [
+        {
+          "key": "parameter-1",
+          "section": "IPsec Service",
+          "native_name": "param1",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered Event 4709 parameter string; semantic meaning is intentionally left unspecified without authoritative documentation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "parameter-2",
+          "section": "IPsec Service",
+          "native_name": "param2",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered Event 4709 parameter string; semantic meaning is intentionally left unspecified without authoritative documentation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "parameter-3",
+          "section": "IPsec Service",
+          "native_name": "param3",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered Event 4709 parameter string; semantic meaning is intentionally left unspecified without authoritative documentation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4740",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4740",

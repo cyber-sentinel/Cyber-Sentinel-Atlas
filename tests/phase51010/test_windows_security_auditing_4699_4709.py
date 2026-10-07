@@ -3,9 +3,9 @@ from __future__ import annotations
 import importlib.util,json
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
-IDS=['4689', '4690', '4691', '4692', '4693', '4694', '4695', '4696', '4697', '4698']
-STRUCTURAL='atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4689-4698'
-EXPECTED={'4689': {'0': 7}, '4690': {'0': 8}, '4691': {'0': 9}, '4692': {'0': 8}, '4693': {'0': 9}, '4694': {'0': 9}, '4695': {'0': 9}, '4696': {'0': 12}, '4697': {'0': 9, '1': 12}, '4698': {'0': 6, '1': 11}}
+IDS=['4699', '4700', '4701', '4702', '4703', '4704', '4705', '4706', '4707', '4709']
+STRUCTURAL='atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4699-4709'
+EXPECTED={'4699': {'0': 6, '1': 11}, '4700': {'0': 6, '1': 11}, '4701': {'0': 6, '1': 11}, '4702': {'0': 6, '1': 11}, '4703': {'0': 12}, '4704': {'0': 6}, '4705': {'0': 6}, '4706': {'0': 10}, '4707': {'0': 6}, '4709': {'0': 3}}
 def mod(n,p):
  s=importlib.util.spec_from_file_location(n,p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); return m
 builder=mod("b",ROOT/"tools/content/build_encyclopedia_records.py"); validator=mod("v",ROOT/"tools/validate_phase52.py")
@@ -21,14 +21,19 @@ def test_02_search_and_scope():
 def test_03_versions_exact():
  d=bp()
  for eid,want in EXPECTED.items(): assert {str(r["version"]):r["field_count"] for r in d[eid]["overview"]["event_versions"]}==want
- assert EXPECTED["4697"]=={"0":9,"1":12} and EXPECTED["4698"]=={"0":6,"1":11}
+ for eid in ("4699","4700","4701","4702"): assert EXPECTED[eid]=={"0":6,"1":11}
+ assert EXPECTED["4703"]=={"0":12} and EXPECTED["4706"]=={"0":10} and EXPECTED["4709"]=={"0":3}
 def test_04_semantics():
- d=bp(); assert d["4689"]["overview"]["event_type"]=="Success"; assert d["4692"]["overview"]["event_type"]=="Success/Failure"; assert d["4696"]["overview"]["event_type"]=="Success / deprecated"; assert d["4697"]["overview"]["event_type"]=="Success"; assert d["4698"]["overview"]["event_type"]=="Success"
+ d=bp()
+ for eid in IDS: assert d[eid]["overview"]["event_type"]=="Success"
+ assert d["4703"]["overview"]["subcategory"]=="Audit Authorization Policy Change"
+ assert d["4706"]["overview"]["subcategory"]=="Audit Authentication Policy Change"
+ assert d["4709"]["overview"]["subcategory"]=="Audit Filtering Platform Policy Change"
 def test_05_evidence_and_redistribution():
  data={x["id"]:x for x in records()}
  for eid in IDS:
   cs=[x for x in data.values() if x.get("record_kind")=="claim" and x.get("subject_id")==f"atlas:event:microsoft.windows.security:{eid}" and x.get("predicate")=="telemetry.represents"]; assert len(cs)==1 and STRUCTURAL in {e["source_id"] for e in cs[0]["evidence"]}; assert data[f"atlas:source:atlas.source:ultimate-windows-security-event-{eid}"]["redistribution"]["policy"]=="prohibited"
 def test_06_coverage():
- m=json.loads((ROOT/"content/encyclopedia/coverage-manifest.json").read_text()); b=m["windows_security_log_review_benchmark"]; assert b["listed_unique_event_id_count"]==422 and set(IDS).issubset(set(b["covered_event_ids"])) and b["encyclopedia_grade_listed_id_count"]>=66; w=next(x for x in m["families"] if x["id"]=="windows-security-auditing"); assert w["denominator_count"]==423 and w["encyclopedia_grade_count"]>=60 and w["remaining_count"]==423-w["encyclopedia_grade_count"]
+ m=json.loads((ROOT/"content/encyclopedia/coverage-manifest.json").read_text()); b=m["windows_security_log_review_benchmark"]; assert (b["encyclopedia_grade_listed_id_count"],b["remaining_listed_id_count"],b["completion_ratio"],b["completion_percent"])==(76,346,"76/422",18.01); assert set(IDS).issubset(set(b["covered_event_ids"])); w=next(x for x in m["families"] if x["id"]=="windows-security-auditing"); assert (w["denominator_count"],w["encyclopedia_grade_count"],w["remaining_count"])==(423,70,353)
 def test_07_discovery_binding():
- x=json.loads((ROOT/"ingestion/inventories/windows-security-auditing-4689-4698-26100.telemetry.json").read_text()); s=x["scope_metadata"]; assert (s["workflow_run_id"],s["artifact_id"],s["provider_event_version_definition_count"],s["provider_unique_event_id_count"])==(37602920128,11473885860,12,10); assert s["artifact_digest"]=='sha256:532f141c53f9af4bbe5553c969444ee57322c7c98bbe0c04a391670c48e0ec83' and s["raw_artifact_sha256"]=='sha256-42f992beda2ee6963d14ea2e475722a4a99324332c900a763167d6f9a55079b1'
+ x=json.loads((ROOT/"ingestion/inventories/windows-security-auditing-4699-4709-26100.telemetry.json").read_text()); s=x["scope_metadata"]; assert (s["workflow_run_id"],s["artifact_id"],s["provider_event_version_definition_count"],s["provider_unique_event_id_count"])==(37610244718,11478270373,14,10); assert s["artifact_digest"]=='sha256:9fedb9a65977712bec90d23589773d9f97ff5b2167054819c3de7d12602cc7de' and s["raw_artifact_sha256"]=='sha256-b486c1cb4b2380e14e9eba77fc79efa09734faff9ff90a221a6ad3f0acc42633'
