@@ -1,1 +1,0 @@
-trigger bounded Security-Auditing 4699-4709 apply retry 2
