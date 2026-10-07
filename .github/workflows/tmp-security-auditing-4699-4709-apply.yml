@@ -52,7 +52,7 @@ jobs:
       - name: Apply bounded content mutation
         env:
           ATLAS_DISCOVERY_JSON: /tmp/atlas-batch07/evidence/security-auditing-4699-4709.json
-        run: python tools/tmp_apply_security_auditing_4699_4709.py
+        run: python tools/tmp_apply_security_auditing_4699_4709_retry.py
 
       - name: Validate focused Phase 5.10.10 contracts
         shell: bash
@@ -89,7 +89,7 @@ jobs:
       - name: Validate ingestion authorization and syntax
         run: |
           python tools/ingestion/validate_ingestion_authorization.py
-          python -m compileall -q tools/content tests/phase51010 tools/tmp_apply_security_auditing_4699_4709.py
+          python -m compileall -q tools/content tests/phase51010 tools/tmp_apply_security_auditing_4699_4709.py tools/tmp_apply_security_auditing_4699_4709_retry.py
           git diff --check
 
       - name: Guard temporary artifacts from durable commit
@@ -98,6 +98,7 @@ jobs:
           test -f .github/workflows/tmp-security-auditing-4699-4709-discovery.yml
           test -f .github/workflows/tmp-security-auditing-4699-4709-apply.yml
           test -f tools/tmp_apply_security_auditing_4699_4709.py
+          test -f tools/tmp_apply_security_auditing_4699_4709_retry.py
           test -f .tmp-trigger-security-auditing-4699-4709
 
       - name: Commit durable outputs only
