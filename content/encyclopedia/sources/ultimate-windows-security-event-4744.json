@@ -1,0 +1,33 @@
+{
+  "canonical_key": "ultimate-windows-security-event-4744",
+  "canonical_urls": [
+    "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4744"
+  ],
+  "change_detection_policy": {
+    "notes": "Coverage/Quick Detail only; no bulk ingestion.",
+    "strategy": "manual"
+  },
+  "created_at": "2026-10-07T18:10:05Z",
+  "curation_status": "validated",
+  "freshness_policy": {
+    "expected_update_cadence": "web-reference",
+    "stale_after_days": 90
+  },
+  "id": "atlas:source:atlas.source:ultimate-windows-security-event-4744",
+  "license": {
+    "status": "restricted"
+  },
+  "namespace": "atlas.source",
+  "official_status": "secondary-reference",
+  "publisher": "Monterey Technology Group, Inc.",
+  "record_kind": "source",
+  "record_revision": 1,
+  "redistribution": {
+    "notes": "External Quick Detail / coverage benchmark only; no substantial page prose is packaged.",
+    "policy": "prohibited"
+  },
+  "schema_version": "1.0.0",
+  "source_class": "tier-c-secondary-research",
+  "title": "Ultimate Windows Security Event 4744",
+  "updated_at": "2026-10-07T18:10:05Z"
+}
