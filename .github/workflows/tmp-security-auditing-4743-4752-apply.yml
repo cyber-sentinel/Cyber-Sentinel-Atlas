@@ -1,0 +1,75 @@
+name: Temporary Security-Auditing 4743-4752 staging apply
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  apply-validate-commit:
+    if: github.head_ref == 'content/windows-security-auditing-batch-11-4743-4752-staging'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: content/windows-security-auditing-batch-11-4743-4752-staging
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Verify historical helper dependency is available
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --all --tags --prune
+          git cat-file -e fd1eccb830be836addb615fafcb2c7ccdb50ce46^{commit}
+      - run: python -m pip install --disable-pip-version-check -r tools/requirements-validation.txt
+      - name: Download checksum-bound discovery evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/b11
+          gh api /repos/${{ github.repository }}/actions/artifacts/11502400552/zip > /tmp/b11/evidence.zip
+          unzip -q /tmp/b11/evidence.zip -d /tmp/b11/evidence
+          echo 'b890cc073d8b012ecf582986ada877eb79a34785f9c9c47f37e1a9afa9f32475  /tmp/b11/evidence/security-auditing-4743-4752.json' | sha256sum -c -
+      - name: Apply bounded content mutation
+        env:
+          ATLAS_DISCOVERY_JSON: /tmp/b11/evidence/security-auditing-4743-4752.json
+        run: python tools/tmp_apply_security_auditing_4743_4752.py
+      - name: Validate focused contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/content/validate_encyclopedia_coverage.py
+          python tools/content/build_encyclopedia_records.py --output /tmp/records.jsonl
+          python tools/ingestion/validate_ingestion_authorization.py
+          python -m compileall -q tools/content tests/phase51010 tools/tmp_apply_security_auditing_4743_4752.py
+          git diff --check
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          for p in [Path('tests/phase51010/test_windows_security_auditing_4743_4752.py'),Path('tests/phase51010/test_windows_security_auditing_4731_4742.py'),Path('tests/phase51010/test_windows_security_coverage_snapshot.py')]:
+              s=importlib.util.spec_from_file_location(p.stem,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+              for n,v in sorted(vars(m).items()):
+                  if n.startswith('test_') and callable(v): v(); print('PASS',p,n)
+          PY
+      - name: Commit durable outputs only
+        shell: bash
+        run: |
+          set -euo pipefail
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          git config user.name 'Cyber-Sentinel CI'
+          git config user.email 'actions@users.noreply.github.com'
+          git add content/encyclopedia docs/windows-security-log-scope.md docs/releases/third-party-redistribution-inventory.json ingestion/inventories/windows-security-auditing-4743-4752-26100.telemetry.json tests/phase51010
+          test -n "$(git diff --cached --name-only)"
+          if git diff --cached --name-only | grep -E '(^|/)(tmp_|tmp-|temporary)'; then echo 'temporary artifact staged'; exit 1; fi
+          git commit -m 'Content: add Security-Auditing 4743-4752 coverage'
+          git push origin HEAD:content/windows-security-auditing-batch-11-4743-4752-staging
