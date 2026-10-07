@@ -12822,6 +12822,1681 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4689",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4689",
+      "title": "Windows Security Event 4689 — A process has exited",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4689",
+      "aliases": [
+        "4689",
+        "Event ID 4689",
+        "Windows 4689",
+        "A process has exited"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4689",
+      "source_version": "event-4689-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4689",
+      "source_locator": "4689(S): A process has exited",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4689-4698",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4689-4698",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4689 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4689",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4689",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records process termination and exposes the subject, process identifier/name and provider-native exit status for lifecycle correlation.",
+        "category": "Detailed Tracking",
+        "subcategory": "Audit Process Termination",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 7,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Process Termination success auditing where process-lifecycle visibility is required.",
+          "Preserve ProcessId, ProcessName, Status and subject logon context."
+        ],
+        "interpretation_note": "Process exit is common lifecycle telemetry; security value increases for critical processes, unusual paths, abnormal exit patterns or tight correlation with suspicious process creation."
+      },
+      "correlations": [
+        {
+          "target": "4688",
+          "key": "ProcessId + ProcessName + Computer + time",
+          "purpose": "pair process termination with process creation"
+        }
+      ],
+      "analysis": [
+        "Correlate ProcessId and ProcessName with Event 4688 using host and tight time bounds because PIDs are reusable.",
+        "Review Status using application-specific exit-code semantics rather than assuming a universal meaning."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "status",
+          "section": "Result",
+          "native_name": "Status",
+          "type": "HexInt32",
+          "meaning": "Provider-native process exit or operation status value; interpret in event-specific context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name or path associated with the audited activity.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4690",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4690",
+      "title": "Windows Security Event 4690 — An attempt was made to duplicate a handle to an object",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4690",
+      "aliases": [
+        "4690",
+        "Event ID 4690",
+        "Windows 4690",
+        "An attempt was made to duplicate a handle to an object"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4690",
+      "source_version": "event-4690-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4690",
+      "source_locator": "4690(S): An attempt was made to duplicate a handle to an object",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4689-4698",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4689-4698",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4690 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4690",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4690",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records duplication of an object handle from one process into another and preserves source/target handle and process identifiers.",
+        "category": "Object Access",
+        "subcategory": "Audit Handle Manipulation",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 8,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Handle Manipulation success auditing only where handle-level visibility is intentionally required.",
+          "Preserve SourceHandleId, SourceProcessId, TargetHandleId and TargetProcessId."
+        ],
+        "interpretation_note": "Microsoft notes that this event usually has little standalone security relevance; it is most useful for narrowly scoped handle-lifecycle investigations."
+      },
+      "correlations": [
+        {
+          "target": "4688",
+          "key": "SourceProcessId or TargetProcessId + Computer + time",
+          "purpose": "resolve the processes participating in handle duplication"
+        },
+        {
+          "target": "4663",
+          "key": "TargetHandleId + Computer + time",
+          "purpose": "follow later access using the duplicated handle where available"
+        }
+      ],
+      "analysis": [
+        "Correlate source and target process identifiers with process creation telemetry.",
+        "Use the source and target handle identifiers to follow activity involving a specifically monitored object handle."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "source-handle-id",
+          "section": "Handle Duplication",
+          "native_name": "SourceHandleId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Source object handle being duplicated.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-process-id",
+          "section": "Handle Duplication",
+          "native_name": "SourceProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier owning the source handle.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-handle-id",
+          "section": "Handle Duplication",
+          "native_name": "TargetHandleId",
+          "type": "Pointer/HexInt64",
+          "meaning": "New duplicated handle identifier in the target process.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-process-id",
+          "section": "Process",
+          "native_name": "TargetProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Target process identifier associated with the event.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4691",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4691",
+      "title": "Windows Security Event 4691 — Indirect access to an object was requested",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4691",
+      "aliases": [
+        "4691",
+        "Event ID 4691",
+        "Windows 4691",
+        "Indirect access to an object was requested"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4691",
+      "source_version": "event-4691-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4691",
+      "source_locator": "4691(S): Indirect access to an object was requested",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4689-4698",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4689-4698",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4691 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4691",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4691",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records an indirect object-access request; Microsoft documents this identity for ALPC port access-request activity.",
+        "category": "Object Access",
+        "subcategory": "Audit Other Object Access Events",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 9,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Other Object Access Events success auditing when ALPC indirect-access telemetry is required.",
+          "Preserve ObjectType, ObjectName, AccessList/AccessMask, ProcessId and subject context."
+        ],
+        "interpretation_note": "This event is generally low-value outside targeted ALPC investigations; interpret requested rights according to the object type and local context."
+      },
+      "correlations": [
+        {
+          "target": "4688",
+          "key": "ProcessId + Computer + time",
+          "purpose": "resolve the requesting process"
+        }
+      ],
+      "analysis": [
+        "Review ObjectType/ObjectName and requested access only in scenarios where the ALPC object is security-relevant.",
+        "Correlate ProcessId with process creation telemetry before attributing the request."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "object-type",
+          "section": "Object",
+          "native_name": "ObjectType",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported type or class of the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-name",
+          "section": "Object",
+          "native_name": "ObjectName",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported name or identifying path of the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "access-list",
+          "section": "Access Request Information",
+          "native_name": "AccessList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered list of access rights requested or exercised.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "access-mask",
+          "section": "Access Request Information",
+          "native_name": "AccessMask",
+          "type": "HexInt32",
+          "meaning": "Bit mask representing requested or exercised access rights.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4692",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4692",
+      "title": "Windows Security Event 4692 — Backup of data protection master key was attempted",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4692",
+      "aliases": [
+        "4692",
+        "Event ID 4692",
+        "Windows 4692",
+        "Backup of data protection master key was attempted"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4692",
+      "source_version": "event-4692-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4692",
+      "source_locator": "4692(S,F): Backup of data protection master key was attempted",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4689-4698",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4689-4698",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4692 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4692",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4692",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records an attempted backup of a DPAPI master key, including recovery-server/key identifiers and a provider-native status/failure value.",
+        "category": "Detailed Tracking",
+        "subcategory": "Audit DPAPI Activity",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 8,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit DPAPI Activity success/failure auditing when DPAPI troubleshooting or master-key lifecycle visibility is required.",
+          "Preserve MasterKeyId, RecoveryServer, RecoveryKeyId, FailureReason and subject context."
+        ],
+        "interpretation_note": "Microsoft characterizes DPAPI Activity events primarily as informational/troubleshooting telemetry; unexpected failures or unusual recovery infrastructure merit contextual review."
+      },
+      "correlations": [
+        {
+          "target": "4693",
+          "key": "MasterKeyId + SubjectLogonId + Computer + time",
+          "purpose": "compare master-key backup and recovery activity"
+        }
+      ],
+      "analysis": [
+        "Correlate MasterKeyId with nearby DPAPI events for the same subject and host.",
+        "Interpret FailureReason using Windows status semantics and verify RecoveryServer/RecoveryKeyId against expected domain recovery configuration."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "master-key-id",
+          "section": "DPAPI",
+          "native_name": "MasterKeyId",
+          "type": "UnicodeString",
+          "meaning": "Identifier of the DPAPI master key involved in the operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "recovery-server",
+          "section": "DPAPI",
+          "native_name": "RecoveryServer",
+          "type": "UnicodeString",
+          "meaning": "Recovery server/domain controller associated with DPAPI master-key backup or recovery.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "recovery-key-id",
+          "section": "DPAPI",
+          "native_name": "RecoveryKeyId",
+          "type": "UnicodeString",
+          "meaning": "Identifier of the DPAPI recovery key.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-reason",
+          "section": "Result",
+          "native_name": "FailureReason",
+          "type": "HexInt32",
+          "meaning": "Provider-native status/failure code for the attempted operation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4693",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4693",
+      "title": "Windows Security Event 4693 — Recovery of data protection master key was attempted",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4693",
+      "aliases": [
+        "4693",
+        "Event ID 4693",
+        "Windows 4693",
+        "Recovery of data protection master key was attempted"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4693",
+      "source_version": "event-4693-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4693",
+      "source_locator": "4693(S,F): Recovery of data protection master key was attempted",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4689-4698",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4689-4698",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4693 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4693",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4693",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records an attempted DPAPI master-key recovery and identifies the master key, recovery reason/server/key and failure status.",
+        "category": "Detailed Tracking",
+        "subcategory": "Audit DPAPI Activity",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 9,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit DPAPI Activity success/failure auditing when master-key recovery visibility is required.",
+          "Preserve MasterKeyId, RecoveryReason, RecoveryServer, RecoveryKeyId, FailureId and subject context."
+        ],
+        "interpretation_note": "Master-key recovery is usually operational DPAPI behavior; failures or recovery activity outside expected domain/user workflows require contextual validation."
+      },
+      "correlations": [
+        {
+          "target": "4692",
+          "key": "MasterKeyId + SubjectLogonId + Computer + time",
+          "purpose": "compare master-key recovery with backup activity"
+        }
+      ],
+      "analysis": [
+        "Review RecoveryReason and FailureId alongside recovery infrastructure and account context.",
+        "Correlate MasterKeyId with Event 4692 and other DPAPI activity."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "master-key-id",
+          "section": "DPAPI",
+          "native_name": "MasterKeyId",
+          "type": "UnicodeString",
+          "meaning": "Identifier of the DPAPI master key involved in the operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "recovery-reason",
+          "section": "DPAPI",
+          "native_name": "RecoveryReason",
+          "type": "HexInt32",
+          "meaning": "Provider-native reason code for DPAPI master-key recovery.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "recovery-server",
+          "section": "DPAPI",
+          "native_name": "RecoveryServer",
+          "type": "UnicodeString",
+          "meaning": "Recovery server/domain controller associated with DPAPI master-key backup or recovery.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "recovery-key-id",
+          "section": "DPAPI",
+          "native_name": "RecoveryKeyId",
+          "type": "UnicodeString",
+          "meaning": "Identifier of the DPAPI recovery key.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-id",
+          "section": "Result",
+          "native_name": "FailureId",
+          "type": "HexInt32",
+          "meaning": "Provider-native failure/status identifier for DPAPI master-key recovery.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4694",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4694",
+      "title": "Windows Security Event 4694 — Protection of auditable protected data was attempted",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4694",
+      "aliases": [
+        "4694",
+        "Event ID 4694",
+        "Windows 4694",
+        "Protection of auditable protected data was attempted"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4694",
+      "source_version": "event-4694-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4694",
+      "source_locator": "4694(S,F): Protection of auditable protected data was attempted",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4689-4698",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4689-4698",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4694 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4694",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4694",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records use of DPAPI CryptProtectData with the CRYPTPROTECT_AUDIT flag and exposes data description, master-key identifier, flags, algorithms and status.",
+        "category": "Detailed Tracking",
+        "subcategory": "Audit DPAPI Activity",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 9,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit DPAPI Activity when auditable DPAPI protection operations are required.",
+          "Preserve DataDescription, MasterKeyId, ProtectedDataFlags, CryptoAlgorithms, FailureReason and subject context."
+        ],
+        "interpretation_note": "Microsoft documents this event mainly for informational/troubleshooting use; security meaning depends on the protected-data purpose, caller context and result."
+      },
+      "correlations": [
+        {
+          "target": "4695",
+          "key": "MasterKeyId + DataDescription + SubjectLogonId + Computer + time",
+          "purpose": "compare protection and unprotection operations"
+        }
+      ],
+      "analysis": [
+        "Baseline DataDescription and CryptoAlgorithms for applications expected to emit auditable DPAPI operations.",
+        "Investigate unexpected failures, subjects or protected-data descriptions in conjunction with application telemetry."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "data-description",
+          "section": "DPAPI",
+          "native_name": "DataDescription",
+          "type": "UnicodeString",
+          "meaning": "Description associated with the auditable protected-data operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "master-key-id",
+          "section": "DPAPI",
+          "native_name": "MasterKeyId",
+          "type": "UnicodeString",
+          "meaning": "Identifier of the DPAPI master key involved in the operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "protected-data-flags",
+          "section": "DPAPI",
+          "native_name": "ProtectedDataFlags",
+          "type": "HexInt32",
+          "meaning": "Flags supplied to the DPAPI protected-data operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "crypto-algorithms",
+          "section": "DPAPI",
+          "native_name": "CryptoAlgorithms",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered cryptographic algorithm information for the DPAPI operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-reason",
+          "section": "Result",
+          "native_name": "FailureReason",
+          "type": "HexInt32",
+          "meaning": "Provider-native status/failure code for the attempted operation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4695",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4695",
+      "title": "Windows Security Event 4695 — Unprotection of auditable protected data was attempted",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4695",
+      "aliases": [
+        "4695",
+        "Event ID 4695",
+        "Windows 4695",
+        "Unprotection of auditable protected data was attempted"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4695",
+      "source_version": "event-4695-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4695",
+      "source_locator": "4695(S,F): Unprotection of auditable protected data was attempted",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4689-4698",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4689-4698",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4695 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4695",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4695",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records an auditable DPAPI unprotection/decryption attempt and exposes the protected-data description, master-key identifier, flags, algorithms and status.",
+        "category": "Detailed Tracking",
+        "subcategory": "Audit DPAPI Activity",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 9,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit DPAPI Activity when auditable DPAPI unprotection operations are required.",
+          "Preserve DataDescription, MasterKeyId, ProtectedDataFlags, CryptoAlgorithms, FailureReason and subject context."
+        ],
+        "interpretation_note": "Failures can arise from normal key/password/user-context conditions as well as abnormal access; avoid treating a failure alone as malicious."
+      },
+      "correlations": [
+        {
+          "target": "4694",
+          "key": "MasterKeyId + DataDescription + SubjectLogonId + Computer + time",
+          "purpose": "compare unprotection with prior protection activity"
+        }
+      ],
+      "analysis": [
+        "Assess FailureReason together with subject identity and the application/data description.",
+        "Correlate repeated failures or unusual subjects with authentication, credential-access and process telemetry."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "data-description",
+          "section": "DPAPI",
+          "native_name": "DataDescription",
+          "type": "UnicodeString",
+          "meaning": "Description associated with the auditable protected-data operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "master-key-id",
+          "section": "DPAPI",
+          "native_name": "MasterKeyId",
+          "type": "UnicodeString",
+          "meaning": "Identifier of the DPAPI master key involved in the operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "protected-data-flags",
+          "section": "DPAPI",
+          "native_name": "ProtectedDataFlags",
+          "type": "HexInt32",
+          "meaning": "Flags supplied to the DPAPI protected-data operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "crypto-algorithms",
+          "section": "DPAPI",
+          "native_name": "CryptoAlgorithms",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered cryptographic algorithm information for the DPAPI operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-reason",
+          "section": "Result",
+          "native_name": "FailureReason",
+          "type": "HexInt32",
+          "meaning": "Provider-native status/failure code for the attempted operation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4696",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4696",
+      "title": "Windows Security Event 4696 — A primary token was assigned to process",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4696",
+      "aliases": [
+        "4696",
+        "Event ID 4696",
+        "Windows 4696",
+        "A primary token was assigned to process"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4696",
+      "source_version": "event-4696-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4696",
+      "source_locator": "4696(S): A primary token was assigned to process",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4689-4698",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4689-4698",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4696 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4696",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4696",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft defines this event for assignment of a non-current primary access token to a process but documents the event as deprecated starting with Windows 7 / Windows Server 2008 R2; controlled build-26100 provider evidence still defines Version 0 structurally.",
+        "category": "Detailed Tracking",
+        "subcategory": "Audit Process Creation",
+        "event_type": "Success / deprecated",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 12,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Treat this as a deprecated provider identity rather than expected modern operational telemetry.",
+          "If observed, preserve subject, target token/account, target process and assigning process context."
+        ],
+        "interpretation_note": "Unexpected presence on a modern host should first trigger provider/platform provenance verification; only then interpret the token-assignment context."
+      },
+      "correlations": [
+        {
+          "target": "4688",
+          "key": "TargetProcessId or ProcessId + Computer + time",
+          "purpose": "resolve process context around primary-token assignment"
+        },
+        {
+          "target": "4624",
+          "key": "TargetLogonId or SubjectLogonId + Computer",
+          "purpose": "resolve authentication context"
+        }
+      ],
+      "analysis": [
+        "Verify OS build/provider authenticity before relying on an observed modern event.",
+        "Correlate TargetProcessId and ProcessId with process creation telemetry and the two logon identifiers with authentication context."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "target-user-sid",
+          "section": "Provider Data",
+          "native_name": "TargetUserSid",
+          "type": "SID",
+          "meaning": "Provider-native TargetUserSid value for Event 4696; interpret with the event and version context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Provider Data",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-native TargetUserName value for Event 4696; interpret with the event and version context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Provider Data",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-native TargetDomainName value for Event 4696; interpret with the event and version context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-logon-id",
+          "section": "Target Account",
+          "native_name": "TargetLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier associated with the target account/token.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-process-id",
+          "section": "Process",
+          "native_name": "TargetProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Target process identifier associated with the event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-process-name",
+          "section": "Process",
+          "native_name": "TargetProcessName",
+          "type": "UnicodeString",
+          "meaning": "Executable path/name of the target process.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name or path associated with the audited activity.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4697",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4697",
+      "title": "Windows Security Event 4697 — A service was installed in the system",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4697",
+      "aliases": [
+        "4697",
+        "Event ID 4697",
+        "Windows 4697",
+        "A service was installed in the system"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4697",
+      "source_version": "event-4697-v0-doc-plus-provider-v1",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4697",
+      "source_locator": "4697(S): A service was installed in the system",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4689-4698",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4689-4698",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4697 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4697",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4697",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records installation of a Windows service. Controlled provider evidence preserves Version 0 and Version 1; Version 1 adds client-process start key, client PID and parent PID context.",
+        "category": "System",
+        "subcategory": "Audit Security System Extension",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 9,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 12,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Security System Extension success auditing and collect this event on systems where service-install visibility is required.",
+          "Preserve service configuration, subject context and the exact event version; retain Version 1 client-process fields."
+        ],
+        "interpretation_note": "Service installation is high-value persistence/execution telemetry. Validate service binary path, account, start type and creating process against approved software and administrative change context."
+      },
+      "correlations": [
+        {
+          "target": "4688",
+          "key": "ClientProcessId or ParentProcessId + Computer + time",
+          "purpose": "resolve service-creation process lineage"
+        }
+      ],
+      "analysis": [
+        "Prioritize unexpected ServiceFileName paths, service accounts, auto-start configuration and newly introduced service names.",
+        "For Version 1, correlate ClientProcessId/ParentProcessId with 4688 and use ClientProcessStartKey to reduce PID-reuse ambiguity."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "service-name",
+          "section": "Service",
+          "native_name": "ServiceName",
+          "type": "UnicodeString",
+          "meaning": "Name of the newly installed service.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "service-file-name",
+          "section": "Service",
+          "native_name": "ServiceFileName",
+          "type": "UnicodeString",
+          "meaning": "Binary path or command configured for the service.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "service-type",
+          "section": "Service",
+          "native_name": "ServiceType",
+          "type": "HexInt32",
+          "meaning": "Provider-native service type value.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "service-start-type",
+          "section": "Service",
+          "native_name": "ServiceStartType",
+          "type": "UInt32",
+          "meaning": "Configured service start type.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "service-account",
+          "section": "Service",
+          "native_name": "ServiceAccount",
+          "type": "UnicodeString",
+          "meaning": "Account configured to run the service.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-start-key",
+          "section": "Client Process",
+          "native_name": "ClientProcessStartKey",
+          "type": "UInt64",
+          "meaning": "Stable process-start key added by newer provider versions for process correlation.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-id",
+          "section": "Client Process",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Client process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "parent-process-id",
+          "section": "Client Process",
+          "native_name": "ParentProcessId",
+          "type": "UInt32",
+          "meaning": "Parent process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4698",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4698",
+      "title": "Windows Security Event 4698 — A scheduled task was created",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4698",
+      "aliases": [
+        "4698",
+        "Event ID 4698",
+        "Windows 4698",
+        "A scheduled task was created"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4698",
+      "source_version": "event-4698-v0-doc-plus-provider-v1",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4698",
+      "source_locator": "4698(S): A scheduled task was created",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4689-4698",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4689-4698",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4698 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4698",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4698",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records creation of a scheduled task. Controlled provider evidence preserves Version 0 and Version 1; Version 1 adds client process identity/lineage plus RPC locality and FQDN context.",
+        "category": "Object Access",
+        "subcategory": "Audit Other Object Access Events",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 11,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Other Object Access Events success auditing and collect scheduled-task creation on systems where persistence visibility is required.",
+          "Preserve TaskName, TaskContent and exact event-version fields; retain Version 1 client/RPC/FQDN context."
+        ],
+        "interpretation_note": "Scheduled-task creation is high-value persistence/execution telemetry. Review task XML, trigger/action, principal/logon type and creating client context against approved automation and administration."
+      },
+      "correlations": [
+        {
+          "target": "4688",
+          "key": "ClientProcessId or ParentProcessId + Computer + time",
+          "purpose": "resolve scheduled-task creation process lineage"
+        },
+        {
+          "target": "4702",
+          "key": "TaskName + Computer + time",
+          "purpose": "track subsequent scheduled-task updates"
+        }
+      ],
+      "analysis": [
+        "Parse TaskContent XML for executable/script actions, unusual paths, privileged principals, hidden settings and suspicious triggers.",
+        "For Version 1, correlate ClientProcessId/ParentProcessId with 4688 and evaluate RpcCallClientLocality/FQDN for remote creation context."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "task-name",
+          "section": "Task",
+          "native_name": "TaskName",
+          "type": "UnicodeString",
+          "meaning": "Task Scheduler path/name of the newly created scheduled task.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "task-content",
+          "section": "Task",
+          "native_name": "TaskContent",
+          "type": "UnicodeString",
+          "meaning": "XML task definition captured when the scheduled task was created.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-start-key",
+          "section": "Client Process",
+          "native_name": "ClientProcessStartKey",
+          "type": "UInt64",
+          "meaning": "Stable process-start key added by newer provider versions for process correlation.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-id",
+          "section": "Client Process",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Client process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "parent-process-id",
+          "section": "Client Process",
+          "native_name": "ParentProcessId",
+          "type": "UInt32",
+          "meaning": "Parent process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "rpc-call-client-locality",
+          "section": "RPC Context",
+          "native_name": "RpcCallClientLocality",
+          "type": "UInt32",
+          "meaning": "Provider-native locality indicator for the RPC client that created the task.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "fqdn",
+          "section": "RPC Context",
+          "native_name": "FQDN",
+          "type": "UnicodeString",
+          "meaning": "FQDN context supplied by the newer scheduled-task event version.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4740",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4740",
