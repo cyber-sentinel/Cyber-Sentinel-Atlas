@@ -15,10 +15,10 @@
     "continuous_numeric_range": false,
     "semantic_authority": "Microsoft official documentation plus controlled provider/channel/version evidence",
     "ingestion_policy": "Do not bulk-ingest third-party prose. UWS remains a controlled Quick Detail and coverage benchmark; every promoted Event ID requires independent Microsoft/provider evidence and provenance review.",
-    "encyclopedia_grade_listed_id_count": 116,
-    "remaining_listed_id_count": 306,
-    "completion_ratio": "116/422",
-    "completion_percent": 27.49,
+    "encyclopedia_grade_listed_id_count": 126,
+    "remaining_listed_id_count": 296,
+    "completion_ratio": "126/422",
+    "completion_percent": 29.86,
     "covered_event_ids": [
       "1100",
       "1101",
@@ -133,6 +133,16 @@
       "4750",
       "4751",
       "4752",
+      "4753",
+      "4754",
+      "4755",
+      "4756",
+      "4757",
+      "4758",
+      "4759",
+      "4760",
+      "4761",
+      "4762",
       "4768",
       "4769",
       "4771"
@@ -147,8 +157,8 @@
       "denominator_scope": "Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296",
       "snapshot": "content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json",
       "denominator_count": 423,
-      "encyclopedia_grade_count": 110,
-      "remaining_count": 313
+      "encyclopedia_grade_count": 120,
+      "remaining_count": 303
     },
     {
       "id": "sysmon",

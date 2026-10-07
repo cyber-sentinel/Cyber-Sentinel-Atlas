@@ -23179,6 +23179,1638 @@
       "title": "Windows Security Event 4752 — A member was removed from a security-disabled global group"
     },
     {
+      "aliases": [
+        "4753",
+        "Event ID 4753",
+        "Windows 4753",
+        "A security-disabled global group was deleted"
+      ],
+      "analysis": [
+        "Validate against approved identity, access and group-lifecycle records before assigning malicious intent."
+      ],
+      "canonical_key": "4753",
+      "channel": "Security",
+      "collection": {
+        "interpretation_note": "Unexpected universal-group or distribution-group changes require validation against approved identity and access-management activity.",
+        "requirements": [
+          "Enable Audit Distribution Group Management success auditing.",
+          "Preserve exact provider version and subject/target context."
+        ]
+      },
+      "correlations": [],
+      "external_reference": {
+        "redistribution": "source-link-and-coverage-benchmark-only",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4753",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4753"
+      },
+      "fields": [
+        {
+          "key": "target-user-name",
+          "meaning": "Name of the target user, computer or group object.",
+          "native_name": "TargetUserName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "meaning": "Domain or computer context for the target object.",
+          "native_name": "TargetDomainName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "meaning": "SID of the target user, computer or group object.",
+          "native_name": "TargetSid",
+          "section": "Target Account",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "meaning": "Security identifier of the subject account.",
+          "native_name": "SubjectUserSid",
+          "section": "Subject",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "meaning": "Account name of the subject.",
+          "native_name": "SubjectUserName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "meaning": "Domain or computer name associated with the subject.",
+          "native_name": "SubjectDomainName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped.",
+          "key": "subject-logon-id",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "native_name": "SubjectLogonId",
+          "section": "Subject",
+          "type": "HexInt64",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "meaning": "Provider-rendered privileges used during the operation; may be empty or a dash.",
+          "native_name": "PrivilegeList",
+          "section": "Additional Information",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "id": "atlas:event:microsoft.windows.security:4753",
+      "lifecycle": "current",
+      "namespace": "microsoft.windows.security",
+      "native_event_id": "4753",
+      "overview": {
+        "category": "Account Management",
+        "event_type": "Success",
+        "event_versions": [
+          {
+            "field_count": 8,
+            "generation": "Documented and/or provider-validated shape",
+            "notes": "Controlled Windows Server 2025 provider structural shape.",
+            "version": "0"
+          }
+        ],
+        "provider_level": "Informational",
+        "subcategory": "Audit Distribution Group Management",
+        "summary": "Records a security-disabled global group was deleted while preserving provider-rendered identity and change context."
+      },
+      "platform": "Windows",
+      "product": "Windows Security Auditing",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4753",
+      "source_locator": "4753(S): A security-disabled global group was deleted",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4753",
+      "source_version": "event-4753-provider-bound-doc",
+      "structural_source": {
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4753 / versions 0",
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4753-4762",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4753-4762"
+      },
+      "title": "Windows Security Event 4753 — A security-disabled global group was deleted"
+    },
+    {
+      "aliases": [
+        "4754",
+        "Event ID 4754",
+        "Windows 4754",
+        "A security-enabled universal group was created"
+      ],
+      "analysis": [
+        "Validate against approved identity, access and group-lifecycle records before assigning malicious intent."
+      ],
+      "canonical_key": "4754",
+      "channel": "Security",
+      "collection": {
+        "interpretation_note": "Unexpected universal-group or distribution-group changes require validation against approved identity and access-management activity.",
+        "requirements": [
+          "Enable Audit Security Group Management success auditing.",
+          "Preserve exact provider version and subject/target context."
+        ]
+      },
+      "correlations": [],
+      "external_reference": {
+        "redistribution": "source-link-and-coverage-benchmark-only",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4754",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4754"
+      },
+      "fields": [
+        {
+          "key": "target-user-name",
+          "meaning": "Name of the target user, computer or group object.",
+          "native_name": "TargetUserName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "meaning": "Domain or computer context for the target object.",
+          "native_name": "TargetDomainName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "meaning": "SID of the target user, computer or group object.",
+          "native_name": "TargetSid",
+          "section": "Target Account",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "meaning": "Security identifier of the subject account.",
+          "native_name": "SubjectUserSid",
+          "section": "Subject",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "meaning": "Account name of the subject.",
+          "native_name": "SubjectUserName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "meaning": "Domain or computer name associated with the subject.",
+          "native_name": "SubjectDomainName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped.",
+          "key": "subject-logon-id",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "native_name": "SubjectLogonId",
+          "section": "Subject",
+          "type": "HexInt64",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "meaning": "Provider-rendered privileges used during the operation; may be empty or a dash.",
+          "native_name": "PrivilegeList",
+          "section": "Additional Information",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sam-account-name",
+          "meaning": "Pre-Windows 2000 logon name or SAM-compatible name.",
+          "native_name": "SamAccountName",
+          "section": "Account Attributes",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sid-history",
+          "meaning": "Provider-rendered SID history associated with the object.",
+          "native_name": "SidHistory",
+          "section": "Account Attributes",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "id": "atlas:event:microsoft.windows.security:4754",
+      "lifecycle": "current",
+      "namespace": "microsoft.windows.security",
+      "native_event_id": "4754",
+      "overview": {
+        "category": "Account Management",
+        "event_type": "Success",
+        "event_versions": [
+          {
+            "field_count": 10,
+            "generation": "Documented and/or provider-validated shape",
+            "notes": "Controlled Windows Server 2025 provider structural shape.",
+            "version": "0"
+          }
+        ],
+        "provider_level": "Informational",
+        "subcategory": "Audit Security Group Management",
+        "summary": "Records a security-enabled universal group was created while preserving provider-rendered identity and change context."
+      },
+      "platform": "Windows",
+      "product": "Windows Security Auditing",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4754",
+      "source_locator": "4754(S): A security-enabled universal group was created",
+      "source_url": "https://learn.microsoft.com/en-gb/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-security-group-management",
+      "source_version": "event-4754-provider-bound-doc",
+      "structural_source": {
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4754 / versions 0",
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4753-4762",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4753-4762"
+      },
+      "title": "Windows Security Event 4754 — A security-enabled universal group was created"
+    },
+    {
+      "aliases": [
+        "4755",
+        "Event ID 4755",
+        "Windows 4755",
+        "A security-enabled universal group was changed"
+      ],
+      "analysis": [
+        "Validate against approved identity, access and group-lifecycle records before assigning malicious intent."
+      ],
+      "canonical_key": "4755",
+      "channel": "Security",
+      "collection": {
+        "interpretation_note": "Unexpected universal-group or distribution-group changes require validation against approved identity and access-management activity.",
+        "requirements": [
+          "Enable Audit Security Group Management success auditing.",
+          "Preserve exact provider version and subject/target context."
+        ]
+      },
+      "correlations": [],
+      "external_reference": {
+        "redistribution": "source-link-and-coverage-benchmark-only",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4755",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4755"
+      },
+      "fields": [
+        {
+          "key": "target-user-name",
+          "meaning": "Name of the target user, computer or group object.",
+          "native_name": "TargetUserName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "meaning": "Domain or computer context for the target object.",
+          "native_name": "TargetDomainName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "meaning": "SID of the target user, computer or group object.",
+          "native_name": "TargetSid",
+          "section": "Target Account",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "meaning": "Security identifier of the subject account.",
+          "native_name": "SubjectUserSid",
+          "section": "Subject",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "meaning": "Account name of the subject.",
+          "native_name": "SubjectUserName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "meaning": "Domain or computer name associated with the subject.",
+          "native_name": "SubjectDomainName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped.",
+          "key": "subject-logon-id",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "native_name": "SubjectLogonId",
+          "section": "Subject",
+          "type": "HexInt64",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "meaning": "Provider-rendered privileges used during the operation; may be empty or a dash.",
+          "native_name": "PrivilegeList",
+          "section": "Additional Information",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sam-account-name",
+          "meaning": "Pre-Windows 2000 logon name or SAM-compatible name.",
+          "native_name": "SamAccountName",
+          "section": "Account Attributes",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sid-history",
+          "meaning": "Provider-rendered SID history associated with the object.",
+          "native_name": "SidHistory",
+          "section": "Account Attributes",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "id": "atlas:event:microsoft.windows.security:4755",
+      "lifecycle": "current",
+      "namespace": "microsoft.windows.security",
+      "native_event_id": "4755",
+      "overview": {
+        "category": "Account Management",
+        "event_type": "Success",
+        "event_versions": [
+          {
+            "field_count": 10,
+            "generation": "Documented and/or provider-validated shape",
+            "notes": "Controlled Windows Server 2025 provider structural shape.",
+            "version": "0"
+          }
+        ],
+        "provider_level": "Informational",
+        "subcategory": "Audit Security Group Management",
+        "summary": "Records a security-enabled universal group was changed while preserving provider-rendered identity and change context."
+      },
+      "platform": "Windows",
+      "product": "Windows Security Auditing",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4755",
+      "source_locator": "4755(S): A security-enabled universal group was changed",
+      "source_url": "https://learn.microsoft.com/en-gb/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-security-group-management",
+      "source_version": "event-4755-provider-bound-doc",
+      "structural_source": {
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4755 / versions 0",
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4753-4762",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4753-4762"
+      },
+      "title": "Windows Security Event 4755 — A security-enabled universal group was changed"
+    },
+    {
+      "aliases": [
+        "4756",
+        "Event ID 4756",
+        "Windows 4756",
+        "A member was added to a security-enabled universal group"
+      ],
+      "analysis": [
+        "Validate against approved identity, access and group-lifecycle records before assigning malicious intent."
+      ],
+      "canonical_key": "4756",
+      "channel": "Security",
+      "collection": {
+        "interpretation_note": "Unexpected universal-group or distribution-group changes require validation against approved identity and access-management activity.",
+        "requirements": [
+          "Enable Audit Security Group Management success auditing.",
+          "Preserve exact provider version and subject/target context."
+        ]
+      },
+      "correlations": [],
+      "external_reference": {
+        "redistribution": "source-link-and-coverage-benchmark-only",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4756",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4756"
+      },
+      "fields": [
+        {
+          "key": "member-name",
+          "meaning": "Distinguished name or provider-rendered name of the affected group member.",
+          "native_name": "MemberName",
+          "section": "Member",
+          "type": "UnicodeString",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "member-sid",
+          "meaning": "SID of the affected group member.",
+          "native_name": "MemberSid",
+          "section": "Member",
+          "type": "SID",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "meaning": "Name of the target user, computer or group object.",
+          "native_name": "TargetUserName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "meaning": "Domain or computer context for the target object.",
+          "native_name": "TargetDomainName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "meaning": "SID of the target user, computer or group object.",
+          "native_name": "TargetSid",
+          "section": "Target Account",
+          "type": "SID",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "meaning": "Security identifier of the subject account.",
+          "native_name": "SubjectUserSid",
+          "section": "Subject",
+          "type": "SID",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "meaning": "Account name of the subject.",
+          "native_name": "SubjectUserName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "meaning": "Domain or computer name associated with the subject.",
+          "native_name": "SubjectDomainName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped.",
+          "key": "subject-logon-id",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "native_name": "SubjectLogonId",
+          "section": "Subject",
+          "type": "HexInt64",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "meaning": "Provider-rendered privileges used during the operation; may be empty or a dash.",
+          "native_name": "PrivilegeList",
+          "section": "Additional Information",
+          "type": "UnicodeString",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "membership-expiration-time",
+          "meaning": "Expiration time for the Version 1 time-bounded group membership.",
+          "native_name": "MembershipExpirationTime",
+          "section": "Member",
+          "type": "FILETIME",
+          "versions": [
+            "1"
+          ]
+        }
+      ],
+      "id": "atlas:event:microsoft.windows.security:4756",
+      "lifecycle": "current",
+      "namespace": "microsoft.windows.security",
+      "native_event_id": "4756",
+      "overview": {
+        "category": "Account Management",
+        "event_type": "Success",
+        "event_versions": [
+          {
+            "field_count": 10,
+            "generation": "Documented and/or provider-validated shape",
+            "notes": "Controlled Windows Server 2025 provider structural shape.",
+            "version": "0"
+          },
+          {
+            "field_count": 11,
+            "generation": "Documented and/or provider-validated shape",
+            "notes": "Controlled Windows Server 2025 provider structural shape.",
+            "version": "1"
+          }
+        ],
+        "provider_level": "Informational",
+        "subcategory": "Audit Security Group Management",
+        "summary": "Records a member was added to a security-enabled universal group while preserving provider-rendered identity and change context. Version 1 adds MembershipExpirationTime and remains distinct."
+      },
+      "platform": "Windows",
+      "product": "Windows Security Auditing",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4756",
+      "source_locator": "4756(S): A member was added to a security-enabled universal group",
+      "source_url": "https://learn.microsoft.com/en-gb/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-security-group-management",
+      "source_version": "event-4756-provider-bound-doc",
+      "structural_source": {
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4756 / versions 0,1",
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4753-4762",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4753-4762"
+      },
+      "title": "Windows Security Event 4756 — A member was added to a security-enabled universal group"
+    },
+    {
+      "aliases": [
+        "4757",
+        "Event ID 4757",
+        "Windows 4757",
+        "A member was removed from a security-enabled universal group"
+      ],
+      "analysis": [
+        "Validate against approved identity, access and group-lifecycle records before assigning malicious intent."
+      ],
+      "canonical_key": "4757",
+      "channel": "Security",
+      "collection": {
+        "interpretation_note": "Unexpected universal-group or distribution-group changes require validation against approved identity and access-management activity.",
+        "requirements": [
+          "Enable Audit Security Group Management success auditing.",
+          "Preserve exact provider version and subject/target context."
+        ]
+      },
+      "correlations": [],
+      "external_reference": {
+        "redistribution": "source-link-and-coverage-benchmark-only",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4757",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4757"
+      },
+      "fields": [
+        {
+          "key": "member-name",
+          "meaning": "Distinguished name or provider-rendered name of the affected group member.",
+          "native_name": "MemberName",
+          "section": "Member",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "member-sid",
+          "meaning": "SID of the affected group member.",
+          "native_name": "MemberSid",
+          "section": "Member",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "meaning": "Name of the target user, computer or group object.",
+          "native_name": "TargetUserName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "meaning": "Domain or computer context for the target object.",
+          "native_name": "TargetDomainName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "meaning": "SID of the target user, computer or group object.",
+          "native_name": "TargetSid",
+          "section": "Target Account",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "meaning": "Security identifier of the subject account.",
+          "native_name": "SubjectUserSid",
+          "section": "Subject",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "meaning": "Account name of the subject.",
+          "native_name": "SubjectUserName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "meaning": "Domain or computer name associated with the subject.",
+          "native_name": "SubjectDomainName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped.",
+          "key": "subject-logon-id",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "native_name": "SubjectLogonId",
+          "section": "Subject",
+          "type": "HexInt64",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "meaning": "Provider-rendered privileges used during the operation; may be empty or a dash.",
+          "native_name": "PrivilegeList",
+          "section": "Additional Information",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "id": "atlas:event:microsoft.windows.security:4757",
+      "lifecycle": "current",
+      "namespace": "microsoft.windows.security",
+      "native_event_id": "4757",
+      "overview": {
+        "category": "Account Management",
+        "event_type": "Success",
+        "event_versions": [
+          {
+            "field_count": 10,
+            "generation": "Documented and/or provider-validated shape",
+            "notes": "Controlled Windows Server 2025 provider structural shape.",
+            "version": "0"
+          }
+        ],
+        "provider_level": "Informational",
+        "subcategory": "Audit Security Group Management",
+        "summary": "Records a member was removed from a security-enabled universal group while preserving provider-rendered identity and change context."
+      },
+      "platform": "Windows",
+      "product": "Windows Security Auditing",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4757",
+      "source_locator": "4757(S): A member was removed from a security-enabled universal group",
+      "source_url": "https://learn.microsoft.com/en-gb/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-security-group-management",
+      "source_version": "event-4757-provider-bound-doc",
+      "structural_source": {
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4757 / versions 0",
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4753-4762",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4753-4762"
+      },
+      "title": "Windows Security Event 4757 — A member was removed from a security-enabled universal group"
+    },
+    {
+      "aliases": [
+        "4758",
+        "Event ID 4758",
+        "Windows 4758",
+        "A security-enabled universal group was deleted"
+      ],
+      "analysis": [
+        "Validate against approved identity, access and group-lifecycle records before assigning malicious intent."
+      ],
+      "canonical_key": "4758",
+      "channel": "Security",
+      "collection": {
+        "interpretation_note": "Unexpected universal-group or distribution-group changes require validation against approved identity and access-management activity.",
+        "requirements": [
+          "Enable Audit Security Group Management success auditing.",
+          "Preserve exact provider version and subject/target context."
+        ]
+      },
+      "correlations": [],
+      "external_reference": {
+        "redistribution": "source-link-and-coverage-benchmark-only",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4758",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4758"
+      },
+      "fields": [
+        {
+          "key": "target-user-name",
+          "meaning": "Name of the target user, computer or group object.",
+          "native_name": "TargetUserName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "meaning": "Domain or computer context for the target object.",
+          "native_name": "TargetDomainName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "meaning": "SID of the target user, computer or group object.",
+          "native_name": "TargetSid",
+          "section": "Target Account",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "meaning": "Security identifier of the subject account.",
+          "native_name": "SubjectUserSid",
+          "section": "Subject",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "meaning": "Account name of the subject.",
+          "native_name": "SubjectUserName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "meaning": "Domain or computer name associated with the subject.",
+          "native_name": "SubjectDomainName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped.",
+          "key": "subject-logon-id",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "native_name": "SubjectLogonId",
+          "section": "Subject",
+          "type": "HexInt64",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "meaning": "Provider-rendered privileges used during the operation; may be empty or a dash.",
+          "native_name": "PrivilegeList",
+          "section": "Additional Information",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "id": "atlas:event:microsoft.windows.security:4758",
+      "lifecycle": "current",
+      "namespace": "microsoft.windows.security",
+      "native_event_id": "4758",
+      "overview": {
+        "category": "Account Management",
+        "event_type": "Success",
+        "event_versions": [
+          {
+            "field_count": 8,
+            "generation": "Documented and/or provider-validated shape",
+            "notes": "Controlled Windows Server 2025 provider structural shape.",
+            "version": "0"
+          }
+        ],
+        "provider_level": "Informational",
+        "subcategory": "Audit Security Group Management",
+        "summary": "Records a security-enabled universal group was deleted while preserving provider-rendered identity and change context."
+      },
+      "platform": "Windows",
+      "product": "Windows Security Auditing",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4758",
+      "source_locator": "4758(S): A security-enabled universal group was deleted",
+      "source_url": "https://learn.microsoft.com/en-gb/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-security-group-management",
+      "source_version": "event-4758-provider-bound-doc",
+      "structural_source": {
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4758 / versions 0",
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4753-4762",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4753-4762"
+      },
+      "title": "Windows Security Event 4758 — A security-enabled universal group was deleted"
+    },
+    {
+      "aliases": [
+        "4759",
+        "Event ID 4759",
+        "Windows 4759",
+        "A security-disabled universal group was created"
+      ],
+      "analysis": [
+        "Validate against approved identity, access and group-lifecycle records before assigning malicious intent."
+      ],
+      "canonical_key": "4759",
+      "channel": "Security",
+      "collection": {
+        "interpretation_note": "Unexpected universal-group or distribution-group changes require validation against approved identity and access-management activity.",
+        "requirements": [
+          "Enable Audit Distribution Group Management success auditing.",
+          "Preserve exact provider version and subject/target context."
+        ]
+      },
+      "correlations": [],
+      "external_reference": {
+        "redistribution": "source-link-and-coverage-benchmark-only",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4759",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4759"
+      },
+      "fields": [
+        {
+          "key": "target-user-name",
+          "meaning": "Name of the target user, computer or group object.",
+          "native_name": "TargetUserName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "meaning": "Domain or computer context for the target object.",
+          "native_name": "TargetDomainName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "meaning": "SID of the target user, computer or group object.",
+          "native_name": "TargetSid",
+          "section": "Target Account",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "meaning": "Security identifier of the subject account.",
+          "native_name": "SubjectUserSid",
+          "section": "Subject",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "meaning": "Account name of the subject.",
+          "native_name": "SubjectUserName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "meaning": "Domain or computer name associated with the subject.",
+          "native_name": "SubjectDomainName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped.",
+          "key": "subject-logon-id",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "native_name": "SubjectLogonId",
+          "section": "Subject",
+          "type": "HexInt64",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "meaning": "Provider-rendered privileges used during the operation; may be empty or a dash.",
+          "native_name": "PrivilegeList",
+          "section": "Additional Information",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sam-account-name",
+          "meaning": "Pre-Windows 2000 logon name or SAM-compatible name.",
+          "native_name": "SamAccountName",
+          "section": "Account Attributes",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sid-history",
+          "meaning": "Provider-rendered SID history associated with the object.",
+          "native_name": "SidHistory",
+          "section": "Account Attributes",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "id": "atlas:event:microsoft.windows.security:4759",
+      "lifecycle": "current",
+      "namespace": "microsoft.windows.security",
+      "native_event_id": "4759",
+      "overview": {
+        "category": "Account Management",
+        "event_type": "Success",
+        "event_versions": [
+          {
+            "field_count": 10,
+            "generation": "Documented and/or provider-validated shape",
+            "notes": "Controlled Windows Server 2025 provider structural shape.",
+            "version": "0"
+          }
+        ],
+        "provider_level": "Informational",
+        "subcategory": "Audit Distribution Group Management",
+        "summary": "Records a security-disabled universal group was created while preserving provider-rendered identity and change context."
+      },
+      "platform": "Windows",
+      "product": "Windows Security Auditing",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4759",
+      "source_locator": "4759(S): A security-disabled universal group was created",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-distribution-group-management",
+      "source_version": "event-4759-provider-bound-doc",
+      "structural_source": {
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4759 / versions 0",
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4753-4762",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4753-4762"
+      },
+      "title": "Windows Security Event 4759 — A security-disabled universal group was created"
+    },
+    {
+      "aliases": [
+        "4760",
+        "Event ID 4760",
+        "Windows 4760",
+        "A security-disabled universal group was changed"
+      ],
+      "analysis": [
+        "Validate against approved identity, access and group-lifecycle records before assigning malicious intent."
+      ],
+      "canonical_key": "4760",
+      "channel": "Security",
+      "collection": {
+        "interpretation_note": "Unexpected universal-group or distribution-group changes require validation against approved identity and access-management activity.",
+        "requirements": [
+          "Enable Audit Distribution Group Management success auditing.",
+          "Preserve exact provider version and subject/target context."
+        ]
+      },
+      "correlations": [],
+      "external_reference": {
+        "redistribution": "source-link-and-coverage-benchmark-only",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4760",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4760"
+      },
+      "fields": [
+        {
+          "key": "target-user-name",
+          "meaning": "Name of the target user, computer or group object.",
+          "native_name": "TargetUserName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "meaning": "Domain or computer context for the target object.",
+          "native_name": "TargetDomainName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "meaning": "SID of the target user, computer or group object.",
+          "native_name": "TargetSid",
+          "section": "Target Account",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "meaning": "Security identifier of the subject account.",
+          "native_name": "SubjectUserSid",
+          "section": "Subject",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "meaning": "Account name of the subject.",
+          "native_name": "SubjectUserName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "meaning": "Domain or computer name associated with the subject.",
+          "native_name": "SubjectDomainName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped.",
+          "key": "subject-logon-id",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "native_name": "SubjectLogonId",
+          "section": "Subject",
+          "type": "HexInt64",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "meaning": "Provider-rendered privileges used during the operation; may be empty or a dash.",
+          "native_name": "PrivilegeList",
+          "section": "Additional Information",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sam-account-name",
+          "meaning": "Pre-Windows 2000 logon name or SAM-compatible name.",
+          "native_name": "SamAccountName",
+          "section": "Account Attributes",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sid-history",
+          "meaning": "Provider-rendered SID history associated with the object.",
+          "native_name": "SidHistory",
+          "section": "Account Attributes",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "id": "atlas:event:microsoft.windows.security:4760",
+      "lifecycle": "current",
+      "namespace": "microsoft.windows.security",
+      "native_event_id": "4760",
+      "overview": {
+        "category": "Account Management",
+        "event_type": "Success",
+        "event_versions": [
+          {
+            "field_count": 10,
+            "generation": "Documented and/or provider-validated shape",
+            "notes": "Controlled Windows Server 2025 provider structural shape.",
+            "version": "0"
+          }
+        ],
+        "provider_level": "Informational",
+        "subcategory": "Audit Distribution Group Management",
+        "summary": "Records a security-disabled universal group was changed while preserving provider-rendered identity and change context."
+      },
+      "platform": "Windows",
+      "product": "Windows Security Auditing",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4760",
+      "source_locator": "4760(S): A security-disabled universal group was changed",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-distribution-group-management",
+      "source_version": "event-4760-provider-bound-doc",
+      "structural_source": {
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4760 / versions 0",
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4753-4762",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4753-4762"
+      },
+      "title": "Windows Security Event 4760 — A security-disabled universal group was changed"
+    },
+    {
+      "aliases": [
+        "4761",
+        "Event ID 4761",
+        "Windows 4761",
+        "A member was added to a security-disabled universal group"
+      ],
+      "analysis": [
+        "Validate against approved identity, access and group-lifecycle records before assigning malicious intent."
+      ],
+      "canonical_key": "4761",
+      "channel": "Security",
+      "collection": {
+        "interpretation_note": "Unexpected universal-group or distribution-group changes require validation against approved identity and access-management activity.",
+        "requirements": [
+          "Enable Audit Distribution Group Management success auditing.",
+          "Preserve exact provider version and subject/target context."
+        ]
+      },
+      "correlations": [],
+      "external_reference": {
+        "redistribution": "source-link-and-coverage-benchmark-only",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4761",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4761"
+      },
+      "fields": [
+        {
+          "key": "member-name",
+          "meaning": "Distinguished name or provider-rendered name of the affected group member.",
+          "native_name": "MemberName",
+          "section": "Member",
+          "type": "UnicodeString",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "member-sid",
+          "meaning": "SID of the affected group member.",
+          "native_name": "MemberSid",
+          "section": "Member",
+          "type": "SID",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "meaning": "Name of the target user, computer or group object.",
+          "native_name": "TargetUserName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "meaning": "Domain or computer context for the target object.",
+          "native_name": "TargetDomainName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "meaning": "SID of the target user, computer or group object.",
+          "native_name": "TargetSid",
+          "section": "Target Account",
+          "type": "SID",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "meaning": "Security identifier of the subject account.",
+          "native_name": "SubjectUserSid",
+          "section": "Subject",
+          "type": "SID",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "meaning": "Account name of the subject.",
+          "native_name": "SubjectUserName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "meaning": "Domain or computer name associated with the subject.",
+          "native_name": "SubjectDomainName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped.",
+          "key": "subject-logon-id",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "native_name": "SubjectLogonId",
+          "section": "Subject",
+          "type": "HexInt64",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "meaning": "Provider-rendered privileges used during the operation; may be empty or a dash.",
+          "native_name": "PrivilegeList",
+          "section": "Additional Information",
+          "type": "UnicodeString",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "membership-expiration-time",
+          "meaning": "Expiration time for the Version 1 time-bounded group membership.",
+          "native_name": "MembershipExpirationTime",
+          "section": "Member",
+          "type": "FILETIME",
+          "versions": [
+            "1"
+          ]
+        }
+      ],
+      "id": "atlas:event:microsoft.windows.security:4761",
+      "lifecycle": "current",
+      "namespace": "microsoft.windows.security",
+      "native_event_id": "4761",
+      "overview": {
+        "category": "Account Management",
+        "event_type": "Success",
+        "event_versions": [
+          {
+            "field_count": 10,
+            "generation": "Documented and/or provider-validated shape",
+            "notes": "Controlled Windows Server 2025 provider structural shape.",
+            "version": "0"
+          },
+          {
+            "field_count": 11,
+            "generation": "Documented and/or provider-validated shape",
+            "notes": "Controlled Windows Server 2025 provider structural shape.",
+            "version": "1"
+          }
+        ],
+        "provider_level": "Informational",
+        "subcategory": "Audit Distribution Group Management",
+        "summary": "Records a member was added to a security-disabled universal group while preserving provider-rendered identity and change context. Version 1 adds MembershipExpirationTime and remains distinct."
+      },
+      "platform": "Windows",
+      "product": "Windows Security Auditing",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4761",
+      "source_locator": "4761(S): A member was added to a security-disabled universal group",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-distribution-group-management",
+      "source_version": "event-4761-provider-bound-doc",
+      "structural_source": {
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4761 / versions 0,1",
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4753-4762",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4753-4762"
+      },
+      "title": "Windows Security Event 4761 — A member was added to a security-disabled universal group"
+    },
+    {
+      "aliases": [
+        "4762",
+        "Event ID 4762",
+        "Windows 4762",
+        "A member was removed from a security-disabled universal group"
+      ],
+      "analysis": [
+        "Validate against approved identity, access and group-lifecycle records before assigning malicious intent."
+      ],
+      "canonical_key": "4762",
+      "channel": "Security",
+      "collection": {
+        "interpretation_note": "Unexpected universal-group or distribution-group changes require validation against approved identity and access-management activity.",
+        "requirements": [
+          "Enable Audit Distribution Group Management success auditing.",
+          "Preserve exact provider version and subject/target context."
+        ]
+      },
+      "correlations": [],
+      "external_reference": {
+        "redistribution": "source-link-and-coverage-benchmark-only",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4762",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4762"
+      },
+      "fields": [
+        {
+          "key": "member-name",
+          "meaning": "Distinguished name or provider-rendered name of the affected group member.",
+          "native_name": "MemberName",
+          "section": "Member",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "member-sid",
+          "meaning": "SID of the affected group member.",
+          "native_name": "MemberSid",
+          "section": "Member",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "meaning": "Name of the target user, computer or group object.",
+          "native_name": "TargetUserName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "meaning": "Domain or computer context for the target object.",
+          "native_name": "TargetDomainName",
+          "section": "Target Account",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "meaning": "SID of the target user, computer or group object.",
+          "native_name": "TargetSid",
+          "section": "Target Account",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "meaning": "Security identifier of the subject account.",
+          "native_name": "SubjectUserSid",
+          "section": "Subject",
+          "type": "SID",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "meaning": "Account name of the subject.",
+          "native_name": "SubjectUserName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "meaning": "Domain or computer name associated with the subject.",
+          "native_name": "SubjectDomainName",
+          "section": "Subject",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped.",
+          "key": "subject-logon-id",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "native_name": "SubjectLogonId",
+          "section": "Subject",
+          "type": "HexInt64",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "meaning": "Provider-rendered privileges used during the operation; may be empty or a dash.",
+          "native_name": "PrivilegeList",
+          "section": "Additional Information",
+          "type": "UnicodeString",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "id": "atlas:event:microsoft.windows.security:4762",
+      "lifecycle": "current",
+      "namespace": "microsoft.windows.security",
+      "native_event_id": "4762",
+      "overview": {
+        "category": "Account Management",
+        "event_type": "Success",
+        "event_versions": [
+          {
+            "field_count": 10,
+            "generation": "Documented and/or provider-validated shape",
+            "notes": "Controlled Windows Server 2025 provider structural shape.",
+            "version": "0"
+          }
+        ],
+        "provider_level": "Informational",
+        "subcategory": "Audit Distribution Group Management",
+        "summary": "Records a member was removed from a security-disabled universal group while preserving provider-rendered identity and change context."
+      },
+      "platform": "Windows",
+      "product": "Windows Security Auditing",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4762",
+      "source_locator": "4762(S): A member was removed from a security-disabled universal group",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-distribution-group-management",
+      "source_version": "event-4762-provider-bound-doc",
+      "structural_source": {
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4762 / versions 0",
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4753-4762",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4753-4762"
+      },
+      "title": "Windows Security Event 4762 — A member was removed from a security-disabled universal group"
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4768",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4768",
