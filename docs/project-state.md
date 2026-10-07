@@ -4,9 +4,9 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `1472bb1818e296399e9b4d216ab27ccc991251c0`
+- Last Reviewed Main SHA: `ae2a18bb91315efcb5537877480757a0c7f01ebd`
 - Live `main` remains authoritative; this durable snapshot intentionally does not claim its own eventual merge SHA as the current HEAD.
-- Latest reviewed merged corpus baseline: `1472bb1818e296399e9b4d216ab27ccc991251c0` — PR #168 promoted Security-Auditing Event IDs 4699–4709 after all six exact-head workflows completed successfully; Windows Security Log UWS benchmark is `76/422`, Windows Security Auditing is `70/423` with `353` remaining, Sysmon remains `30/30`, and the global Windows denominator remains unfrozen.
+- Latest reviewed merged corpus baseline: `ae2a18bb91315efcb5537877480757a0c7f01ebd` — PR #171 promoted Security-Auditing Event IDs 4720, 4722–4730 after all six exact-head workflows completed successfully; Windows Security Log UWS benchmark is `96/422`, Windows Security Auditing is `90/423` with `333` remaining, Sysmon remains `30/30`, and the global Windows denominator remains unfrozen.
 - PR #149 documentation hub refresh — **MERGED**.
 - PR #150 public documentation / CI reporting consistency — **MERGED / EXACT-HEAD CI GREEN**.
 - PR #151 supply-chain scope detection fail-closed hardening — **MERGED / POST-MERGE CI GREEN**.
@@ -19,6 +19,9 @@
 - PR #164 Windows Security-Auditing 4664–4675 encyclopedia promotion — **MERGED / ALL SIX EXACT-HEAD WORKFLOWS SUCCESS** as `4e4953bee6ddcc135d68427a417089e49ea66a3b`; UWS review benchmark advanced to `56/422` and Security-Auditing to `50/423`.
 - PR #166 Windows Security-Auditing 4689–4698 encyclopedia promotion — **MERGED / ALL SIX EXACT-HEAD WORKFLOWS SUCCESS** as `368ee14fda4300d8c3ca01c43014fb9973326a78`; UWS review benchmark advanced to `66/422` and Security-Auditing to `60/423`.
 - PR #168 Windows Security-Auditing 4699–4709 encyclopedia promotion — **MERGED / ALL SIX EXACT-HEAD WORKFLOWS SUCCESS** as `1472bb1818e296399e9b4d216ab27ccc991251c0`; UWS review benchmark advanced to `76/422` and Security-Auditing to `70/423`.
+- PR #169 authoritative coverage documentation synchronization — **MERGED / ALL APPLICABLE EXACT-HEAD WORKFLOWS SUCCESS** as `034c7c49d9d4bd1d493340646b572d084fb4bfb1`.
+- PR #170 Windows Security-Auditing 4710–4719 encyclopedia promotion — **MERGED / ALL SIX EXACT-HEAD WORKFLOWS SUCCESS** as `aae2b2081fa51ece3a72b0c75c6e2886c4f1bdcc`; UWS review benchmark advanced to `86/422` and Security-Auditing to `80/423`.
+- PR #171 Windows Security-Auditing 4720, 4722–4730 encyclopedia promotion — **MERGED / ALL SIX EXACT-HEAD WORKFLOWS SUCCESS** as `ae2a18bb91315efcb5537877480757a0c7f01ebd`; UWS review benchmark advanced to `96/422` and Security-Auditing to `90/423`.
 - PR #85 exact-head baseline: `804aab8b1e9618d71965d78983235dbd7e20e9bf` — Foundation Hygiene `35429390496`, Phase 5.3.4 Canaries `35429390498`, and Phase 5.10.5 Usable Data Preview `35429390479` all **SUCCESS**
 - PR #85 merged to `main` as `4bfe222eb708347ea0769da400c40dbdaf289b69`; post-merge Foundation Hygiene `35429857708`, Phase 5.3.4 Canaries `35429857964`, and Phase 5.10.5 Usable Data Preview `35429857712` are all **SUCCESS / POST-MERGE VERIFIED**.
 - PR #89 exact-head `34225caf471b215717c3a8b1dcaa01799b01abd7`: all applicable checks completed successfully, including Foundation Hygiene `35437483777`, Phase 5.3.4 Canaries `35437483740`, Production Go Architecture `35437483746`, Shared Core Architecture `35437483749`, Governance Hygiene `35437483754`, Supply Chain Closure `35437483745`, Redistribution Closure `35437483753`, First-Party License Readiness `35437483751`, and Public Preview Readiness `35437483747`; merged as `4ea088e455462e66115d6887a472237171a96c94`.
