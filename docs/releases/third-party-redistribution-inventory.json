@@ -1,150 +1,150 @@
 {
+  "schema_version": "1.0.0",
+  "gate": "PPR-04",
+  "state": "BLOCKED",
+  "public_preview_corpus_frozen": false,
+  "software_payload_frozen": false,
+  "freeze_evidence": {
+    "release_commit": null,
+    "public_preview_corpus_manifest_sha256": null,
+    "public_preview_corpus_manifest_evidence": null,
+    "software_payload_manifest_sha256": null,
+    "software_payload_manifest_evidence": null
+  },
+  "release_package_sha256": null,
   "entries": [
     {
-      "class": "knowledge-content",
       "id": "mitre-attack-enterprise",
+      "class": "knowledge-content",
       "included": true,
-      "license_material_manifest": "third_party/license-material/manifest.json",
-      "license_material_path": "third_party/license-material/mitre-attack-enterprise/LICENSE.txt",
-      "license_material_state": "PINNED_BYTE_IDENTICAL_EVIDENCE_ONLY",
+      "upstream_revision": "attack-stix-data@6cda5ad8462c79e14fbb872f4e09059b18e0cfc4 / enterprise-attack-19.2.json",
       "license_or_terms": "MITRE ATT&CK license",
       "license_source": "https://github.com/mitre-attack/attack-stix-data/blob/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/LICENSE.txt",
       "redistribution_state": "CONDITIONALLY_CLEARABLE",
       "required_notices": "MITRE copyright designation and license text",
       "review_evidence": "ingestion/source-profiles/mitre-attack-enterprise.release.json",
-      "upstream_revision": "attack-stix-data@6cda5ad8462c79e14fbb872f4e09059b18e0cfc4 / enterprise-attack-19.2.json"
+      "license_material_path": "third_party/license-material/mitre-attack-enterprise/LICENSE.txt",
+      "license_material_manifest": "third_party/license-material/manifest.json",
+      "license_material_state": "PINNED_BYTE_IDENTICAL_EVIDENCE_ONLY"
     },
     {
-      "class": "knowledge-content",
       "id": "mitre-car",
+      "class": "knowledge-content",
       "included": true,
-      "license_material_manifest": "third_party/license-material/manifest.json",
-      "license_material_path": "third_party/license-material/mitre-car/LICENSE.txt",
-      "license_material_state": "PINNED_BYTE_IDENTICAL_EVIDENCE_ONLY",
+      "upstream_revision": "mitre-attack/car@1b922fe1527d956e222a99473472e594f10f610b",
       "license_or_terms": "Apache-2.0",
       "license_source": "https://github.com/mitre-attack/car/blob/1b922fe1527d956e222a99473472e594f10f610b/LICENSE.txt",
       "redistribution_state": "CONDITIONALLY_CLEARABLE",
       "required_notices": "Apache-2.0 license and applicable upstream notices",
       "review_evidence": "ingestion/source-profiles/mitre-car.release.json",
-      "upstream_revision": "mitre-attack/car@1b922fe1527d956e222a99473472e594f10f610b"
+      "license_material_path": "third_party/license-material/mitre-car/LICENSE.txt",
+      "license_material_manifest": "third_party/license-material/manifest.json",
+      "license_material_state": "PINNED_BYTE_IDENTICAL_EVIDENCE_ONLY"
     },
     {
-      "class": "knowledge-content",
       "id": "mitre-d3fend-ontology",
+      "class": "knowledge-content",
       "included": true,
-      "license_material_manifest": "third_party/license-material/manifest.json",
-      "license_material_path": "third_party/license-material/mitre-d3fend-ontology/LICENSE.md",
-      "license_material_state": "PINNED_BYTE_IDENTICAL_EVIDENCE_ONLY",
+      "upstream_revision": "d3fend/d3fend-ontology@6f888567acb359328ebd1e793b7e01581b6a03ed / ontology 1.6.0 / sha256-4909a5bb66b75d2c359624398848936fb56a6b246bcd5cfcd277977a1277753a",
       "license_or_terms": "MIT",
       "license_source": "https://github.com/d3fend/d3fend-ontology/blob/6f888567acb359328ebd1e793b7e01581b6a03ed/LICENSE.md",
       "redistribution_state": "CONDITIONALLY_CLEARABLE",
       "required_notices": "MIT copyright and permission notice",
       "review_evidence": "ingestion/source-profiles/mitre-d3fend-ontology.release.json",
-      "upstream_revision": "d3fend/d3fend-ontology@6f888567acb359328ebd1e793b7e01581b6a03ed / ontology 1.6.0 / sha256-4909a5bb66b75d2c359624398848936fb56a6b246bcd5cfcd277977a1277753a"
+      "license_material_path": "third_party/license-material/mitre-d3fend-ontology/LICENSE.md",
+      "license_material_manifest": "third_party/license-material/manifest.json",
+      "license_material_state": "PINNED_BYTE_IDENTICAL_EVIDENCE_ONLY"
     },
     {
-      "class": "knowledge-content-source-only",
       "id": "microsoft-windows-security-documentation",
+      "class": "knowledge-content-source-only",
       "included": false,
+      "upstream_revision": "Microsoft Learn Security-Auditing event/audit-policy sources plus controlled provider structural evidence; source prose excluded from Public Preview pack",
       "license_or_terms": "Microsoft Learn Terms of Use; verbatim/substantial Microsoft documentation excluded from Public Preview pack unless separately cleared",
       "license_source": "https://learn.microsoft.com/en-us/legal/termsofuse",
       "redistribution_state": "EXCLUDED",
       "required_notices": "none for excluded Microsoft source text; retain source citation/provenance for independently authored ATLAS facts, field semantics and analysis",
-      "review_evidence": "content/encyclopedia/sources/microsoft-windows-security-event-4608.json + content/encyclopedia/sources/microsoft-windows-security-event-4609.json + content/encyclopedia/sources/microsoft-windows-security-event-4610.json + content/encyclopedia/sources/microsoft-windows-security-event-4611.json + content/encyclopedia/sources/microsoft-windows-security-event-4612.json + content/encyclopedia/sources/microsoft-windows-security-event-4614.json + content/encyclopedia/sources/microsoft-windows-security-event-4615.json + content/encyclopedia/sources/microsoft-windows-security-event-4616.json + content/encyclopedia/sources/microsoft-windows-security-event-4618.json + content/encyclopedia/sources/microsoft-windows-security-event-4621.json + content/encyclopedia/sources/microsoft-windows-security-event-4622.json + content/encyclopedia/sources/microsoft-windows-security-event-4624.json + content/encyclopedia/sources/microsoft-windows-security-event-4625.json + content/encyclopedia/sources/microsoft-windows-security-event-4648.json + content/encyclopedia/sources/microsoft-windows-security-event-4672.json + content/encyclopedia/sources/microsoft-windows-security-event-4740.json + content/encyclopedia/sources/microsoft-windows-security-event-4768.json + content/encyclopedia/sources/microsoft-windows-security-event-4769.json + content/encyclopedia/sources/microsoft-windows-security-event-4771.json + ingestion/inventories/windows-security-auditing-4609-4622-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4609-4622.json + ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.release.json + content/encyclopedia/sources/microsoft-windows-security-event-4626.json + content/encyclopedia/sources/microsoft-windows-security-event-4627.json + content/encyclopedia/sources/microsoft-windows-security-event-4634.json + content/encyclopedia/sources/microsoft-windows-security-event-4646.json + content/encyclopedia/sources/microsoft-windows-security-event-4647.json + content/encyclopedia/sources/microsoft-windows-security-event-4649.json + content/encyclopedia/sources/microsoft-windows-security-event-4650.json + content/encyclopedia/sources/microsoft-windows-security-event-4651.json + content/encyclopedia/sources/microsoft-windows-security-event-4652.json + content/encyclopedia/sources/microsoft-windows-security-event-4653.json + ingestion/inventories/windows-security-auditing-4626-4653-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4626-4653.json + content/encyclopedia/sources/microsoft-windows-security-event-4654.json + content/encyclopedia/sources/microsoft-windows-security-event-4655.json + content/encyclopedia/sources/microsoft-windows-security-event-4656.json + content/encyclopedia/sources/microsoft-windows-security-event-4657.json + content/encyclopedia/sources/microsoft-windows-security-event-4658.json + content/encyclopedia/sources/microsoft-windows-security-event-4659.json + content/encyclopedia/sources/microsoft-windows-security-event-4660.json + content/encyclopedia/sources/microsoft-windows-security-event-4661.json + content/encyclopedia/sources/microsoft-windows-security-event-4662.json + content/encyclopedia/sources/microsoft-windows-security-event-4663.json + ingestion/inventories/windows-security-auditing-4654-4663-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4654-4663.json + content/encyclopedia/sources/microsoft-windows-security-event-4664.json + content/encyclopedia/sources/microsoft-windows-security-event-4665.json + content/encyclopedia/sources/microsoft-windows-security-event-4666.json + content/encyclopedia/sources/microsoft-windows-security-event-4667.json + content/encyclopedia/sources/microsoft-windows-security-event-4668.json + content/encyclopedia/sources/microsoft-windows-security-event-4670.json + content/encyclopedia/sources/microsoft-windows-security-event-4671.json + content/encyclopedia/sources/microsoft-windows-security-event-4673.json + content/encyclopedia/sources/microsoft-windows-security-event-4674.json + content/encyclopedia/sources/microsoft-windows-security-event-4675.json + ingestion/inventories/windows-security-auditing-4664-4675-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4664-4675.json + content/encyclopedia/sources/microsoft-windows-security-event-4689.json + content/encyclopedia/sources/microsoft-windows-security-event-4690.json + content/encyclopedia/sources/microsoft-windows-security-event-4691.json + content/encyclopedia/sources/microsoft-windows-security-event-4692.json + content/encyclopedia/sources/microsoft-windows-security-event-4693.json + content/encyclopedia/sources/microsoft-windows-security-event-4694.json + content/encyclopedia/sources/microsoft-windows-security-event-4695.json + content/encyclopedia/sources/microsoft-windows-security-event-4696.json + content/encyclopedia/sources/microsoft-windows-security-event-4697.json + content/encyclopedia/sources/microsoft-windows-security-event-4698.json + ingestion/inventories/windows-security-auditing-4689-4698-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4689-4698.json + content/encyclopedia/sources/microsoft-windows-security-event-4699.json + content/encyclopedia/sources/microsoft-windows-security-event-4700.json + content/encyclopedia/sources/microsoft-windows-security-event-4701.json + content/encyclopedia/sources/microsoft-windows-security-event-4702.json + content/encyclopedia/sources/microsoft-windows-security-event-4703.json + content/encyclopedia/sources/microsoft-windows-security-event-4704.json + content/encyclopedia/sources/microsoft-windows-security-event-4705.json + content/encyclopedia/sources/microsoft-windows-security-event-4706.json + content/encyclopedia/sources/microsoft-windows-security-event-4707.json + content/encyclopedia/sources/microsoft-windows-security-event-4709.json + ingestion/inventories/windows-security-auditing-4699-4709-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4699-4709.json + content/encyclopedia/sources/microsoft-windows-security-event-4710.json + content/encyclopedia/sources/microsoft-windows-security-event-4711.json + content/encyclopedia/sources/microsoft-windows-security-event-4712.json + content/encyclopedia/sources/microsoft-windows-security-event-4713.json + content/encyclopedia/sources/microsoft-windows-security-event-4714.json + content/encyclopedia/sources/microsoft-windows-security-event-4715.json + content/encyclopedia/sources/microsoft-windows-security-event-4716.json + content/encyclopedia/sources/microsoft-windows-security-event-4717.json + content/encyclopedia/sources/microsoft-windows-security-event-4718.json + content/encyclopedia/sources/microsoft-windows-security-event-4719.json + ingestion/inventories/windows-security-auditing-4710-4719-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4710-4719.json + content/encyclopedia/sources/microsoft-windows-security-event-4720.json + content/encyclopedia/sources/microsoft-windows-security-event-4722.json + content/encyclopedia/sources/microsoft-windows-security-event-4723.json + content/encyclopedia/sources/microsoft-windows-security-event-4724.json + content/encyclopedia/sources/microsoft-windows-security-event-4725.json + content/encyclopedia/sources/microsoft-windows-security-event-4726.json + content/encyclopedia/sources/microsoft-windows-security-event-4727.json + content/encyclopedia/sources/microsoft-windows-security-event-4728.json + content/encyclopedia/sources/microsoft-windows-security-event-4729.json + content/encyclopedia/sources/microsoft-windows-security-event-4730.json + ingestion/inventories/windows-security-auditing-4720-4730-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4720-4730.json + content/encyclopedia/sources/microsoft-windows-security-event-4731.json + content/encyclopedia/sources/microsoft-windows-security-event-4732.json + content/encyclopedia/sources/microsoft-windows-security-event-4733.json + content/encyclopedia/sources/microsoft-windows-security-event-4734.json + content/encyclopedia/sources/microsoft-windows-security-event-4735.json + content/encyclopedia/sources/microsoft-windows-security-event-4737.json + content/encyclopedia/sources/microsoft-windows-security-event-4738.json + content/encyclopedia/sources/microsoft-windows-security-event-4739.json + content/encyclopedia/sources/microsoft-windows-security-event-4741.json + content/encyclopedia/sources/microsoft-windows-security-event-4742.json + ingestion/inventories/windows-security-auditing-4731-4742-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4731-4742.json + content/encyclopedia/sources/microsoft-windows-security-event-4743.json + content/encyclopedia/sources/microsoft-windows-security-event-4744.json + content/encyclopedia/sources/microsoft-windows-security-event-4745.json + content/encyclopedia/sources/microsoft-windows-security-event-4746.json + content/encyclopedia/sources/microsoft-windows-security-event-4747.json + content/encyclopedia/sources/microsoft-windows-security-event-4748.json + content/encyclopedia/sources/microsoft-windows-security-event-4749.json + content/encyclopedia/sources/microsoft-windows-security-event-4750.json + content/encyclopedia/sources/microsoft-windows-security-event-4751.json + content/encyclopedia/sources/microsoft-windows-security-event-4752.json + ingestion/inventories/windows-security-auditing-4743-4752-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4743-4752.json + content/encyclopedia/sources/microsoft-windows-security-event-4753.json + content/encyclopedia/sources/microsoft-windows-security-event-4754.json + content/encyclopedia/sources/microsoft-windows-security-event-4755.json + content/encyclopedia/sources/microsoft-windows-security-event-4756.json + content/encyclopedia/sources/microsoft-windows-security-event-4757.json + content/encyclopedia/sources/microsoft-windows-security-event-4758.json + content/encyclopedia/sources/microsoft-windows-security-event-4759.json + content/encyclopedia/sources/microsoft-windows-security-event-4760.json + content/encyclopedia/sources/microsoft-windows-security-event-4761.json + content/encyclopedia/sources/microsoft-windows-security-event-4762.json + ingestion/inventories/windows-security-auditing-4753-4762-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4753-4762.json",
-      "upstream_revision": "Microsoft Learn Security-Auditing event/audit-policy sources plus controlled provider structural evidence; source prose excluded from Public Preview pack"
+      "review_evidence": "content/encyclopedia/sources/microsoft-windows-security-event-4608.json + content/encyclopedia/sources/microsoft-windows-security-event-4609.json + content/encyclopedia/sources/microsoft-windows-security-event-4610.json + content/encyclopedia/sources/microsoft-windows-security-event-4611.json + content/encyclopedia/sources/microsoft-windows-security-event-4612.json + content/encyclopedia/sources/microsoft-windows-security-event-4614.json + content/encyclopedia/sources/microsoft-windows-security-event-4615.json + content/encyclopedia/sources/microsoft-windows-security-event-4616.json + content/encyclopedia/sources/microsoft-windows-security-event-4618.json + content/encyclopedia/sources/microsoft-windows-security-event-4621.json + content/encyclopedia/sources/microsoft-windows-security-event-4622.json + content/encyclopedia/sources/microsoft-windows-security-event-4624.json + content/encyclopedia/sources/microsoft-windows-security-event-4625.json + content/encyclopedia/sources/microsoft-windows-security-event-4648.json + content/encyclopedia/sources/microsoft-windows-security-event-4672.json + content/encyclopedia/sources/microsoft-windows-security-event-4740.json + content/encyclopedia/sources/microsoft-windows-security-event-4768.json + content/encyclopedia/sources/microsoft-windows-security-event-4769.json + content/encyclopedia/sources/microsoft-windows-security-event-4771.json + ingestion/inventories/windows-security-auditing-4609-4622-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4609-4622.json + ingestion/source-profiles/microsoft-windows-security-auditing-4688-doc.release.json + content/encyclopedia/sources/microsoft-windows-security-event-4626.json + content/encyclopedia/sources/microsoft-windows-security-event-4627.json + content/encyclopedia/sources/microsoft-windows-security-event-4634.json + content/encyclopedia/sources/microsoft-windows-security-event-4646.json + content/encyclopedia/sources/microsoft-windows-security-event-4647.json + content/encyclopedia/sources/microsoft-windows-security-event-4649.json + content/encyclopedia/sources/microsoft-windows-security-event-4650.json + content/encyclopedia/sources/microsoft-windows-security-event-4651.json + content/encyclopedia/sources/microsoft-windows-security-event-4652.json + content/encyclopedia/sources/microsoft-windows-security-event-4653.json + ingestion/inventories/windows-security-auditing-4626-4653-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4626-4653.json + content/encyclopedia/sources/microsoft-windows-security-event-4654.json + content/encyclopedia/sources/microsoft-windows-security-event-4655.json + content/encyclopedia/sources/microsoft-windows-security-event-4656.json + content/encyclopedia/sources/microsoft-windows-security-event-4657.json + content/encyclopedia/sources/microsoft-windows-security-event-4658.json + content/encyclopedia/sources/microsoft-windows-security-event-4659.json + content/encyclopedia/sources/microsoft-windows-security-event-4660.json + content/encyclopedia/sources/microsoft-windows-security-event-4661.json + content/encyclopedia/sources/microsoft-windows-security-event-4662.json + content/encyclopedia/sources/microsoft-windows-security-event-4663.json + ingestion/inventories/windows-security-auditing-4654-4663-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4654-4663.json + content/encyclopedia/sources/microsoft-windows-security-event-4664.json + content/encyclopedia/sources/microsoft-windows-security-event-4665.json + content/encyclopedia/sources/microsoft-windows-security-event-4666.json + content/encyclopedia/sources/microsoft-windows-security-event-4667.json + content/encyclopedia/sources/microsoft-windows-security-event-4668.json + content/encyclopedia/sources/microsoft-windows-security-event-4670.json + content/encyclopedia/sources/microsoft-windows-security-event-4671.json + content/encyclopedia/sources/microsoft-windows-security-event-4673.json + content/encyclopedia/sources/microsoft-windows-security-event-4674.json + content/encyclopedia/sources/microsoft-windows-security-event-4675.json + ingestion/inventories/windows-security-auditing-4664-4675-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4664-4675.json + content/encyclopedia/sources/microsoft-windows-security-event-4689.json + content/encyclopedia/sources/microsoft-windows-security-event-4690.json + content/encyclopedia/sources/microsoft-windows-security-event-4691.json + content/encyclopedia/sources/microsoft-windows-security-event-4692.json + content/encyclopedia/sources/microsoft-windows-security-event-4693.json + content/encyclopedia/sources/microsoft-windows-security-event-4694.json + content/encyclopedia/sources/microsoft-windows-security-event-4695.json + content/encyclopedia/sources/microsoft-windows-security-event-4696.json + content/encyclopedia/sources/microsoft-windows-security-event-4697.json + content/encyclopedia/sources/microsoft-windows-security-event-4698.json + ingestion/inventories/windows-security-auditing-4689-4698-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4689-4698.json + content/encyclopedia/sources/microsoft-windows-security-event-4699.json + content/encyclopedia/sources/microsoft-windows-security-event-4700.json + content/encyclopedia/sources/microsoft-windows-security-event-4701.json + content/encyclopedia/sources/microsoft-windows-security-event-4702.json + content/encyclopedia/sources/microsoft-windows-security-event-4703.json + content/encyclopedia/sources/microsoft-windows-security-event-4704.json + content/encyclopedia/sources/microsoft-windows-security-event-4705.json + content/encyclopedia/sources/microsoft-windows-security-event-4706.json + content/encyclopedia/sources/microsoft-windows-security-event-4707.json + content/encyclopedia/sources/microsoft-windows-security-event-4709.json + ingestion/inventories/windows-security-auditing-4699-4709-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4699-4709.json + content/encyclopedia/sources/microsoft-windows-security-event-4710.json + content/encyclopedia/sources/microsoft-windows-security-event-4711.json + content/encyclopedia/sources/microsoft-windows-security-event-4712.json + content/encyclopedia/sources/microsoft-windows-security-event-4713.json + content/encyclopedia/sources/microsoft-windows-security-event-4714.json + content/encyclopedia/sources/microsoft-windows-security-event-4715.json + content/encyclopedia/sources/microsoft-windows-security-event-4716.json + content/encyclopedia/sources/microsoft-windows-security-event-4717.json + content/encyclopedia/sources/microsoft-windows-security-event-4718.json + content/encyclopedia/sources/microsoft-windows-security-event-4719.json + ingestion/inventories/windows-security-auditing-4710-4719-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4710-4719.json + content/encyclopedia/sources/microsoft-windows-security-event-4720.json + content/encyclopedia/sources/microsoft-windows-security-event-4722.json + content/encyclopedia/sources/microsoft-windows-security-event-4723.json + content/encyclopedia/sources/microsoft-windows-security-event-4724.json + content/encyclopedia/sources/microsoft-windows-security-event-4725.json + content/encyclopedia/sources/microsoft-windows-security-event-4726.json + content/encyclopedia/sources/microsoft-windows-security-event-4727.json + content/encyclopedia/sources/microsoft-windows-security-event-4728.json + content/encyclopedia/sources/microsoft-windows-security-event-4729.json + content/encyclopedia/sources/microsoft-windows-security-event-4730.json + ingestion/inventories/windows-security-auditing-4720-4730-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4720-4730.json + content/encyclopedia/sources/microsoft-windows-security-event-4731.json + content/encyclopedia/sources/microsoft-windows-security-event-4732.json + content/encyclopedia/sources/microsoft-windows-security-event-4733.json + content/encyclopedia/sources/microsoft-windows-security-event-4734.json + content/encyclopedia/sources/microsoft-windows-security-event-4735.json + content/encyclopedia/sources/microsoft-windows-security-event-4737.json + content/encyclopedia/sources/microsoft-windows-security-event-4738.json + content/encyclopedia/sources/microsoft-windows-security-event-4739.json + content/encyclopedia/sources/microsoft-windows-security-event-4741.json + content/encyclopedia/sources/microsoft-windows-security-event-4742.json + ingestion/inventories/windows-security-auditing-4731-4742-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4731-4742.json + content/encyclopedia/sources/microsoft-windows-security-event-4743.json + content/encyclopedia/sources/microsoft-windows-security-event-4744.json + content/encyclopedia/sources/microsoft-windows-security-event-4745.json + content/encyclopedia/sources/microsoft-windows-security-event-4746.json + content/encyclopedia/sources/microsoft-windows-security-event-4747.json + content/encyclopedia/sources/microsoft-windows-security-event-4748.json + content/encyclopedia/sources/microsoft-windows-security-event-4749.json + content/encyclopedia/sources/microsoft-windows-security-event-4750.json + content/encyclopedia/sources/microsoft-windows-security-event-4751.json + content/encyclopedia/sources/microsoft-windows-security-event-4752.json + ingestion/inventories/windows-security-auditing-4743-4752-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4743-4752.json + content/encyclopedia/sources/microsoft-windows-security-event-4753.json + content/encyclopedia/sources/microsoft-windows-security-event-4754.json + content/encyclopedia/sources/microsoft-windows-security-event-4755.json + content/encyclopedia/sources/microsoft-windows-security-event-4756.json + content/encyclopedia/sources/microsoft-windows-security-event-4757.json + content/encyclopedia/sources/microsoft-windows-security-event-4758.json + content/encyclopedia/sources/microsoft-windows-security-event-4759.json + content/encyclopedia/sources/microsoft-windows-security-event-4760.json + content/encyclopedia/sources/microsoft-windows-security-event-4761.json + content/encyclopedia/sources/microsoft-windows-security-event-4762.json + ingestion/inventories/windows-security-auditing-4753-4762-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-security-auditing-provider-26100-4753-4762.json"
     },
     {
-      "class": "knowledge-content-source-only",
       "id": "microsoft-windows-eventlog-documentation",
+      "class": "knowledge-content-source-only",
       "included": false,
+      "upstream_revision": "Microsoft Learn Event 1100, 1102, 1104, 1105, 1108 pages plus controlled Microsoft-Windows-Eventlog provider metadata for 1100/1101/1102/1104/1105/1108; source prose excluded from Public Preview pack",
       "license_or_terms": "Microsoft Learn Terms of Use; verbatim/substantial Microsoft documentation excluded from Public Preview pack unless separately cleared",
       "license_source": "https://learn.microsoft.com/en-us/legal/termsofuse",
       "redistribution_state": "EXCLUDED",
       "required_notices": "none for excluded Microsoft source text; retain source citation/provenance for independently authored ATLAS facts, field semantics and analysis",
-      "review_evidence": "ingestion/inventories/windows-eventlog-security-1100-series-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-eventlog-provider-26100-1100-series.json + content/encyclopedia/sources/microsoft-windows-eventlog-event-1100.json + content/encyclopedia/sources/microsoft-windows-eventlog-event-1102.json + content/encyclopedia/sources/microsoft-windows-eventlog-event-1104.json + content/encyclopedia/sources/microsoft-windows-eventlog-event-1105.json + content/encyclopedia/sources/microsoft-windows-eventlog-event-1108.json",
-      "upstream_revision": "Microsoft Learn Event 1100, 1102, 1104, 1105, 1108 pages plus controlled Microsoft-Windows-Eventlog provider metadata for 1100/1101/1102/1104/1105/1108; source prose excluded from Public Preview pack"
+      "review_evidence": "ingestion/inventories/windows-eventlog-security-1100-series-26100.telemetry.json + content/encyclopedia/sources/microsoft-windows-eventlog-provider-26100-1100-series.json + content/encyclopedia/sources/microsoft-windows-eventlog-event-1100.json + content/encyclopedia/sources/microsoft-windows-eventlog-event-1102.json + content/encyclopedia/sources/microsoft-windows-eventlog-event-1104.json + content/encyclopedia/sources/microsoft-windows-eventlog-event-1105.json + content/encyclopedia/sources/microsoft-windows-eventlog-event-1108.json"
     },
     {
-      "class": "knowledge-content-source-only",
       "id": "ultimate-windows-security-encyclopedia",
+      "class": "knowledge-content-source-only",
       "included": false,
+      "upstream_revision": "Mutable Ultimate Windows Security Windows Security Log Encyclopedia web pages",
       "license_or_terms": "Copyrighted/all-rights-reserved website content; factual normalization and independently authored ATLAS summaries only unless separate redistribution permission is obtained",
       "license_source": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/",
       "redistribution_state": "EXCLUDED",
       "required_notices": "Do not package substantial/verbatim page prose or examples; retain source URL/provenance for normalized facts and ATLAS-authored summaries",
-      "review_evidence": "ingestion/source-profiles/ultimate-windows-security-encyclopedia.release.json + docs/content/source-authority-policy.md",
-      "upstream_revision": "Mutable Ultimate Windows Security Windows Security Log Encyclopedia web pages"
+      "review_evidence": "ingestion/source-profiles/ultimate-windows-security-encyclopedia.release.json + docs/content/source-authority-policy.md"
     },
     {
-      "class": "knowledge-content",
       "id": "microsoft-sysmon-documentation",
+      "class": "knowledge-content",
       "included": true,
-      "license_material_manifest": "third_party/license-material/manifest.json",
-      "license_material_path": "third_party/license-material/microsoft-sysmon-documentation/LICENSE",
-      "license_material_state": "PINNED_BYTE_IDENTICAL_EVIDENCE_ONLY",
+      "upstream_revision": "MicrosoftDocs/sysinternals@2fd3249657118505564fd220e672e8ea45d35916 / Sysmon 15.22 documentation",
       "license_or_terms": "CC-BY-4.0 documentation license at pinned repository revision",
       "license_source": "https://github.com/MicrosoftDocs/sysinternals/blob/2fd3249657118505564fd220e672e8ea45d35916/LICENSE",
       "redistribution_state": "CONDITIONALLY_CLEARABLE",
       "required_notices": "CC-BY-4.0 attribution, copyright/source identification, license reference, and modification indication where applicable; no trademark/endorsement claim",
       "review_evidence": "ingestion/source-profiles/microsoft-sysmon-docs.release.json + ingestion/inventories/sysmon-docs-15.22.documentation.json + pinned repository LICENSE",
-      "upstream_revision": "MicrosoftDocs/sysinternals@2fd3249657118505564fd220e672e8ea45d35916 / Sysmon 15.22 documentation"
+      "license_material_path": "third_party/license-material/microsoft-sysmon-documentation/LICENSE",
+      "license_material_manifest": "third_party/license-material/manifest.json",
+      "license_material_state": "PINNED_BYTE_IDENTICAL_EVIDENCE_ONLY"
     },
     {
-      "class": "knowledge-content",
       "id": "cyber-sentinel-defenseops-content",
+      "class": "knowledge-content",
       "included": false,
+      "upstream_revision": "not selected for Public Preview pack",
       "license_or_terms": "No project LICENSE on current DefenseOps main",
       "license_source": "",
       "redistribution_state": "EXCLUDED",
       "required_notices": "none while excluded",
-      "review_evidence": "THIRD_PARTY_NOTICES.md",
-      "upstream_revision": "not selected for Public Preview pack"
+      "review_evidence": "THIRD_PARTY_NOTICES.md"
     },
     {
-      "class": "software-runtime",
       "id": "go-shared-core-runtime",
+      "class": "software-runtime",
       "included": true,
+      "upstream_revision": "Go 1.25.13 + shared-core/go/go.mod/go.sum + exact linked binary",
       "license_or_terms": "Exact linked-module/toolchain license-material evidence plus SBOM metadata; scanner license classifications are non-authoritative pending review against preserved bytes",
       "license_source": "Phase 5.5.4D exact linked-module/toolchain license-material evidence bound by go.sum and the exact linked binary",
       "redistribution_state": "BUILD_EVIDENCE_REQUIRED",
       "required_notices": "Generate from the exact release binary/module set and preserved module/toolchain license/notice bytes; do not rely on SBOM classifier labels alone",
-      "review_evidence": ".github/workflows/phase554d-supply-chain-closure.yml + tools/release/generate_go_license_material_evidence.py + tools/release/validate_go_license_material_evidence.py + tools/shared_core/phase554d_evidence.py",
-      "upstream_revision": "Go 1.25.13 + shared-core/go/go.mod/go.sum + exact linked binary"
+      "review_evidence": ".github/workflows/phase554d-supply-chain-closure.yml + tools/release/generate_go_license_material_evidence.py + tools/release/validate_go_license_material_evidence.py + tools/shared_core/phase554d_evidence.py"
     },
     {
-      "class": "software-runtime",
       "id": "tauri-rust-runtime",
+      "class": "software-runtime",
       "included": true,
+      "upstream_revision": "Tauri 2.11.5 + committed Cargo.lock",
       "license_or_terms": "Exact Windows-target Cargo metadata/license evidence generated from committed lock; final release-package notice binding remains pending",
       "license_source": "Cargo package license/license_file metadata from the exact locked Windows-target dependency graph",
       "redistribution_state": "BUILD_EVIDENCE_REQUIRED",
       "required_notices": "Generate final crate/license/notice bundle from the frozen release graph; preserve CI inventory for frontend and non-frontend packaging assets plus deterministic generated-icon evidence; bind all final built/package assets to the exact Public Preview package.",
-      "review_evidence": ".github/workflows/phase5101-redistribution-closure.yml + tools/release/generate_tauri_redistribution_evidence.py + tests/phase5101/test_tauri_redistribution_evidence.py + benchmarks/desktop/phase56/candidates/tauri/Cargo.lock",
-      "upstream_revision": "Tauri 2.11.5 + committed Cargo.lock"
+      "review_evidence": ".github/workflows/phase5101-redistribution-closure.yml + tools/release/generate_tauri_redistribution_evidence.py + tests/phase5101/test_tauri_redistribution_evidence.py + benchmarks/desktop/phase56/candidates/tauri/Cargo.lock"
     },
     {
-      "class": "runtime-prerequisite",
       "id": "webview2-runtime",
+      "class": "runtime-prerequisite",
       "included": false,
+      "upstream_revision": "not bundled by current portable model",
       "license_or_terms": "Microsoft WebView2 distribution terms apply if future installer redistributes/bootstrap-downloads runtime",
       "license_source": "",
       "redistribution_state": "EXCLUDED_CURRENT_MODEL",
       "required_notices": "review required if packaging model changes",
-      "review_evidence": "Phase 5.6.4 packaging evidence",
-      "upstream_revision": "not bundled by current portable model"
+      "review_evidence": "Phase 5.6.4 packaging evidence"
     }
-  ],
-  "freeze_evidence": {
-    "public_preview_corpus_manifest_evidence": null,
-    "public_preview_corpus_manifest_sha256": null,
-    "release_commit": null,
-    "software_payload_manifest_evidence": null,
-    "software_payload_manifest_sha256": null
-  },
-  "gate": "PPR-04",
-  "public_preview_corpus_frozen": false,
-  "release_package_sha256": null,
-  "schema_version": "1.0.0",
-  "software_payload_frozen": false,
-  "state": "BLOCKED"
+  ]
 }
