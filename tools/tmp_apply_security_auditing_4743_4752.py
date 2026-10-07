@@ -6,7 +6,7 @@ R=Path(__file__).resolve().parents[1]
 IDS=['4743','4744','4745','4746','4747','4748','4749','4750','4751','4752']
 RUN=37664692346; ART=11502400552
 AD='sha256:729297c7038391b9d7f0e2e81869a5615a2f1e8f12bd7e0fc8da98edacee9b28'
-RAW='sha256-b890cc073d8b012ecf582986ada877eb79a34785f9c9c47f37e1a9afa9f32475'
+RAW='sha256-79439457a025d2acfa7ef9672b6fc1c59e3a1ce596d610d10ec896df65d1c9d0'
 SID='atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4743-4752'
 SV='windows-server-2025-build-26100-security-auditing-4743-4752'
 S={
