@@ -330,11 +330,11 @@ The Engineering Usable Data Preview proved the product path. Phase 5.10.10 now e
 
 Current controlled coverage state:
 
-- Windows Security Log UWS review benchmark: **56/422** listed identities encyclopedia-grade; **366** remaining;
+- Windows Security Log UWS review benchmark: **66/422** listed identities encyclopedia-grade; **356** remaining;
 - Windows Security Auditing denominator is frozen to `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296`;
 - Windows Security denominator: **423 unique Event IDs** / **488 provider event-version definitions**;
-- Windows Security encyclopedia-grade numerator: **50/423** — Event IDs `4608`, `4609`, `4610`, `4611`, `4612`, `4614`, `4615`, `4616`, `4618`, `4621`, `4622`, `4624`, `4625`, `4626`, `4627`, `4634`, `4646`, `4647`, `4648`, `4649`, `4650`, `4651`, `4652`, `4653`, `4654`, `4655`, `4656`, `4657`, `4658`, `4659`, `4660`, `4661`, `4662`, `4663`, `4664`, `4665`, `4666`, `4667`, `4668`, `4670`, `4671`, `4672`, `4673`, `4674`, `4675`, `4688`, `4740`, `4768`, `4769`, `4771`;
-- Windows Security remaining: **373**;
+- Windows Security encyclopedia-grade numerator: **60/423** — Event IDs `4608`, `4609`, `4610`, `4611`, `4612`, `4614`, `4615`, `4616`, `4618`, `4621`, `4622`, `4624`, `4625`, `4626`, `4627`, `4634`, `4646`, `4647`, `4648`, `4649`, `4650`, `4651`, `4652`, `4653`, `4654`, `4655`, `4656`, `4657`, `4658`, `4659`, `4660`, `4661`, `4662`, `4663`, `4664`, `4665`, `4666`, `4667`, `4668`, `4670`, `4671`, `4672`, `4673`, `4674`, `4675`, `4688`, `4689`, `4690`, `4691`, `4692`, `4693`, `4694`, `4695`, `4696`, `4697`, `4698`, `4740`, `4768`, `4769`, `4771`;
+- Windows Security remaining: **363**;
 - Sysmon semantic release: **15.22**;
 - Sysmon controlled structural schema: **4.91**;
 - Sysmon documented/current denominator: **30** Event IDs (`1..29` plus `255`);

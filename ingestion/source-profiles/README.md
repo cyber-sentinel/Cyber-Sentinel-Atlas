@@ -15,4 +15,4 @@ Source-profile presence proves that an upstream/source boundary is governed; it 
 
 For the active Windows Security expansion, per-event curated source records under `content/encyclopedia/sources/` are bound to the frozen provider/channel/build denominator and then materialized through the canonical encyclopedia builder, deterministic search projection, verified pack and acceptance path.
 
-The current reviewed Windows Security Auditing numerator is **50/423**; the cross-provider Security Log UWS review benchmark is **56/422**; Sysmon 15.22 remains **30/30**. Moving coverage state is authoritative in `content/encyclopedia/coverage-manifest.json`.
+The current reviewed Windows Security Auditing numerator is **60/423**; the cross-provider Security Log UWS review benchmark is **66/422**; Sysmon 15.22 remains **30/30**. Moving coverage state is authoritative in `content/encyclopedia/coverage-manifest.json`.
