@@ -1,0 +1,157 @@
+name: Temporary docs sync after Batch 09
+
+on:
+  push:
+    branches:
+      - docs/sync-coverage-after-batch-09
+
+permissions:
+  contents: write
+
+jobs:
+  sync-docs:
+    if: contains(github.event.head_commit.message, 'Run bounded docs sync after Batch 09')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact branch head
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Synchronize current-state coverage projections
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, re
+          from pathlib import Path
+
+          root = Path('.')
+          manifest = json.loads((root/'content/encyclopedia/coverage-manifest.json').read_text())
+          snap = json.loads((root/'content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json').read_text())
+
+          uws = manifest['windows_security_log_review_benchmark']
+          fam = next(x for x in manifest['families'] if x['id']=='windows-security-auditing')
+          uws_ratio = uws['completion_ratio']
+          uws_remaining = uws['remaining_listed_id_count']
+          sa_count = fam['encyclopedia_grade_count']
+          sa_den = fam['denominator_count']
+          sa_ratio = f'{sa_count}/{sa_den}'
+          sa_remaining = fam['remaining_count']
+          sa_ids = [e['event_id'] for e in snap['events'] if e.get('coverage_state')=='ENCYCLOPEDIA_GRADE']
+          assert len(sa_ids) == sa_count == 90
+          ids = ', '.join(f'`{x}`' for x in sa_ids)
+          assert uws_ratio == '96/422' and uws_remaining == 326
+          assert sa_ratio == '90/423' and sa_remaining == 333
+
+          BASE='ae2a18bb91315efcb5537877480757a0c7f01ebd'
+
+          def load(p): return (root/p).read_text()
+          def save(p,s): (root/p).write_text(s)
+          def sub1(s, pat, repl, label, flags=re.M):
+              out,n = re.subn(pat, repl, s, count=1, flags=flags)
+              if n != 1:
+                  raise SystemExit(f'{label}: expected exactly one current-state anchor, got {n}')
+              return out
+
+          # README.md
+          p='README.md'; s=load(p)
+          pat=r'^\| Windows Security Auditing \| (.*?) \| \d+ — .*? \| \d+ \|$'
+          def row(m): return f'| Windows Security Auditing | {m.group(1)} | {sa_count} — {ids} | {sa_remaining} |'
+          s=sub1(s,pat,row,'README coverage row')
+          save(p,s)
+
+          # docs/README.md
+          p='docs/README.md'; s=load(p)
+          s=sub1(s,r'^- Windows Security Log UWS benchmark: .*$',f'- Windows Security Log UWS benchmark: **{uws_ratio} encyclopedia-grade listed identities**, `{uws_remaining}` remaining','docs README UWS')
+          s=sub1(s,r'^- Windows Security Auditing: .*$',f'- Windows Security Auditing: **{sa_ratio} encyclopedia-grade**, `{sa_remaining}` remaining','docs README SA')
+          s=sub1(s,r'^- Current Windows Security exemplars: .*$',f'- Current Windows Security exemplars: {ids}','docs README IDs')
+          save(p,s)
+
+          # docs/current-status.md
+          p='docs/current-status.md'; s=load(p)
+          s=sub1(s,r'^- Reviewed `main` corpus baseline: .*$',f'- Reviewed `main` corpus baseline: `{BASE}` — PR #171 promoted Security-Auditing Event IDs 4720, 4722–4730 after all six exact-head workflows completed **SUCCESS**; Windows Security Log UWS benchmark is `{uws_ratio}`, Windows Security Auditing is `{sa_ratio}` with `{sa_remaining}` remaining, Sysmon remains `30/30`, and the global Windows denominator remains unfrozen.','current-status baseline')
+          if '- PR #170 Windows Security-Auditing 4710–4719 encyclopedia promotion' not in s:
+              anchor='- PR #168 Windows Security-Auditing 4699–4709 encyclopedia promotion — **MERGED / ALL SIX EXACT-HEAD WORKFLOWS SUCCESS** as `1472bb1818e296399e9b4d216ab27ccc991251c0`; UWS review benchmark advanced to `76/422` and Security-Auditing to `70/423`.'
+              insert=anchor+'\n- PR #169 authoritative coverage documentation synchronization — **MERGED / ALL APPLICABLE EXACT-HEAD WORKFLOWS SUCCESS** as `034c7c49d9d4bd1d493340646b572d084fb4bfb1`.\n- PR #170 Windows Security-Auditing 4710–4719 encyclopedia promotion — **MERGED / ALL SIX EXACT-HEAD WORKFLOWS SUCCESS** as `aae2b2081fa51ece3a72b0c75c6e2886c4f1bdcc`; UWS review benchmark advanced to `86/422` and Security-Auditing to `80/423`.\n- PR #171 Windows Security-Auditing 4720, 4722–4730 encyclopedia promotion — **MERGED / ALL SIX EXACT-HEAD WORKFLOWS SUCCESS** as `ae2a18bb91315efcb5537877480757a0c7f01ebd`; UWS review benchmark advanced to `96/422` and Security-Auditing to `90/423`.'
+              if anchor not in s: raise SystemExit('current-status historical anchor missing')
+              s=s.replace(anchor,insert,1)
+          save(p,s)
+
+          # docs/project-state.md
+          p='docs/project-state.md'; s=load(p)
+          s=sub1(s,r'^- Last Reviewed Main SHA: `[^`]+`$',f'- Last Reviewed Main SHA: `{BASE}`','project-state SHA')
+          s=sub1(s,r'^- Latest reviewed merged corpus baseline: .*$',f'- Latest reviewed merged corpus baseline: `{BASE}` — PR #171 promoted Security-Auditing Event IDs 4720, 4722–4730 after all six exact-head workflows completed successfully; Windows Security Log UWS benchmark is `{uws_ratio}`, Windows Security Auditing is `{sa_ratio}` with `{sa_remaining}` remaining, Sysmon remains `30/30`, and the global Windows denominator remains unfrozen.','project-state baseline')
+          if '- PR #170 Windows Security-Auditing 4710–4719 encyclopedia promotion' not in s:
+              anchor='- PR #168 Windows Security-Auditing 4699–4709 encyclopedia promotion — **MERGED / ALL SIX EXACT-HEAD WORKFLOWS SUCCESS** as `1472bb1818e296399e9b4d216ab27ccc991251c0`; UWS review benchmark advanced to `76/422` and Security-Auditing to `70/423`.'
+              insert=anchor+'\n- PR #169 authoritative coverage documentation synchronization — **MERGED / ALL APPLICABLE EXACT-HEAD WORKFLOWS SUCCESS** as `034c7c49d9d4bd1d493340646b572d084fb4bfb1`.\n- PR #170 Windows Security-Auditing 4710–4719 encyclopedia promotion — **MERGED / ALL SIX EXACT-HEAD WORKFLOWS SUCCESS** as `aae2b2081fa51ece3a72b0c75c6e2886c4f1bdcc`; UWS review benchmark advanced to `86/422` and Security-Auditing to `80/423`.\n- PR #171 Windows Security-Auditing 4720, 4722–4730 encyclopedia promotion — **MERGED / ALL SIX EXACT-HEAD WORKFLOWS SUCCESS** as `ae2a18bb91315efcb5537877480757a0c7f01ebd`; UWS review benchmark advanced to `96/422` and Security-Auditing to `90/423`.'
+              if anchor not in s: raise SystemExit('project-state historical anchor missing')
+              s=s.replace(anchor,insert,1)
+          save(p,s)
+
+          # docs/product-surfaces.md
+          p='docs/product-surfaces.md'; s=load(p)
+          pat=r'^\| Windows Security Auditing \| (.*?) \| `\d+/423` — Event IDs .*? \| \d+ \|$'
+          def prow(m): return f'| Windows Security Auditing | {m.group(1)} | `{sa_ratio}` — Event IDs {ids} | {sa_remaining} |'
+          s=sub1(s,pat,prow,'product-surfaces row')
+          save(p,s)
+
+          # docs/roadmap.md
+          p='docs/roadmap.md'; s=load(p)
+          s=sub1(s,r'^- Windows Security Log UWS review benchmark: .*$',f'- Windows Security Log UWS review benchmark: **{uws_ratio}** listed identities encyclopedia-grade; **{uws_remaining}** remaining;','roadmap UWS')
+          s=sub1(s,r'^- Windows Security encyclopedia-grade numerator: .*$',f'- Windows Security encyclopedia-grade numerator: **{sa_ratio}** — Event IDs {ids};','roadmap SA')
+          s=sub1(s,r'^- Windows Security remaining: .*$',f'- Windows Security remaining: **{sa_remaining}**;','roadmap remaining')
+          save(p,s)
+
+          # docs/windows-sysmon-coverage-plan.md
+          p='docs/windows-sysmon-coverage-plan.md'; s=load(p)
+          s=sub1(s,r'^The cross-provider Windows Security Log UWS review benchmark is independently .*$',f'The cross-provider Windows Security Log UWS review benchmark is independently `{uws_ratio}` encyclopedia-grade listed identities with `{uws_remaining}` remaining; it is a review benchmark, not a provider denominator.','coverage-plan UWS')
+          pat=r'^\| Windows Security Auditing \| 423 unique Event IDs / 488 provider event-version definitions \| \d+ — .*? \| \d+ \|$'
+          s=sub1(s,pat,f'| Windows Security Auditing | 423 unique Event IDs / 488 provider event-version definitions | {sa_count} — {ids} | {sa_remaining} |','coverage-plan row')
+          save(p,s)
+
+          # ingestion/README.md
+          p='ingestion/README.md'; s=load(p)
+          s=sub1(s,r'^Current reviewed `main` coverage is .*$',f'Current reviewed `main` coverage is **{sa_ratio}** encyclopedia-grade Event IDs for `Microsoft-Windows-Security-Auditing`, while the cross-provider Security Log UWS review benchmark is **{uws_ratio}** and Sysmon 15.22 remains **30/30** complete. Moving counters remain authoritative only in the machine-readable coverage ledgers.','ingestion README')
+          save(p,s)
+
+          # ingestion/source-profiles/README.md
+          p='ingestion/source-profiles/README.md'; s=load(p)
+          s=sub1(s,r'^The current reviewed Windows Security Auditing numerator is .*$',f'The current reviewed Windows Security Auditing numerator is **{sa_ratio}**; the cross-provider Security Log UWS review benchmark is **{uws_ratio}**; Sysmon 15.22 remains **30/30**. Moving coverage state is authoritative in `content/encyclopedia/coverage-manifest.json`.','source profiles README')
+          save(p,s)
+
+          # fail-closed scope and stale-current checks
+          allowed={
+            'README.md','docs/README.md','docs/current-status.md','docs/product-surfaces.md','docs/project-state.md','docs/roadmap.md','docs/windows-sysmon-coverage-plan.md','ingestion/README.md','ingestion/source-profiles/README.md'
+          }
+          import subprocess
+          changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          if changed != allowed:
+              raise SystemExit(f'unexpected durable scope: {sorted(changed)}')
+          for p in allowed:
+              txt=load(p)
+              # Historical PR #168 entries are allowed to retain 76/422 and 70/423; current anchors above must now expose new values.
+              if p in {'README.md','docs/README.md','docs/product-surfaces.md','docs/roadmap.md','docs/windows-sysmon-coverage-plan.md','ingestion/README.md','ingestion/source-profiles/README.md'}:
+                  if '96/422' not in txt or ('90/423' not in txt and p!='README.md'):
+                      raise SystemExit(f'new coverage projection missing in {p}')
+          print(f'coverage={uws_ratio} security_auditing={sa_ratio} files={len(changed)}')
+          PY
+          git diff --check
+
+      - name: Validate authoritative coverage and queue
+        run: |
+          python tools/content/validate_encyclopedia_coverage.py
+          python tools/content/build_windows_security_review_queue.py --batch-size 10 --batch-index 0 >/tmp/review-queue.json
+          grep -q '4731' /tmp/review-queue.json
+
+      - name: Commit exactly nine durable documentation files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Cyber-Sentinel CI"
+          git config user.email "actions@users.noreply.github.com"
+          git add README.md docs/README.md docs/current-status.md docs/product-surfaces.md docs/project-state.md docs/roadmap.md docs/windows-sysmon-coverage-plan.md ingestion/README.md ingestion/source-profiles/README.md
+          test "$(git diff --cached --name-only | wc -l)" -eq 9
+          git commit -m "Docs: synchronize coverage after PR #171"
+          git push origin HEAD:docs/sync-coverage-after-batch-09
