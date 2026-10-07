@@ -50,7 +50,25 @@ jobs:
       - name: Apply bounded content mutation
         env:
           ATLAS_DISCOVERY_JSON: /tmp/atlas-batch05/evidence/security-auditing-4664-4675.json
-        run: python tools/tmp_apply_security_auditing_4664_4675.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          path = Path("tools/tmp_apply_security_auditing_4664_4675.py").resolve()
+          spec = importlib.util.spec_from_file_location("batch05", path)
+          if spec is None or spec.loader is None:
+              raise RuntimeError("cannot load Batch 05 helper")
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+          original = module.configure_base
+          def configure_base_with_repo_root(base):
+              original(base)
+              base.ROOT = module.ROOT
+          module.configure_base = configure_base_with_repo_root
+          module.main()
+          PY
 
       - name: Validate focused Phase 5.10.10 contracts
         shell: bash
