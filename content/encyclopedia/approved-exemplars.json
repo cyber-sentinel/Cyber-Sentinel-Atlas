@@ -16150,6 +16150,1237 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4710",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4710",
+      "title": "Windows Security Event 4710 — IPsec Services was disabled",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4710",
+      "aliases": [
+        "4710",
+        "Event ID 4710",
+        "Windows 4710",
+        "IPsec Services was disabled"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4710",
+      "source_version": "audit-filtering-platform-policy-change-event-4710-provider-v0",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-filtering-platform-policy-change",
+      "source_locator": "4710(S): IPsec Services was disabled",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4710-4719",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4710-4719",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4710 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4710",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4710",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records that IPsec Services was disabled. Controlled provider evidence preserves two provider-rendered parameter fields without assigning undocumented meanings to either slot.",
+        "category": "Policy Change",
+        "subcategory": "Audit Filtering Platform Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 2,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Filtering Platform Policy Change success auditing where IPsec service-state visibility is required.",
+          "Preserve param1 and param2 exactly as provider-rendered strings together with host and event context."
+        ],
+        "interpretation_note": "Unexpected disablement can remove IPsec policy enforcement or indicate service disruption. The two provider parameters remain opaque unless separately documented by authoritative evidence."
+      },
+      "correlations": [
+        {
+          "target": "4709",
+          "key": "Computer + time",
+          "purpose": "track the preceding or later IPsec Services start transition"
+        }
+      ],
+      "analysis": [
+        "Correlate the transition with service-control, policy-deployment and administrator activity.",
+        "Do not infer meanings for param1 or param2 beyond their provider-rendered values."
+      ],
+      "fields": [
+        {
+          "key": "parameter-1",
+          "section": "Provider Message",
+          "native_name": "param1",
+          "type": "UnicodeString",
+          "meaning": "Opaque provider-rendered parameter; event-specific meaning is not inferred without authoritative documentation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "parameter-2",
+          "section": "Provider Message",
+          "native_name": "param2",
+          "type": "UnicodeString",
+          "meaning": "Opaque provider-rendered parameter; event-specific meaning is not inferred without authoritative documentation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4711",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4711",
+      "title": "Windows Security Event 4711 — PAStore Engine policy status was reported",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4711",
+      "aliases": [
+        "4711",
+        "Event ID 4711",
+        "Windows 4711",
+        "PAStore Engine policy status was reported"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4711",
+      "source_version": "audit-filtering-platform-policy-change-event-4711-provider-v0",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-filtering-platform-policy-change",
+      "source_locator": "4711(S): PAStore Engine policy status was reported",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4710-4719",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4710-4719",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4711 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4711",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4711",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft defines Event 4711 as a success audit that may carry one of several PAStore Engine IPsec policy-status messages. Controlled provider evidence exposes one opaque provider-rendered parameter field.",
+        "category": "Policy Change",
+        "subcategory": "Audit Filtering Platform Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 1,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Filtering Platform Policy Change success auditing where IPsec policy-store status requires visibility.",
+          "Preserve param1 exactly; interpret the rendered message in context without inventing a fixed field contract."
+        ],
+        "interpretation_note": "Use the complete provider-rendered message to determine the specific PAStore condition. A single fixed semantic meaning must not be assigned to this multi-message event identity."
+      },
+      "correlations": [
+        {
+          "target": "4712",
+          "key": "Computer + time",
+          "purpose": "associate PAStore status with potentially serious IPsec failures"
+        }
+      ],
+      "analysis": [
+        "Retain the original rendered message and correlate it with nearby IPsec policy and service events.",
+        "Escalate unexpected policy-store conditions only after confirming the exact rendered message and host baseline."
+      ],
+      "fields": [
+        {
+          "key": "parameter-1",
+          "section": "Provider Message",
+          "native_name": "param1",
+          "type": "UnicodeString",
+          "meaning": "Opaque provider-rendered parameter; event-specific meaning is not inferred without authoritative documentation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4712",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4712",
+      "title": "Windows Security Event 4712 — IPsec Services encountered a potentially serious failure",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4712",
+      "aliases": [
+        "4712",
+        "Event ID 4712",
+        "Windows 4712",
+        "IPsec Services encountered a potentially serious failure"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4712",
+      "source_version": "audit-filtering-platform-policy-change-event-4712-provider-v0",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/audit-filtering-platform-policy-change",
+      "source_locator": "4712(F): IPsec Services encountered a potentially serious failure",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4710-4719",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4710-4719",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4712 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4712",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4712",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a potentially serious IPsec Services failure. Controlled provider evidence preserves one provider-rendered parameter field whose detailed semantics are not inferred.",
+        "category": "Policy Change",
+        "subcategory": "Audit Filtering Platform Policy Change",
+        "event_type": "Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 1,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Filtering Platform Policy Change failure auditing where IPsec failure visibility is required.",
+          "Preserve param1 exactly with system, service and surrounding event context."
+        ],
+        "interpretation_note": "Treat this event as high-value availability and policy-enforcement failure telemetry. Determine operational and security impact from the rendered message and correlated service state."
+      },
+      "correlations": [
+        {
+          "target": "4710",
+          "key": "Computer + time",
+          "purpose": "check whether the serious failure coincided with IPsec disablement"
+        }
+      ],
+      "analysis": [
+        "Investigate the exact provider-rendered error with service health and relevant system logs.",
+        "Correlate preceding 4709-4711 events and policy deployment changes on the same computer."
+      ],
+      "fields": [
+        {
+          "key": "parameter-1",
+          "section": "Provider Message",
+          "native_name": "param1",
+          "type": "UnicodeString",
+          "meaning": "Opaque provider-rendered parameter; event-specific meaning is not inferred without authoritative documentation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4713",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4713",
+      "title": "Windows Security Event 4713 — Kerberos policy was changed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4713",
+      "aliases": [
+        "4713",
+        "Event ID 4713",
+        "Windows 4713",
+        "Kerberos policy was changed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4713",
+      "source_version": "event-4713-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4713",
+      "source_locator": "4713(S): Kerberos policy was changed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4710-4719",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4710-4719",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4713 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4713",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4713",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a Kerberos policy change on a domain controller and includes the provider-rendered policy-change payload plus subject identity.",
+        "category": "Policy Change",
+        "subcategory": "Audit Authentication Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 5,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Collect from domain controllers and monitor all unexpected Kerberos policy changes.",
+          "Preserve subject logon context and KerberosPolicyChange exactly as rendered."
+        ],
+        "interpretation_note": "Kerberos policy changes can alter domain authentication behavior, ticket lifetimes and enforcement. Unplanned changes require authorization and Group Policy review."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "SubjectLogonId + Computer",
+          "purpose": "resolve the administrative logon context"
+        }
+      ],
+      "analysis": [
+        "Compare the rendered policy change with approved domain policy and change records.",
+        "Resolve SubjectLogonId against authentication telemetry and identify the policy delivery path."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "kerberos-policy-change",
+          "section": "Kerberos Policy",
+          "native_name": "KerberosPolicyChange",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered Kerberos policy-change detail.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4714",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4714",
+      "title": "Windows Security Event 4714 — Encrypted data recovery policy was changed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4714",
+      "aliases": [
+        "4714",
+        "Event ID 4714",
+        "Windows 4714",
+        "Encrypted data recovery policy was changed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4714",
+      "source_version": "event-4714-v0-doc-plus-provider-shape",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4714",
+      "source_locator": "4714(S): Encrypted data recovery policy was changed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4710-4719",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4710-4719",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4714 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4714",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4714",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a change to the Encrypting File System Data Recovery Agent certificate or policy. Controlled provider evidence preserves the subject and EfsPolicyChange payload even though older documentation examples may show processing-error output.",
+        "category": "Policy Change",
+        "subcategory": "Audit Other Policy Change Events",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 5,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Other Policy Change Events success auditing where EFS recovery-policy changes require visibility.",
+          "Preserve EfsPolicyChange and the complete subject context."
+        ],
+        "interpretation_note": "An unauthorized Data Recovery Agent or policy change can affect recovery authority and access to encrypted data. Validate every unexpected change against Group Policy administration."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "SubjectLogonId + Computer",
+          "purpose": "resolve the initiating logon context"
+        }
+      ],
+      "analysis": [
+        "Compare the change with approved EFS Data Recovery Agent policy and certificate lifecycle records.",
+        "Correlate the subject with Group Policy processing and registry-policy changes on the computer."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "efs-policy-change",
+          "section": "EFS Recovery Policy",
+          "native_name": "EfsPolicyChange",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered Encrypting File System recovery-policy change detail.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4715",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4715",
+      "title": "Windows Security Event 4715 — The audit policy (SACL) on an object was changed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4715",
+      "aliases": [
+        "4715",
+        "Event ID 4715",
+        "Windows 4715",
+        "The audit policy (SACL) on an object was changed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4715",
+      "source_version": "event-4715-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4715",
+      "source_locator": "4715(S): The audit policy (SACL) on an object was changed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4710-4719",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4710-4719",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4715 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4715",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4715",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a change to the local audit-policy security descriptor, including the prior and new security descriptors.",
+        "category": "Policy Change",
+        "subcategory": "Audit Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Monitor this always-generated audit-policy change on high-value systems.",
+          "Preserve OldSd and NewSd so the security-descriptor delta remains reviewable."
+        ],
+        "interpretation_note": "An unplanned SACL policy-descriptor change can reduce or redirect audit coverage. Compare old and new descriptors and determine whether the change was authorized."
+      },
+      "correlations": [
+        {
+          "target": "4719",
+          "key": "SubjectLogonId + Computer + time",
+          "purpose": "associate security-descriptor and audit-subcategory changes"
+        }
+      ],
+      "analysis": [
+        "Diff OldSd and NewSd using an SDDL-aware parser rather than raw string heuristics alone.",
+        "Resolve the subject and correlate the change with policy-management activity."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "old-security-descriptor",
+          "section": "Audit Policy Security Descriptor",
+          "native_name": "OldSd",
+          "type": "UnicodeString",
+          "meaning": "Security descriptor before the audit-policy SACL change.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "new-security-descriptor",
+          "section": "Audit Policy Security Descriptor",
+          "native_name": "NewSd",
+          "type": "UnicodeString",
+          "meaning": "Security descriptor after the audit-policy SACL change.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4716",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4716",
+      "title": "Windows Security Event 4716 — Trusted domain information was modified",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4716",
+      "aliases": [
+        "4716",
+        "Event ID 4716",
+        "Windows 4716",
+        "Trusted domain information was modified"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4716",
+      "source_version": "event-4716-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4716",
+      "source_locator": "4716(S): Trusted domain information was modified",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4710-4719",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4710-4719",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4716 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4716",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4716",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records modification of Active Directory trusted-domain information, including domain identity and provider-native trust type, direction, attributes and SID-filtering state.",
+        "category": "Policy Change",
+        "subcategory": "Audit Authentication Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 10,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Collect from domain controllers and monitor every trusted-domain modification.",
+          "Preserve DomainName, DomainSid, TdoType, TdoDirection, TdoAttributes, SidFilteringEnabled and subject context."
+        ],
+        "interpretation_note": "Trust changes can alter cross-domain authentication paths and SID-filtering protections. Any unplanned modification is high impact."
+      },
+      "correlations": [
+        {
+          "target": "4706",
+          "key": "DomainSid + DomainName",
+          "purpose": "resolve trust creation history"
+        },
+        {
+          "target": "4707",
+          "key": "DomainSid + DomainName",
+          "purpose": "track trust removal"
+        }
+      ],
+      "analysis": [
+        "Validate trust direction, type, attributes and SID-filtering state against approved forest architecture.",
+        "Review the subject account and compare with trust creation/removal history."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "domain-name",
+          "section": "Provider Data",
+          "native_name": "DomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-native DomainName value for Event 4716; interpret with the event and version context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "domain-sid",
+          "section": "Provider Data",
+          "native_name": "DomainSid",
+          "type": "SID",
+          "meaning": "Provider-native DomainSid value for Event 4716; interpret with the event and version context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "tdo-type",
+          "section": "Provider Data",
+          "native_name": "TdoType",
+          "type": "UInt32",
+          "meaning": "Provider-native TdoType value for Event 4716; interpret with the event and version context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "tdo-direction",
+          "section": "Provider Data",
+          "native_name": "TdoDirection",
+          "type": "UInt32",
+          "meaning": "Provider-native TdoDirection value for Event 4716; interpret with the event and version context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "tdo-attributes",
+          "section": "Provider Data",
+          "native_name": "TdoAttributes",
+          "type": "UInt32",
+          "meaning": "Provider-native TdoAttributes value for Event 4716; interpret with the event and version context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sid-filtering-enabled",
+          "section": "Provider Data",
+          "native_name": "SidFilteringEnabled",
+          "type": "UnicodeString",
+          "meaning": "Provider-native SidFilteringEnabled value for Event 4716; interpret with the event and version context.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4717",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4717",
+      "title": "Windows Security Event 4717 — System security access was granted to an account",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4717",
+      "aliases": [
+        "4717",
+        "Event ID 4717",
+        "Windows 4717",
+        "System security access was granted to an account"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4717",
+      "source_version": "event-4717-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4717",
+      "source_locator": "4717(S): System security access was granted to an account",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4710-4719",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4710-4719",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4717 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4717",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4717",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records assignment of a local logon right to a security principal, one event per affected principal.",
+        "category": "Policy Change",
+        "subcategory": "Audit Authentication Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Authentication Policy Change success auditing where local logon-right changes require monitoring.",
+          "Preserve TargetSid, AccessGranted and subject context."
+        ],
+        "interpretation_note": "Granting interactive, remote, service, batch or network logon rights changes an account's access path. Unexpected grants can enable persistence or lateral movement."
+      },
+      "correlations": [
+        {
+          "target": "4718",
+          "key": "TargetSid + access right + Computer",
+          "purpose": "track later removal of the granted logon right"
+        }
+      ],
+      "analysis": [
+        "Prioritize high-value systems, restricted rights and unexpected target principals.",
+        "Microsoft notes this is commonly performed by SYSTEM; investigate a different subject unless clearly authorized."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "target-sid",
+          "section": "Provider Data",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Provider-native TargetSid value for Event 4717; interpret with the event and version context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "access-granted",
+          "section": "Logon Right",
+          "native_name": "AccessGranted",
+          "type": "UnicodeString",
+          "meaning": "Local logon right granted to the target principal.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4718",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4718",
+      "title": "Windows Security Event 4718 — System security access was removed from an account",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4718",
+      "aliases": [
+        "4718",
+        "Event ID 4718",
+        "Windows 4718",
+        "System security access was removed from an account"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4718",
+      "source_version": "event-4718-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4718",
+      "source_locator": "4718(S): System security access was removed from an account",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4710-4719",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4710-4719",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4718 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4718",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4718",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records removal of a local logon right from a security principal, one event per affected principal.",
+        "category": "Policy Change",
+        "subcategory": "Audit Authentication Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Authentication Policy Change success auditing where local logon-right changes require monitoring.",
+          "Preserve TargetSid, AccessRemoved and subject context."
+        ],
+        "interpretation_note": "Removal may be legitimate hardening, but an unexpected change can disrupt service operation or conceal prior unauthorized grants."
+      },
+      "correlations": [
+        {
+          "target": "4717",
+          "key": "TargetSid + access right + Computer",
+          "purpose": "identify the earlier grant of the removed logon right"
+        }
+      ],
+      "analysis": [
+        "Validate the removed right and target account against approved policy and service dependencies.",
+        "Microsoft notes this is commonly performed by SYSTEM; investigate an unusual subject and correlate with prior 4717 events."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "target-sid",
+          "section": "Provider Data",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Provider-native TargetSid value for Event 4718; interpret with the event and version context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "access-removed",
+          "section": "Logon Right",
+          "native_name": "AccessRemoved",
+          "type": "UnicodeString",
+          "meaning": "Local logon right removed from the target principal.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4719",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4719",
+      "title": "Windows Security Event 4719 — System audit policy was changed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4719",
+      "aliases": [
+        "4719",
+        "Event ID 4719",
+        "Windows 4719",
+        "System audit policy was changed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4719",
+      "source_version": "event-4719-v0-doc-plus-provider-v1",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4719",
+      "source_locator": "4719(S): System audit policy was changed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4710-4719",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4710-4719",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4719 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4719",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4719",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a local audit-policy subcategory change. Controlled provider evidence preserves Version 0 and Version 1; Version 1 adds ClientProcessId and ClientProcessStartKey.",
+        "category": "Policy Change",
+        "subcategory": "Audit Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 8,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 10,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Monitor every event because it is logged regardless of the Audit Policy Change subcategory setting.",
+          "Preserve category/subcategory identifiers, AuditPolicyChanges and exact event version; retain Version 1 client-process fields."
+        ],
+        "interpretation_note": "Audit-policy changes can add or remove success/failure collection and directly affect detection visibility. Every unplanned change on a high-value system requires investigation."
+      },
+      "correlations": [
+        {
+          "target": "4715",
+          "key": "SubjectLogonId + Computer + time",
+          "purpose": "associate audit-policy and policy-security-descriptor changes"
+        },
+        {
+          "target": "4688",
+          "key": "ClientProcessId + Computer + time",
+          "purpose": "resolve the Version 1 client process"
+        }
+      ],
+      "analysis": [
+        "Translate CategoryId, SubcategoryId and SubcategoryGuid using authoritative audit-policy mappings and inspect AuditPolicyChanges.",
+        "For Version 1, correlate ClientProcessId and ClientProcessStartKey with process telemetry."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0",
+            "1"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "category-id",
+          "section": "Audit Policy Change",
+          "native_name": "CategoryId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered audit category identifier.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subcategory-id",
+          "section": "Audit Policy Change",
+          "native_name": "SubcategoryId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered audit subcategory identifier.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subcategory-guid",
+          "section": "Audit Policy Change",
+          "native_name": "SubcategoryGuid",
+          "type": "GUID",
+          "meaning": "GUID of the audit-policy subcategory that changed.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "audit-policy-changes",
+          "section": "Audit Policy Change",
+          "native_name": "AuditPolicyChanges",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered success/failure audit-policy changes.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-id",
+          "section": "Client Process",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Client process identifier added by newer provider versions.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-start-key",
+          "section": "Client Process",
+          "native_name": "ClientProcessStartKey",
+          "type": "UInt64",
+          "meaning": "Stable process-start key added by newer provider versions for process correlation.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4740",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4740",

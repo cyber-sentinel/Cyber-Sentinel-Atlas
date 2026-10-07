@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "source",
+  "id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4710-4719",
+  "record_revision": 1,
+  "created_at": "2026-10-07T13:15:00Z",
+  "updated_at": "2026-10-07T13:15:00Z",
+  "curation_status": "validated",
+  "namespace": "atlas.source",
+  "canonical_key": "microsoft-windows-security-auditing-provider-26100-4710-4719",
+  "title": "Microsoft-Windows-Security-Auditing Security Provider Metadata — Windows Server 2025 build 26100 — bounded Event IDs 4710–4719 batch",
+  "publisher": "Microsoft",
+  "source_class": "tier-a-authoritative",
+  "canonical_urls": [
+    "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log"
+  ],
+  "official_status": "official",
+  "license": {
+    "status": "unknown"
+  },
+  "redistribution": {
+    "policy": "restricted",
+    "notes": "ATLAS stores independently authored normalized facts and source locators; substantial Microsoft documentation prose is not redistributed."
+  },
+  "freshness_policy": {
+    "expected_update_cadence": "documentation-maintained",
+    "stale_after_days": 180
+  },
+  "change_detection_policy": {
+    "strategy": "checksum",
+    "notes": "Bound to workflow 37624523330, artifact 11483148487, artifact digest sha256:291987d9ae9b9dc664c5f5eec89f7319329d9b37b9a00e2e5abfa23dd96b47c8, raw JSON sha256-555591bdecf81f19d6c015f4b16768f2de795077e73d930b591fe94b51508af8, and normalized inventory."
+  }
+}
