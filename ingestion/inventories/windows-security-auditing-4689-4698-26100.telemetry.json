@@ -1,0 +1,722 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-auditing-4689-4698-26100",
+  "inventory_kind": "telemetry",
+  "declared_scope": "Microsoft-Windows-Security-Auditing provider Event IDs 4689 through 4698 linked to Security on controlled Windows Server 2025 Datacenter build 26100",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4689-4698"
+  ],
+  "inventory_method": "provider-runtime-metadata",
+  "inventory_source_version": "windows-server-2025-build-26100-security-auditing-4689-4698",
+  "expected_identity_count": 10,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "channel": "Security",
+    "product": "Windows Server 2025 Datacenter",
+    "platform": "Windows",
+    "windows_build": "26100",
+    "architecture": "64-bit",
+    "workflow_run_id": 37602920128,
+    "artifact_id": 11473885860,
+    "artifact_digest": "sha256:532f141c53f9af4bbe5553c969444ee57322c7c98bbe0c04a391670c48e0ec83",
+    "raw_artifact_sha256": "sha256-42f992beda2ee6963d14ea2e475722a4a99324332c900a763167d6f9a55079b1",
+    "provider_event_version_definition_count": 12,
+    "provider_unique_event_id_count": 10,
+    "expected_identities": [
+      {
+        "event_id": "4689",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 7,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "Status",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4690",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 8,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "SourceHandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "SourceProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TargetHandleId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TargetProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4691",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 9,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ObjectType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AccessList",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AccessMask",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4692",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 8,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "MasterKeyId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RecoveryServer",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RecoveryKeyId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FailureReason",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4693",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 9,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "MasterKeyId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RecoveryReason",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "RecoveryServer",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RecoveryKeyId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FailureId",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4694",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 9,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "DataDescription",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MasterKeyId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ProtectedDataFlags",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "CryptoAlgorithms",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FailureReason",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4695",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 9,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "DataDescription",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MasterKeyId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ProtectedDataFlags",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "CryptoAlgorithms",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FailureReason",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4696",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 12,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TargetUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TargetLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TargetProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TargetProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ProcessId",
+                "in_type": "win:Pointer",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ProcessName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4697",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 9,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ServiceName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ServiceFileName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ServiceType",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "ServiceStartType",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "ServiceAccount",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 12,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "ServiceName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ServiceFileName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ServiceType",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "ServiceStartType",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "ServiceAccount",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ClientProcessStartKey",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "ClientProcessId",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "ParentProcessId",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4698",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 6,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TaskName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TaskContent",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 11,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "TaskName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TaskContent",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ClientProcessStartKey",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "ClientProcessId",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "ParentProcessId",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "RpcCallClientLocality",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FQDN",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "completeness_semantics": "bounded structural evidence for ten identities already inside the separately frozen 423-ID provider denominator; twelve version definitions are preserved and do not alter that denominator"
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-950e6723d9281c539ba515ac641be7ace7c8306e7f6a32ed53dd0eecfe0a8e3a"
+}
