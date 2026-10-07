@@ -38,7 +38,7 @@ jobs:
           mkdir -p /tmp/b11
           gh api /repos/${{ github.repository }}/actions/artifacts/11502400552/zip > /tmp/b11/evidence.zip
           unzip -q /tmp/b11/evidence.zip -d /tmp/b11/evidence
-          echo 'b890cc073d8b012ecf582986ada877eb79a34785f9c9c47f37e1a9afa9f32475  /tmp/b11/evidence/security-auditing-4743-4752.json' | sha256sum -c -
+          echo '79439457a025d2acfa7ef9672b6fc1c59e3a1ce596d610d10ec896df65d1c9d0  /tmp/b11/evidence/security-auditing-4743-4752.json' | sha256sum -c -
       - name: Apply bounded content mutation
         env:
           ATLAS_DISCOVERY_JSON: /tmp/b11/evidence/security-auditing-4743-4752.json
