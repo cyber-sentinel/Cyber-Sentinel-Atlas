@@ -1,0 +1,106 @@
+name: Temporary Batch 12 diff hygiene
+
+on:
+  push:
+    branches:
+      - content/windows-security-auditing-batch-12-4753-4762
+    paths:
+      - '.github/workflows/tmp-batch12-diff-hygiene.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  normalize-diff-without-semantic-change:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact branch head
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Restore main ordering while preserving Batch 12 semantics
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+
+          paths = {
+              'approved': Path('content/encyclopedia/approved-exemplars.json'),
+              'manifest': Path('content/encyclopedia/coverage-manifest.json'),
+              'snapshot': Path('content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json'),
+              'redistribution': Path('docs/releases/third-party-redistribution-inventory.json'),
+          }
+
+          def load_main(path):
+              raw = subprocess.check_output(['git','show',f'origin/main:{path.as_posix()}'], text=True)
+              return json.loads(raw)
+
+          def load_current(path):
+              return json.loads(path.read_text(encoding='utf-8'))
+
+          def write(path, obj):
+              path.write_text(json.dumps(obj, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          current = {k: load_current(p) for k,p in paths.items()}
+          ids = {str(x) for x in range(4753, 4763)}
+
+          m = load_main(paths['approved']); c = current['approved']
+          new = [x for x in c['events'] if str(x.get('native_event_id')) in ids and x.get('namespace') == 'microsoft.windows.security']
+          assert len(new) == 10
+          assert not any(str(x.get('native_event_id')) in ids and x.get('namespace') == 'microsoft.windows.security' for x in m['events'])
+          insert_at = next(i for i,x in enumerate(m['events']) if str(x.get('native_event_id')) == '4752' and x.get('namespace') == 'microsoft.windows.security') + 1
+          m['events'][insert_at:insert_at] = new
+          assert m == c, 'approved-exemplars semantic mismatch'
+          write(paths['approved'], m)
+
+          m = load_main(paths['manifest']); c = current['manifest']
+          mb = m['windows_security_log_review_benchmark']; cb = c['windows_security_log_review_benchmark']
+          for key in ('covered_event_ids','encyclopedia_grade_listed_id_count','remaining_listed_id_count','completion_ratio','completion_percent'):
+              mb[key] = cb[key]
+          mf = next(x for x in m['families'] if x['id'] == 'windows-security-auditing')
+          cf = next(x for x in c['families'] if x['id'] == 'windows-security-auditing')
+          for key in ('encyclopedia_grade_count','remaining_count'):
+              mf[key] = cf[key]
+          assert m == c, 'coverage-manifest semantic mismatch'
+          write(paths['manifest'], m)
+
+          m = load_main(paths['snapshot']); c = current['snapshot']
+          for key in ('encyclopedia_grade_count','remaining_count','completion_ratio','completion_percent'):
+              m[key] = c[key]
+          ce = {str(x['event_id']):x for x in c['events']}
+          for row in m['events']:
+              eid = str(row['event_id'])
+              if eid in ids:
+                  row.clear(); row.update(ce[eid])
+          assert m == c, 'coverage snapshot semantic mismatch'
+          write(paths['snapshot'], m)
+
+          m = load_main(paths['redistribution']); c = current['redistribution']
+          mr = next(x for x in m['entries'] if x['id'] == 'microsoft-windows-security-documentation')
+          cr = next(x for x in c['entries'] if x['id'] == 'microsoft-windows-security-documentation')
+          mr['review_evidence'] = cr['review_evidence']
+          assert m == c, 'redistribution inventory semantic mismatch'
+          write(paths['redistribution'], m)
+
+          print('semantic-equality=PASS ordering-restored=PASS')
+          PY
+
+      - name: Remove temporary hygiene workflow and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/tmp-batch12-diff-hygiene.yml
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          git config user.name 'Cyber-Sentinel CI'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          test -n "$(git diff --cached --name-only)"
+          git commit -m 'Chore: minimize Batch 12 JSON diff noise'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
