@@ -1,0 +1,53 @@
+name: Temporary docs sync after Batch 09 retry
+
+on:
+  push:
+    branches:
+      - docs/sync-coverage-after-batch-09
+
+permissions:
+  contents: write
+
+jobs:
+  sync-docs-retry:
+    if: contains(github.event.head_commit.message, 'Retry bounded docs sync after Batch 09')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Execute corrected bounded sync
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import textwrap
+          wf = Path('.github/workflows/tmp-docs-sync-after-batch-09.yml').read_text()
+          marker = "python - <<'PY'\n"
+          code = wf.split(marker,1)[1].split("\n          PY",1)[0]
+          code = textwrap.dedent(code)
+          old = "if '96/422' not in txt or ('90/423' not in txt and p!='README.md'):"
+          new = "if (p == 'README.md' and ('90 — ' not in txt or '| 333 |' not in txt)) or (p != 'README.md' and ('96/422' not in txt or '90/423' not in txt)):"
+          if old not in code:
+              raise SystemExit('expected validation clause not found')
+          code = code.replace(old,new,1)
+          exec(compile(code,'bounded-docs-sync','exec'), {'__name__':'__main__'})
+          PY
+          git diff --check
+      - name: Validate authoritative coverage and queue
+        run: |
+          python tools/content/validate_encyclopedia_coverage.py
+          python tools/content/build_windows_security_review_queue.py --batch-size 10 --batch-index 0 >/tmp/review-queue.json
+          grep -q '4731' /tmp/review-queue.json
+      - name: Commit exactly nine durable documentation files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Cyber-Sentinel CI"
+          git config user.email "actions@users.noreply.github.com"
+          git add README.md docs/README.md docs/current-status.md docs/product-surfaces.md docs/project-state.md docs/roadmap.md docs/windows-sysmon-coverage-plan.md ingestion/README.md ingestion/source-profiles/README.md
+          test "$(git diff --cached --name-only | wc -l)" -eq 9
+          git commit -m "Docs: synchronize coverage after PR #171"
+          git push origin HEAD:docs/sync-coverage-after-batch-09
