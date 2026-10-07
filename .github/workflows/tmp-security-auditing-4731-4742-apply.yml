@@ -1,0 +1,63 @@
+name: Temporary Security-Auditing 4731-4742 apply
+on:
+  push:
+    branches:
+      - content/windows-security-auditing-batch-10-4731-4742-run2
+permissions:
+  contents: write
+  actions: read
+jobs:
+  apply-validate-commit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check -r tools/requirements-validation.txt
+      - name: Download checksum-bound evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/b10
+          gh api /repos/${{ github.repository }}/actions/artifacts/11490748773/zip > /tmp/b10/evidence.zip
+          unzip -q /tmp/b10/evidence.zip -d /tmp/b10/evidence
+          echo '48f4aa4cbca60e5285fcc73b30e877786ee96a3a3ddaab0eba85a3dd3e765c3a  /tmp/b10/evidence/security-auditing-4731-4742.json' | sha256sum -c -
+      - name: Apply
+        env:
+          ATLAS_DISCOVERY_JSON: /tmp/b10/evidence/security-auditing-4731-4742.json
+        run: python tools/tmp_apply_security_auditing_4731_4742.py
+      - name: Validate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/content/validate_encyclopedia_coverage.py
+          python tools/content/build_encyclopedia_records.py --output /tmp/records.jsonl
+          python tools/ingestion/validate_ingestion_authorization.py
+          python -m compileall -q tools/content tests/phase51010 tools/tmp_apply_security_auditing_4731_4742.py
+          git diff --check
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          for p in [Path('tests/phase51010/test_windows_security_auditing_4731_4742.py'),Path('tests/phase51010/test_windows_security_auditing_4720_4730.py'),Path('tests/phase51010/test_windows_security_coverage_snapshot.py')]:
+              s=importlib.util.spec_from_file_location(p.stem,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+              for n,v in sorted(vars(m).items()):
+                  if n.startswith('test_') and callable(v): v(); print('PASS',p,n)
+          PY
+      - name: Commit durable outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          git config user.name 'Cyber-Sentinel CI'
+          git config user.email 'actions@users.noreply.github.com'
+          git add content/encyclopedia docs/windows-security-log-scope.md docs/releases/third-party-redistribution-inventory.json ingestion/inventories/windows-security-auditing-4731-4742-26100.telemetry.json tests/phase51010
+          test -n "$(git diff --cached --name-only)"
+          git commit -m 'Content: add Security-Auditing 4731-4742 coverage'
+          git push origin HEAD:content/windows-security-auditing-batch-10-4731-4742-run2
