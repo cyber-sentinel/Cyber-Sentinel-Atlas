@@ -17,27 +17,13 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - name: Execute corrected bounded sync
+      - name: Execute bounded docs sync helper
+        run: python tools/tmp_sync_docs_after_batch09.py
+      - name: Validate authoritative coverage and queue
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
-          from pathlib import Path
-          import textwrap
-          wf = Path('.github/workflows/tmp-docs-sync-after-batch-09.yml').read_text()
-          marker = "python - <<'PY'\n"
-          code = wf.split(marker,1)[1].split("\n          PY",1)[0]
-          code = textwrap.dedent(code)
-          old = "if '96/422' not in txt or ('90/423' not in txt and p!='README.md'):"
-          new = "if (p == 'README.md' and ('90 — ' not in txt or '| 333 |' not in txt)) or (p != 'README.md' and ('96/422' not in txt or '90/423' not in txt)):"
-          if old not in code:
-              raise SystemExit('expected validation clause not found')
-          code = code.replace(old,new,1)
-          exec(compile(code,'bounded-docs-sync','exec'), {'__name__':'__main__'})
-          PY
           git diff --check
-      - name: Validate authoritative coverage and queue
-        run: |
           python tools/content/validate_encyclopedia_coverage.py
           python tools/content/build_windows_security_review_queue.py --batch-size 10 --batch-index 0 >/tmp/review-queue.json
           grep -q '4731' /tmp/review-queue.json
