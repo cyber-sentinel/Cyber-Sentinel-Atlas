@@ -10842,6 +10842,1009 @@
       ]
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4664",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4664",
+      "title": "Windows Security Event 4664 — An attempt was made to create a hard link",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4664",
+      "aliases": [
+        "4664",
+        "Event ID 4664",
+        "Windows 4664",
+        "An attempt was made to create a hard link"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4664",
+      "source_version": "event-4664-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4664",
+      "source_locator": "4664(S): An attempt was made to create a hard link",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4664-4675",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4664-4675",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4664 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4664",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4664",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records successful creation of an NTFS hard link and identifies the subject, original file, new link and transaction context.",
+        "category": "Object Access",
+        "subcategory": "Audit File System",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 7,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit File System success auditing and configure an appropriate SACL where hard-link creation visibility is required.",
+          "Preserve FileName, LinkName, TransactionId and subject context."
+        ],
+        "interpretation_note": "Hard-link creation is uncommon in many environments and can be relevant to tampering, persistence or path-confusion investigations when unexpected."
+      },
+      "correlations": [
+        {
+          "target": "4660",
+          "key": "TransactionId + Computer + time",
+          "purpose": "correlate related transactional object activity where present"
+        }
+      ],
+      "analysis": [
+        "Review FileName and LinkName for sensitive targets and unusual paths.",
+        "Correlate TransactionId and subject logon context with adjacent object-access telemetry."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "file-name",
+          "section": "Link Information",
+          "native_name": "FileName",
+          "type": "UnicodeString",
+          "meaning": "Existing file or directory referenced by the new hard link.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "link-name",
+          "section": "Link Information",
+          "native_name": "LinkName",
+          "type": "UnicodeString",
+          "meaning": "Path/name of the newly created hard link.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "transaction-id",
+          "section": "Object",
+          "native_name": "TransactionId",
+          "type": "GUID",
+          "meaning": "Transaction GUID used to correlate related transactional object operations.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4665",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4665",
+      "title": "Windows Security Event 4665 — An attempt was made to create an application client context",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4665",
+      "aliases": [
+        "4665",
+        "Event ID 4665",
+        "Windows 4665",
+        "An attempt was made to create an application client context"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4665",
+      "source_version": "advanced-audit-policy-current-doc",
+      "source_url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/advanced-audit-policy-configuration",
+      "source_locator": "4665(S,F): An attempt was made to create an application client context",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4664-4675",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4664-4675",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4665 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4665",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4665",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Application-generated audit telemetry for creation of a Windows auditing API client context.",
+        "category": "Object Access",
+        "subcategory": "Audit Application Generated",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Application Generated when applications using Windows auditing APIs require monitoring.",
+          "Preserve application, client identity, client logon identifier and status."
+        ],
+        "interpretation_note": "Security relevance depends on the application emitting the audit event and whether the client context is expected."
+      },
+      "correlations": [
+        {
+          "target": "4666",
+          "key": "AppInstance + ClientLogonId + time",
+          "purpose": "associate client-context creation with application operations"
+        }
+      ],
+      "analysis": [
+        "Baseline AppName and ClientName values for applications that use Windows auditing APIs.",
+        "Investigate unexpected client domains, logon identifiers or failure status values."
+      ],
+      "fields": [
+        {
+          "key": "application-name",
+          "section": "Application",
+          "native_name": "AppName",
+          "type": "UnicodeString",
+          "meaning": "Application name supplied to the Windows auditing API.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "application-instance",
+          "section": "Application",
+          "native_name": "AppInstance",
+          "type": "UInt64",
+          "meaning": "Application instance identifier used to correlate application-generated audit events.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-name",
+          "section": "Client",
+          "native_name": "ClientName",
+          "type": "UnicodeString",
+          "meaning": "Client identity/name supplied by the application-generated audit event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-domain",
+          "section": "Client",
+          "native_name": "ClientDomain",
+          "type": "UnicodeString",
+          "meaning": "Client domain supplied by the application-generated audit event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-logon-id",
+          "section": "Client",
+          "native_name": "ClientLogonId",
+          "type": "UInt64",
+          "meaning": "Client logon identifier for correlation with authentication context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "status",
+          "section": "Result",
+          "native_name": "Status",
+          "type": "UInt32",
+          "meaning": "Provider-native status value for application client-context creation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4666",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4666",
+      "title": "Windows Security Event 4666 — An application attempted an operation",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4666",
+      "aliases": [
+        "4666",
+        "Event ID 4666",
+        "Windows 4666",
+        "An application attempted an operation"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4666",
+      "source_version": "advanced-audit-policy-current-doc",
+      "source_url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/advanced-audit-policy-configuration",
+      "source_locator": "4666(S,F): An application attempted an operation",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4664-4675",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4664-4675",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4666 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4666",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4666",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Application-generated audit telemetry describing an application operation against a named object or scope.",
+        "category": "Object Access",
+        "subcategory": "Audit Application Generated",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 11,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Application Generated for monitored applications using Windows auditing APIs.",
+          "Preserve application/client identity, object/scope, role/group and operation identifiers."
+        ],
+        "interpretation_note": "Meaning is application-defined; analyze only with the emitting application's expected authorization model and operation vocabulary."
+      },
+      "correlations": [
+        {
+          "target": "4665",
+          "key": "AppInstance + ClientLogonId + time",
+          "purpose": "associate operation with application client-context creation"
+        },
+        {
+          "target": "4667",
+          "key": "AppInstance + ClientLogonId + time",
+          "purpose": "track client-context lifecycle"
+        }
+      ],
+      "analysis": [
+        "Use AppName, ObjectName, ScopeName and OperationName together to identify the audited action.",
+        "Investigate unexpected Role/Group combinations or operations from unusual client identities."
+      ],
+      "fields": [
+        {
+          "key": "application-name",
+          "section": "Application",
+          "native_name": "AppName",
+          "type": "UnicodeString",
+          "meaning": "Application name supplied to the Windows auditing API.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "application-instance",
+          "section": "Application",
+          "native_name": "AppInstance",
+          "type": "UInt64",
+          "meaning": "Application instance identifier used to correlate application-generated audit events.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-name",
+          "section": "Object",
+          "native_name": "ObjectName",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported name or identifying path of the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "scope-name",
+          "section": "Application Operation",
+          "native_name": "ScopeName",
+          "type": "UnicodeString",
+          "meaning": "Application-defined authorization scope.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-name",
+          "section": "Client",
+          "native_name": "ClientName",
+          "type": "UnicodeString",
+          "meaning": "Client identity/name supplied by the application-generated audit event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-domain",
+          "section": "Client",
+          "native_name": "ClientDomain",
+          "type": "UnicodeString",
+          "meaning": "Client domain supplied by the application-generated audit event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-logon-id",
+          "section": "Client",
+          "native_name": "ClientLogonId",
+          "type": "UInt64",
+          "meaning": "Client logon identifier for correlation with authentication context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "Application Operation",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Application-defined role associated with the operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "group",
+          "section": "Application Operation",
+          "native_name": "Group",
+          "type": "UnicodeString",
+          "meaning": "Application-defined group associated with the operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "operation-name",
+          "section": "Application Operation",
+          "native_name": "OperationName",
+          "type": "UnicodeString",
+          "meaning": "Application-defined operation name.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "operation-id",
+          "section": "Application Operation",
+          "native_name": "OperationId",
+          "type": "UInt32",
+          "meaning": "Application-defined numeric operation identifier.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4667",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4667",
+      "title": "Windows Security Event 4667 — An application client context was deleted",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4667",
+      "aliases": [
+        "4667",
+        "Event ID 4667",
+        "Windows 4667",
+        "An application client context was deleted"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4667",
+      "source_version": "advanced-audit-policy-current-doc",
+      "source_url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/advanced-audit-policy-configuration",
+      "source_locator": "4667(S,F): An application client context was deleted",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4664-4675",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4664-4675",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4667 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4667",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4667",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Application-generated audit telemetry for deletion of a Windows auditing API client context.",
+        "category": "Object Access",
+        "subcategory": "Audit Application Generated",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 5,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Application Generated for monitored applications using Windows auditing APIs.",
+          "Preserve application instance and client identity/logon context."
+        ],
+        "interpretation_note": "Primarily lifecycle telemetry; value increases when paired with context creation and operations from the same application instance."
+      },
+      "correlations": [
+        {
+          "target": "4665",
+          "key": "AppInstance + ClientLogonId + time",
+          "purpose": "pair client-context deletion with creation"
+        }
+      ],
+      "analysis": [
+        "Correlate AppInstance and ClientLogonId with preceding 4665/4666 events.",
+        "Review abnormal context churn or deletion following failed/unusual operations."
+      ],
+      "fields": [
+        {
+          "key": "application-name",
+          "section": "Application",
+          "native_name": "AppName",
+          "type": "UnicodeString",
+          "meaning": "Application name supplied to the Windows auditing API.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "application-instance",
+          "section": "Application",
+          "native_name": "AppInstance",
+          "type": "UInt64",
+          "meaning": "Application instance identifier used to correlate application-generated audit events.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-name",
+          "section": "Client",
+          "native_name": "ClientName",
+          "type": "UnicodeString",
+          "meaning": "Client identity/name supplied by the application-generated audit event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-domain",
+          "section": "Client",
+          "native_name": "ClientDomain",
+          "type": "UnicodeString",
+          "meaning": "Client domain supplied by the application-generated audit event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-logon-id",
+          "section": "Client",
+          "native_name": "ClientLogonId",
+          "type": "UInt64",
+          "meaning": "Client logon identifier for correlation with authentication context.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4668",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4668",
+      "title": "Windows Security Event 4668 — An application was initialized",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4668",
+      "aliases": [
+        "4668",
+        "Event ID 4668",
+        "Windows 4668",
+        "An application was initialized"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4668",
+      "source_version": "advanced-audit-policy-current-doc",
+      "source_url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/advanced-audit-policy-configuration",
+      "source_locator": "4668(S,F): An application was initialized",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4664-4675",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4664-4675",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4668 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4668",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4668",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Application-generated audit telemetry indicating initialization of an application using Windows auditing APIs.",
+        "category": "Object Access",
+        "subcategory": "Audit Application Generated",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 6,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Application Generated where application initialization should be monitored.",
+          "Preserve application instance, client identity/logon context and StoreUrl."
+        ],
+        "interpretation_note": "Interpret with application-specific expectations; unexpected applications or stores can warrant review."
+      },
+      "correlations": [
+        {
+          "target": "4665",
+          "key": "AppInstance + time",
+          "purpose": "associate application initialization with later client-context creation"
+        }
+      ],
+      "analysis": [
+        "Baseline AppName and StoreUrl combinations.",
+        "Correlate AppInstance with subsequent client-context and operation events."
+      ],
+      "fields": [
+        {
+          "key": "application-name",
+          "section": "Application",
+          "native_name": "AppName",
+          "type": "UnicodeString",
+          "meaning": "Application name supplied to the Windows auditing API.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "application-instance",
+          "section": "Application",
+          "native_name": "AppInstance",
+          "type": "UInt64",
+          "meaning": "Application instance identifier used to correlate application-generated audit events.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-name",
+          "section": "Client",
+          "native_name": "ClientName",
+          "type": "UnicodeString",
+          "meaning": "Client identity/name supplied by the application-generated audit event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-domain",
+          "section": "Client",
+          "native_name": "ClientDomain",
+          "type": "UnicodeString",
+          "meaning": "Client domain supplied by the application-generated audit event.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-logon-id",
+          "section": "Client",
+          "native_name": "ClientLogonId",
+          "type": "UInt64",
+          "meaning": "Client logon identifier for correlation with authentication context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "store-url",
+          "section": "Application",
+          "native_name": "StoreUrl",
+          "type": "UnicodeString",
+          "meaning": "Application audit-policy store URL or locator.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4670",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4670",
+      "title": "Windows Security Event 4670 — Permissions on an object were changed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4670",
+      "aliases": [
+        "4670",
+        "Event ID 4670",
+        "Windows 4670",
+        "Permissions on an object were changed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4670",
+      "source_version": "event-4670-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4670",
+      "source_locator": "4670(S): Permissions on an object were changed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4664-4675",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4664-4675",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4670 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4670",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4670",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a permissions change on an audited object and exposes old and new security descriptors plus subject and process context.",
+        "category": "Object Access",
+        "subcategory": "Audit File System / Registry / Authentication Policy Change / Authorization Policy Change",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 12,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the relevant audit subcategory and configure SACL coverage for permission-changing access where required.",
+          "Preserve ObjectType/ObjectName, OldSd/NewSd, HandleId and process context."
+        ],
+        "interpretation_note": "Unexpected ACL or ownership changes on sensitive objects are high-value investigation signals."
+      },
+      "correlations": [
+        {
+          "target": "4656",
+          "key": "HandleId + Computer + time",
+          "purpose": "recover preceding handle-request context"
+        },
+        {
+          "target": "4688",
+          "key": "ProcessId + Computer + time",
+          "purpose": "resolve the process responsible for the permission change"
+        }
+      ],
+      "analysis": [
+        "Diff OldSd and NewSd to identify added/removed ACEs or ownership changes.",
+        "Correlate ProcessId with process creation telemetry and HandleId with earlier object access."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "object-server",
+          "section": "Object",
+          "native_name": "ObjectServer",
+          "type": "UnicodeString",
+          "meaning": "Security subsystem or service responsible for the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-type",
+          "section": "Object",
+          "native_name": "ObjectType",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported type or class of the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-name",
+          "section": "Object",
+          "native_name": "ObjectName",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported name or identifying path of the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "handle-id",
+          "section": "Object",
+          "native_name": "HandleId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Object handle identifier used to correlate related access events.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "old-security-descriptor",
+          "section": "Permission Change",
+          "native_name": "OldSd",
+          "type": "UnicodeString",
+          "meaning": "Security descriptor before the permissions change.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "new-security-descriptor",
+          "section": "Permission Change",
+          "native_name": "NewSd",
+          "type": "UnicodeString",
+          "meaning": "Security descriptor after the permissions change.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name or path associated with the audited activity.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4671",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4671",
+      "title": "Windows Security Event 4671 — An application attempted to access a blocked ordinal through the TBS",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4671",
+      "aliases": [
+        "4671",
+        "Event ID 4671",
+        "Windows 4671",
+        "An application attempted to access a blocked ordinal through the TBS"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4671",
+      "source_version": "event-4671-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4671",
+      "source_locator": "4671(-): An application attempted to access a blocked ordinal through the TBS",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4664-4675",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4664-4675",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4671 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4671",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4671",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft defines this TPM Base Services blocked-ordinal event but documents that current Windows does not invoke it.",
+        "category": "Object Access",
+        "subcategory": "Audit Other Object Access Events",
+        "event_type": "Defined / not generated",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 5,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Treat this as a defined provider identity rather than expected operational telemetry.",
+          "Preserve caller identity and Ordinal if observed in controlled evidence or future platform behavior."
+        ],
+        "interpretation_note": "Absence is expected according to Microsoft documentation; unexpected presence should trigger platform/source verification before semantic conclusions."
+      },
+      "correlations": [],
+      "analysis": [
+        "If observed, verify OS build/provider provenance first.",
+        "Review Ordinal and caller identity only after confirming the event is genuinely emitted by the expected provider."
+      ],
+      "fields": [
+        {
+          "key": "caller-user-sid",
+          "section": "Caller",
+          "native_name": "CallerUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the calling account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "caller-user-name",
+          "section": "Caller",
+          "native_name": "CallerUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the calling account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "caller-domain-name",
+          "section": "Caller",
+          "native_name": "CallerDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain associated with the calling account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "caller-logon-id",
+          "section": "Caller",
+          "native_name": "CallerLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon identifier of the calling account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "ordinal",
+          "section": "TBS",
+          "native_name": "Ordinal",
+          "type": "UInt32",
+          "meaning": "TPM Base Services ordinal requested by the application.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4672",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4672",
@@ -11016,6 +12019,514 @@
           "type": "UnicodeString/list",
           "meaning": "List of sensitive Windows privilege names assigned to the new logon session.",
           "values_ref": "sensitive_privilege"
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4673",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4673",
+      "title": "Windows Security Event 4673 — A privileged service was called",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4673",
+      "aliases": [
+        "4673",
+        "Event ID 4673",
+        "Windows 4673",
+        "A privileged service was called"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4673",
+      "source_version": "event-4673-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4673",
+      "source_locator": "4673(S,F): A privileged service was called",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4664-4675",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4664-4675",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4673 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4673",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4673",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records an attempt to perform privileged system service operations and identifies the subject, service, privilege list and process.",
+        "category": "Privilege Use",
+        "subcategory": "Audit Sensitive Privilege Use / Audit Non Sensitive Privilege Use",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 9,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the relevant Privilege Use audit subcategory.",
+          "Preserve Service, PrivilegeList, subject and process context."
+        ],
+        "interpretation_note": "Unexpected use of sensitive privileges or unusual services/processes is security-relevant; failures can indicate blocked or attempted privileged activity."
+      },
+      "correlations": [
+        {
+          "target": "4624",
+          "key": "SubjectLogonId + Computer",
+          "purpose": "resolve privileged subject logon context"
+        },
+        {
+          "target": "4688",
+          "key": "ProcessId + Computer + time",
+          "purpose": "resolve privileged-calling process"
+        }
+      ],
+      "analysis": [
+        "Prioritize rare privileges such as SeTcbPrivilege or SeDebugPrivilege when inconsistent with the account role.",
+        "Correlate ProcessId with process creation and SubjectLogonId with logon telemetry."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "object-server",
+          "section": "Object",
+          "native_name": "ObjectServer",
+          "type": "UnicodeString",
+          "meaning": "Security subsystem or service responsible for the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "service",
+          "section": "Privilege Use",
+          "native_name": "Service",
+          "type": "UnicodeString",
+          "meaning": "Privileged system service/function invoked.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Access Request Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Privileges associated with the audited access request.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name or path associated with the audited activity.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4674",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4674",
+      "title": "Windows Security Event 4674 — An operation was attempted on a privileged object",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4674",
+      "aliases": [
+        "4674",
+        "Event ID 4674",
+        "Windows 4674",
+        "An operation was attempted on a privileged object"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4674",
+      "source_version": "event-4674-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4674",
+      "source_locator": "4674(S,F): An operation was attempted on a privileged object",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4664-4675",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4664-4675",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4674 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4674",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4674",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a privileged operation attempted on a protected subsystem object after the object is opened.",
+        "category": "Privilege Use",
+        "subcategory": "Audit Sensitive Privilege Use / Audit Non Sensitive Privilege Use",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 12,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the relevant Privilege Use audit subcategory.",
+          "Preserve ObjectServer/ObjectType/ObjectName, HandleId, AccessMask, PrivilegeList and process context."
+        ],
+        "interpretation_note": "Unexpected privilege use against protected subsystem objects can indicate administration, security-control manipulation or malicious privilege abuse."
+      },
+      "correlations": [
+        {
+          "target": "4673",
+          "key": "SubjectLogonId + ProcessId + time",
+          "purpose": "compare privileged object operations with privileged service calls"
+        },
+        {
+          "target": "4688",
+          "key": "ProcessId + Computer + time",
+          "purpose": "resolve process context"
+        }
+      ],
+      "analysis": [
+        "Review PrivilegeList together with ObjectType/ObjectName and AccessMask.",
+        "Correlate ProcessId and subject logon context with surrounding execution/authentication telemetry."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer name associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Logon-session identifier of the subject for authentication correlation.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with authentication/logon telemetry on the same computer; Logon IDs are boot-session scoped."
+        },
+        {
+          "key": "object-server",
+          "section": "Object",
+          "native_name": "ObjectServer",
+          "type": "UnicodeString",
+          "meaning": "Security subsystem or service responsible for the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-type",
+          "section": "Object",
+          "native_name": "ObjectType",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported type or class of the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-name",
+          "section": "Object",
+          "native_name": "ObjectName",
+          "type": "UnicodeString",
+          "meaning": "Provider-reported name or identifying path of the audited object.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "handle-id",
+          "section": "Object",
+          "native_name": "HandleId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Object handle identifier used to correlate related access events.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "access-mask",
+          "section": "Access Request Information",
+          "native_name": "AccessMask",
+          "type": "UnicodeString",
+          "meaning": "Bit mask representing requested or exercised access rights.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Access Request Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Privileges associated with the audited access request.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Process Information",
+          "native_name": "ProcessId",
+          "type": "Pointer/HexInt64",
+          "meaning": "Process identifier associated with the audited activity.",
+          "versions": [
+            "0"
+          ],
+          "correlation": "Correlate with process creation telemetry using PID plus event time because PIDs are reusable."
+        },
+        {
+          "key": "process-name",
+          "section": "Process Information",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Process image name or path associated with the audited activity.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4675",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4675",
+      "title": "Windows Security Event 4675 — SIDs were filtered",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4675",
+      "aliases": [
+        "4675",
+        "Event ID 4675",
+        "Windows 4675",
+        "SIDs were filtered"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4675",
+      "source_version": "event-4675-v0-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4675",
+      "source_locator": "4675(S): SIDs were filtered",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4664-4675",
+        "source_version": "windows-server-2025-build-26100-security-auditing-4664-4675",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4675 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4675",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4675",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records SID filtering for an Active Directory trust and identifies the target account, trust direction/type/attributes, TDO SID and filtered SID list.",
+        "category": "Logon/Logoff",
+        "subcategory": "Audit Logon",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 8,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Collect on Active Directory domain controllers where trust/SID-filtering visibility is required.",
+          "Preserve trust metadata and SidList."
+        ],
+        "interpretation_note": "Use this event to understand SID filtering across trust boundaries; unexpected filtered SIDs or trust changes warrant directory/trust investigation."
+      },
+      "correlations": [
+        {
+          "target": "4716",
+          "key": "trust identity + time",
+          "purpose": "correlate SID filtering with trusted-domain information changes"
+        }
+      ],
+      "analysis": [
+        "Review TdoDirection, TdoType and TdoAttributes against expected trust configuration.",
+        "Inspect SidList for unexpected principals and correlate with trust-change events."
+      ],
+      "fields": [
+        {
+          "key": "target-user-sid",
+          "section": "Target Account",
+          "native_name": "TargetUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the target account/trust context.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Target account name.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Target account domain.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "trust-direction",
+          "section": "Trust Information",
+          "native_name": "TdoDirection",
+          "type": "UInt32",
+          "meaning": "Trusted-domain-object direction value.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "trust-attributes",
+          "section": "Trust Information",
+          "native_name": "TdoAttributes",
+          "type": "UInt32",
+          "meaning": "Trusted-domain-object attributes.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "trust-type",
+          "section": "Trust Information",
+          "native_name": "TdoType",
+          "type": "UInt32",
+          "meaning": "Trusted-domain-object type.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "tdo-domain-sid",
+          "section": "Trust Information",
+          "native_name": "TdoSid",
+          "type": "SID",
+          "meaning": "SID of the trusted-domain object/domain.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "filtered-sids",
+          "section": "Trust Information",
+          "native_name": "SidList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered list of SIDs filtered by the trust boundary.",
+          "versions": [
+            "0"
+          ]
         }
       ]
     },

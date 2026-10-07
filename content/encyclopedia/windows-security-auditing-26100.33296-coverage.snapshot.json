@@ -1,11 +1,11 @@
 {
   "channel": "Security",
-  "completion_percent": 9.46,
-  "completion_ratio": "40/423",
+  "completion_percent": 11.82,
+  "completion_ratio": "50/423",
   "coverage_contract_version": "1.0.0",
   "denominator_count": 423,
   "denominator_kind": "controlled-provider-manifest-unique-event-id",
-  "encyclopedia_grade_count": 40,
+  "encyclopedia_grade_count": 50,
   "events": [
     {
       "canonical_id": "atlas:event:microsoft.windows.security:4608",
@@ -213,44 +213,44 @@
     },
     {
       "canonical_id": "atlas:event:microsoft.windows.security:4664",
-      "counts_toward_release_coverage": false,
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": true,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
       "event_id": "4664"
     },
     {
       "canonical_id": "atlas:event:microsoft.windows.security:4665",
-      "counts_toward_release_coverage": false,
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": true,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
       "event_id": "4665"
     },
     {
       "canonical_id": "atlas:event:microsoft.windows.security:4666",
-      "counts_toward_release_coverage": false,
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": true,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
       "event_id": "4666"
     },
     {
       "canonical_id": "atlas:event:microsoft.windows.security:4667",
-      "counts_toward_release_coverage": false,
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": true,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
       "event_id": "4667"
     },
     {
       "canonical_id": "atlas:event:microsoft.windows.security:4668",
-      "counts_toward_release_coverage": false,
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": true,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
       "event_id": "4668"
     },
     {
       "canonical_id": "atlas:event:microsoft.windows.security:4670",
-      "counts_toward_release_coverage": false,
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": true,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
       "event_id": "4670"
     },
     {
       "canonical_id": "atlas:event:microsoft.windows.security:4671",
-      "counts_toward_release_coverage": false,
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": true,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
       "event_id": "4671"
     },
     {
@@ -261,20 +261,20 @@
     },
     {
       "canonical_id": "atlas:event:microsoft.windows.security:4673",
-      "counts_toward_release_coverage": false,
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": true,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
       "event_id": "4673"
     },
     {
       "canonical_id": "atlas:event:microsoft.windows.security:4674",
-      "counts_toward_release_coverage": false,
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": true,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
       "event_id": "4674"
     },
     {
       "canonical_id": "atlas:event:microsoft.windows.security:4675",
-      "counts_toward_release_coverage": false,
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
+      "counts_toward_release_coverage": true,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
       "event_id": "4675"
     },
     {
@@ -2562,5 +2562,5 @@
     "windows_version": "24H2"
   },
   "release_numerator_rule": "Only ENCYCLOPEDIA_GRADE maintainer-approved records count.",
-  "remaining_count": 383
+  "remaining_count": 373
 }
