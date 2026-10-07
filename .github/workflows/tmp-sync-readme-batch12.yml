@@ -45,8 +45,7 @@ jobs:
           old = 'The cross-provider Windows Security Log **Ultimate Windows Security (UWS) review benchmark** is currently **116/422** listed Event IDs (**27.49%**), with **306** remaining.'
           new = 'The cross-provider Windows Security Log **Ultimate Windows Security (UWS) review benchmark** is currently **126/422** listed Event IDs (**29.86%**), with **296** remaining.'
           assert text.count(old) == 1
-          text = text.replace(old, new)
-          root.write_text(text, encoding='utf-8')
+          root.write_text(text.replace(old, new), encoding='utf-8')
 
           ing = Path('ingestion/README.md')
           t = ing.read_text(encoding='utf-8')
@@ -55,7 +54,7 @@ jobs:
           assert t.count(old) == 1
           ing.write_text(t.replace(old, new), encoding='utf-8')
 
-          assert '**120/423**' in root.read_text(encoding='utf-8') or '| 120 —' in root.read_text(encoding='utf-8')
+          assert '| 120 —' in root.read_text(encoding='utf-8')
           assert '**126/422**' in root.read_text(encoding='utf-8')
           assert '**120/423**' in ing.read_text(encoding='utf-8')
           assert '**126/422**' in ing.read_text(encoding='utf-8')
@@ -71,8 +70,9 @@ jobs:
           git config user.email 'actions@users.noreply.github.com'
           git add README.md ingestion/README.md
           git diff --cached --check
-          test "$(git diff --cached --name-only | wc -l)" -eq 2
+          test "$(git diff --cached --name-only | wc -l)" -eq 3
           git diff --cached --name-only | grep -Fx README.md
           git diff --cached --name-only | grep -Fx ingestion/README.md
+          git diff --cached --name-only | grep -Fx .github/workflows/tmp-sync-readme-batch12.yml
           git commit -m 'Docs: synchronize README coverage after Batch 12'
           git push origin "HEAD:${GITHUB_REF_NAME}"
