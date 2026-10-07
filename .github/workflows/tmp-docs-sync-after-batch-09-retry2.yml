@@ -29,33 +29,29 @@ jobs:
           code = wf.split(marker,1)[1].split("\n          PY",1)[0]
           code = textwrap.dedent(code)
           prefix = code.split('# fail-closed scope and stale-current checks',1)[0]
-          validation = r'''
-# fail-closed scope and file-specific current-state checks
-allowed={
-  'README.md','docs/README.md','docs/current-status.md','docs/product-surfaces.md','docs/project-state.md','docs/roadmap.md','docs/windows-sysmon-coverage-plan.md','ingestion/README.md','ingestion/source-profiles/README.md'
-}
-import subprocess
-changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
-if changed != allowed:
-    raise SystemExit(f'unexpected durable scope: {sorted(changed)}')
-checks = {
-  'README.md': ('90 — ', '| 333 |'),
-  'docs/README.md': ('96/422','90/423','333'),
-  'docs/current-status.md': ('PR #171','96/422','90/423','ae2a18bb91315efcb5537877480757a0c7f01ebd'),
-  'docs/product-surfaces.md': ('90/423','333'),
-  'docs/project-state.md': ('PR #171','96/422','90/423','ae2a18bb91315efcb5537877480757a0c7f01ebd'),
-  'docs/roadmap.md': ('96/422','90/423','333'),
-  'docs/windows-sysmon-coverage-plan.md': ('96/422','90 — ','333'),
-  'ingestion/README.md': ('96/422','90/423'),
-  'ingestion/source-profiles/README.md': ('96/422','90/423'),
-}
-for p, needles in checks.items():
-    txt=load(p)
-    missing=[n for n in needles if n not in txt]
-    if missing:
-        raise SystemExit(f'new coverage projection missing in {p}: {missing}')
-print(f'coverage={uws_ratio} security_auditing={sa_ratio} files={len(changed)}')
-'''
+          validation = "\n".join([
+              "# fail-closed scope and file-specific current-state checks",
+              "allowed={'README.md','docs/README.md','docs/current-status.md','docs/product-surfaces.md','docs/project-state.md','docs/roadmap.md','docs/windows-sysmon-coverage-plan.md','ingestion/README.md','ingestion/source-profiles/README.md'}",
+              "import subprocess",
+              "changed=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())",
+              "if changed != allowed: raise SystemExit(f'unexpected durable scope: {sorted(changed)}')",
+              "checks={",
+              " 'README.md': ('90 — ', '| 333 |'),",
+              " 'docs/README.md': ('96/422','90/423','333'),",
+              " 'docs/current-status.md': ('PR #171','96/422','90/423','ae2a18bb91315efcb5537877480757a0c7f01ebd'),",
+              " 'docs/product-surfaces.md': ('90/423','333'),",
+              " 'docs/project-state.md': ('PR #171','96/422','90/423','ae2a18bb91315efcb5537877480757a0c7f01ebd'),",
+              " 'docs/roadmap.md': ('96/422','90/423','333'),",
+              " 'docs/windows-sysmon-coverage-plan.md': ('96/422','90 — ','333'),",
+              " 'ingestion/README.md': ('96/422','90/423'),",
+              " 'ingestion/source-profiles/README.md': ('96/422','90/423'),",
+              "}",
+              "for p, needles in checks.items():",
+              " txt=load(p)",
+              " missing=[n for n in needles if n not in txt]",
+              " if missing: raise SystemExit(f'new coverage projection missing in {p}: {missing}')",
+              "print(f'coverage={uws_ratio} security_auditing={sa_ratio} files={len(changed)}')",
+          ])
           exec(compile(prefix + validation,'bounded-docs-sync','exec'), {'__name__':'__main__'})
           PY
           git diff --check
