@@ -1,0 +1,767 @@
+{
+  "declared_scope": "Microsoft-Windows-Security-Auditing Event IDs 4753-4762 / Security / Windows Server 2025 build 26100",
+  "digest": "sha256-5ec1f0f51fddea9abf44a800c7d7a6922a62105b0fe102e7740cf2103e41ef42",
+  "expected_identity_count": 10,
+  "guardrails": {
+    "max_unexplained_growth_percent": 0,
+    "max_unexplained_shrink_percent": 0
+  },
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-auditing-4753-4762-26100",
+  "inventory_kind": "telemetry",
+  "inventory_method": "provider-runtime-metadata",
+  "inventory_source_version": "windows-server-2025-build-26100-security-auditing-4753-4762",
+  "scope_metadata": {
+    "architecture": "64-bit",
+    "artifact_digest": "sha256:5033778ccdf7a966a8fc16121f2bcdcd7d9652baf85bff51341b86c2940f7882",
+    "artifact_id": 11508793624,
+    "channel": "Security",
+    "completeness_semantics": "bounded structural evidence for ten identities inside the frozen 423-ID denominator; twelve version definitions preserved",
+    "expected_identities": [
+      {
+        "event_id": "4753",
+        "versions": [
+          {
+            "field_count": 8,
+            "fields": [
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "TargetSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "SubjectUserSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:HexInt64",
+                "name": "SubjectLogonId",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "PrivilegeList",
+                "out_type": "xs:string"
+              }
+            ],
+            "level": "win:Informational",
+            "version": 0
+          }
+        ]
+      },
+      {
+        "event_id": "4754",
+        "versions": [
+          {
+            "field_count": 10,
+            "fields": [
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "TargetSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "SubjectUserSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:HexInt64",
+                "name": "SubjectLogonId",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "PrivilegeList",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SamAccountName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SidHistory",
+                "out_type": "xs:string"
+              }
+            ],
+            "level": "win:Informational",
+            "version": 0
+          }
+        ]
+      },
+      {
+        "event_id": "4755",
+        "versions": [
+          {
+            "field_count": 10,
+            "fields": [
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "TargetSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "SubjectUserSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:HexInt64",
+                "name": "SubjectLogonId",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "PrivilegeList",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SamAccountName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SidHistory",
+                "out_type": "xs:string"
+              }
+            ],
+            "level": "win:Informational",
+            "version": 0
+          }
+        ]
+      },
+      {
+        "event_id": "4756",
+        "versions": [
+          {
+            "field_count": 10,
+            "fields": [
+              {
+                "in_type": "win:UnicodeString",
+                "name": "MemberName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "MemberSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "TargetSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "SubjectUserSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:HexInt64",
+                "name": "SubjectLogonId",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "PrivilegeList",
+                "out_type": "xs:string"
+              }
+            ],
+            "level": "win:Informational",
+            "version": 0
+          },
+          {
+            "field_count": 11,
+            "fields": [
+              {
+                "in_type": "win:UnicodeString",
+                "name": "MemberName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "MemberSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "TargetSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "SubjectUserSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:HexInt64",
+                "name": "SubjectLogonId",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "PrivilegeList",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:FILETIME",
+                "name": "MembershipExpirationTime",
+                "out_type": "xs:dateTime"
+              }
+            ],
+            "level": "win:Informational",
+            "version": 1
+          }
+        ]
+      },
+      {
+        "event_id": "4757",
+        "versions": [
+          {
+            "field_count": 10,
+            "fields": [
+              {
+                "in_type": "win:UnicodeString",
+                "name": "MemberName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "MemberSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "TargetSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "SubjectUserSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:HexInt64",
+                "name": "SubjectLogonId",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "PrivilegeList",
+                "out_type": "xs:string"
+              }
+            ],
+            "level": "win:Informational",
+            "version": 0
+          }
+        ]
+      },
+      {
+        "event_id": "4758",
+        "versions": [
+          {
+            "field_count": 8,
+            "fields": [
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "TargetSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "SubjectUserSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:HexInt64",
+                "name": "SubjectLogonId",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "PrivilegeList",
+                "out_type": "xs:string"
+              }
+            ],
+            "level": "win:Informational",
+            "version": 0
+          }
+        ]
+      },
+      {
+        "event_id": "4759",
+        "versions": [
+          {
+            "field_count": 10,
+            "fields": [
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "TargetSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "SubjectUserSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:HexInt64",
+                "name": "SubjectLogonId",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "PrivilegeList",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SamAccountName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SidHistory",
+                "out_type": "xs:string"
+              }
+            ],
+            "level": "win:Informational",
+            "version": 0
+          }
+        ]
+      },
+      {
+        "event_id": "4760",
+        "versions": [
+          {
+            "field_count": 10,
+            "fields": [
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "TargetSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "SubjectUserSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:HexInt64",
+                "name": "SubjectLogonId",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "PrivilegeList",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SamAccountName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SidHistory",
+                "out_type": "xs:string"
+              }
+            ],
+            "level": "win:Informational",
+            "version": 0
+          }
+        ]
+      },
+      {
+        "event_id": "4761",
+        "versions": [
+          {
+            "field_count": 10,
+            "fields": [
+              {
+                "in_type": "win:UnicodeString",
+                "name": "MemberName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "MemberSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "TargetSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "SubjectUserSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:HexInt64",
+                "name": "SubjectLogonId",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "PrivilegeList",
+                "out_type": "xs:string"
+              }
+            ],
+            "level": "win:Informational",
+            "version": 0
+          },
+          {
+            "field_count": 11,
+            "fields": [
+              {
+                "in_type": "win:UnicodeString",
+                "name": "MemberName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "MemberSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "TargetSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "SubjectUserSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:HexInt64",
+                "name": "SubjectLogonId",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "PrivilegeList",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:FILETIME",
+                "name": "MembershipExpirationTime",
+                "out_type": "xs:dateTime"
+              }
+            ],
+            "level": "win:Informational",
+            "version": 1
+          }
+        ]
+      },
+      {
+        "event_id": "4762",
+        "versions": [
+          {
+            "field_count": 10,
+            "fields": [
+              {
+                "in_type": "win:UnicodeString",
+                "name": "MemberName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "MemberSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "TargetDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "TargetSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:SID",
+                "name": "SubjectUserSid",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectUserName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "SubjectDomainName",
+                "out_type": "xs:string"
+              },
+              {
+                "in_type": "win:HexInt64",
+                "name": "SubjectLogonId",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "in_type": "win:UnicodeString",
+                "name": "PrivilegeList",
+                "out_type": "xs:string"
+              }
+            ],
+            "level": "win:Informational",
+            "version": 0
+          }
+        ]
+      }
+    ],
+    "platform": "Windows",
+    "product": "Windows Server 2025 Datacenter",
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "provider_event_version_definition_count": 12,
+    "provider_unique_event_id_count": 10,
+    "raw_artifact_sha256": "sha256-67a6e722b1b4da6f31a51c5c673b60079eec8d24b0d3734f9a290d1c2ce4e952",
+    "windows_build": "26100",
+    "workflow_run_id": 37680802160
+  },
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-4753-4762"
+  ]
+}

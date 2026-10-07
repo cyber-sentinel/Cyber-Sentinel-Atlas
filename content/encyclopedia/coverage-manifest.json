@@ -1,24 +1,81 @@
 {
-  "coverage_contract_version": "1.0.0",
   "as_of": "2026-10-05",
-  "overall_state": "IN_PROGRESS",
-  "global_windows_denominator_frozen": false,
+  "completion_rule": "A telemetry family may be declared complete only after its provider/channel/version denominator is frozen and every required identity reaches the declared encyclopedia-grade and release acceptance level. The Windows Security Log review benchmark spans listed Event IDs 1100 through 8191 but is sparse and is not itself a provider denominator. No family-specific percentage may be presented as all-Windows completeness.",
+  "coverage_contract_version": "1.0.0",
+  "families": [
+    {
+      "denominator_count": 423,
+      "denominator_scope": "Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296",
+      "encyclopedia_grade_count": 120,
+      "id": "windows-security-auditing",
+      "name": "Windows Security Auditing",
+      "remaining_count": 303,
+      "snapshot": "content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json",
+      "state": "ACTIVE_DENOMINATOR_FROZEN"
+    },
+    {
+      "denominator_count": 30,
+      "denominator_scope": "Sysmon 15.22 documented/current Event IDs with controlled schema 4.91 reference evidence",
+      "encyclopedia_grade_count": 30,
+      "id": "sysmon",
+      "name": "Microsoft Sysinternals Sysmon",
+      "remaining_count": 0,
+      "snapshot": "content/encyclopedia/sysmon-15.22-coverage.snapshot.json",
+      "state": "ACTIVE_DENOMINATOR_FROZEN"
+    },
+    {
+      "id": "powershell-operational",
+      "name": "PowerShell Operational",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "windows-defender",
+      "name": "Windows Defender",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "applocker",
+      "name": "AppLocker",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "wmi-activity",
+      "name": "WMI Activity",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "task-scheduler-operational",
+      "name": "Task Scheduler Operational",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "rdp-terminal-services",
+      "name": "RDP / Terminal Services",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "windows-firewall-filtering-platform",
+      "name": "Windows Firewall / Filtering Platform",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "dns",
+      "name": "DNS Client / DNS Server",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    },
+    {
+      "id": "service-persistence",
+      "name": "Service / persistence telemetry",
+      "state": "DENOMINATOR_NOT_FROZEN"
+    }
+  ],
   "global_windows_completion_percent": null,
+  "global_windows_denominator_frozen": false,
+  "overall_state": "IN_PROGRESS",
   "windows_security_log_review_benchmark": {
-    "state": "CONTROLLED_REVIEW_BENCHMARK_DEFINED",
-    "source": "Ultimate Windows Security — Windows Security Log Encyclopedia",
-    "source_url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/default.aspx",
-    "scope_role": "coverage-and-quick-detail-review-benchmark-only",
-    "minimum_listed_event_id": 1100,
-    "maximum_listed_event_id": 8191,
-    "listed_unique_event_id_count": 422,
+    "completion_percent": 29.86,
+    "completion_ratio": "126/422",
     "continuous_numeric_range": false,
-    "semantic_authority": "Microsoft official documentation plus controlled provider/channel/version evidence",
-    "ingestion_policy": "Do not bulk-ingest third-party prose. UWS remains a controlled Quick Detail and coverage benchmark; every promoted Event ID requires independent Microsoft/provider evidence and provenance review.",
-    "encyclopedia_grade_listed_id_count": 116,
-    "remaining_listed_id_count": 306,
-    "completion_ratio": "116/422",
-    "completion_percent": 27.49,
     "covered_event_ids": [
       "1100",
       "1101",
@@ -133,77 +190,30 @@
       "4750",
       "4751",
       "4752",
+      "4753",
+      "4754",
+      "4755",
+      "4756",
+      "4757",
+      "4758",
+      "4759",
+      "4760",
+      "4761",
+      "4762",
       "4768",
       "4769",
       "4771"
-    ]
-  },
-  "completion_rule": "A telemetry family may be declared complete only after its provider/channel/version denominator is frozen and every required identity reaches the declared encyclopedia-grade and release acceptance level. The Windows Security Log review benchmark spans listed Event IDs 1100 through 8191 but is sparse and is not itself a provider denominator. No family-specific percentage may be presented as all-Windows completeness.",
-  "families": [
-    {
-      "id": "windows-security-auditing",
-      "name": "Windows Security Auditing",
-      "state": "ACTIVE_DENOMINATOR_FROZEN",
-      "denominator_scope": "Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296",
-      "snapshot": "content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json",
-      "denominator_count": 423,
-      "encyclopedia_grade_count": 110,
-      "remaining_count": 313
-    },
-    {
-      "id": "sysmon",
-      "name": "Microsoft Sysinternals Sysmon",
-      "state": "ACTIVE_DENOMINATOR_FROZEN",
-      "denominator_scope": "Sysmon 15.22 documented/current Event IDs with controlled schema 4.91 reference evidence",
-      "snapshot": "content/encyclopedia/sysmon-15.22-coverage.snapshot.json",
-      "denominator_count": 30,
-      "encyclopedia_grade_count": 30,
-      "remaining_count": 0
-    },
-    {
-      "id": "powershell-operational",
-      "name": "PowerShell Operational",
-      "state": "DENOMINATOR_NOT_FROZEN"
-    },
-    {
-      "id": "windows-defender",
-      "name": "Windows Defender",
-      "state": "DENOMINATOR_NOT_FROZEN"
-    },
-    {
-      "id": "applocker",
-      "name": "AppLocker",
-      "state": "DENOMINATOR_NOT_FROZEN"
-    },
-    {
-      "id": "wmi-activity",
-      "name": "WMI Activity",
-      "state": "DENOMINATOR_NOT_FROZEN"
-    },
-    {
-      "id": "task-scheduler-operational",
-      "name": "Task Scheduler Operational",
-      "state": "DENOMINATOR_NOT_FROZEN"
-    },
-    {
-      "id": "rdp-terminal-services",
-      "name": "RDP / Terminal Services",
-      "state": "DENOMINATOR_NOT_FROZEN"
-    },
-    {
-      "id": "windows-firewall-filtering-platform",
-      "name": "Windows Firewall / Filtering Platform",
-      "state": "DENOMINATOR_NOT_FROZEN"
-    },
-    {
-      "id": "dns",
-      "name": "DNS Client / DNS Server",
-      "state": "DENOMINATOR_NOT_FROZEN"
-    },
-    {
-      "id": "service-persistence",
-      "name": "Service / persistence telemetry",
-      "state": "DENOMINATOR_NOT_FROZEN"
-    }
-  ]
+    ],
+    "encyclopedia_grade_listed_id_count": 126,
+    "ingestion_policy": "Do not bulk-ingest third-party prose. UWS remains a controlled Quick Detail and coverage benchmark; every promoted Event ID requires independent Microsoft/provider evidence and provenance review.",
+    "listed_unique_event_id_count": 422,
+    "maximum_listed_event_id": 8191,
+    "minimum_listed_event_id": 1100,
+    "remaining_listed_id_count": 296,
+    "scope_role": "coverage-and-quick-detail-review-benchmark-only",
+    "semantic_authority": "Microsoft official documentation plus controlled provider/channel/version evidence",
+    "source": "Ultimate Windows Security — Windows Security Log Encyclopedia",
+    "source_url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/default.aspx",
+    "state": "CONTROLLED_REVIEW_BENCHMARK_DEFINED"
+  }
 }
