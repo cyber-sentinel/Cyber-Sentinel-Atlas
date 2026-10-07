@@ -1,1 +1,2 @@
 trigger bounded provider discovery for Security-Auditing 4664-4675
+run bounded Security-Auditing 4664-4675 apply
