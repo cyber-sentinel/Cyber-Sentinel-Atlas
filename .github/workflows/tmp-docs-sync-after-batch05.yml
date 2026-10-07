@@ -1,0 +1,84 @@
+name: Temporary docs coverage sync after Batch 05
+
+on:
+  push:
+    branches:
+      - docs/sync-coverage-after-batch-05
+
+permissions:
+  contents: write
+
+jobs:
+  sync-validate-commit:
+    if: contains(github.event.head_commit.message, 'Run bounded docs sync after Batch 05')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact branch head
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Apply bounded current-state documentation sync
+        run: python tools/tmp_sync_docs_after_batch05.py
+
+      - name: Validate documentation projection
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('.')
+          manifest=json.loads((root/'content/encyclopedia/coverage-manifest.json').read_text())
+          bench=manifest['windows_security_log_review_benchmark']
+          fam=next(x for x in manifest['families'] if x['id']=='windows-security-auditing')
+          assert (bench['encyclopedia_grade_listed_id_count'],bench['remaining_listed_id_count'],bench['completion_ratio'])==(56,366,'56/422')
+          assert (fam['encyclopedia_grade_count'],fam['remaining_count'])==(50,373)
+          checks={
+            'README.md':['| Windows Security Auditing |','| 50 —','| 373 |'],
+            'docs/README.md':['**56/422 encyclopedia-grade listed identities**','**50/423 encyclopedia-grade**'],
+            'docs/current-status.md':['PR #164 Windows Security-Auditing 4664–4675','`56/422`','`50/423`'],
+            'docs/project-state.md':['PR #164 Windows Security-Auditing 4664–4675','`56/422`','`50/423`'],
+            'docs/roadmap.md':['**56/422**','**50/423**','**373**'],
+            'docs/product-surfaces.md':['`50/423`','| 373 |'],
+            'docs/windows-sysmon-coverage-plan.md':['`56/422`','50 —','| 373 |'],
+            'ingestion/README.md':['**50/423**','**56/422**'],
+            'ingestion/source-profiles/README.md':['**50/423**','**56/422**'],
+          }
+          for path,needles in checks.items():
+              text=(root/path).read_text()
+              for needle in needles:
+                  assert needle in text,(path,needle)
+          print('PASS documentation projection checks')
+          PY
+
+      - name: Guard commit scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          allowed='^(README\.md|docs/README\.md|docs/current-status\.md|docs/product-surfaces\.md|docs/project-state\.md|docs/roadmap\.md|docs/windows-sysmon-coverage-plan\.md|ingestion/README\.md|ingestion/source-profiles/README\.md)$'
+          unexpected="$(git diff --name-only | grep -Ev "$allowed" || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected durable diff:" >&2
+            echo "$unexpected" >&2
+            exit 1
+          fi
+
+      - name: Commit durable docs only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Cyber-Sentinel CI"
+          git config user.email "actions@users.noreply.github.com"
+          git add README.md docs/README.md docs/current-status.md docs/product-surfaces.md docs/project-state.md docs/roadmap.md docs/windows-sysmon-coverage-plan.md ingestion/README.md ingestion/source-profiles/README.md
+          git diff --cached --check
+          test -n "$(git diff --cached --name-only)"
+          git commit -m "Docs: synchronize coverage state after PR #164"
+          git push origin HEAD:docs/sync-coverage-after-batch-05
