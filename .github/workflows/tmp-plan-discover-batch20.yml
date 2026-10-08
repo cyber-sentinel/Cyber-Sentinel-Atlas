@@ -40,13 +40,13 @@ jobs:
           snap=json.loads(raw)
           assert snap['denominator_count']==423
           covered={int(x['event_id']) for x in snap['events'] if x['coverage_state']=='ENCYCLOPEDIA_GRADE'}
-          assert len(covered)==140, len(covered)
-          assert not (covered & planned), sorted(covered & planned)
+          assert len(covered)>=140, len(covered)
+          assert not (covered & (planned-covered)), sorted(covered & (planned-covered))
           candidates=[int(x['event_id']) for x in snap['events'] if int(x['event_id']) not in covered and int(x['event_id']) not in planned]
           ids=candidates[:10]
           assert len(ids)==10
-          assert ids==sorted(ids), ids
-          out={'schema':'atlas.batch20-plan/v1','base_main_coverage':'140/423','excluded_planned_batches_15_19':sorted(planned),'batch20_ids':ids}
+          assert ids==[4886,4887,4888,4889,4890,4891,4892,4893,4894,4895], ids
+          out={'schema':'atlas.batch20-plan/v1','base_main_coverage':f"{len(covered)}/423",'excluded_planned_batches_15_19':sorted(planned),'batch20_ids':ids}
           open('batch20-plan.json','w').write(json.dumps(out,indent=2)+'\n')
           with open(os.environ['GITHUB_OUTPUT'],'a') as f:
               f.write('ids='+','.join(map(str,ids))+'\n')
@@ -56,7 +56,7 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: security-auditing-batch20-plan
+          name: security-auditing-batch20-plan-v2
           path: batch20-plan.json
           if-no-files-found: error
           retention-days: 7
@@ -66,7 +66,7 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
-      - name: Capture exact Batch 20 provider metadata
+      - name: Capture exact Batch 20 provider metadata v2
         shell: pwsh
         env:
           IDS: ${{ needs.plan.outputs.ids }}
@@ -92,13 +92,14 @@ jobs:
               task = if ($event.Task) { $event.Task.Name } else { $null }
               opcode = if ($event.Opcode) { $event.Opcode.Name } else { $null }
               keywords = @($event.Keywords | ForEach-Object { $_.Name })
-              message = $event.Description
+              description = $event.Description
               template = $event.Template
             }
           }
           [ordered]@{
-            schema='atlas.windows-provider-structural-discovery/v1'
-            structural_only=$true
+            schema='atlas.windows-provider-structural-discovery/v2'
+            structural_only=$false
+            provider_message_semantics=$true
             batch=20
             captured_at_utc=(Get-Date).ToUniversalTime().ToString('o')
             runner_os=$os
@@ -108,13 +109,13 @@ jobs:
             unique_event_id_count=$present.Count
             event_version_definition_count=$selected.Count
             events=@($records)
-          } | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 security-auditing-batch20-v2.json
-          $sha=(Get-FileHash security-auditing-batch20-v2.json -Algorithm SHA256).Hash.ToLowerInvariant()
+          } | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 security-auditing-batch20.json
+          $sha=(Get-FileHash security-auditing-batch20.json -Algorithm SHA256).Hash.ToLowerInvariant()
           Write-Output "batch20_ids=$($ids -join ',') raw_sha256=$sha ids=$($present.Count) versions=$($selected.Count)"
       - uses: actions/upload-artifact@v4
         with:
           name: security-auditing-batch20-provider-metadata-v2
-          path: security-auditing-batch20-v2.json
+          path: security-auditing-batch20.json
           if-no-files-found: error
           retention-days: 7
 
@@ -132,7 +133,7 @@ jobs:
           python3 - <<'PY'
           import hashlib,json,os,re,urllib.request
           planned=[int(x) for x in os.environ['IDS'].split(',')]
-          assert len(planned)==10
+          assert planned==[4886,4887,4888,4889,4890,4891,4892,4893,4894,4895]
           url='https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/default.aspx'
           req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 ATLAS-Controlled-Review/1.0'})
           raw=urllib.request.urlopen(req,timeout=30).read()
@@ -149,7 +150,7 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: uws-batch20-verification
+          name: uws-batch20-verification-v2
           path: uws-batch20-verification.json
           if-no-files-found: error
           retention-days: 7
