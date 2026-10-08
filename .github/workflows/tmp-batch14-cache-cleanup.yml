@@ -1,0 +1,36 @@
+name: Temporary Batch 14 cache cleanup
+
+on:
+  push:
+    branches:
+      - content/windows-security-auditing-batch-14-4776-4785
+    paths:
+      - '.github/workflows/tmp-batch14-cache-cleanup.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+      - name: Remove non-source cache artifacts and self-delete
+        shell: bash
+        run: |
+          set -euo pipefail
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          git rm .github/workflows/tmp-batch14-cache-cleanup.yml
+          git config user.name 'Cyber-Sentinel CI'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          if git diff --cached --name-only | grep -E '(^|/)__pycache__/|\.pyc$'; then
+            : # expected only as deletions in this cleanup commit
+          fi
+          git commit -m 'Chore: remove Batch 14 Python cache artifacts'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
