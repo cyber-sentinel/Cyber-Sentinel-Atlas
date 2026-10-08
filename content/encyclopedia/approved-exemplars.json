@@ -28756,6 +28756,1485 @@
           ]
         }
       ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4786",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4786",
+      "title": "Windows Security Event 4786 — A member was removed from a basic application group.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4786",
+      "aliases": [
+        "4786",
+        "Event ID 4786",
+        "Windows 4786",
+        "A member was removed from a basic application group."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4786: A member was removed from a basic application group.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4786 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4786",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A member was removed from a basic application group. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 10,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "member-name",
+          "section": "Target / Account",
+          "native_name": "MemberName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MemberName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "member-sid",
+          "section": "Target / Account",
+          "native_name": "MemberSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `MemberSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target / Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target / Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `TargetSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Additional Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PrivilegeList` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4787",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4787",
+      "title": "Windows Security Event 4787 — A non-member was added to a basic application group.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4787",
+      "aliases": [
+        "4787",
+        "Event ID 4787",
+        "Windows 4787",
+        "A non-member was added to a basic application group."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4787: A non-member was added to a basic application group.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4787 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4787",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A non-member was added to a basic application group. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 10,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "member-name",
+          "section": "Target / Account",
+          "native_name": "MemberName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MemberName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "member-sid",
+          "section": "Target / Account",
+          "native_name": "MemberSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `MemberSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target / Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target / Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `TargetSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Additional Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PrivilegeList` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4788",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4788",
+      "title": "Windows Security Event 4788 — A non-member was removed from a basic application group.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4788",
+      "aliases": [
+        "4788",
+        "Event ID 4788",
+        "Windows 4788",
+        "A non-member was removed from a basic application group."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4788: A non-member was removed from a basic application group.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4788 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4788",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A non-member was removed from a basic application group. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 10,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "member-name",
+          "section": "Target / Account",
+          "native_name": "MemberName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MemberName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "member-sid",
+          "section": "Target / Account",
+          "native_name": "MemberSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `MemberSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target / Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target / Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `TargetSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Additional Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PrivilegeList` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4789",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4789",
+      "title": "Windows Security Event 4789 — A basic application group was deleted.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4789",
+      "aliases": [
+        "4789",
+        "Event ID 4789",
+        "Windows 4789",
+        "A basic application group was deleted."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4789: A basic application group was deleted.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4789 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4789",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A basic application group was deleted. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target / Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target / Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `TargetSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Additional Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PrivilegeList` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4790",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4790",
+      "title": "Windows Security Event 4790 — An LDAP query group was created.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4790",
+      "aliases": [
+        "4790",
+        "Event ID 4790",
+        "Windows 4790",
+        "An LDAP query group was created."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4790: An LDAP query group was created.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4790 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4790",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: An LDAP query group was created. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 10,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target / Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target / Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `TargetSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Additional Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PrivilegeList` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sam-account-name",
+          "section": "Additional Information",
+          "native_name": "SamAccountName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SamAccountName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sid-history",
+          "section": "Additional Information",
+          "native_name": "SidHistory",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SidHistory` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4791",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4791",
+      "title": "Windows Security Event 4791 — A basic application group was changed.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4791",
+      "aliases": [
+        "4791",
+        "Event ID 4791",
+        "Windows 4791"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4791: A basic application group was changed.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4791 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4791",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A basic application group was changed. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 10,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target / Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target / Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `TargetSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Additional Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PrivilegeList` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sam-account-name",
+          "section": "Additional Information",
+          "native_name": "SamAccountName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SamAccountName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sid-history",
+          "section": "Additional Information",
+          "native_name": "SidHistory",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SidHistory` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4792",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4792",
+      "title": "Windows Security Event 4792 — An LDAP query group was deleted.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4792",
+      "aliases": [
+        "4792",
+        "Event ID 4792",
+        "Windows 4792",
+        "An LDAP query group was deleted."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4792: An LDAP query group was deleted.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4792 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4792",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: An LDAP query group was deleted. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target / Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target / Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `TargetSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Additional Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PrivilegeList` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4793",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4793",
+      "title": "Windows Security Event 4793 — The Password Policy Checking API was called.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4793",
+      "aliases": [
+        "4793",
+        "Event ID 4793",
+        "Windows 4793",
+        "The Password Policy Checking API was called."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4793: The Password Policy Checking API was called.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4793 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4793",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Password Policy Checking API was called. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 7,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "workstation",
+          "section": "Network",
+          "native_name": "Workstation",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Workstation` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "status",
+          "section": "Additional Information",
+          "native_name": "Status",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `Status` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4794",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4794",
+      "title": "Windows Security Event 4794 — An attempt was made to set the Directory Services Restore Mode administrator password.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4794",
+      "aliases": [
+        "4794",
+        "Event ID 4794",
+        "Windows 4794",
+        "An attempt was made to set the Directory Services Restore Mode administrator password."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4794: An attempt was made to set the Directory Services Restore Mode administrator password.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4794 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4794",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: An attempt was made to set the Directory Services Restore Mode administrator password. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 6,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "workstation",
+          "section": "Network",
+          "native_name": "Workstation",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Workstation` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "status",
+          "section": "Additional Information",
+          "native_name": "Status",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `Status` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4797",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4797",
+      "title": "Windows Security Event 4797 — An attempt was made to query the existence of a blank password for an account.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4797",
+      "aliases": [
+        "4797",
+        "Event ID 4797",
+        "Windows 4797",
+        "An attempt was made to query the existence of a blank password for an account."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4797: An attempt was made to query the existence of a blank password for an account.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch15",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4797 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4797",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: An attempt was made to query the existence of a blank password for an account. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 7,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "workstation",
+          "section": "Network",
+          "native_name": "Workstation",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Workstation` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target / Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
     }
   ]
 }
