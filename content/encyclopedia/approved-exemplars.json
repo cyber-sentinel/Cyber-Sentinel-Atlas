@@ -29560,8 +29560,7 @@
       "aliases": [
         "4791",
         "Event ID 4791",
-        "Windows 4791",
-        "A basic application group was changed."
+        "Windows 4791"
       ],
       "lifecycle": "current",
       "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch15",
