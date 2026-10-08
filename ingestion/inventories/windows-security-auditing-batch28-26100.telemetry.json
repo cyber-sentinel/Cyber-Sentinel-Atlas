@@ -1,0 +1,332 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-auditing-batch28-26100",
+  "inventory_kind": "telemetry",
+  "declared_scope": "Microsoft-Windows-Security-Auditing Event IDs 5040, 5041, 5042, 5043, 5044, 5045, 5046, 5047, 5048, 5049 / Security / Windows Server 2025 build 26100",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28"
+  ],
+  "inventory_method": "provider-runtime-message-and-template-metadata",
+  "inventory_source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+  "expected_identity_count": 10,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "channel": "Security",
+    "product": "Windows Server 2025 Datacenter",
+    "platform": "Windows",
+    "windows_build": "26100",
+    "architecture": "64-bit",
+    "workflow_run_id": 37826533823,
+    "artifact_id": 11571896010,
+    "artifact_digest": "sha256:59d39e533b0f4d28f0bd7694667cf66d88da89d677bb67817db617ff6dbba049",
+    "raw_artifact_sha256": "sha256-4469714b27c41464ff3d1a533e462944bc6b2a24fd37ff92e4087d85418b2885",
+    "provider_event_version_definition_count": 10,
+    "provider_unique_event_id_count": 10,
+    "uws_benchmark_verification": {
+      "workflow_run_id": 37826876988,
+      "artifact_id": 11572106023,
+      "artifact_digest": "sha256:af365f9b8db138b5122b6c502b66492958d8c40c470bdc4b28a31414d71d515b",
+      "raw_artifact_sha256": "sha256-fe14e3e08f420a0d324ad698fc7142bc5012900134afe239f795290d15fe9aba",
+      "listed_event_ids": [
+        "5040",
+        "5041",
+        "5042",
+        "5043",
+        "5044",
+        "5045",
+        "5046",
+        "5047",
+        "5048",
+        "5049"
+      ],
+      "listed_count": 10
+    },
+    "expected_identities": [
+      {
+        "event_id": "5040",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AuthenticationSetId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AuthenticationSetName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5041",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AuthenticationSetId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AuthenticationSetName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5042",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AuthenticationSetId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AuthenticationSetName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5043",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ConnectionSecurityRuleId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ConnectionSecurityRuleName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5044",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ConnectionSecurityRuleId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ConnectionSecurityRuleName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5045",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ConnectionSecurityRuleId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ConnectionSecurityRuleName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5046",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CryptographicSetId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CryptographicSetName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5047",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CryptographicSetId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CryptographicSetName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5048",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CryptographicSetId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CryptographicSetName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5049",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "IpSecSecurityAssociationId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "IpSecSecurityAssociationName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "completeness_semantics": "Bounded provider evidence for ten identities inside the frozen 423-ID Security-Auditing denominator. UWS membership is tracked independently as a secondary review benchmark; provider versions are preserved exactly."
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-40081673e5ae6ad9ff02961ddd40670426e3c328c4dfb4e63807caa9747e8fad"
+}

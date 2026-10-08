@@ -45350,6 +45350,926 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5040",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5040",
+      "title": "Windows Security Event 5040 — A change was made to IPsec settings. An authentication set was added. Profile Changed: %1 Added Authentication Set: ID: %2 Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5040",
+      "aliases": [
+        "5040",
+        "Event ID 5040",
+        "Windows 5040",
+        "A change was made to IPsec settings. An authentication set was added. Profile Changed: %1 Added Authentication Set: ID: %2 Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5040: A change was made to IPsec settings. An authentication set was added. Profile Changed: %1 Added Authentication Set: ID: %2 Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5040 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A change was made to IPsec settings. An authentication set was added. Profile Changed: %1 Added Authentication Set: ID: %2 Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile-changed",
+          "section": "Additional Information",
+          "native_name": "ProfileChanged",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProfileChanged` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-set-id",
+          "section": "Additional Information",
+          "native_name": "AuthenticationSetId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationSetId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-set-name",
+          "section": "Additional Information",
+          "native_name": "AuthenticationSetName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationSetName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5040",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5041",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5041",
+      "title": "Windows Security Event 5041 — A change was made to IPsec settings. An authentication set was modified. Profile Changed: %1 Modified Authentication Set: ID: %2 Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5041",
+      "aliases": [
+        "5041",
+        "Event ID 5041",
+        "Windows 5041",
+        "A change was made to IPsec settings. An authentication set was modified. Profile Changed: %1 Modified Authentication Set: ID: %2 Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5041: A change was made to IPsec settings. An authentication set was modified. Profile Changed: %1 Modified Authentication Set: ID: %2 Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5041 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A change was made to IPsec settings. An authentication set was modified. Profile Changed: %1 Modified Authentication Set: ID: %2 Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile-changed",
+          "section": "Additional Information",
+          "native_name": "ProfileChanged",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProfileChanged` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-set-id",
+          "section": "Additional Information",
+          "native_name": "AuthenticationSetId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationSetId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-set-name",
+          "section": "Additional Information",
+          "native_name": "AuthenticationSetName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationSetName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5041",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5042",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5042",
+      "title": "Windows Security Event 5042 — A change was made to IPsec settings. An authentication set was deleted. Profile Changed: %1 Deleted Authentication Set: ID: %2 Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5042",
+      "aliases": [
+        "5042",
+        "Event ID 5042",
+        "Windows 5042",
+        "A change was made to IPsec settings. An authentication set was deleted. Profile Changed: %1 Deleted Authentication Set: ID: %2 Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5042: A change was made to IPsec settings. An authentication set was deleted. Profile Changed: %1 Deleted Authentication Set: ID: %2 Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5042 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A change was made to IPsec settings. An authentication set was deleted. Profile Changed: %1 Deleted Authentication Set: ID: %2 Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile-changed",
+          "section": "Additional Information",
+          "native_name": "ProfileChanged",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProfileChanged` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-set-id",
+          "section": "Additional Information",
+          "native_name": "AuthenticationSetId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationSetId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-set-name",
+          "section": "Additional Information",
+          "native_name": "AuthenticationSetName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationSetName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5042",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5043",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5043",
+      "title": "Windows Security Event 5043 — A change was made to IPsec settings. A connection security rule was added. Profile Changed: %1 Added Connection Security Rule: ID: %2 Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5043",
+      "aliases": [
+        "5043",
+        "Event ID 5043",
+        "Windows 5043",
+        "A change was made to IPsec settings. A connection security rule was added. Profile Changed: %1 Added Connection Security Rule: ID: %2 Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5043: A change was made to IPsec settings. A connection security rule was added. Profile Changed: %1 Added Connection Security Rule: ID: %2 Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5043 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A change was made to IPsec settings. A connection security rule was added. Profile Changed: %1 Added Connection Security Rule: ID: %2 Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile-changed",
+          "section": "Additional Information",
+          "native_name": "ProfileChanged",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProfileChanged` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "connection-security-rule-id",
+          "section": "Additional Information",
+          "native_name": "ConnectionSecurityRuleId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ConnectionSecurityRuleId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "connection-security-rule-name",
+          "section": "Additional Information",
+          "native_name": "ConnectionSecurityRuleName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ConnectionSecurityRuleName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5043",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5044",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5044",
+      "title": "Windows Security Event 5044 — A change was made to IPsec settings. A connection security rule was modified. Profile Changed: %1 Modified Connection Security Rule: ID: %2 Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5044",
+      "aliases": [
+        "5044",
+        "Event ID 5044",
+        "Windows 5044",
+        "A change was made to IPsec settings. A connection security rule was modified. Profile Changed: %1 Modified Connection Security Rule: ID: %2 Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5044: A change was made to IPsec settings. A connection security rule was modified. Profile Changed: %1 Modified Connection Security Rule: ID: %2 Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5044 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A change was made to IPsec settings. A connection security rule was modified. Profile Changed: %1 Modified Connection Security Rule: ID: %2 Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile-changed",
+          "section": "Additional Information",
+          "native_name": "ProfileChanged",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProfileChanged` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "connection-security-rule-id",
+          "section": "Additional Information",
+          "native_name": "ConnectionSecurityRuleId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ConnectionSecurityRuleId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "connection-security-rule-name",
+          "section": "Additional Information",
+          "native_name": "ConnectionSecurityRuleName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ConnectionSecurityRuleName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5044",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5045",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5045",
+      "title": "Windows Security Event 5045 — A change was made to IPsec settings. A connection security rule was deleted. Profile Changed: %1 Deleted Connection Security Rule: ID: %2 Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5045",
+      "aliases": [
+        "5045",
+        "Event ID 5045",
+        "Windows 5045",
+        "A change was made to IPsec settings. A connection security rule was deleted. Profile Changed: %1 Deleted Connection Security Rule: ID: %2 Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5045: A change was made to IPsec settings. A connection security rule was deleted. Profile Changed: %1 Deleted Connection Security Rule: ID: %2 Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5045 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A change was made to IPsec settings. A connection security rule was deleted. Profile Changed: %1 Deleted Connection Security Rule: ID: %2 Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile-changed",
+          "section": "Additional Information",
+          "native_name": "ProfileChanged",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProfileChanged` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "connection-security-rule-id",
+          "section": "Additional Information",
+          "native_name": "ConnectionSecurityRuleId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ConnectionSecurityRuleId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "connection-security-rule-name",
+          "section": "Additional Information",
+          "native_name": "ConnectionSecurityRuleName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ConnectionSecurityRuleName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5045",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5046",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5046",
+      "title": "Windows Security Event 5046 — A change was made to IPsec settings. A crypto set was added. Profile Changed: %1 Added Crypto Set: ID: %2 Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5046",
+      "aliases": [
+        "5046",
+        "Event ID 5046",
+        "Windows 5046",
+        "A change was made to IPsec settings. A crypto set was added. Profile Changed: %1 Added Crypto Set: ID: %2 Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5046: A change was made to IPsec settings. A crypto set was added. Profile Changed: %1 Added Crypto Set: ID: %2 Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5046 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A change was made to IPsec settings. A crypto set was added. Profile Changed: %1 Added Crypto Set: ID: %2 Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile-changed",
+          "section": "Additional Information",
+          "native_name": "ProfileChanged",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProfileChanged` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "cryptographic-set-id",
+          "section": "Additional Information",
+          "native_name": "CryptographicSetId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CryptographicSetId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "cryptographic-set-name",
+          "section": "Additional Information",
+          "native_name": "CryptographicSetName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CryptographicSetName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5046",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5047",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5047",
+      "title": "Windows Security Event 5047 — A change was made to IPsec settings. A crypto set was modified. Profile Changed: %1 Modified Crypto Set: ID: %2 Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5047",
+      "aliases": [
+        "5047",
+        "Event ID 5047",
+        "Windows 5047",
+        "A change was made to IPsec settings. A crypto set was modified. Profile Changed: %1 Modified Crypto Set: ID: %2 Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5047: A change was made to IPsec settings. A crypto set was modified. Profile Changed: %1 Modified Crypto Set: ID: %2 Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5047 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A change was made to IPsec settings. A crypto set was modified. Profile Changed: %1 Modified Crypto Set: ID: %2 Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile-changed",
+          "section": "Additional Information",
+          "native_name": "ProfileChanged",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProfileChanged` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "cryptographic-set-id",
+          "section": "Additional Information",
+          "native_name": "CryptographicSetId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CryptographicSetId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "cryptographic-set-name",
+          "section": "Additional Information",
+          "native_name": "CryptographicSetName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CryptographicSetName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5047",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5048",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5048",
+      "title": "Windows Security Event 5048 — A change was made to IPsec settings. A crypto set was deleted. Profile Changed: %1 Deleted Crypto Set: ID: %2 Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5048",
+      "aliases": [
+        "5048",
+        "Event ID 5048",
+        "Windows 5048",
+        "A change was made to IPsec settings. A crypto set was deleted. Profile Changed: %1 Deleted Crypto Set: ID: %2 Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5048: A change was made to IPsec settings. A crypto set was deleted. Profile Changed: %1 Deleted Crypto Set: ID: %2 Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5048 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A change was made to IPsec settings. A crypto set was deleted. Profile Changed: %1 Deleted Crypto Set: ID: %2 Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile-changed",
+          "section": "Additional Information",
+          "native_name": "ProfileChanged",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProfileChanged` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "cryptographic-set-id",
+          "section": "Additional Information",
+          "native_name": "CryptographicSetId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CryptographicSetId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "cryptographic-set-name",
+          "section": "Additional Information",
+          "native_name": "CryptographicSetName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CryptographicSetName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5048",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5049",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5049",
+      "title": "Windows Security Event 5049 — An IPsec security association was deleted. Profile Changed: %1 Deleted SA: ID: %2 Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5049",
+      "aliases": [
+        "5049",
+        "Event ID 5049",
+        "Windows 5049",
+        "An IPsec security association was deleted. Profile Changed: %1 Deleted SA: ID: %2 Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5049: An IPsec security association was deleted. Profile Changed: %1 Deleted SA: ID: %2 Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch28",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch28",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5049 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: An IPsec security association was deleted. Profile Changed: %1 Deleted SA: ID: %2 Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile-changed",
+          "section": "Additional Information",
+          "native_name": "ProfileChanged",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProfileChanged` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "ip-sec-security-association-id",
+          "section": "Additional Information",
+          "native_name": "IpSecSecurityAssociationId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `IpSecSecurityAssociationId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "ip-sec-security-association-name",
+          "section": "Additional Information",
+          "native_name": "IpSecSecurityAssociationName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `IpSecSecurityAssociationName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5049",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }
