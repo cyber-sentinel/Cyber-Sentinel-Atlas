@@ -75,9 +75,11 @@ jobs:
               id=[int]$event.Id
               version=[int]$event.Version
               provider=$providerName
+              description=$event.Description
               log_links=@($event.LogLink | ForEach-Object { $_.LogName })
               level=if ($event.Level) { $event.Level.Name } else { $null }
-              task=if ($event.Task) { $event.Task.Name } else { $null }
+              task_name=if ($event.Task) { $event.Task.Name } else { $null }
+              task_display=if ($event.Task) { $event.Task.DisplayName } else { $null }
               opcode=if ($event.Opcode) { $event.Opcode.Name } else { $null }
               keywords=@($event.Keywords | ForEach-Object { $_.Name })
               template=$event.Template
@@ -85,8 +87,9 @@ jobs:
           }
           $out = "security-auditing-batch$env:BATCH.json"
           [ordered]@{
-            schema='atlas.windows-provider-structural-discovery/v1'
-            structural_only=$true
+            schema='atlas.windows-provider-structural-discovery/v2'
+            structural_only=$false
+            provider_message_semantics=$true
             batch=[int]$env:BATCH
             captured_at_utc=(Get-Date).ToUniversalTime().ToString('o')
             runner_os=$os
@@ -101,7 +104,7 @@ jobs:
           Write-Output "batch=$env:BATCH ids=$($ids -join ',') versions=$($selected.Count) raw_sha256=$digest"
       - uses: actions/upload-artifact@v4
         with:
-          name: security-auditing-batch${{ matrix.batch }}-provider-metadata
+          name: security-auditing-batch${{ matrix.batch }}-provider-metadata-v2
           path: security-auditing-batch${{ matrix.batch }}.json
           if-no-files-found: error
           retention-days: 7
