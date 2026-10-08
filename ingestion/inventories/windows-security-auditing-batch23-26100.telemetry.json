@@ -1,0 +1,523 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-auditing-batch23-26100",
+  "inventory_kind": "telemetry",
+  "declared_scope": "Microsoft-Windows-Security-Auditing Event IDs 4932, 4933, 4934, 4935, 4936, 4937, 4944, 4945, 4946, 4947 / Security / Windows Server 2025 build 26100",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch23"
+  ],
+  "inventory_method": "provider-runtime-message-and-template-metadata",
+  "inventory_source_version": "windows-server-2025-build-26100-security-auditing-batch23",
+  "expected_identity_count": 10,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "channel": "Security",
+    "product": "Windows Server 2025 Datacenter",
+    "platform": "Windows",
+    "windows_build": "26100",
+    "architecture": "64-bit",
+    "workflow_run_id": 37826533823,
+    "artifact_id": 11571840931,
+    "artifact_digest": "sha256:d036bc0a6e918bada7589840a9b0a4bda9507ad58cd1a16b7c302f9ffe48eea3",
+    "raw_artifact_sha256": "sha256-7d056ca04f2bb5ee6147a6d2dd8c7fbdf348e4a3ec8781bdb2aae882782e206c",
+    "provider_event_version_definition_count": 13,
+    "provider_unique_event_id_count": 10,
+    "uws_benchmark_verification": {
+      "workflow_run_id": 37826876988,
+      "artifact_id": 11572106023,
+      "artifact_digest": "sha256:af365f9b8db138b5122b6c502b66492958d8c40c470bdc4b28a31414d71d515b",
+      "raw_artifact_sha256": "sha256-fe14e3e08f420a0d324ad698fc7142bc5012900134afe239f795290d15fe9aba",
+      "listed_event_ids": [
+        "4932",
+        "4933",
+        "4934",
+        "4935",
+        "4936",
+        "4937",
+        "4944",
+        "4945",
+        "4946",
+        "4947"
+      ],
+      "listed_count": 10
+    },
+    "expected_identities": [
+      {
+        "event_id": "4932",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 6,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "DestinationDRA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceDRA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "NamingContext",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Options",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "SessionID",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "StartUSN",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 6,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "DestinationDRA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceDRA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "NamingContext",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Options",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "SessionID",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "StartUSN",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4933",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 7,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "DestinationDRA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceDRA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "NamingContext",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Options",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "SessionID",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "EndUSN",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "StatusCode",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 7,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "DestinationDRA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceDRA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "NamingContext",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Options",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "SessionID",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "EndUSN",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "StatusCode",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4934",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 7,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SessionID",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "Object",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Attribute",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "TypeOfChange",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "NewValue",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "USN",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "StatusCode",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4935",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 2,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ReplicationEvent",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "AuditStatusCode",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4936",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ReplicationEvent",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "AuditStatusCode",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "ReplicationStatusCode",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4937",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 5,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "DestinationDRA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceDRA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Object",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Options",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "StatusCode",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 5,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "DestinationDRA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceDRA",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Object",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Options",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "StatusCode",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4944",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 7,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "GroupPolicyApplied",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Profile",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "OperationMode",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteAdminEnabled",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MulticastFlowsEnabled",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LogDroppedPacketsEnabled",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LogSuccessfulConnectionsEnabled",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4945",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileUsed",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4946",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4947",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "completeness_semantics": "Bounded provider evidence for ten identities inside the frozen 423-ID Security-Auditing denominator. UWS membership is tracked independently as a secondary review benchmark; provider versions are preserved exactly."
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-1da3246c2504348f5ff2f60def3903add968f6e67a2f8632ef7f1462681dc01e"
+}
