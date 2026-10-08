@@ -31,7 +31,7 @@ jobs:
           from pathlib import Path
           r=json.loads(Path('tmp/security-batch-request.json').read_text())
           batch=int(r['batch'])
-          assert 14 <= batch <= 19
+          assert 14 <= batch <= 20
           ids=[int(x) for x in r['ids']]
           assert len(ids)==10 and ids==sorted(ids)
           print(f'batch={batch}')
@@ -39,6 +39,7 @@ jobs:
           print(f'last={ids[-1]}')
           print('ids='+','.join(map(str,ids)))
           print(f'artifact_name=security-auditing-batch{batch}-provider-metadata-v2')
+          print('artifact_run=' + ('37742066466' if batch==20 else '37721122416'))
           print(f'branch=content/windows-security-auditing-batch-{batch}-{ids[0]}-{ids[-1]}')
           PY
 
@@ -46,7 +47,7 @@ jobs:
         shell: bash
         run: cp tools/tmp_parallel_promote_14_18.py /tmp/atlas-promote.py
 
-      - name: Patch runtime promoter for Batch 19 evidence support
+      - name: Patch runtime promoter for Batch 19/20 evidence support
         shell: bash
         env:
           BATCH: ${{ steps.req.outputs.batch }}
@@ -58,14 +59,19 @@ jobs:
           p=Path('/tmp/atlas-promote.py')
           s=p.read_text()
           needle="18:{'artifact_id':11525997098,'artifact_digest':'sha256:58b3314d30f0230cf9fa5c4d9d6673a784b1ecb2e2e43729f2fc7c7bb4c624d6','raw_sha256':'sha256-e4f5948dbc8dfe8211f2cd4dc691fb0eb41c8da75971863501c32840f2fea725'}}\nDRUN=37721122416; URUN=37721608338; UART=11526525503"
-          replacement="18:{'artifact_id':11525997098,'artifact_digest':'sha256:58b3314d30f0230cf9fa5c4d9d6673a784b1ecb2e2e43729f2fc7c7bb4c624d6','raw_sha256':'sha256-e4f5948dbc8dfe8211f2cd4dc691fb0eb41c8da75971863501c32840f2fea725'},\n19:{'artifact_id':11525347875,'artifact_digest':'sha256:e3ab983a4d0837ec9fb3632062bbe9126c9fbd46924368404653fdaf1f5aaa35','raw_sha256':'sha256-3030328b56a31a24a544ce2179a8fe0bb313bf615cc01bdf4506238b9b173148'}}\nDRUN=37721122416; URUN=37721608338; UART=11526525503"
+          replacement="18:{'artifact_id':11525997098,'artifact_digest':'sha256:58b3314d30f0230cf9fa5c4d9d6673a784b1ecb2e2e43729f2fc7c7bb4c624d6','raw_sha256':'sha256-e4f5948dbc8dfe8211f2cd4dc691fb0eb41c8da75971863501c32840f2fea725'},\n19:{'artifact_id':11525347875,'artifact_digest':'sha256:e3ab983a4d0837ec9fb3632062bbe9126c9fbd46924368404653fdaf1f5aaa35','raw_sha256':'sha256-3030328b56a31a24a544ce2179a8fe0bb313bf615cc01bdf4506238b9b173148'},\n20:{'artifact_id':11534570319,'artifact_digest':'sha256:a032750e844bbfc13be8a9a3b6f3e68192b832a4d48b8a85efc983b2a8f28bfc','raw_sha256':'sha256-a203576c6c0b5f4b8044b69085ef9e2b3bc4c69bb130c6ecc1c96c4aacf67edf'}}\nDRUN=37721122416; URUN=37721608338; UART=11526525503"
           assert s.count(needle)==1
           s=s.replace(needle,replacement)
-          if int(os.environ['BATCH'])==19:
-              a="DRUN=37721122416; URUN=37721608338; UART=11526525503\nUDIG='sha256:65deb6923706d4677d55660e7b06915a16243f0acdafd955d0f7918074f2a51e'\nURAW='sha256-613b59d20e3f6f5b10bd75f611e9d34a0174f47b4deac60547355b73c7ddee44'"
-              b="DRUN=37721122416; URUN=37722312601; UART=11526102512\nUDIG='sha256:2b800bf4a60d1458ac5f72f3851e2e7f547bb847119badfdeb51702d45ed75a3'\nURAW='sha256-33c501e1c52fb9aef7ced3459110a5f7da9f1da8d7e8cbcb64beb34bc36beab4'"
-              assert s.count(a)==1
-              s=s.replace(a,b)
+          batch=int(os.environ['BATCH'])
+          base="DRUN=37721122416; URUN=37721608338; UART=11526525503\nUDIG='sha256:65deb6923706d4677d55660e7b06915a16243f0acdafd955d0f7918074f2a51e'\nURAW='sha256-613b59d20e3f6f5b10bd75f611e9d34a0174f47b4deac60547355b73c7ddee44'"
+          if batch==19:
+              repl="DRUN=37721122416; URUN=37722312601; UART=11526102512\nUDIG='sha256:2b800bf4a60d1458ac5f72f3851e2e7f547bb847119badfdeb51702d45ed75a3'\nURAW='sha256-33c501e1c52fb9aef7ced3459110a5f7da9f1da8d7e8cbcb64beb34bc36beab4'"
+              assert s.count(base)==1
+              s=s.replace(base,repl)
+          elif batch==20:
+              repl="DRUN=37742066466; URUN=37742066466; UART=11533508910\nUDIG='sha256:e823bae8903e88d1423e3f2e28170b1b559e5492f1011e632aceb0b4fd60c277'\nURAW='sha256-aa42f25fe483ba88f95e803f1d4935065c35f2fc91f88f535f83de8802fcd51f'"
+              assert s.count(base)==1
+              s=s.replace(base,repl)
           p.write_text(s)
           compile(s,'/tmp/atlas-promote.py','exec')
           print('runtime-promoter=PASS batch='+os.environ['BATCH'])
@@ -78,7 +84,7 @@ jobs:
           path: /tmp/provider-evidence
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: cyber-sentinel/Cyber-Sentinel-Atlas
-          run-id: 37721122416
+          run-id: ${{ steps.req.outputs.artifact_run }}
 
       - name: Rebuild target branch from fresh main
         shell: bash
