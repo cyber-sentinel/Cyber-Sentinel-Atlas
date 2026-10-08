@@ -1,0 +1,78 @@
+name: Temporary Security-Auditing Batch 13 apply
+
+on:
+  push:
+    branches:
+      - content/windows-security-auditing-batch-13-4763-4775
+    paths:
+      - '.github/workflows/tmp-security-auditing-batch13-apply.yml'
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  apply-batch13:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact branch head
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Download trusted provider artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: security-auditing-batch13-provider-metadata
+          path: .atlas-batch13
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: cyber-sentinel/Cyber-Sentinel-Atlas
+          run-id: 37683880855
+
+      - name: Verify and apply Batch 13
+        shell: bash
+        env:
+          ATLAS_DISCOVERY_JSON: .atlas-batch13/security-auditing-batch13.json
+        run: |
+          set -euo pipefail
+          test "$(sha256sum "$ATLAS_DISCOVERY_JSON" | awk '{print $1}')" = "dbda8672f69d06561e3a714f70f25a558f82ccaafd2e08d30da3aeb46969f8a9"
+          python3 tools/tmp_apply_security_auditing_batch13.py
+
+      - name: Run focused dependency-free tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          paths=[
+            Path('tests/phase51010/test_windows_security_coverage_snapshot.py'),
+            Path('tests/phase51010/test_windows_security_auditing_4753_4762.py'),
+            Path('tests/phase51010/test_windows_security_auditing_batch13.py'),
+          ]
+          for idx,path in enumerate(paths):
+              spec=importlib.util.spec_from_file_location(f'b13_{idx}',path)
+              mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+              tests=[getattr(mod,n) for n in sorted(dir(mod)) if n.startswith('test_') and callable(getattr(mod,n))]
+              assert tests, path
+              for t in tests: t()
+              print(f'PASS {path} ({len(tests)} tests)')
+          PY
+
+      - name: Remove temporary scaffolding and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm tools/tmp_apply_security_auditing_batch13.py \
+                 .github/workflows/tmp-security-auditing-batch13-discovery.yml \
+                 .github/workflows/tmp-security-auditing-batch13-apply.yml
+          rm -rf .atlas-batch13
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          git config user.name 'Cyber-Sentinel CI'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'Content: promote Security-Auditing Batch 13'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
