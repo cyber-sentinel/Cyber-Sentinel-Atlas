@@ -1,0 +1,300 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-auditing-batch24-26100",
+  "inventory_kind": "telemetry",
+  "declared_scope": "Microsoft-Windows-Security-Auditing Event IDs 4948, 4949, 4950, 4951, 4952, 4953, 4954, 4956, 4957, 4958 / Security / Windows Server 2025 build 26100",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24"
+  ],
+  "inventory_method": "provider-runtime-message-and-template-metadata",
+  "inventory_source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+  "expected_identity_count": 10,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "channel": "Security",
+    "product": "Windows Server 2025 Datacenter",
+    "platform": "Windows",
+    "windows_build": "26100",
+    "architecture": "64-bit",
+    "workflow_run_id": 37826533823,
+    "artifact_id": 11572030801,
+    "artifact_digest": "sha256:7487421dbe1b7233cd686b43c24a0abca4c9ffa79e77bcbe3747abd522659aef",
+    "raw_artifact_sha256": "sha256-4d9dccb89353aae13623fdc3713e09acd1408886cdd2f2461c9cfcea478aac4d",
+    "provider_event_version_definition_count": 10,
+    "provider_unique_event_id_count": 10,
+    "uws_benchmark_verification": {
+      "workflow_run_id": 37826876988,
+      "artifact_id": 11572106023,
+      "artifact_digest": "sha256:af365f9b8db138b5122b6c502b66492958d8c40c470bdc4b28a31414d71d515b",
+      "raw_artifact_sha256": "sha256-fe14e3e08f420a0d324ad698fc7142bc5012900134afe239f795290d15fe9aba",
+      "listed_event_ids": [
+        "4948",
+        "4949",
+        "4950",
+        "4951",
+        "4952",
+        "4953",
+        "4954",
+        "4956",
+        "4957",
+        "4958"
+      ],
+      "listed_count": 10
+    },
+    "expected_identities": [
+      {
+        "event_id": "4948",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4949",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 0,
+            "level": "win:Informational",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "4950",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProfileChanged",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SettingType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SettingValue",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4951",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "Profile",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4952",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "Profile",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4953",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 4,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "Profile",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ReasonForRejection",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4954",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 0,
+            "level": "win:Informational",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "4956",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 1,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ActiveProfile",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4957",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 3,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "RuleId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleAttr",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4958",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 4,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "RuleId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RuleName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Error",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Reason",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "completeness_semantics": "Bounded provider evidence for ten identities inside the frozen 423-ID Security-Auditing denominator. UWS membership is tracked independently as a secondary review benchmark; provider versions are preserved exactly."
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-7992667af1c0002c219ec3c6dc4cb880fa53cafc35a302744f931461d4a61c39"
+}

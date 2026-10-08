@@ -40727,6 +40727,864 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4948",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4948",
+      "title": "Windows Security Event 4948 — A change was made to the Windows Firewall exception list. A rule was deleted. Profile Changed: %1 Deleted Rule: Rule ID: %2 Rule Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4948",
+      "aliases": [
+        "4948",
+        "Event ID 4948",
+        "Windows 4948",
+        "A change was made to the Windows Firewall exception list. A rule was deleted. Profile Changed: %1 Deleted Rule: Rule ID: %2 Rule Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4948: A change was made to the Windows Firewall exception list. A rule was deleted. Profile Changed: %1 Deleted Rule: Rule ID: %2 Rule Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4948 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A change was made to the Windows Firewall exception list. A rule was deleted. Profile Changed: %1 Deleted Rule: Rule ID: %2 Rule Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile-changed",
+          "section": "Additional Information",
+          "native_name": "ProfileChanged",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProfileChanged` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "rule-id",
+          "section": "Additional Information",
+          "native_name": "RuleId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "rule-name",
+          "section": "Additional Information",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4948",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4949",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4949",
+      "title": "Windows Security Event 4949 — Windows Firewall settings were restored to the default values.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4949",
+      "aliases": [
+        "4949",
+        "Event ID 4949",
+        "Windows 4949",
+        "Windows Firewall settings were restored to the default values."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4949: Windows Firewall settings were restored to the default values.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4949 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Windows Firewall settings were restored to the default values. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4949",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4950",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4950",
+      "title": "Windows Security Event 4950 — A Windows Firewall setting was changed. Changed Profile: %1 New Setting: Type: %2 Value: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4950",
+      "aliases": [
+        "4950",
+        "Event ID 4950",
+        "Windows 4950",
+        "A Windows Firewall setting was changed. Changed Profile: %1 New Setting: Type: %2 Value: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4950: A Windows Firewall setting was changed. Changed Profile: %1 New Setting: Type: %2 Value: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4950 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A Windows Firewall setting was changed. Changed Profile: %1 New Setting: Type: %2 Value: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile-changed",
+          "section": "Additional Information",
+          "native_name": "ProfileChanged",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProfileChanged` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "setting-type",
+          "section": "Additional Information",
+          "native_name": "SettingType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SettingType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "setting-value",
+          "section": "Additional Information",
+          "native_name": "SettingValue",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SettingValue` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4950",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4951",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4951",
+      "title": "Windows Security Event 4951 — Windows Firewall ignored a rule because its major version number is not recognized. Profile: %1 Ignored Rule: ID: %2 Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4951",
+      "aliases": [
+        "4951",
+        "Event ID 4951",
+        "Windows 4951",
+        "Windows Firewall ignored a rule because its major version number is not recognized. Profile: %1 Ignored Rule: ID: %2 Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4951: Windows Firewall ignored a rule because its major version number is not recognized. Profile: %1 Ignored Rule: ID: %2 Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4951 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Windows Firewall ignored a rule because its major version number is not recognized. Profile: %1 Ignored Rule: ID: %2 Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile",
+          "section": "Additional Information",
+          "native_name": "Profile",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Profile` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "rule-id",
+          "section": "Additional Information",
+          "native_name": "RuleId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "rule-name",
+          "section": "Additional Information",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4951",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4952",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4952",
+      "title": "Windows Security Event 4952 — Windows Firewall ignored parts of a rule because its minor version number is not recognized. Other parts of the rule will be enforced. Profile: %1 Partially Ignored Rule: ID: %2 Name: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4952",
+      "aliases": [
+        "4952",
+        "Event ID 4952",
+        "Windows 4952",
+        "Windows Firewall ignored parts of a rule because its minor version number is not recognized. Other parts of the rule will be enforced. Profile: %1 Partially Ignored Rule: ID: %2 Name: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4952: Windows Firewall ignored parts of a rule because its minor version number is not recognized. Other parts of the rule will be enforced. Profile: %1 Partially Ignored Rule: ID: %2 Name: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4952 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Windows Firewall ignored parts of a rule because its minor version number is not recognized. Other parts of the rule will be enforced. Profile: %1 Partially Ignored Rule: ID: %2 Name: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile",
+          "section": "Additional Information",
+          "native_name": "Profile",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Profile` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "rule-id",
+          "section": "Additional Information",
+          "native_name": "RuleId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "rule-name",
+          "section": "Additional Information",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4952",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4953",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4953",
+      "title": "Windows Security Event 4953 — Windows Firewall ignored a rule because it could not be parsed. Profile: %1 Reason for Rejection: %2 Rule: ID: %3 Name: %4",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4953",
+      "aliases": [
+        "4953",
+        "Event ID 4953",
+        "Windows 4953",
+        "Windows Firewall ignored a rule because it could not be parsed. Profile: %1 Reason for Rejection: %2 Rule: ID: %3 Name: %4"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4953: Windows Firewall ignored a rule because it could not be parsed. Profile: %1 Reason for Rejection: %2 Rule: ID: %3 Name: %4",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4953 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Windows Firewall ignored a rule because it could not be parsed. Profile: %1 Reason for Rejection: %2 Rule: ID: %3 Name: %4 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 4,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profile",
+          "section": "Additional Information",
+          "native_name": "Profile",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Profile` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "reason-for-rejection",
+          "section": "Additional Information",
+          "native_name": "ReasonForRejection",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ReasonForRejection` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "rule-id",
+          "section": "Additional Information",
+          "native_name": "RuleId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "rule-name",
+          "section": "Additional Information",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4953",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4954",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4954",
+      "title": "Windows Security Event 4954 — Group Policy settings for Windows Firewall were changed, and the new settings were applied.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4954",
+      "aliases": [
+        "4954",
+        "Event ID 4954",
+        "Windows 4954",
+        "Group Policy settings for Windows Firewall were changed, and the new settings were applied."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4954: Group Policy settings for Windows Firewall were changed, and the new settings were applied.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4954 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Group Policy settings for Windows Firewall were changed, and the new settings were applied. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4954",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4956",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4956",
+      "title": "Windows Security Event 4956 — Windows Firewall changed the active profile. New Active Profile: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4956",
+      "aliases": [
+        "4956",
+        "Event ID 4956",
+        "Windows 4956",
+        "Windows Firewall changed the active profile. New Active Profile: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4956: Windows Firewall changed the active profile. New Active Profile: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4956 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Windows Firewall changed the active profile. New Active Profile: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "active-profile",
+          "section": "Additional Information",
+          "native_name": "ActiveProfile",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ActiveProfile` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4956",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4957",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4957",
+      "title": "Windows Security Event 4957 — Windows Firewall did not apply the following rule: Rule Information: ID: %1 Name: %2 Error Information: Reason: %3 resolved to an empty set.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4957",
+      "aliases": [
+        "4957",
+        "Event ID 4957",
+        "Windows 4957",
+        "Windows Firewall did not apply the following rule: Rule Information: ID: %1 Name: %2 Error Information: Reason: %3 resolved to an empty set."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4957: Windows Firewall did not apply the following rule: Rule Information: ID: %1 Name: %2 Error Information: Reason: %3 resolved to an empty set.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4957 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Windows Firewall did not apply the following rule: Rule Information: ID: %1 Name: %2 Error Information: Reason: %3 resolved to an empty set. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "rule-id",
+          "section": "Additional Information",
+          "native_name": "RuleId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "rule-name",
+          "section": "Additional Information",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "rule-attr",
+          "section": "Additional Information",
+          "native_name": "RuleAttr",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleAttr` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4957",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4958",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4958",
+      "title": "Windows Security Event 4958 — Windows Firewall did not apply the following rule because the rule referred to items not configured on this computer: Rule Information: ID: %1 Name: %2 Error Information: Error: %3 Reason: %4",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4958",
+      "aliases": [
+        "4958",
+        "Event ID 4958",
+        "Windows 4958",
+        "Windows Firewall did not apply the following rule because the rule referred to items not configured on this computer: Rule Information: ID: %1 Name: %2 Error Information: Error: %3 Reason: %4"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4958: Windows Firewall did not apply the following rule because the rule referred to items not configured on this computer: Rule Information: ID: %1 Name: %2 Error Information: Error: %3 Reason: %4",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch24",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch24",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4958 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Windows Firewall did not apply the following rule because the rule referred to items not configured on this computer: Rule Information: ID: %1 Name: %2 Error Information: Error: %3 Reason: %4 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 4,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "rule-id",
+          "section": "Additional Information",
+          "native_name": "RuleId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "rule-name",
+          "section": "Additional Information",
+          "native_name": "RuleName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RuleName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "error",
+          "section": "Additional Information",
+          "native_name": "Error",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Error` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "reason",
+          "section": "Additional Information",
+          "native_name": "Reason",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Reason` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4958",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }
