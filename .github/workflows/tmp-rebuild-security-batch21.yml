@@ -1,0 +1,117 @@
+name: Temporary rebuild Security-Auditing Batch 21 from fresh main
+
+on:
+  push:
+    branches:
+      - build/parallel-discovery-batches-14-19
+    paths:
+      - '.github/workflows/tmp-rebuild-security-batch21.yml'
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout orchestration branch
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Preserve bounded promoter outside worktree
+        shell: bash
+        run: cp tools/tmp_parallel_promote_14_18.py /tmp/atlas-promote.py
+
+      - name: Bind Batch 21 evidence into runtime promoter
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('/tmp/atlas-promote.py');s=p.read_text()
+          needle="18:{'artifact_id':11525997098,'artifact_digest':'sha256:58b3314d30f0230cf9fa5c4d9d6673a784b1ecb2e2e43729f2fc7c7bb4c624d6','raw_sha256':'sha256-e4f5948dbc8dfe8211f2cd4dc691fb0eb41c8da75971863501c32840f2fea725'}}\nDRUN=37721122416; URUN=37721608338; UART=11526525503"
+          replacement="18:{'artifact_id':11525997098,'artifact_digest':'sha256:58b3314d30f0230cf9fa5c4d9d6673a784b1ecb2e2e43729f2fc7c7bb4c624d6','raw_sha256':'sha256-e4f5948dbc8dfe8211f2cd4dc691fb0eb41c8da75971863501c32840f2fea725'},\n21:{'artifact_id':11551708383,'artifact_digest':'sha256:fc2dbf864b95c6deb8278a08b51ddf68dc3287ec319422bfd71d838666b24b4e','raw_sha256':'sha256-cd360ae1ab1b6ec613c234958c4a96324bd914d3447e97e4cd4c307626a189c0'}}\nDRUN=37781472457; URUN=37781472457; UART=11552956008"
+          assert s.count(needle)==1
+          s=s.replace(needle,replacement)
+          base="UDIG='sha256:65deb6923706d4677d55660e7b06915a16243f0acdafd955d0f7918074f2a51e'\nURAW='sha256-613b59d20e3f6f5b10bd75f611e9d34a0174f47b4deac60547355b73c7ddee44'"
+          repl="UDIG='sha256:18a588203ba9998c6336745f894b79b8f985504d13cb1020c912967eae5755cf'\nURAW='sha256-c3eeab7e7a353e481a81ffe03e13adddd8dea6c8341db389bde536aa40810a66'"
+          assert s.count(base)==1
+          s=s.replace(base,repl)
+          p.write_text(s);compile(s,'/tmp/atlas-promote.py','exec')
+          print('batch21-runtime-promoter=PASS')
+          PY
+
+      - name: Download trusted Batch 21 provider evidence
+        uses: actions/download-artifact@v5
+        with:
+          name: security-auditing-batch21-provider-metadata-v2
+          path: /tmp/provider-evidence
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: cyber-sentinel/Cyber-Sentinel-Atlas
+          run-id: '37781472457'
+
+      - name: Rebuild Batch 21 content branch from exact fresh main
+        shell: bash
+        env:
+          BRANCH: content/windows-security-auditing-batch-21-4896-4907
+          EXPECTED_MAIN: 17aab68ba0b0b8c30dee262d62abe9c570e21e96
+          IDS: 4896,4897,4898,4899,4900,4902,4904,4905,4906,4907
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          actual="$(git rev-parse origin/main)"
+          test "$actual" = "$EXPECTED_MAIN" || { echo "main moved: expected=$EXPECTED_MAIN actual=$actual" >&2; exit 1; }
+          git switch -C "$BRANCH" origin/main
+          artifact=/tmp/provider-evidence/security-auditing-batch21.json
+          test -f "$artifact"
+          python3 /tmp/atlas-promote.py --batch 21 --artifact "$artifact"
+
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          ids=os.environ['IDS'].split(',')
+          assert ids==['4896','4897','4898','4899','4900','4902','4904','4905','4906','4907']
+          sources={json.loads(x.read_text())['id'] for x in Path('content/encyclopedia/sources').glob('*.json')}
+          events=json.loads(Path('content/encyclopedia/approved-exemplars.json').read_text())['events']
+          current=[x for x in events if str(x.get('native_event_id')) in set(ids) and x.get('namespace')=='microsoft.windows.security']
+          assert len(current)==10
+          for e in current:
+              assert e['source_id'] in sources
+              assert e['structural_source']['source_id'] in sources
+              assert e['external_reference']['source_id'] in sources
+          m=json.loads(Path('content/encyclopedia/coverage-manifest.json').read_text())
+          f=next(x for x in m['families'] if x['id']=='windows-security-auditing')
+          b=m['windows_security_log_review_benchmark']
+          assert (f['encyclopedia_grade_count'],f['remaining_count'])==(210,213)
+          assert (b['encyclopedia_grade_listed_id_count'],b['remaining_listed_id_count'])==(216,206)
+          print('batch21-source-and-coverage-integrity=PASS')
+          PY
+
+          python3 - <<'PY'
+          import importlib.util
+          from pathlib import Path
+          paths=[Path('tests/phase51010/test_windows_security_coverage_snapshot.py'),Path('tests/phase51010/test_windows_security_auditing_batch21.py'),Path('tests/phase51010/test_windows_security_auditing_batch20.py')]
+          for idx,path in enumerate(paths):
+              spec=importlib.util.spec_from_file_location(f'b21_{idx}',path);mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
+              tests=[getattr(mod,n) for n in sorted(dir(mod)) if n.startswith('test_') and callable(getattr(mod,n))]
+              assert tests,path
+              for test in tests:test()
+              print(f'PASS {path} ({len(tests)} tests)')
+          PY
+
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          git config user.name 'Cyber-Sentinel CI'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          test -n "$(git diff --cached --name-only)"
+          if git diff --cached --name-only | grep -E '(^|/)__pycache__/|\.pyc$|tmp-rebuild-security-batch21'; then
+            echo 'Temporary/cache artifact detected in durable diff' >&2
+            exit 1
+          fi
+          git commit -m 'Content: promote Security-Auditing Batch 21'
+          git push --force-with-lease origin "HEAD:refs/heads/${BRANCH}"
