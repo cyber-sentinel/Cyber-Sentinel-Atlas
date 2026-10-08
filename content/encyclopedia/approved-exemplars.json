@@ -42715,6 +42715,1863 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4980",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4980",
+      "title": "Windows Security Event 4980 — IPsec main mode and extended mode security associations were established. Main Mode Local Endpoint: Principal Name: %1 Network Address: %3 Keying Module Port: %4 Main Mode Remote Endpoint: Principal Name: %2 Network A...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4980",
+      "aliases": [
+        "4980",
+        "Event ID 4980",
+        "Windows 4980"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4980: IPsec main mode and extended mode security associations were established. Main Mode Local Endpoint: Principal Name: %1 Network Address: %3 Keying Module Port: %4 Main Mode Remote Endpoint: Principal Name: %2 Network A...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4980 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec main mode and extended mode security associations were established. Main Mode Local Endpoint: Principal Name: %1 Network Address: %3 Keying Module Port: %4 Main Mode Remote Endpoint: Principal Name: %2 Network A... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 26,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "local-mmprincipal-name",
+          "section": "Additional Information",
+          "native_name": "LocalMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalMMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mmprincipal-name",
+          "section": "Additional Information",
+          "native_name": "RemoteMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteMMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-address",
+          "section": "Additional Information",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-key-mod-port",
+          "section": "Additional Information",
+          "native_name": "LocalKeyModPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LocalKeyModPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-key-mod-port",
+          "section": "Additional Information",
+          "native_name": "RemoteKeyModPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `RemoteKeyModPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmauth-method",
+          "section": "Additional Information",
+          "native_name": "MMAuthMethod",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMAuthMethod` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmcipher-alg",
+          "section": "Additional Information",
+          "native_name": "MMCipherAlg",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMCipherAlg` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmintegrity-alg",
+          "section": "Additional Information",
+          "native_name": "MMIntegrityAlg",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMIntegrityAlg` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "dhgroup",
+          "section": "Additional Information",
+          "native_name": "DHGroup",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DHGroup` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmlifetime",
+          "section": "Additional Information",
+          "native_name": "MMLifetime",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `MMLifetime` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "qmlimit",
+          "section": "Additional Information",
+          "native_name": "QMLimit",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `QMLimit` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "Additional Information",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Role` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmimpersonation-state",
+          "section": "Additional Information",
+          "native_name": "MMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMImpersonationState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmfilter-id",
+          "section": "Additional Information",
+          "native_name": "MMFilterID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `MMFilterID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmsaid",
+          "section": "Additional Information",
+          "native_name": "MMSAID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `MMSAID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emprincipal-name",
+          "section": "Additional Information",
+          "native_name": "LocalEMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emcert-hash",
+          "section": "Additional Information",
+          "native_name": "LocalEMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMCertHash` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emissuing-ca",
+          "section": "Additional Information",
+          "native_name": "LocalEMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMIssuingCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emroot-ca",
+          "section": "Additional Information",
+          "native_name": "LocalEMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMRootCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emprincipal-name",
+          "section": "Additional Information",
+          "native_name": "RemoteEMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emcert-hash",
+          "section": "Additional Information",
+          "native_name": "RemoteEMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMCertHash` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emissuing-ca",
+          "section": "Additional Information",
+          "native_name": "RemoteEMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMIssuingCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emroot-ca",
+          "section": "Additional Information",
+          "native_name": "RemoteEMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMRootCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "emimpersonation-state",
+          "section": "Additional Information",
+          "native_name": "EMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EMImpersonationState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "qmfilter-id",
+          "section": "Additional Information",
+          "native_name": "QMFilterID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `QMFilterID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4980",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4981",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4981",
+      "title": "Windows Security Event 4981 — IPsec main mode and extended mode security associations were established. Local Endpoint: Principal Name: %1 Network Address: %9 Keying Module Port: %10 Local Certificate: SHA Thumbprint: %2 Issuing CA: %3 Root CA: %4...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4981",
+      "aliases": [
+        "4981",
+        "Event ID 4981",
+        "Windows 4981",
+        "IPsec main mode and extended mode security associations were established. Local Endpoint: Principal Name: %1 Network Address: %9 Keying Module Port: %10 Local Certificate: SHA Thumbprint: %2 Issuing CA: %3 Root CA: %4..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4981: IPsec main mode and extended mode security associations were established. Local Endpoint: Principal Name: %1 Network Address: %9 Keying Module Port: %10 Local Certificate: SHA Thumbprint: %2 Issuing CA: %3 Root CA: %4...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4981 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec main mode and extended mode security associations were established. Local Endpoint: Principal Name: %1 Network Address: %9 Keying Module Port: %10 Local Certificate: SHA Thumbprint: %2 Issuing CA: %3 Root CA: %4... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 26,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "local-mmprincipal-name",
+          "section": "Additional Information",
+          "native_name": "LocalMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalMMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-mmcert-hash",
+          "section": "Additional Information",
+          "native_name": "LocalMMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalMMCertHash` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-mmissuing-ca",
+          "section": "Additional Information",
+          "native_name": "LocalMMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalMMIssuingCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-mmroot-ca",
+          "section": "Additional Information",
+          "native_name": "LocalMMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalMMRootCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mmprincipal-name",
+          "section": "Additional Information",
+          "native_name": "RemoteMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteMMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mmcert-hash",
+          "section": "Additional Information",
+          "native_name": "RemoteMMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteMMCertHash` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mmissuing-ca",
+          "section": "Additional Information",
+          "native_name": "RemoteMMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteMMIssuingCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mmroot-ca",
+          "section": "Additional Information",
+          "native_name": "RemoteMMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteMMRootCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-address",
+          "section": "Additional Information",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-key-mod-port",
+          "section": "Additional Information",
+          "native_name": "LocalKeyModPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LocalKeyModPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-key-mod-port",
+          "section": "Additional Information",
+          "native_name": "RemoteKeyModPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `RemoteKeyModPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmcipher-alg",
+          "section": "Additional Information",
+          "native_name": "MMCipherAlg",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMCipherAlg` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmintegrity-alg",
+          "section": "Additional Information",
+          "native_name": "MMIntegrityAlg",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMIntegrityAlg` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "dhgroup",
+          "section": "Additional Information",
+          "native_name": "DHGroup",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DHGroup` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmlifetime",
+          "section": "Additional Information",
+          "native_name": "MMLifetime",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `MMLifetime` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "qmlimit",
+          "section": "Additional Information",
+          "native_name": "QMLimit",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `QMLimit` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "Additional Information",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Role` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmimpersonation-state",
+          "section": "Additional Information",
+          "native_name": "MMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMImpersonationState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmfilter-id",
+          "section": "Additional Information",
+          "native_name": "MMFilterID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `MMFilterID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmsaid",
+          "section": "Additional Information",
+          "native_name": "MMSAID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `MMSAID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emprincipal-name",
+          "section": "Additional Information",
+          "native_name": "LocalEMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emprincipal-name",
+          "section": "Additional Information",
+          "native_name": "RemoteEMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "emauth-method",
+          "section": "Additional Information",
+          "native_name": "EMAuthMethod",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EMAuthMethod` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "emimpersonation-state",
+          "section": "Additional Information",
+          "native_name": "EMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EMImpersonationState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "qmfilter-id",
+          "section": "Additional Information",
+          "native_name": "QMFilterID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `QMFilterID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4981",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4982",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4982",
+      "title": "Windows Security Event 4982 — IPsec main mode and extended mode security associations were established. Local Endpoint: Principal Name: %1 Network Address: Keying Module Port: %9 Local Certificate: SHA Thumbprint: %2 Issuing CA: %3 Root CA: %4 Rem...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4982",
+      "aliases": [
+        "4982",
+        "Event ID 4982",
+        "Windows 4982",
+        "IPsec main mode and extended mode security associations were established. Local Endpoint: Principal Name: %1 Network Address: Keying Module Port: %9 Local Certificate: SHA Thumbprint: %2 Issuing CA: %3 Root CA: %4 Rem..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4982: IPsec main mode and extended mode security associations were established. Local Endpoint: Principal Name: %1 Network Address: Keying Module Port: %9 Local Certificate: SHA Thumbprint: %2 Issuing CA: %3 Root CA: %4 Rem...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4982 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec main mode and extended mode security associations were established. Local Endpoint: Principal Name: %1 Network Address: Keying Module Port: %9 Local Certificate: SHA Thumbprint: %2 Issuing CA: %3 Root CA: %4 Rem... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 30,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "local-mmprincipal-name",
+          "section": "Additional Information",
+          "native_name": "LocalMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalMMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-mmcert-hash",
+          "section": "Additional Information",
+          "native_name": "LocalMMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalMMCertHash` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-mmissuing-ca",
+          "section": "Additional Information",
+          "native_name": "LocalMMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalMMIssuingCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-mmroot-ca",
+          "section": "Additional Information",
+          "native_name": "LocalMMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalMMRootCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mmprincipal-name",
+          "section": "Additional Information",
+          "native_name": "RemoteMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteMMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mmcert-hash",
+          "section": "Additional Information",
+          "native_name": "RemoteMMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteMMCertHash` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mmissuing-ca",
+          "section": "Additional Information",
+          "native_name": "RemoteMMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteMMIssuingCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mmroot-ca",
+          "section": "Additional Information",
+          "native_name": "RemoteMMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteMMRootCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-key-mod-port",
+          "section": "Additional Information",
+          "native_name": "LocalKeyModPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LocalKeyModPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-key-mod-port",
+          "section": "Additional Information",
+          "native_name": "RemoteKeyModPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `RemoteKeyModPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmcipher-alg",
+          "section": "Additional Information",
+          "native_name": "MMCipherAlg",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMCipherAlg` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmintegrity-alg",
+          "section": "Additional Information",
+          "native_name": "MMIntegrityAlg",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMIntegrityAlg` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "dhgroup",
+          "section": "Additional Information",
+          "native_name": "DHGroup",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DHGroup` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmlifetime",
+          "section": "Additional Information",
+          "native_name": "MMLifetime",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `MMLifetime` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "qmlimit",
+          "section": "Additional Information",
+          "native_name": "QMLimit",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `QMLimit` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "Additional Information",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Role` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmimpersonation-state",
+          "section": "Additional Information",
+          "native_name": "MMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMImpersonationState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmfilter-id",
+          "section": "Additional Information",
+          "native_name": "MMFilterID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `MMFilterID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmsaid",
+          "section": "Additional Information",
+          "native_name": "MMSAID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `MMSAID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emprincipal-name",
+          "section": "Additional Information",
+          "native_name": "LocalEMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emcert-hash",
+          "section": "Additional Information",
+          "native_name": "LocalEMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMCertHash` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emissuing-ca",
+          "section": "Additional Information",
+          "native_name": "LocalEMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMIssuingCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emroot-ca",
+          "section": "Additional Information",
+          "native_name": "LocalEMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMRootCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emprincipal-name",
+          "section": "Additional Information",
+          "native_name": "RemoteEMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emcert-hash",
+          "section": "Additional Information",
+          "native_name": "RemoteEMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMCertHash` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emissuing-ca",
+          "section": "Additional Information",
+          "native_name": "RemoteEMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMIssuingCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emroot-ca",
+          "section": "Additional Information",
+          "native_name": "RemoteEMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMRootCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "emimpersonation-state",
+          "section": "Additional Information",
+          "native_name": "EMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EMImpersonationState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "qmfilter-id",
+          "section": "Additional Information",
+          "native_name": "QMFilterID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `QMFilterID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4982",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4983",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4983",
+      "title": "Windows Security Event 4983 — An IPsec extended mode negotiation failed. The corresponding main mode security association has been deleted. Local Endpoint: Principal Name: %1 Network Address: %9 Keying Module Port: %10 Local Certificate: SHA Thumb...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4983",
+      "aliases": [
+        "4983",
+        "Event ID 4983",
+        "Windows 4983",
+        "An IPsec extended mode negotiation failed. The corresponding main mode security association has been deleted. Local Endpoint: Principal Name: %1 Network Address: %9 Keying Module Port: %10 Local Certificate: SHA Thumb..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4983: An IPsec extended mode negotiation failed. The corresponding main mode security association has been deleted. Local Endpoint: Principal Name: %1 Network Address: %9 Keying Module Port: %10 Local Certificate: SHA Thumb...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4983 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: An IPsec extended mode negotiation failed. The corresponding main mode security association has been deleted. Local Endpoint: Principal Name: %1 Network Address: %9 Keying Module Port: %10 Local Certificate: SHA Thumb... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 18,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "local-emprincipal-name",
+          "section": "Additional Information",
+          "native_name": "LocalEMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emcert-hash",
+          "section": "Additional Information",
+          "native_name": "LocalEMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMCertHash` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emissuing-ca",
+          "section": "Additional Information",
+          "native_name": "LocalEMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMIssuingCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emroot-ca",
+          "section": "Additional Information",
+          "native_name": "LocalEMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMRootCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emprincipal-name",
+          "section": "Additional Information",
+          "native_name": "RemoteEMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emcert-hash",
+          "section": "Additional Information",
+          "native_name": "RemoteEMCertHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMCertHash` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emissuing-ca",
+          "section": "Additional Information",
+          "native_name": "RemoteEMIssuingCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMIssuingCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emroot-ca",
+          "section": "Additional Information",
+          "native_name": "RemoteEMRootCA",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMRootCA` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-address",
+          "section": "Additional Information",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-key-mod-port",
+          "section": "Additional Information",
+          "native_name": "LocalKeyModPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LocalKeyModPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-key-mod-port",
+          "section": "Additional Information",
+          "native_name": "RemoteKeyModPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `RemoteKeyModPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-point",
+          "section": "Additional Information",
+          "native_name": "FailurePoint",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FailurePoint` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-reason",
+          "section": "Additional Information",
+          "native_name": "FailureReason",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FailureReason` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "state",
+          "section": "Additional Information",
+          "native_name": "State",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `State` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "Additional Information",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Role` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "emimpersonation-state",
+          "section": "Additional Information",
+          "native_name": "EMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EMImpersonationState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "qmfilter-id",
+          "section": "Additional Information",
+          "native_name": "QMFilterID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `QMFilterID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4983",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4984",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4984",
+      "title": "Windows Security Event 4984 — An IPsec extended mode negotiation failed. The corresponding main mode security association has been deleted. Local Endpoint: Principal Name: %1 Network Address: %3 Keying Module Port: %4 Remote Endpoint: Principal Na...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4984",
+      "aliases": [
+        "4984",
+        "Event ID 4984",
+        "Windows 4984",
+        "An IPsec extended mode negotiation failed. The corresponding main mode security association has been deleted. Local Endpoint: Principal Name: %1 Network Address: %3 Keying Module Port: %4 Remote Endpoint: Principal Na..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4984: An IPsec extended mode negotiation failed. The corresponding main mode security association has been deleted. Local Endpoint: Principal Name: %1 Network Address: %3 Keying Module Port: %4 Remote Endpoint: Principal Na...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4984 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: An IPsec extended mode negotiation failed. The corresponding main mode security association has been deleted. Local Endpoint: Principal Name: %1 Network Address: %3 Keying Module Port: %4 Remote Endpoint: Principal Na... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 13,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "local-emprincipal-name",
+          "section": "Additional Information",
+          "native_name": "LocalEMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emprincipal-name",
+          "section": "Additional Information",
+          "native_name": "RemoteEMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-address",
+          "section": "Additional Information",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-key-mod-port",
+          "section": "Additional Information",
+          "native_name": "LocalKeyModPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LocalKeyModPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-key-mod-port",
+          "section": "Additional Information",
+          "native_name": "RemoteKeyModPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `RemoteKeyModPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-point",
+          "section": "Additional Information",
+          "native_name": "FailurePoint",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FailurePoint` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-reason",
+          "section": "Additional Information",
+          "native_name": "FailureReason",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FailureReason` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "emauth-method",
+          "section": "Additional Information",
+          "native_name": "EMAuthMethod",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EMAuthMethod` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "state",
+          "section": "Additional Information",
+          "native_name": "State",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `State` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "Additional Information",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Role` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "emimpersonation-state",
+          "section": "Additional Information",
+          "native_name": "EMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EMImpersonationState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "qmfilter-id",
+          "section": "Additional Information",
+          "native_name": "QMFilterID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `QMFilterID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4984",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4985",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4985",
+      "title": "Windows Security Event 4985 — The state of a transaction has changed.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4985",
+      "aliases": [
+        "4985",
+        "Event ID 4985",
+        "Windows 4985",
+        "The state of a transaction has changed."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4985: The state of a transaction has changed.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4985 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The state of a transaction has changed. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 9,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "transaction-id",
+          "section": "Additional Information",
+          "native_name": "TransactionId",
+          "type": "GUID",
+          "meaning": "Provider-rendered `TransactionId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "new-state",
+          "section": "Additional Information",
+          "native_name": "NewState",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `NewState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "resource-manager",
+          "section": "Additional Information",
+          "native_name": "ResourceManager",
+          "type": "GUID",
+          "meaning": "Provider-rendered `ResourceManager` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessId",
+          "type": "Pointer",
+          "meaning": "Provider-rendered `ProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-name",
+          "section": "Object / Process",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProcessName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4985",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5024",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5024",
+      "title": "Windows Security Event 5024 — The Windows Firewall service started successfully.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5024",
+      "aliases": [
+        "5024",
+        "Event ID 5024",
+        "Windows 5024",
+        "The Windows Firewall service started successfully."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5024: The Windows Firewall service started successfully.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5024 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Firewall service started successfully. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5024",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5025",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5025",
+      "title": "Windows Security Event 5025 — The Windows Firewall service was stopped.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5025",
+      "aliases": [
+        "5025",
+        "Event ID 5025",
+        "Windows 5025",
+        "The Windows Firewall service was stopped."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5025: The Windows Firewall service was stopped.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5025 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Firewall service was stopped. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5025",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5027",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5027",
+      "title": "Windows Security Event 5027 — The Windows Firewall service was unable to retrieve the security policy from the local storage. Windows Firewall will continue to enforce the current policy. Error Code: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5027",
+      "aliases": [
+        "5027",
+        "Event ID 5027",
+        "Windows 5027",
+        "The Windows Firewall service was unable to retrieve the security policy from the local storage. Windows Firewall will continue to enforce the current policy. Error Code: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5027: The Windows Firewall service was unable to retrieve the security policy from the local storage. Windows Firewall will continue to enforce the current policy. Error Code: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5027 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Firewall service was unable to retrieve the security policy from the local storage. Windows Firewall will continue to enforce the current policy. Error Code: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "error-code",
+          "section": "Additional Information",
+          "native_name": "ErrorCode",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ErrorCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5027",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5028",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5028",
+      "title": "Windows Security Event 5028 — Windows Firewall was unable to parse the new security policy. Windows Firewall will continue to enforce the current policy. Error Code: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5028",
+      "aliases": [
+        "5028",
+        "Event ID 5028",
+        "Windows 5028",
+        "Windows Firewall was unable to parse the new security policy. Windows Firewall will continue to enforce the current policy. Error Code: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5028: Windows Firewall was unable to parse the new security policy. Windows Firewall will continue to enforce the current policy. Error Code: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch26",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch26",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5028 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Windows Firewall was unable to parse the new security policy. Windows Firewall will continue to enforce the current policy. Error Code: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "error-code",
+          "section": "Additional Information",
+          "native_name": "ErrorCode",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ErrorCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5028",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }
