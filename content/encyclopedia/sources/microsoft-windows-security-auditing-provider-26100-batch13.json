@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "source",
+  "id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch13",
+  "record_revision": 1,
+  "created_at": "2026-10-07T20:42:00Z",
+  "updated_at": "2026-10-07T20:42:00Z",
+  "curation_status": "validated",
+  "namespace": "atlas.source",
+  "canonical_key": "microsoft-windows-security-auditing-provider-26100-batch13",
+  "title": "Microsoft-Windows-Security-Auditing provider metadata — build 26100 — Batch 13",
+  "publisher": "Microsoft",
+  "source_class": "tier-a-authoritative",
+  "canonical_urls": [
+    "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log"
+  ],
+  "official_status": "official",
+  "license": {
+    "status": "unknown"
+  },
+  "redistribution": {
+    "policy": "restricted",
+    "notes": "ATLAS stores independently authored normalized facts and source locators; substantial Microsoft documentation prose is not redistributed."
+  },
+  "freshness_policy": {
+    "expected_update_cadence": "documentation-maintained",
+    "stale_after_days": 180
+  },
+  "change_detection_policy": {
+    "strategy": "checksum",
+    "notes": "Workflow 37683880855; artifact 11509498136; sha256:b5e5abe42a8229c381d31ad1673dfc639e47936294c6b847f7baf1d08897eeee; sha256-dbda8672f69d06561e3a714f70f25a558f82ccaafd2e08d30da3aeb46969f8a9."
+  }
+}

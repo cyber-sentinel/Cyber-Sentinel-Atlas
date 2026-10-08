@@ -24811,6 +24811,1350 @@
       "title": "Windows Security Event 4762 — A member was removed from a security-disabled universal group"
     },
     {
+      "id": "atlas:event:microsoft.windows.security:4763",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4763",
+      "title": "Windows Security Event 4763 — A security-disabled universal group was deleted",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4763",
+      "aliases": [
+        "4763",
+        "Event ID 4763",
+        "Windows 4763",
+        "A security-disabled universal group was deleted"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4763",
+      "source_version": "event-4763-provider-bound-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4763",
+      "source_locator": "4763(S): A security-disabled universal group was deleted",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch13",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch13",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4763 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4763",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4763",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a security-disabled universal group was deleted while preserving provider-rendered identity and operation context.",
+        "category": "Account Management",
+        "subcategory": "Audit Distribution Group Management",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 8,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Distribution Group Management auditing appropriate to the documented success/failure outcome.",
+          "Preserve exact provider version and native context."
+        ],
+        "interpretation_note": "Interpret in documented account, group, Kerberos or credential-validation context and validate against expected administrative/authentication activity."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate the event against expected identity, authentication and change-control activity before assigning malicious intent."
+      ],
+      "fields": [
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target account, group or Kerberos principal.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or realm context associated with the target identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Security identifier of the target identity when the provider supplies one.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered logon-session identifier for subject correlation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Additional Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered privileges associated with the operation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4764",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4764",
+      "title": "Windows Security Event 4764 — A group's type was changed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4764",
+      "aliases": [
+        "4764",
+        "Event ID 4764",
+        "Windows 4764",
+        "A group's type was changed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4764",
+      "source_version": "event-4764-provider-bound-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4764",
+      "source_locator": "4764(S): A group's type was changed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch13",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch13",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4764 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4764",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4764",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a group's type was changed while preserving provider-rendered identity and operation context.",
+        "category": "Account Management",
+        "subcategory": "Audit Security Group Management",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 9,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Security Group Management auditing appropriate to the documented success/failure outcome.",
+          "Preserve exact provider version and native context."
+        ],
+        "interpretation_note": "Interpret in documented account, group, Kerberos or credential-validation context and validate against expected administrative/authentication activity."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate the event against expected identity, authentication and change-control activity before assigning malicious intent."
+      ],
+      "fields": [
+        {
+          "key": "group-type-change",
+          "section": "Change Type",
+          "native_name": "GroupTypeChange",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered description of the group type or scope transition.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target account, group or Kerberos principal.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or realm context associated with the target identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Security identifier of the target identity when the provider supplies one.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered logon-session identifier for subject correlation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Additional Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered privileges associated with the operation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4765",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4765",
+      "title": "Windows Security Event 4765 — SID History was added to an account",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4765",
+      "aliases": [
+        "4765",
+        "Event ID 4765",
+        "Windows 4765",
+        "SID History was added to an account"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4765",
+      "source_version": "event-4765-provider-bound-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4765",
+      "source_locator": "4765(S): SID History was added to an account",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch13",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch13",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4765 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4765",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4765",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records sid history was added to an account while preserving provider-rendered identity and operation context.",
+        "category": "Account Management",
+        "subcategory": "Audit User Account Management",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 11,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit User Account Management auditing appropriate to the documented success/failure outcome.",
+          "Preserve exact provider version and native context."
+        ],
+        "interpretation_note": "Interpret in documented account, group, Kerberos or credential-validation context and validate against expected administrative/authentication activity."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate the event against expected identity, authentication and change-control activity before assigning malicious intent."
+      ],
+      "fields": [
+        {
+          "key": "source-user-name",
+          "section": "Source Account",
+          "native_name": "SourceUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the source identity involved in the operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-sid",
+          "section": "Source Account",
+          "native_name": "SourceSid",
+          "type": "SID",
+          "meaning": "Security identifier of the source identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target account, group or Kerberos principal.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or realm context associated with the target identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Security identifier of the target identity when the provider supplies one.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered logon-session identifier for subject correlation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Additional Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered privileges associated with the operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sid-list",
+          "section": "Additional Information",
+          "native_name": "SidList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered SID history values added to the target account.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4766",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4766",
+      "title": "Windows Security Event 4766 — An attempt to add SID History to an account failed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4766",
+      "aliases": [
+        "4766",
+        "Event ID 4766",
+        "Windows 4766",
+        "An attempt to add SID History to an account failed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4766",
+      "source_version": "event-4766-provider-bound-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4766",
+      "source_locator": "4766(F): An attempt to add SID History to an account failed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch13",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch13",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4766 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4766",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4766",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records an attempt to add sid history to an account failed while preserving provider-rendered identity and operation context.",
+        "category": "Account Management",
+        "subcategory": "Audit User Account Management",
+        "event_type": "Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 8,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit User Account Management auditing appropriate to the documented success/failure outcome.",
+          "Preserve exact provider version and native context."
+        ],
+        "interpretation_note": "Interpret in documented account, group, Kerberos or credential-validation context and validate against expected administrative/authentication activity."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate the event against expected identity, authentication and change-control activity before assigning malicious intent."
+      ],
+      "fields": [
+        {
+          "key": "source-user-name",
+          "section": "Source Account",
+          "native_name": "SourceUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the source identity involved in the operation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target account, group or Kerberos principal.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or realm context associated with the target identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target Account",
+          "native_name": "TargetSid",
+          "type": "UnicodeString",
+          "meaning": "Security identifier of the target identity when the provider supplies one.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered logon-session identifier for subject correlation.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "privilege-list",
+          "section": "Additional Information",
+          "native_name": "PrivilegeList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered privileges associated with the operation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4767",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4767",
+      "title": "Windows Security Event 4767 — A user account was unlocked",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4767",
+      "aliases": [
+        "4767",
+        "Event ID 4767",
+        "Windows 4767",
+        "A user account was unlocked"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4767",
+      "source_version": "event-4767-provider-bound-doc",
+      "source_url": "https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4767",
+      "source_locator": "4767(S): A user account was unlocked",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch13",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch13",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4767 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4767",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4767",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a user account was unlocked while preserving provider-rendered identity and operation context.",
+        "category": "Account Management",
+        "subcategory": "Audit User Account Management",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 7,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit User Account Management auditing appropriate to the documented success/failure outcome.",
+          "Preserve exact provider version and native context."
+        ],
+        "interpretation_note": "Interpret in documented account, group, Kerberos or credential-validation context and validate against expected administrative/authentication activity."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate the event against expected identity, authentication and change-control activity before assigning malicious intent."
+      ],
+      "fields": [
+        {
+          "key": "target-user-name",
+          "section": "Target Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target account, group or Kerberos principal.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or realm context associated with the target identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Security identifier of the target identity when the provider supplies one.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Security identifier of the subject account.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Account name of the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or computer associated with the subject.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered logon-session identifier for subject correlation.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4770",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4770",
+      "title": "Windows Security Event 4770 — A Kerberos service ticket was renewed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4770",
+      "aliases": [
+        "4770",
+        "Event ID 4770",
+        "Windows 4770",
+        "A Kerberos service ticket was renewed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4770",
+      "source_version": "event-4770-provider-bound-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4770",
+      "source_locator": "4770(S): A Kerberos service ticket was renewed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch13",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch13",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4770 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4770",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4770",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a kerberos service ticket was renewed while preserving provider-rendered identity and operation context. Version 1 adds RequestTicketHash and ResponseTicketHash and remains distinct.",
+        "category": "Account Logon",
+        "subcategory": "Audit Kerberos Service Ticket Operations",
+        "event_type": "Success",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 8,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          },
+          {
+            "version": "1",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 10,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Kerberos Service Ticket Operations auditing appropriate to the documented success/failure outcome.",
+          "Preserve exact provider version and native context."
+        ],
+        "interpretation_note": "Interpret in documented account, group, Kerberos or credential-validation context and validate against expected administrative/authentication activity."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate the event against expected identity, authentication and change-control activity before assigning malicious intent."
+      ],
+      "fields": [
+        {
+          "key": "target-user-name",
+          "section": "Account Information",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target account, group or Kerberos principal.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Account Information",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or realm context associated with the target identity.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "service-name",
+          "section": "Service Information",
+          "native_name": "ServiceName",
+          "type": "UnicodeString",
+          "meaning": "Kerberos service principal or service name.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "service-sid",
+          "section": "Service Information",
+          "native_name": "ServiceSid",
+          "type": "SID",
+          "meaning": "Security identifier of the target service when supplied.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "ticket-options",
+          "section": "Additional Information",
+          "native_name": "TicketOptions",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered Kerberos ticket option flags.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "ticket-encryption-type",
+          "section": "Additional Information",
+          "native_name": "TicketEncryptionType",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered Kerberos ticket encryption type.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "ip-address",
+          "section": "Network Information",
+          "native_name": "IpAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered client IP address.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "ip-port",
+          "section": "Network Information",
+          "native_name": "IpPort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered client source port.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "request-ticket-hash",
+          "section": "Additional Information",
+          "native_name": "RequestTicketHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered hash associated with the Kerberos ticket request.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "response-ticket-hash",
+          "section": "Additional Information",
+          "native_name": "ResponseTicketHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered hash associated with the Kerberos ticket response.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4772",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4772",
+      "title": "Windows Security Event 4772 — A Kerberos authentication ticket request failed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4772",
+      "aliases": [
+        "4772",
+        "Event ID 4772",
+        "Windows 4772",
+        "A Kerberos authentication ticket request failed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4772",
+      "source_version": "event-4772-provider-bound-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4772",
+      "source_locator": "4772(F): A Kerberos authentication ticket request failed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch13",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch13",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4772 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4772",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4772",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a kerberos authentication ticket request failed while preserving provider-rendered identity and operation context. Microsoft documents this identity as defined but not generated by the operating system; the corresponding modern failure is recorded under another Kerberos event.",
+        "category": "Account Logon",
+        "subcategory": "Audit Kerberos Authentication Service",
+        "event_type": "Defined / not generated",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 7,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Kerberos Authentication Service auditing appropriate to the documented success/failure outcome.",
+          "Preserve exact provider version and native context."
+        ],
+        "interpretation_note": "Interpret in documented account, group, Kerberos or credential-validation context and validate against expected administrative/authentication activity."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate the event against expected identity, authentication and change-control activity before assigning malicious intent."
+      ],
+      "fields": [
+        {
+          "key": "target-user-name",
+          "section": "Account Information",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target account, group or Kerberos principal.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Account Information",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or realm context associated with the target identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "service-name",
+          "section": "Service Information",
+          "native_name": "ServiceName",
+          "type": "UnicodeString",
+          "meaning": "Kerberos service principal or service name.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "ticket-options",
+          "section": "Additional Information",
+          "native_name": "TicketOptions",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered Kerberos ticket option flags.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-code",
+          "section": "Additional Information",
+          "native_name": "FailureCode",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered Kerberos failure code.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "ip-address",
+          "section": "Network Information",
+          "native_name": "IpAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered client IP address.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "ip-port",
+          "section": "Network Information",
+          "native_name": "IpPort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered client source port.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4773",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4773",
+      "title": "Windows Security Event 4773 — A Kerberos service ticket request failed",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4773",
+      "aliases": [
+        "4773",
+        "Event ID 4773",
+        "Windows 4773",
+        "A Kerberos service ticket request failed"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4773",
+      "source_version": "event-4773-provider-bound-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4773",
+      "source_locator": "4773(F): A Kerberos service ticket request failed",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch13",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch13",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4773 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4773",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4773",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records a kerberos service ticket request failed while preserving provider-rendered identity and operation context. Microsoft documents this identity as defined but not generated by the operating system; the corresponding modern failure is recorded under another Kerberos event.",
+        "category": "Account Logon",
+        "subcategory": "Audit Kerberos Service Ticket Operations",
+        "event_type": "Defined / not generated",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 7,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Kerberos Service Ticket Operations auditing appropriate to the documented success/failure outcome.",
+          "Preserve exact provider version and native context."
+        ],
+        "interpretation_note": "Interpret in documented account, group, Kerberos or credential-validation context and validate against expected administrative/authentication activity."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate the event against expected identity, authentication and change-control activity before assigning malicious intent."
+      ],
+      "fields": [
+        {
+          "key": "target-user-name",
+          "section": "Account Information",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Name of the target account, group or Kerberos principal.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Account Information",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Domain or realm context associated with the target identity.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "service-name",
+          "section": "Service Information",
+          "native_name": "ServiceName",
+          "type": "UnicodeString",
+          "meaning": "Kerberos service principal or service name.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "ticket-options",
+          "section": "Additional Information",
+          "native_name": "TicketOptions",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered Kerberos ticket option flags.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "failure-code",
+          "section": "Additional Information",
+          "native_name": "FailureCode",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered Kerberos failure code.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "ip-address",
+          "section": "Network Information",
+          "native_name": "IpAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered client IP address.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "ip-port",
+          "section": "Network Information",
+          "native_name": "IpPort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered client source port.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4774",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4774",
+      "title": "Windows Security Event 4774 — An account was mapped for logon",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4774",
+      "aliases": [
+        "4774",
+        "Event ID 4774",
+        "Windows 4774",
+        "An account was mapped for logon"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4774",
+      "source_version": "event-4774-provider-bound-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4774",
+      "source_locator": "4774(S, F): An account was mapped for logon",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch13",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch13",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4774 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4774",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4774",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records an account was mapped for logon while preserving provider-rendered identity and operation context.",
+        "category": "Account Logon",
+        "subcategory": "Audit Credential Validation",
+        "event_type": "Success/Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 3,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Credential Validation auditing appropriate to the documented success/failure outcome.",
+          "Preserve exact provider version and native context."
+        ],
+        "interpretation_note": "Interpret in documented account, group, Kerberos or credential-validation context and validate against expected administrative/authentication activity."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate the event against expected identity, authentication and change-control activity before assigning malicious intent."
+      ],
+      "fields": [
+        {
+          "key": "mapping-by",
+          "section": "Mapping",
+          "native_name": "MappingBy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered authentication or mapping mechanism.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-user-name",
+          "section": "Mapping",
+          "native_name": "ClientUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered client account identity used for mapping.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mapped-name",
+          "section": "Mapping",
+          "native_name": "MappedName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered account name resulting from mapping.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4775",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4775",
+      "title": "Windows Security Event 4775 — An account could not be mapped for logon",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4775",
+      "aliases": [
+        "4775",
+        "Event ID 4775",
+        "Windows 4775",
+        "An account could not be mapped for logon"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-event-4775",
+      "source_version": "event-4775-provider-bound-doc",
+      "source_url": "https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4775",
+      "source_locator": "4775(F): An account could not be mapped for logon",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch13",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch13",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4775 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-event-4775",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4775",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Records an account could not be mapped for logon while preserving provider-rendered identity and operation context.",
+        "category": "Account Logon",
+        "subcategory": "Audit Credential Validation",
+        "event_type": "Failure",
+        "provider_level": "Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Documented and/or provider-validated shape",
+            "field_count": 2,
+            "notes": "Controlled Windows Server 2025 provider structural shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable Audit Credential Validation auditing appropriate to the documented success/failure outcome.",
+          "Preserve exact provider version and native context."
+        ],
+        "interpretation_note": "Interpret in documented account, group, Kerberos or credential-validation context and validate against expected administrative/authentication activity."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate the event against expected identity, authentication and change-control activity before assigning malicious intent."
+      ],
+      "fields": [
+        {
+          "key": "client-user-name",
+          "section": "Mapping",
+          "native_name": "ClientUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered client account identity used for mapping.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mapping-by",
+          "section": "Mapping",
+          "native_name": "MappingBy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered authentication or mapping mechanism.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
       "id": "atlas:event:microsoft.windows.security:4768",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4768",
