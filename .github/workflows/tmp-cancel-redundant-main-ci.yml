@@ -1,0 +1,40 @@
+name: Temporary cancel redundant post-merge main CI
+
+on:
+  push:
+    branches:
+      - build/security-auditing-batches-22-35
+    paths:
+      - '.github/workflows/tmp-cancel-redundant-main-ci.yml'
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cancel-redundant-main-ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Cancel only duplicate push CI for current main SHA
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          sha="$(gh api "repos/${GITHUB_REPOSITORY}/branches/main" --jq '.commit.sha')"
+          allowed='^(Foundation Hygiene|Phase 5\.3\.4 Canaries|Phase 5\.10 Public Preview Readiness|Phase 5\.10\.1 Redistribution Closure|Governance Hygiene|Phase 5\.5\.4D Supply Chain Closure)$'
+          gh api "repos/${GITHUB_REPOSITORY}/actions/runs?branch=main&event=push&head_sha=${sha}&per_page=100" > /tmp/runs.json
+          python3 - <<'PY' > /tmp/cancel.tsv
+          import json,re,os
+          allowed=re.compile(r'^(Foundation Hygiene|Phase 5\.3\.4 Canaries|Phase 5\.10 Public Preview Readiness|Phase 5\.10\.1 Redistribution Closure|Governance Hygiene|Phase 5\.5\.4D Supply Chain Closure)$')
+          d=json.load(open('/tmp/runs.json'))
+          for r in d.get('workflow_runs',[]):
+              if r.get('event')=='push' and r.get('head_branch')=='main' and r.get('status') in {'queued','in_progress'} and allowed.match(r.get('name','')):
+                  print(f"{r['id']}\t{r['name']}\t{r['status']}")
+          PY
+          while IFS=$'\t' read -r id name status; do
+            [ -n "$id" ] || continue
+            echo "cancel redundant main push run id=$id name=$name status=$status sha=$sha"
+            gh api -X POST "repos/${GITHUB_REPOSITORY}/actions/runs/${id}/cancel" >/dev/null || true
+          done < /tmp/cancel.tsv
