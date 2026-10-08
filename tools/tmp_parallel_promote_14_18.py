@@ -30,7 +30,10 @@ def title(v,e):
  for m in (' Subject:',' Account Information:',' Authentication Package:',' Peer Name:',' Request ID:',' Serial Number:',' Target Type:',' Account Name:',' Device Name:'):
   if m in s:s=s.split(m,1)[0].strip()
  return (s[:217].rstrip()+'...') if len(s)>220 else s
-def kebab(n): return re.sub(r'([a-z0-9])([A-Z])',r'\1-\2',n).replace('_','-').lower()
+def kebab(n):
+ s=re.sub(r'([a-z0-9])([A-Z])',r'\1-\2',n)
+ s=re.sub(r'[^A-Za-z0-9]+','-',s)
+ return s.strip('-').lower()
 def section(n):
  x=n.lower()
  if x.startswith('subject'):return 'Subject'
