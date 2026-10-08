@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 1
-      - name: Remove ambiguous human-title alias from 4791
+      - name: Apply dependency-free targeted alias repair
         shell: bash
         run: |
           set -euo pipefail
@@ -36,10 +36,14 @@ jobs:
           assert alias not in rows['4791']['aliases']
           assert {'4791','Event ID 4791','Windows 4791'} <= set(rows['4791']['aliases'])
           p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-          print('batch15-alias-collision-fix=PASS')
+          # Targeted fail-closed check: the collision must now resolve to only 4784.
+          owners=[]
+          for eid,row in rows.items():
+              if alias in row.get('aliases',[]): owners.append(eid)
+          assert owners == ['4784'], owners
+          print('batch15-targeted-alias-repair=PASS owners='+','.join(owners))
           PY
-          python tests/phase51010/test_approved_exemplar_content.py
-      - name: Remove temporary workflow and commit fix
+      - name: Remove temporary workflow and commit repair
         shell: bash
         run: |
           set -euo pipefail
