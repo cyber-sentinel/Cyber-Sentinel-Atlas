@@ -1,0 +1,113 @@
+name: Temporary fresh-main Security-Auditing Batch 20 rebuild
+
+on:
+  push:
+    branches:
+      - build/parallel-discovery-batches-14-19
+    paths:
+      - 'tmp/security-batch20-request.json'
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout orchestration branch
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Validate bounded Batch 20 request
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('tmp/security-batch20-request.json').read_text())
+          assert r=={'batch':20,'ids':[4886,4887,4888,4889,4890,4891,4892,4893,4894,4895]}
+          print('batch20-request=PASS')
+          PY
+      - name: Prepare Batch 20 promoter
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp tools/tmp_parallel_promote_14_18.py /tmp/atlas-promote20.py
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('/tmp/atlas-promote20.py')
+          s=p.read_text()
+          needle="18:{'artifact_id':11525997098,'artifact_digest':'sha256:58b3314d30f0230cf9fa5c4d9d6673a784b1ecb2e2e43729f2fc7c7bb4c624d6','raw_sha256':'sha256-e4f5948dbc8dfe8211f2cd4dc691fb0eb41c8da75971863501c32840f2fea725'}}"
+          repl="18:{'artifact_id':11525997098,'artifact_digest':'sha256:58b3314d30f0230cf9fa5c4d9d6673a784b1ecb2e2e43729f2fc7c7bb4c624d6','raw_sha256':'sha256-e4f5948dbc8dfe8211f2cd4dc691fb0eb41c8da75971863501c32840f2fea725'},\n20:{'artifact_id':11534570319,'artifact_digest':'sha256:a032750e844bbfc13be8a9a3b6f3e68192b832a4d48b8a85efc983b2a8f28bfc','raw_sha256':'sha256-a203576c6c0b5f4b8044b69085ef9e2b3bc4c69bb130c6ecc1c96c4aacf67edf'}}"
+          assert s.count(needle)==1
+          s=s.replace(needle,repl)
+          old="DRUN=37721122416; URUN=37721608338; UART=11526525503\nUDIG='sha256:65deb6923706d4677d55660e7b06915a16243f0acdafd955d0f7918074f2a51e'\nURAW='sha256-613b59d20e3f6f5b10bd75f611e9d34a0174f47b4deac60547355b73c7ddee44'"
+          new="DRUN=37742066466; URUN=37742066466; UART=11533508910\nUDIG='sha256:e823bae8903e88d1423e3f2e28170b1b559e5492f1011e632aceb0b4fd60c277'\nURAW='sha256-aa42f25fe483ba88f95e803f1d4935065c35f2fc91f88f535f83de8802fcd51f'"
+          assert s.count(old)==1
+          s=s.replace(old,new)
+          p.write_text(s)
+          compile(s,str(p),'exec')
+          print('batch20-promoter=PASS')
+          PY
+      - name: Download trusted Batch 20 provider artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: security-auditing-batch20-provider-metadata-v2
+          path: /tmp/provider-evidence
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: cyber-sentinel/Cyber-Sentinel-Atlas
+          run-id: 37742066466
+      - name: Build Batch 20 from exact fresh main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git switch -C content/windows-security-auditing-batch-20-4886-4895 origin/main
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('content/encyclopedia/coverage-manifest.json').read_text())
+          f=next(x for x in m['families'] if x['id']=='windows-security-auditing')
+          b=m['windows_security_log_review_benchmark']
+          assert (f['encyclopedia_grade_count'],f['remaining_count'])==(190,233), (f['encyclopedia_grade_count'],f['remaining_count'])
+          assert (b['encyclopedia_grade_listed_id_count'],b['remaining_listed_id_count'])==(196,226), (b['encyclopedia_grade_listed_id_count'],b['remaining_listed_id_count'])
+          print('batch20-fresh-main-precondition=PASS')
+          PY
+          test -f /tmp/provider-evidence/security-auditing-batch20.json
+          python3 /tmp/atlas-promote20.py --batch 20 --artifact /tmp/provider-evidence/security-auditing-batch20.json
+          python3 - <<'PY'
+          import json, importlib.util
+          from pathlib import Path
+          ids={'4886','4887','4888','4889','4890','4891','4892','4893','4894','4895'}
+          sources={json.loads(x.read_text())['id'] for x in Path('content/encyclopedia/sources').glob('*.json')}
+          events=json.loads(Path('content/encyclopedia/approved-exemplars.json').read_text())['events']
+          current=[x for x in events if str(x.get('native_event_id')) in ids and x.get('namespace')=='microsoft.windows.security']
+          assert len(current)==10
+          for e in current:
+              assert e['source_id'] in sources
+              assert e['structural_source']['source_id'] in sources
+              assert e['external_reference']['source_id'] in sources
+          for idx,path in enumerate([Path('tests/phase51010/test_windows_security_coverage_snapshot.py'),Path('tests/phase51010/test_windows_security_auditing_batch20.py'),Path('tests/phase51010/test_windows_security_auditing_batch19.py')]):
+              spec=importlib.util.spec_from_file_location(f'b20_{idx}',path)
+              mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+              tests=[getattr(mod,n) for n in sorted(dir(mod)) if n.startswith('test_') and callable(getattr(mod,n))]
+              assert tests
+              for test in tests: test()
+          print('batch20-focused-validation=PASS')
+          PY
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          git config user.name 'Cyber-Sentinel CI'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          test -n "$(git diff --cached --name-only)"
+          if git diff --cached --name-only | grep -E '(^|/)__pycache__/|\.pyc$|^tmp/|^\.github/workflows/tmp-'; then
+            echo 'Temporary/cache artifact detected in Batch 20 durable diff' >&2
+            exit 1
+          fi
+          git commit -m 'Content: promote Security-Auditing Batch 20'
+          git push --force-with-lease origin HEAD:refs/heads/content/windows-security-auditing-batch-20-4886-4895
