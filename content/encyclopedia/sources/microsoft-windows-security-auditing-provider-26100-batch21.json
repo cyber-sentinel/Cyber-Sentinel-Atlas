@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "source",
+  "id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch21",
+  "record_revision": 1,
+  "created_at": "2026-10-08T13:07:59Z",
+  "updated_at": "2026-10-08T13:07:59Z",
+  "curation_status": "validated",
+  "namespace": "atlas.source",
+  "canonical_key": "microsoft-windows-security-auditing-provider-26100-batch21",
+  "title": "Microsoft-Windows-Security-Auditing provider message metadata — build 26100 — Batch 21",
+  "publisher": "Microsoft",
+  "source_class": "tier-a-authoritative",
+  "canonical_urls": [
+    "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+    "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/appendix-l--events-to-monitor"
+  ],
+  "official_status": "official",
+  "license": {
+    "status": "unknown"
+  },
+  "redistribution": {
+    "policy": "restricted",
+    "notes": "ATLAS stores normalized facts, provider field shapes and short source locators; substantial Microsoft documentation or provider prose is not redistributed."
+  },
+  "freshness_policy": {
+    "expected_update_cadence": "provider-build-bound",
+    "stale_after_days": 180
+  },
+  "change_detection_policy": {
+    "strategy": "checksum",
+    "notes": "Discovery run 37781472457; artifact 11551708383; sha256:fc2dbf864b95c6deb8278a08b51ddf68dc3287ec319422bfd71d838666b24b4e; sha256-cd360ae1ab1b6ec613c234958c4a96324bd914d3447e97e4cd4c307626a189c0; UWS membership run 37781472457; artifact 11552956008; sha256:18a588203ba9998c6336745f894b79b8f985504d13cb1020c912967eae5755cf; sha256-c3eeab7e7a353e481a81ffe03e13adddd8dea6c8341db389bde536aa40810a66."
+  }
+}
