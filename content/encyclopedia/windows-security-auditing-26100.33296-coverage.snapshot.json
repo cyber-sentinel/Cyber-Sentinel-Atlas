@@ -17,10 +17,10 @@
   "denominator_kind": "controlled-provider-manifest-unique-event-id",
   "denominator_count": 423,
   "provider_event_version_definition_count": 488,
-  "encyclopedia_grade_count": 240,
-  "remaining_count": 183,
-  "completion_ratio": "240/423",
-  "completion_percent": 56.74,
+  "encyclopedia_grade_count": 250,
+  "remaining_count": 173,
+  "completion_ratio": "250/423",
+  "completion_percent": 59.1,
   "release_numerator_rule": "Only ENCYCLOPEDIA_GRADE maintainer-approved records count.",
   "legacy_semantics": "This denominator is exact for Microsoft-Windows-Security-Auditing / Security on Windows Server 2025 Datacenter 24H2 build 26100.33296. Absence of historical Event ID 592 does not remove its independently preserved legacy canonical identity and does not imply completeness across other Windows builds/providers/channels.",
   "events": [
@@ -1466,62 +1466,62 @@
     },
     {
       "event_id": "4960",
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
-      "counts_toward_release_coverage": false,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
       "canonical_id": "atlas:event:microsoft.windows.security:4960"
     },
     {
       "event_id": "4961",
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
-      "counts_toward_release_coverage": false,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
       "canonical_id": "atlas:event:microsoft.windows.security:4961"
     },
     {
       "event_id": "4962",
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
-      "counts_toward_release_coverage": false,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
       "canonical_id": "atlas:event:microsoft.windows.security:4962"
     },
     {
       "event_id": "4963",
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
-      "counts_toward_release_coverage": false,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
       "canonical_id": "atlas:event:microsoft.windows.security:4963"
     },
     {
       "event_id": "4964",
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
-      "counts_toward_release_coverage": false,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
       "canonical_id": "atlas:event:microsoft.windows.security:4964"
     },
     {
       "event_id": "4965",
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
-      "counts_toward_release_coverage": false,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
       "canonical_id": "atlas:event:microsoft.windows.security:4965"
     },
     {
       "event_id": "4976",
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
-      "counts_toward_release_coverage": false,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
       "canonical_id": "atlas:event:microsoft.windows.security:4976"
     },
     {
       "event_id": "4977",
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
-      "counts_toward_release_coverage": false,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
       "canonical_id": "atlas:event:microsoft.windows.security:4977"
     },
     {
       "event_id": "4978",
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
-      "counts_toward_release_coverage": false,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
       "canonical_id": "atlas:event:microsoft.windows.security:4978"
     },
     {
       "event_id": "4979",
-      "coverage_state": "IDENTIFIED_PROVIDER_SCOPE",
-      "counts_toward_release_coverage": false,
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
       "canonical_id": "atlas:event:microsoft.windows.security:4979"
     },
     {

@@ -41585,6 +41585,1136 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4960",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4960",
+      "title": "Windows Security Event 4960 — IPsec dropped an inbound packet that failed an integrity check. If this problem persists, it could indicate a network issue or that packets are being modified in transit to this computer. Verify that the packets sent...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4960",
+      "aliases": [
+        "4960",
+        "Event ID 4960",
+        "Windows 4960",
+        "IPsec dropped an inbound packet that failed an integrity check. If this problem persists, it could indicate a network issue or that packets are being modified in transit to this computer. Verify that the packets sent..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4960: IPsec dropped an inbound packet that failed an integrity check. If this problem persists, it could indicate a network issue or that packets are being modified in transit to this computer. Verify that the packets sent...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4960 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec dropped an inbound packet that failed an integrity check. If this problem persists, it could indicate a network issue or that packets are being modified in transit to this computer. Verify that the packets sent... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "spi",
+          "section": "Additional Information",
+          "native_name": "SPI",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `SPI` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4960",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4961",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4961",
+      "title": "Windows Security Event 4961 — IPsec dropped an inbound packet that failed a replay check. If this problem persists, it could indicate a replay attack against this computer. Remote Network Address: %1 Inbound SA SPI: %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4961",
+      "aliases": [
+        "4961",
+        "Event ID 4961",
+        "Windows 4961",
+        "IPsec dropped an inbound packet that failed a replay check. If this problem persists, it could indicate a replay attack against this computer. Remote Network Address: %1 Inbound SA SPI: %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4961: IPsec dropped an inbound packet that failed a replay check. If this problem persists, it could indicate a replay attack against this computer. Remote Network Address: %1 Inbound SA SPI: %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4961 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec dropped an inbound packet that failed a replay check. If this problem persists, it could indicate a replay attack against this computer. Remote Network Address: %1 Inbound SA SPI: %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "spi",
+          "section": "Additional Information",
+          "native_name": "SPI",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `SPI` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4961",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4962",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4962",
+      "title": "Windows Security Event 4962 — IPsec dropped an inbound packet that failed a replay check. The inbound packet had too low a sequence number to ensure it was not a replay. Remote Network Address: %1 Inbound SA SPI: %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4962",
+      "aliases": [
+        "4962",
+        "Event ID 4962",
+        "Windows 4962",
+        "IPsec dropped an inbound packet that failed a replay check. The inbound packet had too low a sequence number to ensure it was not a replay. Remote Network Address: %1 Inbound SA SPI: %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4962: IPsec dropped an inbound packet that failed a replay check. The inbound packet had too low a sequence number to ensure it was not a replay. Remote Network Address: %1 Inbound SA SPI: %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4962 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec dropped an inbound packet that failed a replay check. The inbound packet had too low a sequence number to ensure it was not a replay. Remote Network Address: %1 Inbound SA SPI: %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "spi",
+          "section": "Additional Information",
+          "native_name": "SPI",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `SPI` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4962",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4963",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4963",
+      "title": "Windows Security Event 4963 — IPsec dropped an inbound clear text packet that should have been secured. If the remote computer is configured with a Request Outbound IPsec policy, this might be benign and expected. This can also be caused by the re...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4963",
+      "aliases": [
+        "4963",
+        "Event ID 4963",
+        "Windows 4963",
+        "IPsec dropped an inbound clear text packet that should have been secured. If the remote computer is configured with a Request Outbound IPsec policy, this might be benign and expected. This can also be caused by the re..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4963: IPsec dropped an inbound clear text packet that should have been secured. If the remote computer is configured with a Request Outbound IPsec policy, this might be benign and expected. This can also be caused by the re...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4963 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec dropped an inbound clear text packet that should have been secured. If the remote computer is configured with a Request Outbound IPsec policy, this might be benign and expected. This can also be caused by the re... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "spi",
+          "section": "Additional Information",
+          "native_name": "SPI",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `SPI` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4963",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4964",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4964",
+      "title": "Windows Security Event 4964 — Special groups have been assigned to a new logon.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4964",
+      "aliases": [
+        "4964",
+        "Event ID 4964",
+        "Windows 4964",
+        "Special groups have been assigned to a new logon."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4964: Special groups have been assigned to a new logon.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4964 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Special groups have been assigned to a new logon. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "logon-guid",
+          "section": "Additional Information",
+          "native_name": "LogonGuid",
+          "type": "GUID",
+          "meaning": "Provider-rendered `LogonGuid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-sid",
+          "section": "Target / Account",
+          "native_name": "TargetUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `TargetUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target / Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-logon-id",
+          "section": "Target / Account",
+          "native_name": "TargetLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `TargetLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-logon-guid",
+          "section": "Target / Account",
+          "native_name": "TargetLogonGuid",
+          "type": "GUID",
+          "meaning": "Provider-rendered `TargetLogonGuid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sid-list",
+          "section": "Additional Information",
+          "native_name": "SidList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SidList` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4964",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4965",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4965",
+      "title": "Windows Security Event 4965 — IPsec received a packet from a remote computer with an incorrect Security Parameter Index (SPI). This is usually caused by malfunctioning hardware that is corrupting packets. If these errors persist, verify that the p...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4965",
+      "aliases": [
+        "4965",
+        "Event ID 4965",
+        "Windows 4965",
+        "IPsec received a packet from a remote computer with an incorrect Security Parameter Index (SPI). This is usually caused by malfunctioning hardware that is corrupting packets. If these errors persist, verify that the p..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4965: IPsec received a packet from a remote computer with an incorrect Security Parameter Index (SPI). This is usually caused by malfunctioning hardware that is corrupting packets. If these errors persist, verify that the p...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4965 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec received a packet from a remote computer with an incorrect Security Parameter Index (SPI). This is usually caused by malfunctioning hardware that is corrupting packets. If these errors persist, verify that the p... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "spi",
+          "section": "Additional Information",
+          "native_name": "SPI",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `SPI` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4965",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4976",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4976",
+      "title": "Windows Security Event 4976 — During main mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation. Local Network Address: %1 Rem...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4976",
+      "aliases": [
+        "4976",
+        "Event ID 4976",
+        "Windows 4976",
+        "During main mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation. Local Network Address: %1 Rem..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4976: During main mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation. Local Network Address: %1 Rem...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4976 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: During main mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation. Local Network Address: %1 Rem... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "local-address",
+          "section": "Additional Information",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "key-mod-name",
+          "section": "Additional Information",
+          "native_name": "KeyModName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `KeyModName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4976",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4977",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4977",
+      "title": "Windows Security Event 4977 — During quick mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation. Local Network Address: %1 Re...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4977",
+      "aliases": [
+        "4977",
+        "Event ID 4977",
+        "Windows 4977",
+        "During quick mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation. Local Network Address: %1 Re..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4977: During quick mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation. Local Network Address: %1 Re...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4977 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: During quick mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation. Local Network Address: %1 Re... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "local-address",
+          "section": "Additional Information",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "key-mod-name",
+          "section": "Additional Information",
+          "native_name": "KeyModName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `KeyModName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4977",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4978",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4978",
+      "title": "Windows Security Event 4978 — During extended mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation. Local Network Address: %1...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4978",
+      "aliases": [
+        "4978",
+        "Event ID 4978",
+        "Windows 4978",
+        "During extended mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation. Local Network Address: %1..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4978: During extended mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation. Local Network Address: %1...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4978 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: During extended mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation. Local Network Address: %1... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "local-address",
+          "section": "Additional Information",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "key-mod-name",
+          "section": "Additional Information",
+          "native_name": "KeyModName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `KeyModName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4978",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4979",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4979",
+      "title": "Windows Security Event 4979 — IPsec main mode and extended mode security associations were established. Main Mode Local Endpoint: Principal Name: %1 Network Address: %3 Keying Module Port: %4 Main Mode Remote Endpoint: Principal Name: %2 Network A...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4979",
+      "aliases": [
+        "4979",
+        "Event ID 4979",
+        "Windows 4979",
+        "IPsec main mode and extended mode security associations were established. Main Mode Local Endpoint: Principal Name: %1 Network Address: %3 Keying Module Port: %4 Main Mode Remote Endpoint: Principal Name: %2 Network A..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4979: IPsec main mode and extended mode security associations were established. Main Mode Local Endpoint: Principal Name: %1 Network Address: %3 Keying Module Port: %4 Main Mode Remote Endpoint: Principal Name: %2 Network A...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch25",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch25",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4979 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec main mode and extended mode security associations were established. Main Mode Local Endpoint: Principal Name: %1 Network Address: %3 Keying Module Port: %4 Main Mode Remote Endpoint: Principal Name: %2 Network A... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 21,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "local-mmprincipal-name",
+          "section": "Additional Information",
+          "native_name": "LocalMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalMMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-mmprincipal-name",
+          "section": "Additional Information",
+          "native_name": "RemoteMMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteMMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-address",
+          "section": "Additional Information",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-key-mod-port",
+          "section": "Additional Information",
+          "native_name": "LocalKeyModPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LocalKeyModPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-key-mod-port",
+          "section": "Additional Information",
+          "native_name": "RemoteKeyModPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `RemoteKeyModPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmauth-method",
+          "section": "Additional Information",
+          "native_name": "MMAuthMethod",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMAuthMethod` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmcipher-alg",
+          "section": "Additional Information",
+          "native_name": "MMCipherAlg",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMCipherAlg` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmintegrity-alg",
+          "section": "Additional Information",
+          "native_name": "MMIntegrityAlg",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMIntegrityAlg` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "dhgroup",
+          "section": "Additional Information",
+          "native_name": "DHGroup",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DHGroup` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmlifetime",
+          "section": "Additional Information",
+          "native_name": "MMLifetime",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `MMLifetime` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "qmlimit",
+          "section": "Additional Information",
+          "native_name": "QMLimit",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `QMLimit` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "Additional Information",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Role` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmimpersonation-state",
+          "section": "Additional Information",
+          "native_name": "MMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MMImpersonationState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmfilter-id",
+          "section": "Additional Information",
+          "native_name": "MMFilterID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `MMFilterID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "mmsaid",
+          "section": "Additional Information",
+          "native_name": "MMSAID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `MMSAID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-emprincipal-name",
+          "section": "Additional Information",
+          "native_name": "LocalEMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalEMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-emprincipal-name",
+          "section": "Additional Information",
+          "native_name": "RemoteEMPrincipalName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteEMPrincipalName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "emauth-method",
+          "section": "Additional Information",
+          "native_name": "EMAuthMethod",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EMAuthMethod` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "emimpersonation-state",
+          "section": "Additional Information",
+          "native_name": "EMImpersonationState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EMImpersonationState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "qmfilter-id",
+          "section": "Additional Information",
+          "native_name": "QMFilterID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `QMFilterID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4979",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }
