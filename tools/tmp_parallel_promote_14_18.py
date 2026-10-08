@@ -50,7 +50,7 @@ def load(path,batch):
 def shapes(d):
  ns={'e':'http://schemas.microsoft.com/win/2004/08/events'};s={str(e):[] for e in d['requested_ids']};t={}
  for r in d['events']:
-  e=str(r['id']);root=ET.fromstring(r['template']);f=[(x.attrib['name'],x.attrib.get('inType'),x.attrib.get('outType')) for x in root.findall('e:data',ns)];s[e].append({'version':int(r['version']),'level':r.get('level'),'fields':f});t.setdefault(e,title(r.get('description'),e))
+  e=str(r['id']);tmpl=r.get('template') or '';root=ET.fromstring(tmpl) if tmpl.strip() else None;f=[] if root is None else [(x.attrib['name'],x.attrib.get('inType'),x.attrib.get('outType')) for x in root.findall('e:data',ns)];s[e].append({'version':int(r['version']),'level':r.get('level'),'fields':f});t.setdefault(e,title(r.get('description'),e))
  assert all(s.values());return s,t
 def inventory(batch,ids,s,m):
  sid=f'atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch{batch}';q=[]
