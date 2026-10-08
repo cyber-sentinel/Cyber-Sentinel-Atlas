@@ -1,0 +1,357 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-auditing-batch19-26100",
+  "inventory_kind": "telemetry",
+  "declared_scope": "Microsoft-Windows-Security-Auditing Event IDs 4876, 4877, 4878, 4879, 4880, 4881, 4882, 4883, 4884, 4885 / Security / Windows Server 2025 build 26100",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch19"
+  ],
+  "inventory_method": "provider-runtime-message-and-template-metadata",
+  "inventory_source_version": "windows-server-2025-build-26100-security-auditing-batch19",
+  "expected_identity_count": 10,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "channel": "Security",
+    "product": "Windows Server 2025 Datacenter",
+    "platform": "Windows",
+    "windows_build": "26100",
+    "architecture": "64-bit",
+    "workflow_run_id": 37721122416,
+    "artifact_id": 11525347875,
+    "artifact_digest": "sha256:e3ab983a4d0837ec9fb3632062bbe9126c9fbd46924368404653fdaf1f5aaa35",
+    "raw_artifact_sha256": "sha256-3030328b56a31a24a544ce2179a8fe0bb313bf615cc01bdf4506238b9b173148",
+    "provider_event_version_definition_count": 10,
+    "provider_unique_event_id_count": 10,
+    "uws_benchmark_verification": {
+      "workflow_run_id": 37722312601,
+      "artifact_id": 11526102512,
+      "artifact_digest": "sha256:2b800bf4a60d1458ac5f72f3851e2e7f547bb847119badfdeb51702d45ed75a3",
+      "raw_artifact_sha256": "sha256-33c501e1c52fb9aef7ced3459110a5f7da9f1da8d7e8cbcb64beb34bc36beab4"
+    },
+    "expected_identities": [
+      {
+        "event_id": "4876",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 5,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "BackupType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4877",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 4,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4878",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 0,
+            "level": "win:Informational",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "4879",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 0,
+            "level": "win:Informational",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "4880",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 4,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "CertificateDatabaseHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "PrivateKeyUsageCount",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CACertificateHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CAPublicKeyHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4881",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 4,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "CertificateDatabaseHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "PrivateKeyUsageCount",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CACertificateHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CAPublicKeyHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4882",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 5,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SecuritySettings",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4883",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 5,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "RequestId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4884",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 6,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "Certificate",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RequestId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4885",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 5,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "AuditFilter",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "completeness_semantics": "Bounded provider evidence for ten UWS-listed identities inside the frozen 423-ID Security-Auditing denominator; provider versions preserved exactly."
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-ddf27090c2f4838d1b8fa0a8609ddf47e84c662815309d64560fd5be6e6149a2"
+}
