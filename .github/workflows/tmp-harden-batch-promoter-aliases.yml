@@ -1,0 +1,54 @@
+name: Temporary harden batch promoter alias uniqueness
+
+on:
+  push:
+    branches:
+      - build/parallel-discovery-batches-14-19
+    paths:
+      - '.github/workflows/tmp-harden-batch-promoter-aliases.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  harden:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+      - name: Make generated human-title aliases collision-safe
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('tools/tmp_parallel_promote_14_18.py')
+          s=p.read_text()
+          old="p=ROOT/'content/encyclopedia/approved-exemplars.json';d=json.loads(p.read_text());ev=d['events'];existing={str(x.get('native_event_id')) for x in ev if x.get('namespace')=='microsoft.windows.security'};assert not(set(ids)&existing);sid=f'atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch{batch}';new=[]"
+          new="p=ROOT/'content/encyclopedia/approved-exemplars.json';d=json.loads(p.read_text());ev=d['events'];existing={str(x.get('native_event_id')) for x in ev if x.get('namespace')=='microsoft.windows.security'};assert not(set(ids)&existing);used_aliases={a for x in ev if x.get('namespace')=='microsoft.windows.security' for a in x.get('aliases',[])};sid=f'atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch{batch}';new=[]"
+          assert s.count(old)==1
+          s=s.replace(old,new)
+          old2="ttl=t[e];new.append({'id':f'atlas:event:microsoft.windows.security:{e}'"
+          new2="ttl=t[e];aliases=[e,f'Event ID {e}',f'Windows {e}'];\n  if ttl not in used_aliases:aliases.append(ttl)\n  used_aliases.update(aliases);new.append({'id':f'atlas:event:microsoft.windows.security:{e}'"
+          assert s.count(old2)==1
+          s=s.replace(old2,new2)
+          old3="'aliases':[e,f'Event ID {e}',f'Windows {e}',ttl]"
+          assert s.count(old3)==1
+          s=s.replace(old3,"'aliases':aliases")
+          compile(s,str(p),'exec')
+          p.write_text(s)
+          print('batch-promoter-alias-hardening=PASS')
+          PY
+      - name: Remove temporary workflow and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/tmp-harden-batch-promoter-aliases.yml
+          git config user.name 'Cyber-Sentinel CI'
+          git config user.email 'actions@users.noreply.github.com'
+          git add tools/tmp_parallel_promote_14_18.py
+          git diff --cached --check
+          git commit -m 'Build: make batch promoter aliases collision-safe'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
