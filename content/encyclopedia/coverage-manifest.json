@@ -15,10 +15,10 @@
     "continuous_numeric_range": false,
     "semantic_authority": "Microsoft official documentation plus controlled provider/channel/version evidence",
     "ingestion_policy": "Do not bulk-ingest third-party prose. UWS remains a controlled Quick Detail and coverage benchmark; every promoted Event ID requires independent Microsoft/provider evidence and provenance review.",
-    "encyclopedia_grade_listed_id_count": 136,
-    "remaining_listed_id_count": 286,
-    "completion_ratio": "136/422",
-    "completion_percent": 32.23,
+    "encyclopedia_grade_listed_id_count": 146,
+    "remaining_listed_id_count": 276,
+    "completion_ratio": "146/422",
+    "completion_percent": 34.6,
     "covered_event_ids": [
       "1100",
       "1101",
@@ -155,7 +155,17 @@
       "4772",
       "4773",
       "4774",
-      "4775"
+      "4775",
+      "4776",
+      "4777",
+      "4778",
+      "4779",
+      "4780",
+      "4781",
+      "4782",
+      "4783",
+      "4784",
+      "4785"
     ]
   },
   "completion_rule": "A telemetry family may be declared complete only after its provider/channel/version denominator is frozen and every required identity reaches the declared encyclopedia-grade and release acceptance level. The Windows Security Log review benchmark spans listed Event IDs 1100 through 8191 but is sparse and is not itself a provider denominator. No family-specific percentage may be presented as all-Windows completeness.",
@@ -167,8 +177,8 @@
       "denominator_scope": "Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296",
       "snapshot": "content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json",
       "denominator_count": 423,
-      "encyclopedia_grade_count": 130,
-      "remaining_count": 293
+      "encyclopedia_grade_count": 140,
+      "remaining_count": 283
     },
     {
       "id": "sysmon",
