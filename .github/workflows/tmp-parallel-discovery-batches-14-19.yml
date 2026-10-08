@@ -1,0 +1,107 @@
+name: Temporary parallel discovery Batches 14-19
+
+on:
+  push:
+    branches:
+      - build/parallel-discovery-batches-14-19
+    paths:
+      - '.github/workflows/tmp-parallel-discovery-batches-14-19.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: plan
+        shell: bash
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          from pathlib import Path
+          snap=json.loads(Path('content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json').read_text())
+          exclude={4763,4764,4765,4766,4767,4770,4772,4773,4774,4775}
+          remaining=[]
+          for row in snap['events']:
+              eid=int(row['event_id'])
+              if not row.get('counts_toward_release_coverage', False) and eid not in exclude:
+                  remaining.append(eid)
+          assert len(remaining) >= 60, len(remaining)
+          chunks=[]
+          for offset,batch in enumerate(range(14,20)):
+              ids=remaining[offset*10:(offset+1)*10]
+              assert len(ids)==10
+              chunks.append({'batch':batch,'ids':ids,'label':'-'.join(map(str,ids))})
+          print('matrix='+json.dumps({'include':chunks},separators=(',',':')))
+          print('planned='+json.dumps(chunks,separators=(',',':')))
+          PY
+
+  discover:
+    needs: plan
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix: ${{ fromJson(needs.plan.outputs.matrix) }}
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - name: Capture bounded provider metadata
+        shell: pwsh
+        env:
+          IDS_JSON: ${{ toJson(matrix.ids) }}
+          BATCH: ${{ matrix.batch }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $ids = @(ConvertFrom-Json $env:IDS_JSON | ForEach-Object { [int]$_ })
+          if ($ids.Count -ne 10) { throw "Expected 10 IDs, got $($ids.Count)" }
+          $providerName = 'Microsoft-Windows-Security-Auditing'
+          $provider = Get-WinEvent -ListProvider $providerName
+          $selected = @($provider.Events | Where-Object { $ids -contains [int]$_.Id } | Sort-Object Id, Version)
+          $present = @($selected | ForEach-Object { [int]$_.Id } | Sort-Object -Unique)
+          $missing = @($ids | Where-Object { $_ -notin $present })
+          if ($missing.Count -gt 0 -or $present.Count -ne $ids.Count) {
+            throw "Provider identity set mismatch. Missing=$($missing -join ',') actual=$($present -join ',')"
+          }
+          $os = Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, OsBuildNumber, OsArchitecture
+          if ([string]$os.OsBuildNumber -ne '26100') { throw "Expected build 26100, got $($os.OsBuildNumber)" }
+          $records = foreach ($event in $selected) {
+            [ordered]@{
+              id=[int]$event.Id
+              version=[int]$event.Version
+              provider=$providerName
+              log_links=@($event.LogLink | ForEach-Object { $_.LogName })
+              level=if ($event.Level) { $event.Level.Name } else { $null }
+              task=if ($event.Task) { $event.Task.Name } else { $null }
+              opcode=if ($event.Opcode) { $event.Opcode.Name } else { $null }
+              keywords=@($event.Keywords | ForEach-Object { $_.Name })
+              template=$event.Template
+            }
+          }
+          $out = "security-auditing-batch$env:BATCH.json"
+          [ordered]@{
+            schema='atlas.windows-provider-structural-discovery/v1'
+            structural_only=$true
+            batch=[int]$env:BATCH
+            captured_at_utc=(Get-Date).ToUniversalTime().ToString('o')
+            runner_os=$os
+            provider=$providerName
+            channel_scope='Security'
+            requested_ids=$ids
+            unique_event_id_count=$present.Count
+            event_version_definition_count=$selected.Count
+            events=@($records)
+          } | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 $out
+          $digest=(Get-FileHash $out -Algorithm SHA256).Hash.ToLowerInvariant()
+          Write-Output "batch=$env:BATCH ids=$($ids -join ',') versions=$($selected.Count) raw_sha256=$digest"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: security-auditing-batch${{ matrix.batch }}-provider-metadata
+          path: security-auditing-batch${{ matrix.batch }}.json
+          if-no-files-found: error
+          retention-days: 7
