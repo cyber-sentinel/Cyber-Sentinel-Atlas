@@ -1,0 +1,155 @@
+name: Temporary plan and discover Security-Auditing Batch 20
+
+on:
+  push:
+    branches:
+      - build/parallel-discovery-batches-14-19
+    paths:
+      - '.github/workflows/tmp-plan-discover-batch20.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      ids: ${{ steps.plan.outputs.ids }}
+      first: ${{ steps.plan.outputs.first }}
+      last: ${{ steps.plan.outputs.last }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+      - name: Derive next ten uncovered identities after planned Batches 15-19
+        id: plan
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --depth=1
+          python3 - <<'PY'
+          import json, os, subprocess
+          planned={
+            4786,4787,4788,4789,4790,4791,4792,4793,4794,4797,
+            4798,4799,4800,4801,4802,4803,4816,4817,4818,4819,
+            4820,4821,4822,4823,4824,4825,4826,4830,4864,4865,
+            4866,4867,4868,4869,4870,4871,4872,4873,4874,4875,
+            4876,4877,4878,4879,4880,4881,4882,4883,4884,4885,
+          }
+          raw=subprocess.check_output(['git','show','origin/main:content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json'],text=True)
+          snap=json.loads(raw)
+          assert snap['denominator_count']==423
+          covered={int(x['event_id']) for x in snap['events'] if x['coverage_state']=='ENCYCLOPEDIA_GRADE'}
+          assert len(covered)==140, len(covered)
+          assert not (covered & planned), sorted(covered & planned)
+          candidates=[int(x['event_id']) for x in snap['events'] if int(x['event_id']) not in covered and int(x['event_id']) not in planned]
+          ids=candidates[:10]
+          assert len(ids)==10
+          assert ids==sorted(ids), ids
+          out={'schema':'atlas.batch20-plan/v1','base_main_coverage':'140/423','excluded_planned_batches_15_19':sorted(planned),'batch20_ids':ids}
+          open('batch20-plan.json','w').write(json.dumps(out,indent=2)+'\n')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('ids='+','.join(map(str,ids))+'\n')
+              f.write('first='+str(ids[0])+'\n')
+              f.write('last='+str(ids[-1])+'\n')
+          print(json.dumps(out,separators=(',',':')))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: security-auditing-batch20-plan
+          path: batch20-plan.json
+          if-no-files-found: error
+          retention-days: 7
+
+  provider-discovery:
+    needs: plan
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Capture exact Batch 20 provider metadata
+        shell: pwsh
+        env:
+          IDS: ${{ needs.plan.outputs.ids }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $ids = @($env:IDS.Split(',') | ForEach-Object { [int]$_ })
+          if ($ids.Count -ne 10) { throw "Expected 10 IDs, got $($ids.Count)" }
+          $providerName = 'Microsoft-Windows-Security-Auditing'
+          $provider = Get-WinEvent -ListProvider $providerName
+          $selected = @($provider.Events | Where-Object { $ids -contains [int]$_.Id } | Sort-Object Id, Version)
+          $present = @($selected | ForEach-Object { [int]$_.Id } | Sort-Object -Unique)
+          $missing = @($ids | Where-Object { $_ -notin $present })
+          if ($missing.Count -gt 0 -or $present.Count -ne 10) { throw "Provider identity mismatch missing=$($missing -join ',') actual=$($present -join ',')" }
+          $os = Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, OsBuildNumber, OsArchitecture
+          if ([string]$os.OsBuildNumber -ne '26100') { throw "Expected build 26100, got $($os.OsBuildNumber)" }
+          $records = foreach ($event in $selected) {
+            [ordered]@{
+              id = [int]$event.Id
+              version = [int]$event.Version
+              provider = $providerName
+              log_links = @($event.LogLink | ForEach-Object { $_.LogName })
+              level = if ($event.Level) { $event.Level.Name } else { $null }
+              task = if ($event.Task) { $event.Task.Name } else { $null }
+              opcode = if ($event.Opcode) { $event.Opcode.Name } else { $null }
+              keywords = @($event.Keywords | ForEach-Object { $_.Name })
+              message = $event.Description
+              template = $event.Template
+            }
+          }
+          [ordered]@{
+            schema='atlas.windows-provider-structural-discovery/v1'
+            structural_only=$true
+            batch=20
+            captured_at_utc=(Get-Date).ToUniversalTime().ToString('o')
+            runner_os=$os
+            provider=$providerName
+            channel_scope='Security'
+            requested_ids=$ids
+            unique_event_id_count=$present.Count
+            event_version_definition_count=$selected.Count
+            events=@($records)
+          } | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 security-auditing-batch20-v2.json
+          $sha=(Get-FileHash security-auditing-batch20-v2.json -Algorithm SHA256).Hash.ToLowerInvariant()
+          Write-Output "batch20_ids=$($ids -join ',') raw_sha256=$sha ids=$($present.Count) versions=$($selected.Count)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: security-auditing-batch20-provider-metadata-v2
+          path: security-auditing-batch20-v2.json
+          if-no-files-found: error
+          retention-days: 7
+
+  uws-verification:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify Batch 20 identities are listed in UWS benchmark
+        shell: bash
+        env:
+          IDS: ${{ needs.plan.outputs.ids }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,re,urllib.request
+          planned=[int(x) for x in os.environ['IDS'].split(',')]
+          assert len(planned)==10
+          url='https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/default.aspx'
+          req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 ATLAS-Controlled-Review/1.0'})
+          raw=urllib.request.urlopen(req,timeout=30).read()
+          text=raw.decode('utf-8','replace')
+          ids={int(x) for x in re.findall(r'event(?:\.aspx)?\?eventid=(\d+)',text,re.I)}
+          if len(ids)<400:
+              ids.update(int(x) for x in re.findall(r'eventid[=:\"\'\s]+(\d{3,5})',text,re.I))
+          missing=[x for x in planned if x not in ids]
+          assert len(ids)>=400, len(ids)
+          assert not missing, missing
+          evidence={'source_url':url,'retrieved_unique_ids':len(ids),'planned_ids':planned,'missing':missing,'raw_sha256':'sha256-'+hashlib.sha256(raw).hexdigest()}
+          open('uws-batch20-verification.json','w').write(json.dumps(evidence,indent=2)+'\n')
+          print(json.dumps(evidence,separators=(',',':')))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: uws-batch20-verification
+          path: uws-batch20-verification.json
+          if-no-files-found: error
+          retention-days: 7
