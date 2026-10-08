@@ -35609,6 +35609,1411 @@
           ]
         }
       ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4886",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4886",
+      "title": "Windows Security Event 4886 — Certificate Services received a certificate request.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4886",
+      "aliases": [
+        "4886",
+        "Event ID 4886",
+        "Windows 4886",
+        "Certificate Services received a certificate request."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4886: Certificate Services received a certificate request.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4886 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4886",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Certificate Services received a certificate request. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 12,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "request-id",
+          "section": "Additional Information",
+          "native_name": "RequestId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RequestId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "requester",
+          "section": "Additional Information",
+          "native_name": "Requester",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Requester` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "attributes",
+          "section": "Additional Information",
+          "native_name": "Attributes",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Attributes` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject",
+          "section": "Subject",
+          "native_name": "Subject",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Subject` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "subject-alternative-name",
+          "section": "Subject",
+          "native_name": "SubjectAlternativeName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectAlternativeName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "certificate-template",
+          "section": "Additional Information",
+          "native_name": "CertificateTemplate",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CertificateTemplate` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "request-osversion",
+          "section": "Additional Information",
+          "native_name": "RequestOSVersion",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RequestOSVersion` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "request-cspprovider",
+          "section": "Additional Information",
+          "native_name": "RequestCSPProvider",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RequestCSPProvider` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "request-client-info",
+          "section": "Network",
+          "native_name": "RequestClientInfo",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RequestClientInfo` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "authentication-service",
+          "section": "Authentication",
+          "native_name": "AuthenticationService",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationService` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "authentication-level",
+          "section": "Additional Information",
+          "native_name": "AuthenticationLevel",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationLevel` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "dcomor-rpc",
+          "section": "Additional Information",
+          "native_name": "DCOMorRPC",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DCOMorRPC` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4887",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4887",
+      "title": "Windows Security Event 4887 — Certificate Services approved a certificate request and issued a certificate.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4887",
+      "aliases": [
+        "4887",
+        "Event ID 4887",
+        "Windows 4887",
+        "Certificate Services approved a certificate request and issued a certificate."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4887: Certificate Services approved a certificate request and issued a certificate.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4887 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4887",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Certificate Services approved a certificate request and issued a certificate. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 6,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 12,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "request-id",
+          "section": "Additional Information",
+          "native_name": "RequestId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RequestId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "requester",
+          "section": "Additional Information",
+          "native_name": "Requester",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Requester` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "attributes",
+          "section": "Additional Information",
+          "native_name": "Attributes",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Attributes` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "disposition",
+          "section": "Additional Information",
+          "native_name": "Disposition",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Disposition` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-key-identifier",
+          "section": "Subject",
+          "native_name": "SubjectKeyIdentifier",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectKeyIdentifier` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject",
+          "section": "Subject",
+          "native_name": "Subject",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Subject` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-alternative-name",
+          "section": "Subject",
+          "native_name": "SubjectAlternativeName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectAlternativeName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "certificate-template",
+          "section": "Additional Information",
+          "native_name": "CertificateTemplate",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CertificateTemplate` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "serial-number",
+          "section": "Additional Information",
+          "native_name": "SerialNumber",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SerialNumber` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "authentication-service",
+          "section": "Authentication",
+          "native_name": "AuthenticationService",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationService` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "authentication-level",
+          "section": "Additional Information",
+          "native_name": "AuthenticationLevel",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationLevel` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "dcomor-rpc",
+          "section": "Additional Information",
+          "native_name": "DCOMorRPC",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DCOMorRPC` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4888",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4888",
+      "title": "Windows Security Event 4888 — Certificate Services denied a certificate request.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4888",
+      "aliases": [
+        "4888",
+        "Event ID 4888",
+        "Windows 4888",
+        "Certificate Services denied a certificate request."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4888: Certificate Services denied a certificate request.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4888 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4888",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Certificate Services denied a certificate request. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 6,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 9,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "request-id",
+          "section": "Additional Information",
+          "native_name": "RequestId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RequestId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "requester",
+          "section": "Additional Information",
+          "native_name": "Requester",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Requester` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "attributes",
+          "section": "Additional Information",
+          "native_name": "Attributes",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Attributes` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "disposition",
+          "section": "Additional Information",
+          "native_name": "Disposition",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Disposition` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-key-identifier",
+          "section": "Subject",
+          "native_name": "SubjectKeyIdentifier",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectKeyIdentifier` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject",
+          "section": "Subject",
+          "native_name": "Subject",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Subject` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "authentication-service",
+          "section": "Authentication",
+          "native_name": "AuthenticationService",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationService` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "authentication-level",
+          "section": "Additional Information",
+          "native_name": "AuthenticationLevel",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationLevel` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "dcomor-rpc",
+          "section": "Additional Information",
+          "native_name": "DCOMorRPC",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DCOMorRPC` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4889",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4889",
+      "title": "Windows Security Event 4889 — Certificate Services set the status of a certificate request to pending.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4889",
+      "aliases": [
+        "4889",
+        "Event ID 4889",
+        "Windows 4889",
+        "Certificate Services set the status of a certificate request to pending."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4889: Certificate Services set the status of a certificate request to pending.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4889 / versions 0,1"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4889",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Certificate Services set the status of a certificate request to pending. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 6,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 9,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "request-id",
+          "section": "Additional Information",
+          "native_name": "RequestId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RequestId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "requester",
+          "section": "Additional Information",
+          "native_name": "Requester",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Requester` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "attributes",
+          "section": "Additional Information",
+          "native_name": "Attributes",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Attributes` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "disposition",
+          "section": "Additional Information",
+          "native_name": "Disposition",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Disposition` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-key-identifier",
+          "section": "Subject",
+          "native_name": "SubjectKeyIdentifier",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectKeyIdentifier` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject",
+          "section": "Subject",
+          "native_name": "Subject",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Subject` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "authentication-service",
+          "section": "Authentication",
+          "native_name": "AuthenticationService",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationService` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "authentication-level",
+          "section": "Additional Information",
+          "native_name": "AuthenticationLevel",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationLevel` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "dcomor-rpc",
+          "section": "Additional Information",
+          "native_name": "DCOMorRPC",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DCOMorRPC` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4890",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4890",
+      "title": "Windows Security Event 4890 — The certificate manager settings for Certificate Services changed. Enable: %1 %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4890",
+      "aliases": [
+        "4890",
+        "Event ID 4890",
+        "Windows 4890",
+        "The certificate manager settings for Certificate Services changed. Enable: %1 %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4890: The certificate manager settings for Certificate Services changed. Enable: %1 %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4890 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4890",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The certificate manager settings for Certificate Services changed. Enable: %1 %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 6,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "enable-restricted-permissions",
+          "section": "Additional Information",
+          "native_name": "EnableRestrictedPermissions",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EnableRestrictedPermissions` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "restricted-permissions",
+          "section": "Additional Information",
+          "native_name": "RestrictedPermissions",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RestrictedPermissions` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4891",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4891",
+      "title": "Windows Security Event 4891 — A configuration entry changed in Certificate Services. Node: %1 Entry: %2 Value: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4891",
+      "aliases": [
+        "4891",
+        "Event ID 4891",
+        "Windows 4891",
+        "A configuration entry changed in Certificate Services. Node: %1 Entry: %2 Value: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4891: A configuration entry changed in Certificate Services. Node: %1 Entry: %2 Value: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4891 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4891",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A configuration entry changed in Certificate Services. Node: %1 Entry: %2 Value: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 7,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "node",
+          "section": "Additional Information",
+          "native_name": "Node",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Node` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "entry",
+          "section": "Additional Information",
+          "native_name": "Entry",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Entry` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "value",
+          "section": "Additional Information",
+          "native_name": "Value",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Value` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4892",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4892",
+      "title": "Windows Security Event 4892 — A property of Certificate Services changed. Property: %1 Index: %2 Type: %3 Value: %4",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4892",
+      "aliases": [
+        "4892",
+        "Event ID 4892",
+        "Windows 4892",
+        "A property of Certificate Services changed. Property: %1 Index: %2 Type: %3 Value: %4"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4892: A property of Certificate Services changed. Property: %1 Index: %2 Type: %3 Value: %4",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4892 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4892",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A property of Certificate Services changed. Property: %1 Index: %2 Type: %3 Value: %4 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "property-name",
+          "section": "Additional Information",
+          "native_name": "PropertyName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PropertyName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "property-index",
+          "section": "Additional Information",
+          "native_name": "PropertyIndex",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PropertyIndex` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "property-type",
+          "section": "Additional Information",
+          "native_name": "PropertyType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PropertyType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "property-value",
+          "section": "Additional Information",
+          "native_name": "PropertyValue",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PropertyValue` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4893",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4893",
+      "title": "Windows Security Event 4893 — Certificate Services archived a key.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4893",
+      "aliases": [
+        "4893",
+        "Event ID 4893",
+        "Windows 4893",
+        "Certificate Services archived a key."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4893: Certificate Services archived a key.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4893 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4893",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Certificate Services archived a key. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "request-id",
+          "section": "Additional Information",
+          "native_name": "RequestId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RequestId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "requester",
+          "section": "Additional Information",
+          "native_name": "Requester",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Requester` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "krahashes",
+          "section": "Additional Information",
+          "native_name": "KRAHashes",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `KRAHashes` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4894",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4894",
+      "title": "Windows Security Event 4894 — Certificate Services imported and archived a key.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4894",
+      "aliases": [
+        "4894",
+        "Event ID 4894",
+        "Windows 4894",
+        "Certificate Services imported and archived a key."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4894: Certificate Services imported and archived a key.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4894 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4894",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Certificate Services imported and archived a key. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 5,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "request-id",
+          "section": "Additional Information",
+          "native_name": "RequestId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RequestId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:4895",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "4895",
+      "title": "Windows Security Event 4895 — Certificate Services published the CA certificate to Active Directory Domain Services. Certificate Hash: %1 Valid From: %2 Valid To: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "4895",
+      "aliases": [
+        "4895",
+        "Event ID 4895",
+        "Windows 4895",
+        "Certificate Services published the CA certificate to Active Directory Domain Services. Certificate Hash: %1 Valid From: %2 Valid To: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "4895: Certificate Services published the CA certificate to Active Directory Domain Services. Certificate Hash: %1 Valid From: %2 Valid To: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch20",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch20",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 4895 / versions 0"
+      },
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4895",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Certificate Services published the CA certificate to Active Directory Domain Services. Certificate Hash: %1 Valid From: %2 Valid To: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "certificate-hash",
+          "section": "Additional Information",
+          "native_name": "CertificateHash",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CertificateHash` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "valid-from",
+          "section": "Additional Information",
+          "native_name": "ValidFrom",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ValidFrom` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "valid-to",
+          "section": "Additional Information",
+          "native_name": "ValidTo",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ValidTo` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
     }
   ]
 }
