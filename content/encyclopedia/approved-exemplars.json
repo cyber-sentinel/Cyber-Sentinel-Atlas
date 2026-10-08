@@ -44572,6 +44572,784 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5029",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5029",
+      "title": "Windows Security Event 5029 — The Windows Firewall service failed to initialize the driver. Windows Firewall will continue to enforce the current policy. Error Code: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5029",
+      "aliases": [
+        "5029",
+        "Event ID 5029",
+        "Windows 5029",
+        "The Windows Firewall service failed to initialize the driver. Windows Firewall will continue to enforce the current policy. Error Code: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5029: The Windows Firewall service failed to initialize the driver. Windows Firewall will continue to enforce the current policy. Error Code: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5029 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Firewall service failed to initialize the driver. Windows Firewall will continue to enforce the current policy. Error Code: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "error-code",
+          "section": "Additional Information",
+          "native_name": "ErrorCode",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ErrorCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5029",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5030",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5030",
+      "title": "Windows Security Event 5030 — The Windows Firewall service failed to start. Error Code: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5030",
+      "aliases": [
+        "5030",
+        "Event ID 5030",
+        "Windows 5030",
+        "The Windows Firewall service failed to start. Error Code: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5030: The Windows Firewall service failed to start. Error Code: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5030 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Firewall service failed to start. Error Code: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "error-code",
+          "section": "Additional Information",
+          "native_name": "ErrorCode",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ErrorCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5030",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5031",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5031",
+      "title": "Windows Security Event 5031 — Windows Firewall blocked an application from accepting incoming connections on the network. Profiles: %1 Application: %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5031",
+      "aliases": [
+        "5031",
+        "Event ID 5031",
+        "Windows 5031",
+        "Windows Firewall blocked an application from accepting incoming connections on the network. Profiles: %1 Application: %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5031: Windows Firewall blocked an application from accepting incoming connections on the network. Profiles: %1 Application: %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5031 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Windows Firewall blocked an application from accepting incoming connections on the network. Profiles: %1 Application: %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "profiles",
+          "section": "Additional Information",
+          "native_name": "Profiles",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Profiles` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "application",
+          "section": "Additional Information",
+          "native_name": "Application",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Application` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5031",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5032",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5032",
+      "title": "Windows Security Event 5032 — Windows Firewall was unable to notify the user that it blocked an application from accepting incoming connections on the network. Error Code: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5032",
+      "aliases": [
+        "5032",
+        "Event ID 5032",
+        "Windows 5032",
+        "Windows Firewall was unable to notify the user that it blocked an application from accepting incoming connections on the network. Error Code: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5032: Windows Firewall was unable to notify the user that it blocked an application from accepting incoming connections on the network. Error Code: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5032 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Windows Firewall was unable to notify the user that it blocked an application from accepting incoming connections on the network. Error Code: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "error-code",
+          "section": "Additional Information",
+          "native_name": "ErrorCode",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ErrorCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5032",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5033",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5033",
+      "title": "Windows Security Event 5033 — The Windows Firewall Driver started successfully.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5033",
+      "aliases": [
+        "5033",
+        "Event ID 5033",
+        "Windows 5033",
+        "The Windows Firewall Driver started successfully."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5033: The Windows Firewall Driver started successfully.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5033 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Firewall Driver started successfully. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5033",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5034",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5034",
+      "title": "Windows Security Event 5034 — The Windows Firewall Driver was stopped.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5034",
+      "aliases": [
+        "5034",
+        "Event ID 5034",
+        "Windows 5034",
+        "The Windows Firewall Driver was stopped."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5034: The Windows Firewall Driver was stopped.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5034 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Firewall Driver was stopped. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5034",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5035",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5035",
+      "title": "Windows Security Event 5035 — The Windows Firewall Driver failed to start. Error Code: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5035",
+      "aliases": [
+        "5035",
+        "Event ID 5035",
+        "Windows 5035",
+        "The Windows Firewall Driver failed to start. Error Code: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5035: The Windows Firewall Driver failed to start. Error Code: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5035 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Firewall Driver failed to start. Error Code: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "error-code",
+          "section": "Additional Information",
+          "native_name": "ErrorCode",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ErrorCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5035",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5037",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5037",
+      "title": "Windows Security Event 5037 — The Windows Firewall Driver detected a critical runtime error, terminating. Error Code: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5037",
+      "aliases": [
+        "5037",
+        "Event ID 5037",
+        "Windows 5037",
+        "The Windows Firewall Driver detected a critical runtime error, terminating. Error Code: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5037: The Windows Firewall Driver detected a critical runtime error, terminating. Error Code: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5037 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Firewall Driver detected a critical runtime error, terminating. Error Code: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "error-code",
+          "section": "Additional Information",
+          "native_name": "ErrorCode",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ErrorCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5037",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5038",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5038",
+      "title": "Windows Security Event 5038 — Code integrity determined that the image hash of a file is not valid. The file could be corrupt due to unauthorized modification or the invalid hash could indicate a potential disk device error. File Name: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5038",
+      "aliases": [
+        "5038",
+        "Event ID 5038",
+        "Windows 5038",
+        "Code integrity determined that the image hash of a file is not valid. The file could be corrupt due to unauthorized modification or the invalid hash could indicate a potential disk device error. File Name: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5038: Code integrity determined that the image hash of a file is not valid. The file could be corrupt due to unauthorized modification or the invalid hash could indicate a potential disk device error. File Name: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5038 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Code integrity determined that the image hash of a file is not valid. The file could be corrupt due to unauthorized modification or the invalid hash could indicate a potential disk device error. File Name: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "param1",
+          "section": "Additional Information",
+          "native_name": "param1",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `param1` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5038",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5039",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5039",
+      "title": "Windows Security Event 5039 — A registry key was virtualized.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5039",
+      "aliases": [
+        "5039",
+        "Event ID 5039",
+        "Windows 5039",
+        "A registry key was virtualized."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5039: A registry key was virtualized.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch27",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch27",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5039 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A registry key was virtualized. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-path",
+          "section": "Object / Process",
+          "native_name": "ObjectPath",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ObjectPath` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-virtual-path",
+          "section": "Object / Process",
+          "native_name": "ObjectVirtualPath",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ObjectVirtualPath` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessId",
+          "type": "Pointer",
+          "meaning": "Provider-rendered `ProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-name",
+          "section": "Object / Process",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProcessName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5039",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }
