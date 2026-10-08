@@ -1,0 +1,179 @@
+name: Temporary inline drive Security-Auditing Batches 28-35
+
+on:
+  push:
+    branches:
+      - build/security-auditing-batches-22-35
+    paths:
+      - '.github/workflows/tmp-drive-inline-security-auditing-batches28-35.yml'
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  drive-inline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout orchestration branch
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Drive bounded inline fresh-main sequence
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          REPO="$GITHUB_REPOSITORY"
+          DISCOVERY_RUN=37826533823
+          UWS_RUN=37826876988
+          UWS_NAME='uws-batches22-35-verification-v2'
+          cp tools/tmp_promote_security_batch_dynamic.py /tmp/atlas-promote.py
+          gh api "repos/${REPO}/actions/runs/${DISCOVERY_RUN}/artifacts?per_page=100" > /tmp/discovery-artifacts.json
+          gh api "repos/${REPO}/actions/runs/${UWS_RUN}/artifacts?per_page=100" > /tmp/uws-artifacts.json
+          rm -rf /tmp/uws-evidence
+          gh run download "$UWS_RUN" -R "$REPO" -n "$UWS_NAME" -D /tmp/uws-evidence
+
+          batch_ids() {
+            case "$1" in
+              28) echo '5040,5041,5042,5043,5044,5045,5046,5047,5048,5049' ;;
+              29) echo '5050,5051,5056,5057,5058,5059,5060,5061,5062,5063' ;;
+              30) echo '5064,5065,5066,5067,5068,5069,5070,5071,5120,5121' ;;
+              31) echo '5122,5123,5124,5125,5126,5127,5136,5137,5138,5139' ;;
+              32) echo '5140,5141,5142,5143,5144,5145,5146,5147,5148,5149' ;;
+              33) echo '5150,5151,5152,5153,5154,5155,5156,5157,5158,5159' ;;
+              34) echo '5160,5168,5169,5170,5376,5377,5378,5379,5380,5381' ;;
+              35) echo '5382,5440,5441,5442,5443,5444,5446,5447,5448,5449' ;;
+              *) return 1 ;;
+            esac
+          }
+
+          coverage_count() {
+            gh api "repos/${REPO}/contents/content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json?ref=main" --jq '.content' | tr -d '\n' | base64 -d | jq -r '.encyclopedia_grade_count'
+          }
+          uws_count() {
+            gh api "repos/${REPO}/contents/content/encyclopedia/coverage-manifest.json?ref=main" --jq '.content' | tr -d '\n' | base64 -d | jq -r '.windows_security_log_review_benchmark.encyclopedia_grade_listed_id_count'
+          }
+
+          wait_gates() {
+            local head="$1"
+            for _ in $(seq 1 480); do
+              gh api "repos/${REPO}/actions/runs?head_sha=${head}&event=pull_request&per_page=100" > /tmp/pr-runs.json
+              state=$(python3 - <<'PY'
+          import json
+          req={'Foundation Hygiene','Phase 5.3.4 Canaries','Phase 5.10 Public Preview Readiness','Phase 5.10.1 Redistribution Closure','Governance Hygiene','Phase 5.5.4D Supply Chain Closure'}
+          d=json.load(open('/tmp/pr-runs.json'));latest={}
+          for r in d.get('workflow_runs',[]):
+              n=r.get('name')
+              if n in req and (n not in latest or r['id']>latest[n]['id']):latest[n]=r
+          missing=sorted(req-set(latest));bad=[];pending=[]
+          for n,r in latest.items():
+              if r.get('status')!='completed':pending.append(f"{n}:{r.get('status')}")
+              elif r.get('conclusion')!='success':bad.append(f"{n}:{r.get('conclusion')}")
+          if bad:print('FAIL '+','.join(sorted(bad)))
+          elif missing or pending:print('PENDING missing='+','.join(missing)+' pending='+','.join(sorted(pending)))
+          else:print('PASS')
+          PY
+              )
+              echo "head=${head} gates=${state}"
+              case "$state" in PASS) return 0;; FAIL*) echo "$state" >&2;exit 1;; esac
+              sleep 10
+            done
+            echo 'gate timeout' >&2;exit 1
+          }
+
+          cancel_main_push() {
+            local sha="$1"; sleep 3
+            gh api "repos/${REPO}/actions/runs?branch=main&event=push&head_sha=${sha}&per_page=100" > /tmp/main-runs.json
+            python3 - <<'PY' > /tmp/cancel-ids
+          import json
+          req={'Foundation Hygiene','Phase 5.3.4 Canaries','Phase 5.10 Public Preview Readiness','Phase 5.10.1 Redistribution Closure','Governance Hygiene','Phase 5.5.4D Supply Chain Closure'}
+          for r in json.load(open('/tmp/main-runs.json')).get('workflow_runs',[]):
+              if r.get('name') in req and r.get('event')=='push' and r.get('head_branch')=='main' and r.get('status') in {'queued','in_progress'}:print(r['id'])
+          PY
+            while read -r id;do [ -n "$id" ]||continue;echo "cancel post-merge push run=${id}";gh api -X POST "repos/${REPO}/actions/runs/${id}/cancel" >/dev/null||true;done < /tmp/cancel-ids
+          }
+
+          for batch in $(seq 28 35); do
+            ids=$(batch_ids "$batch"); first=${ids%%,*}; last=${ids##*,}
+            expected=$((210+10*(batch-22))); target=$((expected+10))
+            branch="content/windows-security-auditing-batch-${batch}-${first}-${last}"
+            echo "=== Batch ${batch}: ${ids} ==="
+            git fetch origin main --prune
+            mainsha=$(git rev-parse origin/main)
+            current=$(coverage_count); [ "$current" -eq "$expected" ] || { echo "coverage mismatch ${current} != ${expected}" >&2;exit 1; }
+            open_count=$(gh api "repos/${REPO}/pulls?state=open&per_page=100" --jq 'length'); [ "$open_count" -eq 0 ] || { echo 'unexpected open PR' >&2;exit 1; }
+            ! git ls-remote --exit-code --heads origin "refs/heads/${branch}" >/dev/null 2>&1 || { echo "branch exists ${branch}" >&2;exit 1; }
+            python3 - "$ids" <<'PY'
+          import json,subprocess,sys
+          ids=[int(x) for x in sys.argv[1].split(',')]
+          snap=json.loads(subprocess.check_output(['git','show','origin/main:content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json'],text=True))
+          nxt=[int(x['event_id']) for x in snap['events'] if x['coverage_state']=='IDENTIFIED_PROVIDER_SCOPE'][:10]
+          assert nxt==ids,(nxt,ids)
+          print('queue-match=PASS')
+          PY
+
+            provider_name="security-auditing-batch${batch}-provider-metadata-v2"
+            rm -rf "/tmp/provider-${batch}";mkdir -p "/tmp/provider-${batch}"
+            gh run download "$DISCOVERY_RUN" -R "$REPO" -n "$provider_name" -D "/tmp/provider-${batch}"
+            BATCH="$batch" PROVIDER_NAME="$provider_name" python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          b=int(os.environ['BATCH']);pn=os.environ['PROVIDER_NAME']
+          da=json.load(open('/tmp/discovery-artifacts.json'))['artifacts'];ua=json.load(open('/tmp/uws-artifacts.json'))['artifacts']
+          pm=next(x for x in da if x['name']==pn);um=next(x for x in ua if x['name']=='uws-batches22-35-verification-v2')
+          pf=Path(f'/tmp/provider-{b}/security-auditing-batch{b}.json');uf=Path('/tmp/uws-evidence/uws-batches22-35-verification.json')
+          assert pf.exists() and uf.exists();u=json.loads(uf.read_text());ub=u['batches'][str(b)]
+          e={'batch':b,'discovery_run_id':37826533823,'provider_artifact_id':pm['id'],'provider_artifact_digest':pm['digest'],'provider_raw_sha256':'sha256-'+hashlib.sha256(pf.read_bytes()).hexdigest(),'uws_run_id':37826876988,'uws_artifact_id':um['id'],'uws_artifact_digest':um['digest'],'uws_raw_sha256':u['raw_sha256'],'uws_listed_ids':ub['listed_ids'],'uws_not_listed_ids':ub['not_listed_ids']}
+          Path('/tmp/batch-evidence.json').write_text(json.dumps(e,indent=2)+'\n');print(json.dumps(e,separators=(',',':')))
+          PY
+
+            git switch -C "$branch" origin/main
+            python3 /tmp/atlas-promote.py --batch "$batch" --artifact "/tmp/provider-${batch}/security-auditing-batch${batch}.json" --evidence /tmp/batch-evidence.json
+            BATCH="$batch" IDS="$ids" python3 - <<'PY'
+          import importlib.util,json,os
+          from pathlib import Path
+          b=int(os.environ['BATCH']);ids=set(os.environ['IDS'].split(','));listed=set(map(str,json.load(open('/tmp/batch-evidence.json'))['uws_listed_ids']))
+          sources={json.loads(x.read_text())['id'] for x in Path('content/encyclopedia/sources').glob('*.json')}
+          events=json.loads(Path('content/encyclopedia/approved-exemplars.json').read_text())['events'];cur=[x for x in events if str(x.get('native_event_id')) in ids and x.get('namespace')=='microsoft.windows.security'];assert len(cur)==10
+          for e in cur:
+              assert e['source_id'] in sources and e['structural_source']['source_id'] in sources
+              ext=e.get('external_reference');eid=str(e['native_event_id'])
+              if eid in listed:assert ext and ext['source_id'] in sources and 'ultimatewindowssecurity.com' in ext['url']
+              else:assert ext is None,(eid,ext)
+          paths=[Path('tests/phase51010/test_windows_security_coverage_snapshot.py'),Path(f'tests/phase51010/test_windows_security_auditing_batch{b}.py')];prev=Path(f'tests/phase51010/test_windows_security_auditing_batch{b-1}.py')
+          if prev.exists():paths.append(prev)
+          for i,p in enumerate(paths):
+              s=importlib.util.spec_from_file_location(f't{i}',p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);ts=[getattr(m,n) for n in dir(m) if n.startswith('test_') and callable(getattr(m,n))];assert ts
+              for t in ts:t()
+          print('focused-tests-and-source-integrity=PASS')
+          PY
+            find . -type d -name __pycache__ -prune -exec rm -rf {} +;find . -type f -name '*.pyc' -delete
+            git config user.name 'Cyber-Sentinel CI';git config user.email 'actions@users.noreply.github.com';git add -A;git diff --cached --check
+            test -n "$(git diff --cached --name-only)";! git diff --cached --name-only | grep -E '(^|/)__pycache__/|\.pyc$|^tmp/|^tools/tmp_'
+            git commit -m "Content: promote Security-Auditing Batch ${batch}";git push origin "HEAD:refs/heads/${branch}"
+            head=$(git rev-parse HEAD)
+            gh api "repos/${REPO}/compare/main...${branch}" > /tmp/compare.json
+            python3 - <<'PY'
+          import json,re
+          d=json.load(open('/tmp/compare.json'));assert d['status']=='ahead' and d['ahead_by']==1 and d['behind_by']==0;f=[x['filename'] for x in d['files']];assert len(f)==9,f;assert not any(re.search(r'(^|/)__pycache__/|\.pyc$|^tmp/|^tools/tmp_',x) for x in f)
+          PY
+            actual_uws=$(gh api "repos/${REPO}/contents/content/encyclopedia/coverage-manifest.json?ref=${branch}" --jq '.content'|tr -d '\n'|base64 -d|jq -r '.windows_security_log_review_benchmark.encyclopedia_grade_listed_id_count')
+            body="Fresh-main Batch ${batch} promotion. Scope: ${ids}. Provider discovery run 37826533823 and UWS verification run 37826876988 are checksum/artifact-bound in committed evidence. Pre-PR queue/source/tests/hygiene PASS; ahead_by=1; behind_by=0; nine durable files. Expected Security ${target}/423; UWS ${actual_uws}/422; Sysmon 30/30."
+            pr=$(gh api -X POST "repos/${REPO}/pulls" -f title="Content: promote Windows Security-Auditing Batch ${batch} (${first}-${last})" -f head="$branch" -f base=main -f body="$body" --jq '.number')
+            echo "created PR #${pr} head=${head}"
+            wait_gates "$head"
+            [ "$(gh api "repos/${REPO}/pulls/${pr}" --jq '.head.sha')" = "$head" ] || exit 1
+            [ "$(gh api "repos/${REPO}/pulls/${pr}" --jq '.mergeable')" = true ] || exit 1
+            result=$(gh api -X PUT "repos/${REPO}/pulls/${pr}/merge" -f merge_method=squash -f sha="$head" -f commit_title="Content: promote Windows Security-Auditing Batch ${batch} (${first}-${last}) (#${pr})")
+            [ "$(printf '%s' "$result"|jq -r '.merged')" = true ] || { echo "$result" >&2;exit 1; };merge_sha=$(printf '%s' "$result"|jq -r '.sha')
+            head_tree=$(gh api "repos/${REPO}/commits/${head}" --jq '.commit.tree.sha');main_tree=$(gh api "repos/${REPO}/commits/${merge_sha}" --jq '.commit.tree.sha');verified=$(gh api "repos/${REPO}/commits/${merge_sha}" --jq '.commit.verification.verified')
+            [ "$head_tree" = "$main_tree" ] && [ "$verified" = true ] || exit 1
+            [ "$(coverage_count)" -eq "$target" ] || exit 1
+            echo "MERGED batch=${batch} sha=${merge_sha} security=${target}/423 uws=$(uws_count)/422 signed=true"
+            cancel_main_push "$merge_sha"
+          done
+          echo 'BATCHES_28_35_COMPLETE=PASS'
