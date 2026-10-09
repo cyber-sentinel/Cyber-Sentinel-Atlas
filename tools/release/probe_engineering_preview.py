@@ -24,7 +24,13 @@ def approved_windows_event_ids() -> list[str]:
         for item in data["events"]
         if item.get("namespace") == "microsoft.windows.security"
     ]
-    if (not event_ids or len(event_ids) > 423
+    # Do not cap the aggregate preview set at the Security-Auditing provider
+    # denominator. That frozen 423-ID denominator applies only to the
+    # Microsoft-Windows-Security-Auditing family, while approved Windows
+    # Security exemplars may include independently governed identities outside
+    # that family. The aggregate probe remains fail-closed on type, decimal
+    # identity, and uniqueness.
+    if (not event_ids
             or any(not isinstance(event_id, str) or not event_id.isdecimal() for event_id in event_ids)
             or len(event_ids) != len(set(event_ids))):
         raise RuntimeError("approved Windows Security exemplar IDs are invalid or duplicated")

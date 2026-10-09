@@ -92,6 +92,25 @@ def test_05_duplicate_approved_event_id_fails_closed():
             probe.APPROVED_EXEMPLARS = original
 
 
+def test_06_provider_denominator_does_not_cap_aggregate_preview_probe():
+    original = probe.APPROVED_EXEMPLARS
+    with tempfile.TemporaryDirectory() as directory:
+        path = Path(directory) / "approved-exemplars.json"
+        event_ids = [str(1000 + index) for index in range(424)]
+        path.write_text(json.dumps({
+            "status": "MAINTAINER_APPROVED_PRODUCTION_EXEMPLARS",
+            "events": [
+                {"namespace": "microsoft.windows.security", "native_event_id": event_id}
+                for event_id in event_ids
+            ],
+        }), encoding="utf-8")
+        probe.APPROVED_EXEMPLARS = path
+        try:
+            assert probe.approved_windows_event_ids() == event_ids
+        finally:
+            probe.APPROVED_EXEMPLARS = original
+
+
 if __name__ == "__main__":
     for name, value in sorted(globals().items()):
         if name.startswith("test_") and callable(value):
