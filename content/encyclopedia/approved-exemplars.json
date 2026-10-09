@@ -58558,6 +58558,680 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5462",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5462",
+      "title": "Windows Security Event 5462 — IPsec Policy Agent failed to apply some rules of the active IPsec policy on the computer. Use the IP Security Monitor snap-in to diagnose the problem. Policy: %1 Error Code: %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5462",
+      "aliases": [
+        "5462",
+        "Event ID 5462",
+        "Windows 5462",
+        "IPsec Policy Agent failed to apply some rules of the active IPsec policy on the computer. Use the IP Security Monitor snap-in to diagnose the problem. Policy: %1 Error Code: %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5462: IPsec Policy Agent failed to apply some rules of the active IPsec policy on the computer. Use the IP Security Monitor snap-in to diagnose the problem. Policy: %1 Error Code: %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5462 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent failed to apply some rules of the active IPsec policy on the computer. Use the IP Security Monitor snap-in to diagnose the problem. Policy: %1 Error Code: %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "policy",
+          "section": "Additional Information",
+          "native_name": "Policy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Policy` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "error",
+          "section": "Additional Information",
+          "native_name": "Error",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Error` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5462",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5463",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5463",
+      "title": "Windows Security Event 5463 — IPsec Policy Agent polled for changes to the active IPsec policy and detected no changes.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5463",
+      "aliases": [
+        "5463",
+        "Event ID 5463",
+        "Windows 5463",
+        "IPsec Policy Agent polled for changes to the active IPsec policy and detected no changes."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5463: IPsec Policy Agent polled for changes to the active IPsec policy and detected no changes.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5463 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent polled for changes to the active IPsec policy and detected no changes. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5463",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5464",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5464",
+      "title": "Windows Security Event 5464 — IPsec Policy Agent polled for changes to the active IPsec policy, detected changes, and applied them.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5464",
+      "aliases": [
+        "5464",
+        "Event ID 5464",
+        "Windows 5464",
+        "IPsec Policy Agent polled for changes to the active IPsec policy, detected changes, and applied them."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5464: IPsec Policy Agent polled for changes to the active IPsec policy, detected changes, and applied them.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5464 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent polled for changes to the active IPsec policy, detected changes, and applied them. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5464",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5465",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5465",
+      "title": "Windows Security Event 5465 — IPsec Policy Agent received a control for forced reloading of IPsec policy and processed the control successfully.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5465",
+      "aliases": [
+        "5465",
+        "Event ID 5465",
+        "Windows 5465",
+        "IPsec Policy Agent received a control for forced reloading of IPsec policy and processed the control successfully."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5465: IPsec Policy Agent received a control for forced reloading of IPsec policy and processed the control successfully.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5465 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent received a control for forced reloading of IPsec policy and processed the control successfully. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5465",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5466",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5466",
+      "title": "Windows Security Event 5466 — IPsec Policy Agent polled for changes to the Active Directory IPsec policy, determined that Active Directory cannot be reached, and will use the cached copy of the Active Directory IPsec policy instead. Any changes ma...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5466",
+      "aliases": [
+        "5466",
+        "Event ID 5466",
+        "Windows 5466",
+        "IPsec Policy Agent polled for changes to the Active Directory IPsec policy, determined that Active Directory cannot be reached, and will use the cached copy of the Active Directory IPsec policy instead. Any changes ma..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5466: IPsec Policy Agent polled for changes to the Active Directory IPsec policy, determined that Active Directory cannot be reached, and will use the cached copy of the Active Directory IPsec policy instead. Any changes ma...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5466 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent polled for changes to the Active Directory IPsec policy, determined that Active Directory cannot be reached, and will use the cached copy of the Active Directory IPsec policy instead. Any changes ma... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5466",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5467",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5467",
+      "title": "Windows Security Event 5467 — IPsec Policy Agent polled for changes to the Active Directory IPsec policy, determined that Active Directory can be reached, and found no changes to the policy. The cached copy of the Active Directory IPsec policy is...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5467",
+      "aliases": [
+        "5467",
+        "Event ID 5467",
+        "Windows 5467",
+        "IPsec Policy Agent polled for changes to the Active Directory IPsec policy, determined that Active Directory can be reached, and found no changes to the policy. The cached copy of the Active Directory IPsec policy is..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5467: IPsec Policy Agent polled for changes to the Active Directory IPsec policy, determined that Active Directory can be reached, and found no changes to the policy. The cached copy of the Active Directory IPsec policy is...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5467 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent polled for changes to the Active Directory IPsec policy, determined that Active Directory can be reached, and found no changes to the policy. The cached copy of the Active Directory IPsec policy is... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5467",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5468",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5468",
+      "title": "Windows Security Event 5468 — IPsec Policy Agent polled for changes to the Active Directory IPsec policy, determined that Active Directory can be reached, found changes to the policy, and applied those changes. The cached copy of the Active Direct...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5468",
+      "aliases": [
+        "5468",
+        "Event ID 5468",
+        "Windows 5468",
+        "IPsec Policy Agent polled for changes to the Active Directory IPsec policy, determined that Active Directory can be reached, found changes to the policy, and applied those changes. The cached copy of the Active Direct..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5468: IPsec Policy Agent polled for changes to the Active Directory IPsec policy, determined that Active Directory can be reached, found changes to the policy, and applied those changes. The cached copy of the Active Direct...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5468 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent polled for changes to the Active Directory IPsec policy, determined that Active Directory can be reached, found changes to the policy, and applied those changes. The cached copy of the Active Direct... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5468",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5471",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5471",
+      "title": "Windows Security Event 5471 — IPsec Policy Agent loaded local storage IPsec policy on the computer. Policy: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5471",
+      "aliases": [
+        "5471",
+        "Event ID 5471",
+        "Windows 5471",
+        "IPsec Policy Agent loaded local storage IPsec policy on the computer. Policy: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5471: IPsec Policy Agent loaded local storage IPsec policy on the computer. Policy: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5471 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent loaded local storage IPsec policy on the computer. Policy: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "policy",
+          "section": "Additional Information",
+          "native_name": "Policy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Policy` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5471",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5472",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5472",
+      "title": "Windows Security Event 5472 — IPsec Policy Agent failed to load local storage IPsec policy on the computer. Policy: %1 Error Code: %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5472",
+      "aliases": [
+        "5472",
+        "Event ID 5472",
+        "Windows 5472",
+        "IPsec Policy Agent failed to load local storage IPsec policy on the computer. Policy: %1 Error Code: %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5472: IPsec Policy Agent failed to load local storage IPsec policy on the computer. Policy: %1 Error Code: %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5472 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent failed to load local storage IPsec policy on the computer. Policy: %1 Error Code: %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "policy",
+          "section": "Additional Information",
+          "native_name": "Policy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Policy` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "error",
+          "section": "Additional Information",
+          "native_name": "Error",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Error` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5472",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5473",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5473",
+      "title": "Windows Security Event 5473 — IPsec Policy Agent loaded directory storage IPsec policy on the computer. Policy: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5473",
+      "aliases": [
+        "5473",
+        "Event ID 5473",
+        "Windows 5473",
+        "IPsec Policy Agent loaded directory storage IPsec policy on the computer. Policy: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5473: IPsec Policy Agent loaded directory storage IPsec policy on the computer. Policy: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch37",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch37",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5473 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent loaded directory storage IPsec policy on the computer. Policy: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "policy",
+          "section": "Additional Information",
+          "native_name": "Policy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Policy` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5473",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }
