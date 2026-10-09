@@ -57325,6 +57325,1239 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5450",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5450",
+      "title": "Windows Security Event 5450 — A Windows Filtering Platform sub-layer has been changed.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5450",
+      "aliases": [
+        "5450",
+        "Event ID 5450",
+        "Windows 5450",
+        "A Windows Filtering Platform sub-layer has been changed."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5450: A Windows Filtering Platform sub-layer has been changed.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5450 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A Windows Filtering Platform sub-layer has been changed. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 10,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessId",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "user-sid",
+          "section": "Target / Account",
+          "native_name": "UserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `UserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "user-name",
+          "section": "Target / Account",
+          "native_name": "UserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `UserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "provider-key",
+          "section": "Additional Information",
+          "native_name": "ProviderKey",
+          "type": "GUID",
+          "meaning": "Provider-rendered `ProviderKey` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "provider-name",
+          "section": "Additional Information",
+          "native_name": "ProviderName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProviderName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "change-type",
+          "section": "Additional Information",
+          "native_name": "ChangeType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ChangeType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sub-layer-key",
+          "section": "Additional Information",
+          "native_name": "SubLayerKey",
+          "type": "GUID",
+          "meaning": "Provider-rendered `SubLayerKey` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sub-layer-name",
+          "section": "Additional Information",
+          "native_name": "SubLayerName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubLayerName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "sub-layer-type",
+          "section": "Additional Information",
+          "native_name": "SubLayerType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubLayerType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "weight",
+          "section": "Additional Information",
+          "native_name": "Weight",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Weight` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5450",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5451",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5451",
+      "title": "Windows Security Event 5451 — An IPsec quick mode security association was established. Local Endpoint: Network Address: %1 Network Address mask: %2 Port: %3 Tunnel Endpoint: %4 Remote Endpoint: Network Address: %5 Network Address Mask: %6 Port: %...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5451",
+      "aliases": [
+        "5451",
+        "Event ID 5451",
+        "Windows 5451",
+        "An IPsec quick mode security association was established. Local Endpoint: Network Address: %1 Network Address mask: %2 Port: %3 Tunnel Endpoint: %4 Remote Endpoint: Network Address: %5 Network Address Mask: %6 Port: %..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5451: An IPsec quick mode security association was established. Local Endpoint: Network Address: %1 Network Address mask: %2 Port: %3 Tunnel Endpoint: %4 Remote Endpoint: Network Address: %5 Network Address Mask: %6 Port: %...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5451 / versions 0,1"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: An IPsec quick mode security association was established. Local Endpoint: Network Address: %1 Network Address mask: %2 Port: %3 Tunnel Endpoint: %4 Remote Endpoint: Network Address: %5 Network Address Mask: %6 Port: %... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 24,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 26,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "local-address",
+          "section": "Additional Information",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "local-address-mask",
+          "section": "Additional Information",
+          "native_name": "LocalAddressMask",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalAddressMask` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "local-port",
+          "section": "Additional Information",
+          "native_name": "LocalPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LocalPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "local-tunnel-endpoint",
+          "section": "Additional Information",
+          "native_name": "LocalTunnelEndpoint",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalTunnelEndpoint` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "remote-address-mask",
+          "section": "Additional Information",
+          "native_name": "RemoteAddressMask",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddressMask` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "remote-port",
+          "section": "Additional Information",
+          "native_name": "RemotePort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `RemotePort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "peer-private-address",
+          "section": "Network",
+          "native_name": "PeerPrivateAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PeerPrivateAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "remote-tunnel-endpoint",
+          "section": "Additional Information",
+          "native_name": "RemoteTunnelEndpoint",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteTunnelEndpoint` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "ip-protocol",
+          "section": "Additional Information",
+          "native_name": "IpProtocol",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `IpProtocol` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "keying-module-name",
+          "section": "Additional Information",
+          "native_name": "KeyingModuleName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `KeyingModuleName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "ah-auth-type",
+          "section": "Additional Information",
+          "native_name": "AhAuthType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AhAuthType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "esp-auth-type",
+          "section": "Additional Information",
+          "native_name": "EspAuthType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EspAuthType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "cipher-type",
+          "section": "Additional Information",
+          "native_name": "CipherType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CipherType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "lifetime-seconds",
+          "section": "Additional Information",
+          "native_name": "LifetimeSeconds",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LifetimeSeconds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "lifetime-kilobytes",
+          "section": "Additional Information",
+          "native_name": "LifetimeKilobytes",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LifetimeKilobytes` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "lifetime-packets",
+          "section": "Additional Information",
+          "native_name": "LifetimePackets",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LifetimePackets` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "mode",
+          "section": "Additional Information",
+          "native_name": "Mode",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Mode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "role",
+          "section": "Additional Information",
+          "native_name": "Role",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Role` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "transport-filter-id",
+          "section": "Additional Information",
+          "native_name": "TransportFilterId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `TransportFilterId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "main-mode-sa-id",
+          "section": "Additional Information",
+          "native_name": "MainModeSaId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `MainModeSaId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "quick-mode-sa-id",
+          "section": "Additional Information",
+          "native_name": "QuickModeSaId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `QuickModeSaId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "inbound-spi",
+          "section": "Additional Information",
+          "native_name": "InboundSpi",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `InboundSpi` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "outbound-spi",
+          "section": "Additional Information",
+          "native_name": "OutboundSpi",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `OutboundSpi` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "tunnel-id",
+          "section": "Additional Information",
+          "native_name": "TunnelId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `TunnelId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "traffic-selector-id",
+          "section": "Additional Information",
+          "native_name": "TrafficSelectorId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `TrafficSelectorId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5451",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5452",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5452",
+      "title": "Windows Security Event 5452 — An IPsec quick mode security association ended. Local Endpoint: Network Address: %1 Port: %2 Tunnel Endpoint: %3 Remote Endpoint: Network Address: %4 Port: %5 Tunnel Endpoint: %6 Additional Information: Protocol: %7 Q...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5452",
+      "aliases": [
+        "5452",
+        "Event ID 5452",
+        "Windows 5452",
+        "An IPsec quick mode security association ended. Local Endpoint: Network Address: %1 Port: %2 Tunnel Endpoint: %3 Remote Endpoint: Network Address: %4 Port: %5 Tunnel Endpoint: %6 Additional Information: Protocol: %7 Q..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5452: An IPsec quick mode security association ended. Local Endpoint: Network Address: %1 Port: %2 Tunnel Endpoint: %3 Remote Endpoint: Network Address: %4 Port: %5 Tunnel Endpoint: %6 Additional Information: Protocol: %7 Q...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5452 / versions 0,1"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: An IPsec quick mode security association ended. Local Endpoint: Network Address: %1 Port: %2 Tunnel Endpoint: %3 Remote Endpoint: Network Address: %4 Port: %5 Tunnel Endpoint: %6 Additional Information: Protocol: %7 Q... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 12,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "local-address",
+          "section": "Additional Information",
+          "native_name": "LocalAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "local-port",
+          "section": "Additional Information",
+          "native_name": "LocalPort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LocalPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "local-tunnel-endpoint",
+          "section": "Additional Information",
+          "native_name": "LocalTunnelEndpoint",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalTunnelEndpoint` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "remote-address",
+          "section": "Additional Information",
+          "native_name": "RemoteAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "remote-port",
+          "section": "Additional Information",
+          "native_name": "RemotePort",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `RemotePort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "remote-tunnel-endpoint",
+          "section": "Additional Information",
+          "native_name": "RemoteTunnelEndpoint",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteTunnelEndpoint` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "ip-protocol",
+          "section": "Additional Information",
+          "native_name": "IpProtocol",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `IpProtocol` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "quick-mode-sa-id",
+          "section": "Additional Information",
+          "native_name": "QuickModeSaId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `QuickModeSaId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "local-address-mask",
+          "section": "Additional Information",
+          "native_name": "LocalAddressMask",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalAddressMask` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "remote-address-mask",
+          "section": "Additional Information",
+          "native_name": "RemoteAddressMask",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemoteAddressMask` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "tunnel-id",
+          "section": "Additional Information",
+          "native_name": "TunnelId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `TunnelId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "traffic-selector-id",
+          "section": "Additional Information",
+          "native_name": "TrafficSelectorId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `TrafficSelectorId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5452",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5453",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5453",
+      "title": "Windows Security Event 5453 — An IPsec negotiation with a remote computer failed because the IKE and AuthIP IPsec Keying Modules (IKEEXT) service is not started.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5453",
+      "aliases": [
+        "5453",
+        "Event ID 5453",
+        "Windows 5453",
+        "An IPsec negotiation with a remote computer failed because the IKE and AuthIP IPsec Keying Modules (IKEEXT) service is not started."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5453: An IPsec negotiation with a remote computer failed because the IKE and AuthIP IPsec Keying Modules (IKEEXT) service is not started.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5453 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: An IPsec negotiation with a remote computer failed because the IKE and AuthIP IPsec Keying Modules (IKEEXT) service is not started. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5453",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5456",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5456",
+      "title": "Windows Security Event 5456 — IPsec Policy Agent applied Active Directory storage IPsec policy on the computer. Policy: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5456",
+      "aliases": [
+        "5456",
+        "Event ID 5456",
+        "Windows 5456",
+        "IPsec Policy Agent applied Active Directory storage IPsec policy on the computer. Policy: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5456: IPsec Policy Agent applied Active Directory storage IPsec policy on the computer. Policy: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5456 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent applied Active Directory storage IPsec policy on the computer. Policy: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "policy",
+          "section": "Additional Information",
+          "native_name": "Policy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Policy` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5456",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5457",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5457",
+      "title": "Windows Security Event 5457 — IPsec Policy Agent failed to apply Active Directory storage IPsec policy on the computer. DN: %1 Error code: %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5457",
+      "aliases": [
+        "5457",
+        "Event ID 5457",
+        "Windows 5457",
+        "IPsec Policy Agent failed to apply Active Directory storage IPsec policy on the computer. DN: %1 Error code: %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5457: IPsec Policy Agent failed to apply Active Directory storage IPsec policy on the computer. DN: %1 Error code: %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5457 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent failed to apply Active Directory storage IPsec policy on the computer. DN: %1 Error code: %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "policy",
+          "section": "Additional Information",
+          "native_name": "Policy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Policy` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "error",
+          "section": "Additional Information",
+          "native_name": "Error",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Error` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5457",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5458",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5458",
+      "title": "Windows Security Event 5458 — IPsec Policy Agent applied locally cached copy of Active Directory storage IPsec policy on the computer. Policy: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5458",
+      "aliases": [
+        "5458",
+        "Event ID 5458",
+        "Windows 5458",
+        "IPsec Policy Agent applied locally cached copy of Active Directory storage IPsec policy on the computer. Policy: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5458: IPsec Policy Agent applied locally cached copy of Active Directory storage IPsec policy on the computer. Policy: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5458 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent applied locally cached copy of Active Directory storage IPsec policy on the computer. Policy: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "policy",
+          "section": "Additional Information",
+          "native_name": "Policy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Policy` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5458",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5459",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5459",
+      "title": "Windows Security Event 5459 — IPsec Policy Agent failed to apply locally cached copy of Active Directory storage IPsec policy on the computer. Policy: %1 Error Code: %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5459",
+      "aliases": [
+        "5459",
+        "Event ID 5459",
+        "Windows 5459",
+        "IPsec Policy Agent failed to apply locally cached copy of Active Directory storage IPsec policy on the computer. Policy: %1 Error Code: %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5459: IPsec Policy Agent failed to apply locally cached copy of Active Directory storage IPsec policy on the computer. Policy: %1 Error Code: %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5459 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent failed to apply locally cached copy of Active Directory storage IPsec policy on the computer. Policy: %1 Error Code: %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "policy",
+          "section": "Additional Information",
+          "native_name": "Policy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Policy` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "error",
+          "section": "Additional Information",
+          "native_name": "Error",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Error` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5459",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5460",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5460",
+      "title": "Windows Security Event 5460 — IPsec Policy Agent applied local registry storage IPsec policy on the computer. Policy: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5460",
+      "aliases": [
+        "5460",
+        "Event ID 5460",
+        "Windows 5460",
+        "IPsec Policy Agent applied local registry storage IPsec policy on the computer. Policy: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5460: IPsec Policy Agent applied local registry storage IPsec policy on the computer. Policy: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5460 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent applied local registry storage IPsec policy on the computer. Policy: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "policy",
+          "section": "Additional Information",
+          "native_name": "Policy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Policy` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5460",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5461",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5461",
+      "title": "Windows Security Event 5461 — IPsec Policy Agent failed to apply local registry storage IPsec policy on the computer. Policy: %1 Error Code: %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5461",
+      "aliases": [
+        "5461",
+        "Event ID 5461",
+        "Windows 5461",
+        "IPsec Policy Agent failed to apply local registry storage IPsec policy on the computer. Policy: %1 Error Code: %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5461: IPsec Policy Agent failed to apply local registry storage IPsec policy on the computer. Policy: %1 Error Code: %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch36",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch36",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5461 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent failed to apply local registry storage IPsec policy on the computer. Policy: %1 Error Code: %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "policy",
+          "section": "Additional Information",
+          "native_name": "Policy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Policy` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "error",
+          "section": "Additional Information",
+          "native_name": "Error",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Error` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5461",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }
