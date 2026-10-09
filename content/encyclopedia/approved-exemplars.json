@@ -64080,6 +64080,910 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6404",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6404",
+      "title": "Windows Security Event 6404 — BranchCache: Hosted cache could not be authenticated using the provisioned SSL certificate. Domain name of the hosted cache: %1 Error Code: %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6404",
+      "aliases": [
+        "6404",
+        "Event ID 6404",
+        "Windows 6404",
+        "BranchCache: Hosted cache could not be authenticated using the provisioned SSL certificate. Domain name of the hosted cache: %1 Error Code: %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6404: BranchCache: Hosted cache could not be authenticated using the provisioned SSL certificate. Domain name of the hosted cache: %1 Error Code: %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6404 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: BranchCache: Hosted cache could not be authenticated using the provisioned SSL certificate. Domain name of the hosted cache: %1 Error Code: %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "hosted-cache-name",
+          "section": "Additional Information",
+          "native_name": "HostedCacheName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `HostedCacheName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "error-code",
+          "section": "Additional Information",
+          "native_name": "ErrorCode",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ErrorCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6404",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6405",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6405",
+      "title": "Windows Security Event 6405 — BranchCache: %2 instance(s) of event id %1 occurred.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6405",
+      "aliases": [
+        "6405",
+        "Event ID 6405",
+        "Windows 6405",
+        "BranchCache: %2 instance(s) of event id %1 occurred."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6405: BranchCache: %2 instance(s) of event id %1 occurred.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6405 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: BranchCache: %2 instance(s) of event id %1 occurred. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "event-id",
+          "section": "Additional Information",
+          "native_name": "EventId",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `EventId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "count",
+          "section": "Additional Information",
+          "native_name": "Count",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Count` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6405",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6406",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6406",
+      "title": "Windows Security Event 6406 — %1 registered to Windows Firewall to control filtering for the following: %2.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6406",
+      "aliases": [
+        "6406",
+        "Event ID 6406",
+        "Windows 6406",
+        "%1 registered to Windows Firewall to control filtering for the following: %2."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6406: %1 registered to Windows Firewall to control filtering for the following: %2.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6406 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: %1 registered to Windows Firewall to control filtering for the following: %2. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "product-name",
+          "section": "Additional Information",
+          "native_name": "ProductName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProductName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "categories",
+          "section": "Additional Information",
+          "native_name": "Categories",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Categories` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6406",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6407",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6407",
+      "title": "Windows Security Event 6407 — %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6407",
+      "aliases": [
+        "6407",
+        "Event ID 6407",
+        "Windows 6407",
+        "%1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6407: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6407 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "message",
+          "section": "Additional Information",
+          "native_name": "Message",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Message` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6407",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6408",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6408",
+      "title": "Windows Security Event 6408 — Registered product %1 failed and Windows Firewall is now controlling the filtering for %2.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6408",
+      "aliases": [
+        "6408",
+        "Event ID 6408",
+        "Windows 6408",
+        "Registered product %1 failed and Windows Firewall is now controlling the filtering for %2."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6408: Registered product %1 failed and Windows Firewall is now controlling the filtering for %2.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6408 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Registered product %1 failed and Windows Firewall is now controlling the filtering for %2. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "product-name",
+          "section": "Additional Information",
+          "native_name": "ProductName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProductName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "categories",
+          "section": "Additional Information",
+          "native_name": "Categories",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Categories` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6408",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6409",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6409",
+      "title": "Windows Security Event 6409 — BranchCache: A service connection point object could not be parsed. SCP object GUID: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6409",
+      "aliases": [
+        "6409",
+        "Event ID 6409",
+        "Windows 6409",
+        "BranchCache: A service connection point object could not be parsed. SCP object GUID: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6409: BranchCache: A service connection point object could not be parsed. SCP object GUID: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6409 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: BranchCache: A service connection point object could not be parsed. SCP object GUID: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "guid",
+          "section": "Additional Information",
+          "native_name": "GUID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `GUID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6409",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6410",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6410",
+      "title": "Windows Security Event 6410 — Code integrity determined that a file does not meet the security requirements to load into a process. This could be due to the use of shared sections or other issues. File Name: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6410",
+      "aliases": [
+        "6410",
+        "Event ID 6410",
+        "Windows 6410",
+        "Code integrity determined that a file does not meet the security requirements to load into a process. This could be due to the use of shared sections or other issues. File Name: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6410: Code integrity determined that a file does not meet the security requirements to load into a process. This could be due to the use of shared sections or other issues. File Name: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6410 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Code integrity determined that a file does not meet the security requirements to load into a process. This could be due to the use of shared sections or other issues. File Name: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "param1",
+          "section": "Additional Information",
+          "native_name": "param1",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `param1` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6410",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6416",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6416",
+      "title": "Windows Security Event 6416 — A new external device was recognized by the system.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6416",
+      "aliases": [
+        "6416",
+        "Event ID 6416",
+        "Windows 6416",
+        "A new external device was recognized by the system."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6416: A new external device was recognized by the system.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6416 / versions 0,1"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A new external device was recognized by the system. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "class-id",
+          "section": "Additional Information",
+          "native_name": "ClassId",
+          "type": "GUID",
+          "meaning": "Provider-rendered `ClassId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "vendor-ids",
+          "section": "Additional Information",
+          "native_name": "VendorIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `VendorIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "compatible-ids",
+          "section": "Additional Information",
+          "native_name": "CompatibleIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CompatibleIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "location-information",
+          "section": "Additional Information",
+          "native_name": "LocationInformation",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocationInformation` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "device-id",
+          "section": "Additional Information",
+          "native_name": "DeviceId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "device-description",
+          "section": "Additional Information",
+          "native_name": "DeviceDescription",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceDescription` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "class-name",
+          "section": "Additional Information",
+          "native_name": "ClassName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClassName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6416",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6417",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6417",
+      "title": "Windows Security Event 6417 — The FIPS mode crypto selftests succeeded. Process ID: %1 Process Name: %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6417",
+      "aliases": [
+        "6417",
+        "Event ID 6417",
+        "Windows 6417",
+        "The FIPS mode crypto selftests succeeded. Process ID: %1 Process Name: %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6417: The FIPS mode crypto selftests succeeded. Process ID: %1 Process Name: %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6417 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The FIPS mode crypto selftests succeeded. Process ID: %1 Process Name: %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessId",
+          "type": "Pointer",
+          "meaning": "Provider-rendered `ProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-name",
+          "section": "Object / Process",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProcessName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6417",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6418",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6418",
+      "title": "Windows Security Event 6418 — The FIPS mode crypto selftests failed. Process ID: %1 Process Name: %2 Failed test code: %3",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6418",
+      "aliases": [
+        "6418",
+        "Event ID 6418",
+        "Windows 6418",
+        "The FIPS mode crypto selftests failed. Process ID: %1 Process Name: %2 Failed test code: %3"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6418: The FIPS mode crypto selftests failed. Process ID: %1 Process Name: %2 Failed test code: %3",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch41",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch41",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6418 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The FIPS mode crypto selftests failed. Process ID: %1 Process Name: %2 Failed test code: %3 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 3,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessId",
+          "type": "Pointer",
+          "meaning": "Provider-rendered `ProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-name",
+          "section": "Object / Process",
+          "native_name": "ProcessName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProcessName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "fatal-code",
+          "section": "Additional Information",
+          "native_name": "FatalCode",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `FatalCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6418",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }
