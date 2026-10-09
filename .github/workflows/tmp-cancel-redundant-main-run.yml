@@ -16,9 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      RUN_ID: '37953142391'
+      RUN_ID: '37955664558'
     steps:
-      - name: Force-cancel redundant post-merge run
+      - name: Force-cancel invalidated prior-head run
         shell: bash
         run: |
           set -euo pipefail
