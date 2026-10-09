@@ -45,10 +45,10 @@ def test_02_denominator_is_exact_controlled_provider_scope():
 
 def test_03_only_current_approved_windows_exemplars_count():
     snapshot = builder.build_snapshot()
-    assert snapshot["encyclopedia_grade_count"] == 330
-    assert snapshot["remaining_count"] == 93
-    assert snapshot["completion_ratio"] == "330/423"
-    assert snapshot["completion_percent"] == 78.01
+    assert snapshot["encyclopedia_grade_count"] == 340
+    assert snapshot["remaining_count"] == 83
+    assert snapshot["completion_ratio"] == "340/423"
+    assert snapshot["completion_percent"] == 80.38
     by_id = {item["event_id"]: item for item in snapshot["events"]}
     for event_id in ("4608", "4624", "4625", "4648", "4672", "4688", "4740", "4768", "4769", "4771"):
         assert by_id[event_id]["coverage_state"] == "ENCYCLOPEDIA_GRADE"
@@ -61,7 +61,7 @@ def test_03b_other_security_log_providers_do_not_enter_security_auditing_denomin
     for event_id in ("1100", "1101", "1102", "1104", "1105", "1108"):
         assert event_id not in ids
     assert snapshot["denominator_count"] == 423
-    assert snapshot["encyclopedia_grade_count"] == 330
+    assert snapshot["encyclopedia_grade_count"] == 340
 
 
 def test_04_inventory_binding_and_legacy_boundary_are_explicit():
