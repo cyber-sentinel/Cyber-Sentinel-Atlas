@@ -59232,6 +59232,919 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5474",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5474",
+      "title": "Windows Security Event 5474 — IPsec Policy Agent failed to load directory storage IPsec policy on the computer. Policy: %1 Error Code: %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5474",
+      "aliases": [
+        "5474",
+        "Event ID 5474",
+        "Windows 5474",
+        "IPsec Policy Agent failed to load directory storage IPsec policy on the computer. Policy: %1 Error Code: %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5474: IPsec Policy Agent failed to load directory storage IPsec policy on the computer. Policy: %1 Error Code: %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5474 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent failed to load directory storage IPsec policy on the computer. Policy: %1 Error Code: %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "policy",
+          "section": "Additional Information",
+          "native_name": "Policy",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Policy` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "error",
+          "section": "Additional Information",
+          "native_name": "Error",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Error` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5474",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5477",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5477",
+      "title": "Windows Security Event 5477 — IPsec Policy Agent failed to add quick mode filter. Quick Mode Filter: %1 Error Code: %2",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5477",
+      "aliases": [
+        "5477",
+        "Event ID 5477",
+        "Windows 5477",
+        "IPsec Policy Agent failed to add quick mode filter. Quick Mode Filter: %1 Error Code: %2"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5477: IPsec Policy Agent failed to add quick mode filter. Quick Mode Filter: %1 Error Code: %2",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5477 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent failed to add quick mode filter. Quick Mode Filter: %1 Error Code: %2 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 2,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "quick-mode-filter",
+          "section": "Additional Information",
+          "native_name": "QuickModeFilter",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuickModeFilter` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "error",
+          "section": "Additional Information",
+          "native_name": "Error",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Error` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5477",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5478",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5478",
+      "title": "Windows Security Event 5478 — The IPsec Policy Agent service was started.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5478",
+      "aliases": [
+        "5478",
+        "Event ID 5478",
+        "Windows 5478",
+        "The IPsec Policy Agent service was started."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5478: The IPsec Policy Agent service was started.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5478 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The IPsec Policy Agent service was started. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5478",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5479",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5479",
+      "title": "Windows Security Event 5479 — The IPsec Policy Agent service was stopped. Stopping this service can put the computer at greater risk of network attack or expose the computer to potential security risks.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5479",
+      "aliases": [
+        "5479",
+        "Event ID 5479",
+        "Windows 5479",
+        "The IPsec Policy Agent service was stopped. Stopping this service can put the computer at greater risk of network attack or expose the computer to potential security risks."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5479: The IPsec Policy Agent service was stopped. Stopping this service can put the computer at greater risk of network attack or expose the computer to potential security risks.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5479 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The IPsec Policy Agent service was stopped. Stopping this service can put the computer at greater risk of network attack or expose the computer to potential security risks. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5479",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5480",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5480",
+      "title": "Windows Security Event 5480 — IPsec Policy Agent failed to get the complete list of network interfaces on the computer. This poses a potential security risk because some of the network interfaces may not get the protection provided by the applied...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5480",
+      "aliases": [
+        "5480",
+        "Event ID 5480",
+        "Windows 5480",
+        "IPsec Policy Agent failed to get the complete list of network interfaces on the computer. This poses a potential security risk because some of the network interfaces may not get the protection provided by the applied..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5480: IPsec Policy Agent failed to get the complete list of network interfaces on the computer. This poses a potential security risk because some of the network interfaces may not get the protection provided by the applied...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5480 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent failed to get the complete list of network interfaces on the computer. This poses a potential security risk because some of the network interfaces may not get the protection provided by the applied... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5480",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5483",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5483",
+      "title": "Windows Security Event 5483 — The IPsec Policy Agent service failed to initialize its RPC server. The service could not be started. Error Code: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5483",
+      "aliases": [
+        "5483",
+        "Event ID 5483",
+        "Windows 5483",
+        "The IPsec Policy Agent service failed to initialize its RPC server. The service could not be started. Error Code: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5483: The IPsec Policy Agent service failed to initialize its RPC server. The service could not be started. Error Code: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5483 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The IPsec Policy Agent service failed to initialize its RPC server. The service could not be started. Error Code: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "error",
+          "section": "Additional Information",
+          "native_name": "Error",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Error` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5483",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5484",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5484",
+      "title": "Windows Security Event 5484 — The IPsec Policy Agent service experienced a critical failure and has shut down. The shutdown of this service can put the computer at greater risk of network attack or expose the computer to potential security risks....",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5484",
+      "aliases": [
+        "5484",
+        "Event ID 5484",
+        "Windows 5484",
+        "The IPsec Policy Agent service experienced a critical failure and has shut down. The shutdown of this service can put the computer at greater risk of network attack or expose the computer to potential security risks...."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5484: The IPsec Policy Agent service experienced a critical failure and has shut down. The shutdown of this service can put the computer at greater risk of network attack or expose the computer to potential security risks....",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5484 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The IPsec Policy Agent service experienced a critical failure and has shut down. The shutdown of this service can put the computer at greater risk of network attack or expose the computer to potential security risks.... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "error",
+          "section": "Additional Information",
+          "native_name": "Error",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Error` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5484",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5485",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5485",
+      "title": "Windows Security Event 5485 — IPsec Policy Agent failed to process some IPsec filters on a plug-and-play event for network interfaces. This poses a potential security risk because some of the network interfaces may not get the protection provided...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5485",
+      "aliases": [
+        "5485",
+        "Event ID 5485",
+        "Windows 5485",
+        "IPsec Policy Agent failed to process some IPsec filters on a plug-and-play event for network interfaces. This poses a potential security risk because some of the network interfaces may not get the protection provided..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5485: IPsec Policy Agent failed to process some IPsec filters on a plug-and-play event for network interfaces. This poses a potential security risk because some of the network interfaces may not get the protection provided...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5485 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: IPsec Policy Agent failed to process some IPsec filters on a plug-and-play event for network interfaces. This poses a potential security risk because some of the network interfaces may not get the protection provided... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5485",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5632",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5632",
+      "title": "Windows Security Event 5632 — A request was made to authenticate to a wireless network.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5632",
+      "aliases": [
+        "5632",
+        "Event ID 5632",
+        "Windows 5632",
+        "A request was made to authenticate to a wireless network."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5632: A request was made to authenticate to a wireless network.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5632 / versions 0,1"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A request was made to authenticate to a wireless network. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 14,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "ssid",
+          "section": "Additional Information",
+          "native_name": "SSID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SSID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "identity",
+          "section": "Additional Information",
+          "native_name": "Identity",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Identity` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "peer-mac",
+          "section": "Network",
+          "native_name": "PeerMac",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PeerMac` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "local-mac",
+          "section": "Additional Information",
+          "native_name": "LocalMac",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalMac` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "intf-guid",
+          "section": "Additional Information",
+          "native_name": "IntfGuid",
+          "type": "GUID",
+          "meaning": "Provider-rendered `IntfGuid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "reason-code",
+          "section": "Additional Information",
+          "native_name": "ReasonCode",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `ReasonCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "reason-text",
+          "section": "Additional Information",
+          "native_name": "ReasonText",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ReasonText` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "error-code",
+          "section": "Additional Information",
+          "native_name": "ErrorCode",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `ErrorCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "eapreason-code",
+          "section": "Additional Information",
+          "native_name": "EAPReasonCode",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `EAPReasonCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "eap-root-cause-string",
+          "section": "Additional Information",
+          "native_name": "EapRootCauseString",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EapRootCauseString` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "eaperror-code",
+          "section": "Additional Information",
+          "native_name": "EAPErrorCode",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `EAPErrorCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5632",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5633",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5633",
+      "title": "Windows Security Event 5633 — A request was made to authenticate to a wired network.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5633",
+      "aliases": [
+        "5633",
+        "Event ID 5633",
+        "Windows 5633",
+        "A request was made to authenticate to a wired network."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5633: A request was made to authenticate to a wired network.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch38",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch38",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5633 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A request was made to authenticate to a wired network. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "interface-name",
+          "section": "Additional Information",
+          "native_name": "InterfaceName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `InterfaceName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "identity",
+          "section": "Additional Information",
+          "native_name": "Identity",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Identity` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "reason-code",
+          "section": "Additional Information",
+          "native_name": "ReasonCode",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `ReasonCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "reason-text",
+          "section": "Additional Information",
+          "native_name": "ReasonText",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ReasonText` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "error-code",
+          "section": "Additional Information",
+          "native_name": "ErrorCode",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `ErrorCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5633",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }
