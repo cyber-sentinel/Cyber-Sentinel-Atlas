@@ -1,16 +1,9 @@
 {
-  "batch": 42,
+  "batch": 43,
   "ids": [
-    6419,
-    6420,
-    6421,
-    6422,
-    6423,
-    6424,
-    6425,
-    6426,
-    6427,
-    6428
+    6429,
+    6430,
+    8191
   ],
-  "expected_provider_before": 410
+  "expected_provider_before": 420
 }
