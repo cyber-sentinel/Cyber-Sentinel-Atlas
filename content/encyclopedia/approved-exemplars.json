@@ -52124,6 +52124,1835 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5150",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5150",
+      "title": "Windows Security Event 5150 — The Windows Filtering Platform has blocked a packet. Network Information: Direction: %1 Source Address: %2 Destination Address: %3 EtherType: %4 MediaType: %5 InterfaceType: %6 VlanTag: %7 Filter Information: Filter R...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5150",
+      "aliases": [
+        "5150",
+        "Event ID 5150",
+        "Windows 5150",
+        "The Windows Filtering Platform has blocked a packet. Network Information: Direction: %1 Source Address: %2 Destination Address: %3 EtherType: %4 MediaType: %5 InterfaceType: %6 VlanTag: %7 Filter Information: Filter R..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5150: The Windows Filtering Platform has blocked a packet. Network Information: Direction: %1 Source Address: %2 Destination Address: %3 EtherType: %4 MediaType: %5 InterfaceType: %6 VlanTag: %7 Filter Information: Filter R...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5150 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Filtering Platform has blocked a packet. Network Information: Direction: %1 Source Address: %2 Destination Address: %3 EtherType: %4 MediaType: %5 InterfaceType: %6 VlanTag: %7 Filter Information: Filter R... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 10,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "direction",
+          "section": "Additional Information",
+          "native_name": "Direction",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Direction` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-address",
+          "section": "Additional Information",
+          "native_name": "SourceAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourceAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "dest-address",
+          "section": "Additional Information",
+          "native_name": "DestAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DestAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "ether-type",
+          "section": "Additional Information",
+          "native_name": "EtherType",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `EtherType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "media-type",
+          "section": "Additional Information",
+          "native_name": "MediaType",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `MediaType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "interface-type",
+          "section": "Additional Information",
+          "native_name": "InterfaceType",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `InterfaceType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "vlan-tag",
+          "section": "Additional Information",
+          "native_name": "VlanTag",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `VlanTag` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "filter-rtid",
+          "section": "Additional Information",
+          "native_name": "FilterRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `FilterRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-name",
+          "section": "Additional Information",
+          "native_name": "LayerName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LayerName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-rtid",
+          "section": "Additional Information",
+          "native_name": "LayerRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `LayerRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5150",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5151",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5151",
+      "title": "Windows Security Event 5151 — A more restrictive Windows Filtering Platform filter has blocked a packet. Network Information: Direction: %1 Source Address: %2 Destination Address: %3 EtherType: %4 MediaType: %5 InterfaceType: %6 VlanTag: %7 Filter...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5151",
+      "aliases": [
+        "5151",
+        "Event ID 5151",
+        "Windows 5151",
+        "A more restrictive Windows Filtering Platform filter has blocked a packet. Network Information: Direction: %1 Source Address: %2 Destination Address: %3 EtherType: %4 MediaType: %5 InterfaceType: %6 VlanTag: %7 Filter..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5151: A more restrictive Windows Filtering Platform filter has blocked a packet. Network Information: Direction: %1 Source Address: %2 Destination Address: %3 EtherType: %4 MediaType: %5 InterfaceType: %6 VlanTag: %7 Filter...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5151 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A more restrictive Windows Filtering Platform filter has blocked a packet. Network Information: Direction: %1 Source Address: %2 Destination Address: %3 EtherType: %4 MediaType: %5 InterfaceType: %6 VlanTag: %7 Filter... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 10,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "direction",
+          "section": "Additional Information",
+          "native_name": "Direction",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Direction` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-address",
+          "section": "Additional Information",
+          "native_name": "SourceAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourceAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "dest-address",
+          "section": "Additional Information",
+          "native_name": "DestAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DestAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "ether-type",
+          "section": "Additional Information",
+          "native_name": "EtherType",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `EtherType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "media-type",
+          "section": "Additional Information",
+          "native_name": "MediaType",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `MediaType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "interface-type",
+          "section": "Additional Information",
+          "native_name": "InterfaceType",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `InterfaceType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "vlan-tag",
+          "section": "Additional Information",
+          "native_name": "VlanTag",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `VlanTag` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "filter-rtid",
+          "section": "Additional Information",
+          "native_name": "FilterRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `FilterRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-name",
+          "section": "Additional Information",
+          "native_name": "LayerName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LayerName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-rtid",
+          "section": "Additional Information",
+          "native_name": "LayerRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `LayerRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5151",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5152",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5152",
+      "title": "Windows Security Event 5152 — The Windows Filtering Platform has blocked a packet. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination Address: %6 Destinati...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5152",
+      "aliases": [
+        "5152",
+        "Event ID 5152",
+        "Windows 5152",
+        "The Windows Filtering Platform has blocked a packet. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination Address: %6 Destinati..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5152: The Windows Filtering Platform has blocked a packet. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination Address: %6 Destinati...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5152 / versions 0,1"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Filtering Platform has blocked a packet. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination Address: %6 Destinati... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 12,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `ProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "application",
+          "section": "Additional Information",
+          "native_name": "Application",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Application` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "direction",
+          "section": "Additional Information",
+          "native_name": "Direction",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Direction` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "source-address",
+          "section": "Additional Information",
+          "native_name": "SourceAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourceAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "source-port",
+          "section": "Additional Information",
+          "native_name": "SourcePort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourcePort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "dest-address",
+          "section": "Additional Information",
+          "native_name": "DestAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DestAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "dest-port",
+          "section": "Additional Information",
+          "native_name": "DestPort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DestPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "protocol",
+          "section": "Additional Information",
+          "native_name": "Protocol",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Protocol` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "filter-rtid",
+          "section": "Additional Information",
+          "native_name": "FilterRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `FilterRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "layer-name",
+          "section": "Additional Information",
+          "native_name": "LayerName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LayerName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "layer-rtid",
+          "section": "Additional Information",
+          "native_name": "LayerRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `LayerRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "filter-origin",
+          "section": "Additional Information",
+          "native_name": "FilterOrigin",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FilterOrigin` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5152",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5153",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5153",
+      "title": "Windows Security Event 5153 — A more restrictive Windows Filtering Platform filter has blocked a packet. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5153",
+      "aliases": [
+        "5153",
+        "Event ID 5153",
+        "Windows 5153",
+        "A more restrictive Windows Filtering Platform filter has blocked a packet. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5153: A more restrictive Windows Filtering Platform filter has blocked a packet. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5153 / versions 0,1"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A more restrictive Windows Filtering Platform filter has blocked a packet. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 12,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `ProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "application",
+          "section": "Additional Information",
+          "native_name": "Application",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Application` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "direction",
+          "section": "Additional Information",
+          "native_name": "Direction",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Direction` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "source-address",
+          "section": "Additional Information",
+          "native_name": "SourceAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourceAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "source-port",
+          "section": "Additional Information",
+          "native_name": "SourcePort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourcePort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "dest-address",
+          "section": "Additional Information",
+          "native_name": "DestAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DestAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "dest-port",
+          "section": "Additional Information",
+          "native_name": "DestPort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DestPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "protocol",
+          "section": "Additional Information",
+          "native_name": "Protocol",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Protocol` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "filter-rtid",
+          "section": "Additional Information",
+          "native_name": "FilterRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `FilterRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "layer-name",
+          "section": "Additional Information",
+          "native_name": "LayerName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LayerName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "layer-rtid",
+          "section": "Additional Information",
+          "native_name": "LayerRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `LayerRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "filter-origin",
+          "section": "Additional Information",
+          "native_name": "FilterOrigin",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FilterOrigin` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5153",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5154",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5154",
+      "title": "Windows Security Event 5154 — The Windows Filtering Platform has permitted an application or service to listen on a port for incoming connections. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address: %3...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5154",
+      "aliases": [
+        "5154",
+        "Event ID 5154",
+        "Windows 5154",
+        "The Windows Filtering Platform has permitted an application or service to listen on a port for incoming connections. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address: %3..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5154: The Windows Filtering Platform has permitted an application or service to listen on a port for incoming connections. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address: %3...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5154 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Filtering Platform has permitted an application or service to listen on a port for incoming connections. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address: %3... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `ProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "application",
+          "section": "Additional Information",
+          "native_name": "Application",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Application` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-address",
+          "section": "Additional Information",
+          "native_name": "SourceAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourceAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-port",
+          "section": "Additional Information",
+          "native_name": "SourcePort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourcePort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "protocol",
+          "section": "Additional Information",
+          "native_name": "Protocol",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Protocol` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "filter-rtid",
+          "section": "Additional Information",
+          "native_name": "FilterRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `FilterRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-name",
+          "section": "Additional Information",
+          "native_name": "LayerName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LayerName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-rtid",
+          "section": "Additional Information",
+          "native_name": "LayerRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `LayerRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5154",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5155",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5155",
+      "title": "Windows Security Event 5155 — The Windows Filtering Platform has blocked an application or service from listening on a port for incoming connections. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address:...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5155",
+      "aliases": [
+        "5155",
+        "Event ID 5155",
+        "Windows 5155",
+        "The Windows Filtering Platform has blocked an application or service from listening on a port for incoming connections. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address:..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5155: The Windows Filtering Platform has blocked an application or service from listening on a port for incoming connections. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address:...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5155 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Filtering Platform has blocked an application or service from listening on a port for incoming connections. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address:... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `ProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "application",
+          "section": "Additional Information",
+          "native_name": "Application",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Application` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-address",
+          "section": "Additional Information",
+          "native_name": "SourceAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourceAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-port",
+          "section": "Additional Information",
+          "native_name": "SourcePort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourcePort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "protocol",
+          "section": "Additional Information",
+          "native_name": "Protocol",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Protocol` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "filter-rtid",
+          "section": "Additional Information",
+          "native_name": "FilterRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `FilterRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-name",
+          "section": "Additional Information",
+          "native_name": "LayerName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LayerName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-rtid",
+          "section": "Additional Information",
+          "native_name": "LayerRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `LayerRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5155",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5156",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5156",
+      "title": "Windows Security Event 5156 — The Windows Filtering Platform has permitted a connection. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination Address: %6 Des...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5156",
+      "aliases": [
+        "5156",
+        "Event ID 5156",
+        "Windows 5156",
+        "The Windows Filtering Platform has permitted a connection. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination Address: %6 Des..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5156: The Windows Filtering Platform has permitted a connection. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination Address: %6 Des...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5156 / versions 0,1"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Filtering Platform has permitted a connection. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination Address: %6 Des... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 15,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `ProcessID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "application",
+          "section": "Additional Information",
+          "native_name": "Application",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Application` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "direction",
+          "section": "Additional Information",
+          "native_name": "Direction",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Direction` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "source-address",
+          "section": "Additional Information",
+          "native_name": "SourceAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourceAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "source-port",
+          "section": "Additional Information",
+          "native_name": "SourcePort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourcePort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "dest-address",
+          "section": "Additional Information",
+          "native_name": "DestAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DestAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "dest-port",
+          "section": "Additional Information",
+          "native_name": "DestPort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DestPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "protocol",
+          "section": "Additional Information",
+          "native_name": "Protocol",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Protocol` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "filter-rtid",
+          "section": "Additional Information",
+          "native_name": "FilterRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `FilterRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "layer-name",
+          "section": "Additional Information",
+          "native_name": "LayerName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LayerName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "layer-rtid",
+          "section": "Additional Information",
+          "native_name": "LayerRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `LayerRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "interface-index",
+          "section": "Additional Information",
+          "native_name": "InterfaceIndex",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `InterfaceIndex` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "filter-origin",
+          "section": "Additional Information",
+          "native_name": "FilterOrigin",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FilterOrigin` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "remote-user-id",
+          "section": "Additional Information",
+          "native_name": "RemoteUserID",
+          "type": "SID",
+          "meaning": "Provider-rendered `RemoteUserID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "remote-machine-id",
+          "section": "Additional Information",
+          "native_name": "RemoteMachineID",
+          "type": "SID",
+          "meaning": "Provider-rendered `RemoteMachineID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5156",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5157",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5157",
+      "title": "Windows Security Event 5157 — The Windows Filtering Platform has blocked a connection. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination Address: %6 Desti...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5157",
+      "aliases": [
+        "5157",
+        "Event ID 5157",
+        "Windows 5157",
+        "The Windows Filtering Platform has blocked a connection. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination Address: %6 Desti..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5157: The Windows Filtering Platform has blocked a connection. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination Address: %6 Desti...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5157 / versions 0,1,2,3"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Filtering Platform has blocked a connection. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address: %4 Source Port: %5 Destination Address: %6 Desti... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 13,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "2",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 16,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "3",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 19,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `ProcessID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "application",
+          "section": "Additional Information",
+          "native_name": "Application",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Application` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "direction",
+          "section": "Additional Information",
+          "native_name": "Direction",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Direction` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "source-address",
+          "section": "Additional Information",
+          "native_name": "SourceAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourceAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "source-port",
+          "section": "Additional Information",
+          "native_name": "SourcePort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourcePort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "dest-address",
+          "section": "Additional Information",
+          "native_name": "DestAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DestAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "dest-port",
+          "section": "Additional Information",
+          "native_name": "DestPort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DestPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "protocol",
+          "section": "Additional Information",
+          "native_name": "Protocol",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Protocol` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "filter-rtid",
+          "section": "Additional Information",
+          "native_name": "FilterRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `FilterRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "layer-name",
+          "section": "Additional Information",
+          "native_name": "LayerName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LayerName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "layer-rtid",
+          "section": "Additional Information",
+          "native_name": "LayerRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `LayerRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "remote-user-id",
+          "section": "Additional Information",
+          "native_name": "RemoteUserID",
+          "type": "SID",
+          "meaning": "Provider-rendered `RemoteUserID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "remote-machine-id",
+          "section": "Additional Information",
+          "native_name": "RemoteMachineID",
+          "type": "SID",
+          "meaning": "Provider-rendered `RemoteMachineID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "original-profile",
+          "section": "Additional Information",
+          "native_name": "OriginalProfile",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `OriginalProfile` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "current-profile",
+          "section": "Additional Information",
+          "native_name": "CurrentProfile",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CurrentProfile` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "is-loopback",
+          "section": "Additional Information",
+          "native_name": "IsLoopback",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `IsLoopback` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "2",
+            "3"
+          ]
+        },
+        {
+          "key": "interface-index",
+          "section": "Additional Information",
+          "native_name": "InterfaceIndex",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `InterfaceIndex` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "3"
+          ]
+        },
+        {
+          "key": "filter-origin",
+          "section": "Additional Information",
+          "native_name": "FilterOrigin",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FilterOrigin` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "3"
+          ]
+        },
+        {
+          "key": "has-remote-dynamic-keyword-address",
+          "section": "Additional Information",
+          "native_name": "HasRemoteDynamicKeywordAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `HasRemoteDynamicKeywordAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "3"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5157",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5158",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5158",
+      "title": "Windows Security Event 5158 — The Windows Filtering Platform has permitted a bind to a local port. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address: %3 Source Port: %4 Protocol: %5 Filter Information...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5158",
+      "aliases": [
+        "5158",
+        "Event ID 5158",
+        "Windows 5158",
+        "The Windows Filtering Platform has permitted a bind to a local port. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address: %3 Source Port: %4 Protocol: %5 Filter Information..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5158: The Windows Filtering Platform has permitted a bind to a local port. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address: %3 Source Port: %4 Protocol: %5 Filter Information...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5158 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Filtering Platform has permitted a bind to a local port. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address: %3 Source Port: %4 Protocol: %5 Filter Information... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `ProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "application",
+          "section": "Additional Information",
+          "native_name": "Application",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Application` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-address",
+          "section": "Additional Information",
+          "native_name": "SourceAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourceAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-port",
+          "section": "Additional Information",
+          "native_name": "SourcePort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourcePort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "protocol",
+          "section": "Additional Information",
+          "native_name": "Protocol",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Protocol` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "filter-rtid",
+          "section": "Additional Information",
+          "native_name": "FilterRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `FilterRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-name",
+          "section": "Additional Information",
+          "native_name": "LayerName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LayerName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-rtid",
+          "section": "Additional Information",
+          "native_name": "LayerRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `LayerRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5158",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5159",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5159",
+      "title": "Windows Security Event 5159 — The Windows Filtering Platform has blocked a bind to a local port. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address: %3 Source Port: %4 Protocol: %5 Filter Information:...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5159",
+      "aliases": [
+        "5159",
+        "Event ID 5159",
+        "Windows 5159",
+        "The Windows Filtering Platform has blocked a bind to a local port. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address: %3 Source Port: %4 Protocol: %5 Filter Information:..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5159: The Windows Filtering Platform has blocked a bind to a local port. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address: %3 Source Port: %4 Protocol: %5 Filter Information:...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5159 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Filtering Platform has blocked a bind to a local port. Application Information: Process ID: %1 Application Name: %2 Network Information: Source Address: %3 Source Port: %4 Protocol: %5 Filter Information:... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessId",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `ProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "application",
+          "section": "Additional Information",
+          "native_name": "Application",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Application` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-address",
+          "section": "Additional Information",
+          "native_name": "SourceAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourceAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-port",
+          "section": "Additional Information",
+          "native_name": "SourcePort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourcePort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "protocol",
+          "section": "Additional Information",
+          "native_name": "Protocol",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Protocol` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "filter-rtid",
+          "section": "Additional Information",
+          "native_name": "FilterRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `FilterRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-name",
+          "section": "Additional Information",
+          "native_name": "LayerName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LayerName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-rtid",
+          "section": "Additional Information",
+          "native_name": "LayerRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `LayerRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5159",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }

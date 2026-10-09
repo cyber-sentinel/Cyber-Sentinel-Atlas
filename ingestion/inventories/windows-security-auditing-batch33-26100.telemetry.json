@@ -1,0 +1,1139 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-auditing-batch33-26100",
+  "inventory_kind": "telemetry",
+  "declared_scope": "Microsoft-Windows-Security-Auditing Event IDs 5150, 5151, 5152, 5153, 5154, 5155, 5156, 5157, 5158, 5159 / Security / Windows Server 2025 build 26100",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch33"
+  ],
+  "inventory_method": "provider-runtime-message-and-template-metadata",
+  "inventory_source_version": "windows-server-2025-build-26100-security-auditing-batch33",
+  "expected_identity_count": 10,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "channel": "Security",
+    "product": "Windows Server 2025 Datacenter",
+    "platform": "Windows",
+    "windows_build": "26100",
+    "architecture": "64-bit",
+    "workflow_run_id": 37826533823,
+    "artifact_id": 11571881176,
+    "artifact_digest": "sha256:d133f6d114e6d6c9e7b0d82bc20e82c5cf405fd8485fd079360b92c2a2d535d5",
+    "raw_artifact_sha256": "sha256-af93f971d9f9c054a3e7f3ba0de866c5577d75b0bf71b864a941625734ac4464",
+    "provider_event_version_definition_count": 16,
+    "provider_unique_event_id_count": 10,
+    "uws_benchmark_verification": {
+      "workflow_run_id": 37826876988,
+      "artifact_id": 11572106023,
+      "artifact_digest": "sha256:af365f9b8db138b5122b6c502b66492958d8c40c470bdc4b28a31414d71d515b",
+      "raw_artifact_sha256": "sha256-fe14e3e08f420a0d324ad698fc7142bc5012900134afe239f795290d15fe9aba",
+      "listed_event_ids": [
+        "5150",
+        "5151",
+        "5152",
+        "5153",
+        "5154",
+        "5155",
+        "5156",
+        "5157",
+        "5158",
+        "5159"
+      ],
+      "listed_count": 10
+    },
+    "expected_identities": [
+      {
+        "event_id": "5150",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 10,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "Direction",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "EtherType",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "MediaType",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "InterfaceType",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "VlanTag",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5151",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 10,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "Direction",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "EtherType",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "MediaType",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "InterfaceType",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "VlanTag",
+                "in_type": "win:HexInt32",
+                "out_type": "win:HexInt32"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5152",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 11,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessId",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Direction",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestPort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 12,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessId",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Direction",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestPort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterOrigin",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5153",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 11,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessId",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Direction",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestPort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 12,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessId",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Direction",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestPort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterOrigin",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5154",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 8,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessId",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5155",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 8,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessId",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5156",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 11,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Direction",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestPort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 15,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Direction",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestPort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "InterfaceIndex",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterOrigin",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "RemoteUserID",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMachineID",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5157",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 11,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Direction",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestPort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 13,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Direction",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestPort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "RemoteUserID",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMachineID",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              }
+            ]
+          },
+          {
+            "version": 2,
+            "field_count": 16,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Direction",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestPort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "RemoteUserID",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMachineID",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "OriginalProfile",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CurrentProfile",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "IsLoopback",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          },
+          {
+            "version": 3,
+            "field_count": 19,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Direction",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DestPort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "InterfaceIndex",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterOrigin",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "RemoteUserID",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RemoteMachineID",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "OriginalProfile",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CurrentProfile",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "IsLoopback",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "HasRemoteDynamicKeywordAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5158",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 8,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessId",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5159",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 8,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "ProcessId",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "Application",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourceAddress",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SourcePort",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Protocol",
+                "in_type": "win:UInt32",
+                "out_type": "xs:unsignedInt"
+              },
+              {
+                "name": "FilterRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              },
+              {
+                "name": "LayerName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "LayerRTID",
+                "in_type": "win:UInt64",
+                "out_type": "xs:unsignedLong"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "completeness_semantics": "Bounded provider evidence for ten identities inside the frozen 423-ID Security-Auditing denominator. UWS membership is tracked independently as a secondary review benchmark; provider versions are preserved exactly."
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-ae97071ee5fe75bf3381b082223028b1803775c0ab984e0bc08458218e52ed65"
+}
