@@ -62450,6 +62450,1636 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6276",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6276",
+      "title": "Windows Security Event 6276 — Network Policy Server quarantined a user. Contact the Network Policy Server administrator for more information. User: Security ID: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6276",
+      "aliases": [
+        "6276",
+        "Event ID 6276",
+        "Windows 6276",
+        "Network Policy Server quarantined a user. Contact the Network Policy Server administrator for more information. User: Security ID: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6276: Network Policy Server quarantined a user. Contact the Network Policy Server administrator for more information. User: Security ID: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6276 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Network Policy Server quarantined a user. Contact the Network Policy Server administrator for more information. User: Security ID: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 29,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "fully-qualified-subject-user-name",
+          "section": "Additional Information",
+          "native_name": "FullyQualifiedSubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FullyQualifiedSubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-machine-sid",
+          "section": "Subject",
+          "native_name": "SubjectMachineSID",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectMachineSID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-machine-name",
+          "section": "Subject",
+          "native_name": "SubjectMachineName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectMachineName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "fully-qualified-subject-machine-name",
+          "section": "Additional Information",
+          "native_name": "FullyQualifiedSubjectMachineName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FullyQualifiedSubjectMachineName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "machine-inventory",
+          "section": "Additional Information",
+          "native_name": "MachineInventory",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MachineInventory` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "called-station-id",
+          "section": "Additional Information",
+          "native_name": "CalledStationID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CalledStationID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "calling-station-id",
+          "section": "Additional Information",
+          "native_name": "CallingStationID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CallingStationID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasipv4-address",
+          "section": "Additional Information",
+          "native_name": "NASIPv4Address",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASIPv4Address` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasipv6-address",
+          "section": "Additional Information",
+          "native_name": "NASIPv6Address",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASIPv6Address` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasidentifier",
+          "section": "Additional Information",
+          "native_name": "NASIdentifier",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASIdentifier` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasport-type",
+          "section": "Additional Information",
+          "native_name": "NASPortType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASPortType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasport",
+          "section": "Additional Information",
+          "native_name": "NASPort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-name",
+          "section": "Network",
+          "native_name": "ClientName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClientName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-ipaddress",
+          "section": "Network",
+          "native_name": "ClientIPAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClientIPAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "proxy-policy-name",
+          "section": "Additional Information",
+          "native_name": "ProxyPolicyName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProxyPolicyName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "network-policy-name",
+          "section": "Network",
+          "native_name": "NetworkPolicyName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NetworkPolicyName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-provider",
+          "section": "Additional Information",
+          "native_name": "AuthenticationProvider",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationProvider` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-server",
+          "section": "Additional Information",
+          "native_name": "AuthenticationServer",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationServer` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-type",
+          "section": "Additional Information",
+          "native_name": "AuthenticationType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "eaptype",
+          "section": "Additional Information",
+          "native_name": "EAPType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EAPType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "account-session-identifier",
+          "section": "Target / Account",
+          "native_name": "AccountSessionIdentifier",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AccountSessionIdentifier` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-state",
+          "section": "Additional Information",
+          "native_name": "QuarantineState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "extended-quarantine-state",
+          "section": "Additional Information",
+          "native_name": "ExtendedQuarantineState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ExtendedQuarantineState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-session-id",
+          "section": "Additional Information",
+          "native_name": "QuarantineSessionID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineSessionID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-help-url",
+          "section": "Additional Information",
+          "native_name": "QuarantineHelpURL",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineHelpURL` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-system-health-result",
+          "section": "Additional Information",
+          "native_name": "QuarantineSystemHealthResult",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineSystemHealthResult` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6276",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6277",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6277",
+      "title": "Windows Security Event 6277 — Network Policy Server granted access to a user but put it on probation because the host did not meet the defined health policy. Contact the Network Policy Server administrator for more information. User: Security ID: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6277",
+      "aliases": [
+        "6277",
+        "Event ID 6277",
+        "Windows 6277",
+        "Network Policy Server granted access to a user but put it on probation because the host did not meet the defined health policy. Contact the Network Policy Server administrator for more information. User: Security ID: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6277: Network Policy Server granted access to a user but put it on probation because the host did not meet the defined health policy. Contact the Network Policy Server administrator for more information. User: Security ID: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6277 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Network Policy Server granted access to a user but put it on probation because the host did not meet the defined health policy. Contact the Network Policy Server administrator for more information. User: Security ID: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 30,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "fully-qualified-subject-user-name",
+          "section": "Additional Information",
+          "native_name": "FullyQualifiedSubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FullyQualifiedSubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-machine-sid",
+          "section": "Subject",
+          "native_name": "SubjectMachineSID",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectMachineSID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-machine-name",
+          "section": "Subject",
+          "native_name": "SubjectMachineName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectMachineName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "fully-qualified-subject-machine-name",
+          "section": "Additional Information",
+          "native_name": "FullyQualifiedSubjectMachineName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FullyQualifiedSubjectMachineName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "machine-inventory",
+          "section": "Additional Information",
+          "native_name": "MachineInventory",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MachineInventory` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "called-station-id",
+          "section": "Additional Information",
+          "native_name": "CalledStationID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CalledStationID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "calling-station-id",
+          "section": "Additional Information",
+          "native_name": "CallingStationID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CallingStationID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasipv4-address",
+          "section": "Additional Information",
+          "native_name": "NASIPv4Address",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASIPv4Address` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasipv6-address",
+          "section": "Additional Information",
+          "native_name": "NASIPv6Address",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASIPv6Address` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasidentifier",
+          "section": "Additional Information",
+          "native_name": "NASIdentifier",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASIdentifier` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasport-type",
+          "section": "Additional Information",
+          "native_name": "NASPortType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASPortType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasport",
+          "section": "Additional Information",
+          "native_name": "NASPort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-name",
+          "section": "Network",
+          "native_name": "ClientName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClientName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-ipaddress",
+          "section": "Network",
+          "native_name": "ClientIPAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClientIPAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "proxy-policy-name",
+          "section": "Additional Information",
+          "native_name": "ProxyPolicyName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProxyPolicyName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "network-policy-name",
+          "section": "Network",
+          "native_name": "NetworkPolicyName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NetworkPolicyName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-provider",
+          "section": "Additional Information",
+          "native_name": "AuthenticationProvider",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationProvider` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-server",
+          "section": "Additional Information",
+          "native_name": "AuthenticationServer",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationServer` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-type",
+          "section": "Additional Information",
+          "native_name": "AuthenticationType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "eaptype",
+          "section": "Additional Information",
+          "native_name": "EAPType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EAPType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "account-session-identifier",
+          "section": "Target / Account",
+          "native_name": "AccountSessionIdentifier",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AccountSessionIdentifier` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-state",
+          "section": "Additional Information",
+          "native_name": "QuarantineState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "extended-quarantine-state",
+          "section": "Additional Information",
+          "native_name": "ExtendedQuarantineState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ExtendedQuarantineState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-session-id",
+          "section": "Additional Information",
+          "native_name": "QuarantineSessionID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineSessionID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-help-url",
+          "section": "Additional Information",
+          "native_name": "QuarantineHelpURL",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineHelpURL` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-system-health-result",
+          "section": "Additional Information",
+          "native_name": "QuarantineSystemHealthResult",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineSystemHealthResult` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-grace-time",
+          "section": "Additional Information",
+          "native_name": "QuarantineGraceTime",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineGraceTime` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6277",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6278",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6278",
+      "title": "Windows Security Event 6278 — Network Policy Server granted full access to a user because the host met the defined health policy. User: Security ID: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6278",
+      "aliases": [
+        "6278",
+        "Event ID 6278",
+        "Windows 6278",
+        "Network Policy Server granted full access to a user because the host met the defined health policy. User: Security ID: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6278: Network Policy Server granted full access to a user because the host met the defined health policy. User: Security ID: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6278 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Network Policy Server granted full access to a user because the host met the defined health policy. User: Security ID: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 29,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "fully-qualified-subject-user-name",
+          "section": "Additional Information",
+          "native_name": "FullyQualifiedSubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FullyQualifiedSubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-machine-sid",
+          "section": "Subject",
+          "native_name": "SubjectMachineSID",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectMachineSID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-machine-name",
+          "section": "Subject",
+          "native_name": "SubjectMachineName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectMachineName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "fully-qualified-subject-machine-name",
+          "section": "Additional Information",
+          "native_name": "FullyQualifiedSubjectMachineName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FullyQualifiedSubjectMachineName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "machine-inventory",
+          "section": "Additional Information",
+          "native_name": "MachineInventory",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `MachineInventory` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "called-station-id",
+          "section": "Additional Information",
+          "native_name": "CalledStationID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CalledStationID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "calling-station-id",
+          "section": "Additional Information",
+          "native_name": "CallingStationID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CallingStationID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasipv4-address",
+          "section": "Additional Information",
+          "native_name": "NASIPv4Address",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASIPv4Address` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasipv6-address",
+          "section": "Additional Information",
+          "native_name": "NASIPv6Address",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASIPv6Address` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasidentifier",
+          "section": "Additional Information",
+          "native_name": "NASIdentifier",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASIdentifier` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasport-type",
+          "section": "Additional Information",
+          "native_name": "NASPortType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASPortType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "nasport",
+          "section": "Additional Information",
+          "native_name": "NASPort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NASPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-name",
+          "section": "Network",
+          "native_name": "ClientName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClientName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-ipaddress",
+          "section": "Network",
+          "native_name": "ClientIPAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClientIPAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "proxy-policy-name",
+          "section": "Additional Information",
+          "native_name": "ProxyPolicyName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ProxyPolicyName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "network-policy-name",
+          "section": "Network",
+          "native_name": "NetworkPolicyName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `NetworkPolicyName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-provider",
+          "section": "Additional Information",
+          "native_name": "AuthenticationProvider",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationProvider` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-server",
+          "section": "Additional Information",
+          "native_name": "AuthenticationServer",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationServer` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "authentication-type",
+          "section": "Additional Information",
+          "native_name": "AuthenticationType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AuthenticationType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "eaptype",
+          "section": "Additional Information",
+          "native_name": "EAPType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `EAPType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "account-session-identifier",
+          "section": "Target / Account",
+          "native_name": "AccountSessionIdentifier",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AccountSessionIdentifier` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-state",
+          "section": "Additional Information",
+          "native_name": "QuarantineState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "extended-quarantine-state",
+          "section": "Additional Information",
+          "native_name": "ExtendedQuarantineState",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ExtendedQuarantineState` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-session-id",
+          "section": "Additional Information",
+          "native_name": "QuarantineSessionID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineSessionID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-help-url",
+          "section": "Additional Information",
+          "native_name": "QuarantineHelpURL",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineHelpURL` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "quarantine-system-health-result",
+          "section": "Additional Information",
+          "native_name": "QuarantineSystemHealthResult",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `QuarantineSystemHealthResult` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6278",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6279",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6279",
+      "title": "Windows Security Event 6279 — Network Policy Server locked the user account due to repeated failed authentication attempts. User: Security ID: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6279",
+      "aliases": [
+        "6279",
+        "Event ID 6279",
+        "Windows 6279",
+        "Network Policy Server locked the user account due to repeated failed authentication attempts. User: Security ID: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6279: Network Policy Server locked the user account due to repeated failed authentication attempts. User: Security ID: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6279 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Network Policy Server locked the user account due to repeated failed authentication attempts. User: Security ID: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 4,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "fully-qualified-subject-user-name",
+          "section": "Additional Information",
+          "native_name": "FullyQualifiedSubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FullyQualifiedSubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6279",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6280",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6280",
+      "title": "Windows Security Event 6280 — Network Policy Server unlocked the user account. User: Security ID: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6280",
+      "aliases": [
+        "6280",
+        "Event ID 6280",
+        "Windows 6280",
+        "Network Policy Server unlocked the user account. User: Security ID: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6280: Network Policy Server unlocked the user account. User: Security ID: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6280 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Network Policy Server unlocked the user account. User: Security ID: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 4,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "fully-qualified-subject-user-name",
+          "section": "Additional Information",
+          "native_name": "FullyQualifiedSubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FullyQualifiedSubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6280",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6281",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6281",
+      "title": "Windows Security Event 6281 — Code Integrity determined that the page hashes of an image file are not valid. The file could be improperly signed without page hashes or corrupt due to unauthorized modification. The invalid hashes could indicate a p...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6281",
+      "aliases": [
+        "6281",
+        "Event ID 6281",
+        "Windows 6281",
+        "Code Integrity determined that the page hashes of an image file are not valid. The file could be improperly signed without page hashes or corrupt due to unauthorized modification. The invalid hashes could indicate a p..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6281: Code Integrity determined that the page hashes of an image file are not valid. The file could be improperly signed without page hashes or corrupt due to unauthorized modification. The invalid hashes could indicate a p...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6281 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Code Integrity determined that the page hashes of an image file are not valid. The file could be improperly signed without page hashes or corrupt due to unauthorized modification. The invalid hashes could indicate a p... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "param1",
+          "section": "Additional Information",
+          "native_name": "param1",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `param1` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6281",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6400",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6400",
+      "title": "Windows Security Event 6400 — BranchCache: Received an incorrectly formatted response while discovering availability of content. IP address of the client that sent this response: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6400",
+      "aliases": [
+        "6400",
+        "Event ID 6400",
+        "Windows 6400",
+        "BranchCache: Received an incorrectly formatted response while discovering availability of content. IP address of the client that sent this response: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6400: BranchCache: Received an incorrectly formatted response while discovering availability of content. IP address of the client that sent this response: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6400 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: BranchCache: Received an incorrectly formatted response while discovering availability of content. IP address of the client that sent this response: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "client-ipaddress",
+          "section": "Network",
+          "native_name": "ClientIPAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClientIPAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6400",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6401",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6401",
+      "title": "Windows Security Event 6401 — BranchCache: Received invalid data from a peer. Data discarded. IP address of the client that sent this data: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6401",
+      "aliases": [
+        "6401",
+        "Event ID 6401",
+        "Windows 6401",
+        "BranchCache: Received invalid data from a peer. Data discarded. IP address of the client that sent this data: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6401: BranchCache: Received invalid data from a peer. Data discarded. IP address of the client that sent this data: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6401 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: BranchCache: Received invalid data from a peer. Data discarded. IP address of the client that sent this data: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "client-ipaddress",
+          "section": "Network",
+          "native_name": "ClientIPAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClientIPAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6401",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6402",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6402",
+      "title": "Windows Security Event 6402 — BranchCache: The message to the hosted cache offering it data is incorrectly formatted. IP address of the client that sent this message: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6402",
+      "aliases": [
+        "6402",
+        "Event ID 6402",
+        "Windows 6402",
+        "BranchCache: The message to the hosted cache offering it data is incorrectly formatted. IP address of the client that sent this message: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6402: BranchCache: The message to the hosted cache offering it data is incorrectly formatted. IP address of the client that sent this message: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6402 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: BranchCache: The message to the hosted cache offering it data is incorrectly formatted. IP address of the client that sent this message: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "client-ipaddress",
+          "section": "Network",
+          "native_name": "ClientIPAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClientIPAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6402",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6403",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6403",
+      "title": "Windows Security Event 6403 — BranchCache: The hosted cache sent an incorrectly formatted response to the client's message to offer it data. Domain name of the hosted cache is: %1",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6403",
+      "aliases": [
+        "6403",
+        "Event ID 6403",
+        "Windows 6403",
+        "BranchCache: The hosted cache sent an incorrectly formatted response to the client's message to offer it data. Domain name of the hosted cache is: %1"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6403: BranchCache: The hosted cache sent an incorrectly formatted response to the client's message to offer it data. Domain name of the hosted cache is: %1",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch40",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch40",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6403 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: BranchCache: The hosted cache sent an incorrectly formatted response to the client's message to offer it data. Domain name of the hosted cache is: %1 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 1,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "hosted-cache-name",
+          "section": "Additional Information",
+          "native_name": "HostedCacheName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `HostedCacheName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6403",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }
