@@ -53953,6 +53953,1789 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5160",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5160",
+      "title": "Windows Security Event 5160 — The Windows Filtering Platform Audit Mode has allowed a connection or packet that would have been blocked. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5160",
+      "aliases": [
+        "5160",
+        "Event ID 5160",
+        "Windows 5160",
+        "The Windows Filtering Platform Audit Mode has allowed a connection or packet that would have been blocked. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5160: The Windows Filtering Platform Audit Mode has allowed a connection or packet that would have been blocked. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5160 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The Windows Filtering Platform Audit Mode has allowed a connection or packet that would have been blocked. Application Information: Process ID: %1 Application Name: %2 Network Information: Direction: %3 Source Address... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 23,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "process-id",
+          "section": "Object / Process",
+          "native_name": "ProcessID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `ProcessID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "application",
+          "section": "Additional Information",
+          "native_name": "Application",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Application` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "direction",
+          "section": "Additional Information",
+          "native_name": "Direction",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Direction` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-address",
+          "section": "Additional Information",
+          "native_name": "SourceAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourceAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "source-port",
+          "section": "Additional Information",
+          "native_name": "SourcePort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SourcePort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "dest-address",
+          "section": "Additional Information",
+          "native_name": "DestAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DestAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "dest-port",
+          "section": "Additional Information",
+          "native_name": "DestPort",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DestPort` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "protocol",
+          "section": "Additional Information",
+          "native_name": "Protocol",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Protocol` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "interface-index",
+          "section": "Additional Information",
+          "native_name": "InterfaceIndex",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `InterfaceIndex` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "filter-origin",
+          "section": "Additional Information",
+          "native_name": "FilterOrigin",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FilterOrigin` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "filter-rtid",
+          "section": "Additional Information",
+          "native_name": "FilterRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `FilterRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-name",
+          "section": "Additional Information",
+          "native_name": "LayerName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LayerName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "layer-rtid",
+          "section": "Additional Information",
+          "native_name": "LayerRTID",
+          "type": "UInt64",
+          "meaning": "Provider-rendered `LayerRTID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-user-id",
+          "section": "Additional Information",
+          "native_name": "RemoteUserID",
+          "type": "SID",
+          "meaning": "Provider-rendered `RemoteUserID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "remote-machine-id",
+          "section": "Additional Information",
+          "native_name": "RemoteMachineID",
+          "type": "SID",
+          "meaning": "Provider-rendered `RemoteMachineID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "original-profile",
+          "section": "Additional Information",
+          "native_name": "OriginalProfile",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `OriginalProfile` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "current-profile",
+          "section": "Additional Information",
+          "native_name": "CurrentProfile",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CurrentProfile` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "is-loopback",
+          "section": "Additional Information",
+          "native_name": "IsLoopback",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `IsLoopback` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "has-remote-dynamic-keyword-address",
+          "section": "Additional Information",
+          "native_name": "HasRemoteDynamicKeywordAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `HasRemoteDynamicKeywordAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "firewall-policy-store",
+          "section": "Additional Information",
+          "native_name": "FirewallPolicyStore",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FirewallPolicyStore` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "modifiable",
+          "section": "Additional Information",
+          "native_name": "Modifiable",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Modifiable` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "callout-involved",
+          "section": "Additional Information",
+          "native_name": "CalloutInvolved",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CalloutInvolved` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "callout-id",
+          "section": "Additional Information",
+          "native_name": "CalloutID",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `CalloutID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5168",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5168",
+      "title": "Windows Security Event 5168 — Spn check for SMB/SMB2 fails.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5168",
+      "aliases": [
+        "5168",
+        "Event ID 5168",
+        "Windows 5168",
+        "Spn check for SMB/SMB2 fails."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5168: Spn check for SMB/SMB2 fails.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5168 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Spn check for SMB/SMB2 fails. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 9,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "spn-name",
+          "section": "Additional Information",
+          "native_name": "SpnName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SpnName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "error-code",
+          "section": "Additional Information",
+          "native_name": "ErrorCode",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `ErrorCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "server-names",
+          "section": "Additional Information",
+          "native_name": "ServerNames",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ServerNames` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "configured-names",
+          "section": "Additional Information",
+          "native_name": "ConfiguredNames",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ConfiguredNames` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "ip-addresses",
+          "section": "Network",
+          "native_name": "IpAddresses",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `IpAddresses` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5168",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5169",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5169",
+      "title": "Windows Security Event 5169 — A directory service object was modified.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5169",
+      "aliases": [
+        "5169",
+        "Event ID 5169",
+        "Windows 5169"
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5169: A directory service object was modified.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5169 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A directory service object was modified. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 16,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "op-correlation-id",
+          "section": "Additional Information",
+          "native_name": "OpCorrelationID",
+          "type": "GUID",
+          "meaning": "Provider-rendered `OpCorrelationID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "app-correlation-id",
+          "section": "Additional Information",
+          "native_name": "AppCorrelationID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AppCorrelationID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "dsname",
+          "section": "Additional Information",
+          "native_name": "DSName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DSName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "dstype",
+          "section": "Additional Information",
+          "native_name": "DSType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DSType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-dn",
+          "section": "Object / Process",
+          "native_name": "ObjectDN",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ObjectDN` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-guid",
+          "section": "Object / Process",
+          "native_name": "ObjectGUID",
+          "type": "GUID",
+          "meaning": "Provider-rendered `ObjectGUID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-class",
+          "section": "Object / Process",
+          "native_name": "ObjectClass",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ObjectClass` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "attribute-ldapdisplay-name",
+          "section": "Additional Information",
+          "native_name": "AttributeLDAPDisplayName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AttributeLDAPDisplayName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "attribute-syntax-oid",
+          "section": "Additional Information",
+          "native_name": "AttributeSyntaxOID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AttributeSyntaxOID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "attribute-value",
+          "section": "Additional Information",
+          "native_name": "AttributeValue",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AttributeValue` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "expiration-time",
+          "section": "Additional Information",
+          "native_name": "ExpirationTime",
+          "type": "FILETIME",
+          "meaning": "Provider-rendered `ExpirationTime` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "operation-type",
+          "section": "Additional Information",
+          "native_name": "OperationType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `OperationType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5169",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5170",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5170",
+      "title": "Windows Security Event 5170 — A directory service object was modified during a background cleanup task.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5170",
+      "aliases": [
+        "5170",
+        "Event ID 5170",
+        "Windows 5170",
+        "A directory service object was modified during a background cleanup task."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5170: A directory service object was modified during a background cleanup task.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5170 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A directory service object was modified during a background cleanup task. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 16,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "op-correlation-id",
+          "section": "Additional Information",
+          "native_name": "OpCorrelationID",
+          "type": "GUID",
+          "meaning": "Provider-rendered `OpCorrelationID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "app-correlation-id",
+          "section": "Additional Information",
+          "native_name": "AppCorrelationID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AppCorrelationID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "dsname",
+          "section": "Additional Information",
+          "native_name": "DSName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DSName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "dstype",
+          "section": "Additional Information",
+          "native_name": "DSType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DSType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-dn",
+          "section": "Object / Process",
+          "native_name": "ObjectDN",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ObjectDN` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-guid",
+          "section": "Object / Process",
+          "native_name": "ObjectGUID",
+          "type": "GUID",
+          "meaning": "Provider-rendered `ObjectGUID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "object-class",
+          "section": "Object / Process",
+          "native_name": "ObjectClass",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ObjectClass` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "attribute-ldapdisplay-name",
+          "section": "Additional Information",
+          "native_name": "AttributeLDAPDisplayName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AttributeLDAPDisplayName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "attribute-syntax-oid",
+          "section": "Additional Information",
+          "native_name": "AttributeSyntaxOID",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AttributeSyntaxOID` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "attribute-value",
+          "section": "Additional Information",
+          "native_name": "AttributeValue",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AttributeValue` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "expiration-time",
+          "section": "Additional Information",
+          "native_name": "ExpirationTime",
+          "type": "FILETIME",
+          "meaning": "Provider-rendered `ExpirationTime` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "operation-type",
+          "section": "Additional Information",
+          "native_name": "OperationType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `OperationType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5170",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5376",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5376",
+      "title": "Windows Security Event 5376 — Credential Manager credentials were backed up.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5376",
+      "aliases": [
+        "5376",
+        "Event ID 5376",
+        "Windows 5376",
+        "Credential Manager credentials were backed up."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5376: Credential Manager credentials were backed up.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5376 / versions 0,1"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Credential Manager credentials were backed up. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 4,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 7,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "backup-file-name",
+          "section": "Additional Information",
+          "native_name": "BackupFileName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `BackupFileName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "process-creation-time",
+          "section": "Object / Process",
+          "native_name": "ProcessCreationTime",
+          "type": "FILETIME",
+          "meaning": "Provider-rendered `ProcessCreationTime` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-id",
+          "section": "Network",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ClientProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5376",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5377",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5377",
+      "title": "Windows Security Event 5377 — Credential Manager credentials were restored from a backup.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5377",
+      "aliases": [
+        "5377",
+        "Event ID 5377",
+        "Windows 5377",
+        "Credential Manager credentials were restored from a backup."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5377: Credential Manager credentials were restored from a backup.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5377 / versions 0,1"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Credential Manager credentials were restored from a backup. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 4,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          },
+          {
+            "version": "1",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 7,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0",
+            "1"
+          ]
+        },
+        {
+          "key": "backup-file-name",
+          "section": "Additional Information",
+          "native_name": "BackupFileName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `BackupFileName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "process-creation-time",
+          "section": "Object / Process",
+          "native_name": "ProcessCreationTime",
+          "type": "FILETIME",
+          "meaning": "Provider-rendered `ProcessCreationTime` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "client-process-id",
+          "section": "Network",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ClientProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "1"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5377",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5378",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5378",
+      "title": "Windows Security Event 5378 — The requested credentials delegation was disallowed by policy.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5378",
+      "aliases": [
+        "5378",
+        "Event ID 5378",
+        "Windows 5378",
+        "The requested credentials delegation was disallowed by policy."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5378: The requested credentials delegation was disallowed by policy.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5378 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The requested credentials delegation was disallowed by policy. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "package",
+          "section": "Additional Information",
+          "native_name": "Package",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `Package` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "user-upn",
+          "section": "Target / Account",
+          "native_name": "UserUPN",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `UserUPN` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-server",
+          "section": "Target / Account",
+          "native_name": "TargetServer",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetServer` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "cred-type",
+          "section": "Additional Information",
+          "native_name": "CredType",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CredType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5378",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5379",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5379",
+      "title": "Windows Security Event 5379 — Credential Manager credentials were read.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5379",
+      "aliases": [
+        "5379",
+        "Event ID 5379",
+        "Windows 5379",
+        "Credential Manager credentials were read."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5379: Credential Manager credentials were read.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5379 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Credential Manager credentials were read. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-name",
+          "section": "Target / Account",
+          "native_name": "TargetName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "type",
+          "section": "Additional Information",
+          "native_name": "Type",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Type` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "count-of-credentials-returned",
+          "section": "Additional Information",
+          "native_name": "CountOfCredentialsReturned",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `CountOfCredentialsReturned` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "read-operation",
+          "section": "Additional Information",
+          "native_name": "ReadOperation",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ReadOperation` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "return-code",
+          "section": "Additional Information",
+          "native_name": "ReturnCode",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ReturnCode` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-creation-time",
+          "section": "Object / Process",
+          "native_name": "ProcessCreationTime",
+          "type": "FILETIME",
+          "meaning": "Provider-rendered `ProcessCreationTime` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-process-id",
+          "section": "Network",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ClientProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5379",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5380",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5380",
+      "title": "Windows Security Event 5380 — Vault Find Credential.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5380",
+      "aliases": [
+        "5380",
+        "Event ID 5380",
+        "Windows 5380",
+        "Vault Find Credential."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5380: Vault Find Credential.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5380 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Vault Find Credential. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 10,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "search-string",
+          "section": "Additional Information",
+          "native_name": "SearchString",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SearchString` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "schema-friendly-name",
+          "section": "Additional Information",
+          "native_name": "SchemaFriendlyName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SchemaFriendlyName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "schema",
+          "section": "Additional Information",
+          "native_name": "Schema",
+          "type": "GUID",
+          "meaning": "Provider-rendered `Schema` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "count-of-credentials-returned",
+          "section": "Additional Information",
+          "native_name": "CountOfCredentialsReturned",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `CountOfCredentialsReturned` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-creation-time",
+          "section": "Object / Process",
+          "native_name": "ProcessCreationTime",
+          "type": "FILETIME",
+          "meaning": "Provider-rendered `ProcessCreationTime` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-process-id",
+          "section": "Network",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ClientProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5380",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:5381",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "5381",
+      "title": "Windows Security Event 5381 — Vault credentials were read.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "5381",
+      "aliases": [
+        "5381",
+        "Event ID 5381",
+        "Windows 5381",
+        "Vault credentials were read."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "5381: Vault credentials were read.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch34",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch34",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 5381 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Vault credentials were read. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "flags",
+          "section": "Additional Information",
+          "native_name": "Flags",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `Flags` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "count-of-credentials-returned",
+          "section": "Additional Information",
+          "native_name": "CountOfCredentialsReturned",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `CountOfCredentialsReturned` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "process-creation-time",
+          "section": "Object / Process",
+          "native_name": "ProcessCreationTime",
+          "type": "FILETIME",
+          "meaning": "Provider-rendered `ProcessCreationTime` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-process-id",
+          "section": "Network",
+          "native_name": "ClientProcessId",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `ClientProcessId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=5381",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }
