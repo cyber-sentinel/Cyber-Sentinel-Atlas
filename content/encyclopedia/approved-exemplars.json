@@ -64984,6 +64984,1762 @@
         "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
         "redistribution": "source-link-and-coverage-benchmark-only"
       }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6419",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6419",
+      "title": "Windows Security Event 6419 — A request was made to disable a device.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6419",
+      "aliases": [
+        "6419",
+        "Event ID 6419",
+        "Windows 6419",
+        "A request was made to disable a device."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6419: A request was made to disable a device.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6419 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A request was made to disable a device. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-id",
+          "section": "Additional Information",
+          "native_name": "DeviceId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-description",
+          "section": "Additional Information",
+          "native_name": "DeviceDescription",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceDescription` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "class-id",
+          "section": "Additional Information",
+          "native_name": "ClassId",
+          "type": "GUID",
+          "meaning": "Provider-rendered `ClassId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "class-name",
+          "section": "Additional Information",
+          "native_name": "ClassName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClassName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "hardware-ids",
+          "section": "Additional Information",
+          "native_name": "HardwareIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `HardwareIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "compatible-ids",
+          "section": "Additional Information",
+          "native_name": "CompatibleIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CompatibleIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "location-information",
+          "section": "Additional Information",
+          "native_name": "LocationInformation",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocationInformation` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6419",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6420",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6420",
+      "title": "Windows Security Event 6420 — A device was disabled.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6420",
+      "aliases": [
+        "6420",
+        "Event ID 6420",
+        "Windows 6420",
+        "A device was disabled."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6420: A device was disabled.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6420 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A device was disabled. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-id",
+          "section": "Additional Information",
+          "native_name": "DeviceId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-description",
+          "section": "Additional Information",
+          "native_name": "DeviceDescription",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceDescription` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "class-id",
+          "section": "Additional Information",
+          "native_name": "ClassId",
+          "type": "GUID",
+          "meaning": "Provider-rendered `ClassId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "class-name",
+          "section": "Additional Information",
+          "native_name": "ClassName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClassName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "hardware-ids",
+          "section": "Additional Information",
+          "native_name": "HardwareIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `HardwareIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "compatible-ids",
+          "section": "Additional Information",
+          "native_name": "CompatibleIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CompatibleIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "location-information",
+          "section": "Additional Information",
+          "native_name": "LocationInformation",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocationInformation` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6420",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6421",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6421",
+      "title": "Windows Security Event 6421 — A request was made to enable a device.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6421",
+      "aliases": [
+        "6421",
+        "Event ID 6421",
+        "Windows 6421",
+        "A request was made to enable a device."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6421: A request was made to enable a device.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6421 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A request was made to enable a device. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-id",
+          "section": "Additional Information",
+          "native_name": "DeviceId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-description",
+          "section": "Additional Information",
+          "native_name": "DeviceDescription",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceDescription` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "class-id",
+          "section": "Additional Information",
+          "native_name": "ClassId",
+          "type": "GUID",
+          "meaning": "Provider-rendered `ClassId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "class-name",
+          "section": "Additional Information",
+          "native_name": "ClassName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClassName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "hardware-ids",
+          "section": "Additional Information",
+          "native_name": "HardwareIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `HardwareIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "compatible-ids",
+          "section": "Additional Information",
+          "native_name": "CompatibleIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CompatibleIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "location-information",
+          "section": "Additional Information",
+          "native_name": "LocationInformation",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocationInformation` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6421",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6422",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6422",
+      "title": "Windows Security Event 6422 — A device was enabled.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6422",
+      "aliases": [
+        "6422",
+        "Event ID 6422",
+        "Windows 6422",
+        "A device was enabled."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6422: A device was enabled.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6422 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A device was enabled. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-id",
+          "section": "Additional Information",
+          "native_name": "DeviceId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-description",
+          "section": "Additional Information",
+          "native_name": "DeviceDescription",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceDescription` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "class-id",
+          "section": "Additional Information",
+          "native_name": "ClassId",
+          "type": "GUID",
+          "meaning": "Provider-rendered `ClassId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "class-name",
+          "section": "Additional Information",
+          "native_name": "ClassName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClassName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "hardware-ids",
+          "section": "Additional Information",
+          "native_name": "HardwareIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `HardwareIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "compatible-ids",
+          "section": "Additional Information",
+          "native_name": "CompatibleIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CompatibleIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "location-information",
+          "section": "Additional Information",
+          "native_name": "LocationInformation",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocationInformation` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6422",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6423",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6423",
+      "title": "Windows Security Event 6423 — The installation of this device is forbidden by system policy.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6423",
+      "aliases": [
+        "6423",
+        "Event ID 6423",
+        "Windows 6423",
+        "The installation of this device is forbidden by system policy."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6423: The installation of this device is forbidden by system policy.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6423 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The installation of this device is forbidden by system policy. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-id",
+          "section": "Additional Information",
+          "native_name": "DeviceId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-description",
+          "section": "Additional Information",
+          "native_name": "DeviceDescription",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceDescription` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "class-id",
+          "section": "Additional Information",
+          "native_name": "ClassId",
+          "type": "GUID",
+          "meaning": "Provider-rendered `ClassId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "class-name",
+          "section": "Additional Information",
+          "native_name": "ClassName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClassName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "hardware-ids",
+          "section": "Additional Information",
+          "native_name": "HardwareIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `HardwareIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "compatible-ids",
+          "section": "Additional Information",
+          "native_name": "CompatibleIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CompatibleIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "location-information",
+          "section": "Additional Information",
+          "native_name": "LocationInformation",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocationInformation` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6423",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6424",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6424",
+      "title": "Windows Security Event 6424 — The installation of this device was allowed, after having previously been forbidden by policy.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6424",
+      "aliases": [
+        "6424",
+        "Event ID 6424",
+        "Windows 6424",
+        "The installation of this device was allowed, after having previously been forbidden by policy."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6424: The installation of this device was allowed, after having previously been forbidden by policy.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6424 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The installation of this device was allowed, after having previously been forbidden by policy. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 11,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-id",
+          "section": "Additional Information",
+          "native_name": "DeviceId",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "device-description",
+          "section": "Additional Information",
+          "native_name": "DeviceDescription",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DeviceDescription` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "class-id",
+          "section": "Additional Information",
+          "native_name": "ClassId",
+          "type": "GUID",
+          "meaning": "Provider-rendered `ClassId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "class-name",
+          "section": "Additional Information",
+          "native_name": "ClassName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClassName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "hardware-ids",
+          "section": "Additional Information",
+          "native_name": "HardwareIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `HardwareIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "compatible-ids",
+          "section": "Additional Information",
+          "native_name": "CompatibleIds",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `CompatibleIds` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "location-information",
+          "section": "Additional Information",
+          "native_name": "LocationInformation",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocationInformation` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=6424",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6425",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6425",
+      "title": "Windows Security Event 6425 — A network client used a legacy RPC method to modify authentication information on a trusted domain object. The authentication information was encrypted with a legacy encryption algorithm. Consider upgrading the client...",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6425",
+      "aliases": [
+        "6425",
+        "Event ID 6425",
+        "Windows 6425",
+        "A network client used a legacy RPC method to modify authentication information on a trusted domain object. The authentication information was encrypted with a legacy encryption algorithm. Consider upgrading the client..."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6425: A network client used a legacy RPC method to modify authentication information on a trusted domain object. The authentication information was encrypted with a legacy encryption algorithm. Consider upgrading the client...",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6425 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A network client used a legacy RPC method to modify authentication information on a trusted domain object. The authentication information was encrypted with a legacy encryption algorithm. Consider upgrading the client... Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 8,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "trusted-domain-name",
+          "section": "Additional Information",
+          "native_name": "TrustedDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TrustedDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "trusted-domain-id",
+          "section": "Additional Information",
+          "native_name": "TrustedDomainId",
+          "type": "SID",
+          "meaning": "Provider-rendered `TrustedDomainId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "client-network-address",
+          "section": "Network",
+          "native_name": "ClientNetworkAddress",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ClientNetworkAddress` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "legacy-rpcmethod-name",
+          "section": "Additional Information",
+          "native_name": "LegacyRPCMethodName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LegacyRPCMethodName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6426",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6426",
+      "title": "Windows Security Event 6426 — The volatile system access rights assigned to an account were modified.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6426",
+      "aliases": [
+        "6426",
+        "Event ID 6426",
+        "Windows 6426",
+        "The volatile system access rights assigned to an account were modified."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6426: The volatile system access rights assigned to an account were modified.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6426 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: The volatile system access rights assigned to an account were modified. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 13,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-sid",
+          "section": "Target / Account",
+          "native_name": "TargetSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `TargetSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "original-access-rights-mask",
+          "section": "Additional Information",
+          "native_name": "OriginalAccessRightsMask",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `OriginalAccessRightsMask` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "original-access-rights",
+          "section": "Additional Information",
+          "native_name": "OriginalAccessRights",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `OriginalAccessRights` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "granted-access-rights-mask",
+          "section": "Additional Information",
+          "native_name": "GrantedAccessRightsMask",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `GrantedAccessRightsMask` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "granted-access-rights",
+          "section": "Additional Information",
+          "native_name": "GrantedAccessRights",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `GrantedAccessRights` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "removed-access-rights-mask",
+          "section": "Additional Information",
+          "native_name": "RemovedAccessRightsMask",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `RemovedAccessRightsMask` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "removed-access-rights",
+          "section": "Additional Information",
+          "native_name": "RemovedAccessRights",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `RemovedAccessRights` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "final-access-rights-mask",
+          "section": "Additional Information",
+          "native_name": "FinalAccessRightsMask",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `FinalAccessRightsMask` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "final-access-rights",
+          "section": "Additional Information",
+          "native_name": "FinalAccessRights",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `FinalAccessRights` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6427",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6427",
+      "title": "Windows Security Event 6427 — System access right details for a successful logon.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6427",
+      "aliases": [
+        "6427",
+        "Event ID 6427",
+        "Windows 6427",
+        "System access right details for a successful logon."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6427: System access right details for a successful logon.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6427 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: System access right details for a successful logon. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 15,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-sid",
+          "section": "Target / Account",
+          "native_name": "TargetUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `TargetUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target / Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-logon-id",
+          "section": "Target / Account",
+          "native_name": "TargetLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `TargetLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "logon-type",
+          "section": "Additional Information",
+          "native_name": "LogonType",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LogonType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "system-access-right-required-for-logon",
+          "section": "Additional Information",
+          "native_name": "SystemAccessRightRequiredForLogon",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SystemAccessRightRequiredForLogon` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "system-access-right-required-for-logon-ulong",
+          "section": "Additional Information",
+          "native_name": "SystemAccessRightRequiredForLogonUlong",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `SystemAccessRightRequiredForLogonUlong` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "event-index",
+          "section": "Additional Information",
+          "native_name": "EventIndex",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `EventIndex` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "event-count-total",
+          "section": "Additional Information",
+          "native_name": "EventCountTotal",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `EventCountTotal` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "system-access-right-sid-list",
+          "section": "Additional Information",
+          "native_name": "SystemAccessRightSidList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SystemAccessRightSidList` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "local-system-access-right-sid-list",
+          "section": "Additional Information",
+          "native_name": "LocalSystemAccessRightSidList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `LocalSystemAccessRightSidList` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6428",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6428",
+      "title": "Windows Security Event 6428 — System access right details for a failed logon that was explicitly denied.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6428",
+      "aliases": [
+        "6428",
+        "Event ID 6428",
+        "Windows 6428",
+        "System access right details for a failed logon that was explicitly denied."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6428: System access right details for a failed logon that was explicitly denied.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch42",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch42",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6428 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: System access right details for a failed logon that was explicitly denied. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 14,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-sid",
+          "section": "Target / Account",
+          "native_name": "TargetUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `TargetUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target / Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "logon-type",
+          "section": "Additional Information",
+          "native_name": "LogonType",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LogonType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "deny-system-access-right",
+          "section": "Additional Information",
+          "native_name": "DenySystemAccessRight",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DenySystemAccessRight` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "deny-system-access-right-ulong",
+          "section": "Additional Information",
+          "native_name": "DenySystemAccessRightUlong",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `DenySystemAccessRightUlong` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "event-index",
+          "section": "Additional Information",
+          "native_name": "EventIndex",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `EventIndex` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "event-count-total",
+          "section": "Additional Information",
+          "native_name": "EventCountTotal",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `EventCountTotal` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "deny-system-access-rights-sid-list",
+          "section": "Additional Information",
+          "native_name": "DenySystemAccessRightsSidList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DenySystemAccessRightsSidList` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "deny-local-system-access-rights-sid-list",
+          "section": "Additional Information",
+          "native_name": "DenyLocalSystemAccessRightsSidList",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DenyLocalSystemAccessRightsSidList` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
     }
   ]
 }
