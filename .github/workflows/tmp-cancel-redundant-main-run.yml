@@ -1,0 +1,26 @@
+name: Temporary cancel redundant post-merge main run
+
+on:
+  push:
+    branches:
+      - build/security-auditing-batches-36-43
+    paths:
+      - '.github/workflows/tmp-cancel-redundant-main-run.yml'
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cancel:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RUN_ID: '37953142391'
+    steps:
+      - name: Cancel redundant post-merge run
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}/cancel" || true
+          echo "requested-cancel=${RUN_ID}"
