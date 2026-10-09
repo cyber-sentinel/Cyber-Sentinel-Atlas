@@ -66740,6 +66740,329 @@
           ]
         }
       ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6429",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6429",
+      "title": "Windows Security Event 6429 — System access right details for a failed logon that was implicitly denied.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6429",
+      "aliases": [
+        "6429",
+        "Event ID 6429",
+        "Windows 6429",
+        "System access right details for a failed logon that was implicitly denied."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch43",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch43",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6429: System access right details for a failed logon that was implicitly denied.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch43",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch43",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6429 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: System access right details for a failed logon that was implicitly denied. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 10,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "subject-user-sid",
+          "section": "Subject",
+          "native_name": "SubjectUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `SubjectUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-user-name",
+          "section": "Subject",
+          "native_name": "SubjectUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-domain-name",
+          "section": "Subject",
+          "native_name": "SubjectDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `SubjectDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "subject-logon-id",
+          "section": "Subject",
+          "native_name": "SubjectLogonId",
+          "type": "HexInt64",
+          "meaning": "Provider-rendered `SubjectLogonId` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-sid",
+          "section": "Target / Account",
+          "native_name": "TargetUserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `TargetUserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-user-name",
+          "section": "Target / Account",
+          "native_name": "TargetUserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetUserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "target-domain-name",
+          "section": "Target / Account",
+          "native_name": "TargetDomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `TargetDomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "logon-type",
+          "section": "Additional Information",
+          "native_name": "LogonType",
+          "type": "UInt32",
+          "meaning": "Provider-rendered `LogonType` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "allow-system-access-right",
+          "section": "Additional Information",
+          "native_name": "AllowSystemAccessRight",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `AllowSystemAccessRight` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "allow-system-access-right-ulong",
+          "section": "Additional Information",
+          "native_name": "AllowSystemAccessRightUlong",
+          "type": "HexInt32",
+          "meaning": "Provider-rendered `AllowSystemAccessRightUlong` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:6430",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "6430",
+      "title": "Windows Security Event 6430 — A Windows Firewall policy was imported.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "6430",
+      "aliases": [
+        "6430",
+        "Event ID 6430",
+        "Windows 6430",
+        "A Windows Firewall policy was imported."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch43",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch43",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "6430: A Windows Firewall policy was imported.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch43",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch43",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 6430 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: A Windows Firewall policy was imported. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 5,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [
+        {
+          "key": "user-sid",
+          "section": "Target / Account",
+          "native_name": "UserSid",
+          "type": "SID",
+          "meaning": "Provider-rendered `UserSid` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "user-name",
+          "section": "Target / Account",
+          "native_name": "UserName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `UserName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "domain-name",
+          "section": "Additional Information",
+          "native_name": "DomainName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `DomainName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "import-file-name",
+          "section": "Additional Information",
+          "native_name": "ImportFileName",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `ImportFileName` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        },
+        {
+          "key": "policy-details",
+          "section": "Additional Information",
+          "native_name": "PolicyDetails",
+          "type": "UnicodeString",
+          "meaning": "Provider-rendered `PolicyDetails` field preserved from controlled Microsoft event metadata.",
+          "versions": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.security:8191",
+      "namespace": "microsoft.windows.security",
+      "canonical_key": "8191",
+      "title": "Windows Security Event 8191 — Highest System-Defined Audit Message Value.",
+      "provider": "Microsoft-Windows-Security-Auditing",
+      "channel": "Security",
+      "product": "Windows Security Auditing",
+      "platform": "Windows",
+      "native_event_id": "8191",
+      "aliases": [
+        "8191",
+        "Event ID 8191",
+        "Windows 8191",
+        "Highest System-Defined Audit Message Value."
+      ],
+      "lifecycle": "current",
+      "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch43",
+      "source_version": "windows-server-2025-build-26100-security-auditing-batch43",
+      "source_url": "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+      "source_locator": "8191: Highest System-Defined Audit Message Value.",
+      "structural_source": {
+        "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch43",
+        "source_version": "windows-server-2025-build-26100-security-auditing-batch43",
+        "locator": "Microsoft-Windows-Security-Auditing / Security / Event ID 8191 / versions 0"
+      },
+      "overview": {
+        "summary": "Microsoft provider message: Highest System-Defined Audit Message Value. Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
+        "category": "Windows Security Auditing",
+        "subcategory": "Provider-defined Security auditing",
+        "event_type": "Provider-defined",
+        "provider_level": "win:Informational",
+        "event_versions": [
+          {
+            "version": "0",
+            "generation": "Controlled provider message/template metadata",
+            "field_count": 0,
+            "notes": "Windows Server 2025 build 26100 provider shape."
+          }
+        ]
+      },
+      "collection": {
+        "requirements": [
+          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Preserve native Event ID, provider, channel and Version for deterministic parsing."
+        ],
+        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+      },
+      "correlations": [],
+      "analysis": [
+        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
+        "Use provider-native version and field set as structural authority."
+      ],
+      "fields": [],
+      "external_reference": {
+        "source_id": "atlas:source:atlas.source:ultimate-windows-security-benchmark",
+        "url": "https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=8191",
+        "role": "PRIMARY_EXTERNAL_QUICK_DETAIL_REFERENCE",
+        "redistribution": "source-link-and-coverage-benchmark-only"
+      }
     }
   ]
 }
