@@ -1,0 +1,119 @@
+name: Temporary synchronize terminal Windows coverage docs
+
+on:
+  push:
+    branches:
+      - build/security-auditing-batches-36-43
+    paths:
+      - '.github/workflows/tmp-sync-terminal-coverage-docs.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout documentation branch
+        uses: actions/checkout@v7
+        with:
+          ref: docs/coverage-terminal-sync-423
+          fetch-depth: 0
+
+      - name: Patch terminal coverage projections fail closed
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          def patch(path, pattern, replacement, flags=0, expected=1):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              new, count = re.subn(pattern, replacement, text, flags=flags)
+              if count != expected:
+                  raise SystemExit(f'{path}: expected {expected} replacement(s), got {count} for {pattern!r}')
+              p.write_text(new, encoding='utf-8')
+
+          patch(
+              'docs/product-surfaces.md',
+              r'^\| Windows Security Auditing \|.*$',
+              '| Windows Security Auditing | `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296` — 423 unique Event IDs / 488 provider event-version definitions | `423/423` encyclopedia-grade | 0 |',
+              flags=re.M,
+          )
+
+          patch(
+              'docs/roadmap.md',
+              r'^- Windows Security Log UWS review benchmark: \*\*106/422\*\* listed identities encyclopedia-grade; \*\*316\*\* remaining;$',
+              '- Windows Security Log UWS review benchmark: **422/422** listed identities encyclopedia-grade; **0** remaining;',
+              flags=re.M,
+          )
+          patch(
+              'docs/roadmap.md',
+              r'^- Windows Security encyclopedia-grade numerator: \*\*100/423\*\*.*$',
+              '- Windows Security encyclopedia-grade numerator: **423/423**; **0** remaining;',
+              flags=re.M,
+          )
+
+          patch(
+              'docs/windows-sysmon-coverage-plan.md',
+              r'^The cross-provider Windows Security Log UWS review benchmark is independently `106/422` encyclopedia-grade listed identities with `316` remaining; it is a review benchmark, not a provider denominator\.$',
+              'The cross-provider Windows Security Log UWS review benchmark is independently `422/422` encyclopedia-grade listed identities with `0` remaining; it is a review benchmark, not a provider denominator.',
+              flags=re.M,
+          )
+          patch(
+              'docs/windows-sysmon-coverage-plan.md',
+              r'^\| Windows Security Auditing \|.*$',
+              '| Windows Security Auditing | 423 unique Event IDs / 488 provider event-version definitions | 423/423 | 0 |',
+              flags=re.M,
+          )
+          patch(
+              'docs/windows-sysmon-coverage-plan.md',
+              r'For bounded review planning, run\n`python3 tools/content/build_windows_security_review_queue\.py --batch-size 10 --batch-index 0`\.\nThe deterministic queue binds each batch to the frozen inventory and exact coverage\nsnapshot\. It includes only currently uncovered Windows Security IDs and never\ncreates tasks, promotes content, or changes release coverage\. Rebuild it after\neach merged content promotion; before assigning a batch, check the live branch,\nopen PRs, and canonical orchestrator task/lease state to avoid duplicate work\.\nEach ID still requires controlled source review, field-level semantics,\nprovenance, tests, packaged acceptance, and the normal PR/release gates\.',
+              'The deterministic Windows Security review queue is now exhausted at `423/423` and must return `remaining_count=0` / `batch_count=0` when built from fresh `main`. Do not fabricate another Security-Auditing batch. The next denominator-freeze workstream is **PowerShell Operational**, which requires controlled provider/channel/version discovery before any percentage or completion claim is permitted.',
+          )
+
+          patch(
+              'docs/current-status.md',
+              r'^Status timestamp: 2026-10-07$',
+              'Status timestamp: 2026-10-09',
+              flags=re.M,
+          )
+          patch(
+              'docs/current-status.md',
+              r'^- Reviewed `main` corpus baseline:.*$',
+              '- Reviewed `main` corpus baseline: `4e7c1920dba058879ae3577b90ae2842bedc852a` — PR #211 completed the frozen Microsoft-Windows-Security-Auditing / Security denominator at `423/423` with `0` remaining after all six exact-head workflows succeeded; UWS review benchmark is `422/422`, Sysmon is `30/30`, and the global Windows denominator remains intentionally unfrozen.',
+              flags=re.M,
+          )
+
+          patch(
+              'docs/project-state.md',
+              r'^- Latest reviewed merged corpus baseline:.*$',
+              '- Latest reviewed merged corpus baseline: `4e7c1920dba058879ae3577b90ae2842bedc852a` — PR #211 completed Windows Security-Auditing at `423/423` with `0` remaining after all six exact-head workflows succeeded; Windows Security Log UWS benchmark is `422/422`, Sysmon remains `30/30`, and the global Windows denominator remains unfrozen. PowerShell Operational is the next mandatory denominator-freeze boundary.',
+              flags=re.M,
+          )
+
+          # Current projection documents must no longer expose the obsolete terminal counters.
+          for path in [
+              'docs/README.md',
+              'docs/product-surfaces.md',
+              'docs/roadmap.md',
+              'docs/windows-sysmon-coverage-plan.md',
+              'ingestion/source-profiles/README.md',
+          ]:
+              text = Path(path).read_text(encoding='utf-8')
+              for stale in ('100/423', '106/422', '316` remaining', '323` remaining'):
+                  if stale in text:
+                      raise SystemExit(f'{path}: stale active projection remains: {stale}')
+
+      - name: Commit synchronized projections
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Cyber-Sentinel CI'
+          git config user.email 'actions@users.noreply.github.com'
+          git status --short
+          git diff --check
+          git add docs/product-surfaces.md docs/roadmap.md docs/windows-sysmon-coverage-plan.md docs/current-status.md docs/project-state.md
+          git diff --cached --quiet && { echo 'no changes'; exit 1; }
+          git commit -m 'Docs: close terminal Windows coverage projections'
+          git push origin HEAD:docs/coverage-terminal-sync-423
