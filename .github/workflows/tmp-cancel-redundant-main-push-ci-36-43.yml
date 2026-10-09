@@ -1,0 +1,33 @@
+name: Temporary cancel redundant main push CI 36-43
+
+on:
+  push:
+    branches:
+      - build/security-auditing-batches-36-43
+    paths:
+      - '.github/workflows/tmp-cancel-redundant-main-push-ci-36-43.yml'
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cancel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel redundant push CI on current main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha="$(gh api "repos/${GITHUB_REPOSITORY}/branches/main" --jq '.commit.sha')"
+          names='["Foundation Hygiene","Phase 5.3.4 Canaries","Governance Hygiene","Phase 5.10 Public Preview Readiness","Phase 5.10.1 Redistribution Closure","Phase 5.5.4D Supply Chain Closure"]'
+          gh api "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=${sha}&event=push&per_page=100" \
+            --jq '.workflow_runs[] | [.id,.name,.status] | @tsv' | \
+          while IFS=$'\t' read -r id name status; do
+            if jq -e --arg n "$name" 'index($n) != null' <<<"$names" >/dev/null && [[ "$status" == queued || "$status" == in_progress ]]; then
+              echo "cancel redundant main push run: $id $name $status"
+              gh api -X POST "repos/${GITHUB_REPOSITORY}/actions/runs/${id}/cancel" >/dev/null || true
+            fi
+          done
