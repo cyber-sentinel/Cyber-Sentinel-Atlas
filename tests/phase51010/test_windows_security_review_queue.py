@@ -40,8 +40,8 @@ def test_02_invalid_sizes_and_out_of_scope_state_fail_closed():
             raise AssertionError("invalid batch size was accepted")
     snapshot = json.loads(builder.SNAPSHOT.read_text(encoding="utf-8"))
     altered = copy.deepcopy(snapshot)
-    first_uncovered = next(item for item in altered["events"] if not item["counts_toward_release_coverage"])
-    first_uncovered["coverage_state"] = "ENCYCLOPEDIA_GRADE"
+    first_event = altered["events"][0]
+    first_event["coverage_state"] = "OUT_OF_SCOPE"
     with tempfile.TemporaryDirectory() as directory:
         path = Path(directory) / "snapshot.json"
         path.write_text(json.dumps(altered), encoding="utf-8")
