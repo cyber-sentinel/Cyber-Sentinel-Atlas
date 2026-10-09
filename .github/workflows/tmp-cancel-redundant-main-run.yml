@@ -18,9 +18,9 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       RUN_ID: '37953142391'
     steps:
-      - name: Cancel redundant post-merge run
+      - name: Force-cancel redundant post-merge run
         shell: bash
         run: |
           set -euo pipefail
-          gh api --method POST "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}/cancel" || true
-          echo "requested-cancel=${RUN_ID}"
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}/force-cancel" || true
+          echo "requested-force-cancel=${RUN_ID}"
