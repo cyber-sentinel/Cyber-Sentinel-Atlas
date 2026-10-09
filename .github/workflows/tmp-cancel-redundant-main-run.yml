@@ -16,11 +16,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      RUN_ID: '37961409088'
+      RUN_IDS: '37961409210 37961409142'
     steps:
-      - name: Force-cancel invalidated prior-head run
+      - name: Force-cancel invalidated prior-head runs
         shell: bash
         run: |
           set -euo pipefail
-          gh api --method POST "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}/force-cancel" || true
-          echo "requested-force-cancel=${RUN_ID}"
+          for run_id in ${RUN_IDS}; do
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/actions/runs/${run_id}/force-cancel" || true
+            echo "requested-force-cancel=${run_id}"
+          done
