@@ -1,13 +1,13 @@
 # Cyber-Sentinel-Atlas — Current Authoritative Status
 
-Status timestamp: 2026-10-07
+Status timestamp: 2026-10-09
 
 ## Control plane
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
 - Live release authority: `main`. This file is a reviewed snapshot and does not treat its own eventual merge SHA as a stable `Current main HEAD`; fresh GitHub state supersedes the snapshot.
-- Reviewed `main` corpus baseline: `cfb40438e278f23cf74e9a591a98aa2c5a7c4ffd` — PR #174 promoted Security-Auditing Event IDs 4731–4742 after all six exact-head workflows completed **SUCCESS**; Windows Security Log UWS benchmark is `106/422`, Windows Security Auditing is `100/423` with `323` remaining, Sysmon remains `30/30`, and the global Windows denominator remains unfrozen.
+- Reviewed `main` corpus baseline: `4e7c1920dba058879ae3577b90ae2842bedc852a` — PR #211 completed the frozen Microsoft-Windows-Security-Auditing / Security denominator at `423/423` with `0` remaining after all six exact-head workflows succeeded; UWS review benchmark is `422/422`, Sysmon is `30/30`, and the global Windows denominator remains intentionally unfrozen.
 - PR #152 deterministic Windows Security review queue — **MERGED / EXACT-HEAD CI GREEN**; planning-only, fail-closed, inventory/snapshot-bound.
 - PR #153 Windows Security Event 4769 encyclopedia promotion — **MERGED / EXACT-HEAD CI GREEN**; Windows Security advanced to `9/423`.
 - PR #158 Windows Security EventLog 1100-series promotion — **MERGED / EXACT-HEAD CI GREEN** as `a5d8f99b9ae47ff820a1594b91116465dfce9096`; UWS review benchmark advanced to `16/422` while Security-Auditing remained `10/423`.

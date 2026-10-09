@@ -6,7 +6,7 @@
 - Release authority: `main`
 - Last Reviewed Main SHA: `cfb40438e278f23cf74e9a591a98aa2c5a7c4ffd`
 - Live `main` remains authoritative; this durable snapshot intentionally does not claim its own eventual merge SHA as the current HEAD.
-- Latest reviewed merged corpus baseline: `cfb40438e278f23cf74e9a591a98aa2c5a7c4ffd` — PR #174 promoted Security-Auditing Event IDs 4731–4742 after all six exact-head workflows completed successfully; Windows Security Log UWS benchmark is `106/422`, Windows Security Auditing is `100/423` with `323` remaining, Sysmon remains `30/30`, and the global Windows denominator remains unfrozen.
+- Latest reviewed merged corpus baseline: `4e7c1920dba058879ae3577b90ae2842bedc852a` — PR #211 completed Windows Security-Auditing at `423/423` with `0` remaining after all six exact-head workflows succeeded; Windows Security Log UWS benchmark is `422/422`, Sysmon remains `30/30`, and the global Windows denominator remains unfrozen. PowerShell Operational is the next mandatory denominator-freeze boundary.
 - PR #149 documentation hub refresh — **MERGED**.
 - PR #150 public documentation / CI reporting consistency — **MERGED / EXACT-HEAD CI GREEN**.
 - PR #151 supply-chain scope detection fail-closed hardening — **MERGED / POST-MERGE CI GREEN**.
