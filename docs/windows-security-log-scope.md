@@ -54,9 +54,9 @@ In particular, the Security Log benchmark contains the `1100`-series Event IDs b
 
 Current controlled progress after bounded Windows Security Log Batch 14:
 
-- Windows Security Log UWS review benchmark: `326/422` listed identities encyclopedia-grade (`77.25%`), `96` remaining;
-- newly promoted Security-Auditing IDs in this batch: `5140`, `5141`, `5142`, `5143`, `5144`, `5145`, `5146`, `5147`, `5148`, `5149`;
-- Windows Security Auditing provider coverage: `320/423` encyclopedia-grade with `103` provider-specific identities remaining;
+- Windows Security Log UWS review benchmark: `336/422` listed identities encyclopedia-grade (`79.62%`), `86` remaining;
+- newly promoted Security-Auditing IDs in this batch: `5150`, `5151`, `5152`, `5153`, `5154`, `5155`, `5156`, `5157`, `5158`, `5159`;
+- Windows Security Auditing provider coverage: `330/423` encyclopedia-grade with `93` provider-specific identities remaining;
 - the provider denominator itself remains frozen at `423` unique IDs / `488` Event ID-version definitions;
 - Sysmon 15.22: `30/30` complete;
 - global Windows denominator: intentionally unfrozen.
