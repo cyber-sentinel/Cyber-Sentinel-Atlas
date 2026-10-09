@@ -1,0 +1,59 @@
+name: Temporary UWS verify Security-Auditing Batches 36-43
+
+on:
+  push:
+    branches:
+      - build/security-auditing-batches-36-43
+    paths:
+      - '.github/workflows/tmp-uws-verify-batches36-43.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+      - name: Derive exact queue and verify UWS membership
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --depth=1
+          python3 - <<'PY'
+          import hashlib,json,re,subprocess,urllib.request
+          expected_main='514b2ececcdcdd2650d9460b1c3324f9f584101e'
+          actual=subprocess.check_output(['git','rev-parse','origin/main'],text=True).strip()
+          assert actual==expected_main,(actual,expected_main)
+          snap=json.loads(subprocess.check_output(['git','show','origin/main:content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json'],text=True))
+          selected=[int(x['event_id']) for x in snap['events'] if x['coverage_state']=='IDENTIFIED_PROVIDER_SCOPE']
+          assert len(selected)==73
+          rows=[]
+          for i,batch in enumerate(range(36,44)):
+              ids=selected[i*10:(i+1)*10]; assert len(ids)==(3 if batch==43 else 10)
+              rows.append({'batch':batch,'ids':ids})
+          url='https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/default.aspx'
+          req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 ATLAS-Controlled-Review/1.0'})
+          raw=urllib.request.urlopen(req,timeout=30).read(); text=raw.decode('utf-8','replace')
+          listed={int(x) for x in re.findall(r'event(?:\.aspx)?\?eventid=(\d+)',text,re.I)}
+          if len(listed)<400:
+              listed.update(int(x) for x in re.findall(r"eventid[=:\"'\s]+(\d{3,5})",text,re.I))
+          assert len(listed)>=400,len(listed)
+          batches={}
+          for row in rows:
+              ids=row['ids']; yes=[x for x in ids if x in listed]; no=[x for x in ids if x not in listed]
+              batches[str(row['batch'])]={'ids':ids,'listed_ids':yes,'not_listed_ids':no,'listed_count':len(yes)}
+          evidence={'schema':'atlas.uws-batches36-43-membership/v1','source_url':url,'retrieved_unique_ids':len(listed),'raw_sha256':'sha256-'+hashlib.sha256(raw).hexdigest(),'base_main':actual,'batches':batches}
+          open('uws-batches36-43-verification.json','w').write(json.dumps(evidence,indent=2)+'\n')
+          print(json.dumps(evidence,separators=(',',':')))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: uws-batches36-43-verification-v2
+          path: uws-batches36-43-verification.json
+          if-no-files-found: error
+          retention-days: 14
+
