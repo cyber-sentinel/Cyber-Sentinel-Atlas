@@ -1,0 +1,629 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-security-auditing-batch31-26100",
+  "inventory_kind": "telemetry",
+  "declared_scope": "Microsoft-Windows-Security-Auditing Event IDs 5122, 5123, 5124, 5125, 5126, 5127, 5136, 5137, 5138, 5139 / Security / Windows Server 2025 build 26100",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch31"
+  ],
+  "inventory_method": "provider-runtime-message-and-template-metadata",
+  "inventory_source_version": "windows-server-2025-build-26100-security-auditing-batch31",
+  "expected_identity_count": 10,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-Security-Auditing",
+    "channel": "Security",
+    "product": "Windows Server 2025 Datacenter",
+    "platform": "Windows",
+    "windows_build": "26100",
+    "architecture": "64-bit",
+    "workflow_run_id": 37826533823,
+    "artifact_id": 11570998870,
+    "artifact_digest": "sha256:526cbbf84d079c97b4dbb2c1a3275eff99d309f84daa3520d99328ab74ff562a",
+    "raw_artifact_sha256": "sha256-d3808e37e906e4aec4920d5c2ed411a126bb418def87143d8de2401c6d01c7b2",
+    "provider_event_version_definition_count": 11,
+    "provider_unique_event_id_count": 10,
+    "uws_benchmark_verification": {
+      "workflow_run_id": 37826876988,
+      "artifact_id": 11572106023,
+      "artifact_digest": "sha256:af365f9b8db138b5122b6c502b66492958d8c40c470bdc4b28a31414d71d515b",
+      "raw_artifact_sha256": "sha256-fe14e3e08f420a0d324ad698fc7142bc5012900134afe239f795290d15fe9aba",
+      "listed_event_ids": [
+        "5122",
+        "5123",
+        "5124",
+        "5125",
+        "5126",
+        "5127",
+        "5136",
+        "5137",
+        "5138",
+        "5139"
+      ],
+      "listed_count": 10
+    },
+    "expected_identities": [
+      {
+        "event_id": "5122",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 6,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "CAConfigurationId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "NewValue",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5123",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 6,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "PropertyName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "NewValue",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5124",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 5,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "NewSecuritySettings",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5125",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 4,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          },
+          {
+            "version": 1,
+            "field_count": 7,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "SerialNumber",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "CAName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Status",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5126",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 2,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "CAConfigurationId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "NewSigningCertificateHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5127",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 8,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "CAConfigurationId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "BaseCRLNumber",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "BaseCRLThisUpdate",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "BaseCRLHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DeltaCRLNumber",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DeltaCRLIndicator",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DeltaCRLThisUpdate",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DeltaCRLHash",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5136",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 15,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "OpCorrelationID",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "AppCorrelationID",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "DSName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DSType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectDN",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectGUID",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "ObjectClass",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AttributeLDAPDisplayName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AttributeSyntaxOID",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "AttributeValue",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "OperationType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5137",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 11,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "OpCorrelationID",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "AppCorrelationID",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "DSName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DSType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectDN",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectGUID",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "ObjectClass",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5138",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 12,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "OpCorrelationID",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "AppCorrelationID",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "DSName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DSType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "OldObjectDN",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "NewObjectDN",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectGUID",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "ObjectClass",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "5139",
+        "versions": [
+          {
+            "version": 0,
+            "field_count": 12,
+            "level": "win:Informational",
+            "fields": [
+              {
+                "name": "OpCorrelationID",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "AppCorrelationID",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserSid",
+                "in_type": "win:SID",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectUserName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectDomainName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "SubjectLogonId",
+                "in_type": "win:HexInt64",
+                "out_type": "win:HexInt64"
+              },
+              {
+                "name": "DSName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "DSType",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "OldObjectDN",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "NewObjectDN",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ObjectGUID",
+                "in_type": "win:GUID",
+                "out_type": "xs:GUID"
+              },
+              {
+                "name": "ObjectClass",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "completeness_semantics": "Bounded provider evidence for ten identities inside the frozen 423-ID Security-Auditing denominator. UWS membership is tracked independently as a secondary review benchmark; provider versions are preserved exactly."
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-49a15ba0e8b5dc230e3e3bc969a03a8d1fc6d62ad3f0804b32f4f00afda2ce8f"
+}
