@@ -5,7 +5,8 @@ on:
     branches:
       - build/security-auditing-batches-36-43
     paths:
-      - 'tmp/security-batch-request-22-35.json'
+      - 'tmp/security-batch-request-36-43.json'
+      - '.github/workflows/tmp-rebuild-security-batch36-43.yml'
 
 permissions:
   actions: read
@@ -34,7 +35,7 @@ jobs:
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import json
           from pathlib import Path
-          r=json.loads(Path('tmp/security-batch-request-22-35.json').read_text())
+          r=json.loads(Path('tmp/security-batch-request-36-43.json').read_text())
           b=int(r['batch']); ids=[int(x) for x in r['ids']]
           assert 36<=b<=43 and len(ids)==(3 if b==43 else 10) and ids==sorted(ids)
           assert int(r['expected_provider_before'])==350+10*(b-36)
