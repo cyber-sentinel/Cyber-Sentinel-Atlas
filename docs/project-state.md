@@ -4,8 +4,9 @@
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
-- Last Reviewed Main SHA: `cfb40438e278f23cf74e9a591a98aa2c5a7c4ffd`
+- Last Reviewed Main SHA: `6655baf2fd4fa151911ab94076501bc44c0a9ac9`
 - Live `main` remains authoritative; this durable snapshot intentionally does not claim its own eventual merge SHA as the current HEAD.
+- Active production/build Go toolchain baseline: `1.26.9`. Historical Phase 5.5.3 technology-selection and Phase 5.6 evaluation evidence remains pinned to the toolchain versions originally measured and is not rewritten.
 - Latest reviewed merged corpus baseline: `4e7c1920dba058879ae3577b90ae2842bedc852a` — PR #211 completed Windows Security-Auditing at `423/423` with `0` remaining after all six exact-head workflows succeeded; Windows Security Log UWS benchmark is `422/422`, Sysmon remains `30/30`, and the global Windows denominator remains unfrozen. PowerShell Operational is the next mandatory denominator-freeze boundary.
 - PR #149 documentation hub refresh — **MERGED**.
 - PR #150 public documentation / CI reporting consistency — **MERGED / EXACT-HEAD CI GREEN**.
@@ -176,15 +177,16 @@ ATLAS project continuity is repository-backed rather than chat-backed.
     - target: `v0.1.0-rc.1`
     - functional/security boundary frozen from `main@2c7788e08e0254f330cca1cbb0d1a8a9432291f5`
     - logo, banner, theme tokens and non-behavioral visual identity remain intentionally open
-  - 5.10.10 Windows & Sysmon Knowledge Coverage Expansion: **ACTIVE / CONTROLLED COVERAGE EXPANSION**
+  - 5.10.10 Windows Security & Sysmon Knowledge Coverage Expansion: **COMPLETE FOR BOTH FROZEN FAMILIES / NEXT FAMILY DISCOVERY ACTIVE**
     - Windows Security Auditing denominator: **FROZEN** for `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296`
     - Windows Security controlled denominator: `423` unique Event IDs / `488` provider event-version definitions
-    - Windows Security Log UWS review benchmark: `76/422` listed identities encyclopedia-grade; remaining `346`
-    - Windows Security encyclopedia grade: `70/423` — Event IDs `4608`, `4609`, `4610`, `4611`, `4612`, `4614`, `4615`, `4616`, `4618`, `4621`, `4622`, `4624`, `4625`, `4626`, `4627`, `4634`, `4646`, `4647`, `4648`, `4649`, `4650`, `4651`, `4652`, `4653`, `4654`, `4655`, `4656`, `4657`, `4658`, `4659`, `4660`, `4661`, `4662`, `4663`, `4664`, `4665`, `4666`, `4667`, `4668`, `4670`, `4671`, `4672`, `4673`, `4674`, `4675`, `4688`, `4689`, `4690`, `4691`, `4692`, `4693`, `4694`, `4695`, `4696`, `4697`, `4698`, `4699`, `4700`, `4701`, `4702`, `4703`, `4704`, `4705`, `4706`, `4707`, `4709`, `4740`, `4768`, `4769`, `4771`; remaining `353`
+    - Windows Security Log UWS review benchmark: `422/422` listed identities encyclopedia-grade; remaining `0`
+    - Windows Security encyclopedia grade: `423/423`; remaining `0`; the exact Event ID set is governed by `content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json`
     - Sysmon semantic release: `15.22`; controlled structural schema: `4.91`
     - Sysmon denominator: `30` documented/current Event IDs; encyclopedia grade: `30/30` — Event IDs `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20`, `21`, `22`, `23`, `24`, `25`, `26`, `27`, `28`, `29`, `255`; remaining `0`
     - global Windows denominator: **NOT FROZEN**; global completion percentage intentionally undefined
     - remaining mandatory families still require controlled denominators: PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, Service/persistence telemetry
+    - next mandatory denominator-freeze boundary: **PowerShell Operational**
     - machine-readable authority: `content/encyclopedia/coverage-manifest.json`
     - Public Preview corpus authority: **NOT GRANTED**
   - Public Preview readiness: **BLOCKED**

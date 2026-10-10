@@ -117,7 +117,7 @@
       "id": "go-shared-core-runtime",
       "class": "software-runtime",
       "included": true,
-      "upstream_revision": "Go 1.25.13 + shared-core/go/go.mod/go.sum + exact linked binary",
+      "upstream_revision": "Go 1.26.9 + shared-core/go/go.mod/go.sum + exact linked binary",
       "license_or_terms": "Exact linked-module/toolchain license-material evidence plus SBOM metadata; scanner license classifications are non-authoritative pending review against preserved bytes",
       "license_source": "Phase 5.5.4D exact linked-module/toolchain license-material evidence bound by go.sum and the exact linked binary",
       "redistribution_state": "BUILD_EVIDENCE_REQUIRED",
