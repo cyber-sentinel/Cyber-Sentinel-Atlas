@@ -12,6 +12,7 @@ const css = fs.readFileSync(path.join(webRoot, 'styles.css'), 'utf8');
 const main = fs.readFileSync(path.join(webRoot, 'main.js'), 'utf8');
 const tauri = JSON.parse(fs.readFileSync(path.join(root, 'benchmarks', 'desktop', 'phase56', 'candidates', 'tauri', 'tauri.conf.json'), 'utf8'));
 const entity = require(path.join(webRoot, 'entity-state.js'));
+const investigation = require(path.join(webRoot, 'investigation-model.js'));
 
 test('ATLAS Entity exposes only the six explicit analyst states', () => {
   assert.deepEqual(entity.MODES, ['idle', 'searching', 'correlating', 'reasoning', 'finding', 'warning']);
@@ -77,4 +78,36 @@ test('workspace exposes provenance, evidence metrics and accessible entity state
   assert.ok(main.includes('renderTimeline(detail, baseRecord, summary)'));
   assert.ok(css.includes('@media(prefers-reduced-motion:reduce)'));
   assert.ok(css.includes('body[data-theme="high-contrast"]'));
+});
+
+test('investigation graph builds deterministic, explicitly classified canaries', () => {
+  const canaries = [
+    ['atlas:event:microsoft.windows.security:4625', 'Target User Name'],
+    ['atlas:event:microsoft.windows.security:4688', 'New Process Name'],
+    ['atlas:event:microsoft.sysmon:1', 'ProcessGuid']
+  ];
+  for (const [recordId, fieldTitle] of canaries) {
+    const graph = investigation.build({
+      detail_version: '1.0.0',
+      record: { id: recordId, title: recordId },
+      fields: [{ id: `${recordId}.field`, title: fieldTitle, canonical_key: fieldTitle }],
+      sources: [{ id: `${recordId}.source`, title: 'Authoritative source' }]
+    });
+    assert.equal(graph.record_id, recordId);
+    assert.equal(graph.confidence, 'UNASSESSED');
+    assert.ok(graph.nodes.some(node => node.classification === 'FACT' && node.status === 'VERIFIED'));
+    assert.ok(graph.nodes.some(node => node.classification === 'EVIDENCE REQUIREMENT'));
+    assert.ok(graph.nodes.some(node => node.classification === 'HYPOTHESIS' && node.status === 'UNASSESSED'));
+    assert.ok(graph.nodes.some(node => node.classification === 'CHECK'));
+    assert.ok(graph.nodes.some(node => node.classification === 'PROVENANCE'));
+    assert.ok(graph.edges.every(edge => ['REQUIRES_EVIDENCE', 'INFORMS', 'REQUIRES_CHECK', 'SUPPORTS_SEMANTICS'].includes(edge.type)));
+  }
+});
+
+test('investigation graph refuses unsupported or incomplete records', () => {
+  assert.equal(investigation.build(null), null);
+  assert.equal(investigation.build({ detail_version: '1.0.0' }), null);
+  assert.equal(investigation.build({ detail_version: '1.0.0', record: { id: 'atlas:event:unknown:1' } }), null);
+  assert.ok(html.includes('A hypothesis is never promoted to fact by this view.'));
+  assert.ok(html.includes('src="investigation-model.js"'));
 });

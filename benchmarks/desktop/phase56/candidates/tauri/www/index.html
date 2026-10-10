@@ -32,6 +32,7 @@
           <button class="nav-item active" type="button" data-view="investigate" aria-current="page"><span class="nav-icon" aria-hidden="true">⌕</span><span>Investigate</span></button>
           <button class="nav-item" type="button" data-view="record"><span class="nav-icon" aria-hidden="true">▤</span><span>Record</span></button>
           <button class="nav-item" type="button" data-view="graph"><span class="nav-icon" aria-hidden="true">⌘</span><span>Relationships</span></button>
+          <button class="nav-item" type="button" data-view="investigation"><span class="nav-icon" aria-hidden="true">⎔</span><span>Investigation</span></button>
           <button class="nav-item" type="button" data-view="pack"><span class="nav-icon" aria-hidden="true">◈</span><span>Pack Control</span></button>
           <button class="nav-item" type="button" data-view="diagnostics"><span class="nav-icon" aria-hidden="true">◎</span><span>Diagnostics</span></button>
         </nav>
@@ -87,7 +88,7 @@
       </section>
 
       <section class="view" data-view-panel="record" aria-labelledby="recordTitle">
-        <div class="section-heading"><div><div class="eyebrow">CANONICAL RECORD / CLAIM EVIDENCE</div><h2 id="recordTitle">Record &amp; Provenance</h2><p>Read-only canonical data, source lineage and evidence timestamps projected by Shared Core.</p></div><button id="recordGraphButton" class="secondary-button" type="button" disabled>Expand relationships</button></div>
+        <div class="section-heading"><div><div class="eyebrow">CANONICAL RECORD / CLAIM EVIDENCE</div><h2 id="recordTitle">Record &amp; Provenance</h2><p>Read-only canonical data, source lineage and evidence timestamps projected by Shared Core.</p></div><div class="action-row"><button id="recordInvestigationButton" class="primary-button" type="button" disabled>Open investigation</button><button id="recordGraphButton" class="secondary-button" type="button" disabled>Expand relationships</button></div></div>
         <div id="recordDetail" class="panel record-detail empty-state">Select a search result first.</div>
       </section>
 
@@ -95,6 +96,16 @@
         <div class="section-heading"><div><div class="eyebrow">RELATIONSHIPS / EVIDENCE PIVOT</div><h2 id="graphTitle">Bounded Relationship Graph</h2><p>Traversal is evaluated by Shared Core. The Desktop never executes arbitrary graph queries.</p></div></div>
         <form id="graphForm" class="compact-form" autocomplete="off"><label for="graphSeed">Canonical seed ID</label><input id="graphSeed" type="text" maxlength="1024" required><label for="graphDepth">Depth</label><select id="graphDepth"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option></select><button class="primary-button" type="submit">Correlate</button></form>
         <div id="graphResults" class="panel graph-results empty-state">Choose a canonical record or enter a seed ID.</div>
+      </section>
+
+      <section class="view" data-view-panel="investigation" aria-labelledby="investigationTitle">
+        <div class="section-heading">
+          <div><div class="eyebrow">FACT / EVIDENCE / HYPOTHESIS / CHECK</div><h2 id="investigationTitle">Investigation Graph v0</h2><p id="investigationPurpose">Load one of the three verified canaries to construct a deterministic investigation template.</p></div>
+          <div id="investigationConfidence" class="meta-chip">CONFIDENCE · UNASSESSED</div>
+        </div>
+        <div class="semantics-legend" aria-label="Investigation semantic classes"><span data-kind="fact">FACT</span><span data-kind="evidence">EVIDENCE REQUIREMENT</span><span data-kind="hypothesis">HYPOTHESIS</span><span data-kind="check">CHECK</span><span data-kind="provenance">PROVENANCE</span></div>
+        <div id="investigationGraph" class="investigation-graph empty-state"><div class="empty-mark" aria-hidden="true">⎔</div><strong>No investigation selected</strong><span>Use 4625, 4688 or Sysmon 1 from the canary rail.</span></div>
+        <p class="investigation-boundary">A hypothesis is never promoted to fact by this view. Field availability indicates schema knowledge, not evidence collected from a live endpoint.</p>
       </section>
 
       <section class="view" data-view-panel="pack" aria-labelledby="packTitle">
@@ -137,6 +148,7 @@
     <footer class="footer"><span>ADR-0026 · Tauri 2.x · atlas-core protocol 1.0.0</span><span id="footerState">Fail-closed startup validation pending</span></footer>
   </div>
   <script src="entity-state.js"></script>
+  <script src="investigation-model.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

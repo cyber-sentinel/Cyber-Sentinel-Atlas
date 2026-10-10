@@ -14,6 +14,7 @@ const atlas = Object.freeze({
 const state = {
   currentRecordId: null,
   currentRecord: null,
+  currentInvestigation: null,
   lastStatus: null,
   lastPack: null,
   activitySequence: 0
@@ -21,6 +22,7 @@ const state = {
 
 const $ = id => document.getElementById(id);
 const entityAdapter = window.AtlasEntityState;
+const investigationModel = window.AtlasInvestigationModel;
 
 function text(value) {
   if (value === null || value === undefined || value === '') return '—';
@@ -251,6 +253,53 @@ function renderRelationshipSummary(detail, container) {
   container.append(section);
 }
 
+function renderInvestigation(detail) {
+  const container = $('investigationGraph');
+  let graph = null;
+  try {
+    graph = investigationModel && typeof investigationModel.build === 'function'
+      ? investigationModel.build(detail)
+      : null;
+  } catch (_) {
+    graph = null;
+  }
+  state.currentInvestigation = graph;
+  $('recordInvestigationButton').disabled = !graph;
+  clear(container);
+
+  if (!graph) {
+    container.className = 'investigation-graph empty-state';
+    container.append(el('div', 'empty-mark', '⎔'), el('strong', '', 'No bounded investigation template'), el('span', '', 'Investigation Graph v0 is intentionally limited to 4625, 4688 and Sysmon 1.'));
+    $('investigationPurpose').textContent = 'Load one of the three verified canaries to construct a deterministic investigation template.';
+    $('investigationConfidence').textContent = 'CONFIDENCE · UNASSESSED';
+    return null;
+  }
+
+  container.className = 'investigation-graph';
+  $('investigationPurpose').textContent = graph.purpose;
+  $('investigationConfidence').textContent = `CONFIDENCE · ${graph.confidence}`;
+  const lanes = [
+    ['AUTHORITY', ['FACT', 'PROVENANCE']],
+    ['EVIDENCE REQUIRED', ['EVIDENCE REQUIREMENT']],
+    ['HYPOTHESES', ['HYPOTHESIS']],
+    ['ANALYST CHECKS', ['CHECK']]
+  ];
+  lanes.forEach(([title, kinds]) => {
+    const lane = el('section', 'investigation-lane');
+    lane.append(el('h3', '', title));
+    graph.nodes.filter(node => kinds.includes(node.classification)).forEach(node => {
+      const card = el('article', 'investigation-node');
+      card.dataset.kind = node.classification;
+      card.append(el('span', 'node-kind', node.classification), el('strong', '', node.label), el('p', '', node.detail), el('span', 'node-status', node.status));
+      lane.append(card);
+    });
+    container.append(lane);
+  });
+  const edgeTypes = [...new Set(graph.edges.map(edge => edge.type))];
+  container.append(el('div', 'investigation-edge-summary', `${graph.edges.length} typed links · ${edgeTypes.join(' · ')}`));
+  return graph;
+}
+
 function renderRecord(record, target) {
   clear(target);
   target.classList.remove('empty-state');
@@ -309,8 +358,12 @@ async function loadRecord(id, openRecordView = false) {
     renderRecord(record, $('quickDetail'));
     renderRecord(record, $('recordDetail'));
     updateEvidenceMetrics(record?.detail_version ? record : null);
+    setEntity('reasoning', `Constructing the bounded investigation view for ${id}.`);
+    const investigation = renderInvestigation(record?.detail_version ? record : null);
     const sources = Array.isArray(record?.sources) ? record.sources.length : 0;
-    setEntity('finding', `Canonical record resolved with ${sources} linked source${sources === 1 ? '' : 's'}.`);
+    setEntity('finding', investigation
+      ? `Canonical record and ${investigation.nodes.length} explicitly classified investigation nodes are ready.`
+      : `Canonical record resolved with ${sources} linked source${sources === 1 ? '' : 's'}.`);
     setNotice('Canonical record and provenance loaded from the verified active pack.', 'success');
     addActivity('FINDING', `Resolved ${id}`);
     if (openRecordView) showView('record');
@@ -550,6 +603,12 @@ function bindEvents() {
   $('recordGraphButton').addEventListener('click', () => {
     if (state.currentRecordId) $('graphSeed').value = state.currentRecordId;
     showView('graph');
+  });
+  $('recordInvestigationButton').addEventListener('click', () => {
+    if (!state.currentInvestigation) return;
+    showView('investigation');
+    setEntity('finding', `${state.currentInvestigation.title} is ready for analyst review.`);
+    addActivity('IRG', state.currentInvestigation.title);
   });
   $('refreshPack').addEventListener('click', refreshPack);
   $('applyUpdate').addEventListener('click', () => runPackAction('update'));
