@@ -127,7 +127,8 @@
 
     <aside class="intelligence-rail" aria-label="ATLAS intelligence rail">
       <section class="entity-card" aria-labelledby="entityTitle">
-        <div class="entity-heading"><div><div class="eyebrow">SYNTHETIC ANALYST PRESENCE</div><h2 id="entityTitle">ATLAS Entity</h2></div><span id="entitySignal" class="entity-signal" aria-hidden="true"></span></div>
+        <div class="entity-heading"><div><div class="eyebrow">SYNTHETIC ANALYST PRESENCE</div><h2 id="entityTitle">ATLAS Entity</h2></div><div class="entity-controls"><span id="entitySignal" class="entity-signal" aria-hidden="true"></span><button id="toggleEntity" class="entity-toggle" type="button" aria-expanded="true" aria-controls="entityBody">Minimize</button></div></div>
+        <div id="entityBody" class="entity-body">
         <div id="entityVisual" class="entity-visual" role="img" aria-label="ATLAS Entity is idle">
           <svg viewBox="0 0 280 280" focusable="false" aria-hidden="true">
             <defs><radialGradient id="coreGradient" cx="50%" cy="44%" r="58%"><stop offset="0" stop-color="#d8f8ff" stop-opacity=".98"/><stop offset=".18" stop-color="#56d6ff" stop-opacity=".88"/><stop offset=".58" stop-color="#167ba4" stop-opacity=".28"/><stop offset="1" stop-color="#07131e" stop-opacity="0"/></radialGradient><filter id="entityGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
@@ -139,6 +140,7 @@
         <div class="entity-state-row"><span>STATE</span><strong id="entityStateLabel">IDLE</strong></div>
         <p id="entityStateDetail" class="entity-detail" aria-live="polite">Awaiting a verified analyst action.</p>
         <p class="entity-boundary">State reflects explicit product activity only. No hidden model reasoning is displayed.</p>
+        </div>
       </section>
 
       <section class="rail-card" aria-labelledby="evidenceTitle"><div class="rail-card-heading"><h3 id="evidenceTitle">Evidence Surface</h3><span id="evidenceStatus">EMPTY</span></div><dl class="evidence-metrics"><div><dt>Fields</dt><dd id="metricFields">0</dd></div><div><dt>Claims</dt><dd id="metricClaims">0</dd></div><div><dt>Sources</dt><dd id="metricSources">0</dd></div><div><dt>Relations</dt><dd id="metricRelations">0</dd></div></dl></section>

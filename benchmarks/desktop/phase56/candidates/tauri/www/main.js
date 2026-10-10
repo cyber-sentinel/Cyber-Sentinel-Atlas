@@ -83,6 +83,16 @@ function setEntity(mode, detail) {
   $('entityVisual').setAttribute('aria-label', `ATLAS Entity is ${next.mode}`);
 }
 
+function setEntityCollapsed(collapsed, persist = true) {
+  const card = document.querySelector('.entity-card');
+  card.classList.toggle('collapsed', collapsed);
+  $('toggleEntity').setAttribute('aria-expanded', String(!collapsed));
+  $('toggleEntity').textContent = collapsed ? 'Expand' : 'Minimize';
+  if (persist) {
+    try { localStorage.setItem('atlas-entity-collapsed', String(collapsed)); } catch (_) { /* local preference only */ }
+  }
+}
+
 function showView(name) {
   document.querySelectorAll('.view').forEach(panel => {
     panel.classList.toggle('active', panel.dataset.viewPanel === name);
@@ -622,6 +632,10 @@ function bindEvents() {
     } catch (_) { /* individual refresh methods render fail-closed state */ }
   });
   $('timezoneSelect').addEventListener('change', updateClocks);
+  $('toggleEntity').addEventListener('click', () => {
+    const collapsed = !document.querySelector('.entity-card').classList.contains('collapsed');
+    setEntityCollapsed(collapsed);
+  });
   $('themeSelect').addEventListener('change', event => {
     document.body.dataset.theme = event.target.value;
     try { localStorage.setItem('atlas-theme', event.target.value); } catch (_) { /* local preference only */ }
@@ -636,6 +650,7 @@ async function bootstrap() {
       document.body.dataset.theme = savedTheme;
       $('themeSelect').value = savedTheme;
     }
+    setEntityCollapsed(localStorage.getItem('atlas-entity-collapsed') === 'true', false);
   } catch (_) { /* local preference is optional */ }
   updateClocks();
   window.setInterval(updateClocks, 1000);

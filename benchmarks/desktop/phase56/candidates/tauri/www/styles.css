@@ -258,6 +258,8 @@ details[open] > summary { margin-bottom: 7px; color: var(--blue); }
 .entity-card, .rail-card { padding: 13px; }
 .entity-heading { justify-content: space-between; gap: 10px; }
 .entity-heading h2 { margin: 4px 0 0; font-size: 16px; }
+.entity-controls { display: flex; align-items: center; gap: 8px; }
+.entity-toggle { padding: 4px 6px; border: 1px solid var(--line); border-radius: 7px; background: var(--surface-2); color: var(--muted); font-size: 8px; cursor: pointer; }
 .entity-signal { width: 8px; height: 8px; border-radius: 50%; background: var(--entity); box-shadow: 0 0 12px var(--entity); }
 .entity-visual { position: relative; max-width: 250px; margin: 4px auto -3px; overflow: hidden; border-radius: 50%; }
 .entity-visual::after { content: ""; position: absolute; inset: 14%; border: 1px solid rgba(81, 205, 251, .07); border-radius: 50%; background: radial-gradient(circle, rgba(81, 205, 251, .045), transparent 68%); }
@@ -289,6 +291,8 @@ body[data-entity-mode="warning"] .entity-core { filter: drop-shadow(0 0 16px var
 .entity-state-row strong { color: var(--entity); font: 800 10px ui-monospace, Consolas, monospace; letter-spacing: .13em; }
 .entity-detail { min-height: 34px; margin: 10px 0 7px; color: var(--text); font-size: 10px; line-height: 1.55; }
 .entity-boundary { margin: 0; color: var(--faint); font-size: 8px; line-height: 1.5; }
+.entity-card.collapsed .entity-visual, .entity-card.collapsed .entity-detail, .entity-card.collapsed .entity-boundary { display: none; }
+.entity-card.collapsed .entity-state-row { margin-top: 11px; }
 .rail-card-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 9px; }
 .rail-card-heading span { color: var(--faint); font: 700 8px ui-monospace, Consolas, monospace; letter-spacing: .1em; }
 .evidence-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0; }
@@ -337,9 +341,7 @@ body[data-entity-mode="warning"] .entity-core { filter: drop-shadow(0 0 16px var
   .sidebar-meta { grid-template-columns: auto minmax(140px, 1fr) minmax(190px, 1fr); align-items: center; margin-top: 10px; }
   .workspace { grid-column: 1; grid-row: 3; padding: 14px; }
   .intelligence-rail { grid-column: 1; grid-row: 4; grid-template-columns: 1fr 1fr; }
-  .entity-card { grid-column: 1 / 3; display: grid; grid-template-columns: minmax(180px, .65fr) 1fr; column-gap: 16px; }
-  .entity-heading { grid-column: 1 / 3; }
-  .entity-visual { grid-row: 2 / 6; }
+  .entity-card { grid-column: 1 / 3; display: block; }
   .footer { grid-column: 1; grid-row: 5; min-height: 38px; padding: 8px 12px; flex-wrap: wrap; }
   .compact-form { grid-template-columns: 1fr; }
   .section-heading { flex-direction: column; }

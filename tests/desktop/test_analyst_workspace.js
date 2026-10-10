@@ -78,6 +78,9 @@ test('workspace exposes provenance, evidence metrics and accessible entity state
   assert.ok(main.includes('renderTimeline(detail, baseRecord, summary)'));
   assert.ok(css.includes('@media(prefers-reduced-motion:reduce)'));
   assert.ok(css.includes('body[data-theme="high-contrast"]'));
+  assert.ok(html.includes('id="toggleEntity"'));
+  assert.ok(main.includes("localStorage.setItem('atlas-entity-collapsed'"));
+  assert.ok(main.includes("setAttribute('aria-expanded', String(!collapsed))"));
 });
 
 test('investigation graph builds deterministic, explicitly classified canaries', () => {
