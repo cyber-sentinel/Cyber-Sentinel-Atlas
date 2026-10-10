@@ -1,6 +1,6 @@
 module github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go
 
-go 1.25.13
+go 1.26.9
 
 require (
 	github.com/theupdateframework/go-tuf/v2 v2.4.2

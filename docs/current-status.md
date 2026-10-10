@@ -1,12 +1,13 @@
 # Cyber-Sentinel-Atlas — Current Authoritative Status
 
-Status timestamp: 2026-10-09
+Status timestamp: 2026-10-10
 
 ## Control plane
 
 - Repository: `cyber-sentinel/Cyber-Sentinel-Atlas`
 - Release authority: `main`
 - Live release authority: `main`. This file is a reviewed snapshot and does not treat its own eventual merge SHA as a stable `Current main HEAD`; fresh GitHub state supersedes the snapshot.
+- Active production/build Go toolchain baseline: `1.26.9`. Phase 5.5.3 technology-selection and Phase 5.6 evaluation artifacts retain their original `1.25.0` / `1.25.13` values as intentionally frozen historical evidence, not executable production defaults.
 - Reviewed `main` corpus baseline: `4e7c1920dba058879ae3577b90ae2842bedc852a` — PR #211 completed the frozen Microsoft-Windows-Security-Auditing / Security denominator at `423/423` with `0` remaining after all six exact-head workflows succeeded; UWS review benchmark is `422/422`, Sysmon is `30/30`, and the global Windows denominator remains intentionally unfrozen.
 - PR #152 deterministic Windows Security review queue — **MERGED / EXACT-HEAD CI GREEN**; planning-only, fail-closed, inventory/snapshot-bound.
 - PR #153 Windows Security Event 4769 encyclopedia promotion — **MERGED / EXACT-HEAD CI GREEN**; Windows Security advanced to `9/423`.

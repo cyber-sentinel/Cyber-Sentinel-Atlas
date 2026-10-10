@@ -42,7 +42,7 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
-  GO_VERSION: '1.25.13'
+  GO_VERSION: '1.26.9'
   RUST_VERSION: '1.95.0'
   TAURI_LOCK_SHA256: 'dd2a97c412b0f7289f07ba16cfc28b4cca02ea9b7a5f5ed4d488b34977e37b3e'
 

@@ -44,7 +44,7 @@ The Public Preview software inventory must be generated from the exact built art
 
 | Component family | Current pinned/observed boundary | Current control state | Release requirement |
 | --- | --- | --- | --- |
-| Go Shared Core | Go `1.25.13`; module graph in `shared-core/go/go.mod` | **TECHNICAL EVIDENCE AVAILABLE** | Bind exact linked-module SBOM + license evidence to release binary |
+| Go Shared Core | Go `1.26.9`; module graph in `shared-core/go/go.mod` | **TECHNICAL EVIDENCE AVAILABLE** | Bind exact linked-module SBOM + license evidence to release binary |
 | TUF Go runtime | `github.com/theupdateframework/go-tuf/v2 v2.4.2` | **TECHNICAL EVIDENCE AVAILABLE** | Include if linked/distributed; preserve license evidence |
 | SQLite Go implementation | `modernc.org/sqlite v1.58.0` | **TECHNICAL EVIDENCE AVAILABLE** | Bind linked dependency and license evidence to release binary |
 | Go text/runtime dependencies | `golang.org/x/text v0.39.0` plus indirect locked modules | **TECHNICAL EVIDENCE AVAILABLE** | Use generated SBOM/license validation; do not maintain a hand-written substitute |
