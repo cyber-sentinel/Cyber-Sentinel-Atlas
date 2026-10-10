@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "project": "Cyber-Sentinel ATLAS",
+  "authority": "Product Owner approved commitments",
+  "status_values": ["done", "in_progress", "approved_pending", "deferred", "blocked", "missing_from_control_plane"],
+  "reporting": {
+    "done": "green",
+    "in_progress": "yellow",
+    "approved_pending": "amber",
+    "deferred": "amber",
+    "blocked": "red",
+    "missing_from_control_plane": "red"
+  },
+  "commitments": [
+    {
+      "id": "ATLAS-ROADMAP-001",
+      "title": "YOLO Achievement sandbox",
+      "status": "done",
+      "scope": "Use a temporary sandbox for the GitHub YOLO achievement without weakening production repository governance.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-ROADMAP-002",
+      "title": "Weighted Progress Model",
+      "status": "approved_pending",
+      "scope": "Machine-derived, fail-closed project progress. Undefined denominators remain null rather than producing fabricated completion percentages.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-ROADMAP-003",
+      "title": "Enterprise MITRE ATT&CK semantic upgrade",
+      "status": "approved_pending",
+      "scope": "Additive, versioned, non-destructive ATT&CK enrichment including Detection Strategies, Analytics, Data Components, lifecycle/versioning, provenance and regression gates while preserving identifiers, mappings and historical snapshots.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-ROADMAP-004",
+      "title": "Deep Knowledge Integration: LOLBAS + GTFOBins + iRed.team",
+      "status": "approved_pending",
+      "scope": "Deep technical integration of behaviors, binaries/functions/APIs, prerequisites, artifacts, telemetry/Event IDs/Sysmon, ATT&CK, D3FEND, CAR where defensible, Detection, Hunt, Investigation and Response. Content must be independently authored with claim-level provenance, cross-validation, licensing/redistribution boundaries and no copied or close-paraphrased source text.",
+      "approved": true,
+      "subitems": [
+        {"id": "ATLAS-KNOWLEDGE-LOLBAS", "status": "approved_pending", "priority_domain": "Windows"},
+        {"id": "ATLAS-KNOWLEDGE-GTFOBINS", "status": "approved_pending", "priority_domain": "Linux"},
+        {"id": "ATLAS-KNOWLEDGE-IREDTEAM", "status": "missing_from_control_plane", "priority_domain": "cross-domain adversary tradecraft"}
+      ]
+    },
+    {
+      "id": "ATLAS-ROADMAP-005",
+      "title": "Investigation Reasoning Graph / Hypothesis Mind Map",
+      "status": "approved_pending",
+      "scope": "Deterministic investigation reasoning model: Event -> Hypotheses -> Evidence Needed -> Supports/Refutes -> Confidence -> ATT&CK/D3FEND -> Detection/Hunt -> Investigation -> Response. Fact, Evidence, Hypothesis, Inference and AI Suggestion must remain explicitly distinct.",
+      "approved": true,
+      "entities": ["Event", "Process", "User", "Host", "IP", "Command", "File", "Credential", "Session", "Artifact", "Hypothesis", "ATT&CK Technique", "Detection", "Hunt", "Response Action"]
+    },
+    {
+      "id": "ATLAS-ROADMAP-006",
+      "title": "Private ATLAS MVP-2 Analyst Preview",
+      "status": "approved_pending",
+      "scope": "Deliver a private Windows portable/local-offline Analyst Preview for personal/internal testing using the real Windows corpus. It must include Search, Event Detail, Provenance, Relationship Graph, Timeline, an initial deterministic Investigation Graph and canary investigations for Windows 4625, Windows 4688 and Sysmon 1. Windows Security 423/423 and Sysmon 30/30 are baseline corpus inputs; PowerShell is included when its denominator is frozen.",
+      "approved": true,
+      "privacy": "private_by_default_no_public_release_without_explicit_product_owner_approval_and_licensing_closure",
+      "themes": ["ATLAS Blue", "Tactical Dark Green"]
+    },
+    {
+      "id": "ATLAS-ROADMAP-007",
+      "title": "Abstract Animated ATLAS Digital Entity",
+      "status": "approved_pending",
+      "scope": "Non-human abstract ATLAS Entity, not a human face and not a cliche robot. Visual language may use a data orb/digital face, transparent hands and node-particles. MVP-2 receives a simple meaningful locally rendered version tied to real engine states rather than decoration.",
+      "approved": true,
+      "states": ["Idle", "Searching", "Correlating", "Reasoning", "Finding", "Warning"],
+      "reacts_to": ["search", "relationships", "graph construction", "findings", "integrity/provenance warnings"]
+    },
+    {
+      "id": "ATLAS-ROADMAP-008",
+      "title": "ATLAS Entity Evolution Track",
+      "status": "approved_pending",
+      "scope": "Continue post-MVP evolution of the ATLAS Digital Entity in abstraction, motion, interaction, graph integration, visual intelligence and responsive behavior.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-ROADMAP-009",
+      "title": "Cyber-Sentinel private-by-default development and release governance",
+      "status": "approved_pending",
+      "scope": "All MVPs, prototypes, test builds, experimental builds, internal RCs and test artifacts across ATLAS, DefenseOps and Skills remain private/non-public by default. Public release requires explicit Product Owner approval after licensing and release requirements are satisfied.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-ROADMAP-010",
+      "title": "Cyber-Sentinel public profile and README redesign",
+      "status": "approved_pending",
+      "scope": "Redesign the public Cyber-Sentinel profile/README with technical positioning and infographics for ecosystem architecture, ATLAS thesis, Investigation Graph, trust pipeline, product loop and local/offline architecture.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-GUIDELINE-001",
+      "title": "GitHub achievements are secondary to real engineering",
+      "status": "in_progress",
+      "scope": "Pursue GitHub achievements only when they occur naturally through real, high-quality engineering work; never distort product engineering merely to obtain an achievement.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-ARCH-001",
+      "title": "Universal TelemetryRecordType abstraction",
+      "status": "done",
+      "scope": "Platform -> Product -> TelemetryProvider -> TelemetrySource -> TelemetryRecordType with Event, AuditRecord, Operation, Activity, Finding and FlowRecord specializations. Artifact and Behavior remain separate concepts.",
+      "approved": true,
+      "repo_evidence": ["docs/adr/0007-universal-telemetry-taxonomy.md", "docs/architecture/universal-telemetry-taxonomy.md"]
+    },
+    {
+      "id": "ATLAS-ARCH-002",
+      "title": "Canonical ATLAS production pipeline",
+      "status": "in_progress",
+      "scope": "Authoritative Sources -> Acquisition + Raw Snapshots -> Parsing + Normalization + Lineage -> Validation + Human Review -> Canonical AtlasRecord Model -> Deterministic Search (SQLite + FTS5) -> Verified Content Packs (.atlaspack + TUF) -> Production Shared Core (Go) -> Versioned Local Protocol -> Windows Desktop -> Web/PWA -> API/CLI -> Grounded AI.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-ARCH-003",
+      "title": "Mandatory product principles",
+      "status": "in_progress",
+      "scope": "Offline-first, source-backed, vendor-neutral, exact-search-first, claim-level provenance, canonical identifiers, legacy/current telemetry preservation, signed/checksummed rollback-safe content packs, grounded AI only on mature deterministic retrieval/provenance boundaries, universal architecture with a deliberately narrow MVP.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-ARCH-004",
+      "title": "Canonical v1 model and AtlasRecord integrity",
+      "status": "done",
+      "scope": "Canonical AtlasRecord model with typed provenance/integrity, telemetry spine, trusted Sources, registry/extension rules, HTTPS-only source URLs and canonical schema identity. Production model changes require architecture authority rather than unilateral redesign.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-CONTENT-QUALITY-001",
+      "title": "Encyclopedia-grade promotion standard",
+      "status": "in_progress",
+      "scope": "A telemetry identity is not encyclopedia-grade merely because its identifier exists. Promotion requires field-level semantics, version/applicability, prerequisites, value dictionaries where applicable, correlations, security analysis, provenance and applicable schema/source/redistribution/test evidence.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-SOURCE-AUTHORITY-001",
+      "title": "Windows and Sysmon source authority",
+      "status": "in_progress",
+      "scope": "Microsoft official/vendor documentation is semantic authority. Microsoft Sysinternals is the canonical Sysmon source. Ultimate Windows Security is a coverage/Quick Detail benchmark and not primary semantic authority. Official MITRE/vendor material outranks secondary references.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-MVP-WINDOWS-001",
+      "title": "Windows mandatory telemetry families",
+      "status": "in_progress",
+      "scope": "Security-Auditing, Sysmon, PowerShell Operational, Windows Defender, AppLocker/WDAC, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS Client/Server and service/process persistence telemetry with explicit provider/channel/version denominators.",
+      "approved": true,
+      "repo_evidence": ["docs/mvp/mvp-scope.md"]
+    },
+    {
+      "id": "ATLAS-MVP-KNOWLEDGE-001",
+      "title": "Windows analyst knowledge relationships",
+      "status": "in_progress",
+      "scope": "Windows Security, Sysmon, PowerShell, Active Directory, MITRE ATT&CK, selected D3FEND/CAR where defensible, validated/controlled DefenseOps detections and hunts, investigation/DFIR pivots and source/provenance metadata.",
+      "approved": true,
+      "repo_evidence": ["docs/mvp/mvp-scope.md"]
+    },
+    {
+      "id": "ATLAS-MVP-UX-001",
+      "title": "Windows MVP analyst experience",
+      "status": "in_progress",
+      "scope": "Operationally useful analyst product with deterministic lookup/search, canonical Event/Record Detail, provenance, bounded relationship navigation, timeline/investigation pivots, trusted pack state/update/rollback and no mandatory Internet connection for core installed-pack investigation.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-MVP-PROTECTION-001",
+      "title": "Windows MVP packaging and local protection",
+      "status": "approved_pending",
+      "scope": "User-facing Windows MVP should not expose a distracting command window, and final distributable protection/signing/Defender compatibility must be addressed without making unapproved certificate or legal commitments.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-SCOPE-UNIVERSAL-001",
+      "title": "Universal domain expansion",
+      "status": "deferred",
+      "scope": "Azure, AWS, Google Cloud, Linux, Kubernetes, Docker, DevOps/CI-CD, Microsoft 365/Exchange/SharePoint, SQL Server, PostgreSQL, MySQL/MariaDB, MongoDB and other databases, using the universal telemetry model, cross-platform correlation, pack-based content and offline-first delivery.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-SCOPE-QUERY-001",
+      "title": "Detection/query knowledge and conversion",
+      "status": "deferred",
+      "scope": "Support Sigma and defensible query/detection knowledge/conversion while keeping validation and provenance requirements; broad generative query conversion remains deferred until validation boundaries are mature.",
+      "approved": true
+    },
+    {
+      "id": "ATLAS-PRODUCT-001",
+      "title": "Approved ATLAS product family",
+      "status": "in_progress",
+      "scope": "Desktop Windows/Linux/macOS; CLI Windows/Linux/macOS; Web; iOS Safari PWA; API; native Mobile iOS/Android. PWA is specifically iOS Safari; normal desktop/Android browser access belongs to Web. Windows Desktop is current release-critical surface.",
+      "approved": true,
+      "repo_evidence": ["AGENTS.md", "docs/mvp/mvp-scope.md"]
+    },
+    {
+      "id": "ATLAS-THESIS-001",
+      "title": "ATLAS security knowledge product thesis",
+      "status": "in_progress",
+      "scope": "Platform/Technology -> Telemetry Provider/Source -> Telemetry Record/Artifact -> Security Meaning/Behavior -> ATT&CK/D3FEND/CAR -> Detection/Hunt -> Investigation/DFIR -> Response/Defensive Action -> Claim-level Sources & Provenance.",
+      "approved": true
+    },
+    {
+      "id": "CYBERSENTINEL-ECOSYSTEM-001",
+      "title": "Cyber-Sentinel operating model",
+      "status": "done",
+      "scope": "ATLAS=KNOW, DefenseOps=DEFEND, Skills=APPLY with operating loop KNOW -> DEFEND -> APPLY -> VALIDATE -> AUTOMATE -> EVOLVE and feedback into knowledge, engineering and procedures.",
+      "approved": true
+    },
+    {
+      "id": "CYBERSENTINEL-ECOSYSTEM-002",
+      "title": "Repository responsibility boundaries",
+      "status": "in_progress",
+      "scope": "ATLAS owns knowledge/provenance/search/investigation; DefenseOps owns detection/hunting/validation/response/automation; Skills remains a separate repository for repeatable playbooks/methods and integrates through bounded provenance-aware interfaces without duplicating the canonical model.",
+      "approved": true
+    },
+    {
+      "id": "CYBERSENTINEL-DEFENSEOPS-001",
+      "title": "DefenseOps naming and privacy",
+      "status": "in_progress",
+      "scope": "Forge was renamed Cyber-Sentinel-DefenseOps. DefenseOps remains private until project completion/publication is explicitly approved by the Product Owner.",
+      "approved": true
+    },
+    {
+      "id": "CYBERSENTINEL-VISUAL-001",
+      "title": "Approved ATLAS ecosystem visual assets",
+      "status": "done",
+      "scope": "Use the approved ATLAS ecosystem/product visual language and durable assets, including ATLAS-IR and the approved Azadi Tower ecosystem artwork where applicable; do not substitute unapproved autogenerated architecture artwork for an explicitly selected asset.",
+      "approved": true
+    },
+    {
+      "id": "CYBERSENTINEL-CODENAMES-001",
+      "title": "Approved internal codename set",
+      "status": "deferred",
+      "scope": "Approved names: ZAGROS, BINALUD, KARKAS, TAFTAN and SAHAND. Name approval is durable, while exact mapping to future repositories/modules remains subject to explicit architecture/product use and conflict checks.",
+      "approved": true
+    }
+  ]
+}
