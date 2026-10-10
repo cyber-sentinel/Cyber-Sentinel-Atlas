@@ -149,5 +149,101 @@
     });
   }
 
-  return Object.freeze({ PLAYBOOKS, build });
+  const CASE_KINDS = Object.freeze(['positive', 'benign', 'incomplete']);
+  const EVIDENCE_STATES = Object.freeze(['PRESENT', 'ABSENT', 'UNKNOWN']);
+  const ASSESSMENT_EFFECTS = Object.freeze(['SUPPORTS', 'REFUTES', 'UNKNOWN']);
+
+  function boundedString(value, name, maximum) {
+    if (typeof value !== 'string' || !value.trim() || value.length > maximum) {
+      throw new TypeError(`${name} must be a non-empty string no longer than ${maximum} characters`);
+    }
+    return value.trim();
+  }
+
+  function applyEvidence(graph, evidenceSet) {
+    if (!graph || graph.version !== 'atlas-investigation/v0' || !Array.isArray(graph.nodes) || !Array.isArray(graph.edges)) {
+      throw new TypeError('a valid atlas-investigation/v0 graph is required');
+    }
+    if (!evidenceSet || typeof evidenceSet !== 'object') throw new TypeError('an evidence set is required');
+
+    const scenarioId = boundedString(evidenceSet.scenario_id, 'scenario_id', 128);
+    const recordId = boundedString(evidenceSet.record_id, 'record_id', 256);
+    if (recordId !== graph.record_id) throw new TypeError('evidence record_id does not match the investigation graph');
+    if (!CASE_KINDS.includes(evidenceSet.case_kind)) throw new TypeError('case_kind is not supported');
+    if (!Array.isArray(evidenceSet.observations) || evidenceSet.observations.length > 64) {
+      throw new TypeError('observations must be an array containing at most 64 items');
+    }
+
+    const hypothesisIds = new Set(graph.nodes.filter(node => node.classification === 'HYPOTHESIS').map(node => node.id));
+    const seen = new Set();
+    const assessmentCounts = new Map([...hypothesisIds].map(id => [id, { supports: 0, refutes: 0 }]));
+    const evidenceNodes = [];
+    const evidenceEdges = [];
+
+    evidenceSet.observations.forEach((observation, index) => {
+      if (!observation || typeof observation !== 'object') throw new TypeError(`observation ${index + 1} is invalid`);
+      const sourceId = boundedString(observation.source_id, `observation ${index + 1} source_id`, 256);
+      const observationId = boundedString(observation.id, `observation ${index + 1} id`, 128);
+      if (seen.has(observationId)) throw new TypeError(`duplicate observation id: ${observationId}`);
+      seen.add(observationId);
+      if (!EVIDENCE_STATES.includes(observation.state)) throw new TypeError(`observation ${observationId} state is unsupported`);
+      const assessments = Array.isArray(observation.assessments) ? observation.assessments : [];
+      if (assessments.length > hypothesisIds.size) throw new TypeError(`observation ${observationId} has too many assessments`);
+
+      const nodeId = `observed-${observationId}`;
+      evidenceNodes.push(Object.freeze({
+        id: nodeId,
+        classification: 'EVIDENCE',
+        label: boundedString(observation.label, `observation ${observationId} label`, 160),
+        detail: boundedString(observation.summary, `observation ${observationId} summary`, 500),
+        status: observation.state,
+        provenance_id: sourceId
+      }));
+      evidenceEdges.push(Object.freeze({ from: nodeId, to: 'record', type: 'DERIVED_FROM_RECORD_CONTEXT' }));
+
+      const assessedHypotheses = new Set();
+      assessments.forEach(assessment => {
+        if (!assessment || typeof assessment !== 'object' || !hypothesisIds.has(assessment.hypothesis_id)) {
+          throw new TypeError(`observation ${observationId} targets an unknown hypothesis`);
+        }
+        if (!ASSESSMENT_EFFECTS.includes(assessment.effect)) throw new TypeError(`observation ${observationId} effect is unsupported`);
+        if (assessedHypotheses.has(assessment.hypothesis_id)) throw new TypeError(`observation ${observationId} repeats a hypothesis assessment`);
+        assessedHypotheses.add(assessment.hypothesis_id);
+        evidenceEdges.push(Object.freeze({ from: nodeId, to: assessment.hypothesis_id, type: assessment.effect }));
+        const count = assessmentCounts.get(assessment.hypothesis_id);
+        if (assessment.effect === 'SUPPORTS') count.supports += 1;
+        if (assessment.effect === 'REFUTES') count.refutes += 1;
+      });
+    });
+
+    let assessed = 0;
+    let conflicted = 0;
+    const nodes = graph.nodes.map(node => {
+      if (node.classification !== 'HYPOTHESIS') return node;
+      const count = assessmentCounts.get(node.id);
+      let status = 'UNASSESSED';
+      if (count.supports && count.refutes) {
+        status = 'CONFLICTING EVIDENCE';
+        conflicted += 1;
+      } else if (count.supports) {
+        status = 'SUPPORTED BY PROVIDED EVIDENCE';
+        assessed += 1;
+      } else if (count.refutes) {
+        status = 'REFUTED BY PROVIDED EVIDENCE';
+        assessed += 1;
+      }
+      return Object.freeze({ ...node, status });
+    });
+
+    return Object.freeze({
+      ...graph,
+      scenario_id: scenarioId,
+      case_kind: evidenceSet.case_kind,
+      confidence: conflicted ? 'EVIDENCE-CONFLICTED' : assessed ? 'BOUNDED-EVIDENCE' : 'INCOMPLETE',
+      nodes: Object.freeze([...nodes, ...evidenceNodes]),
+      edges: Object.freeze([...graph.edges, ...evidenceEdges])
+    });
+  }
+
+  return Object.freeze({ PLAYBOOKS, CASE_KINDS, EVIDENCE_STATES, ASSESSMENT_EFFECTS, build, applyEvidence });
 }));

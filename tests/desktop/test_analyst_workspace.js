@@ -13,6 +13,7 @@ const main = fs.readFileSync(path.join(webRoot, 'main.js'), 'utf8');
 const tauri = JSON.parse(fs.readFileSync(path.join(root, 'benchmarks', 'desktop', 'phase56', 'candidates', 'tauri', 'tauri.conf.json'), 'utf8'));
 const entity = require(path.join(webRoot, 'entity-state.js'));
 const investigation = require(path.join(webRoot, 'investigation-model.js'));
+const investigationFixtures = JSON.parse(fs.readFileSync(path.join(root, 'tests', 'fixtures', 'desktop', 'investigation-canaries.v0.json'), 'utf8'));
 
 test('ATLAS Entity exposes only the six explicit analyst states', () => {
   assert.deepEqual(entity.MODES, ['idle', 'searching', 'correlating', 'reasoning', 'finding', 'warning']);
@@ -113,4 +114,47 @@ test('investigation graph refuses unsupported or incomplete records', () => {
   assert.equal(investigation.build({ detail_version: '1.0.0', record: { id: 'atlas:event:unknown:1' } }), null);
   assert.ok(html.includes('A hypothesis is never promoted to fact by this view.'));
   assert.ok(html.includes('src="investigation-model.js"'));
+});
+
+test('canary acceptance fixtures remain synthetic, bounded and complete', () => {
+  assert.equal(investigationFixtures.schema, 'atlas-investigation-fixtures/v0');
+  assert.equal(investigationFixtures.fixture_only, true);
+  assert.equal(investigationFixtures.canonical_corpus, false);
+  assert.equal(investigationFixtures.scenarios.length, 9);
+  const combinations = new Set(investigationFixtures.scenarios.map(item => `${item.record_id}:${item.case_kind}`));
+  for (const recordId of Object.keys(investigation.PLAYBOOKS)) {
+    for (const caseKind of investigation.CASE_KINDS) assert.ok(combinations.has(`${recordId}:${caseKind}`));
+  }
+});
+
+test('explicit evidence produces deterministic support, refute and incomplete states', () => {
+  for (const fixture of investigationFixtures.scenarios) {
+    const base = investigation.build({
+      detail_version: '1.0.0',
+      record: { id: fixture.record_id, title: fixture.record_id },
+      fields: [],
+      sources: [{ id: `${fixture.record_id}.source`, title: 'Authoritative source' }]
+    });
+    const assessed = investigation.applyEvidence(base, fixture);
+    assert.equal(assessed.scenario_id, fixture.scenario_id);
+    assert.equal(assessed.case_kind, fixture.case_kind);
+    assert.equal(assessed.nodes.filter(node => node.classification === 'EVIDENCE').length, fixture.observations.length);
+    assert.ok(assessed.edges.every(edge => ['REQUIRES_EVIDENCE', 'INFORMS', 'REQUIRES_CHECK', 'SUPPORTS_SEMANTICS', 'DERIVED_FROM_RECORD_CONTEXT', 'SUPPORTS', 'REFUTES', 'UNKNOWN'].includes(edge.type)));
+    if (fixture.case_kind === 'incomplete') {
+      assert.equal(assessed.confidence, 'INCOMPLETE');
+      assert.ok(assessed.nodes.filter(node => node.classification === 'HYPOTHESIS').every(node => node.status === 'UNASSESSED'));
+    } else {
+      assert.equal(assessed.confidence, 'BOUNDED-EVIDENCE');
+      assert.ok(assessed.nodes.some(node => node.classification === 'HYPOTHESIS' && node.status !== 'UNASSESSED'));
+    }
+  }
+});
+
+test('evidence assessment fails closed on mismatched, duplicate or unbounded input', () => {
+  const fixture = investigationFixtures.scenarios[0];
+  const base = investigation.build({ detail_version: '1.0.0', record: { id: fixture.record_id }, fields: [], sources: [] });
+  assert.throws(() => investigation.applyEvidence(base, { ...fixture, record_id: 'atlas:event:unknown:1' }), /does not match/);
+  assert.throws(() => investigation.applyEvidence(base, { ...fixture, case_kind: 'invented' }), /not supported/);
+  assert.throws(() => investigation.applyEvidence(base, { ...fixture, observations: [...fixture.observations, fixture.observations[0]] }), /duplicate observation/);
+  assert.throws(() => investigation.applyEvidence(base, { ...fixture, observations: [{ ...fixture.observations[0], assessments: [{ hypothesis_id: 'hypothesis-99', effect: 'SUPPORTS' }] }] }), /unknown hypothesis/);
 });

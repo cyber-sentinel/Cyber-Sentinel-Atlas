@@ -1,0 +1,152 @@
+{
+  "schema": "atlas-investigation-fixtures/v0",
+  "fixture_only": true,
+  "canonical_corpus": false,
+  "purpose": "Deterministic acceptance fixtures for support, refute and incomplete-evidence semantics. These are not endpoint observations.",
+  "scenarios": [
+    {
+      "scenario_id": "4625-positive-password-spray",
+      "record_id": "atlas:event:microsoft.windows.security:4625",
+      "case_kind": "positive",
+      "observations": [
+        {
+          "id": "multi-account-window",
+          "label": "Failures span multiple accounts",
+          "summary": "Synthetic acceptance evidence represents repeated failures across several target accounts from one source within a bounded time window.",
+          "state": "PRESENT",
+          "source_id": "fixture:desktop:4625-positive",
+          "assessments": [{ "hypothesis_id": "hypothesis-1", "effect": "SUPPORTS" }]
+        }
+      ]
+    },
+    {
+      "scenario_id": "4625-benign-stale-service-credential",
+      "record_id": "atlas:event:microsoft.windows.security:4625",
+      "case_kind": "benign",
+      "observations": [
+        {
+          "id": "approved-service-context",
+          "label": "Known service context",
+          "summary": "Synthetic acceptance evidence represents a known service using an expired credential during an approved maintenance window.",
+          "state": "PRESENT",
+          "source_id": "fixture:desktop:4625-benign",
+          "assessments": [
+            { "hypothesis_id": "hypothesis-1", "effect": "REFUTES" },
+            { "hypothesis_id": "hypothesis-4", "effect": "SUPPORTS" }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "4625-incomplete-origin",
+      "record_id": "atlas:event:microsoft.windows.security:4625",
+      "case_kind": "incomplete",
+      "observations": [
+        {
+          "id": "origin-not-collected",
+          "label": "Origin context unavailable",
+          "summary": "Synthetic acceptance evidence intentionally leaves source address and workstation context unknown.",
+          "state": "UNKNOWN",
+          "source_id": "fixture:desktop:4625-incomplete",
+          "assessments": []
+        }
+      ]
+    },
+    {
+      "scenario_id": "4688-positive-lolbin-pattern",
+      "record_id": "atlas:event:microsoft.windows.security:4688",
+      "case_kind": "positive",
+      "observations": [
+        {
+          "id": "unusual-trusted-binary-command",
+          "label": "Unusual trusted-binary command",
+          "summary": "Synthetic acceptance evidence represents a trusted Windows binary with a command pattern outside the approved administrative baseline.",
+          "state": "PRESENT",
+          "source_id": "fixture:desktop:4688-positive",
+          "assessments": [{ "hypothesis_id": "hypothesis-1", "effect": "SUPPORTS" }]
+        }
+      ]
+    },
+    {
+      "scenario_id": "4688-benign-deployment",
+      "record_id": "atlas:event:microsoft.windows.security:4688",
+      "case_kind": "benign",
+      "observations": [
+        {
+          "id": "approved-deployment-context",
+          "label": "Approved deployment activity",
+          "summary": "Synthetic acceptance evidence represents a signed deployment process aligned with the authorized change window.",
+          "state": "PRESENT",
+          "source_id": "fixture:desktop:4688-benign",
+          "assessments": [
+            { "hypothesis_id": "hypothesis-1", "effect": "REFUTES" },
+            { "hypothesis_id": "hypothesis-4", "effect": "SUPPORTS" }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "4688-incomplete-command-line",
+      "record_id": "atlas:event:microsoft.windows.security:4688",
+      "case_kind": "incomplete",
+      "observations": [
+        {
+          "id": "command-line-not-collected",
+          "label": "Command line unavailable",
+          "summary": "Synthetic acceptance evidence intentionally leaves process command-line content unknown.",
+          "state": "UNKNOWN",
+          "source_id": "fixture:desktop:4688-incomplete",
+          "assessments": []
+        }
+      ]
+    },
+    {
+      "scenario_id": "sysmon1-positive-lineage-anomaly",
+      "record_id": "atlas:event:microsoft.sysmon:1",
+      "case_kind": "positive",
+      "observations": [
+        {
+          "id": "unexpected-parent-child",
+          "label": "Unexpected process lineage",
+          "summary": "Synthetic acceptance evidence represents a parent-child relationship outside the expected application workflow.",
+          "state": "PRESENT",
+          "source_id": "fixture:desktop:sysmon1-positive",
+          "assessments": [{ "hypothesis_id": "hypothesis-2", "effect": "SUPPORTS" }]
+        }
+      ]
+    },
+    {
+      "scenario_id": "sysmon1-benign-management-agent",
+      "record_id": "atlas:event:microsoft.sysmon:1",
+      "case_kind": "benign",
+      "observations": [
+        {
+          "id": "approved-management-agent",
+          "label": "Approved management automation",
+          "summary": "Synthetic acceptance evidence represents expected software-management execution with verified administrative context.",
+          "state": "PRESENT",
+          "source_id": "fixture:desktop:sysmon1-benign",
+          "assessments": [
+            { "hypothesis_id": "hypothesis-2", "effect": "REFUTES" },
+            { "hypothesis_id": "hypothesis-4", "effect": "SUPPORTS" }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "sysmon1-incomplete-hash-lineage",
+      "record_id": "atlas:event:microsoft.sysmon:1",
+      "case_kind": "incomplete",
+      "observations": [
+        {
+          "id": "hash-and-parent-unknown",
+          "label": "Hash and parent context unavailable",
+          "summary": "Synthetic acceptance evidence intentionally leaves image hash and parent process context unknown.",
+          "state": "UNKNOWN",
+          "source_id": "fixture:desktop:sysmon1-incomplete",
+          "assessments": []
+        }
+      ]
+    }
+  ]
+}
