@@ -29,28 +29,44 @@ The following remain reserved decisions and require explicit Product Owner appro
 - production code-signing or certificate decisions;
 - public-cloud hosting commitments;
 - HSM/KMS ownership or trust-policy changes;
-- external redistribution decisions not already governed by repository policy.
+- external redistribution decisions not already governed by repository policy;
+- publication of private Product Owner control-plane content.
+
+## Public/private control-plane boundary
+
+The public ATLAS repository is **not** the complete Product Owner control plane.
+
+Confidential roadmap, internal MVP planning, restricted-source metadata, detailed approved commitments, management state and other private governance material are maintained in a private Product Owner control plane.
+
+See `docs/product/control-plane-boundary.md` for the public boundary contract.
+
+Rules:
+
+- never mirror the confidential commitment ledger into this public repository unless explicitly approved for publication;
+- never commit raw restricted/licensed/copyrighted source material to the public repository by default;
+- workers with authorized private-control-plane access must reconcile that private authority before strategic status reporting, roadmap decisions, MVP planning, or scope changes;
+- workers without private context must not infer that an item absent from public documentation was cancelled or dropped;
+- if private strategic context is required but unavailable, fail closed on destructive scope changes rather than silently deleting commitments.
 
 ## Source-of-truth hierarchy
 
-GitHub live state is authoritative over previous chat summaries, prompts, handoffs, checkpoints, or remembered state.
+GitHub live state is authoritative over previous chat summaries, prompts, handoffs, checkpoints, or remembered state for public repository execution.
 
-When repository documents disagree, resolve them in this order:
+For public repository documents, resolve conflicts in this order:
 
-1. Accepted ADRs in `docs/adr/` for frozen architecture decisions.
-2. `docs/product/approved-commitments.json` for Product Owner-approved scope, backlog, MVP, governance and durable product commitments that must not disappear merely because they are not in the current execution stream.
-3. Machine-readable release/readiness state under `docs/releases/`.
-4. `docs/project-state.md` for the current project control-plane state.
-5. `docs/current-status.md` for verified operational evidence and exact baselines.
-6. `docs/roadmap.md` for phase sequencing and remaining work.
-7. `docs/product-surfaces.md` for approved product-family scope.
-8. `README.md` for the public product summary.
+1. Accepted ADRs in `docs/adr/` for frozen public architecture decisions.
+2. Machine-readable release/readiness state under `docs/releases/`.
+3. `docs/project-state.md` for current public project control-plane state.
+4. `docs/current-status.md` for verified operational evidence and exact baselines.
+5. `docs/roadmap.md` for public phase sequencing and remaining work.
+6. `docs/product-surfaces.md` for approved public product-family scope.
+7. `README.md` for the public product summary.
+
+Private Product Owner governance supersedes public silence for confidential commitments, internal MVP scope and non-public strategic decisions when the authorized worker has access to it.
 
 Historical snapshots under `docs/history/` are evidence, not current authority.
 
-Before any write, new engineering stream, status report, handoff, roadmap update, or MVP planning action, read and reconcile `docs/product/approved-commitments.json`. A commitment may not silently disappear from planning or reporting merely because it is not part of the current sprint, branch, batch, or PR. If a Product Owner-approved commitment is absent from the live control-plane, report it as `MISSING_FROM_CONTROL_PLANE` and repair the durable control-plane as routine documentation/governance work unless a reserved Product Owner decision is implicated.
-
-Before any write or new engineering stream, fresh-check the authoritative GitHub state, including at minimum:
+Before any write or new engineering stream, fresh-check authoritative GitHub state, including at minimum:
 
 1. current `main` HEAD;
 2. open PRs;
@@ -61,18 +77,20 @@ Before any write or new engineering stream, fresh-check the authoritative GitHub
 7. `ahead_by` / `behind_by` where applicable;
 8. changed files;
 9. machine-readable project state where available;
-10. approved commitments relevant to the proposed work.
+10. private approved commitments relevant to the work when authorized private context is available.
 
 Never create duplicate work.
 
 ## Management status reporting contract
 
-Cyber-Sentinel management/status reports must reconcile both current execution and the full approved commitment ledger. Use these states consistently:
+Cyber-Sentinel management/status reports use these states consistently:
 
 - 🟢 `DONE / VERIFIED` — completed with repository/test/CI evidence where applicable;
 - 🟡 `IN_PROGRESS` — active execution or validation is underway;
-- 🟠 `APPROVED_PENDING / DEFERRED / NEXT ACTION` — approved and intentionally not complete yet, with dependencies or sequencing made explicit;
-- 🔴 `BLOCKED / FAILURE / MISSING_FROM_CONTROL_PLANE` — a real blocker, failed gate, or approved commitment that is not durably represented where it should be.
+- 🟠 `APPROVED_PENDING / DEFERRED / NEXT ACTION` — approved and intentionally incomplete, with dependencies or sequencing explicit;
+- 🔴 `BLOCKED / FAILURE / MISSING_FROM_CONTROL_PLANE` — a real blocker, failed gate, or an approved commitment missing from the durable control plane.
+
+Authorized management reports must reconcile both current execution and the private approved-commitment ledger when that private authority is available.
 
 Every management report must include, as applicable:
 
@@ -82,7 +100,7 @@ Every management report must include, as applicable:
 4. blockers/failures/control-plane gaps;
 5. exact next action.
 
-Do not report only the current PR or sprint when broader Product Owner-approved commitments remain outstanding.
+Do not report only the current PR or sprint when broader approved commitments remain outstanding.
 
 ## Non-negotiable engineering rules
 
@@ -97,11 +115,11 @@ Do not report only the current PR or sprint when broader Product Owner-approved 
 - A queued workflow is not a passing workflow.
 - A required skipped workflow is not automatically a passing workflow unless the governing path-aware contract explicitly says so.
 - Never treat generated search indexes, UI state, semantic/model output, or upstream source text as canonical truth.
-- Never commit credentials, private keys, tokens, personal secrets, signing material, or uncontrolled production data.
+- Never commit credentials, private keys, tokens, personal secrets, signing material, uncontrolled production data, or confidential control-plane state to public history.
 - Do not make licensing, production certificate, HSM/KMS, or legal redistribution decisions automatically.
 - Never force-push `main`.
 - Never perform destructive resets against authoritative work.
-- Fail closed when material source, schema, security, provenance, or redistribution ambiguity cannot safely be resolved.
+- Fail closed when material source, schema, security, provenance, privacy, or redistribution ambiguity cannot safely be resolved.
 
 ## Frozen architecture
 
@@ -160,6 +178,18 @@ Do not combine independent coverage denominators.
 
 Never claim `ENCYCLOPEDIA_GRADE` without repository evidence satisfying the applicable schema, source/provenance, semantic, redistribution, and exact-head validation gates.
 
+## Restricted/private reference sources
+
+Private reference material may inform independently authored ATLAS knowledge when Product Owner authorization and applicable source-governance rules permit it.
+
+Public-repository rules:
+
+- do not commit raw restricted/private course material, posters, PDFs or source images by default;
+- do not publish substantial verbatim text or close paraphrases from restricted/copyrighted sources;
+- preserve source/provenance boundaries;
+- prefer primary/official sources for canonical telemetry semantics;
+- require redistribution/license review before exposing restricted-source-derived material publicly.
+
 ## Standard task lifecycle
 
 Every implementation task follows this sequence:
@@ -167,7 +197,7 @@ Every implementation task follows this sequence:
 ```text
 Read authority
     ↓
-Read approved commitments registry
+Reconcile private Product Owner governance when authorized/relevant
     ↓
 Fresh-check GitHub live state
     ↓
@@ -191,7 +221,7 @@ Merge
     ↓
 Post-merge verification when required
     ↓
-Synchronize approved commitments / project-state / current-status / roadmap / README as applicable
+Synchronize public state and private commitment state as applicable
     ↓
 Fresh-check again and continue with the next safe non-duplicate task
 ```
@@ -201,33 +231,33 @@ Fresh-check again and continue with the next safe non-duplicate task
 Before modifying code or documentation, an authorized worker must:
 
 1. read `AGENTS.md`;
-2. read `docs/product/approved-commitments.json`;
+2. read `docs/product/control-plane-boundary.md`;
 3. read `docs/project-state.md`;
-4. read the relevant ADR, release gate, architecture document, and tests;
-5. inspect the current `main` head and open PRs;
-6. inspect relevant branches, recent merges, and exact-head workflows;
-7. confirm that the proposed change does not duplicate another stream;
-8. confirm that the proposed change does not bypass a frozen boundary;
-9. confirm that it does not silently drop or contradict an approved Product Owner commitment.
+4. read the relevant ADR, release gate, architecture document, source policy and tests;
+5. inspect current `main` head and open PRs;
+6. inspect relevant branches, recent merges and exact-head workflows;
+7. confirm the proposed change does not duplicate another stream;
+8. confirm the proposed change does not bypass a frozen boundary;
+9. when private authority is available, confirm it does not silently drop or contradict an approved Product Owner commitment.
 
 During execution:
 
 - use a dedicated branch or isolated worktree;
-- do not allow concurrent workers to modify the same file set unless the work is explicitly coordinated;
+- do not allow concurrent workers to modify the same file set unless explicitly coordinated;
 - prefer deterministic builders and machine-readable evidence over hand-maintained counters;
 - keep generated evidence reproducible;
 - preserve fail-closed behavior;
 - preserve provenance and source-version identity;
 - inspect resulting diffs before handoff or PR creation;
-- remove generated `__pycache__`, `.pyc`, temporary workflows, temporary triggers, temporary helpers, and other non-durable artifacts before a production PR unless explicitly required as durable evidence.
+- remove generated `__pycache__`, `.pyc`, temporary workflows, temporary triggers, temporary helpers and other non-durable artifacts before a production PR unless explicitly required as durable evidence.
 
 Before handoff or stopping:
 
 - leave the branch and PR in an inspectable state;
 - record blockers and exact evidence;
-- update authoritative state documents if the completed change materially alters project state;
-- ensure decisions required for continuation are recorded in durable project artifacts;
-- ensure approved commitments affected by the work have accurate durable status and are not lost in conversational state.
+- update authoritative state documents if completed work materially alters project state;
+- ensure decisions required for continuation are recorded in durable project artifacts or the authorized private Product Owner control plane as appropriate;
+- do not publish private commitment detail merely to make a handoff self-contained.
 
 ## Continuous execution policy
 
@@ -250,7 +280,7 @@ Continue through applicable stages such as:
 - authoritative state synchronization;
 - the next safe project task.
 
-Do not stop merely because one task, batch, issue, PR, milestone, or merge is complete.
+Do not stop merely because one task, batch, issue, PR, milestone or merge is complete.
 
 After every successful merge:
 
@@ -259,7 +289,7 @@ After every successful merge:
 3. verify applicable post-merge workflows;
 4. verify expected project/coverage state;
 5. verify temporary artifacts are absent;
-6. reconcile `docs/product/approved-commitments.json` against the completed work and remaining approved backlog;
+6. reconcile private Product Owner commitments when authorized private context is available;
 7. rebuild the next deterministic work queue where applicable;
 8. continue with the next highest-priority safe non-duplicate task.
 
@@ -281,20 +311,18 @@ A task is DONE only when all applicable conditions are true:
 - documentation and machine-readable state agree;
 - the PR is merged to the intended base;
 - required post-merge verification succeeds;
-- the authoritative project-state documents are synchronized;
-- the approved commitment ledger is updated when the task changes the state of a Product Owner-approved commitment.
+- authoritative public project-state documents are synchronized;
+- private Product Owner commitment state is synchronized when the task changes an approved private commitment.
 
 A green unit test alone is not Definition of Done.
 
 ## Long-running work and session continuity
 
-Local terminals, worker processes, worktrees, containers, individual machines, and chat/session context are replaceable. The repository-backed engineering record is the durable project memory.
+Local terminals, worker processes, worktrees, containers, individual machines and chat/session context are replaceable. Durable repository evidence and the authorized private Product Owner control plane are the project memory.
 
-A new authorized technical lead or implementation worker must be able to continue the project from GitHub and the authoritative files above without reconstructing undocumented prior-session context.
+A new authorized technical lead or implementation worker must be able to continue without reconstructing undocumented prior-session context, while still respecting the public/private boundary.
 
-For complex multi-step work, maintain enough durable state that another Codex or ChatGPT session can continue without relying on conversation memory.
-
-Prefer repository state, commits, tests, workflow evidence, explicit checkpoints, and the approved commitment registry over conversational assumptions.
+Prefer repository state, commits, tests, workflow evidence, explicit checkpoints and private governance over conversational assumptions.
 
 ## Usage-limit / session-handoff policy
 
@@ -307,37 +335,32 @@ Before the session can no longer continue, whenever the platform allows:
 1. finish the current atomic mutation whenever safely possible;
 2. push all valid durable work;
 3. do not leave an ambiguous partially-applied repository mutation;
-4. record the exact current repository state;
-5. produce a compact `RESUME CHECKPOINT`.
+4. record exact current repository state;
+5. produce a compact `RESUME CHECKPOINT` without leaking private control-plane content into public artifacts.
 
-The `RESUME CHECKPOINT` must include:
+The `RESUME CHECKPOINT` should include, as applicable:
 
 - authoritative `main` HEAD SHA;
-- active branch;
-- active branch exact HEAD SHA;
-- open PR number and state, if any;
-- `ahead_by` / `behind_by` where applicable;
+- active branch/head;
+- open PR and state;
+- `ahead_by` / `behind_by`;
 - changed files;
-- latest relevant commits;
-- exact-head workflow runs and conclusions;
-- current corpus/project coverage state;
-- approved commitments changed, completed, blocked or still pending;
-- work completed during the session;
+- relevant commits;
+- exact-head workflow conclusions;
+- current public corpus/project state;
+- a private-control-plane reconciliation status without exposing confidential details publicly;
+- completed work;
 - unresolved failures;
 - actual blockers;
-- temporary artifacts still present, if any;
+- temporary artifacts;
 - exact next technical action;
-- required commands or GitHub operations;
-- security/source/provenance caveats;
-- a paste-ready continuation prompt for ChatGPT or the next Codex session.
+- required commands/GitHub operations;
+- source/security/provenance/privacy caveats;
+- a continuation prompt suitable for the authorized next session.
 
-If usage is exhausted during an active turn, complete as much of that turn as the platform permits and leave the repository in the safest recoverable state.
-
-Never report work as complete unless durable repository, test, or CI evidence confirms it.
+Never report work as complete unless durable repository, test or CI evidence confirms it.
 
 ## Required handoff format
-
-When producing a session handoff, use:
 
 ```text
 ### Current State
@@ -346,7 +369,7 @@ When producing a session handoff, use:
 - PR
 - coverage/state
 - CI
-- approved commitments status
+- private-control-plane reconciliation status
 
 ### Completed
 - concrete work
@@ -355,7 +378,7 @@ When producing a session handoff, use:
 - PR/merge evidence
 
 ### Approved Pending / Deferred
-- durable Product Owner-approved commitments not yet complete
+- summarize only at the level appropriate for the handoff's confidentiality boundary
 
 ### Blockers
 - real blockers and control-plane gaps only
@@ -364,5 +387,5 @@ When producing a session handoff, use:
 - exact next engineering action
 
 ### Continuation Prompt
-- self-contained prompt that allows another ChatGPT/Codex session to resume without guessing
+- self-contained for an authorized next ChatGPT/Codex session without exposing private control-plane detail publicly
 ```
