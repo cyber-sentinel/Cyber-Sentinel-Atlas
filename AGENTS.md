@@ -38,14 +38,17 @@ GitHub live state is authoritative over previous chat summaries, prompts, handof
 When repository documents disagree, resolve them in this order:
 
 1. Accepted ADRs in `docs/adr/` for frozen architecture decisions.
-2. Machine-readable release/readiness state under `docs/releases/`.
-3. `docs/project-state.md` for the current project control-plane state.
-4. `docs/current-status.md` for verified operational evidence and exact baselines.
-5. `docs/roadmap.md` for phase sequencing and remaining work.
-6. `docs/product-surfaces.md` for approved product-family scope.
-7. `README.md` for the public product summary.
+2. `docs/product/approved-commitments.json` for Product Owner-approved scope, backlog, MVP, governance and durable product commitments that must not disappear merely because they are not in the current execution stream.
+3. Machine-readable release/readiness state under `docs/releases/`.
+4. `docs/project-state.md` for the current project control-plane state.
+5. `docs/current-status.md` for verified operational evidence and exact baselines.
+6. `docs/roadmap.md` for phase sequencing and remaining work.
+7. `docs/product-surfaces.md` for approved product-family scope.
+8. `README.md` for the public product summary.
 
 Historical snapshots under `docs/history/` are evidence, not current authority.
+
+Before any write, new engineering stream, status report, handoff, roadmap update, or MVP planning action, read and reconcile `docs/product/approved-commitments.json`. A commitment may not silently disappear from planning or reporting merely because it is not part of the current sprint, branch, batch, or PR. If a Product Owner-approved commitment is absent from the live control-plane, report it as `MISSING_FROM_CONTROL_PLANE` and repair the durable control-plane as routine documentation/governance work unless a reserved Product Owner decision is implicated.
 
 Before any write or new engineering stream, fresh-check the authoritative GitHub state, including at minimum:
 
@@ -57,9 +60,29 @@ Before any write or new engineering stream, fresh-check the authoritative GitHub
 6. whether another stream already performed or overlaps the proposed work;
 7. `ahead_by` / `behind_by` where applicable;
 8. changed files;
-9. machine-readable project state where available.
+9. machine-readable project state where available;
+10. approved commitments relevant to the proposed work.
 
 Never create duplicate work.
+
+## Management status reporting contract
+
+Cyber-Sentinel management/status reports must reconcile both current execution and the full approved commitment ledger. Use these states consistently:
+
+- 🟢 `DONE / VERIFIED` — completed with repository/test/CI evidence where applicable;
+- 🟡 `IN_PROGRESS` — active execution or validation is underway;
+- 🟠 `APPROVED_PENDING / DEFERRED / NEXT ACTION` — approved and intentionally not complete yet, with dependencies or sequencing made explicit;
+- 🔴 `BLOCKED / FAILURE / MISSING_FROM_CONTROL_PLANE` — a real blocker, failed gate, or approved commitment that is not durably represented where it should be.
+
+Every management report must include, as applicable:
+
+1. current execution;
+2. completed/verified work;
+3. approved pending/deferred commitments;
+4. blockers/failures/control-plane gaps;
+5. exact next action.
+
+Do not report only the current PR or sprint when broader Product Owner-approved commitments remain outstanding.
 
 ## Non-negotiable engineering rules
 
@@ -144,6 +167,8 @@ Every implementation task follows this sequence:
 ```text
 Read authority
     ↓
+Read approved commitments registry
+    ↓
 Fresh-check GitHub live state
     ↓
 Identify phase / gate / invariant
@@ -166,7 +191,7 @@ Merge
     ↓
 Post-merge verification when required
     ↓
-Synchronize project-state / current-status / roadmap / README as applicable
+Synchronize approved commitments / project-state / current-status / roadmap / README as applicable
     ↓
 Fresh-check again and continue with the next safe non-duplicate task
 ```
@@ -176,12 +201,14 @@ Fresh-check again and continue with the next safe non-duplicate task
 Before modifying code or documentation, an authorized worker must:
 
 1. read `AGENTS.md`;
-2. read `docs/project-state.md`;
-3. read the relevant ADR, release gate, architecture document, and tests;
-4. inspect the current `main` head and open PRs;
-5. inspect relevant branches, recent merges, and exact-head workflows;
-6. confirm that the proposed change does not duplicate another stream;
-7. confirm that the proposed change does not bypass a frozen boundary.
+2. read `docs/product/approved-commitments.json`;
+3. read `docs/project-state.md`;
+4. read the relevant ADR, release gate, architecture document, and tests;
+5. inspect the current `main` head and open PRs;
+6. inspect relevant branches, recent merges, and exact-head workflows;
+7. confirm that the proposed change does not duplicate another stream;
+8. confirm that the proposed change does not bypass a frozen boundary;
+9. confirm that it does not silently drop or contradict an approved Product Owner commitment.
 
 During execution:
 
@@ -199,7 +226,8 @@ Before handoff or stopping:
 - leave the branch and PR in an inspectable state;
 - record blockers and exact evidence;
 - update authoritative state documents if the completed change materially alters project state;
-- ensure decisions required for continuation are recorded in durable project artifacts.
+- ensure decisions required for continuation are recorded in durable project artifacts;
+- ensure approved commitments affected by the work have accurate durable status and are not lost in conversational state.
 
 ## Continuous execution policy
 
@@ -231,8 +259,9 @@ After every successful merge:
 3. verify applicable post-merge workflows;
 4. verify expected project/coverage state;
 5. verify temporary artifacts are absent;
-6. rebuild the next deterministic work queue where applicable;
-7. continue with the next highest-priority safe non-duplicate task.
+6. reconcile `docs/product/approved-commitments.json` against the completed work and remaining approved backlog;
+7. rebuild the next deterministic work queue where applicable;
+8. continue with the next highest-priority safe non-duplicate task.
 
 Only stop when one of the following applies:
 
@@ -252,7 +281,8 @@ A task is DONE only when all applicable conditions are true:
 - documentation and machine-readable state agree;
 - the PR is merged to the intended base;
 - required post-merge verification succeeds;
-- the authoritative project-state documents are synchronized.
+- the authoritative project-state documents are synchronized;
+- the approved commitment ledger is updated when the task changes the state of a Product Owner-approved commitment.
 
 A green unit test alone is not Definition of Done.
 
@@ -264,7 +294,7 @@ A new authorized technical lead or implementation worker must be able to continu
 
 For complex multi-step work, maintain enough durable state that another Codex or ChatGPT session can continue without relying on conversation memory.
 
-Prefer repository state, commits, tests, workflow evidence, and explicit checkpoints over conversational assumptions.
+Prefer repository state, commits, tests, workflow evidence, explicit checkpoints, and the approved commitment registry over conversational assumptions.
 
 ## Usage-limit / session-handoff policy
 
@@ -291,6 +321,7 @@ The `RESUME CHECKPOINT` must include:
 - latest relevant commits;
 - exact-head workflow runs and conclusions;
 - current corpus/project coverage state;
+- approved commitments changed, completed, blocked or still pending;
 - work completed during the session;
 - unresolved failures;
 - actual blockers;
@@ -315,6 +346,7 @@ When producing a session handoff, use:
 - PR
 - coverage/state
 - CI
+- approved commitments status
 
 ### Completed
 - concrete work
@@ -322,8 +354,11 @@ When producing a session handoff, use:
 - tests
 - PR/merge evidence
 
+### Approved Pending / Deferred
+- durable Product Owner-approved commitments not yet complete
+
 ### Blockers
-- real blockers only
+- real blockers and control-plane gaps only
 
 ### Next Action
 - exact next engineering action
