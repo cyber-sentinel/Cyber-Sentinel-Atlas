@@ -10,10 +10,10 @@ ATLAS is the **KNOW** layer of the Cyber-Sentinel ecosystem: a provenance-first,
 - Windows Desktop: **release-critical surface**
 - Public Preview: **BLOCKED / fail-closed**
 - Phase 5.10.10: **ACTIVE / CONTROLLED COVERAGE EXPANSION**
-- Windows Security Log UWS benchmark: **106/422 encyclopedia-grade listed identities**, `316` remaining
-- Windows Security Auditing: **100/423 encyclopedia-grade**, `323` remaining
-- Current Windows Security exemplars: `4608`, `4609`, `4610`, `4611`, `4612`, `4614`, `4615`, `4616`, `4618`, `4621`, `4622`, `4624`, `4625`, `4626`, `4627`, `4634`, `4646`, `4647`, `4648`, `4649`, `4650`, `4651`, `4652`, `4653`, `4654`, `4655`, `4656`, `4657`, `4658`, `4659`, `4660`, `4661`, `4662`, `4663`, `4664`, `4665`, `4666`, `4667`, `4668`, `4670`, `4671`, `4672`, `4673`, `4674`, `4675`, `4688`, `4689`, `4690`, `4691`, `4692`, `4693`, `4694`, `4695`, `4696`, `4697`, `4698`, `4699`, `4700`, `4701`, `4702`, `4703`, `4704`, `4705`, `4706`, `4707`, `4709`, `4710`, `4711`, `4712`, `4713`, `4714`, `4715`, `4716`, `4717`, `4718`, `4719`, `4720`, `4722`, `4723`, `4724`, `4725`, `4726`, `4727`, `4728`, `4729`, `4730`, `4731`, `4732`, `4733`, `4734`, `4735`, `4737`, `4738`, `4739`, `4740`, `4741`, `4742`, `4768`, `4769`, `4771`
+- Windows Security Log UWS benchmark: **422/422 encyclopedia-grade listed identities**, `0` remaining
+- Windows Security Auditing: **423/423 encyclopedia-grade**, `0` remaining
 - Sysmon 15.22: **30/30 COMPLETE**
+- Next mandatory denominator-freeze boundary: **PowerShell Operational**
 - Global Windows denominator: **NOT FROZEN**
 
 The machine-readable coverage authority is `../content/encyclopedia/coverage-manifest.json`. Fresh GitHub `main` state supersedes any point-in-time prose snapshot.

@@ -13,6 +13,6 @@ Historical source versions are retained when needed for reproducibility, lifecyc
 
 Source-profile presence proves that an upstream/source boundary is governed; it does not by itself make a telemetry identity encyclopedia-grade.
 
-For the active Windows Security expansion, per-event curated source records under `content/encyclopedia/sources/` are bound to the frozen provider/channel/build denominator and then materialized through the canonical encyclopedia builder, deterministic search projection, verified pack and acceptance path.
+For the controlled Windows Security expansion, per-event curated source records under `content/encyclopedia/sources/` are bound to the frozen provider/channel/build denominator and then materialized through the canonical encyclopedia builder, deterministic search projection, verified pack and acceptance path.
 
-The current reviewed Windows Security Auditing numerator is **100/423**; the cross-provider Security Log UWS review benchmark is **106/422**; Sysmon 15.22 remains **30/30**. Moving coverage state is authoritative in `content/encyclopedia/coverage-manifest.json`.
+Windows Security Auditing is **423/423** encyclopedia-grade with **0** provider-specific identities remaining; the cross-provider Windows Security Log UWS review benchmark is **422/422** with **0** listed identities remaining; Sysmon 15.22 remains **30/30**. The next denominator-freeze boundary is PowerShell Operational. Moving coverage state is authoritative in `content/encyclopedia/coverage-manifest.json`; the global Windows denominator remains intentionally unfrozen.

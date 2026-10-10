@@ -23,11 +23,11 @@ The objective is not merely to store Event IDs. Each covered item must answer, w
 
 Phase 5.10.10 now uses deterministic family-specific denominators rather than fixture counts as the coverage authority.
 
-The cross-provider Windows Security Log UWS review benchmark is independently `106/422` encyclopedia-grade listed identities with `316` remaining; it is a review benchmark, not a provider denominator.
+The cross-provider Windows Security Log UWS review benchmark is independently `422/422` encyclopedia-grade listed identities with `0` remaining; it is a review benchmark, not a provider denominator.
 
 | Family | Controlled denominator | Encyclopedia grade | Remaining |
 | --- | ---: | ---: | ---: |
-| Windows Security Auditing | 423 unique Event IDs / 488 provider event-version definitions | 100 — `4608`, `4609`, `4610`, `4611`, `4612`, `4614`, `4615`, `4616`, `4618`, `4621`, `4622`, `4624`, `4625`, `4626`, `4627`, `4634`, `4646`, `4647`, `4648`, `4649`, `4650`, `4651`, `4652`, `4653`, `4654`, `4655`, `4656`, `4657`, `4658`, `4659`, `4660`, `4661`, `4662`, `4663`, `4664`, `4665`, `4666`, `4667`, `4668`, `4670`, `4671`, `4672`, `4673`, `4674`, `4675`, `4688`, `4689`, `4690`, `4691`, `4692`, `4693`, `4694`, `4695`, `4696`, `4697`, `4698`, `4699`, `4700`, `4701`, `4702`, `4703`, `4704`, `4705`, `4706`, `4707`, `4709`, `4710`, `4711`, `4712`, `4713`, `4714`, `4715`, `4716`, `4717`, `4718`, `4719`, `4720`, `4722`, `4723`, `4724`, `4725`, `4726`, `4727`, `4728`, `4729`, `4730`, `4731`, `4732`, `4733`, `4734`, `4735`, `4737`, `4738`, `4739`, `4740`, `4741`, `4742`, `4768`, `4769`, `4771` | 323 |
+| Windows Security Auditing | 423 unique Event IDs / 488 provider event-version definitions | 423/423 | 0 |
 | Sysmon 15.22 | 30 documented/current Event IDs | 30 — `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20`, `21`, `22`, `23`, `24`, `25`, `26`, `27`, `28`, `29`, `255` | 0 |
 
 ### Windows Security Auditing scope
@@ -75,15 +75,7 @@ Authoritative machine-readable state:
 - `content/encyclopedia/windows-security-auditing-26100.33296-coverage.snapshot.json`;
 - `content/encyclopedia/sysmon-15.22-coverage.snapshot.json`.
 
-For bounded review planning, run
-`python3 tools/content/build_windows_security_review_queue.py --batch-size 10 --batch-index 0`.
-The deterministic queue binds each batch to the frozen inventory and exact coverage
-snapshot. It includes only currently uncovered Windows Security IDs and never
-creates tasks, promotes content, or changes release coverage. Rebuild it after
-each merged content promotion; before assigning a batch, check the live branch,
-open PRs, and canonical orchestrator task/lease state to avoid duplicate work.
-Each ID still requires controlled source review, field-level semantics,
-provenance, tests, packaged acceptance, and the normal PR/release gates.
+The deterministic Windows Security review queue is now exhausted at `423/423` and must return `remaining_count=0` / `batch_count=0` when built from fresh `main`. Do not fabricate another Security-Auditing batch. The next denominator-freeze workstream is **PowerShell Operational**, which requires controlled provider/channel/version discovery before any percentage or completion claim is permitted.
 
 The packaged engineering preview remains a proof of the bounded product path. Coverage progress does not by itself grant Public Preview corpus or release authority.
 
