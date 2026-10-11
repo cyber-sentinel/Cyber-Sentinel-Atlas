@@ -10,25 +10,29 @@ import (
 	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/pack"
 )
 
-func TestResolveRuntimeRootNamespacesPreviewBuildByCommit(t *testing.T) {
-	oldVersion, oldCommit := coreVersion, coreCommit
-	defer func() {
-		coreVersion, coreCommit = oldVersion, oldCommit
-	}()
-	coreVersion = "0.1.0-preview"
-	coreCommit = strings.Repeat("a", 40)
+func TestResolveRuntimeRootNamespacesEngineeringBuildByCommit(t *testing.T) {
+	for _, version := range []string{"0.1.0-preview", "0.2.0-mvp2-private"} {
+		t.Run(version, func(t *testing.T) {
+			oldVersion, oldCommit := coreVersion, coreCommit
+			defer func() {
+				coreVersion, coreCommit = oldVersion, oldCommit
+			}()
+			coreVersion = version
+			coreCommit = strings.Repeat("a", 40)
 
-	base, err := pack.DefaultRuntimeRoot()
-	if err != nil {
-		t.Fatal(err)
-	}
-	got, err := resolveRuntimeRoot()
-	if err != nil {
-		t.Fatal(err)
-	}
-	want := filepath.Join(base, "preview-builds", coreCommit)
-	if got != want {
-		t.Fatalf("preview runtime root = %q want %q", got, want)
+			base, err := pack.DefaultRuntimeRoot()
+			if err != nil {
+				t.Fatal(err)
+			}
+			got, err := resolveRuntimeRoot()
+			if err != nil {
+				t.Fatal(err)
+			}
+			want := filepath.Join(base, "preview-builds", coreCommit)
+			if got != want {
+				t.Fatalf("engineering runtime root = %q want %q", got, want)
+			}
+		})
 	}
 }
 
@@ -53,16 +57,16 @@ func TestResolveRuntimeRootProductionUsesStableBase(t *testing.T) {
 	}
 }
 
-func TestResolveRuntimeRootPreviewRejectsUnsafeCommit(t *testing.T) {
+func TestResolveRuntimeRootEngineeringRejectsUnsafeCommit(t *testing.T) {
 	oldVersion, oldCommit := coreVersion, coreCommit
 	defer func() {
 		coreVersion, coreCommit = oldVersion, oldCommit
 	}()
-	coreVersion = "0.1.0-preview"
+	coreVersion = "0.2.0-mvp2-private"
 	coreCommit = "../not-a-commit"
 
 	if _, err := resolveRuntimeRoot(); err == nil || !strings.Contains(err.Error(), "40-character hexadecimal") {
-		t.Fatalf("unsafe preview commit must fail closed: %v", err)
+		t.Fatalf("unsafe engineering commit must fail closed: %v", err)
 	}
 }
 
