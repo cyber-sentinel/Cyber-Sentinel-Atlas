@@ -34,22 +34,28 @@ func validCommitNamespace(value string) bool {
 	return true
 }
 
-// resolveRuntimeRoot keeps release/runtime state stable while isolating preview
-// builds by their exact source commit. Engineering-preview TUF roots are created
-// ephemerally per build, so sharing one durable preview root across different
-// commits would allow an older active generation to shadow the newly bundled
-// pack and would also create invalid trust continuity between unrelated preview
-// roots. Production/non-preview builds retain the canonical stable runtime root.
+func isolatedEngineeringBuild(version string) bool {
+	value := strings.ToLower(version)
+	return strings.Contains(value, "preview") || strings.Contains(value, "mvp2-private")
+}
+
+// resolveRuntimeRoot keeps release/runtime state stable while isolating
+// engineering preview/private-alpha builds by their exact source commit.
+// Engineering-preview TUF roots are created ephemerally per build, so sharing
+// one durable engineering root across different commits would allow an older
+// active generation to shadow the newly bundled pack and would also create
+// invalid trust continuity between unrelated preview roots. Production and
+// ordinary development builds retain the canonical stable runtime root.
 func resolveRuntimeRoot() (string, error) {
 	base, err := pack.DefaultRuntimeRoot()
 	if err != nil {
 		return "", err
 	}
-	if !strings.Contains(strings.ToLower(coreVersion), "preview") {
+	if !isolatedEngineeringBuild(coreVersion) {
 		return base, nil
 	}
 	if !validCommitNamespace(coreCommit) {
-		return "", errors.New("preview build requires an exact 40-character hexadecimal source commit")
+		return "", errors.New("isolated engineering build requires an exact 40-character hexadecimal source commit")
 	}
 	return filepath.Join(base, "preview-builds", strings.ToLower(coreCommit)), nil
 }
@@ -67,8 +73,8 @@ func openRuntimeAt(runtimeRoot string) (*app.Runtime, error) {
 
 // installBundledEngineeringPreview performs an initial, local-only bootstrap from
 // fixed filenames adjacent to atlas-core. It never accepts a caller-controlled
-// archive/root path. Preview builds use a source-commit-namespaced runtime root,
-// so an active generation here belongs to this exact preview build rather than a
+// archive/root path. Engineering builds use a source-commit-namespaced runtime
+// root, so an active generation here belongs to this exact build rather than a
 // previous package. Both files are required together; partial/tampered bundles
 // fail closed through the existing TUF + pack verification and activation path.
 func installBundledEngineeringPreview(runtimeRoot, bundleRoot string) (bool, error) {
