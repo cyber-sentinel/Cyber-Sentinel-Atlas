@@ -1,0 +1,459 @@
+{
+  "schema_version": "1.0.0",
+  "status": "MAINTAINER_APPROVED_POWERSHELL_OPERATIONAL_26100",
+  "family": "PowerShell Operational",
+  "provider": "Microsoft-Windows-PowerShell",
+  "channel": "Microsoft-Windows-PowerShell/Operational",
+  "namespace": "microsoft.windows.powershell",
+  "reference_build": "26100",
+  "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+  "batch_index": 2,
+  "events": [
+    {
+      "id": "atlas:event:microsoft.windows.powershell:4106",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "4106",
+      "native_event_id": "4106",
+      "title": "4106 — Script Block Invocation Completed",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "4106",
+        "PowerShell 4106",
+        "PowerShell Event 4106",
+        "Event ID 4106"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 4106 / Version 1",
+      "overview": {
+        "summary": "Script Block Invocation Completed. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task Stopping Command. Analyst field shape: ScriptBlockId, RunspaceId. Pair start/stop records by ScriptBlockId and RunspaceId when invocation logging is enabled.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "4106",
+        "version": "1",
+        "level": "Verbose",
+        "task": "Stopping Command",
+        "opcode": "Close (Async)",
+        "keywords": [
+          "PowerShell Runspace"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 2
+          }
+        ],
+        "analyst_pivots": [
+          "ScriptBlockId",
+          "RunspaceId"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope.",
+          "Enable Script Block Invocation Logging; this can produce high event volume."
+        ],
+        "volume": "high",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for sequencing script-block invocation and correlating ScriptBlockId to RunspaceId.",
+      "correlations": [
+        "PowerShell 4103/4104/4105/4106",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "script_block_id",
+          "section": "Event Data",
+          "native_name": "ScriptBlockId",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Identifier used to correlate script block content and invocation lifecycle records.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "runspace_id",
+          "section": "Event Data",
+          "native_name": "RunspaceId",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Identifier for the associated PowerShell runspace.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:8193",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "8193",
+      "native_event_id": "8193",
+      "title": "8193 — Runspace Object Created",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "8193",
+        "PowerShell 8193",
+        "PowerShell Event 8193",
+        "Event ID 8193"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 8193 / Version 1",
+      "overview": {
+        "summary": "Runspace Object Created. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task Connect. Analyst field shape: param1.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "8193",
+        "version": "1",
+        "level": "Verbose",
+        "task": "Connect",
+        "opcode": "to be used when an object is constructed",
+        "keywords": [
+          "PowerShell Runspace"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 1
+          }
+        ],
+        "analyst_pivots": [
+          "param1"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for runspace, session, and remoting lifecycle reconstruction; correlate with process creation and WSMan context.",
+      "correlations": [
+        "PowerShell runspace lifecycle",
+        "WSMan/remoting context",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "param1",
+          "section": "Event Data",
+          "native_name": "param1",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Runspace instance identifier.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:8194",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "8194",
+      "native_event_id": "8194",
+      "title": "8194 — Runspace Pool Created",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "8194",
+        "PowerShell 8194",
+        "PowerShell Event 8194",
+        "Event ID 8194"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 8194 / Version 1",
+      "overview": {
+        "summary": "Runspace Pool Created. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task Connect. Analyst field shape: InstanceId, MaxRunspaces, MinRunspaces.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "8194",
+        "version": "1",
+        "level": "Verbose",
+        "task": "Connect",
+        "opcode": "to be used when an object is constructed",
+        "keywords": [
+          "PowerShell Runspace"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 3
+          }
+        ],
+        "analyst_pivots": [
+          "InstanceId",
+          "MaxRunspaces",
+          "MinRunspaces"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for runspace, session, and remoting lifecycle reconstruction; correlate with process creation and WSMan context.",
+      "correlations": [
+        "PowerShell runspace lifecycle",
+        "WSMan/remoting context",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "instance_id",
+          "section": "Event Data",
+          "native_name": "InstanceId",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Identifier for the created runspace pool.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "max_runspaces",
+          "section": "Event Data",
+          "native_name": "MaxRunspaces",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Maximum configured runspace count.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "min_runspaces",
+          "section": "Event Data",
+          "native_name": "MinRunspaces",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Minimum configured runspace count.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:8195",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "8195",
+      "native_event_id": "8195",
+      "title": "8195 — Runspace Pool Opening",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "8195",
+        "PowerShell 8195",
+        "PowerShell Event 8195",
+        "Event ID 8195"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 8195 / Version 1",
+      "overview": {
+        "summary": "Runspace Pool Opening. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task Connect. Analyst field shape: no EventData fields.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "8195",
+        "version": "1",
+        "level": "Verbose",
+        "task": "Connect",
+        "opcode": "Open (async)",
+        "keywords": [
+          "PowerShell Runspace"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 0
+          }
+        ],
+        "analyst_pivots": []
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for runspace, session, and remoting lifecycle reconstruction; correlate with process creation and WSMan context.",
+      "correlations": [
+        "PowerShell runspace lifecycle",
+        "WSMan/remoting context",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": []
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:8196",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "8196",
+      "native_event_id": "8196",
+      "title": "8196 — Runspace Activity Correlation Updated",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "8196",
+        "PowerShell 8196",
+        "PowerShell Event 8196",
+        "Event ID 8196"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 8196 / Version 1",
+      "overview": {
+        "summary": "Runspace Activity Correlation Updated. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task Connect. Analyst field shape: no EventData fields.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "8196",
+        "version": "1",
+        "level": "Verbose",
+        "task": "Connect",
+        "opcode": "Open (async)",
+        "keywords": [
+          "PowerShell Runspace"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 0
+          }
+        ],
+        "analyst_pivots": []
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for runspace, session, and remoting lifecycle reconstruction; correlate with process creation and WSMan context.",
+      "correlations": [
+        "PowerShell runspace lifecycle",
+        "WSMan/remoting context",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": []
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:8197",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "8197",
+      "native_event_id": "8197",
+      "title": "8197 — Runspace State Changed",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "8197",
+        "PowerShell 8197",
+        "PowerShell Event 8197",
+        "Event ID 8197"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 8197 / Version 1",
+      "overview": {
+        "summary": "Runspace State Changed. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task Connect. Analyst field shape: param1.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "8197",
+        "version": "1",
+        "level": "Verbose",
+        "task": "Connect",
+        "opcode": "Open (async)",
+        "keywords": [
+          "PowerShell Runspace"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 1
+          }
+        ],
+        "analyst_pivots": [
+          "param1"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for runspace, session, and remoting lifecycle reconstruction; correlate with process creation and WSMan context.",
+      "correlations": [
+        "PowerShell runspace lifecycle",
+        "WSMan/remoting context",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "param1",
+          "section": "Event Data",
+          "native_name": "param1",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Runspace state after the transition.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    }
+  ]
+}
