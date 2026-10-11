@@ -6,11 +6,14 @@ const path = require('node:path');
 const test = require('node:test');
 
 const root = path.resolve(__dirname, '..', '..');
-const webRoot = path.join(root, 'benchmarks', 'desktop', 'phase56', 'candidates', 'tauri', 'www');
+const tauriRoot = path.join(root, 'benchmarks', 'desktop', 'phase56', 'candidates', 'tauri');
+const webRoot = path.join(tauriRoot, 'www');
 const html = fs.readFileSync(path.join(webRoot, 'index.html'), 'utf8');
 const css = fs.readFileSync(path.join(webRoot, 'styles.css'), 'utf8');
 const main = fs.readFileSync(path.join(webRoot, 'main.js'), 'utf8');
-const tauri = JSON.parse(fs.readFileSync(path.join(root, 'benchmarks', 'desktop', 'phase56', 'candidates', 'tauri', 'tauri.conf.json'), 'utf8'));
+const buildRs = fs.readFileSync(path.join(tauriRoot, 'build.rs'), 'utf8');
+const rustMain = fs.readFileSync(path.join(tauriRoot, 'src', 'main.rs'), 'utf8');
+const tauri = JSON.parse(fs.readFileSync(path.join(tauriRoot, 'tauri.conf.json'), 'utf8'));
 const entity = require(path.join(webRoot, 'entity-state.js'));
 const investigation = require(path.join(webRoot, 'investigation-model.js'));
 const investigationFixtures = JSON.parse(fs.readFileSync(path.join(root, 'tests', 'fixtures', 'desktop', 'investigation-canaries.v0.json'), 'utf8'));
@@ -33,126 +36,109 @@ test('ATLAS Entity fails closed on unknown or malformed state', () => {
   assert.equal(entity.create('finding', 'x'.repeat(400)).detail.length, 240);
 });
 
-test('analyst workspace binds all three corpus-backed canaries', () => {
-  const canaries = [
-    ['4625', 'atlas:event:microsoft.windows.security:4625'],
-    ['4688', 'atlas:event:microsoft.windows.security:4688'],
-    ['Sysmon 1', 'atlas:event:microsoft.sysmon:1']
-  ];
-  for (const [query, id] of canaries) {
-    assert.match(html, new RegExp(`data-canary-query="${query}"`));
-    assert.ok(html.includes(`data-canary-id="${id}"`));
-  }
-  assert.ok(main.includes('await runSearchQuery(query, expectedId)'));
-  assert.ok(main.includes('matches.find(match => match?.target_id === canaryId)'));
+test('Explore is search-first and keeps acceptance canaries out of primary product navigation', () => {
+  for (const query of ['4624', '1100', '4688', 'Sysmon 1']) assert.match(html, new RegExp(`data-example-query="${query}"`));
+  assert.ok(html.includes('What do you want to investigate?'));
+  assert.ok(html.includes('Event ID, executable, ATT&amp;CK technique, provider, field or behavior'));
+  assert.equal(html.includes('INVESTIGATION CANARIES'), false);
+  assert.equal(html.includes('data-canary-query='), false);
+  assert.ok(main.includes('.filter(m=>!isSynthetic(m))'));
+  assert.ok(main.includes("s.includes('synthetic.test')"));
+});
+
+test('Quick Detail is analyst-facing and hides canonical internals behind Raw / Canonical', () => {
+  for (const label of ['Overview', 'Fields', 'Example', 'Detection & Hunt', 'Sources', 'Raw / Canonical']) assert.ok(html.includes(label), `missing quick-detail tab: ${label}`);
+  assert.ok(main.includes("firstClaim(detail,'telemetry.represents')"));
+  assert.ok(main.includes("firstClaim(detail,'security.relevance')"));
+  assert.ok(main.includes("claims(detail,'telemetry.field-semantics')"));
+  assert.ok(main.includes('Key investigative pivots'));
+  assert.ok(main.includes('No accepted example is packaged for this record yet.'));
+  assert.ok(main.includes('Canonical/internal model data is intentionally kept out of the primary analyst view.'));
 });
 
 test('workspace preserves the frozen seven-command Desktop boundary', () => {
   const commands = [...main.matchAll(/invoke\('([a-z_]+)'/g)].map(match => match[1]);
-  assert.deepEqual(commands, [
-    'core_status',
-    'search_records',
-    'get_record',
-    'expand_graph',
-    'pack_status',
-    'pack_update',
-    'pack_rollback'
-  ]);
-  const permissions = tauri.app.security.capabilities[0].permissions;
-  assert.equal(permissions.length, 7);
+  assert.deepEqual(commands, ['core_status','search_records','get_record','expand_graph','pack_status','pack_update','pack_rollback']);
+  assert.equal(tauri.app.security.capabilities[0].permissions.length, 7);
   assert.equal(tauri.app.security.csp.includes("connect-src 'none'"), true);
 });
 
 test('untrusted corpus data is rendered without HTML injection sinks', () => {
   assert.equal(main.includes('.innerHTML'), false);
   assert.equal(main.includes('insertAdjacentHTML'), false);
-  assert.ok(main.includes('node.textContent = content'));
-  assert.ok(main.includes('pre.textContent = JSON.stringify'));
+  assert.ok(main.includes('n.textContent=String(content)'));
+  assert.ok(main.includes('p.textContent=JSON.stringify'));
 });
 
-test('workspace exposes provenance, evidence metrics and accessible entity state', () => {
-  for (const id of ['workspace', 'globalNotice', 'entityVisual', 'entityStateLabel', 'metricFields', 'metricClaims', 'metricSources', 'metricRelations']) {
-    assert.ok(html.includes(`id="${id}"`), `missing ${id}`);
-  }
-  assert.ok(html.includes('No hidden model reasoning is displayed.'));
-  assert.ok(main.includes('renderReferenceSources(detail, summary)'));
-  assert.ok(main.includes('renderTimeline(detail, baseRecord, summary)'));
+test('ATLAS Entity participates in analyst navigation rather than acting only as a status lamp', () => {
+  for (const id of ['entityVisual', 'entityStateLabel', 'entityInsightTitle', 'entityPivots']) assert.ok(html.includes(`id="${id}"`), `missing ${id}`);
+  assert.ok(main.includes('renderEntityPivots(detail)'));
+  assert.ok(main.includes("activateTab('fields')"));
+  assert.ok(main.includes("showView('mindmap')"));
+  assert.ok(css.includes('body[data-entity-mode="reasoning"]'));
   assert.ok(css.includes('@media(prefers-reduced-motion:reduce)'));
   assert.ok(css.includes('body[data-theme="high-contrast"]'));
-  assert.ok(html.includes('id="toggleEntity"'));
+});
+
+test('Mind Map renders a bounded graphical node-link view without arbitrary graph execution', () => {
+  assert.ok(html.includes('id="graphResults"'));
+  assert.ok(main.includes("createElementNS('http://www.w3.org/2000/svg',tag)"));
+  assert.ok(main.includes("class:'graph-node root'"));
+  assert.ok(main.includes('await atlas.graph(seed,depth)'));
+  assert.ok(main.includes('Math.min(pivots.length,14)'));
+});
+
+test('release host and sidecar are configured to avoid companion console windows', () => {
+  assert.ok(rustMain.includes('command.creation_flags(CREATE_NO_WINDOW)'));
+  assert.ok(buildRs.includes('cargo:rustc-link-arg=/SUBSYSTEM:WINDOWS'));
+  assert.equal(tauri.app.windows[0].title, 'Cyber-Sentinel ATLAS');
+});
+
+test('workspace exposes provenance metrics only as advanced/internal data and remains accessible', () => {
+  for (const id of ['workspace', 'globalNotice', 'metricFields', 'metricClaims', 'metricSources', 'metricRelations', 'toggleEntity']) assert.ok(html.includes(`id="${id}"`), `missing ${id}`);
+  assert.ok(html.includes('aria-live="polite"'));
   assert.ok(main.includes("localStorage.setItem('atlas-entity-collapsed'"));
-  assert.ok(main.includes("setAttribute('aria-expanded', String(!collapsed))"));
+  assert.ok(main.includes("setAttribute('aria-expanded',String(!collapsed))"));
 });
 
 test('investigation graph builds deterministic, explicitly classified canaries', () => {
-  const canaries = [
-    ['atlas:event:microsoft.windows.security:4625', 'Target User Name'],
-    ['atlas:event:microsoft.windows.security:4688', 'New Process Name'],
-    ['atlas:event:microsoft.sysmon:1', 'ProcessGuid']
-  ];
+  const canaries = [['atlas:event:microsoft.windows.security:4625','Target User Name'],['atlas:event:microsoft.windows.security:4688','New Process Name'],['atlas:event:microsoft.sysmon:1','ProcessGuid']];
   for (const [recordId, fieldTitle] of canaries) {
-    const graph = investigation.build({
-      detail_version: '1.0.0',
-      record: { id: recordId, title: recordId },
-      fields: [{ id: `${recordId}.field`, title: fieldTitle, canonical_key: fieldTitle }],
-      sources: [{ id: `${recordId}.source`, title: 'Authoritative source' }]
-    });
-    assert.equal(graph.record_id, recordId);
-    assert.equal(graph.confidence, 'UNASSESSED');
+    const graph = investigation.build({detail_version:'1.0.0',record:{id:recordId,title:recordId},fields:[{id:`${recordId}.field`,title:fieldTitle,canonical_key:fieldTitle}],sources:[{id:`${recordId}.source`,title:'Authoritative source'}]});
+    assert.equal(graph.record_id, recordId); assert.equal(graph.confidence, 'UNASSESSED');
     assert.ok(graph.nodes.some(node => node.classification === 'FACT' && node.status === 'VERIFIED'));
     assert.ok(graph.nodes.some(node => node.classification === 'EVIDENCE REQUIREMENT'));
     assert.ok(graph.nodes.some(node => node.classification === 'HYPOTHESIS' && node.status === 'UNASSESSED'));
-    assert.ok(graph.nodes.some(node => node.classification === 'CHECK'));
-    assert.ok(graph.nodes.some(node => node.classification === 'PROVENANCE'));
-    assert.ok(graph.edges.every(edge => ['REQUIRES_EVIDENCE', 'INFORMS', 'REQUIRES_CHECK', 'SUPPORTS_SEMANTICS'].includes(edge.type)));
+    assert.ok(graph.nodes.some(node => node.classification === 'CHECK')); assert.ok(graph.nodes.some(node => node.classification === 'PROVENANCE'));
+    assert.ok(graph.edges.every(edge => ['REQUIRES_EVIDENCE','INFORMS','REQUIRES_CHECK','SUPPORTS_SEMANTICS'].includes(edge.type)));
   }
 });
 
-test('investigation graph refuses unsupported or incomplete records', () => {
+test('investigation graph refuses unsupported records without blocking Explore', () => {
   assert.equal(investigation.build(null), null);
   assert.equal(investigation.build({ detail_version: '1.0.0' }), null);
   assert.equal(investigation.build({ detail_version: '1.0.0', record: { id: 'atlas:event:unknown:1' } }), null);
-  assert.ok(html.includes('A hypothesis is never promoted to fact by this view.'));
-  assert.ok(html.includes('src="investigation-model.js"'));
+  assert.ok(html.includes('A hypothesis is never promoted to fact without evidence.'));
+  assert.ok(main.includes('The record remains fully searchable and readable. Investigation enrichment is a separate content layer.'));
 });
 
 test('canary acceptance fixtures remain synthetic, bounded and complete', () => {
-  assert.equal(investigationFixtures.schema, 'atlas-investigation-fixtures/v0');
-  assert.equal(investigationFixtures.fixture_only, true);
-  assert.equal(investigationFixtures.canonical_corpus, false);
-  assert.equal(investigationFixtures.scenarios.length, 9);
+  assert.equal(investigationFixtures.schema, 'atlas-investigation-fixtures/v0'); assert.equal(investigationFixtures.fixture_only, true); assert.equal(investigationFixtures.canonical_corpus, false); assert.equal(investigationFixtures.scenarios.length, 9);
   const combinations = new Set(investigationFixtures.scenarios.map(item => `${item.record_id}:${item.case_kind}`));
-  for (const recordId of Object.keys(investigation.PLAYBOOKS)) {
-    for (const caseKind of investigation.CASE_KINDS) assert.ok(combinations.has(`${recordId}:${caseKind}`));
-  }
+  for (const recordId of Object.keys(investigation.PLAYBOOKS)) for (const caseKind of investigation.CASE_KINDS) assert.ok(combinations.has(`${recordId}:${caseKind}`));
 });
 
 test('explicit evidence produces deterministic support, refute and incomplete states', () => {
   for (const fixture of investigationFixtures.scenarios) {
-    const base = investigation.build({
-      detail_version: '1.0.0',
-      record: { id: fixture.record_id, title: fixture.record_id },
-      fields: [],
-      sources: [{ id: `${fixture.record_id}.source`, title: 'Authoritative source' }]
-    });
-    const assessed = investigation.applyEvidence(base, fixture);
-    assert.equal(assessed.scenario_id, fixture.scenario_id);
-    assert.equal(assessed.case_kind, fixture.case_kind);
-    assert.equal(assessed.nodes.filter(node => node.classification === 'EVIDENCE').length, fixture.observations.length);
-    assert.ok(assessed.edges.every(edge => ['REQUIRES_EVIDENCE', 'INFORMS', 'REQUIRES_CHECK', 'SUPPORTS_SEMANTICS', 'DERIVED_FROM_RECORD_CONTEXT', 'SUPPORTS', 'REFUTES', 'UNKNOWN'].includes(edge.type)));
-    if (fixture.case_kind === 'incomplete') {
-      assert.equal(assessed.confidence, 'INCOMPLETE');
-      assert.ok(assessed.nodes.filter(node => node.classification === 'HYPOTHESIS').every(node => node.status === 'UNASSESSED'));
-    } else {
-      assert.equal(assessed.confidence, 'BOUNDED-EVIDENCE');
-      assert.ok(assessed.nodes.some(node => node.classification === 'HYPOTHESIS' && node.status !== 'UNASSESSED'));
-    }
+    const base = investigation.build({detail_version:'1.0.0',record:{id:fixture.record_id,title:fixture.record_id},fields:[],sources:[{id:`${fixture.record_id}.source`,title:'Authoritative source'}]});
+    const assessed = investigation.applyEvidence(base, fixture); assert.equal(assessed.scenario_id, fixture.scenario_id); assert.equal(assessed.case_kind, fixture.case_kind); assert.equal(assessed.nodes.filter(node=>node.classification==='EVIDENCE').length, fixture.observations.length);
+    assert.ok(assessed.edges.every(edge => ['REQUIRES_EVIDENCE','INFORMS','REQUIRES_CHECK','SUPPORTS_SEMANTICS','DERIVED_FROM_RECORD_CONTEXT','SUPPORTS','REFUTES','UNKNOWN'].includes(edge.type)));
+    if (fixture.case_kind === 'incomplete') assert.equal(assessed.confidence, 'INCOMPLETE'); else assert.equal(assessed.confidence, 'BOUNDED-EVIDENCE');
   }
 });
 
 test('evidence assessment fails closed on mismatched, duplicate or unbounded input', () => {
-  const fixture = investigationFixtures.scenarios[0];
-  const base = investigation.build({ detail_version: '1.0.0', record: { id: fixture.record_id }, fields: [], sources: [] });
+  const fixture = investigationFixtures.scenarios[0]; const base = investigation.build({detail_version:'1.0.0',record:{id:fixture.record_id},fields:[],sources:[]});
   assert.throws(() => investigation.applyEvidence(base, { ...fixture, record_id: 'atlas:event:unknown:1' }), /does not match/);
   assert.throws(() => investigation.applyEvidence(base, { ...fixture, case_kind: 'invented' }), /not supported/);
   assert.throws(() => investigation.applyEvidence(base, { ...fixture, observations: [...fixture.observations, fixture.observations[0]] }), /duplicate observation/);

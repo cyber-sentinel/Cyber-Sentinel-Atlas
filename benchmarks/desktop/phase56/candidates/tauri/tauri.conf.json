@@ -11,7 +11,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Cyber-Sentinel ATLAS — First Preview",
+        "title": "Cyber-Sentinel ATLAS",
         "width": 1320,
         "height": 820,
         "minWidth": 760,
@@ -28,10 +28,8 @@
       "capabilities": [
         {
           "identifier": "main-preview-commands",
-          "description": "Restrict the local main webview to the fixed First Preview Shared Core command set accepted by ADR-0026.",
-          "windows": [
-            "main"
-          ],
+          "description": "Restrict the local main webview to the fixed ATLAS Shared Core command set accepted by ADR-0026.",
+          "windows": ["main"],
           "permissions": [
             "allow-core-status",
             "allow-search-records",

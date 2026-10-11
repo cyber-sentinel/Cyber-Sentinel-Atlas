@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>Cyber-Sentinel ATLAS — Analyst Preview</title>
+  <title>Cyber-Sentinel ATLAS</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body data-theme="atlas-dark" data-entity-mode="idle">
@@ -12,145 +12,92 @@
   <div class="app-shell">
     <header class="topbar">
       <div class="brand-block">
-        <div class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 48 48" focusable="false"><path d="M24 5 41 15v18L24 43 7 33V15Z" class="mark-shell"/><path d="m16 31 8-18 8 18m-13-6h10" class="mark-glyph"/></svg>
-        </div>
-        <div><div class="eyebrow">CYBER-SENTINEL</div><h1>ATLAS <span>Analyst Preview</span></h1></div>
+        <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path d="M24 5 41 15v18L24 43 7 33V15Z" class="mark-shell"/><path d="m16 31 8-18 8 18m-13-6h10" class="mark-glyph"/></svg></div>
+        <div><div class="eyebrow">CYBER-SENTINEL</div><h1>ATLAS</h1></div>
       </div>
-      <div class="mission-state" aria-label="Workspace scope"><span class="mission-kicker">ACTIVE SCOPE</span><strong>Windows telemetry knowledge</strong></div>
-      <div class="topbar-status" aria-label="Runtime status">
-        <span id="offlineBadge" class="status-pill neutral">Checking core</span>
-        <span id="packBadge" class="status-pill neutral">Pack unknown</span>
+      <div class="topbar-search-hint"><span class="topbar-kicker">OFFLINE SECURITY KNOWLEDGE</span><span>Windows · Sysmon · expandable knowledge packs</span></div>
+      <div class="topbar-status">
+        <span id="offlineBadge" class="runtime-dot neutral" title="Runtime boundary"><span class="dot"></span><span>Checking</span></span>
+        <span id="packBadge" class="runtime-dot neutral" title="Active knowledge pack"><span class="dot"></span><span>Pack</span></span>
         <button id="refreshStatus" class="icon-button" type="button" aria-label="Refresh runtime status" title="Refresh runtime status">↻</button>
       </div>
     </header>
 
     <aside class="sidebar" aria-label="Primary navigation">
-      <div>
-        <div class="rail-label">ANALYST WORKSPACE</div>
-        <nav class="nav-stack">
-          <button class="nav-item active" type="button" data-view="investigate" aria-current="page"><span class="nav-icon" aria-hidden="true">⌕</span><span>Investigate</span></button>
-          <button class="nav-item" type="button" data-view="record"><span class="nav-icon" aria-hidden="true">▤</span><span>Record</span></button>
-          <button class="nav-item" type="button" data-view="graph"><span class="nav-icon" aria-hidden="true">⌘</span><span>Relationships</span></button>
-          <button class="nav-item" type="button" data-view="investigation"><span class="nav-icon" aria-hidden="true">⎔</span><span>Investigation</span></button>
-          <button class="nav-item" type="button" data-view="pack"><span class="nav-icon" aria-hidden="true">◈</span><span>Pack Control</span></button>
-          <button class="nav-item" type="button" data-view="diagnostics"><span class="nav-icon" aria-hidden="true">◎</span><span>Diagnostics</span></button>
-        </nav>
-
-        <section class="canary-section" aria-labelledby="canaryTitle">
-          <div id="canaryTitle" class="rail-label">INVESTIGATION CANARIES</div>
-          <button class="canary-button" type="button" data-canary-query="4625" data-canary-id="atlas:event:microsoft.windows.security:4625"><span class="canary-id">4625</span><span><strong>Failed logon</strong><small>Credential attack triage</small></span></button>
-          <button class="canary-button" type="button" data-canary-query="4688" data-canary-id="atlas:event:microsoft.windows.security:4688"><span class="canary-id">4688</span><span><strong>Process creation</strong><small>Execution context</small></span></button>
-          <button class="canary-button" type="button" data-canary-query="Sysmon 1" data-canary-id="atlas:event:microsoft.sysmon:1"><span class="canary-id">S1</span><span><strong>Sysmon process</strong><small>Process lineage</small></span></button>
-        </section>
-      </div>
-
-      <div class="sidebar-meta">
-        <label for="themeSelect">Visual mode</label>
-        <select id="themeSelect"><option value="atlas-dark">ATLAS Blue</option><option value="tactical-green">Tactical Green</option><option value="high-contrast">High Contrast</option></select>
-        <div class="security-note"><span class="security-dot" aria-hidden="true"></span><span><strong>Local-first boundary</strong><small>No default network listener</small></span></div>
-      </div>
+      <nav class="nav-stack">
+        <button class="nav-item active" type="button" data-view="explore" aria-current="page"><span class="nav-icon" aria-hidden="true">⌕</span><span>Explore</span></button>
+        <button class="nav-item" type="button" data-view="investigation"><span class="nav-icon" aria-hidden="true">⎔</span><span>Investigation</span></button>
+        <button class="nav-item" type="button" data-view="mindmap"><span class="nav-icon" aria-hidden="true">⌘</span><span>Mind Map</span></button>
+        <button class="nav-item" type="button" data-view="advanced"><span class="nav-icon" aria-hidden="true">⚙</span><span>Settings</span></button>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-help"><strong>Search anything</strong><span>Event ID, provider, field, behavior, ATT&amp;CK ID or executable name when the active pack contains it.</span></div></div>
     </aside>
 
     <main id="workspace" class="workspace" tabindex="-1">
-      <section id="globalNotice" class="notice info" role="status" aria-live="polite">Validating the packaged Shared Core and verified pack state…</section>
+      <section id="globalNotice" class="notice info compact-notice" role="status" aria-live="polite">Validating local runtime…</section>
 
-      <section class="view active" data-view-panel="investigate" aria-labelledby="investigateTitle">
-        <div class="section-heading hero-heading">
-          <div><div class="eyebrow">SEARCH / TRIAGE / PIVOT</div><h2 id="investigateTitle">Analyst Command Center</h2><p>Resolve canonical telemetry, inspect claim-level provenance and pivot through bounded relationships — entirely on the active verified pack.</p></div>
-          <div id="searchMeta" class="meta-chip">AWAITING QUERY</div>
-        </div>
+      <section class="view active" data-view-panel="explore" aria-labelledby="exploreTitle">
+        <section id="searchHero" class="search-hero">
+          <div class="hero-copy"><div class="eyebrow">EXPLORE SECURITY KNOWLEDGE</div><h2 id="exploreTitle">What do you want to investigate?</h2><p>Search by Event ID, executable, ATT&amp;CK technique, provider, field or behavior. ATLAS returns the shortest useful answer first and keeps raw model data out of the way.</p></div>
+          <form id="searchForm" class="search-bar" autocomplete="off">
+            <label class="sr-only" for="searchInput">Search ATLAS knowledge</label><span class="search-glyph" aria-hidden="true">⌕</span>
+            <input id="searchInput" name="query" type="search" maxlength="512" placeholder="Try 4624, 1100, Sysmon 1, T1059, bitsadmin.exe…" required>
+            <select id="searchLimit" aria-label="Maximum search results"><option value="10" selected>10 results</option><option value="20">20 results</option><option value="50">50 results</option></select>
+            <button class="primary-button" type="submit">Search</button>
+          </form>
+          <div class="example-row" aria-label="Example searches"><span>Examples</span><button class="query-chip" type="button" data-example-query="4624">4624</button><button class="query-chip" type="button" data-example-query="1100">1100</button><button class="query-chip" type="button" data-example-query="4688">4688</button><button class="query-chip" type="button" data-example-query="Sysmon 1">Sysmon 1</button></div>
+        </section>
 
-        <form id="searchForm" class="search-bar" autocomplete="off">
-          <label class="sr-only" for="searchInput">Search ATLAS knowledge</label><span class="search-glyph" aria-hidden="true">⌕</span>
-          <input id="searchInput" name="query" type="search" maxlength="512" placeholder="Event ID, ATT&amp;CK ID, provider, field or behavior…" required>
-          <select id="searchLimit" aria-label="Maximum search results"><option value="10">10 results</option><option value="20" selected>20 results</option><option value="50">50 results</option></select>
-          <button class="primary-button" type="submit">Analyze</button>
-        </form>
-
-        <div class="signal-strip" aria-label="Verified corpus boundary">
-          <div><span>WINDOWS SECURITY</span><strong>423 / 423</strong><small>controlled denominator</small></div>
-          <div><span>SYSMON</span><strong>30 / 30</strong><small>15.22 · schema 4.91</small></div>
-          <div><span>SEARCH MODE</span><strong>Deterministic</strong><small>exact before lexical</small></div>
-          <div><span>TRUST</span><strong>Fail-closed</strong><small>TUF + provenance</small></div>
-        </div>
-
-        <div class="content-grid search-grid">
-          <section class="panel results-panel" aria-labelledby="resultsTitle">
-            <div class="panel-heading"><div><span class="panel-index">01</span><h3 id="resultsTitle">Resolved Records</h3></div><span id="resultCount" class="counter">0</span></div>
-            <div id="searchResults" class="result-list empty-state"><div class="empty-mark" aria-hidden="true">⌁</div><strong>Ready for a bounded query</strong><span>Use a canary or search the verified local knowledge pack.</span></div>
-          </section>
-          <section class="panel detail-panel" aria-labelledby="quickDetailTitle">
-            <div class="panel-heading"><div><span class="panel-index">02</span><h3 id="quickDetailTitle">Evidence Detail</h3></div><button id="openRecordView" class="text-button" type="button" disabled>Open full record →</button></div>
-            <div id="quickDetail" class="empty-state"><div class="empty-mark" aria-hidden="true">◇</div><strong>No record selected</strong><span>Choose a resolved result to load canonical facts and provenance.</span></div>
-          </section>
-        </div>
-      </section>
-
-      <section class="view" data-view-panel="record" aria-labelledby="recordTitle">
-        <div class="section-heading"><div><div class="eyebrow">CANONICAL RECORD / CLAIM EVIDENCE</div><h2 id="recordTitle">Record &amp; Provenance</h2><p>Read-only canonical data, source lineage and evidence timestamps projected by Shared Core.</p></div><div class="action-row"><button id="recordInvestigationButton" class="primary-button" type="button" disabled>Open investigation</button><button id="recordGraphButton" class="secondary-button" type="button" disabled>Expand relationships</button></div></div>
-        <div id="recordDetail" class="panel record-detail empty-state">Select a search result first.</div>
-      </section>
-
-      <section class="view" data-view-panel="graph" aria-labelledby="graphTitle">
-        <div class="section-heading"><div><div class="eyebrow">RELATIONSHIPS / EVIDENCE PIVOT</div><h2 id="graphTitle">Bounded Relationship Graph</h2><p>Traversal is evaluated by Shared Core. The Desktop never executes arbitrary graph queries.</p></div></div>
-        <form id="graphForm" class="compact-form" autocomplete="off"><label for="graphSeed">Canonical seed ID</label><input id="graphSeed" type="text" maxlength="1024" required><label for="graphDepth">Depth</label><select id="graphDepth"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option></select><button class="primary-button" type="submit">Correlate</button></form>
-        <div id="graphResults" class="panel graph-results empty-state">Choose a canonical record or enter a seed ID.</div>
+        <section id="exploreStage" class="explore-stage hidden" aria-live="polite">
+          <div class="results-column">
+            <div class="section-label-row"><div><span class="section-kicker">MATCHES</span><h3>Results</h3></div><span id="resultCount" class="counter">0</span></div>
+            <div id="searchMeta" class="search-meta">AWAITING QUERY</div>
+            <div id="searchResults" class="result-list"></div>
+          </div>
+          <article class="answer-column"><div id="quickDetail" class="quick-detail empty-answer"><div class="empty-orb" aria-hidden="true">◇</div><h3>Select a result</h3><p>ATLAS will show the analyst-facing summary, field semantics, security relevance and source-backed pivots here.</p></div></article>
+        </section>
       </section>
 
       <section class="view" data-view-panel="investigation" aria-labelledby="investigationTitle">
-        <div class="section-heading">
-          <div><div class="eyebrow">FACT / EVIDENCE / HYPOTHESIS / CHECK</div><h2 id="investigationTitle">Investigation Graph v0</h2><p id="investigationPurpose">Load one of the three verified canaries to construct a deterministic investigation template.</p></div>
-          <div id="investigationConfidence" class="meta-chip">CONFIDENCE · UNASSESSED</div>
-        </div>
-        <div class="semantics-legend" aria-label="Investigation semantic classes"><span data-kind="fact">FACT</span><span data-kind="evidence">EVIDENCE REQUIREMENT</span><span data-kind="hypothesis">HYPOTHESIS</span><span data-kind="check">CHECK</span><span data-kind="provenance">PROVENANCE</span></div>
-        <div id="investigationGraph" class="investigation-graph empty-state"><div class="empty-mark" aria-hidden="true">⎔</div><strong>No investigation selected</strong><span>Use 4625, 4688 or Sysmon 1 from the canary rail.</span></div>
-        <p class="investigation-boundary">A hypothesis is never promoted to fact by this view. Field availability indicates schema knowledge, not evidence collected from a live endpoint.</p>
+        <div class="section-heading"><div><div class="eyebrow">ANALYST REASONING</div><h2 id="investigationTitle">Investigation</h2><p id="investigationPurpose">Select an event with a bounded investigation model from Explore.</p></div><div id="investigationConfidence" class="meta-chip">CONFIDENCE · UNASSESSED</div></div>
+        <div class="semantics-legend" aria-label="Investigation semantic classes"><span data-kind="fact">FACT</span><span data-kind="evidence">EVIDENCE</span><span data-kind="hypothesis">HYPOTHESIS</span><span data-kind="check">CHECK</span><span data-kind="provenance">SOURCE</span></div>
+        <div id="investigationGraph" class="investigation-graph empty-state"><div class="empty-mark" aria-hidden="true">⎔</div><strong>No investigation selected</strong><span>Search first, then open Investigation from an enriched record.</span></div>
+        <p class="investigation-boundary">ATLAS keeps facts, evidence requirements, hypotheses and analyst checks separate. A hypothesis is never promoted to fact without evidence.</p>
       </section>
 
-      <section class="view" data-view-panel="pack" aria-labelledby="packTitle">
-        <div class="section-heading"><div><div class="eyebrow">TRUST / RECOVERY</div><h2 id="packTitle">Verified Pack Control</h2><p>Update and rollback authority remains inside Shared Core and its durable trust state.</p></div><button id="refreshPack" class="secondary-button" type="button">Refresh</button></div>
-        <div class="content-grid pack-grid">
-          <section class="panel"><div class="panel-heading"><div><span class="panel-index">01</span><h3>Active State</h3></div></div><dl id="packFacts" class="facts"><div><dt>Status</dt><dd>Loading…</dd></div></dl></section>
-          <section class="panel danger-zone"><div class="panel-heading"><div><span class="panel-index">02</span><h3>Controlled Actions</h3></div></div><p>Actions fail closed when no verified pending update or safe rollback target exists.</p><div class="action-row"><button id="applyUpdate" class="primary-button" type="button">Apply verified update</button><button id="rollbackPack" class="danger-button" type="button">Rollback to LKG</button></div><div id="packActionResult" class="operation-result" aria-live="polite"></div></section>
-        </div>
+      <section class="view" data-view-panel="mindmap" aria-labelledby="mindmapTitle">
+        <div class="section-heading"><div><div class="eyebrow">RELATIONSHIPS / PIVOTS</div><h2 id="mindmapTitle">Mind Map</h2><p>Explore bounded relationships around the selected record. The center is the current entity; surrounding nodes are returned by Shared Core.</p></div><div class="graph-controls"><label for="graphDepth">Depth</label><select id="graphDepth"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option></select><button id="graphRefresh" class="secondary-button" type="button">Refresh map</button></div></div>
+        <form id="graphForm" class="sr-only" autocomplete="off"><label for="graphSeed">Canonical seed ID</label><input id="graphSeed" type="text" maxlength="1024" required><button type="submit">Run graph</button></form>
+        <div id="graphResults" class="graph-stage empty-state"><div class="empty-mark" aria-hidden="true">⌘</div><strong>No relationship map yet</strong><span>Select a record in Explore, then open Mind Map.</span></div>
       </section>
 
-      <section class="view" data-view-panel="diagnostics" aria-labelledby="diagnosticsTitle">
-        <div class="section-heading"><div><div class="eyebrow">LOCAL / VERIFIED</div><h2 id="diagnosticsTitle">Runtime Diagnostics</h2><p>Local build identity, protocol status and verified sidecar integrity evidence.</p></div><button id="refreshDiagnostics" class="secondary-button" type="button">Refresh</button></div>
-        <div class="content-grid diagnostics-grid">
-          <section class="panel"><div class="panel-heading"><div><span class="panel-index">01</span><h3>Shared Core</h3></div></div><pre id="diagnosticsOutput">Loading…</pre></section>
-          <section class="panel"><div class="panel-heading"><div><span class="panel-index">02</span><h3>Time Presentation</h3></div></div><label for="timezoneSelect">Display timezone</label><select id="timezoneSelect"><option value="system">System timezone</option><option value="UTC">UTC</option><option value="Asia/Tehran">Asia/Tehran</option></select><dl class="facts clock-facts"><div><dt>UTC</dt><dd id="utcClock">—</dd></div><div><dt>System</dt><dd id="systemClock">—</dd></div><div><dt>Selected</dt><dd id="selectedClock">—</dd></div><div><dt>Tehran / Jalali</dt><dd id="tehranClock">—</dd></div></dl><p class="muted small">Canonical timestamps are not rewritten. Calendar/timezone conversion is presentation-only.</p></section>
+      <section class="view" data-view-panel="advanced" aria-labelledby="advancedTitle">
+        <div class="section-heading"><div><div class="eyebrow">SETTINGS / ADVANCED</div><h2 id="advancedTitle">Settings &amp; technical details</h2><p>Runtime, pack, theme and canonical/raw information live here rather than in the primary analyst workflow.</p></div></div>
+        <div class="settings-grid">
+          <section class="panel"><div class="panel-heading"><h3>Appearance</h3></div><label for="themeSelect">Theme</label><select id="themeSelect"><option value="atlas-dark">ATLAS Blue</option><option value="tactical-green">Tactical Green</option><option value="high-contrast">High Contrast</option></select><label for="timezoneSelect">Display timezone</label><select id="timezoneSelect"><option value="system">System timezone</option><option value="UTC">UTC</option><option value="Asia/Tehran">Asia/Tehran</option></select><dl class="facts compact-facts"><div><dt>UTC</dt><dd id="utcClock">—</dd></div><div><dt>System</dt><dd id="systemClock">—</dd></div><div><dt>Selected</dt><dd id="selectedClock">—</dd></div><div><dt>Tehran / Jalali</dt><dd id="tehranClock">—</dd></div></dl></section>
+          <section class="panel"><div class="panel-heading"><h3>Verified pack</h3><button id="refreshPack" class="text-button" type="button">Refresh</button></div><dl id="packFacts" class="facts compact-facts"><div><dt>Status</dt><dd>Loading…</dd></div></dl><div class="action-row"><button id="applyUpdate" class="secondary-button" type="button">Apply verified update</button><button id="rollbackPack" class="danger-button" type="button">Rollback to LKG</button></div><pre id="packActionResult" class="operation-result" aria-live="polite"></pre></section>
+          <section class="panel wide-panel"><div class="panel-heading"><h3>Runtime diagnostics</h3><button id="refreshDiagnostics" class="text-button" type="button">Refresh</button></div><pre id="diagnosticsOutput" class="diagnostics-output">Loading…</pre></section>
+          <section class="panel wide-panel"><div class="panel-heading"><h3>Current record — canonical/raw</h3></div><div id="recordDetail" class="raw-record empty-state">Select a record in Explore.</div></section>
         </div>
+        <div class="advanced-metrics" aria-hidden="true"><span id="evidenceStatus">NO PROJECTION</span><span id="metricFields">0</span><span id="metricClaims">0</span><span id="metricSources">0</span><span id="metricRelations">0</span><ol id="activityTrail"></ol></div>
       </section>
+
+      <button id="openRecordView" class="sr-only" type="button" disabled>Open raw record</button><button id="recordGraphButton" class="sr-only" type="button" disabled>Open mind map</button><button id="recordInvestigationButton" class="sr-only" type="button" disabled>Open investigation</button>
     </main>
 
-    <aside class="intelligence-rail" aria-label="ATLAS intelligence rail">
+    <aside class="intelligence-rail" aria-label="ATLAS intelligence">
       <section class="entity-card" aria-labelledby="entityTitle">
-        <div class="entity-heading"><div><div class="eyebrow">SYNTHETIC ANALYST PRESENCE</div><h2 id="entityTitle">ATLAS Entity</h2></div><div class="entity-controls"><span id="entitySignal" class="entity-signal" aria-hidden="true"></span><button id="toggleEntity" class="entity-toggle" type="button" aria-expanded="true" aria-controls="entityBody">Minimize</button></div></div>
+        <div class="entity-heading"><div><div class="eyebrow">ATLAS INTELLIGENCE</div><h2 id="entityTitle">Entity</h2></div><button id="toggleEntity" class="entity-toggle" type="button" aria-expanded="true" aria-controls="entityBody">Minimize</button></div>
         <div id="entityBody" class="entity-body">
-        <div id="entityVisual" class="entity-visual" role="img" aria-label="ATLAS Entity is idle">
-          <svg viewBox="0 0 280 280" focusable="false" aria-hidden="true">
-            <defs><radialGradient id="coreGradient" cx="50%" cy="44%" r="58%"><stop offset="0" stop-color="#d8f8ff" stop-opacity=".98"/><stop offset=".18" stop-color="#56d6ff" stop-opacity=".88"/><stop offset=".58" stop-color="#167ba4" stop-opacity=".28"/><stop offset="1" stop-color="#07131e" stop-opacity="0"/></radialGradient><filter id="entityGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-            <circle class="entity-orbit orbit-a" cx="140" cy="140" r="101"/><ellipse class="entity-orbit orbit-b" cx="140" cy="140" rx="116" ry="55"/><ellipse class="entity-orbit orbit-c" cx="140" cy="140" rx="58" ry="117"/>
-            <g class="entity-particles"><circle cx="47" cy="120" r="3"/><circle cx="226" cy="96" r="4"/><circle cx="179" cy="238" r="3"/><circle cx="77" cy="210" r="2.5"/><circle cx="196" cy="49" r="2.5"/><circle cx="111" cy="39" r="2"/></g>
-            <circle class="entity-halo" cx="140" cy="140" r="68"/><circle class="entity-core" cx="140" cy="140" r="54" fill="url(#coreGradient)" filter="url(#entityGlow)"/><path class="entity-face" d="M113 132c8-7 17-10 27-10s19 3 27 10M119 151c6 7 13 10 21 10s15-3 21-10"/><path class="entity-axis" d="M140 78v28m0 68v28M78 140h28m68 0h28"/>
-          </svg><div class="scan-line" aria-hidden="true"></div>
-        </div>
-        <div class="entity-state-row"><span>STATE</span><strong id="entityStateLabel">IDLE</strong></div>
-        <p id="entityStateDetail" class="entity-detail" aria-live="polite">Awaiting a verified analyst action.</p>
-        <p class="entity-boundary">State reflects explicit product activity only. No hidden model reasoning is displayed.</p>
+          <div id="entityVisual" class="entity-visual" role="img" aria-label="ATLAS Entity is idle"><svg viewBox="0 0 300 300" focusable="false" aria-hidden="true"><defs><radialGradient id="coreGradient" cx="50%" cy="45%" r="58%"><stop offset="0" stop-color="#ecfdff" stop-opacity=".98"/><stop offset=".14" stop-color="#7ee6ff" stop-opacity=".95"/><stop offset=".42" stop-color="#1aa5d2" stop-opacity=".52"/><stop offset="1" stop-color="#07131e" stop-opacity="0"/></radialGradient><filter id="entityGlow" x="-90%" y="-90%" width="280%" height="280%"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle class="entity-orbit orbit-a" cx="150" cy="150" r="104"/><ellipse class="entity-orbit orbit-b" cx="150" cy="150" rx="123" ry="59"/><ellipse class="entity-orbit orbit-c" cx="150" cy="150" rx="60" ry="124"/><g class="entity-links"><line x1="150" y1="150" x2="53" y2="116"/><line x1="150" y1="150" x2="244" y2="96"/><line x1="150" y1="150" x2="212" y2="241"/></g><g class="entity-particles"><circle cx="53" cy="116" r="4"/><circle cx="244" cy="96" r="4.5"/><circle cx="212" cy="241" r="3.5"/><circle cx="85" cy="222" r="3"/><circle cx="201" cy="49" r="3"/><circle cx="116" cy="37" r="2.5"/></g><circle class="entity-halo" cx="150" cy="150" r="70"/><circle class="entity-core" cx="150" cy="150" r="57" fill="url(#coreGradient)" filter="url(#entityGlow)"/><path class="entity-eye" d="M112 151c20-18 56-18 76 0-20 18-56 18-76 0Z"/><circle class="entity-pupil" cx="150" cy="151" r="9"/></svg></div>
+          <div class="entity-state-row"><span>STATE</span><strong id="entityStateLabel">IDLE</strong></div>
+          <div class="entity-insight"><span class="section-kicker">CURRENT FOCUS</span><h3 id="entityInsightTitle">Ready to explore</h3><p id="entityStateDetail">Search for a security event, field, technique or tool.</p><div id="entityPivots" class="entity-pivots"></div></div>
         </div>
       </section>
-
-      <section class="rail-card" aria-labelledby="evidenceTitle"><div class="rail-card-heading"><h3 id="evidenceTitle">Evidence Surface</h3><span id="evidenceStatus">EMPTY</span></div><dl class="evidence-metrics"><div><dt>Fields</dt><dd id="metricFields">0</dd></div><div><dt>Claims</dt><dd id="metricClaims">0</dd></div><div><dt>Sources</dt><dd id="metricSources">0</dd></div><div><dt>Relations</dt><dd id="metricRelations">0</dd></div></dl></section>
-      <section class="rail-card activity-card" aria-labelledby="activityTitle"><div class="rail-card-heading"><h3 id="activityTitle">Analyst Trail</h3><span>LOCAL</span></div><ol id="activityTrail" class="activity-trail" aria-live="polite"><li><time>READY</time><span>Workspace initialized</span></li></ol></section>
     </aside>
 
-    <footer class="footer"><span>ADR-0026 · Tauri 2.x · atlas-core protocol 1.0.0</span><span id="footerState">Fail-closed startup validation pending</span></footer>
+    <footer class="footer"><span>Cyber-Sentinel ATLAS</span><span id="footerState">Local-first analyst workspace</span></footer>
   </div>
-  <script src="entity-state.js"></script>
-  <script src="investigation-model.js"></script>
-  <script src="main.js"></script>
+  <script src="entity-state.js"></script><script src="investigation-model.js"></script><script src="main.js"></script>
 </body>
 </html>
