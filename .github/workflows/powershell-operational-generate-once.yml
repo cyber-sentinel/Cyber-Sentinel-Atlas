@@ -1,0 +1,100 @@
+name: PowerShell Operational one-time corpus generation
+
+on:
+  push:
+    branches:
+      - feat/powershell-operational-encyclopedia
+    paths:
+      - .github/workflows/powershell-operational-generate-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Capture provider metadata outside Git
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $ProviderName='Microsoft-Windows-PowerShell'
+          $OperationalLog='Microsoft-Windows-PowerShell/Operational'
+          $Out=Join-Path $env:RUNNER_TEMP 'powershell-operational'
+          New-Item -ItemType Directory -Force -Path $Out | Out-Null
+          $Os=Get-CimInstance Win32_OperatingSystem
+          $Provider=Get-WinEvent -ListProvider $ProviderName
+          $Events=foreach($Event in $Provider.Events){
+            $LogName=$null
+            if($null -ne $Event.LogLink){$LogName=[string]$Event.LogLink.LogName}
+            [ordered]@{
+              id=[int]$Event.Id; version=[int]$Event.Version; log_name=$LogName
+              level=if($null -ne $Event.Level){[string]$Event.Level.DisplayName}else{$null}
+              opcode=if($null -ne $Event.Opcode){[string]$Event.Opcode.DisplayName}else{$null}
+              task=if($null -ne $Event.Task){[string]$Event.Task.DisplayName}else{$null}
+              keywords=@($Event.Keywords|ForEach-Object{[string]$_.DisplayName})
+              template=[string]$Event.Template
+            }
+          }
+          $OperationalEvents=@($Events|Where-Object{$_.log_name -eq $OperationalLog})
+          $Ids=@($OperationalEvents.id|Sort-Object -Unique)
+          if($OperationalEvents.Count -ne 43 -or $Ids.Count -ne 43){throw 'PowerShell Operational denominator drift'}
+          $Report=[ordered]@{
+            schema='atlas-private-provider-inventory/v1'; provider=$ProviderName; channel=$OperationalLog
+            collected_at_utc=[DateTime]::UtcNow.ToString('o')
+            runner=[ordered]@{os_caption=[string]$Os.Caption;os_version=[string]$Os.Version;os_build_number=[string]$Os.BuildNumber;architecture=[string]$Os.OSArchitecture;locale=[string]$Os.Locale;github_runner_image=[string]$env:ImageOS}
+            provider_event_version_definition_count=$OperationalEvents.Count; provider_unique_event_id_count=$Ids.Count
+            unique_event_ids=$Ids; events=$OperationalEvents
+          }
+          $Inventory=Join-Path $Out 'provider-inventory.json'
+          $Report|ConvertTo-Json -Depth 20|Set-Content -Encoding utf8 $Inventory
+          $ProviderXml=Join-Path $Out 'provider.xml'
+          & wevtutil gp $ProviderName /ge:true /gm:true /f:xml | Set-Content -Encoding utf8 $ProviderXml
+          if($LASTEXITCODE -ne 0){throw 'wevtutil provider export failed'}
+          $ProviderHash=(Get-FileHash -Algorithm SHA256 $ProviderXml).Hash.ToLowerInvariant()
+          $InventoryHash=(Get-FileHash -Algorithm SHA256 $Inventory).Hash.ToLowerInvariant()
+          "PS_PROVIDER_INVENTORY=$Inventory"|Out-File $env:GITHUB_ENV -Encoding utf8 -Append
+          "PS_PROVIDER_XML_SHA256=sha256-$ProviderHash"|Out-File $env:GITHUB_ENV -Encoding utf8 -Append
+          "PS_NORMALIZED_SHA256=sha256-$InventoryHash"|Out-File $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Generate normalized ATLAS corpus
+        shell: pwsh
+        run: |
+          python tools/content/generate_powershell_operational_26100.py `
+            --input "$env:PS_PROVIDER_INVENTORY" `
+            --repo-root . `
+            --provider-xml-sha256 "$env:PS_PROVIDER_XML_SHA256" `
+            --normalized-private-inventory-sha256 "$env:PS_NORMALIZED_SHA256"
+          if($LASTEXITCODE -ne 0){throw 'PowerShell corpus generation failed'}
+
+      - name: Fail closed on derived scope
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $Batches=Get-ChildItem content/encyclopedia/powershell-operational-26100-batch*.json
+          if($Batches.Count -ne 8){throw 'expected eight governed PowerShell batches'}
+          $Events=@()
+          foreach($File in $Batches){$Events += (Get-Content -Raw $File|ConvertFrom-Json).events}
+          if($Events.Count -ne 43){throw "expected 43 events, got $($Events.Count)"}
+          $FieldCount=($Events|ForEach-Object{$_.fields.Count}|Measure-Object -Sum).Sum
+          if($FieldCount -ne 71){throw "expected 71 field projections, got $FieldCount"}
+          if(git status --porcelain | Select-String -Pattern 'provider.xml|provider-inventory.json'){throw 'raw provider material entered Git worktree'}
+
+      - name: Commit derived corpus only
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          git config user.name 'cyber-sentinel'
+          git config user.email '118610577+cyber-sentinel@users.noreply.github.com'
+          git add content/encyclopedia/powershell-operational-26100-batch*.json
+          git add content/encyclopedia/powershell-operational-26100-coverage.snapshot.json
+          git add content/encyclopedia/sources/microsoft-windows-powershell-operational-provider-26100.json
+          git add ingestion/inventories/windows-powershell-operational-26100.telemetry.json
+          if(git diff --cached --quiet){throw 'generator produced no derived corpus changes'}
+          git commit -m 'feat(powershell): freeze Operational 43/43 derived corpus'
+          git push origin HEAD:feat/powershell-operational-encyclopedia
