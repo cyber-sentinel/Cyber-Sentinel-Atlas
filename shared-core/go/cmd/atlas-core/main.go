@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/app"
 	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/pack"
@@ -21,6 +22,38 @@ var (
 	coreCommit  = "unknown"
 )
 
+func validCommitNamespace(value string) bool {
+	if len(value) != 40 {
+		return false
+	}
+	for _, ch := range value {
+		if !((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F')) {
+			return false
+		}
+	}
+	return true
+}
+
+// resolveRuntimeRoot keeps release/runtime state stable while isolating preview
+// builds by their exact source commit. Engineering-preview TUF roots are created
+// ephemerally per build, so sharing one durable preview root across different
+// commits would allow an older active generation to shadow the newly bundled
+// pack and would also create invalid trust continuity between unrelated preview
+// roots. Production/non-preview builds retain the canonical stable runtime root.
+func resolveRuntimeRoot() (string, error) {
+	base, err := pack.DefaultRuntimeRoot()
+	if err != nil {
+		return "", err
+	}
+	if !strings.Contains(strings.ToLower(coreVersion), "preview") {
+		return base, nil
+	}
+	if !validCommitNamespace(coreCommit) {
+		return "", errors.New("preview build requires an exact 40-character hexadecimal source commit")
+	}
+	return filepath.Join(base, "preview-builds", strings.ToLower(coreCommit)), nil
+}
+
 func openRuntimeAt(runtimeRoot string) (*app.Runtime, error) {
 	runtime, err := app.NewFromRuntimeRoot(runtimeRoot)
 	if errors.Is(err, pack.ErrNoActiveGeneration) {
@@ -34,9 +67,10 @@ func openRuntimeAt(runtimeRoot string) (*app.Runtime, error) {
 
 // installBundledEngineeringPreview performs an initial, local-only bootstrap from
 // fixed filenames adjacent to atlas-core. It never accepts a caller-controlled
-// archive/root path and never runs when an active generation already exists.
-// Both files are required together; partial/tampered bundles fail closed through
-// the existing TUF + pack verification and activation path.
+// archive/root path. Preview builds use a source-commit-namespaced runtime root,
+// so an active generation here belongs to this exact preview build rather than a
+// previous package. Both files are required together; partial/tampered bundles
+// fail closed through the existing TUF + pack verification and activation path.
 func installBundledEngineeringPreview(runtimeRoot, bundleRoot string) (bool, error) {
 	archivePath := filepath.Join(bundleRoot, bundledPreviewPackName)
 	rootPath := filepath.Join(bundleRoot, bundledPreviewRootName)
@@ -103,7 +137,7 @@ func openRuntimeWithBundle(runtimeRoot, bundleRoot string) (*app.Runtime, error)
 }
 
 func openRuntime() (*app.Runtime, error) {
-	runtimeRoot, err := pack.DefaultRuntimeRoot()
+	runtimeRoot, err := resolveRuntimeRoot()
 	if err != nil {
 		return nil, err
 	}
