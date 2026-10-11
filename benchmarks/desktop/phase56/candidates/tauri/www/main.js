@@ -11,671 +11,88 @@ const atlas = Object.freeze({
   packRollback: () => invoke('pack_rollback')
 });
 
-const state = {
-  currentRecordId: null,
-  currentRecord: null,
-  currentInvestigation: null,
-  lastStatus: null,
-  lastPack: null,
-  activitySequence: 0
-};
-
+const state = { currentRecordId:null, currentRecord:null, currentMatch:null, currentInvestigation:null, currentTab:'overview', lastPack:null, activitySequence:0 };
 const $ = id => document.getElementById(id);
 const entityAdapter = window.AtlasEntityState;
 const investigationModel = window.AtlasInvestigationModel;
 
-function text(value) {
-  if (value === null || value === undefined || value === '') return '—';
-  if (typeof value === 'string') return value;
-  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
-  return JSON.stringify(value);
-}
+function clear(node){ if(node) node.replaceChildren(); }
+function el(tag,className,content){ const n=document.createElement(tag); if(className)n.className=className; if(content!==undefined&&content!==null)n.textContent=String(content); return n; }
+function text(v,fallback='—'){ return v===null||v===undefined||v===''?fallback:(typeof v==='object'?fallback:String(v)); }
+function compact(v){ if(v===null||v===undefined||v==='')return '—'; if(Array.isArray(v))return v.map(x=>typeof x==='object'?JSON.stringify(x):String(x)).join(', '); if(typeof v==='object')return Object.entries(v).map(([k,x])=>`${k}: ${typeof x==='object'?JSON.stringify(x):x}`).join(' · '); return String(v); }
+function jsonBlock(v){ const p=el('pre','raw-json'); p.textContent=JSON.stringify(v,null,2); return p; }
+function setNotice(message,kind='info'){ const n=$('globalNotice'); n.className=`notice ${kind} compact-notice`; n.textContent=message||''; }
+function setRuntimeBadge(node,label,kind='neutral'){ node.className=`runtime-dot ${kind}`; clear(node); node.append(el('span','dot'),el('span','',label)); }
+function addActivity(label,detail){ const trail=$('activityTrail'); if(!trail)return; const li=el('li','',`${String(++state.activitySequence).padStart(2,'0')} · ${label} · ${detail}`); trail.prepend(li); while(trail.children.length>8)trail.lastElementChild.remove(); }
 
-function clear(node) {
-  node.replaceChildren();
-}
-
-function el(tag, className, content) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (content !== undefined) node.textContent = content;
-  return node;
-}
-
-function jsonBlock(value) {
-  const pre = el('pre', 'json-block');
-  pre.textContent = JSON.stringify(value, null, 2);
-  return pre;
-}
-
-function setNotice(message, kind = 'info') {
-  const node = $('globalNotice');
-  node.className = `notice ${kind}`;
-  node.textContent = message;
-}
-
-function setBadge(node, label, kind = 'neutral') {
-  node.className = `status-pill ${kind}`;
-  node.textContent = label;
-}
-
-function addActivity(label, detail) {
-  const trail = $('activityTrail');
-  const item = document.createElement('li');
-  const sequence = String(++state.activitySequence).padStart(2, '0');
-  item.append(el('time', '', `${sequence} · ${label}`), el('span', '', detail));
-  trail.prepend(item);
-  while (trail.children.length > 6) trail.lastElementChild.remove();
-}
-
-function setEntity(mode, detail) {
+function setEntity(mode,detail,title){
   let next;
-  try {
-    next = entityAdapter && typeof entityAdapter.create === 'function'
-      ? entityAdapter.create(mode, detail)
-      : { mode: 'warning', label: 'WARNING', detail: 'Entity state adapter unavailable.' };
-  } catch (_) {
-    next = { mode: 'warning', label: 'WARNING', detail: 'Entity visualization isolated after a state adapter failure.' };
-  }
-  document.body.dataset.entityMode = next.mode;
-  $('entityStateLabel').textContent = next.label;
-  $('entityStateDetail').textContent = next.detail;
-  $('entityVisual').setAttribute('aria-label', `ATLAS Entity is ${next.mode}`);
+  try{ next=entityAdapter?.create?entityAdapter.create(mode,detail):{mode:'warning',label:'WARNING',detail:'Entity state adapter unavailable.'}; }
+  catch(_){ next={mode:'warning',label:'WARNING',detail:'Entity visualization isolated after a state adapter failure.'}; }
+  document.body.dataset.entityMode=next.mode; $('entityStateLabel').textContent=next.label; $('entityStateDetail').textContent=next.detail;
+  $('entityInsightTitle').textContent=title||({idle:'Ready to explore',searching:'Searching verified knowledge',correlating:'Building context',reasoning:'Following evidence relationships',finding:'Analyst context ready',warning:'Attention required'}[next.mode]||'ATLAS');
+  $('entityVisual').setAttribute('aria-label',`ATLAS Entity is ${next.mode}`);
 }
+function setEntityCollapsed(collapsed,persist=true){ const card=document.querySelector('.entity-card'); card.classList.toggle('collapsed',collapsed); $('toggleEntity').setAttribute('aria-expanded',String(!collapsed)); $('toggleEntity').textContent=collapsed?'Expand':'Minimize'; if(persist){try{localStorage.setItem('atlas-entity-collapsed',String(collapsed));}catch(_){}} }
+function showView(name){ document.querySelectorAll('.view').forEach(p=>p.classList.toggle('active',p.dataset.viewPanel===name)); document.querySelectorAll('.nav-item').forEach(button=>{const active=button.dataset.view===name;button.classList.toggle('active',active);if(active)button.setAttribute('aria-current', 'page');else button.removeAttribute('aria-current');}); if(name==='mindmap'&&state.currentRecordId)runGraphForCurrentRecord(); if(name==='investigation'&&state.currentRecord)renderInvestigation(detailOf(state.currentRecord)); $('workspace').focus({ preventScroll: true }); }
 
-function setEntityCollapsed(collapsed, persist = true) {
-  const card = document.querySelector('.entity-card');
-  card.classList.toggle('collapsed', collapsed);
-  $('toggleEntity').setAttribute('aria-expanded', String(!collapsed));
-  $('toggleEntity').textContent = collapsed ? 'Expand' : 'Minimize';
-  if (persist) {
-    try { localStorage.setItem('atlas-entity-collapsed', String(collapsed)); } catch (_) { /* local preference only */ }
-  }
+function detailOf(record){ return record?.detail_version?record:null; }
+function baseOf(record){ return detailOf(record)?.record||record||{}; }
+function claimValue(c){ return c?.object&&typeof c.object==='object'?c.object.value??null:null; }
+function claims(detail,predicate){ const list=Array.isArray(detail?.claims)?detail.claims:[]; return predicate?list.filter(c=>c?.predicate===predicate):list; }
+function firstClaim(detail,predicate){ const c=claims(detail,predicate)[0]; return c?claimValue(c):null; }
+function ctx(base){ const i=Array.isArray(base?.native_identifiers)?base.native_identifiers[0]:null,c=i?.context||{}; return {eventId:i?.type==='event_id'?i.value:base?.canonical_key||'',provider:c.provider||'',channel:c.channel||'',product:c.product||'',platform:c.platform||'',version:i?.components?.semantic_source_version||base?.version||''}; }
+function lines(v){ if(v===null||v===undefined||v==='')return[]; if(typeof v==='string'||typeof v==='number'||typeof v==='boolean')return[String(v)]; if(Array.isArray(v))return v.flatMap(x=>typeof x==='object'&&x!==null?[x.label||x.name||x.title||x.description||x.meaning||compact(x)]:[String(x)]).filter(Boolean); if(typeof v==='object')return Object.entries(v).map(([k,x])=>`${k}: ${typeof x==='object'?compact(x):x}`); return[]; }
+function displayTitle(base,overview){ const c=ctx(base), candidate=state.currentMatch?.title, source=overview?.event_name||overview?.display_name||overview?.title||base?.title||candidate||state.currentRecordId||'Security knowledge record'; return c.eventId&&!String(source).toLowerCase().includes(String(c.eventId).toLowerCase())?`${c.eventId} — ${source}`:source; }
+function summary(base,overview,security){ return [overview?.summary,overview?.description,overview?.purpose,overview?.meaning,base?.description,typeof security?.analysis==='string'?security.analysis:null].find(v=>typeof v==='string'&&v.trim())||'Verified security knowledge record. Review the field semantics, source-backed context and available correlations below.'; }
+function contextRows(base,overview){ const c=ctx(base),out=[]; const add=(k,v)=>{if(v!==null&&v!==undefined&&v!=='')out.push([k,compact(v)]);}; add('Provider',c.provider);add('Channel',c.channel);add('Category',overview?.category);add('Subcategory',overview?.subcategory);add('Type',overview?.event_type||overview?.type||overview?.outcome||overview?.level);add('Supported Windows',overview?.operating_systems||overview?.supported_windows||overview?.windows_versions||overview?.platform_versions);add('Version definitions',overview?.event_versions);add('Legacy / corresponding IDs',overview?.legacy_event_ids||overview?.corresponding_events||overview?.legacy_ids); return out; }
+
+function fieldSemantics(detail){
+  const fields=Array.isArray(detail?.fields)?detail.fields:[], map=new Map(); claims(detail,'telemetry.field-semantics').forEach(c=>{if(c?.subject_id)map.set(c.subject_id,claimValue(c)||{});});
+  return fields.map(f=>{const s=map.get(f?.id)||{};return{id:f?.id||'',nativeName:s.native_name||f?.native_name||f?.canonical_key||f?.title||'Field',section:s.section||'Fields',type:s.type||s.data_type||'',meaning:s.meaning||'',versions:s.versions||s.version_applicability||'',values:s.values||null,valuesRef:s.values_ref||null,correlation:s.correlation||null,notes:s.notes||null,providerScope:s.provider_scope||null};});
 }
+const PIVOTS=['logontype','targetusername','subjectusername','ipaddress','sourcenetworkaddress','workstationname','authenticationpackagename','logonprocessname','processguid','processid','image','commandline','parentprocessguid','parentprocessid','parentimage','parentcommandline','hashes','user','logonguid','logonid'];
+const norm=v=>String(v||'').toLowerCase().replace(/[^a-z0-9]+/g,'');
+function keyFields(detail,limit=8){ return [...fieldSemantics(detail)].sort((a,b)=>{const score=f=>{const i=PIVOTS.findIndex(p=>norm(f.nativeName).includes(p));return(i<0?500:i)-(f.correlation?40:0)-(f.values?20:0)-(f.meaning?5:0);};return score(a)-score(b)||a.nativeName.localeCompare(b.nativeName);}).slice(0,limit); }
+function updateMetrics(detail){ const m=[['metricFields',detail?.fields],['metricClaims',detail?.claims],['metricSources',detail?.sources],['metricRelations',detail?.relationships]]; m.forEach(([id,v])=>$(id).textContent=String(Array.isArray(v)?v.length:0)); $('evidenceStatus').textContent=m.some(([,v])=>Array.isArray(v)&&v.length)?'VERIFIED DATA':'NO PROJECTION'; }
+function activateTab(name){state.currentTab=name;document.querySelectorAll('.quick-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.dataset.tabPanel===name));}
+function contextList(rows){const box=el('div','context-list');rows.forEach(([k,v])=>{const r=el('div','context-row');r.append(el('span','',k),el('span','',v));box.append(r);});return box;}
+function listCard(title,values,empty){const card=el('section','info-card');card.append(el('h4','',title));if(values.length){const ul=document.createElement('ul');values.slice(0,12).forEach(v=>ul.append(el('li','',v)));card.append(ul);}else card.append(el('p','',empty));return card;}
+function pivotCard(detail){const box=el('section','summary-card');box.append(el('h4','','Key investigative pivots'));const grid=el('div','quick-pivots');const fs=keyFields(detail);if(!fs.length)grid.append(el('p','muted small','No structured field dictionary is packaged for this record.'));fs.forEach(f=>{const b=el('button','pivot-card');b.type='button';b.append(el('strong','',f.nativeName),el('span','',f.meaning||f.correlation||f.type||'Structured event field'));b.addEventListener('click',()=>{activateTab('fields');requestAnimationFrame(()=>{const t=f.id?document.querySelector(`[data-field-row-id="${CSS.escape(f.id)}"]`):null;t?.scrollIntoView({behavior:'smooth',block:'center'});t?.classList.add('selected-field');if(t)window.setTimeout(()=>t.classList.remove('selected-field'),1400);});});grid.append(b);});box.append(grid);return box;}
+function overviewTab(detail,base,overview,security){const p=el('section','tab-panel active');p.dataset.tabPanel='overview';const g=el('div','overview-grid'),left=el('div','section-stack'),right=el('div','section-stack');left.append(pivotCard(detail),listCard('Why it matters',lines(security?.analysis),'No additional analyst analysis is packaged for this record yet.'));const c=el('section','info-card');c.append(el('h4','','Event context'),contextList(contextRows(base,overview)));right.append(c,listCard('Correlations',lines(security?.correlations||overview?.correlations),'No curated correlation guidance is packaged for this record yet.'));g.append(left,right);p.append(g);return p;}
+function appendValues(box,values){if(!values)return;const t=el('table','value-table');if(Array.isArray(values))values.slice(0,32).forEach(v=>{const r=document.createElement('tr');r.append(el('td','',v?.value??v?.id??v?.name??String(v)),el('td','',typeof v==='object'?(v.description??v.meaning??v.label??compact(v)):'') );t.append(r);});else if(typeof values==='object')Object.entries(values).slice(0,32).forEach(([k,v])=>{const r=document.createElement('tr');r.append(el('td','',k),el('td','',typeof v==='object'?compact(v):v));t.append(r);});if(t.children.length)box.append(t);}
+function fieldsTab(detail){const p=el('section','tab-panel');p.dataset.tabPanel='fields';const fs=fieldSemantics(detail);if(!fs.length){p.append(el('div','empty-tab','No field dictionary is available for this record in the active pack.'));return p;}const groups=new Map();fs.forEach(f=>{if(!groups.has(f.section))groups.set(f.section,[]);groups.get(f.section).push(f);});const stack=el('div','section-stack');groups.forEach((arr,name)=>{const group=el('section','field-group');group.append(el('h4','',name));const list=el('div','field-list');arr.forEach(f=>{const row=el('article','field-row');row.dataset.fieldRowId=f.id||'';row.append(el('div','field-name',f.nativeName));const d=el('div','field-detail');d.append(el('div','field-meaning',f.meaning||'Meaning not yet packaged.'));const tags=el('div','field-tags');if(f.type)tags.append(el('span','field-tag',f.type));lines(f.versions).slice(0,4).forEach(v=>tags.append(el('span','field-tag',v)));if(f.valuesRef)tags.append(el('span','field-tag',`Dictionary: ${compact(f.valuesRef)}`));if(tags.children.length)d.append(tags);const notes=[...lines(f.correlation).map(x=>`Correlation: ${x}`),...lines(f.notes),...lines(f.providerScope).map(x=>`Scope: ${x}`)];if(notes.length)d.append(el('div','field-notes',notes.slice(0,5).join(' · ')));appendValues(d,f.values);row.append(d);list.append(row);});group.append(list);stack.append(group);});p.append(stack);return p;}
+function exampleTab(detail,overview){const p=el('section','tab-panel');p.dataset.tabPanel='example';const vals=[];[overview?.examples,overview?.example].forEach(v=>lines(v).forEach(x=>vals.push(x)));claims(detail).filter(c=>String(c?.predicate||'').toLowerCase().includes('example')).forEach(c=>lines(claimValue(c)).forEach(x=>vals.push(x)));const unique=[...new Set(vals)];if(!unique.length){const b=el('div','empty-tab');b.append(el('strong','','No accepted example is packaged for this record yet.'),el('p','','ATLAS will not invent an event sample. Sanitized independently-authored examples can be added as governed enrichment.'));p.append(b);}else unique.forEach((v,i)=>{const c=el('section','example-card');c.append(el('h4','',`Example ${i+1}`),el('p','',v));p.append(c);});return p;}
+function analysisTab(security,collection){const p=el('section','tab-panel');p.dataset.tabPanel='analysis';const s=el('div','section-stack');s.append(listCard('Security analysis',lines(security?.analysis),'No additional security-analysis narrative is packaged for this record yet.'),listCard('Detection / hunt pivots',lines(security?.correlations),'No curated correlation pivots are packaged for this record yet.'),listCard('Collection / prerequisites',lines(collection),'No special collection prerequisite is packaged for this record.'));p.append(s);return p;}
+function sourcesTab(detail){const p=el('section','tab-panel');p.dataset.tabPanel='sources';const list=el('div','source-list'),sources=Array.isArray(detail?.sources)?detail.sources:[];if(!sources.length)list.append(el('div','empty-tab','No source records are linked to this detail projection.'));else sources.slice(0,20).forEach(s=>{const c=el('section','source-card');c.append(el('strong','',s?.title||s?.canonical_key||s?.id||'Source'));if(s?.source_version||s?.version)c.append(el('span','',`Version: ${s.source_version||s.version}`));if(s?.url)c.append(el('span','',s.url));if(s?.id)c.append(el('span','',s.id));list.append(c);});p.append(list);return p;}
+function rawTab(record){const p=el('section','tab-panel');p.dataset.tabPanel='raw';p.append(el('div','empty-tab','Canonical/internal model data is intentionally kept out of the primary analyst view. It remains available here for audit and engineering use.'),jsonBlock(record));return p;}
 
-function showView(name) {
-  document.querySelectorAll('.view').forEach(panel => {
-    panel.classList.toggle('active', panel.dataset.viewPanel === name);
-  });
-  document.querySelectorAll('.nav-item').forEach(button => {
-    const active = button.dataset.view === name;
-    button.classList.toggle('active', active);
-    if (active) button.setAttribute('aria-current', 'page');
-    else button.removeAttribute('aria-current');
-  });
-  $('workspace').focus({ preventScroll: true });
-}
+function renderEntityPivots(detail){const c=$('entityPivots');clear(c);keyFields(detail,4).forEach(f=>{const b=el('button','entity-pivot',f.nativeName);b.type='button';b.addEventListener('click',()=>{showView('explore');activateTab('fields');requestAnimationFrame(()=>document.querySelector(`[data-field-row-id="${CSS.escape(f.id)}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));});c.append(b);});}
+function renderQuickDetail(record){const target=$('quickDetail');clear(target);target.className='quick-detail';const detail=detailOf(record),base=baseOf(record),overview=firstClaim(detail,'telemetry.represents')||{},security=firstClaim(detail,'security.relevance')||{},collection=firstClaim(detail,'telemetry.requires-policy')||{},c=ctx(base),title=displayTitle(base,overview);const hero=el('header','answer-hero'),k=el('div','answer-kicker');if(c.eventId)k.append(el('span','badge strong',`Event ${c.eventId}`));if(c.product)k.append(el('span','badge',c.product));if(c.provider)k.append(el('span','badge',c.provider));if(c.channel)k.append(el('span','badge',c.channel));hero.append(k,el('h3','answer-title',title),el('p','answer-description',summary(base,overview,security)));const badges=el('div','answer-badges');if(overview?.category||overview?.subcategory)badges.append(el('span','badge strong',compact(overview.category||overview.subcategory)));if(security?.analysis)badges.append(el('span','badge security','Security analysis available'));const fc=Array.isArray(detail?.fields)?detail.fields.length:0;if(fc)badges.append(el('span','badge',`${fc} structured fields`));if(badges.children.length)hero.append(badges);const tabs=el('nav','quick-tabs');[['overview','Overview'],['fields','Fields'],['example','Example'],['analysis','Detection & Hunt'],['sources','Sources'],['raw','Raw / Canonical']].forEach(([name,label])=>{const b=el('button',`quick-tab${name==='overview'?' active':''}`,label);b.type='button';b.dataset.tab=name;b.addEventListener('click',()=>activateTab(name));tabs.append(b);});target.append(hero,tabs,overviewTab(detail,base,overview,security),fieldsTab(detail),exampleTab(detail,overview),analysisTab(security,collection),sourcesTab(detail),rawTab(record));activateTab(state.currentTab==='raw'?'overview':state.currentTab);renderEntityPivots(detail);const piv=keyFields(detail,4).map(f=>f.nativeName);setEntity('finding',piv.length?`Start with ${piv.join(', ')}. Open Fields for semantics or Mind Map for relationships.`:'The verified record is ready. Review Overview, Fields and available relationships.',c.eventId?`${c.eventId} · ${title.replace(`${c.eventId} — `,'')}`:title);}
+function renderRawRecord(record){const t=$('recordDetail');clear(t);t.className='raw-record';t.append(jsonBlock(record));}
 
-function compactValue(value) {
-  if (Array.isArray(value)) return value.slice(0, 4).map(text).join(', ');
-  if (value && typeof value === 'object') return JSON.stringify(value);
-  return text(value);
-}
+function renderInvestigation(detail){const c=$('investigationGraph');let g=null;try{g=investigationModel?.build?investigationModel.build(detail):null;}catch(_){g=null;}state.currentInvestigation=g;$('recordInvestigationButton').disabled=!g;clear(c);if(!g){c.className='investigation-graph empty-state';c.append(el('div','empty-mark','⎔'),el('strong','','No curated investigation model for this record yet'),el('span','','The record remains fully searchable and readable. Investigation enrichment is a separate content layer.'));$('investigationPurpose').textContent='No bounded investigation model is packaged for the selected record.';$('investigationConfidence').textContent='CONFIDENCE · N/A';return null;}c.className='investigation-graph';$('investigationPurpose').textContent=g.purpose;$('investigationConfidence').textContent=`CONFIDENCE · ${g.confidence}`;[['AUTHORITY',['FACT','PROVENANCE']],['EVIDENCE REQUIRED',['EVIDENCE REQUIREMENT','EVIDENCE']],['HYPOTHESES',['HYPOTHESIS']],['ANALYST CHECKS',['CHECK']]].forEach(([title,kinds])=>{const lane=el('section','investigation-lane');lane.append(el('h3','',title));g.nodes.filter(n=>kinds.includes(n.classification)).forEach(n=>{const card=el('article','investigation-node');card.append(el('span','node-kind',n.classification),el('strong','',n.label),el('p','',n.detail),el('span','node-status',n.status));lane.append(card);});c.append(lane);});c.append(el('div','investigation-edge-summary',`${g.edges.length} typed links · ${[...new Set(g.edges.map(e=>e.type))].join(' · ')}`));return g;}
 
-function renderFacts(container, object, preferredKeys = []) {
-  clear(container);
-  const keys = [];
-  preferredKeys.forEach(key => {
-    if (Object.prototype.hasOwnProperty.call(object || {}, key)) keys.push(key);
-  });
-  Object.keys(object || {}).forEach(key => {
-    if (!keys.includes(key) && !['claims', 'sources', 'provenance', 'relationships', 'fields'].includes(key)) keys.push(key);
-  });
-  keys.slice(0, 18).forEach(key => {
-    const row = document.createElement('div');
-    row.append(el('dt', '', key.replaceAll('_', ' ')), el('dd', '', compactValue(object[key])));
-    container.append(row);
-  });
-  if (!keys.length) {
-    const row = document.createElement('div');
-    row.append(el('dt', '', 'Status'), el('dd', '', 'No fields returned'));
-    container.append(row);
-  }
-}
+async function loadRecord(id,openAdvanced=false,match=null){if(!id)return false;state.currentMatch=match||state.currentMatch;setEntity('correlating','Loading field semantics, analyst context and source lineage.','Building context');setNotice('Loading verified record…','info');addActivity('RECORD',id);try{const record=await atlas.record(id);state.currentRecordId=id;state.currentRecord=record;$('graphSeed').value=id;$('openRecordView').disabled=false;$('recordGraphButton').disabled=false;renderQuickDetail(record);renderRawRecord(record);updateMetrics(detailOf(record));renderInvestigation(detailOf(record));setNotice('','success');addActivity('FINDING',id);if(openAdvanced)showView('advanced');return true;}catch(error){setEntity('warning',`Record resolution failed closed for ${id}.`,'Unable to load record');setNotice(`Record load failed closed: ${String(error)}`,'danger');return false;}}
+function isSynthetic(match){const s=[match?.target_id,match?.title,match?.provider,match?.product,match?.namespace,match?.match_reason].filter(Boolean).join(' ').toLowerCase();return s.includes('synthetic.test')||s.includes('synthetic collision');}
+function renderResults(result,query){const c=$('searchResults');clear(c);const matches=(Array.isArray(result?.matches)?result.matches:[]).filter(m=>!isSynthetic(m));$('resultCount').textContent=String(matches.length);$('searchMeta').textContent=matches.length?`${matches.length} verified match${matches.length===1?'':'es'} for “${query}”`:`No verified match for “${query}”`;if(!matches.length){const box=el('div','empty-tab');const toolLike=/\.(exe|dll|ps1|bat|cmd)$/i.test(query)||/^[a-z][a-z0-9_-]{2,}$/i.test(query);box.append(el('strong','','No record in the active pack'),el('p','',toolLike?'The search engine is working, but this tool/keyword is not present in the current knowledge pack yet. ATLAS does not fabricate a result.':'The active pack returned no analyst-facing record for this query.'));c.append(box);return matches;}matches.forEach(m=>{const b=el('button','result-card');b.type='button';b.dataset.recordId=m.target_id||'';b.append(el('span','result-title',m.title||m.target_id||'Untitled record'));const sub=[m.provider||m.product||m.platform,m.match_reason].filter(Boolean).join(' · ');if(sub)b.append(el('span','result-subtitle',sub));const meta=el('span','result-meta');[m.entity_type,m.platform,m.product].filter(Boolean).forEach(v=>meta.append(el('span','token',v)));if(meta.children.length)b.append(meta);b.addEventListener('click',async()=>{document.querySelectorAll('.result-card').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');state.currentTab='overview';await loadRecord(m.target_id,false,m);});c.append(b);});return matches;}
+async function runSearchQuery(query){const limit=Number($('searchLimit').value);$('searchHero').classList.add('compact');$('exploreStage').classList.remove('hidden');setEntity('searching',`Resolving “${query.slice(0,80)}” against the active verified pack.`,'Searching');setNotice('Searching locally…','info');addActivity('SEARCH',query.slice(0,96));try{const result=await atlas.search(query,limit),matches=renderResults(result,query);if(!matches.length){setEntity('idle','No matching record is present in the active pack. Try another Event ID or keyword.','No packaged match');setNotice('','warning');return[];}setNotice('','success');if(matches.length===1){const only=matches[0];document.querySelector(`[data-record-id="${CSS.escape(only.target_id||'')}"]`)?.classList.add('selected');state.currentTab='overview';await loadRecord(only.target_id,false,only);}else setEntity('finding',`${matches.length} verified records match. Choose the provider or record you intended.`,'Choose a result');return matches;}catch(error){setEntity('warning','Search failed closed at the Shared Core boundary.','Search unavailable');setNotice(`Search failed closed: ${String(error)}`,'danger');return[];}}
+async function runSearch(event){event.preventDefault();const q=$('searchInput').value.trim();if(q)await runSearchQuery(q);}
 
-function claimValue(claim) {
-  const object = claim?.object;
-  return object && typeof object === 'object' ? object.value ?? null : null;
-}
+function pivotId(p){if(!p||typeof p!=='object')return null;for(const k of ['target_id','id','to_id','from_id','source_id'])if(typeof p[k]==='string'&&p[k])return p[k];return null;}
+function shortId(id){const p=String(id||'Related').split(':');return p[p.length-1]||'Related';}
+function svg(tag,attrs={}){const n=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,String(v)));return n;}
+function renderGraph(result){const c=$('graphResults');clear(c);c.className='graph-stage';const pivots=Array.isArray(result?.pivots)?result.pivots:[];if(!pivots.length){c.className='graph-stage empty-state';c.append(el('div','empty-mark','⌘'),el('strong','','No relationship pivots returned'),el('span','','This record has no bounded graph edges in the active pack at the selected depth.'));return[];}const wrap=el('div','mindmap-wrap'),canvas=el('div','graph-canvas'),legend=el('div','graph-legend'),map=svg('svg',{viewBox:'0 0 760 480',role:'img','aria-label':'ATLAS relationship mind map'}),cx=380,cy=240,count=Math.min(pivots.length,14),radius=count>8?180:155;for(let i=0;i<count;i++){const a=Math.PI*2*i/count-Math.PI/2,x=cx+Math.cos(a)*radius,y=cy+Math.sin(a)*radius;map.append(svg('line',{x1:cx,y1:cy,x2:x,y2:y,class:'graph-line'}));}map.append(svg('circle',{cx,cy,r:37,class:'graph-node root'}));const rl=svg('text',{x:cx,y:cy+4,class:'graph-label','text-anchor':'middle'});rl.textContent=shortId(state.currentRecordId);map.append(rl);pivots.slice(0,count).forEach((p,i)=>{const a=Math.PI*2*i/count-Math.PI/2,x=cx+Math.cos(a)*radius,y=cy+Math.sin(a)*radius,id=pivotId(p);map.append(svg('circle',{cx:x,cy:y,r:24,class:'graph-node'}));const l=svg('text',{x,y:y+3,class:'graph-label','text-anchor':'middle'});l.textContent=shortId(id).slice(0,18);map.append(l);const b=el('button','graph-pivot-button');b.type='button';b.append(el('strong','',p?.relationship_type||p?.type||`Relationship ${i+1}`),el('span','',id||'Relationship detail'));if(id)b.addEventListener('click',()=>loadRecord(id,false,null));legend.append(b);});canvas.append(map);wrap.append(canvas,legend);c.append(wrap);return pivots;}
+async function runGraphForCurrentRecord(){const seed=state.currentRecordId||$('graphSeed').value.trim(),depth=Number($('graphDepth').value);if(!seed){$('graphResults').className='graph-stage empty-state';$('graphResults').textContent='Select a record in Explore first.';return[];}$('graphSeed').value=seed;setEntity('reasoning','Mapping bounded relationships returned by Shared Core.','Building relationship map');try{const result=await atlas.graph(seed,depth),p=renderGraph(result);setEntity('finding',p.length?`${p.length} relationship pivot${p.length===1?'':'s'} mapped around the selected record.`:'No bounded relationships are packaged for this record at the selected depth.',p.length?'Relationship map ready':'No graph pivots');return p;}catch(error){setEntity('warning','Relationship expansion failed closed.','Mind Map unavailable');setNotice(`Graph expansion failed closed: ${String(error)}`,'danger');return[];}}
+async function runGraph(event){event?.preventDefault();return runGraphForCurrentRecord();}
 
-function updateEvidenceMetrics(detail) {
-  const metrics = {
-    Fields: Array.isArray(detail?.fields) ? detail.fields.length : 0,
-    Claims: Array.isArray(detail?.claims) ? detail.claims.length : 0,
-    Sources: Array.isArray(detail?.sources) ? detail.sources.length : 0,
-    Relations: Array.isArray(detail?.relationships) ? detail.relationships.length : 0
-  };
-  $('metricFields').textContent = String(metrics.Fields);
-  $('metricClaims').textContent = String(metrics.Claims);
-  $('metricSources').textContent = String(metrics.Sources);
-  $('metricRelations').textContent = String(metrics.Relations);
-  $('evidenceStatus').textContent = Object.values(metrics).some(Boolean) ? 'VERIFIED DATA' : 'NO PROJECTION';
-}
-
-function renderFieldDictionary(detail, container) {
-  const fields = Array.isArray(detail?.fields) ? detail.fields : [];
-  const claims = Array.isArray(detail?.claims) ? detail.claims : [];
-  if (!fields.length) return;
-
-  const section = el('section', 'detail-section field-dictionary');
-  const heading = el('div', 'detail-section-heading');
-  heading.append(el('strong', '', 'Field Dictionary'), el('span', 'muted small', `${fields.length} structured field${fields.length === 1 ? '' : 's'}`));
-  section.append(heading);
-
-  const claimsBySubject = new Map();
-  claims.forEach(claim => {
-    const subject = claim?.subject_id;
-    if (!subject) return;
-    if (!claimsBySubject.has(subject)) claimsBySubject.set(subject, []);
-    claimsBySubject.get(subject).push(claim);
-  });
-
-  fields.forEach(field => {
-    const card = el('article', 'field-card');
-    card.append(el('div', 'field-name', field?.title || field?.canonical_key || field?.id || 'Field'));
-    if (field?.id) card.append(el('div', 'field-id', field.id));
-    const fieldClaims = claimsBySubject.get(field?.id) || [];
-    fieldClaims.forEach(claim => {
-      const value = claimValue(claim);
-      if (value && typeof value === 'object' && !Array.isArray(value)) {
-        const facts = el('dl', 'facts compact-facts');
-        renderFacts(facts, value, ['section', 'native_name', 'data_type', 'meaning', 'version_applicability', 'optional', 'conditional', 'collection_requirement', 'security_relevance']);
-        card.append(facts);
-      } else if (value !== null) {
-        card.append(el('div', 'field-meaning', compactValue(value)));
-      }
-      const evidence = Array.isArray(claim?.evidence) ? claim.evidence : [];
-      evidence.slice(0, 3).forEach(item => {
-        const source = item?.source_id || 'source';
-        const locator = item?.locator?.heading || item?.locator?.section || '';
-        card.append(el('div', 'field-source', locator ? `${source} · ${locator}` : source));
-      });
-    });
-    section.append(card);
-  });
-  container.append(section);
-}
-
-function renderReferenceSources(detail, container) {
-  const sources = Array.isArray(detail?.sources) ? detail.sources : [];
-  if (!sources.length) return;
-  const section = el('section', 'detail-section provenance-box');
-  const heading = el('div', 'detail-section-heading');
-  heading.append(el('strong', '', 'Sources / Provenance'), el('span', 'source-status', 'CLAIM-LINKED'));
-  section.append(heading);
-  sources.slice(0, 12).forEach(source => {
-    const row = el('div', 'source-row');
-    const label = el('span', 'source-title', source?.title || source?.canonical_key || source?.id || 'Source');
-    const identity = el('span', 'source-id', source?.id || 'source identity unavailable');
-    row.append(label, identity);
-    section.append(row);
-  });
-  container.append(section);
-}
-
-function collectTimeline(detail, baseRecord) {
-  const entries = [];
-  const add = (timestamp, kind, label) => {
-    if (typeof timestamp !== 'string' || !timestamp.trim()) return;
-    const parsed = Date.parse(timestamp);
-    entries.push({ timestamp, parsed: Number.isNaN(parsed) ? 0 : parsed, kind, label });
-  };
-  add(baseRecord?.created_at, 'RECORD', 'Canonical record created');
-  add(baseRecord?.updated_at, 'RECORD', 'Canonical record updated');
-  (Array.isArray(detail?.claims) ? detail.claims : []).forEach(claim => {
-    (Array.isArray(claim?.evidence) ? claim.evidence : []).forEach(evidence => {
-      add(evidence?.retrieved_at, 'SOURCE', `Evidence retrieved · ${evidence?.source_id || 'source'}`);
-    });
-  });
-  return entries.sort((a, b) => a.parsed - b.parsed || a.label.localeCompare(b.label));
-}
-
-function renderTimeline(detail, baseRecord, container) {
-  const entries = collectTimeline(detail, baseRecord);
-  if (!entries.length) return;
-  const section = el('section', 'detail-section');
-  const heading = el('div', 'detail-section-heading');
-  heading.append(el('strong', '', 'Evidence Timeline'), el('span', 'muted small', `${entries.length} durable timestamp${entries.length === 1 ? '' : 's'}`));
-  section.append(heading);
-  const list = el('ol', 'activity-trail');
-  entries.slice(0, 12).forEach(entry => {
-    const item = document.createElement('li');
-    item.append(el('time', '', entry.kind), el('span', '', `${entry.timestamp} · ${entry.label}`));
-    list.append(item);
-  });
-  section.append(list);
-  container.append(section);
-}
-
-function renderRelationshipSummary(detail, container) {
-  const relationships = Array.isArray(detail?.relationships) ? detail.relationships : [];
-  if (!relationships.length) return;
-  const section = el('section', 'detail-section');
-  const heading = el('div', 'detail-section-heading');
-  heading.append(el('strong', '', 'Direct Relationships'), el('span', 'muted small', `${relationships.length} bounded edge${relationships.length === 1 ? '' : 's'}`));
-  section.append(heading);
-  relationships.slice(0, 10).forEach(relationship => {
-    const card = el('div', 'pivot-card');
-    card.append(el('strong', '', relationship?.relationship_type || 'RELATED'));
-    card.append(el('div', 'source-id', `${relationship?.from || relationship?.source_id || '—'} → ${relationship?.to || relationship?.target_id || '—'}`));
-    section.append(card);
-  });
-  container.append(section);
-}
-
-function renderInvestigation(detail) {
-  const container = $('investigationGraph');
-  let graph = null;
-  try {
-    graph = investigationModel && typeof investigationModel.build === 'function'
-      ? investigationModel.build(detail)
-      : null;
-  } catch (_) {
-    graph = null;
-  }
-  state.currentInvestigation = graph;
-  $('recordInvestigationButton').disabled = !graph;
-  clear(container);
-
-  if (!graph) {
-    container.className = 'investigation-graph empty-state';
-    container.append(el('div', 'empty-mark', '⎔'), el('strong', '', 'No bounded investigation template'), el('span', '', 'Investigation Graph v0 is intentionally limited to 4625, 4688 and Sysmon 1.'));
-    $('investigationPurpose').textContent = 'Load one of the three verified canaries to construct a deterministic investigation template.';
-    $('investigationConfidence').textContent = 'CONFIDENCE · UNASSESSED';
-    return null;
-  }
-
-  container.className = 'investigation-graph';
-  $('investigationPurpose').textContent = graph.purpose;
-  $('investigationConfidence').textContent = `CONFIDENCE · ${graph.confidence}`;
-  const lanes = [
-    ['AUTHORITY', ['FACT', 'PROVENANCE']],
-    ['EVIDENCE REQUIRED', ['EVIDENCE REQUIREMENT']],
-    ['HYPOTHESES', ['HYPOTHESIS']],
-    ['ANALYST CHECKS', ['CHECK']]
-  ];
-  lanes.forEach(([title, kinds]) => {
-    const lane = el('section', 'investigation-lane');
-    lane.append(el('h3', '', title));
-    graph.nodes.filter(node => kinds.includes(node.classification)).forEach(node => {
-      const card = el('article', 'investigation-node');
-      card.dataset.kind = node.classification;
-      card.append(el('span', 'node-kind', node.classification), el('strong', '', node.label), el('p', '', node.detail), el('span', 'node-status', node.status));
-      lane.append(card);
-    });
-    container.append(lane);
-  });
-  const edgeTypes = [...new Set(graph.edges.map(edge => edge.type))];
-  container.append(el('div', 'investigation-edge-summary', `${graph.edges.length} typed links · ${edgeTypes.join(' · ')}`));
-  return graph;
-}
-
-function renderRecord(record, target) {
-  clear(target);
-  target.classList.remove('empty-state');
-  const detail = record?.detail_version ? record : null;
-  const baseRecord = detail?.record || record || {};
-  const summary = el('div', 'record-summary');
-  const hero = el('header', 'record-hero');
-  hero.append(el('div', 'record-title', baseRecord?.title || baseRecord?.name || state.currentRecordId || 'Canonical record'));
-  if (state.currentRecordId) hero.append(el('div', 'record-id', state.currentRecordId));
-  summary.append(hero);
-
-  const facts = el('dl', 'facts');
-  renderFacts(facts, baseRecord, ['entity_type', 'namespace', 'platform', 'product', 'provider', 'channel', 'lifecycle', 'version', 'curation_status']);
-  summary.append(facts);
-
-  if (detail) {
-    const recordClaims = (Array.isArray(detail.claims) ? detail.claims : []).filter(claim => claim?.subject_id === baseRecord?.id);
-    if (recordClaims.length) {
-      const box = el('section', 'provenance-box');
-      box.append(el('strong', '', 'Record Claims'));
-      recordClaims.slice(0, 16).forEach(claim => {
-        const item = document.createElement('details');
-        const heading = document.createElement('summary');
-        heading.textContent = claim?.predicate || claim?.id || 'Claim';
-        item.append(heading, jsonBlock(claimValue(claim) ?? claim));
-        box.append(item);
-      });
-      summary.append(box);
-    }
-    renderReferenceSources(detail, summary);
-    renderRelationshipSummary(detail, summary);
-    renderTimeline(detail, baseRecord, summary);
-    renderFieldDictionary(detail, summary);
-  }
-
-  const raw = document.createElement('details');
-  const rawHeading = document.createElement('summary');
-  rawHeading.textContent = detail ? 'Detail Projection JSON' : 'Canonical JSON';
-  raw.append(rawHeading, jsonBlock(record));
-  summary.append(raw);
-  target.append(summary);
-}
-
-async function loadRecord(id, openRecordView = false) {
-  if (!id) return false;
-  setEntity('correlating', `Loading canonical facts and provenance for ${id}.`);
-  setNotice(`Loading canonical record ${id}…`, 'info');
-  addActivity('RECORD', `Requested ${id}`);
-  try {
-    const record = await atlas.record(id);
-    state.currentRecordId = id;
-    state.currentRecord = record;
-    $('graphSeed').value = id;
-    $('openRecordView').disabled = false;
-    $('recordGraphButton').disabled = false;
-    renderRecord(record, $('quickDetail'));
-    renderRecord(record, $('recordDetail'));
-    updateEvidenceMetrics(record?.detail_version ? record : null);
-    setEntity('reasoning', `Constructing the bounded investigation view for ${id}.`);
-    const investigation = renderInvestigation(record?.detail_version ? record : null);
-    const sources = Array.isArray(record?.sources) ? record.sources.length : 0;
-    setEntity('finding', investigation
-      ? `Canonical record and ${investigation.nodes.length} explicitly classified investigation nodes are ready.`
-      : `Canonical record resolved with ${sources} linked source${sources === 1 ? '' : 's'}.`);
-    setNotice('Canonical record and provenance loaded from the verified active pack.', 'success');
-    addActivity('FINDING', `Resolved ${id}`);
-    if (openRecordView) showView('record');
-    return true;
-  } catch (error) {
-    setEntity('warning', `Record resolution failed closed for ${id}.`);
-    setNotice(`Record load failed closed: ${String(error)}`, 'danger');
-    addActivity('WARNING', 'Record load failed closed');
-    return false;
-  }
-}
-
-function renderSearchResults(result) {
-  const container = $('searchResults');
-  clear(container);
-  container.classList.remove('empty-state');
-  const matches = Array.isArray(result?.matches) ? result.matches : [];
-  $('resultCount').textContent = String(matches.length);
-  $('searchMeta').textContent = `${text(result?.status)} · ${text(result?.match_stage)}`.toUpperCase();
-  if (!matches.length) {
-    container.classList.add('empty-state');
-    container.append(el('div', 'empty-mark', '∅'), el('strong', '', 'No canonical match'), el('span', '', 'The bounded query returned no records from the active pack.'));
-    return matches;
-  }
-  matches.forEach(match => {
-    const button = el('button', 'result-card');
-    button.type = 'button';
-    button.dataset.recordId = match.target_id || '';
-    button.append(el('span', 'result-title', match.title || match.target_id || 'Untitled record'));
-    const meta = el('span', 'result-meta');
-    [match.entity_type, match.platform, match.product, match.provider, match.match_reason].filter(Boolean).forEach(value => meta.append(el('span', 'token', String(value))));
-    button.append(meta);
-    button.addEventListener('click', async () => {
-      document.querySelectorAll('.result-card').forEach(card => card.classList.remove('selected'));
-      button.classList.add('selected');
-      await loadRecord(match.target_id, false);
-    });
-    container.append(button);
-  });
-  return matches;
-}
-
-async function runSearchQuery(query, canaryId = null) {
-  const limit = Number($('searchLimit').value);
-  setEntity('searching', `Resolving “${query.slice(0, 80)}” against the active verified pack.`);
-  setNotice('Running bounded offline search…', 'info');
-  $('searchMeta').textContent = 'SEARCHING';
-  addActivity('SEARCH', query.slice(0, 96));
-  try {
-    const result = await atlas.search(query, limit);
-    const matches = renderSearchResults(result);
-    if (!matches.length) {
-      setEntity('idle', 'No matching record found. Awaiting the next analyst action.');
-      setNotice('Search completed locally with no canonical matches.', 'warning');
-      return matches;
-    }
-    setEntity('finding', `${matches.length} canonical result${matches.length === 1 ? '' : 's'} resolved.`);
-    setNotice('Search completed locally against the active verified pack.', 'success');
-    if (canaryId) {
-      const exact = matches.find(match => match?.target_id === canaryId);
-      if (!exact) {
-        setEntity('warning', 'The canary query did not return its expected canonical identity.');
-        setNotice(`Canary failed closed: expected ${canaryId} was not returned.`, 'danger');
-        return matches;
-      }
-      const card = document.querySelector(`[data-record-id="${canaryId}"]`);
-      if (card) card.classList.add('selected');
-      await loadRecord(canaryId, false);
-    }
-    return matches;
-  } catch (error) {
-    $('searchMeta').textContent = 'SEARCH FAILED';
-    setEntity('warning', 'Search failed closed at the Shared Core boundary.');
-    setNotice(`Search failed closed: ${String(error)}`, 'danger');
-    addActivity('WARNING', 'Search failed closed');
-    return [];
-  }
-}
-
-async function runSearch(event) {
-  event.preventDefault();
-  const query = $('searchInput').value.trim();
-  if (query) await runSearchQuery(query);
-}
-
-function findPivotId(pivot) {
-  if (!pivot || typeof pivot !== 'object') return null;
-  for (const key of ['target_id', 'id', 'to_id', 'from_id', 'source_id']) {
-    if (typeof pivot[key] === 'string' && pivot[key]) return pivot[key];
-  }
-  return null;
-}
-
-function renderGraph(result) {
-  const container = $('graphResults');
-  clear(container);
-  container.classList.remove('empty-state');
-  const pivots = Array.isArray(result?.pivots) ? result.pivots : [];
-  if (!pivots.length) {
-    container.classList.add('empty-state');
-    container.textContent = 'No relationship pivots returned for this bounded expansion.';
-    return pivots;
-  }
-  const list = el('div', 'pivot-list');
-  pivots.forEach((pivot, index) => {
-    const card = el('article', 'pivot-card');
-    const pivotId = findPivotId(pivot);
-    card.append(el('strong', '', pivot?.relationship_type || pivot?.type || `Pivot ${index + 1}`), jsonBlock(pivot));
-    if (pivotId) {
-      const button = el('button', 'text-button', `Open ${pivotId}`);
-      button.type = 'button';
-      button.addEventListener('click', () => loadRecord(pivotId, true));
-      card.append(button);
-    }
-    list.append(card);
-  });
-  container.append(list);
-  return pivots;
-}
-
-async function runGraph(event) {
-  event.preventDefault();
-  const seedId = $('graphSeed').value.trim();
-  const depth = Number($('graphDepth').value);
-  if (!seedId) return;
-  setEntity('reasoning', `Evaluating bounded relationships for ${seedId}.`);
-  setNotice('Expanding bounded relationships in Shared Core…', 'info');
-  addActivity('GRAPH', `Depth ${depth} · ${seedId}`);
-  try {
-    const result = await atlas.graph(seedId, depth);
-    const pivots = renderGraph(result);
-    setEntity('finding', `${pivots.length} relationship pivot${pivots.length === 1 ? '' : 's'} available for review.`);
-    setNotice('Relationship expansion completed locally.', 'success');
-  } catch (error) {
-    setEntity('warning', 'Relationship expansion failed closed.');
-    setNotice(`Graph expansion failed closed: ${String(error)}`, 'danger');
-  }
-}
-
-function renderPack(pack) {
-  state.lastPack = pack;
-  renderFacts($('packFacts'), pack || {}, ['ready', 'state', 'pack_id', 'pack_version', 'generation_id', 'manifest_digest', 'pending_update', 'rollback_available']);
-  if (pack?.ready) setBadge($('packBadge'), `Pack ${pack.pack_version || 'ready'}`, 'success');
-  else setBadge($('packBadge'), 'Pack not ready', 'warning');
-  $('applyUpdate').disabled = pack?.pending_update !== true;
-  $('rollbackPack').disabled = pack?.rollback_available !== true;
-}
-
-async function refreshPack() {
-  try {
-    const pack = await atlas.packStatus();
-    renderPack(pack);
-    return pack;
-  } catch (error) {
-    setBadge($('packBadge'), 'Pack error', 'danger');
-    setEntity('warning', 'Pack integrity state is unavailable.');
-    setNotice(`Pack state failed closed: ${String(error)}`, 'danger');
-    throw error;
-  }
-}
-
-async function runPackAction(kind) {
-  const isUpdate = kind === 'update';
-  const prompt = isUpdate ? 'Apply the already-verified pending pack update? Shared Core trust checks remain authoritative.' : 'Rollback to the safe Last Known Good pack generation?';
-  if (!window.confirm(prompt)) return;
-  const output = $('packActionResult');
-  output.textContent = isUpdate ? 'Applying verified update…' : 'Executing safe rollback…';
-  setEntity('reasoning', isUpdate ? 'Shared Core is validating the pending pack update.' : 'Shared Core is evaluating Last Known Good recovery.');
-  try {
-    const result = isUpdate ? await atlas.packUpdate() : await atlas.packRollback();
-    output.textContent = JSON.stringify(result, null, 2);
-    await refreshPack();
-    setEntity('finding', isUpdate ? 'Verified pack update completed.' : 'Safe rollback completed.');
-    setNotice(isUpdate ? 'Verified pack update completed.' : 'Safe rollback completed.', 'success');
-  } catch (error) {
-    output.textContent = `FAIL-CLOSED: ${String(error)}`;
-    setEntity('warning', 'Pack control operation failed closed.');
-    setNotice(`Pack control failed closed: ${String(error)}`, 'danger');
-  }
-}
-
-function renderDiagnostics(status) {
-  $('diagnosticsOutput').textContent = JSON.stringify(status, null, 2);
-  const core = status?.status_result || {};
-  const offline = core?.offline_capable === true && core?.network_listener === false;
-  if (offline) {
-    setBadge($('offlineBadge'), 'Offline boundary verified', 'success');
-    $('footerState').textContent = `Verified sidecar · ${String(status.sidecar_sha256 || '').slice(0, 12)}…`;
-  } else {
-    setBadge($('offlineBadge'), 'Boundary check failed', 'danger');
-    $('footerState').textContent = 'Runtime boundary not verified';
-  }
-}
-
-async function refreshDiagnostics() {
-  try {
-    const status = await atlas.status();
-    state.lastStatus = status;
-    renderDiagnostics(status);
-    return status;
-  } catch (error) {
-    setBadge($('offlineBadge'), 'Core unavailable', 'danger');
-    $('diagnosticsOutput').textContent = `FAIL-CLOSED\n${String(error)}`;
-    $('footerState').textContent = 'Fail-closed: Shared Core validation failed';
-    setEntity('warning', 'Shared Core validation failed closed.');
-    throw error;
-  }
-}
-
-function formatClock(date, timeZone, locale = 'en-GB') {
-  const options = { dateStyle: 'medium', timeStyle: 'medium', hour12: false };
-  if (timeZone) options.timeZone = timeZone;
-  return new Intl.DateTimeFormat(locale, options).format(date);
-}
-
-function updateClocks() {
-  const now = new Date();
-  $('utcClock').textContent = formatClock(now, 'UTC');
-  $('systemClock').textContent = formatClock(now, undefined);
-  const selected = $('timezoneSelect').value;
-  $('selectedClock').textContent = selected === 'system' ? formatClock(now, undefined) : formatClock(now, selected);
-  $('tehranClock').textContent = formatClock(now, 'Asia/Tehran', 'fa-IR-u-ca-persian');
-}
-
-function bindEvents() {
-  document.querySelectorAll('.nav-item').forEach(button => button.addEventListener('click', () => showView(button.dataset.view)));
-  document.querySelectorAll('.canary-button').forEach(button => button.addEventListener('click', async () => {
-    const query = button.dataset.canaryQuery;
-    const expectedId = button.dataset.canaryId;
-    showView('investigate');
-    $('searchInput').value = query;
-    await runSearchQuery(query, expectedId);
-  }));
-  $('searchForm').addEventListener('submit', runSearch);
-  $('graphForm').addEventListener('submit', runGraph);
-  $('openRecordView').addEventListener('click', () => showView('record'));
-  $('recordGraphButton').addEventListener('click', () => {
-    if (state.currentRecordId) $('graphSeed').value = state.currentRecordId;
-    showView('graph');
-  });
-  $('recordInvestigationButton').addEventListener('click', () => {
-    if (!state.currentInvestigation) return;
-    showView('investigation');
-    setEntity('finding', `${state.currentInvestigation.title} is ready for analyst review.`);
-    addActivity('IRG', state.currentInvestigation.title);
-  });
-  $('refreshPack').addEventListener('click', refreshPack);
-  $('applyUpdate').addEventListener('click', () => runPackAction('update'));
-  $('rollbackPack').addEventListener('click', () => runPackAction('rollback'));
-  $('refreshDiagnostics').addEventListener('click', refreshDiagnostics);
-  $('refreshStatus').addEventListener('click', async () => {
-    setEntity('correlating', 'Revalidating Shared Core and pack trust state.');
-    try {
-      await Promise.all([refreshDiagnostics(), refreshPack()]);
-      setEntity('idle', 'Runtime and pack trust state revalidated.');
-    } catch (_) { /* individual refresh methods render fail-closed state */ }
-  });
-  $('timezoneSelect').addEventListener('change', updateClocks);
-  $('toggleEntity').addEventListener('click', () => {
-    const collapsed = !document.querySelector('.entity-card').classList.contains('collapsed');
-    setEntityCollapsed(collapsed);
-  });
-  $('themeSelect').addEventListener('change', event => {
-    document.body.dataset.theme = event.target.value;
-    try { localStorage.setItem('atlas-theme', event.target.value); } catch (_) { /* local preference only */ }
-  });
-}
-
-async function bootstrap() {
-  bindEvents();
-  try {
-    const savedTheme = localStorage.getItem('atlas-theme');
-    if (['high-contrast', 'atlas-dark', 'tactical-green'].includes(savedTheme)) {
-      document.body.dataset.theme = savedTheme;
-      $('themeSelect').value = savedTheme;
-    }
-    setEntityCollapsed(localStorage.getItem('atlas-entity-collapsed') === 'true', false);
-  } catch (_) { /* local preference is optional */ }
-  updateClocks();
-  window.setInterval(updateClocks, 1000);
-  setEntity('correlating', 'Validating local runtime integrity and active pack state.');
-
-  try {
-    const [status, pack] = await Promise.all([refreshDiagnostics(), refreshPack()]);
-    const core = status?.status_result || {};
-    if (core.offline_capable === true && core.network_listener === false) {
-      if (pack?.ready) {
-        setEntity('idle', 'Verified runtime and active pack are ready for analysis.');
-        setNotice('ATLAS is ready: verified Shared Core, offline boundary and active knowledge pack confirmed.', 'success');
-        addActivity('VERIFIED', 'Runtime and active pack ready');
-      } else {
-        setEntity('warning', 'Shared Core is verified, but no active knowledge pack is ready.');
-        setNotice('Shared Core is verified and offline; activate a verified knowledge pack to enable investigation.', 'warning');
-      }
-    } else {
-      setEntity('warning', 'The frozen offline boundary was not proven.');
-      setNotice('ATLAS startup validation did not prove the frozen offline boundary.', 'danger');
-    }
-  } catch (error) {
-    setEntity('warning', 'Startup validation failed closed.');
-    setNotice(`ATLAS startup failed closed: ${String(error)}`, 'danger');
-  }
-}
-
+function renderPack(pack){state.lastPack=pack;const t=$('packFacts');clear(t);[['Ready',pack?.ready],['Pack',pack?.pack_id],['Version',pack?.pack_version],['Generation',pack?.generation_id],['Pending update',pack?.pending_update],['Rollback available',pack?.rollback_available]].forEach(([k,v])=>{if(v===undefined||v===null||v==='')return;const r=document.createElement('div');r.append(el('dt','',k),el('dd','',text(v)));t.append(r);});setRuntimeBadge($('packBadge'),pack?.ready?`Pack ${pack.pack_version||'ready'}`:'Pack not ready',pack?.ready?'success':'warning');$('applyUpdate').disabled=pack?.pending_update!==true;$('rollbackPack').disabled=pack?.rollback_available!==true;}
+async function refreshPack(){try{const p=await atlas.packStatus();renderPack(p);return p;}catch(error){setRuntimeBadge($('packBadge'),'Pack error','danger');setEntity('warning','Pack integrity state is unavailable.','Pack verification problem');throw error;}}
+async function runPackAction(kind){const update=kind==='update';if(!window.confirm(update?'Apply the already-verified pending pack update?':'Rollback to the safe Last Known Good pack generation?'))return;const out=$('packActionResult');out.textContent=update?'Applying verified update…':'Executing safe rollback…';try{const r=update?await atlas.packUpdate():await atlas.packRollback();out.textContent=JSON.stringify(r,null,2);await refreshPack();}catch(error){out.textContent=`FAIL-CLOSED: ${String(error)}`;setEntity('warning','Pack control operation failed closed.','Pack operation failed');}}
+function renderDiagnostics(status){$('diagnosticsOutput').textContent=JSON.stringify(status,null,2);const core=status?.status_result||{},offline=core?.offline_capable===true&&core?.network_listener===false;setRuntimeBadge($('offlineBadge'),offline?'Offline':'Boundary warning',offline?'success':'danger');$('footerState').textContent=offline?'Verified local runtime · no default network listener':'Runtime boundary not verified';}
+async function refreshDiagnostics(){try{const s=await atlas.status();renderDiagnostics(s);return s;}catch(error){setRuntimeBadge($('offlineBadge'),'Core unavailable','danger');$('diagnosticsOutput').textContent=`FAIL-CLOSED:\n${String(error)}`;setEntity('warning','Shared Core validation failed closed.','Runtime unavailable');throw error;}}
+function clock(date,tz,locale='en-GB'){const o={dateStyle:'medium',timeStyle:'medium',hour12:false};if(tz)o.timeZone=tz;return new Intl.DateTimeFormat(locale,o).format(date);}
+function updateClocks(){const n=new Date(),selected=$('timezoneSelect').value;$('utcClock').textContent=clock(n,'UTC');$('systemClock').textContent=clock(n);$('selectedClock').textContent=selected==='system'?clock(n):clock(n,selected);$('tehranClock').textContent=clock(n,'Asia/Tehran','fa-IR-u-ca-persian');}
+function bindEvents(){document.querySelectorAll('.nav-item').forEach(button=>button.addEventListener('click',()=>showView(button.dataset.view)));document.querySelectorAll('[data-example-query]').forEach(b=>b.addEventListener('click',async()=>{$('searchInput').value=b.dataset.exampleQuery;showView('explore');await runSearchQuery(b.dataset.exampleQuery);}));$('searchForm').addEventListener('submit',runSearch);$('graphForm').addEventListener('submit',runGraph);$('graphRefresh').addEventListener('click',runGraphForCurrentRecord);$('openRecordView').addEventListener('click',()=>showView('advanced'));$('recordGraphButton').addEventListener('click',()=>showView('mindmap'));$('recordInvestigationButton').addEventListener('click',()=>showView('investigation'));$('refreshPack').addEventListener('click',refreshPack);$('applyUpdate').addEventListener('click',()=>runPackAction('update'));$('rollbackPack').addEventListener('click',()=>runPackAction('rollback'));$('refreshDiagnostics').addEventListener('click',refreshDiagnostics);$('refreshStatus').addEventListener('click',async()=>{setEntity('correlating','Revalidating Shared Core and active pack state.','Checking runtime');try{await Promise.all([refreshDiagnostics(),refreshPack()]);setEntity('idle','Runtime and active pack are verified and ready.','Ready to explore');}catch(_){}});$('timezoneSelect').addEventListener('change',updateClocks);$('toggleEntity').addEventListener('click',()=>setEntityCollapsed(!document.querySelector('.entity-card').classList.contains('collapsed')));$('themeSelect').addEventListener('change',e=>{document.body.dataset.theme=e.target.value;try{localStorage.setItem('atlas-theme',e.target.value);}catch(_){}});}
+async function bootstrap(){bindEvents();try{const theme=localStorage.getItem('atlas-theme');if(['high-contrast','atlas-dark','tactical-green'].includes(theme)){document.body.dataset.theme=theme;$('themeSelect').value=theme;}setEntityCollapsed(localStorage.getItem('atlas-entity-collapsed')==='true',false);}catch(_){}updateClocks();window.setInterval(updateClocks,1000);setEntity('correlating','Verifying local runtime integrity and active knowledge pack.','Starting ATLAS');try{const [status,pack]=await Promise.all([refreshDiagnostics(),refreshPack()]),core=status?.status_result||{};if(core.offline_capable===true&&core.network_listener===false&&pack?.ready){setEntity('idle','Search for an Event ID, field, ATT&CK technique or tool contained in the active pack.','Ready to explore');setNotice('','success');addActivity('VERIFIED','Runtime and active pack ready');}else{setEntity('warning','The runtime or active pack is not fully ready.','Startup attention');setNotice('ATLAS startup validation did not prove the full local runtime + pack boundary.','warning');}}catch(error){setEntity('warning','Startup validation failed closed.','ATLAS unavailable');setNotice(`ATLAS startup failed closed: ${String(error)}`,'danger');}}
 bootstrap();
