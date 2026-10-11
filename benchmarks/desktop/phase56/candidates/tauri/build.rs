@@ -65,10 +65,12 @@ fn configure_windows_gui_subsystem() {
     if env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("windows")
         && env::var("PROFILE").as_deref() == Ok("release")
     {
-        // The packaged ATLAS host is a GUI application. atlas-core is already
-        // spawned with CREATE_NO_WINDOW; this prevents the release host itself
-        // from opening a companion console window.
+        // Match rustc's Windows GUI-subsystem behavior: keep Rust's generated
+        // `main` entrypoint while preventing the packaged GUI host from
+        // allocating a companion console. atlas-core separately uses
+        // CREATE_NO_WINDOW when spawned by the host.
         println!("cargo:rustc-link-arg=/SUBSYSTEM:WINDOWS");
+        println!("cargo:rustc-link-arg=/ENTRY:mainCRTStartup");
     }
 }
 
