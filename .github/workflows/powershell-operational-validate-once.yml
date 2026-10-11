@@ -1,0 +1,88 @@
+name: PowerShell Operational one-time validation
+
+on:
+  push:
+    branches:
+      - feat/powershell-operational-encyclopedia
+    paths:
+      - .github/workflows/powershell-operational-validate-once.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      GOTOOLCHAIN: local
+      CGO_ENABLED: '0'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.9'
+          cache-dependency-path: shared-core/go/go.sum
+
+      - name: Install exact pack/test dependencies
+        run: |
+          python -m pip install --disable-pip-version-check -r tools/pack/requirements-phase552.txt
+          python -c "import importlib.metadata as m; assert m.version('tuf') == '7.0.0'; assert m.version('securesystemslib') == '1.4.0'; assert m.version('jsonschema') == '4.25.1'; assert m.version('pytest') == '8.4.2'"
+
+      - name: Validate PowerShell canonical family
+        run: |
+          python -m pytest -q tests/phase51010/test_powershell_operational_26100.py
+          python tools/content/build_powershell_operational_records.py --output "$RUNNER_TEMP/powershell-canonical.jsonl"
+          test "$(grep -c 'atlas:event:microsoft.windows.powershell:' "$RUNNER_TEMP/powershell-canonical.jsonl")" -ge 43
+
+      - name: Validate ATLAS foundation and desktop contracts
+        run: |
+          python tools/validate_foundation.py
+          node --check benchmarks/desktop/phase56/candidates/tauri/www/entity-state.js
+          node --check benchmarks/desktop/phase56/candidates/tauri/www/main.js
+          node --test tests/desktop/test_analyst_workspace.js tests/desktop/test_stale_selection_guard.js
+
+      - name: Build deterministic MVP-2 pack with PowerShell
+        run: |
+          STAGE="$RUNNER_TEMP/atlas-mvp2-powershell"
+          mkdir -p "$STAGE"
+          python -m tools.release.build_mvp2_private_pack --output-dir "$STAGE"
+          test -f "$STAGE/atlas-engineering-preview.atlaspack"
+          echo "MVP2_STAGE=$STAGE" >> "$GITHUB_ENV"
+
+      - name: Build and test exact Shared Core
+        working-directory: shared-core/go
+        run: |
+          go mod verify
+          go test ./... -count=1
+          go vet ./...
+          go build -trimpath -buildvcs=false -o "$MVP2_STAGE/atlas-core" ./cmd/atlas-core
+
+      - name: Prove 502-record runtime corpus
+        run: |
+          python tools/release/probe_mvp2_full_corpus.py --core "$MVP2_STAGE/atlas-core" --output "$MVP2_STAGE/MVP2-FULL-CORPUS-ACCEPTANCE.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ['MVP2_STAGE'])/'MVP2-FULL-CORPUS-ACCEPTANCE.json'
+          r=json.loads(p.read_text())
+          s=r['summary']
+          assert s['total_records']==502
+          assert s['windows_security_records']==429
+          assert s['sysmon_records']==30
+          assert s['powershell_operational_records']==43
+          assert all(s[k] is True for k in ('all_searchable','all_detail_resolvable','all_field_projections_exact','all_overviews_present','all_primary_sources_projected'))
+          assert len(r['powershell_operational'])==43
+          assert r['powershell_operational']['4104']['field_count']==5
+          assert r['powershell_operational']['4105']['field_count']==2
+          assert r['powershell_operational']['4106']['field_count']==2
+          print('MVP2 PowerShell runtime acceptance: 502/502 PASS')
+          PY
