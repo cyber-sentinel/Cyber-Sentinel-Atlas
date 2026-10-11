@@ -2,9 +2,9 @@
 """Corpus-wide fail-closed acceptance for the ATLAS MVP-2 packaged runtime.
 
 This probe is deliberately end-to-end: it talks to the packaged atlas-core over
-its production stdio protocol and verifies that every approved Windows Security
-and Sysmon knowledge record can be found, opened with detail=true, and projected
-with the exact governed field dictionary carried by approved-exemplars.json.
+its production stdio protocol and verifies that every approved Windows Security,
+Sysmon, and frozen PowerShell Operational knowledge record can be found, opened
+with detail=true, and projected with the exact governed field dictionary.
 """
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ from typing import Any, BinaryIO
 MAX_FRAME = 8 * 1024 * 1024
 ROOT = Path(__file__).resolve().parents[2]
 APPROVED = ROOT / "content" / "encyclopedia" / "approved-exemplars.json"
+POWERSHELL_BATCH_GLOB = "powershell-operational-26100-batch*.json"
 SEARCH_CONTRACT = "1.0.0"
 DETAIL_CONTRACT = "1.0.0"
 
@@ -62,6 +63,27 @@ def request(stdin: BinaryIO, stdout: BinaryIO, request_id: str, method: str, par
     return response.get("result")
 
 
+def _powershell_events() -> list[dict[str, Any]]:
+    directory = ROOT / "content" / "encyclopedia"
+    paths = sorted(directory.glob(POWERSHELL_BATCH_GLOB), key=lambda p: p.name)
+    if len(paths) != 8:
+        raise RuntimeError(f"PowerShell batch count drift: expected 8, got {len(paths)}")
+    events: list[dict[str, Any]] = []
+    for index, path in enumerate(paths, start=1):
+        batch = json.loads(path.read_text(encoding="utf-8"))
+        if batch.get("status") != "MAINTAINER_APPROVED_POWERSHELL_OPERATIONAL_26100":
+            raise RuntimeError(f"unapproved PowerShell batch: {path.name}")
+        if batch.get("batch_index") != index:
+            raise RuntimeError(f"PowerShell batch ordering drift: {path.name}")
+        events.extend(batch.get("events") or [])
+    ids = [str(item.get("native_event_id", "")) for item in events]
+    if len(events) != 43 or len(set(ids)) != 43:
+        raise RuntimeError(f"PowerShell denominator drift: events={len(events)}, unique={len(set(ids))}")
+    if sum(len(item.get("fields") or []) for item in events) != 71:
+        raise RuntimeError("PowerShell field denominator drift: expected 71")
+    return sorted(events, key=lambda item: int(item["native_event_id"]))
+
+
 def approved_events() -> list[dict[str, Any]]:
     data = json.loads(APPROVED.read_text(encoding="utf-8"))
     if data.get("status") != "MAINTAINER_APPROVED_PRODUCTION_EXEMPLARS":
@@ -74,11 +96,16 @@ def approved_events() -> list[dict[str, Any]]:
         raise RuntimeError("approved Windows/Sysmon event corpus is empty")
     windows = [item for item in events if item.get("namespace") == "microsoft.windows.security"]
     sysmon = [item for item in events if item.get("namespace") == "microsoft.sysmon"]
-    if len(windows) < 423:
-        raise RuntimeError(f"approved Windows Security aggregate unexpectedly small: {len(windows)}")
+    if len(windows) != 429:
+        raise RuntimeError(f"approved Windows Security aggregate drift: expected 429, got {len(windows)}")
     if len(sysmon) != 30:
         raise RuntimeError(f"approved Sysmon denominator drift: expected 30, got {len(sysmon)}")
-    return events
+    powershell = _powershell_events()
+    combined = [*events, *powershell]
+    ids = [item.get("id") for item in combined]
+    if len(combined) != 502 or len(set(ids)) != 502:
+        raise RuntimeError(f"MVP-2 event aggregate drift: total={len(combined)}, unique={len(set(ids))}")
+    return combined
 
 
 def target_in_search(result: Any, target_id: str) -> bool:
@@ -199,6 +226,7 @@ def main() -> int:
         "probe": "mvp2-full-corpus",
         "windows_security": {},
         "sysmon": {},
+        "powershell_operational": {},
     }
     try:
         request(
@@ -210,7 +238,7 @@ def main() -> int:
                 "protocol": "atlas-core",
                 "version": "1.0.0",
                 "client_name": "atlas-mvp2-full-corpus-probe",
-                "client_version": "1.0.0",
+                "client_version": "1.1.0",
                 "session_nonce": "atlas-mvp2-full-corpus",
             },
         )
@@ -222,7 +250,15 @@ def main() -> int:
             target_id = str(event["id"])
             event_id = str(event["native_event_id"])
             namespace = str(event["namespace"])
-            query = f"Sysmon {event_id}" if namespace == "microsoft.sysmon" else event_id
+            if namespace == "microsoft.sysmon":
+                query = f"Sysmon {event_id}"
+                bucket = "sysmon"
+            elif namespace == "microsoft.windows.powershell":
+                query = f"PowerShell {event_id}"
+                bucket = "powershell_operational"
+            else:
+                query = event_id
+                bucket = "windows_security"
             search = request(
                 process.stdin,
                 process.stdout,
@@ -242,12 +278,12 @@ def main() -> int:
             result = verify_detail(event, detail)
             result["query"] = query
             result["search_ok"] = True
-            bucket = "sysmon" if namespace == "microsoft.sysmon" else "windows_security"
             evidence[bucket][event_id] = result
 
         evidence["summary"] = {
             "windows_security_records": len(evidence["windows_security"]),
             "sysmon_records": len(evidence["sysmon"]),
+            "powershell_operational_records": len(evidence["powershell_operational"]),
             "total_records": len(events),
             "all_searchable": True,
             "all_detail_resolvable": True,
@@ -255,6 +291,15 @@ def main() -> int:
             "all_overviews_present": True,
             "all_primary_sources_projected": True,
         }
+        expected_summary = (429, 30, 43, 502)
+        actual_summary = (
+            evidence["summary"]["windows_security_records"],
+            evidence["summary"]["sysmon_records"],
+            evidence["summary"]["powershell_operational_records"],
+            evidence["summary"]["total_records"],
+        )
+        if actual_summary != expected_summary:
+            raise RuntimeError(f"MVP-2 summary drift: expected {expected_summary}, got {actual_summary}")
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     finally:
