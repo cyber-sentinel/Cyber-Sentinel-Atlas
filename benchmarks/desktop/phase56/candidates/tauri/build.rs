@@ -31,11 +31,9 @@ fn write_deterministic_windows_icon() -> PathBuf {
     let icon_path = icon_dir.join("icon.ico");
 
     let mut icon = Vec::with_capacity((IMAGE_OFFSET + DIB_BYTES) as usize);
-
     push_u16_le(&mut icon, 0);
     push_u16_le(&mut icon, 1);
     push_u16_le(&mut icon, 1);
-
     icon.push(WIDTH as u8);
     icon.push(HEIGHT as u8);
     icon.push(0);
@@ -44,7 +42,6 @@ fn write_deterministic_windows_icon() -> PathBuf {
     push_u16_le(&mut icon, 32);
     push_u32_le(&mut icon, DIB_BYTES);
     push_u32_le(&mut icon, IMAGE_OFFSET);
-
     push_u32_le(&mut icon, 40);
     push_i32_le(&mut icon, WIDTH as i32);
     push_i32_le(&mut icon, (HEIGHT * 2) as i32);
@@ -56,18 +53,27 @@ fn write_deterministic_windows_icon() -> PathBuf {
     push_i32_le(&mut icon, 0);
     push_u32_le(&mut icon, 0);
     push_u32_le(&mut icon, 0);
-
     for _ in 0..(WIDTH * HEIGHT) {
         icon.extend_from_slice(&[0x20, 0x12, 0x0b, 0xff]);
     }
-
     icon.resize((IMAGE_OFFSET + DIB_BYTES) as usize, 0);
-
     fs::write(&icon_path, &icon).expect("failed to write deterministic Tauri Windows icon");
     icon_path
 }
 
+fn configure_windows_gui_subsystem() {
+    if env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("windows")
+        && env::var("PROFILE").as_deref() == Ok("release")
+    {
+        // The packaged ATLAS host is a GUI application. atlas-core is already
+        // spawned with CREATE_NO_WINDOW; this prevents the release host itself
+        // from opening a companion console window.
+        println!("cargo:rustc-link-arg=/SUBSYSTEM:WINDOWS");
+    }
+}
+
 fn main() {
+    configure_windows_gui_subsystem();
     let icon_path = write_deterministic_windows_icon();
     let windows = tauri_build::WindowsAttributes::new().window_icon_path(icon_path);
     let app_manifest = tauri_build::AppManifest::new().commands(&[
