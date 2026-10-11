@@ -6,7 +6,65 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/cyber-sentinel/Cyber-Sentinel-Atlas/shared-core/go/internal/pack"
 )
+
+func TestResolveRuntimeRootNamespacesPreviewBuildByCommit(t *testing.T) {
+	oldVersion, oldCommit := coreVersion, coreCommit
+	defer func() {
+		coreVersion, coreCommit = oldVersion, oldCommit
+	}()
+	coreVersion = "0.1.0-preview"
+	coreCommit = strings.Repeat("a", 40)
+
+	base, err := pack.DefaultRuntimeRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, err := resolveRuntimeRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := filepath.Join(base, "preview-builds", coreCommit)
+	if got != want {
+		t.Fatalf("preview runtime root = %q want %q", got, want)
+	}
+}
+
+func TestResolveRuntimeRootProductionUsesStableBase(t *testing.T) {
+	oldVersion, oldCommit := coreVersion, coreCommit
+	defer func() {
+		coreVersion, coreCommit = oldVersion, oldCommit
+	}()
+	coreVersion = "1.0.0"
+	coreCommit = strings.Repeat("b", 40)
+
+	want, err := pack.DefaultRuntimeRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, err := resolveRuntimeRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != want {
+		t.Fatalf("production runtime root = %q want stable %q", got, want)
+	}
+}
+
+func TestResolveRuntimeRootPreviewRejectsUnsafeCommit(t *testing.T) {
+	oldVersion, oldCommit := coreVersion, coreCommit
+	defer func() {
+		coreVersion, coreCommit = oldVersion, oldCommit
+	}()
+	coreVersion = "0.1.0-preview"
+	coreCommit = "../not-a-commit"
+
+	if _, err := resolveRuntimeRoot(); err == nil || !strings.Contains(err.Error(), "40-character hexadecimal") {
+		t.Fatalf("unsafe preview commit must fail closed: %v", err)
+	}
+}
 
 func TestOpenRuntimeAtNoActiveGenerationStaysAvailable(t *testing.T) {
 	runtime, err := openRuntimeAt(t.TempDir())
