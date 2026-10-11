@@ -54,10 +54,10 @@ def test_01_canonical_records_validate_v1():
 
 def test_02_exact_denominator_and_field_projection():
     data = by_id()
-    event_ids = sorted(
+    event_ids = sorted([
         item["canonical_key"] for item in data.values()
         if item.get("record_kind") == "entity" and item.get("entity_type") == "event"
-    , key=int)
+    ], key=int)
     assert event_ids == IDS
     fields = [
         item for item in data.values()
