@@ -47,7 +47,7 @@ test('Explore is search-first and keeps acceptance canaries out of primary produ
 });
 
 test('Quick Detail is analyst-facing and hides canonical internals behind Raw / Canonical', () => {
-  for (const label of ['Overview', 'Fields', 'Example', 'Detection & Hunt', 'Sources', 'Raw / Canonical']) assert.ok(html.includes(label), `missing quick-detail tab: ${label}`);
+  for (const label of ['Overview', 'Fields', 'Example', 'Detection & Hunt', 'Sources', 'Raw / Canonical']) assert.ok(main.includes(`'${label}'`), `missing generated quick-detail tab: ${label}`);
   assert.ok(main.includes("firstClaim(detail,'telemetry.represents')"));
   assert.ok(main.includes("firstClaim(detail,'security.relevance')"));
   assert.ok(main.includes("claims(detail,'telemetry.field-semantics')"));
