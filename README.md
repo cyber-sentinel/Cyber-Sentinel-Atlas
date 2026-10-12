@@ -29,6 +29,10 @@ ATLAS is designed for SOC analysts, incident responders, threat hunters, DFIR pr
 >
 > **Public Preview state:** BLOCKED / fail-closed
 >
+> **Phase 5.1 — Product Foundation:** COMPLETE
+>
+> **Stage 1 — Governance / Architecture Sync:** COMPLETE
+>
 > **No technical claim without provenance.**
 
 ## Current State
