@@ -1,438 +1,291 @@
-# Cyber-Sentinel-Atlas
+<p align="center">
+  <img src="assets/azadi-tower-atlas.png" alt="Cyber-Sentinel ATLAS" width="100%" />
+</p>
 
-**Provenance-First Cyber Defense Knowledge & Investigation Platform**
+<h1 align="center">Cyber-Sentinel ATLAS</h1>
+<p align="center"><strong>Provenance-First Cyber Defense Knowledge & Investigation Platform</strong></p>
+<p align="center">KNOW • SEARCH • INVESTIGATE • EXPLAIN • VERIFY</p>
 
-[![First Preview](https://img.shields.io/badge/First%20Preview-engineering%20ready-success)](docs/current-status.md)
-[![Usable Data Preview](https://img.shields.io/badge/Usable%20Data%20Preview-post--merge%20verified-success)](docs/releases/phase-5.10.5-usable-data-preview.md)
-[![Public Preview](https://img.shields.io/badge/Public%20Preview-blocked-important)](docs/releases/phase-5.10-public-preview-readiness.md)
-![Offline First](https://img.shields.io/badge/architecture-offline--first-informational)
-![Shared Core](https://img.shields.io/badge/shared%20core-Go-informational)
-![Desktop](https://img.shields.io/badge/desktop-Tauri%202.x-informational)
-![Provenance](https://img.shields.io/badge/provenance-claim--level-informational)
+<p align="center">
+  <a href="docs/current-status.md"><img alt="First Preview" src="https://img.shields.io/badge/First%20Preview-engineering%20ready-success"></a>
+  <a href="docs/releases/phase-5.10-public-preview-readiness.md"><img alt="Public Preview" src="https://img.shields.io/badge/Public%20Preview-blocked-important"></a>
+  <img alt="Windows Security Auditing" src="https://img.shields.io/badge/Windows%20Security-423%2F423-success">
+  <img alt="Sysmon" src="https://img.shields.io/badge/Sysmon%2015.22-30%2F30-success">
+  <img alt="PowerShell Candidate" src="https://img.shields.io/badge/PowerShell%20Operational-43%2F43-blueviolet">
+  <img alt="Offline First" src="https://img.shields.io/badge/architecture-offline--first-informational">
+</p>
 
-Cyber-Sentinel-Atlas is the **KNOW** layer of the Cyber-Sentinel ecosystem: an offline-first cyber-defense knowledge and investigation platform that connects telemetry, canonical security records, adversary behavior, detections, hunts, DFIR artifacts, relationships, and claim-level provenance into one inspectable analyst workflow.
+ATLAS is the **KNOW** layer of the Cyber-Sentinel ecosystem: an offline-first analyst workbench and verified knowledge platform for connecting telemetry, canonical security records, adversary behavior, investigation pivots, relationships, defensive context, and claim-level provenance.
 
-ATLAS is built for security teams that need investigation context to be **deterministic, attributable, reviewable, offline-capable, and operationally safe** rather than dependent on scattered references, opaque retrieval, or ungrounded AI output.
+> **Core question:** **What do we know about what we are seeing — and what evidence supports it?**
+
+ATLAS is designed for SOC analysts, incident responders, threat hunters, DFIR practitioners, detection engineers, security architects, and restricted/high-assurance environments that need investigation context to remain **deterministic, attributable, reviewable, offline-capable, and operationally safe**.
 
 > **First Preview engineering readiness:** READY
-> **Usable Data Preview:** COMPLETE / MERGED / POST-MERGE VERIFIED
-> **Current maturity:** Engineering-ready First Preview
+>
 > **Release state:** Pre-preview / unreleased
+>
 > **Repository visibility:** Public
-> **Active workstreams:** Phase 5.10.7 — Public Preview RC evidence closure; Phase 5.10.10 — controlled Windows knowledge-coverage expansion; Sysmon 15.22 frozen denominator complete at 30/30
-> **RC target:** `v0.1.0-rc.1` — functionally frozen; release evidence still blocked
-> **Public Preview state:** **BLOCKED** until every mandatory release gate passes
-> **Desktop:** Windows / Tauri 2.x — ADR-0026 Accepted
-> **Shared Core:** Go / bounded child-process stdio
-> **Licensing note:** No project `LICENSE` is currently published; public visibility does not grant reuse or redistribution rights
+>
+> **Public Preview state:** BLOCKED / fail-closed
+>
+> **Phase 5.1 — Product Foundation:** COMPLETE
+>
+> **Stage 1 — Governance / Architecture Sync:** COMPLETE
+>
+> **No technical claim without provenance.**
 
-Foundation regression invariants: **Phase 5.1 — Product Foundation: COMPLETE**; **Stage 1 — Governance / Architecture Sync: COMPLETE**.
+## Current State
 
-Public repository visibility does not imply a signed public release, GA status, or universal production approval. The engineering-ready First Preview, the Phase 5.10.5 Usable Data Preview evidence, and a publicly distributable security product are intentionally separate release states.
+ATLAS deliberately separates **engineering evidence**, **candidate validation**, **Product Owner acceptance**, and **public-release authority**.
 
-## Product Thesis
+| Boundary | Verified state |
+| --- | --- |
+| Public `main` release authority | Engineering-ready First Preview; Public Preview remains fail-closed |
+| Microsoft-Windows-Security-Auditing | **423/423** encyclopedia-grade; `0` remaining |
+| Windows Security Log UWS review benchmark | **422/422** listed identities; benchmark only, not semantic authority |
+| Sysmon 15.22 | **30/30** encyclopedia-grade; `0` remaining |
+| PowerShell Operational | **43/43** in the validated MVP-2 candidate workstream |
+| Integrated MVP-2 runtime corpus | **502/502** clean-Windows runtime acceptance on the current candidate |
+| Windows Desktop candidate | Exact-source Windows build + clean-Windows automated acceptance **PASS** |
+| Product Owner interactive review | **PENDING** for the current MVP-2 candidate |
+| Global Windows denominator | Intentionally **not frozen** |
+| Public Preview | **BLOCKED** until every mandatory release gate passes |
 
-Security investigation knowledge is fragmented across operating systems, SIEMs, EDR/XDR platforms, cloud environments, container runtimes, vendor documentation, detection repositories, threat intelligence, DFIR references, standards, and analyst experience.
+The PowerShell `43/43` and integrated `502/502` figures describe the validated MVP-2 candidate workstream. They are **not** a claim that the candidate has been promoted to public `main` or authorized as a public release.
 
-ATLAS connects these sources without collapsing their trust boundaries. Material technical claims remain bound to inspectable evidence, deterministic retrieval precedes optional semantic augmentation, and verified offline content remains usable when network access is restricted or unavailable.
+The global Windows denominator remains intentionally undefined while additional mandatory telemetry families are brought under controlled family-specific coverage. ATLAS does not publish a misleading “all Windows Event IDs” percentage.
+
+## Why ATLAS Exists
+
+Security investigation knowledge is fragmented across operating systems, SIEMs, EDR/XDR platforms, cloud environments, container runtimes, vendor documentation, threat intelligence, detection repositories, DFIR references, standards, and analyst experience.
+
+ATLAS creates a governed layer between those sources and the analyst. It does **not** collapse source authority, provenance, version context, or confidence boundaries merely to make retrieval convenient.
 
 **No technical claim without provenance.**
 
 <p align="center">
-  <img src="assets/satellite.png" alt="Cyber-Sentinel Atlas product thesis — telemetry, security knowledge, investigation, defensive action and provenance" width="100%" />
+  <img src="assets/satellite.png" alt="ATLAS product thesis" width="100%" />
 </p>
 
-ATLAS is designed as a **Cyber Defense Knowledge Graph + Analyst Workbench + Verified Offline Knowledge Platform**.
+## Analyst Experience
 
-Its core question is:
-
-> **What do we know about what we are seeing — and what evidence supports it?**
-
-## Why ATLAS Exists
-
-A SOC analyst should not have to search ten unrelated sources to understand one event, technique, artifact, relationship, defensive control, or investigation pivot. ATLAS creates a governed knowledge layer that can answer those questions while preserving source identity, version context, confidence boundaries, and traceability.
-
-ATLAS is not an Event ID wiki, an ATT&CK browser, a SIEM-specific portal, a detection-rule dump, or an ungrounded AI chatbot. It is the knowledge and investigation layer around which those sources can be connected safely.
-
-## Designed For
-
-- SOC analysts and incident responders;
-- threat hunters and DFIR practitioners;
-- detection and security engineers;
-- blue and purple teams;
-- security architects and platform teams;
-- regulated, disconnected, restricted, sovereign, and high-assurance environments;
-- enterprises building AI-assisted security workflows that require deterministic grounding and inspectable provenance.
-
-## Enterprise Value
-
-ATLAS is designed to reduce investigation friction while preserving evidence and trust boundaries. The product direction emphasizes:
-
-- **Faster investigation:** exact identifier resolution, lexical retrieval, graph pivots, and provenance in one analyst surface;
-- **Operational resilience:** verified offline knowledge packs and no mandatory cloud dependency for core investigation;
-- **Trustworthy knowledge:** source lineage, claim-level provenance, lifecycle/version context, and deterministic canonical contracts;
-- **Controlled updates:** TUF-based pack trust, anti-rollback controls, immutable generations, health-gated activation, and Last Known Good recovery;
-- **Reduced platform coupling:** vendor-neutral canonical knowledge with explicit vendor/source context rather than a SIEM-owned knowledge model;
-- **AI-ready grounding:** deterministic retrieval and evidence remain authoritative; future AI assistance cannot silently become canonical truth;
-- **Enterprise release discipline:** reproducible builds, SBOM evidence, vulnerability gates, explicit release authority, rollback, revocation, accessibility, signing, and redistribution controls.
-
-## Current Product Capabilities
-
-The engineering-ready Windows First Preview provides:
-
-- offline global search;
-- canonical record and entity detail;
-- deterministic exact-before-lexical resolution;
-- bounded relationship and graph navigation;
-- claim and source provenance;
-- Windows Event / Sysmon investigation context available in the active pack;
-- verified pack status and controlled update;
-- safe rollback / recovery visibility;
-- diagnostics;
-- UTC, system-local, and Tehran/Jalali presentation;
-- operational dark UI with high-contrast/accessibility controls.
-
-The packaged clean-Windows acceptance path is required to prove deterministic Search → Record behavior for the current Windows Security exemplars (`4624`, `4625`, `4648`, `4672`, `4688`, `4740`, `4768`, `4769`, `4771`), Sysmon Event ID `1`, bounded Graph/Provenance behavior, and deliberate TUF target tampering rejected fail-closed.
-
-The selected desktop host exposes exactly seven application commands: `core_status`, `search_records`, `get_record`, `expand_graph`, `pack_status`, `pack_update`, and `pack_rollback`.
-
-### Approved ATLAS Product Family
-
-The approved ATLAS product family is broader than the current Windows release surface:
+The current MVP-2 direction is **search-first**: the primary page should answer the analyst quickly; deeper views provide supporting evidence and investigation structure.
 
 ```text
-ATLAS
-│
-├── ATLAS Desktop
-│    ├── Windows       ← current release-critical surface
-│    ├── Linux
-│    └── macOS
-│
-├── ATLAS CLI
-│    ├── Windows
-│    ├── Linux
-│    └── macOS
-│
-├── ATLAS Web
-│
-├── ATLAS PWA
-│    └── iOS Safari
-│
-├── ATLAS API
-│
-└── ATLAS Mobile
-     ├── iOS
-     └── Android
+Search
+  ↓
+Quick Answer
+  ↓
+Record Detail + Fields
+  ↓
+Sources + Provenance
+  ↓
+Relationships / Mind Map
+  ↓
+Investigation Context
+  ↓
+ATLAS Entity guidance
 ```
 
-This product family is **approved delivery scope**, not a statement that every surface is released today. Windows Desktop remains the current release-critical implementation. Web plus the iOS Safari PWA, CLI/API, cross-platform Desktop and native Mobile consume the same canonical/provenance contracts without creating a second source of truth.
+The analyst surface is designed around:
 
-Authoritative surface plan: [`docs/product-surfaces.md`](docs/product-surfaces.md).
+- Event ID, provider, title, behavior, tool/executable, and ATT&CK-oriented lookup where governed content exists;
+- concise Quick Answer before internal/canonical detail;
+- version-aware fields and examples only when source-backed;
+- explicit source/provenance views;
+- bounded relationship and investigation graphs;
+- evidence timeline and pivots;
+- an ATLAS Entity that presents grounded context without exposing hidden chain-of-thought;
+- advanced/raw internals separated from the primary investigation view.
 
-### Current Knowledge Coverage Boundary
+## Core Product Capabilities
 
-ATLAS now separates **runtime proof** from **corpus completion**. The packaged engineering preview proves the analyst path, while deterministic coverage ledgers measure how much telemetry knowledge has actually reached the maintained encyclopedia-grade contract.
+### Deterministic knowledge retrieval
 
-Current controlled Phase 5.10.10 coverage:
+- exact-before-lexical resolution;
+- SQLite + FTS5 production search core;
+- canonical record and entity detail;
+- explicit provider/product/version identity;
+- bounded graph expansion;
+- source and claim provenance.
 
-| Family | Controlled denominator | Encyclopedia grade | Remaining |
-| --- | ---: | ---: | ---: |
-| Windows Security Auditing | 423 unique Event IDs on `Microsoft-Windows-Security-Auditing / Security / Windows Server 2025 Datacenter 24H2 build 26100.33296` | 120 — `4608`, `4609`, `4610`, `4611`, `4612`, `4614`, `4615`, `4616`, `4618`, `4621`, `4622`, `4624`, `4625`, `4626`, `4627`, `4634`, `4646`, `4647`, `4648`, `4649`, `4650`, `4651`, `4652`, `4653`, `4654`, `4655`, `4656`, `4657`, `4658`, `4659`, `4660`, `4661`, `4662`, `4663`, `4664`, `4665`, `4666`, `4667`, `4668`, `4670`, `4671`, `4672`, `4673`, `4674`, `4675`, `4688`, `4689`, `4690`, `4691`, `4692`, `4693`, `4694`, `4695`, `4696`, `4697`, `4698`, `4699`, `4700`, `4701`, `4702`, `4703`, `4704`, `4705`, `4706`, `4707`, `4709`, `4710`, `4711`, `4712`, `4713`, `4714`, `4715`, `4716`, `4717`, `4718`, `4719`, `4720`, `4722`, `4723`, `4724`, `4725`, `4726`, `4727`, `4728`, `4729`, `4730`, `4731`, `4732`, `4733`, `4734`, `4735`, `4737`, `4738`, `4739`, `4740`, `4741`, `4742`, `4743`, `4744`, `4745`, `4746`, `4747`, `4748`, `4749`, `4750`, `4751`, `4752`, `4753`, `4754`, `4755`, `4756`, `4757`, `4758`, `4759`, `4760`, `4761`, `4762`, `4768`, `4769`, `4771` | 303 |
-| Sysmon 15.22 | 30 documented/current Event IDs with controlled schema 4.91 evidence | 30 — `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`, `14`, `15`, `16`, `17`, `18`, `19`, `20`, `21`, `22`, `23`, `24`, `25`, `26`, `27`, `28`, `29`, `255` | 0 |
+### Verified offline knowledge
 
-The cross-provider Windows Security Log **Ultimate Windows Security (UWS) review benchmark** is currently **126/422** listed Event IDs (**29.86%**), with **296** remaining. UWS is used only as a controlled coverage / Quick Detail review benchmark; Microsoft official documentation plus controlled provider/channel/version evidence remain semantic authority, and third-party prose is not bulk-ingested.
+- `.atlaspack` verified content packs;
+- TUF-based trust model;
+- trusted-time and highest-seen rollback protection;
+- immutable generations;
+- health-gated activation;
+- Last Known Good recovery;
+- no mandatory cloud dependency for core investigation.
 
-The authoritative machine-readable ledger is [`content/encyclopedia/coverage-manifest.json`](content/encyclopedia/coverage-manifest.json).
+### Analyst investigation
 
-Point-in-time counters in this README are a human-readable projection of that ledger; if they ever diverge, the machine-readable coverage state is authoritative.
+- Search → Record → Provenance workflow;
+- relationship and mind-map navigation;
+- investigation pivots;
+- telemetry field context;
+- evidence-backed detection/hunt/DFIR context as content maturity allows;
+- clean separation between facts, evidence, hypotheses, support/refute state, and confidence.
 
-The global Windows denominator is intentionally **not frozen**. PowerShell Operational, Windows Defender, AppLocker, WMI Activity, Task Scheduler Operational, RDP/Terminal Services, Windows Firewall/Filtering Platform, DNS, and Service/persistence telemetry still require controlled denominators and encyclopedia-grade materialization. ATLAS therefore does not publish a misleading unqualified "all Windows Event IDs" percentage.
+### Grounded AI direction
 
-An Event ID counts toward maintained coverage only after authoritative source pinning, canonical/provenance materialization, encyclopedia-grade depth, deterministic search/pack projection, and acceptance evidence. A parser, source profile, fixture, or UI mention alone does not count.
+ATLAS is AI-ready but not AI-dependent. Deterministic retrieval and provenance remain authoritative. Optional AI assistance may summarize or reason over governed context, but model output does not silently become canonical truth.
 
-The Public Preview corpus remains fail-closed; individual coverage progress does not by itself authorize a public release.
+## Coverage Model
 
-Authoritative coverage plan: [`docs/windows-sysmon-coverage-plan.md`](docs/windows-sysmon-coverage-plan.md).
+ATLAS measures coverage by **controlled family-specific denominators**, not by arbitrary fixture counts.
 
-Telemetry content-depth contract: [`docs/content/telemetry-record-content-contract.md`](docs/content/telemetry-record-content-contract.md).
+| Family | Controlled coverage | Status |
+| --- | ---: | --- |
+| Microsoft-Windows-Security-Auditing / Security | `423/423` | **COMPLETE** |
+| Sysmon 15.22 | `30/30` | **COMPLETE** |
+| PowerShell Operational | `43/43` | **Validated MVP-2 candidate** |
+| Windows Security Log UWS benchmark | `422/422` | **Review benchmark COMPLETE** |
+| Global Windows | — | **Denominator not frozen** |
 
-Workspace UX authority: [`docs/ux/ux-information-architecture.md`](docs/ux/ux-information-architecture.md) and [`docs/ux/workspace-product-review.md`](docs/ux/workspace-product-review.md).
+UWS is a controlled cross-provider review/Quick Detail benchmark only. Microsoft official documentation and controlled provider/channel/version evidence remain semantic authority for Windows content.
 
-## Documentation Hub
+Authoritative public coverage references:
 
-The repository documentation is organized around durable product, architecture, coverage, release, and operating-state authorities:
-
-| Area | Primary document |
-| --- | --- |
-| Documentation index | [`docs/README.md`](docs/README.md) |
-| Current authoritative project snapshot | [`docs/current-status.md`](docs/current-status.md) |
-| Durable project state | [`docs/project-state.md`](docs/project-state.md) |
-| Delivery roadmap | [`docs/roadmap.md`](docs/roadmap.md) |
-| Product surfaces | [`docs/product-surfaces.md`](docs/product-surfaces.md) |
-| Windows / Sysmon coverage plan | [`docs/windows-sysmon-coverage-plan.md`](docs/windows-sysmon-coverage-plan.md) |
-| Public Preview readiness | [`docs/releases/phase-5.10-public-preview-readiness.md`](docs/releases/phase-5.10-public-preview-readiness.md) |
-| Architecture decisions | [`docs/adr/`](docs/adr/) |
-| UX / analyst workspace | [`docs/ux/`](docs/ux/) |
-
-Machine-readable coverage and release-state files remain authoritative where a human-readable page and a generated ledger ever disagree.
+- [`content/encyclopedia/coverage-manifest.json`](content/encyclopedia/coverage-manifest.json)
+- [`docs/windows-security-log-scope.md`](docs/windows-security-log-scope.md)
+- [`docs/windows-sysmon-coverage-plan.md`](docs/windows-sysmon-coverage-plan.md)
 
 ## Architecture
 
 <p align="center">
-  <img src="assets/ATLAS-IR.png" alt="Cyber-Sentinel Atlas content pipeline and production architecture" width="100%" />
+  <img src="assets/ATLAS-IR.png" alt="ATLAS content and production architecture" width="100%" />
 </p>
 
-ATLAS is **offline-first**. Deterministic exact and lexical retrieval works without AI, and no UI, search index, upstream source, or model response becomes canonical truth merely because it was returned to an analyst.
+```text
+Authoritative Sources
+        ↓
+Acquisition + Raw Snapshots
+        ↓
+Parsing + Normalization + Lineage
+        ↓
+Validation + Human Review
+        ↓
+Canonical AtlasRecord Model
+        ↓
+Deterministic Search (SQLite + FTS5)
+        ↓
+Verified Content Packs (.atlaspack + TUF)
+        ↓
+Production Shared Core (Go)
+        ↓
+Versioned Local Protocol
+        ↓
+Windows Desktop → Web/PWA → API/CLI → Grounded AI
+```
 
 ### Accepted production boundary
 
 | Area | Accepted boundary |
 | --- | --- |
-| Canonical schema | Contract `1.0.0`, JSON Schema Draft 2020-12 |
+| Canonical schema | `1.0.0`, JSON Schema Draft 2020-12 |
 | Canonical model | Exactly seven `AtlasRecord` families |
-| Search | SQLite + FTS5, exact-before-lexical deterministic retrieval |
-| Content trust | TUF-based verification, trusted-time, highest-seen rollback protection |
-| Pack runtime | Verified `.atlaspack`, immutable generations, health-gated activation, Last Known Good |
-| Shared Core | Go — ADR-0024 |
-| Conformance oracle | Python |
-| Desktop host | Tauri 2.x — ADR-0026 |
-| Desktop/Core IPC | `atlas-core --serve-stdio`, protocol `atlas-core/1.0.0` |
-| Framing | Bounded 4-byte unsigned big-endian length prefix + UTF-8 JSON |
-| Network posture | No default local HTTP/TCP/WebSocket listener; no hidden network fallback |
-| User-facing CLI | `atlas` |
+| Search | SQLite + FTS5, exact-before-lexical |
+| Content trust | TUF verification + trusted-time + rollback protection |
+| Shared Core | Go |
+| Desktop host | Tauri 2.x |
+| Desktop/Core IPC | bounded child-process stdio, `atlas-core/1.0.0` |
+| Network posture | no default local HTTP/TCP/WebSocket listener |
+| User-facing CLI direction | `atlas` |
 
-The Desktop layer consumes Shared Core capabilities but does not duplicate or redefine canonical validation, deterministic search/graph semantics, TUF verification, durable trust state, or rollback protection.
-
-### Canonical model
-
-The v1 contract contains exactly seven record families:
-
-- `EntityRecord`
-- `ClaimRecord`
-- `RelationshipRecord`
-- `SourceRecord`
-- `ValidationRecord`
-- `VersionRecord`
-- `CoverageSnapshot`
-
-Canonical schema URI base:
-
-```text
-https://raw.githubusercontent.com/cyber-sentinel/Cyber-Sentinel-Atlas/main/schemas/v1/
-```
-
-Schema changes are explicit, versioned, and guarded against silent drift.
-
-## Content & Trust Pipeline
-
-```text
-Authoritative Source
-        ↓
-Acquisition + Raw Snapshot
-        ↓
-Parser + Normalizer + Lineage
-        ↓
-Canonical Candidate Corpus
-        ↓
-Inventory Diff + Validation + Human Review
-        ↓
-PACK_READY
-        ↓
-Signed / Verified .atlaspack
-        ↓
-Immutable Generation + Health Gate
-        ↓
-ACTIVE / Last Known Good
-```
-
-`PACK_READY` is a governed promotion state; it is not equivalent to signed, installed, active, or publicly released content.
-
-## First Preview Security Posture
+## Security & Trust Posture
 
 The First Preview intentionally keeps a narrow local attack surface:
 
 - one main-window capability boundary;
 - exactly seven exposed application commands;
-- no generic frontend-controlled Shared Core method bridge;
-- no Tauri plugin surface;
+- no generic frontend-controlled Shared Core bridge;
 - CSP `connect-src 'none'`;
 - no default application network listener;
-- adjacent SHA-256-bound `atlas-core.exe` sidecar;
-- fail-closed sidecar corruption handling and verified recovery;
-- verified pack trust, trusted-time, anti-rollback, and LKG semantics inherited from the frozen Shared Core;
-- no application binary auto-update path in First Preview.
+- adjacent SHA-256-bound Shared Core sidecar;
+- verified-pack trust and rollback semantics;
+- no application-binary auto-update path in First Preview;
+- fail-closed handling where trust, provenance, source, schema, or redistribution ambiguity is material.
 
-These controls are engineering evidence, not a claim that every enterprise environment can deploy ATLAS without its own risk assessment and change control.
+These are engineering controls, not universal production authorization for every environment.
 
-## Verified Engineering Milestones
+## Public / Private Source Boundary
 
-| Boundary | State |
+The public repository contains independently authored engineering material, public-safe source metadata, canonical structures, validation evidence, and product code.
+
+Raw restricted/private course material, copyrighted PDFs/posters, confidential Product Owner governance, credentials, private signing material, and uncontrolled production data are **not** public-repository content. Restricted references may inform independently authored knowledge only under explicit source-governance rules.
+
+## Product Family
+
+```text
+ATLAS
+│
+├── Desktop
+│   ├── Windows        ← current release-critical surface
+│   ├── Linux
+│   └── macOS
+│
+├── CLI
+├── Web
+├── PWA
+├── API
+└── Mobile
+    ├── iOS
+    └── Android
+```
+
+This is approved delivery scope, not a statement that every surface is released today. All surfaces must consume the same canonical/provenance contracts rather than creating competing sources of truth.
+
+See [`docs/product-surfaces.md`](docs/product-surfaces.md).
+
+## What ATLAS Is Not
+
+ATLAS is not:
+
+- an Event ID wiki;
+- an ATT&CK browser clone;
+- a SIEM-specific rule portal;
+- an unvalidated detection dump;
+- an opaque RAG chatbot;
+- a replacement for environment-specific analyst judgment or production change control.
+
+It is a **Cyber Defense Knowledge Graph + Analyst Workbench + Verified Offline Knowledge Platform**.
+
+## Documentation
+
+| Area | Authority |
 | --- | --- |
-| Phase 5.1 — Product Foundation | **COMPLETE** |
-| Phase 5.2 — Canonical Data Model | **COMPLETE / MERGED** |
-| Phase 5.3 — Source & Ingestion Core | **COMPLETE / MERGED** |
-| Phase 5.4 — Deterministic Search Core | **COMPLETE / MERGED** |
-| Phase 5.5 — Offline Pack Runtime / Shared Core | **COMPLETE / MERGED / POST-MERGE VERIFIED / FROZEN** |
-| Phase 5.6 — Windows Desktop MVP | **COMPLETE / MERGED / POST-MERGE VERIFIED** |
-| G-D1 through G-D9 | **PASS / VERIFIED** |
-| ADR-0026 desktop selection | **ACCEPTED — Tauri 2.x** |
-| First Preview engineering readiness | **READY** |
-| Phase 5.10 — Public Preview Readiness | **ACTIVE** |
-| Phase 5.10.5 — Usable Data Preview | **COMPLETE / MERGED / POST-MERGE VERIFIED** |
+| Documentation hub | [`docs/README.md`](docs/README.md) |
+| Current verified status | [`docs/current-status.md`](docs/current-status.md) |
+| Durable project state | [`docs/project-state.md`](docs/project-state.md) |
+| Public roadmap | [`docs/roadmap.md`](docs/roadmap.md) |
+| Product surfaces | [`docs/product-surfaces.md`](docs/product-surfaces.md) |
+| Coverage plan | [`docs/windows-sysmon-coverage-plan.md`](docs/windows-sysmon-coverage-plan.md) |
+| Public Preview readiness | [`docs/releases/phase-5.10-public-preview-readiness.md`](docs/releases/phase-5.10-public-preview-readiness.md) |
+| Architecture decisions | [`docs/adr/`](docs/adr/) |
+| Analyst UX | [`docs/ux/`](docs/ux/) |
 
-Post-merge verification run `35305516189` succeeded on engineering baseline `main@4d64b2fb402b280d00c01783f7990538a3b67484`. Both `build exact-head usable data preview` and `clean Windows first-run Search Record Graph` passed. The post-merge package artifact is `phase5105-usable-data-preview` (artifact `10530884223`, digest `sha256:174009a03ca99c5df83f3ab4489319f88ab9ff02a1c94343cecd066ac8b9f435`) and the clean-Windows evidence is `phase5105-clean-windows-evidence` (artifact `10532105635`, digest `sha256:efea2fd75a83f6300d7463217a7412c96324a5428e8eaf2ae08ac548039ee438`).
-
-Phase 5.6 release authority is backed by the merged implementation and post-merge Windows packaging/smoke evidence. The First Preview artifact remains an **unsigned portable ZIP**; production signing and public distribution are separate Phase 5.10 controls.
-
-## Public Preview Readiness
-
-Public Preview is intentionally fail-closed. The current mandatory gate state is:
-
-| Gate | Readiness area | State |
-| --- | --- | --- |
-| PPR-01 | First Preview engineering baseline | **PASS** |
-| PPR-02 | Security disclosure and supported-release policy | **PASS** |
-| PPR-03 | First-party licensing decision | **BLOCKED** |
-| PPR-04 | Third-party redistribution closure | **BLOCKED** |
-| PPR-05 | Production code signing and key custody | **BLOCKED** |
-| PPR-06 | Public packaging and distribution hardening | **BLOCKED** |
-| PPR-07 | Accessibility release review | **PARTIAL** |
-| PPR-08 | Source freshness and public-pack publication policy | **PASS** |
-| PPR-09 | Release governance and launch criteria | **PASS** |
-| PPR-10 | Supply-chain evidence | **PASS** |
-| PPR-11 | Trademark and attribution controls | **PASS** |
-
-PPR-04 now includes an exact Windows-target Rust/Tauri redistribution preflight. PR #54 exact-head workflow run `35309913398` passed the PPR-04 redistribution control and generated Windows-target Rust/Tauri preflight evidence for 258 reachable third-party crates and 3 packaged frontend assets. Artifact `10533096533` has digest `sha256:ead00ebd410b7a5e715f1488847c7c066ec31dbed7196c1796c221f3dc75535d`. This is preflight evidence only; final corpus/software freeze, final notices, and exact release-package binding remain required.
-
-Authoritative controls:
-
-- [Public Preview Readiness Gate Matrix](docs/releases/phase-5.10-public-preview-readiness.md)
-- [First-Party License Decision Control](docs/releases/first-party-license-decision.md)
-- [Third-Party Redistribution Closure](docs/releases/third-party-redistribution-closure.md)
-- [Production Signing & Key Custody](docs/releases/production-signing-and-key-custody.md)
-- [Public Packaging & Distribution](docs/releases/public-packaging-and-distribution.md)
-- [Machine-Readable Gate State](docs/releases/phase-5.10-public-preview-readiness.json)
-- [Phase 5.10.5 Usable Data Preview Evidence](docs/releases/phase-5.10.5-usable-data-preview.md)
-- [Source Freshness & Public Pack Publication Policy](docs/releases/source-freshness-and-publication-policy.md)
-- [Public Preview Launch Governance](docs/releases/public-preview-launch-governance.md)
-- [Accessibility Release Review Contract](docs/releases/accessibility-release-review.md)
-- [Public Preview RC Functional Freeze Contract](docs/releases/public-preview-rc-contract.md)
-
-PPR-08 and PPR-09 are policy-closed and CI-enforced. PPR-07 remains partial until the exact packaged Public Preview candidate completes the executable Windows keyboard/Narrator/high-contrast/DPI review. Licensing, redistribution, production signing, and public packaging remain explicit blockers and are not auto-selected by tooling.
-
-Phase 5.10.5 improves the engineering usability baseline but **does not** convert any PPR blocker into PASS and does not authorize a Public Preview release.
-
-## Deployment & Integration Model
-
-The First Preview is Windows-first and portable. Core investigation remains local and offline-capable. Future enterprise deployment can build around the same bounded contracts rather than embedding product-specific logic into the UI.
-
-Integration boundaries are deliberately explicit:
-
-- ATLAS consumes authoritative/reference content through governed ingestion and provenance;
-- DefenseOps may provide validated defensive engineering content through a controlled import boundary;
-- Skills may reference ATLAS knowledge and DefenseOps engineering artifacts without inheriting ownership or trust;
-- future API/CLI and AI surfaces must reuse the canonical and Shared Core contracts rather than create parallel truth stores.
+Machine-readable coverage and release-state artifacts remain authoritative when prose and generated state ever diverge.
 
 ## Cyber-Sentinel Ecosystem
 
-ATLAS is the **KNOW** layer of a three-part cyber-defense operating model:
-
-<p align="center">
-  <img src="assets/azadi-tower-atlas.png" alt="Cyber-Sentinel ecosystem operating loop — ATLAS KNOW, DefenseOps DEFEND, Skills APPLY, validate automate evolve" width="100%" />
-</p>
-
 ```text
-Cyber-Sentinel
-├── ATLAS       — KNOW   → Connect • Search • Investigate • Explain
-├── DefenseOps  — DEFEND → Detect • Hunt • Validate • Respond • Automate
-└── Skills      — APPLY  → Execute • Review • Reuse • Govern
+ATLAS       — KNOW   → Connect • Search • Investigate • Explain
+DefenseOps  — DEFEND → Detect • Hunt • Validate • Respond • Automate
+Skills      — APPLY  → Execute • Review • Reuse • Govern
 ```
 
-Controlled content may move between products only through explicit provenance, validation, versioning, authorization, and release boundaries.
+- [Cyber-Sentinel DefenseOps](https://github.com/cyber-sentinel/Cyber-Sentinel-DefenseOps)
+- [Cyber-Sentinel Skills](https://github.com/cyber-sentinel/Cyber-Sentinel-Skills)
+- [Cyber-Sentinel ecosystem landing page](https://github.com/cyber-sentinel)
 
-## Product Boundaries
+## Release & Licensing Boundary
 
-ATLAS owns governed knowledge, retrieval, provenance, relationships, trust, and analyst investigation context.
-
-It does **not** replace:
-
-- SIEM/EDR/XDR telemetry collection;
-- DefenseOps detection/hunting engineering;
-- Skills operating procedures;
-- organizational incident command or change control;
-- environment-specific production validation;
-- legal/licensing review for public redistribution.
-
-## Engineering & Release Discipline
-
-Every material product claim should have inspectable evidence. Repository CI is treated as a control, not marketing.
-
-ATLAS distinguishes:
-
-- **engineering ready** — defined engineering and verification gates passed;
-- **usable data preview verified** — a packaged clean-Windows analyst workflow proves real knowledge retrieval plus fail-closed tamper behavior;
-- **Public Preview ready** — all mandatory PPR gates passed with concrete release evidence;
-- **production ready** — environment-specific and not inferable from repository CI alone.
-
-The authoritative workflow is:
-
-```text
-Branch → PR → CI → architecture/security review → exact-head verification
-      → merge → post-merge verification → controlled release authority
-```
-
-Agent and human contributors follow the same durable engineering contract in [`AGENTS.md`](AGENTS.md). The multi-agent / session-continuity model is defined in [`docs/operations/agent-engineering-operating-model.md`](docs/operations/agent-engineering-operating-model.md). Project continuation must be recoverable from GitHub without relying on a previous chat session.
-
-Mandatory release gates are not weakened to obtain a green build.
-
-## Near-Term Roadmap
-
-The critical path is Phase 5.10 Public Preview readiness:
-
-```text
-First Preview engineering closure                         COMPLETE
-        ↓
-Phase 5.10.5 usable-data analyst flow                    POST-MERGE VERIFIED
-        ↓
-Phase 5.10.6 release vehicle/accessibility hardening      MERGED / VERIFIED
-        ↓
-Phase 5.10.7 functional freeze for v0.1.0-rc.1            ACTIVE / RC EVIDENCE BLOCKED
-        ↓
-PPR-08 freshness/publication policy                      PASS
-PPR-09 launch/rollback/revocation governance             PASS
-PPR-07 packaged accessibility review                     PARTIAL
-        ↓
-First-party license + third-party redistribution         BLOCKED
-        ↓
-Production signing + protected key custody               BLOCKED
-        ↓
-Signed public packaging / distribution hardening         BLOCKED
-        ↓
-Strict Public Preview release gate                       BLOCKED
-```
-
-Web/PWA, broader API surfaces, and Grounded AI remain deferred beyond the First Preview critical path. Future AI remains subordinate to deterministic retrieval, provenance, and canonical truth.
-
-## Governance, Security & Licensing
-
-- [Current Authoritative Status](docs/current-status.md)
-- [Project State](docs/project-state.md)
-- [Roadmap](docs/roadmap.md)
-- [Phase 5.10.5 Usable Data Preview Evidence](docs/releases/phase-5.10.5-usable-data-preview.md)
-- [Security Policy](SECURITY.md)
-- [Contribution Guidance](CONTRIBUTING.md)
-- [Third-Party Notices](THIRD_PARTY_NOTICES.md)
-- [Trademark Guidance](TRADEMARKS.md)
-- [Citation Metadata](CITATION.cff)
-
-The repository is public for inspectability and collaboration. Until a first-party `LICENSE` is explicitly published and applicable third-party rights are closed, reuse, redistribution, repackaging, and commercial incorporation should be assessed conservatively.
+Public repository visibility does not imply a signed public release, GA status, redistribution permission, or universal production approval. No project `LICENSE` is currently published in this repository; public visibility alone does not grant reuse or redistribution rights.
 
 ---
 
-**Maintainer:** Ali RahimDabagh
-
-**Profile:** `cyber-sentinel`
-
-**Ecosystem role:** `KNOW`
-
-**Focus:** Cyber Defense Knowledge • SOC Investigation • DFIR • Threat Hunting • Provenance • Offline Security Platforms • Security Architecture
+<p align="center"><strong>Cyber-Sentinel ATLAS — KNOW with evidence.</strong></p>
+<p align="center"><sub>Maintained by Ali RahimDabagh</sub></p>
