@@ -63,6 +63,25 @@ def request(stdin: BinaryIO, stdout: BinaryIO, request_id: str, method: str, par
     return response.get("result")
 
 
+def request_process(
+    process: subprocess.Popen[bytes],
+    request_id: str,
+    method: str,
+    params: dict[str, Any],
+) -> Any:
+    assert process.stdin is not None and process.stdout is not None and process.stderr is not None
+    try:
+        return request(process.stdin, process.stdout, request_id, method, params)
+    except (BrokenPipeError, RuntimeError) as exc:
+        returncode = process.poll()
+        if returncode is None:
+            raise
+        stderr = process.stderr.read().decode("utf-8", errors="replace")
+        raise RuntimeError(
+            f"{method}: atlas-core exited {returncode} before completing request: {stderr[:4000]}"
+        ) from exc
+
+
 def _powershell_events() -> list[dict[str, Any]]:
     directory = ROOT / "content" / "encyclopedia"
     paths = sorted(directory.glob(POWERSHELL_BATCH_GLOB), key=lambda p: p.name)
@@ -203,14 +222,24 @@ def main() -> int:
     if not core.is_file():
         raise SystemExit(f"atlas-core executable not found: {core}")
 
+    output = args.output.resolve()
+    probe_config_root = output.parent / ".atlas-full-corpus-probe-config"
+    probe_config_root.mkdir(parents=True, exist_ok=True)
+
     env = {
         key: os.environ[key]
         for key in (
             "PATH", "SystemRoot", "SYSTEMROOT", "WINDIR", "TEMP", "TMP",
-            "USERPROFILE", "LOCALAPPDATA", "APPDATA", "ATLAS_RUNTIME_CHANNEL",
+            "USERPROFILE", "APPDATA", "ATLAS_RUNTIME_CHANNEL",
         )
         if key in os.environ
     }
+    if os.name == "nt":
+        env["LOCALAPPDATA"] = str(probe_config_root)
+    else:
+        env["HOME"] = str(probe_config_root)
+        env["XDG_CONFIG_HOME"] = str(probe_config_root)
+
     process = subprocess.Popen(
         [str(core), "--serve-stdio"],
         cwd=str(core.parent),
@@ -229,9 +258,8 @@ def main() -> int:
         "powershell_operational": {},
     }
     try:
-        request(
-            process.stdin,
-            process.stdout,
+        request_process(
+            process,
             "h",
             "core.handshake",
             {
@@ -242,7 +270,7 @@ def main() -> int:
                 "session_nonce": "atlas-mvp2-full-corpus",
             },
         )
-        status = request(process.stdin, process.stdout, "status", "pack.status", {})
+        status = request_process(process, "status", "pack.status", {})
         if not isinstance(status, dict) or status.get("ready") is not True or status.get("state") != "read_model_ready":
             raise RuntimeError(f"active pack is not ready: {status}")
 
@@ -259,18 +287,16 @@ def main() -> int:
             else:
                 query = event_id
                 bucket = "windows_security"
-            search = request(
-                process.stdin,
-                process.stdout,
+            search = request_process(
+                process,
                 f"q{index}",
                 "search.query",
                 {"query": query, "graph_depth": 1, "limit": 50},
             )
             if not target_in_search(search, target_id):
                 raise RuntimeError(f"{target_id}: not discoverable by analyst query {query!r}")
-            detail = request(
-                process.stdin,
-                process.stdout,
+            detail = request_process(
+                process,
                 f"r{index}",
                 "record.get",
                 {"id": target_id, "detail": True},
@@ -300,8 +326,8 @@ def main() -> int:
         )
         if actual_summary != expected_summary:
             raise RuntimeError(f"MVP-2 summary drift: expected {expected_summary}, got {actual_summary}")
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     finally:
         try:
             process.stdin.close()
@@ -315,7 +341,7 @@ def main() -> int:
 
     stderr = process.stderr.read().decode("utf-8", errors="replace")
     if process.returncode not in (0, None):
-        raise RuntimeError(f"atlas-core exited {process.returncode}: {stderr[:2000]}")
+        raise RuntimeError(f"atlas-core exited {process.returncode}: {stderr[:4000]}")
     return 0
 
 
