@@ -1,0 +1,485 @@
+{
+  "schema_version": "1.0.0",
+  "status": "MAINTAINER_APPROVED_POWERSHELL_OPERATIONAL_26100",
+  "family": "PowerShell Operational",
+  "provider": "Microsoft-Windows-PowerShell",
+  "channel": "Microsoft-Windows-PowerShell/Operational",
+  "namespace": "microsoft.windows.powershell",
+  "reference_build": "26100",
+  "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+  "batch_index": 5,
+  "events": [
+    {
+      "id": "atlas:event:microsoft.windows.powershell:24594",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "24594",
+      "native_event_id": "24594",
+      "title": "24594 — PowerShell ISE All Breakpoints Removed",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "24594",
+        "PowerShell 24594",
+        "PowerShell Event 24594",
+        "Event ID 24594"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 24594 / Version 1",
+      "overview": {
+        "summary": "PowerShell ISE All Breakpoints Removed. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Information, task PowerShell ISE Operation. Analyst field shape: no EventData fields.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "24594",
+        "version": "1",
+        "level": "Information",
+        "task": "PowerShell ISE Operation",
+        "opcode": null,
+        "keywords": [],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 0
+          }
+        ],
+        "analyst_pivots": []
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope.",
+          "PowerShell ISE activity must occur; these events are host-specific."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for distinguishing interactive PowerShell ISE execution/debugging from other PowerShell hosts.",
+      "correlations": [
+        "PowerShell ISE process/session",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": []
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:24595",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "24595",
+      "native_event_id": "24595",
+      "title": "24595 — PowerShell ISE Breakpoint Set",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "24595",
+        "PowerShell 24595",
+        "PowerShell Event 24595",
+        "Event ID 24595"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 24595 / Version 1",
+      "overview": {
+        "summary": "PowerShell ISE Breakpoint Set. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Information, task PowerShell ISE Operation. Analyst field shape: CurrentLine, FileName.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "24595",
+        "version": "1",
+        "level": "Information",
+        "task": "PowerShell ISE Operation",
+        "opcode": null,
+        "keywords": [],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 2
+          }
+        ],
+        "analyst_pivots": [
+          "CurrentLine",
+          "FileName"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope.",
+          "PowerShell ISE activity must occur; these events are host-specific."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for distinguishing interactive PowerShell ISE execution/debugging from other PowerShell hosts.",
+      "correlations": [
+        "PowerShell ISE process/session",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "current_line",
+          "section": "Event Data",
+          "native_name": "CurrentLine",
+          "type": "win:Int32",
+          "out_type": "xs:int",
+          "meaning": "Line number associated with an ISE breakpoint operation.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "file_name",
+          "section": "Event Data",
+          "native_name": "FileName",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Script file path associated with the PowerShell ISE operation.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:24596",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "24596",
+      "native_event_id": "24596",
+      "title": "24596 — PowerShell ISE Breakpoint Removed",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "24596",
+        "PowerShell 24596",
+        "PowerShell Event 24596",
+        "Event ID 24596"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 24596 / Version 1",
+      "overview": {
+        "summary": "PowerShell ISE Breakpoint Removed. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Information, task PowerShell ISE Operation. Analyst field shape: CurrentLine, FileName.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "24596",
+        "version": "1",
+        "level": "Information",
+        "task": "PowerShell ISE Operation",
+        "opcode": null,
+        "keywords": [],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 2
+          }
+        ],
+        "analyst_pivots": [
+          "CurrentLine",
+          "FileName"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope.",
+          "PowerShell ISE activity must occur; these events are host-specific."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for distinguishing interactive PowerShell ISE execution/debugging from other PowerShell hosts.",
+      "correlations": [
+        "PowerShell ISE process/session",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "current_line",
+          "section": "Event Data",
+          "native_name": "CurrentLine",
+          "type": "win:Int32",
+          "out_type": "xs:int",
+          "meaning": "Line number associated with an ISE breakpoint operation.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "file_name",
+          "section": "Event Data",
+          "native_name": "FileName",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Script file path associated with the PowerShell ISE operation.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:24597",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "24597",
+      "native_event_id": "24597",
+      "title": "24597 — PowerShell ISE Breakpoint Enabled",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "24597",
+        "PowerShell 24597",
+        "PowerShell Event 24597",
+        "Event ID 24597"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 24597 / Version 1",
+      "overview": {
+        "summary": "PowerShell ISE Breakpoint Enabled. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Information, task PowerShell ISE Operation. Analyst field shape: CurrentLine, FileName.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "24597",
+        "version": "1",
+        "level": "Information",
+        "task": "PowerShell ISE Operation",
+        "opcode": null,
+        "keywords": [],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 2
+          }
+        ],
+        "analyst_pivots": [
+          "CurrentLine",
+          "FileName"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope.",
+          "PowerShell ISE activity must occur; these events are host-specific."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for distinguishing interactive PowerShell ISE execution/debugging from other PowerShell hosts.",
+      "correlations": [
+        "PowerShell ISE process/session",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "current_line",
+          "section": "Event Data",
+          "native_name": "CurrentLine",
+          "type": "win:Int32",
+          "out_type": "xs:int",
+          "meaning": "Line number associated with an ISE breakpoint operation.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "file_name",
+          "section": "Event Data",
+          "native_name": "FileName",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Script file path associated with the PowerShell ISE operation.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:24598",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "24598",
+      "native_event_id": "24598",
+      "title": "24598 — PowerShell ISE Breakpoint Disabled",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "24598",
+        "PowerShell 24598",
+        "PowerShell Event 24598",
+        "Event ID 24598"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 24598 / Version 1",
+      "overview": {
+        "summary": "PowerShell ISE Breakpoint Disabled. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Information, task PowerShell ISE Operation. Analyst field shape: CurrentLine, FileName.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "24598",
+        "version": "1",
+        "level": "Information",
+        "task": "PowerShell ISE Operation",
+        "opcode": null,
+        "keywords": [],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 2
+          }
+        ],
+        "analyst_pivots": [
+          "CurrentLine",
+          "FileName"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope.",
+          "PowerShell ISE activity must occur; these events are host-specific."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for distinguishing interactive PowerShell ISE execution/debugging from other PowerShell hosts.",
+      "correlations": [
+        "PowerShell ISE process/session",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "current_line",
+          "section": "Event Data",
+          "native_name": "CurrentLine",
+          "type": "win:Int32",
+          "out_type": "xs:int",
+          "meaning": "Line number associated with an ISE breakpoint operation.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "file_name",
+          "section": "Event Data",
+          "native_name": "FileName",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Script file path associated with the PowerShell ISE operation.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:24599",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "24599",
+      "native_event_id": "24599",
+      "title": "24599 — PowerShell ISE Breakpoint Hit",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "24599",
+        "PowerShell 24599",
+        "PowerShell Event 24599",
+        "Event ID 24599"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 24599 / Version 1",
+      "overview": {
+        "summary": "PowerShell ISE Breakpoint Hit. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Information, task PowerShell ISE Operation. Analyst field shape: CurrentLine, FileName.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "24599",
+        "version": "1",
+        "level": "Information",
+        "task": "PowerShell ISE Operation",
+        "opcode": null,
+        "keywords": [],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 2
+          }
+        ],
+        "analyst_pivots": [
+          "CurrentLine",
+          "FileName"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope.",
+          "PowerShell ISE activity must occur; these events are host-specific."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for distinguishing interactive PowerShell ISE execution/debugging from other PowerShell hosts.",
+      "correlations": [
+        "PowerShell ISE process/session",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "current_line",
+          "section": "Event Data",
+          "native_name": "CurrentLine",
+          "type": "win:Int32",
+          "out_type": "xs:int",
+          "meaning": "Line number associated with an ISE breakpoint operation.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "file_name",
+          "section": "Event Data",
+          "native_name": "FileName",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Script file path associated with the PowerShell ISE operation.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,425 @@
+{
+  "schema_version": "1.0.0",
+  "status": "MAINTAINER_APPROVED_POWERSHELL_OPERATIONAL_26100",
+  "family": "PowerShell Operational",
+  "provider": "Microsoft-Windows-PowerShell",
+  "channel": "Microsoft-Windows-PowerShell/Operational",
+  "namespace": "microsoft.windows.powershell",
+  "reference_build": "26100",
+  "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+  "batch_index": 3,
+  "events": [
+    {
+      "id": "atlas:event:microsoft.windows.powershell:8198",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "8198",
+      "native_event_id": "8198",
+      "title": "8198 — Session Creation Retry",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "8198",
+        "PowerShell 8198",
+        "PowerShell Event 8198",
+        "Event ID 8198"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 8198 / Version 1",
+      "overview": {
+        "summary": "Session Creation Retry. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task Connect. Analyst field shape: param1, param2, param3.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "8198",
+        "version": "1",
+        "level": "Verbose",
+        "task": "Connect",
+        "opcode": "Open (async)",
+        "keywords": [
+          "PowerShell Runspace"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 3
+          }
+        ],
+        "analyst_pivots": [
+          "param1",
+          "param2",
+          "param3"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for runspace, session, and remoting lifecycle reconstruction; correlate with process creation and WSMan context.",
+      "correlations": [
+        "PowerShell runspace lifecycle",
+        "WSMan/remoting context",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "param1",
+          "section": "Event Data",
+          "native_name": "param1",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Session creation retry count.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "param2",
+          "section": "Event Data",
+          "native_name": "param2",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Error code that triggered the retry.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "param3",
+          "section": "Event Data",
+          "native_name": "param3",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Session identifier associated with the retry.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:12039",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "12039",
+      "native_event_id": "12039",
+      "title": "12039 — Runspace Activity Correlation Updated",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "12039",
+        "PowerShell 12039",
+        "PowerShell Event 12039",
+        "Event ID 12039"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 12039 / Version 1",
+      "overview": {
+        "summary": "Runspace Activity Correlation Updated. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task Connect. Analyst field shape: no EventData fields.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "12039",
+        "version": "1",
+        "level": "Verbose",
+        "task": "Connect",
+        "opcode": "Open (async)",
+        "keywords": [
+          "PowerShell Runspace"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 0
+          }
+        ],
+        "analyst_pivots": []
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for runspace, session, and remoting lifecycle reconstruction; correlate with process creation and WSMan context.",
+      "correlations": [
+        "PowerShell runspace lifecycle",
+        "WSMan/remoting context",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": []
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:24577",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "24577",
+      "native_event_id": "24577",
+      "title": "24577 — PowerShell ISE Script Execution Started",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "24577",
+        "PowerShell 24577",
+        "PowerShell Event 24577",
+        "Event ID 24577"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 24577 / Version 1",
+      "overview": {
+        "summary": "PowerShell ISE Script Execution Started. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Information, task PowerShell ISE Operation. Analyst field shape: FileName.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "24577",
+        "version": "1",
+        "level": "Information",
+        "task": "PowerShell ISE Operation",
+        "opcode": null,
+        "keywords": [],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 1
+          }
+        ],
+        "analyst_pivots": [
+          "FileName"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope.",
+          "PowerShell ISE activity must occur; these events are host-specific."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for distinguishing interactive PowerShell ISE execution/debugging from other PowerShell hosts.",
+      "correlations": [
+        "PowerShell ISE process/session",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "file_name",
+          "section": "Event Data",
+          "native_name": "FileName",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Script file path associated with the PowerShell ISE operation.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:24578",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "24578",
+      "native_event_id": "24578",
+      "title": "24578 — PowerShell ISE User-Selected Script Started",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "24578",
+        "PowerShell 24578",
+        "PowerShell Event 24578",
+        "Event ID 24578"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 24578 / Version 1",
+      "overview": {
+        "summary": "PowerShell ISE User-Selected Script Started. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Information, task PowerShell ISE Operation. Analyst field shape: FileName.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "24578",
+        "version": "1",
+        "level": "Information",
+        "task": "PowerShell ISE Operation",
+        "opcode": null,
+        "keywords": [],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 1
+          }
+        ],
+        "analyst_pivots": [
+          "FileName"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope.",
+          "PowerShell ISE activity must occur; these events are host-specific."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for distinguishing interactive PowerShell ISE execution/debugging from other PowerShell hosts.",
+      "correlations": [
+        "PowerShell ISE process/session",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "file_name",
+          "section": "Event Data",
+          "native_name": "FileName",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Script file path associated with the PowerShell ISE operation.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:24579",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "24579",
+      "native_event_id": "24579",
+      "title": "24579 — PowerShell ISE Current Command Stopped",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "24579",
+        "PowerShell 24579",
+        "PowerShell Event 24579",
+        "Event ID 24579"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 24579 / Version 1",
+      "overview": {
+        "summary": "PowerShell ISE Current Command Stopped. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Information, task PowerShell ISE Operation. Analyst field shape: no EventData fields.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "24579",
+        "version": "1",
+        "level": "Information",
+        "task": "PowerShell ISE Operation",
+        "opcode": null,
+        "keywords": [],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 0
+          }
+        ],
+        "analyst_pivots": []
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope.",
+          "PowerShell ISE activity must occur; these events are host-specific."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for distinguishing interactive PowerShell ISE execution/debugging from other PowerShell hosts.",
+      "correlations": [
+        "PowerShell ISE process/session",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": []
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:24580",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "24580",
+      "native_event_id": "24580",
+      "title": "24580 — PowerShell ISE Debugger Resumed",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "24580",
+        "PowerShell 24580",
+        "PowerShell Event 24580",
+        "Event ID 24580"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 24580 / Version 1",
+      "overview": {
+        "summary": "PowerShell ISE Debugger Resumed. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Information, task PowerShell ISE Operation. Analyst field shape: no EventData fields.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "24580",
+        "version": "1",
+        "level": "Information",
+        "task": "PowerShell ISE Operation",
+        "opcode": null,
+        "keywords": [],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 0
+          }
+        ],
+        "analyst_pivots": []
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope.",
+          "PowerShell ISE activity must occur; these events are host-specific."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for distinguishing interactive PowerShell ISE execution/debugging from other PowerShell hosts.",
+      "correlations": [
+        "PowerShell ISE process/session",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": []
+    }
+  ]
+}

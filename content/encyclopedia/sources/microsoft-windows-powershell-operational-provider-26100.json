@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0.0",
+  "record_kind": "source",
+  "id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+  "record_revision": 1,
+  "created_at": "2026-10-11T17:34:31Z",
+  "updated_at": "2026-10-11T17:34:31Z",
+  "curation_status": "validated",
+  "namespace": "atlas.source",
+  "canonical_key": "microsoft-windows-powershell-operational-provider-26100",
+  "title": "Microsoft-Windows-PowerShell Operational Provider Metadata — Windows Server 2025 build 26100",
+  "publisher": "Microsoft",
+  "source_class": "tier-a-authoritative",
+  "canonical_urls": [
+    "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+    "https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log",
+    "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil"
+  ],
+  "official_status": "official",
+  "license": {
+    "status": "unknown"
+  },
+  "redistribution": {
+    "policy": "restricted",
+    "notes": "ATLAS stores independently authored normalized provider facts, hashes and locators. Raw Microsoft provider XML/message prose remains outside Git and is not redistributed."
+  },
+  "freshness_policy": {
+    "expected_update_cadence": "provider-build-bound",
+    "stale_after_days": 180
+  },
+  "change_detection_policy": {
+    "strategy": "checksum",
+    "notes": "Controlled Microsoft Windows Server 2025 Datacenter build 26100 provider capture; raw provider XML digest sha256-cdd3f6b37731ebc384e160743893ac3a53e9457e60b2b9438e4c5b585c793f25; normalized private inventory digest sha256-48f42f368d6b1e3c6235a9a03252288ab4981cb64ba824664821842112a6aaf0. Private control-plane locator is intentionally not published."
+  }
+}

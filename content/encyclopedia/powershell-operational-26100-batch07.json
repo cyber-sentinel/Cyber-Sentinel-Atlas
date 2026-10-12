@@ -1,0 +1,575 @@
+{
+  "schema_version": "1.0.0",
+  "status": "MAINTAINER_APPROVED_POWERSHELL_OPERATIONAL_26100",
+  "family": "PowerShell Operational",
+  "provider": "Microsoft-Windows-PowerShell",
+  "channel": "Microsoft-Windows-PowerShell/Operational",
+  "namespace": "microsoft.windows.powershell",
+  "reference_build": "26100",
+  "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+  "batch_index": 7,
+  "events": [
+    {
+      "id": "atlas:event:microsoft.windows.powershell:53250",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "53250",
+      "native_event_id": "53250",
+      "title": "53250 — PowerShell Scheduled Job Completed",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "53250",
+        "PowerShell 53250",
+        "PowerShell Event 53250",
+        "Event ID 53250"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 53250 / Version 1",
+      "overview": {
+        "summary": "PowerShell Scheduled Job Completed. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Information, task PowerShell Scheduled Jobs. Analyst field shape: ScheduledJobDefName, StopTime, State.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "53250",
+        "version": "1",
+        "level": "Information",
+        "task": "PowerShell Scheduled Jobs",
+        "opcode": "To be used when operation is just executing a method",
+        "keywords": [],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 3
+          }
+        ],
+        "analyst_pivots": [
+          "ScheduledJobDefName",
+          "StopTime",
+          "State"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for scheduled PowerShell execution and persistence investigations; correlate with Task Scheduler and process creation.",
+      "correlations": [
+        "PowerShell Scheduled Jobs",
+        "Task Scheduler telemetry",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "scheduled_job_def_name",
+          "section": "Event Data",
+          "native_name": "ScheduledJobDefName",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Name of the PowerShell Scheduled Job definition.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "stop_time",
+          "section": "Event Data",
+          "native_name": "StopTime",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Provider-formatted scheduled-job stop time.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "state",
+          "section": "Event Data",
+          "native_name": "State",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Scheduled-job state reported by the provider.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:53251",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "53251",
+      "native_event_id": "53251",
+      "title": "53251 — PowerShell Scheduled Job Exception",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "53251",
+        "PowerShell 53251",
+        "PowerShell Event 53251",
+        "Event ID 53251"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 53251 / Version 1",
+      "overview": {
+        "summary": "PowerShell Scheduled Job Exception. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Error, task PowerShell Scheduled Jobs. Analyst field shape: Name, Message, StackTrace, InnerException.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "53251",
+        "version": "1",
+        "level": "Error",
+        "task": "PowerShell Scheduled Jobs",
+        "opcode": "To be used when an exception is raised",
+        "keywords": [],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 4
+          }
+        ],
+        "analyst_pivots": [
+          "Name",
+          "Message",
+          "StackTrace",
+          "InnerException"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "possible",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for scheduled PowerShell execution and persistence investigations; correlate with Task Scheduler and process creation.",
+      "correlations": [
+        "PowerShell Scheduled Jobs",
+        "Task Scheduler telemetry",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "name",
+          "section": "Event Data",
+          "native_name": "Name",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Name/type reported for the scheduled-job exception.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "message",
+          "section": "Event Data",
+          "native_name": "Message",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Exception message reported for the scheduled job.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "stack_trace",
+          "section": "Event Data",
+          "native_name": "StackTrace",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Stack trace emitted for an error or exception.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "inner_exception",
+          "section": "Event Data",
+          "native_name": "InnerException",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Nested exception information reported for the scheduled job.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:53504",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "53504",
+      "native_event_id": "53504",
+      "title": "53504 — PowerShell Named Pipe IPC Listener Started",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "53504",
+        "PowerShell 53504",
+        "PowerShell Event 53504",
+        "Event ID 53504"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 53504 / Version 1",
+      "overview": {
+        "summary": "PowerShell Named Pipe IPC Listener Started. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task PowerShell Named Pipe IPC. Analyst field shape: param1, param2.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "53504",
+        "version": "1",
+        "level": "Verbose",
+        "task": "PowerShell Named Pipe IPC",
+        "opcode": "Open (async)",
+        "keywords": [
+          "PowerShell remoting transport"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 2
+          }
+        ],
+        "analyst_pivots": [
+          "param1",
+          "param2"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for local IPC/remoting/process-attach investigations; correlate process, AppDomain, and user context where present.",
+      "correlations": [
+        "PowerShell Named Pipe IPC lifecycle",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "param1",
+          "section": "Event Data",
+          "native_name": "param1",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Process value emitted for the IPC listener.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "param2",
+          "section": "Event Data",
+          "native_name": "param2",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "AppDomain value emitted for the IPC listener.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:53505",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "53505",
+      "native_event_id": "53505",
+      "title": "53505 — PowerShell Named Pipe IPC Listener Ended",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "53505",
+        "PowerShell 53505",
+        "PowerShell Event 53505",
+        "Event ID 53505"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 53505 / Version 1",
+      "overview": {
+        "summary": "PowerShell Named Pipe IPC Listener Ended. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task PowerShell Named Pipe IPC. Analyst field shape: param1, param2.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "53505",
+        "version": "1",
+        "level": "Verbose",
+        "task": "PowerShell Named Pipe IPC",
+        "opcode": "Close (Async)",
+        "keywords": [
+          "PowerShell remoting transport"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 2
+          }
+        ],
+        "analyst_pivots": [
+          "param1",
+          "param2"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for local IPC/remoting/process-attach investigations; correlate process, AppDomain, and user context where present.",
+      "correlations": [
+        "PowerShell Named Pipe IPC lifecycle",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "param1",
+          "section": "Event Data",
+          "native_name": "param1",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Process value emitted for the IPC listener.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "param2",
+          "section": "Event Data",
+          "native_name": "param2",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "AppDomain value emitted for the IPC listener.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:53506",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "53506",
+      "native_event_id": "53506",
+      "title": "53506 — PowerShell Named Pipe IPC Listener Error",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "53506",
+        "PowerShell 53506",
+        "PowerShell Event 53506",
+        "Event ID 53506"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 53506 / Version 1",
+      "overview": {
+        "summary": "PowerShell Named Pipe IPC Listener Error. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task PowerShell Named Pipe IPC. Analyst field shape: param1, param2, param3.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "53506",
+        "version": "1",
+        "level": "Verbose",
+        "task": "PowerShell Named Pipe IPC",
+        "opcode": "To be used when an exception is raised",
+        "keywords": [
+          "PowerShell remoting transport"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 3
+          }
+        ],
+        "analyst_pivots": [
+          "param1",
+          "param2",
+          "param3"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "possible",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for local IPC/remoting/process-attach investigations; correlate process, AppDomain, and user context where present.",
+      "correlations": [
+        "PowerShell Named Pipe IPC lifecycle",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "param1",
+          "section": "Event Data",
+          "native_name": "param1",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Process value emitted for the IPC listener.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "param2",
+          "section": "Event Data",
+          "native_name": "param2",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "AppDomain value emitted for the IPC listener.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "param3",
+          "section": "Event Data",
+          "native_name": "param3",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "IPC listener error message.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atlas:event:microsoft.windows.powershell:53507",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "53507",
+      "native_event_id": "53507",
+      "title": "53507 — PowerShell Named Pipe IPC Connected",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "53507",
+        "PowerShell 53507",
+        "PowerShell Event 53507",
+        "Event ID 53507"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 53507 / Version 1",
+      "overview": {
+        "summary": "PowerShell Named Pipe IPC Connected. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task PowerShell Named Pipe IPC. Analyst field shape: param1, param2, param3.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "53507",
+        "version": "1",
+        "level": "Verbose",
+        "task": "PowerShell Named Pipe IPC",
+        "opcode": "connect",
+        "keywords": [
+          "PowerShell remoting transport"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 3
+          }
+        ],
+        "analyst_pivots": [
+          "param1",
+          "param2",
+          "param3"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for local IPC/remoting/process-attach investigations; correlate process, AppDomain, and user context where present.",
+      "correlations": [
+        "PowerShell Named Pipe IPC lifecycle",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "param1",
+          "section": "Event Data",
+          "native_name": "param1",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Process value emitted for the IPC connection.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "param2",
+          "section": "Event Data",
+          "native_name": "param2",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "AppDomain value emitted for the IPC connection.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "param3",
+          "section": "Event Data",
+          "native_name": "param3",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "User identity emitted for the IPC connection.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    }
+  ]
+}

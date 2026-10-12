@@ -1,0 +1,285 @@
+{
+  "coverage_contract_version": "1.0.0",
+  "product": "Windows PowerShell 5.1 Operational",
+  "provider": "Microsoft-Windows-PowerShell",
+  "channel": "Microsoft-Windows-PowerShell/Operational",
+  "reference_scope": {
+    "product": "Microsoft Windows Server 2025 Datacenter",
+    "windows_version": "24H2",
+    "windows_build": "26100",
+    "architecture": "x64",
+    "locale": "en-US"
+  },
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-powershell-operational-provider-26100",
+  "inventory_digest": "sha256-25d2c5a59425bca93e4c6f7bf762177941a5a693c35e3d1370583d7935d232f8",
+  "raw_artifact_sha256": "sha256-cdd3f6b37731ebc384e160743893ac3a53e9457e60b2b9438e4c5b585c793f25",
+  "denominator_kind": "controlled-provider-runtime-metadata-unique-event-id",
+  "denominator_count": 43,
+  "provider_event_version_definition_count": 43,
+  "encyclopedia_grade_count": 43,
+  "remaining_count": 0,
+  "completion_ratio": "43/43",
+  "completion_percent": 100.0,
+  "release_numerator_rule": "Only ENCYCLOPEDIA_GRADE maintainer-approved PowerShell Operational records count.",
+  "scope_semantics": "This denominator is exact for Microsoft-Windows-PowerShell / Microsoft-Windows-PowerShell/Operational on controlled Microsoft Windows Server 2025 Datacenter build 26100; it does not imply completeness for PowerShellCore, other Windows builds/providers, or non-Windows PowerShell.",
+  "events": [
+    {
+      "event_id": "4100",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:4100"
+    },
+    {
+      "event_id": "4101",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:4101"
+    },
+    {
+      "event_id": "4102",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:4102"
+    },
+    {
+      "event_id": "4103",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:4103"
+    },
+    {
+      "event_id": "4104",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:4104"
+    },
+    {
+      "event_id": "4105",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:4105"
+    },
+    {
+      "event_id": "4106",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:4106"
+    },
+    {
+      "event_id": "8193",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:8193"
+    },
+    {
+      "event_id": "8194",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:8194"
+    },
+    {
+      "event_id": "8195",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:8195"
+    },
+    {
+      "event_id": "8196",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:8196"
+    },
+    {
+      "event_id": "8197",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:8197"
+    },
+    {
+      "event_id": "8198",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:8198"
+    },
+    {
+      "event_id": "12039",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:12039"
+    },
+    {
+      "event_id": "24577",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24577"
+    },
+    {
+      "event_id": "24578",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24578"
+    },
+    {
+      "event_id": "24579",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24579"
+    },
+    {
+      "event_id": "24580",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24580"
+    },
+    {
+      "event_id": "24581",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24581"
+    },
+    {
+      "event_id": "24582",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24582"
+    },
+    {
+      "event_id": "24583",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24583"
+    },
+    {
+      "event_id": "24584",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24584"
+    },
+    {
+      "event_id": "24592",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24592"
+    },
+    {
+      "event_id": "24593",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24593"
+    },
+    {
+      "event_id": "24594",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24594"
+    },
+    {
+      "event_id": "24595",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24595"
+    },
+    {
+      "event_id": "24596",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24596"
+    },
+    {
+      "event_id": "24597",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24597"
+    },
+    {
+      "event_id": "24598",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24598"
+    },
+    {
+      "event_id": "24599",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:24599"
+    },
+    {
+      "event_id": "32777",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:32777"
+    },
+    {
+      "event_id": "32784",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:32784"
+    },
+    {
+      "event_id": "40961",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:40961"
+    },
+    {
+      "event_id": "40962",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:40962"
+    },
+    {
+      "event_id": "46358",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:46358"
+    },
+    {
+      "event_id": "53249",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:53249"
+    },
+    {
+      "event_id": "53250",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:53250"
+    },
+    {
+      "event_id": "53251",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:53251"
+    },
+    {
+      "event_id": "53504",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:53504"
+    },
+    {
+      "event_id": "53505",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:53505"
+    },
+    {
+      "event_id": "53506",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:53506"
+    },
+    {
+      "event_id": "53507",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:53507"
+    },
+    {
+      "event_id": "53508",
+      "coverage_state": "ENCYCLOPEDIA_GRADE",
+      "counts_toward_release_coverage": true,
+      "canonical_id": "atlas:event:microsoft.windows.powershell:53508"
+    }
+  ]
+}

@@ -1,0 +1,985 @@
+{
+  "ingestion_contract_version": "1.0.0",
+  "inventory_contract_version": "1.0.0",
+  "inventory_id": "atlas:inventory:atlas.ingestion:windows-powershell-operational-provider-26100",
+  "inventory_kind": "telemetry",
+  "declared_scope": "Microsoft-Windows-PowerShell events linked to Microsoft-Windows-PowerShell/Operational on controlled Microsoft Windows Server 2025 Datacenter build 26100",
+  "source_ids": [
+    "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100"
+  ],
+  "inventory_method": "provider-runtime-metadata",
+  "inventory_source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+  "expected_identity_count": 43,
+  "identity_dimensions": [
+    "provider",
+    "channel",
+    "native-id",
+    "product",
+    "platform",
+    "version"
+  ],
+  "scope_metadata": {
+    "provider": "Microsoft-Windows-PowerShell",
+    "channel": "Microsoft-Windows-PowerShell/Operational",
+    "product": "Microsoft Windows Server 2025 Datacenter",
+    "platform": "Windows",
+    "windows_build": "26100",
+    "architecture": "64-bit",
+    "locale": "en-US",
+    "collection_method": "Get-WinEvent -ListProvider plus wevtutil gp /ge:true /gm:true /f:xml",
+    "raw_artifact_sha256": "sha256-cdd3f6b37731ebc384e160743893ac3a53e9457e60b2b9438e4c5b585c793f25",
+    "normalized_private_inventory_sha256": "sha256-48f42f368d6b1e3c6235a9a03252288ab4981cb64ba824664821842112a6aaf0",
+    "provider_event_version_definition_count": 43,
+    "provider_unique_event_id_count": 43,
+    "expected_identities": [
+      {
+        "event_id": "4100",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 3,
+            "level": "Information",
+            "task": "None",
+            "opcode": "To be used when an exception is raised",
+            "fields": [
+              {
+                "name": "ContextInfo",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "UserData",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Payload",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4101",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 3,
+            "level": "Information",
+            "task": "None",
+            "opcode": "To be used when an exception is raised",
+            "fields": [
+              {
+                "name": "ContextInfo",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "UserData",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Payload",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4102",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 3,
+            "level": "Information",
+            "task": "None",
+            "opcode": "To be used when an exception is raised",
+            "fields": [
+              {
+                "name": "ContextInfo",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "UserData",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Payload",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4103",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 3,
+            "level": "Information",
+            "task": "None",
+            "opcode": "To be used when an exception is raised",
+            "fields": [
+              {
+                "name": "ContextInfo",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "UserData",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Payload",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4104",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 5,
+            "level": "Verbose",
+            "task": "Starting Command",
+            "opcode": "On create calls",
+            "fields": [
+              {
+                "name": "MessageNumber",
+                "in_type": "win:Int32",
+                "out_type": "xs:int"
+              },
+              {
+                "name": "MessageTotal",
+                "in_type": "win:Int32",
+                "out_type": "xs:int"
+              },
+              {
+                "name": "ScriptBlockText",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ScriptBlockId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Path",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4105",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 2,
+            "level": "Verbose",
+            "task": "Starting Command",
+            "opcode": "Open (async)",
+            "fields": [
+              {
+                "name": "ScriptBlockId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RunspaceId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "4106",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 2,
+            "level": "Verbose",
+            "task": "Stopping Command",
+            "opcode": "Close (Async)",
+            "fields": [
+              {
+                "name": "ScriptBlockId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "RunspaceId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "8193",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 1,
+            "level": "Verbose",
+            "task": "Connect",
+            "opcode": "to be used when an object is constructed",
+            "fields": [
+              {
+                "name": "param1",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "8194",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 3,
+            "level": "Verbose",
+            "task": "Connect",
+            "opcode": "to be used when an object is constructed",
+            "fields": [
+              {
+                "name": "InstanceId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MaxRunspaces",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "MinRunspaces",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "8195",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Verbose",
+            "task": "Connect",
+            "opcode": "Open (async)",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "8196",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Verbose",
+            "task": "Connect",
+            "opcode": "Open (async)",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "8197",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 1,
+            "level": "Verbose",
+            "task": "Connect",
+            "opcode": "Open (async)",
+            "fields": [
+              {
+                "name": "param1",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "8198",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 3,
+            "level": "Verbose",
+            "task": "Connect",
+            "opcode": "Open (async)",
+            "fields": [
+              {
+                "name": "param1",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "param2",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "param3",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "12039",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Verbose",
+            "task": "Connect",
+            "opcode": "Open (async)",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "24577",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 1,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": [
+              {
+                "name": "FileName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "24578",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 1,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": [
+              {
+                "name": "FileName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "24579",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "24580",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "24581",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "24582",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "24583",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "24584",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "24592",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "24593",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Information",
+            "task": "None",
+            "opcode": null,
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "24594",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "24595",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 2,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": [
+              {
+                "name": "CurrentLine",
+                "in_type": "win:Int32",
+                "out_type": "xs:int"
+              },
+              {
+                "name": "FileName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "24596",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 2,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": [
+              {
+                "name": "CurrentLine",
+                "in_type": "win:Int32",
+                "out_type": "xs:int"
+              },
+              {
+                "name": "FileName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "24597",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 2,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": [
+              {
+                "name": "CurrentLine",
+                "in_type": "win:Int32",
+                "out_type": "xs:int"
+              },
+              {
+                "name": "FileName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "24598",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 2,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": [
+              {
+                "name": "CurrentLine",
+                "in_type": "win:Int32",
+                "out_type": "xs:int"
+              },
+              {
+                "name": "FileName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "24599",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 2,
+            "level": "Information",
+            "task": "PowerShell ISE Operation",
+            "opcode": null,
+            "fields": [
+              {
+                "name": "CurrentLine",
+                "in_type": "win:Int32",
+                "out_type": "xs:int"
+              },
+              {
+                "name": "FileName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "32777",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 3,
+            "level": "Error",
+            "task": "None",
+            "opcode": "Open (async)",
+            "fields": [
+              {
+                "name": "param1",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "param2",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "param3",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "32784",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 5,
+            "level": "Error",
+            "task": "None",
+            "opcode": "Open (async)",
+            "fields": [
+              {
+                "name": "SessionId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "PipelineId",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ErrorCode",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "ErrorMessage",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "StackTrace",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "40961",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Information",
+            "task": "PowerShell Console Startup",
+            "opcode": "Start",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "40962",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Information",
+            "task": "PowerShell Console Startup",
+            "opcode": "Stop",
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "46358",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 0,
+            "level": "Warning",
+            "task": "None",
+            "opcode": null,
+            "fields": []
+          }
+        ]
+      },
+      {
+        "event_id": "53249",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 2,
+            "level": "Information",
+            "task": "PowerShell Scheduled Jobs",
+            "opcode": "To be used when operation is just executing a method",
+            "fields": [
+              {
+                "name": "ScheduledJobDefName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "StartTime",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "53250",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 3,
+            "level": "Information",
+            "task": "PowerShell Scheduled Jobs",
+            "opcode": "To be used when operation is just executing a method",
+            "fields": [
+              {
+                "name": "ScheduledJobDefName",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "StopTime",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "State",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "53251",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 4,
+            "level": "Error",
+            "task": "PowerShell Scheduled Jobs",
+            "opcode": "To be used when an exception is raised",
+            "fields": [
+              {
+                "name": "Name",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "Message",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "StackTrace",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "InnerException",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "53504",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 2,
+            "level": "Verbose",
+            "task": "PowerShell Named Pipe IPC",
+            "opcode": "Open (async)",
+            "fields": [
+              {
+                "name": "param1",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "param2",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "53505",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 2,
+            "level": "Verbose",
+            "task": "PowerShell Named Pipe IPC",
+            "opcode": "Close (Async)",
+            "fields": [
+              {
+                "name": "param1",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "param2",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "53506",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 3,
+            "level": "Verbose",
+            "task": "PowerShell Named Pipe IPC",
+            "opcode": "To be used when an exception is raised",
+            "fields": [
+              {
+                "name": "param1",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "param2",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "param3",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "53507",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 3,
+            "level": "Verbose",
+            "task": "PowerShell Named Pipe IPC",
+            "opcode": "connect",
+            "fields": [
+              {
+                "name": "param1",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "param2",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "param3",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "event_id": "53508",
+        "versions": [
+          {
+            "version": 1,
+            "field_count": 3,
+            "level": "Verbose",
+            "task": "PowerShell Named Pipe IPC",
+            "opcode": "Close (Async)",
+            "fields": [
+              {
+                "name": "param1",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "param2",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              },
+              {
+                "name": "param3",
+                "in_type": "win:UnicodeString",
+                "out_type": "xs:string"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "completeness_semantics": "Exact for Microsoft-Windows-PowerShell identities linked to Microsoft-Windows-PowerShell/Operational on controlled Microsoft Windows Server 2025 Datacenter build 26100; not a global PowerShell or Windows denominator."
+  },
+  "guardrails": {
+    "max_unexplained_shrink_percent": 0,
+    "max_unexplained_growth_percent": 0
+  },
+  "digest": "sha256-25d2c5a59425bca93e4c6f7bf762177941a5a693c35e3d1370583d7935d232f8"
+}

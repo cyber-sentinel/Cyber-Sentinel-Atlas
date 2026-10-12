@@ -5,8 +5,9 @@ The general engineering-preview builder intentionally preserves historical test
 fixtures for old regression paths. MVP-2 must instead present the governed
 encyclopedia projection. This adapter therefore:
 
-1. removes the explicitly superseded Phase-5.2 4688 demonstration field; and
-2. overlays a small, governed set of independently-authored sanitized analyst
+1. removes the explicitly superseded Phase-5.2 4688 demonstration field;
+2. includes the frozen PowerShell Operational canonical family; and
+3. overlays a small, governed set of independently-authored sanitized analyst
    examples onto the existing ``telemetry.represents`` overview claims.
 
 The examples are content, not UI hard-codes. They remain source-backed through
@@ -21,6 +22,7 @@ import json
 from pathlib import Path
 
 from tools.content import build_encyclopedia_records as encyclopedia
+from tools.content.build_powershell_operational_records import build_records as build_powershell_operational_records
 from tools.release import build_engineering_preview_pack as base
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -29,6 +31,12 @@ EXPECTED_EXAMPLE_SUBJECTS = frozenset({
     "atlas:event:microsoft.windows.security:4624",
     "atlas:event:microsoft.windows.security:4688",
     "atlas:event:microsoft.sysmon:1",
+})
+EXPECTED_POWERSHELL_EVENT_IDS = frozenset({
+    "4100","4101","4102","4103","4104","4105","4106","8193","8194","8195","8196","8197","8198",
+    "12039","24577","24578","24579","24580","24581","24582","24583","24584","24592","24593","24594",
+    "24595","24596","24597","24598","24599","32777","32784","40961","40962","46358","53249","53250",
+    "53251","53504","53505","53506","53507","53508",
 })
 
 # These three repository-owned Phase-5.2 support records represented a single
@@ -42,6 +50,42 @@ SUPERSEDED_FIXTURE_RECORD_IDS = frozenset({
 })
 
 _original_load = base.load_canonical_records
+
+
+def _include_powershell(records: list[dict]) -> list[dict]:
+    by_id = {record.get("id"): record for record in records}
+    if None in by_id:
+        raise RuntimeError("MVP-2 baseline contains a canonical record without id")
+    for record in build_powershell_operational_records():
+        record_id = record.get("id")
+        if not record_id:
+            raise RuntimeError("PowerShell canonical record is missing id")
+        previous = by_id.get(record_id)
+        if previous is not None and previous != record:
+            raise RuntimeError(f"conflicting PowerShell canonical record id: {record_id}")
+        by_id[record_id] = record
+
+    actual_events = {
+        record_id.rsplit(":", 1)[-1]
+        for record_id, record in by_id.items()
+        if isinstance(record_id, str)
+        and record_id.startswith("atlas:event:microsoft.windows.powershell:")
+        and record.get("record_kind") == "entity"
+        and record.get("entity_type") == "event"
+    }
+    if actual_events != EXPECTED_POWERSHELL_EVENT_IDS:
+        raise RuntimeError(
+            "MVP-2 PowerShell event set drift; expected 43 exact provider identities"
+        )
+    field_count = sum(
+        1 for record in by_id.values()
+        if record.get("record_kind") == "entity"
+        and record.get("entity_type") == "field"
+        and str(record.get("id", "")).startswith("atlas:field:microsoft.windows.powershell:")
+    )
+    if field_count != 71:
+        raise RuntimeError(f"MVP-2 PowerShell field projection drift: expected 71, got {field_count}")
+    return [by_id[key] for key in sorted(by_id)]
 
 
 def _load_governed_examples() -> dict[str, dict]:
@@ -149,7 +193,8 @@ def load_mvp2_records():
     ]
     if len(records) - len(filtered) != len(SUPERSEDED_FIXTURE_RECORD_IDS):
         raise RuntimeError("MVP-2 superseded-fixture pruning was not exact")
-    return _overlay_examples(filtered)
+    with_powershell = _include_powershell(filtered)
+    return _overlay_examples(with_powershell)
 
 
 def main() -> int:

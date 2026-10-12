@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0.0",
+  "status": "MAINTAINER_APPROVED_POWERSHELL_OPERATIONAL_26100",
+  "family": "PowerShell Operational",
+  "provider": "Microsoft-Windows-PowerShell",
+  "channel": "Microsoft-Windows-PowerShell/Operational",
+  "namespace": "microsoft.windows.powershell",
+  "reference_build": "26100",
+  "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+  "batch_index": 8,
+  "events": [
+    {
+      "id": "atlas:event:microsoft.windows.powershell:53508",
+      "namespace": "microsoft.windows.powershell",
+      "canonical_key": "53508",
+      "native_event_id": "53508",
+      "title": "53508 — PowerShell Named Pipe IPC Disconnected",
+      "lifecycle": "current",
+      "provider": "Microsoft-Windows-PowerShell",
+      "channel": "Microsoft-Windows-PowerShell/Operational",
+      "product": "Windows PowerShell 5.1",
+      "platform": "Windows",
+      "aliases": [
+        "53508",
+        "PowerShell 53508",
+        "PowerShell Event 53508",
+        "Event ID 53508"
+      ],
+      "source_id": "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100",
+      "source_version": "windows-server-2025-build-26100-microsoft-windows-powershell-operational",
+      "source_url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logging?view=powershell-5.1",
+      "source_locator": "controlled provider metadata / Microsoft-Windows-PowerShell/Operational / Event ID 53508 / Version 1",
+      "overview": {
+        "summary": "PowerShell Named Pipe IPC Disconnected. This Microsoft-Windows-PowerShell record is emitted to Microsoft-Windows-PowerShell/Operational; provider metadata classifies it as level Verbose, task PowerShell Named Pipe IPC. Analyst field shape: param1, param2, param3.",
+        "provider": "Microsoft-Windows-PowerShell",
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "event_id": "53508",
+        "version": "1",
+        "level": "Verbose",
+        "task": "PowerShell Named Pipe IPC",
+        "opcode": "Close (Async)",
+        "keywords": [
+          "PowerShell remoting transport"
+        ],
+        "event_versions": [
+          {
+            "version": "1",
+            "field_count": 3
+          }
+        ],
+        "analyst_pivots": [
+          "param1",
+          "param2",
+          "param3"
+        ]
+      },
+      "collection": {
+        "channel": "Microsoft-Windows-PowerShell/Operational",
+        "prerequisites": [
+          "Collect Microsoft-Windows-PowerShell/Operational where Windows PowerShell telemetry is in scope."
+        ],
+        "volume": "environment-dependent",
+        "sensitive_data": "limited-by-event-shape",
+        "notes": "Absence is not proof of no PowerShell activity; policy, host, version, and feature usage affect event generation."
+      },
+      "analysis": "Useful for local IPC/remoting/process-attach investigations; correlate process, AppDomain, and user context where present.",
+      "correlations": [
+        "PowerShell Named Pipe IPC lifecycle",
+        "Windows Security 4688",
+        "Sysmon Event 1"
+      ],
+      "fields": [
+        {
+          "key": "param1",
+          "section": "Event Data",
+          "native_name": "param1",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "Process value emitted for the IPC disconnection.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "param2",
+          "section": "Event Data",
+          "native_name": "param2",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "AppDomain value emitted for the IPC disconnection.",
+          "versions": [
+            "1"
+          ]
+        },
+        {
+          "key": "param3",
+          "section": "Event Data",
+          "native_name": "param3",
+          "type": "win:UnicodeString",
+          "out_type": "xs:string",
+          "meaning": "User identity emitted for the IPC disconnection.",
+          "versions": [
+            "1"
+          ]
+        }
+      ]
+    }
+  ]
+}
