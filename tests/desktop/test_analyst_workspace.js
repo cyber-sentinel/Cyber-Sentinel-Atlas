@@ -15,6 +15,7 @@ const buildRs = fs.readFileSync(path.join(tauriRoot, 'build.rs'), 'utf8');
 const rustMain = fs.readFileSync(path.join(tauriRoot, 'src', 'main.rs'), 'utf8');
 const tauri = JSON.parse(fs.readFileSync(path.join(tauriRoot, 'tauri.conf.json'), 'utf8'));
 const entity = require(path.join(webRoot, 'entity-state.js'));
+const projection = require(path.join(webRoot, 'entity-projection.js'));
 const investigation = require(path.join(webRoot, 'investigation-model.js'));
 const investigationFixtures = JSON.parse(fs.readFileSync(path.join(root, 'tests', 'fixtures', 'desktop', 'investigation-canaries.v0.json'), 'utf8'));
 const entitySource = fs.readFileSync(path.join(webRoot, 'entity-state.js'), 'utf8');
@@ -48,13 +49,30 @@ test('Explore is search-first and keeps acceptance canaries out of primary produ
 });
 
 test('Quick Detail is analyst-facing and hides canonical internals behind Raw / Canonical', () => {
-  for (const label of ['Overview', 'Fields', 'Example', 'Detection & Hunt', 'Sources', 'Raw / Canonical']) assert.ok(main.includes(`'${label}'`), `missing generated quick-detail tab: ${label}`);
-  assert.ok(main.includes("firstClaim(detail,'telemetry.represents')"));
+  for (const label of ['Overview', 'Fields', 'Example', 'Detection & Hunt', 'Sources', 'Raw / Canonical']) assert.ok(projection.TAB_MODELS.event.some(tab => tab[1] === label), `missing event quick-detail tab: ${label}`);
+  assert.ok(main.includes("firstClaim(detail,entityProjection.overviewPredicate(base))"));
   assert.ok(main.includes("firstClaim(detail,'security.relevance')"));
   assert.ok(main.includes("claims(detail,'telemetry.field-semantics')"));
   assert.ok(main.includes('Key investigative pivots'));
   assert.ok(main.includes('No accepted example is packaged for this record yet.'));
   assert.ok(main.includes('Canonical/internal model data is intentionally kept out of the primary analyst view.'));
+});
+
+test('Tool and Hunt Profile projection is generic and does not fake Event fields', () => {
+  const tool={entity_type:'tool',native_identifiers:[{type:'tool_name',value:'utility.exe'}]};
+  const hunt={entity_type:'activity',native_identifiers:[{type:'hunt_profile',value:'profile'}]};
+  assert.equal(projection.kind(tool),'tool');
+  assert.equal(projection.kind(hunt),'hunt');
+  assert.equal(projection.overviewPredicate(hunt),'behavior.description');
+  assert.deepEqual(projection.tabs(tool).map(tab=>tab[1]),['Overview','Capabilities','Relationships','Sources','Raw / Canonical']);
+  assert.deepEqual(projection.tabs(hunt).map(tab=>tab[1]),['Overview','Investigation','Relationships','Sources','Raw / Canonical']);
+  assert.equal(projection.tabs(tool).some(tab=>tab[1]==='Fields'),false);
+  assert.equal(projection.tabs(hunt).some(tab=>tab[1]==='Example'),false);
+  assert.deepEqual(projection.entityPivots(tool,{}, {lolbas_categories:['Execute'],attack_techniques:['T1218']},{recommended_telemetry:['Windows 4688']}),['Execute','T1218','Windows 4688']);
+  assert.deepEqual(projection.entityPivots(hunt,{artifact_families:['process-tree']},{related_event_ids:['4688']},{}),['process-tree','Event 4688']);
+  assert.ok(main.includes("firstClaim(detail,entityProjection.overviewPredicate(base))"));
+  assert.ok(main.includes("entityProjection.tabs(base)"));
+  assert.ok(main.includes("entityProjection.entityPivots(base,overview,security,collection)"));
 });
 
 test('workspace preserves the frozen seven-command Desktop boundary', () => {
@@ -73,7 +91,7 @@ test('untrusted corpus data is rendered without HTML injection sinks', () => {
 
 test('ATLAS Entity participates in analyst navigation rather than acting only as a status lamp', () => {
   for (const id of ['entityVisual', 'entityStateLabel', 'entityInsightTitle', 'entityPivots']) assert.ok(html.includes(`id="${id}"`), `missing ${id}`);
-  assert.ok(main.includes('renderEntityPivots(detail)'));
+  assert.ok(main.includes('renderEntityPivots(detail,base,overview,security,collection)'));
   assert.ok(main.includes("activateTab('fields')"));
   assert.ok(main.includes("showView('mindmap')"));
   assert.ok(css.includes('body[data-entity-mode="reasoning"]'));
