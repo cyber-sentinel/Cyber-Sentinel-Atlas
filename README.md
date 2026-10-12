@@ -72,21 +72,9 @@ ATLAS creates a governed layer between those sources and the analyst. It does **
 
 The current MVP-2 direction is **search-first**: the primary page should answer the analyst quickly; deeper views provide supporting evidence and investigation structure.
 
-```text
-Search
-  ↓
-Quick Answer
-  ↓
-Record Detail + Fields
-  ↓
-Sources + Provenance
-  ↓
-Relationships / Mind Map
-  ↓
-Investigation Context
-  ↓
-ATLAS Entity guidance
-```
+<p align="center">
+  <img src="assets/atlas-analyst-workflow.svg" alt="ATLAS search-first analyst workflow from search to provenance, mind map, investigation, and ATLAS Entity guidance" width="100%" />
+</p>
 
 The analyst surface is designed around:
 
@@ -159,27 +147,9 @@ Authoritative public coverage references:
   <img src="assets/ATLAS-IR.png" alt="ATLAS content and production architecture" width="100%" />
 </p>
 
-```text
-Authoritative Sources
-        ↓
-Acquisition + Raw Snapshots
-        ↓
-Parsing + Normalization + Lineage
-        ↓
-Validation + Human Review
-        ↓
-Canonical AtlasRecord Model
-        ↓
-Deterministic Search (SQLite + FTS5)
-        ↓
-Verified Content Packs (.atlaspack + TUF)
-        ↓
-Production Shared Core (Go)
-        ↓
-Versioned Local Protocol
-        ↓
-Windows Desktop → Web/PWA → API/CLI → Grounded AI
-```
+<p align="center">
+  <img src="assets/atlas-verified-pipeline.svg" alt="ATLAS verified content pipeline from authoritative sources to canonical records, deterministic search, verified packs, shared core, and product surfaces" width="100%" />
+</p>
 
 ### Accepted production boundary
 
