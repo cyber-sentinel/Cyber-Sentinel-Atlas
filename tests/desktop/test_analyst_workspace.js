@@ -17,6 +17,7 @@ const tauri = JSON.parse(fs.readFileSync(path.join(tauriRoot, 'tauri.conf.json')
 const entity = require(path.join(webRoot, 'entity-state.js'));
 const investigation = require(path.join(webRoot, 'investigation-model.js'));
 const investigationFixtures = JSON.parse(fs.readFileSync(path.join(root, 'tests', 'fixtures', 'desktop', 'investigation-canaries.v0.json'), 'utf8'));
+const entitySource = fs.readFileSync(path.join(webRoot, 'entity-state.js'), 'utf8');
 
 test('ATLAS Entity exposes only the six explicit analyst states', () => {
   assert.deepEqual(entity.MODES, ['idle', 'searching', 'correlating', 'reasoning', 'finding', 'warning']);
@@ -78,6 +79,27 @@ test('ATLAS Entity participates in analyst navigation rather than acting only as
   assert.ok(css.includes('body[data-entity-mode="reasoning"]'));
   assert.ok(css.includes('@media(prefers-reduced-motion:reduce)'));
   assert.ok(css.includes('body[data-theme="high-contrast"]'));
+  assert.ok(entitySource.includes('entity-gesture-field'));
+  for (const mode of entity.MODES) assert.ok(entitySource.includes(`data-entity-mode="${mode}"`), `missing visible motion profile for ${mode}`);
+  assert.ok(entitySource.includes('@media (prefers-reduced-motion:reduce)'));
+});
+
+test('search and record failures clear prior selection and use nested Shared Core scope metadata', () => {
+  assert.ok(main.includes('state.currentMatch=match||null'));
+  assert.ok(main.includes('window.AtlasStaleSelectionGuard?.resetWorkspaceAfterSearchMiss?.()'));
+  assert.ok(main.includes('const loaded=await loadRecord(only.target_id,false,only);if(!loaded)return[];'));
+  assert.ok(main.includes('const scope=m?.scope||{}'));
+  assert.ok(main.includes('provider=m.provider||scope.provider'));
+});
+
+test('Tauri commands keep blocking child-process I/O off the WebView command executor', () => {
+  assert.ok(rustMain.includes('async fn run_core_session_async'));
+  assert.ok(rustMain.includes('tauri::async_runtime::spawn_blocking'));
+  for (const command of ['core_status','search_records','get_record','expand_graph','pack_status','pack_update','pack_rollback']) {
+    assert.ok(rustMain.includes(`async fn ${command}(`), `${command} must remain asynchronous`);
+  }
+  assert.ok(rustMain.includes('stdout_reader = thread::spawn'));
+  assert.ok(rustMain.includes('stderr_reader = thread::spawn'));
 });
 
 test('Mind Map renders a bounded graphical node-link view without arbitrary graph execution', () => {

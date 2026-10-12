@@ -202,16 +202,42 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
     let mut child = command
         .spawn()
         .map_err(|e| format!("spawn atlas-core: {e}"))?;
-    {
+    let write_result = {
         let mut stdin = child.stdin.take().ok_or("atlas-core stdin unavailable")?;
-        stdin
+        let result = stdin
             .write_all(&wire)
-            .map_err(|e| format!("write atlas-core stdin: {e}"))?;
-        stdin
-            .flush()
-            .map_err(|e| format!("flush atlas-core stdin: {e}"))?;
+            .map_err(|e| format!("write atlas-core stdin: {e}"))
+            .and_then(|_| {
+                stdin
+                    .flush()
+                    .map_err(|e| format!("flush atlas-core stdin: {e}"))
+            });
+        result
+    };
+    if let Err(error) = write_result {
+        let _ = child.kill();
+        let _ = child.wait();
+        return Err(error);
     }
 
+    let mut stdout_stream = child.stdout.take().ok_or("atlas-core stdout unavailable")?;
+    let mut stderr_stream = child.stderr.take().ok_or("atlas-core stderr unavailable")?;
+    let stdout_reader = thread::spawn(move || {
+        let mut bytes = Vec::new();
+        stdout_stream
+            .read_to_end(&mut bytes)
+            .map_err(|e| format!("read stdout: {e}"))?;
+        Ok::<Vec<u8>, String>(bytes)
+    });
+    let stderr_reader = thread::spawn(move || {
+        let mut bytes = Vec::new();
+        stderr_stream
+            .read_to_end(&mut bytes)
+            .map_err(|e| format!("read stderr: {e}"))?;
+        Ok::<Vec<u8>, String>(bytes)
+    });
+
+    let mut timed_out = false;
     let status = loop {
         if let Some(status) = child
             .try_wait()
@@ -221,22 +247,22 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
         }
         if started.elapsed() > Duration::from_secs(15) {
             let _ = child.kill();
-            return Err("atlas-core stdio request timed out".into());
+            timed_out = true;
+            break child
+                .wait()
+                .map_err(|e| format!("wait for timed-out atlas-core: {e}"))?;
         }
         thread::sleep(Duration::from_millis(20));
     };
 
-    let mut stdout = Vec::new();
-    let mut stderr = Vec::new();
-    if let Some(mut stream) = child.stdout.take() {
-        stream
-            .read_to_end(&mut stdout)
-            .map_err(|e| format!("read stdout: {e}"))?;
-    }
-    if let Some(mut stream) = child.stderr.take() {
-        stream
-            .read_to_end(&mut stderr)
-            .map_err(|e| format!("read stderr: {e}"))?;
+    let stdout = stdout_reader
+        .join()
+        .map_err(|_| "atlas-core stdout reader panicked".to_string())??;
+    let stderr = stderr_reader
+        .join()
+        .map_err(|_| "atlas-core stderr reader panicked".to_string())??;
+    if timed_out {
+        return Err("atlas-core stdio request timed out".into());
     }
     if !status.success() {
         return Err(format!(
@@ -333,39 +359,53 @@ fn run_core_probe() -> Result<Value, String> {
     }))
 }
 
-#[tauri::command]
-fn core_status() -> Result<Value, String> {
-    run_core_probe()
+async fn run_core_session_async(
+    method: &'static str,
+    params: Value,
+) -> Result<CoreSessionEvidence, String> {
+    tauri::async_runtime::spawn_blocking(move || run_core_session(method, params))
+        .await
+        .map_err(|error| format!("atlas-core worker failed: {error}"))?
 }
 
 #[tauri::command]
-fn search_records(query: String, limit: Option<i64>) -> Result<Value, String> {
+async fn core_status() -> Result<Value, String> {
+    tauri::async_runtime::spawn_blocking(run_core_probe)
+        .await
+        .map_err(|error| format!("atlas-core status worker failed: {error}"))?
+}
+
+#[tauri::command]
+async fn search_records(query: String, limit: Option<i64>) -> Result<Value, String> {
     validate_nonempty_scalar_bounded(&query, "query", MAX_UI_QUERY_SCALARS)?;
     let limit = limit.unwrap_or(20);
     if !(1..=MAX_UI_RESULT_LIMIT).contains(&limit) {
         return Err("limit is outside the Desktop result bound".into());
     }
-    Ok(run_core_session(
+    Ok(run_core_session_async(
         "search.query",
         json!({"query": query, "graph_depth": 1, "limit": limit}),
-    )?
+    )
+    .await?
     .result)
 }
 
 #[tauri::command]
-fn get_record(id: String) -> Result<Value, String> {
+async fn get_record(id: String) -> Result<Value, String> {
     validate_nonempty_scalar_bounded(&id, "id", MAX_UI_IDENTIFIER_SCALARS)?;
-    Ok(run_core_session("record.get", json!({"id": id, "detail": true}))?.result)
+    Ok(run_core_session_async("record.get", json!({"id": id, "detail": true}))
+        .await?
+        .result)
 }
 
 #[tauri::command]
-fn expand_graph(seed_id: String, depth: Option<i64>) -> Result<Value, String> {
+async fn expand_graph(seed_id: String, depth: Option<i64>) -> Result<Value, String> {
     validate_nonempty_scalar_bounded(&seed_id, "seed_id", MAX_UI_IDENTIFIER_SCALARS)?;
     let depth = depth.unwrap_or(1);
     if !(0..=MAX_UI_GRAPH_DEPTH).contains(&depth) {
         return Err("depth is outside the Desktop request bound".into());
     }
-    Ok(run_core_session(
+    Ok(run_core_session_async(
         "graph.expand",
         json!({
             "seed_ids": [seed_id],
@@ -373,23 +413,24 @@ fn expand_graph(seed_id: String, depth: Option<i64>) -> Result<Value, String> {
             "direction": "both",
             "limit": 100
         }),
-    )?
+    )
+    .await?
     .result)
 }
 
 #[tauri::command]
-fn pack_status() -> Result<Value, String> {
-    Ok(run_core_session("pack.status", json!({}))?.result)
+async fn pack_status() -> Result<Value, String> {
+    Ok(run_core_session_async("pack.status", json!({})).await?.result)
 }
 
 #[tauri::command]
-fn pack_update() -> Result<Value, String> {
-    Ok(run_core_session("pack.update", json!({}))?.result)
+async fn pack_update() -> Result<Value, String> {
+    Ok(run_core_session_async("pack.update", json!({})).await?.result)
 }
 
 #[tauri::command]
-fn pack_rollback() -> Result<Value, String> {
-    Ok(run_core_session("pack.rollback", json!({}))?.result)
+async fn pack_rollback() -> Result<Value, String> {
+    Ok(run_core_session_async("pack.rollback", json!({})).await?.result)
 }
 
 fn arg_value(name: &str) -> Option<String> {
