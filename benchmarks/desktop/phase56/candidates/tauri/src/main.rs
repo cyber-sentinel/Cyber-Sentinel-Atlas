@@ -1,11 +1,11 @@
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use std::fs::{self, File};
 use std::io::{Read, Write};
-use std::path::{Path, PathBuf};
-use std::process::{Command, Stdio};
 #[cfg(windows)]
 use std::os::windows::process::CommandExt;
+use std::path::{Path, PathBuf};
+use std::process::{Command, Stdio};
 use std::thread;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
@@ -92,8 +92,7 @@ fn locate_and_verify_sidecar() -> Result<(PathBuf, String), String> {
             manifest.display()
         ));
     }
-    let manifest_text =
-        fs::read_to_string(&manifest).map_err(|e| format!("read manifest: {e}"))?;
+    let manifest_text = fs::read_to_string(&manifest).map_err(|e| format!("read manifest: {e}"))?;
     let expected_text = manifest_text
         .split_whitespace()
         .next()
@@ -393,9 +392,11 @@ async fn search_records(query: String, limit: Option<i64>) -> Result<Value, Stri
 #[tauri::command]
 async fn get_record(id: String) -> Result<Value, String> {
     validate_nonempty_scalar_bounded(&id, "id", MAX_UI_IDENTIFIER_SCALARS)?;
-    Ok(run_core_session_async("record.get", json!({"id": id, "detail": true}))
-        .await?
-        .result)
+    Ok(
+        run_core_session_async("record.get", json!({"id": id, "detail": true}))
+            .await?
+            .result,
+    )
 }
 
 #[tauri::command]
@@ -420,17 +421,23 @@ async fn expand_graph(seed_id: String, depth: Option<i64>) -> Result<Value, Stri
 
 #[tauri::command]
 async fn pack_status() -> Result<Value, String> {
-    Ok(run_core_session_async("pack.status", json!({})).await?.result)
+    Ok(run_core_session_async("pack.status", json!({}))
+        .await?
+        .result)
 }
 
 #[tauri::command]
 async fn pack_update() -> Result<Value, String> {
-    Ok(run_core_session_async("pack.update", json!({})).await?.result)
+    Ok(run_core_session_async("pack.update", json!({}))
+        .await?
+        .result)
 }
 
 #[tauri::command]
 async fn pack_rollback() -> Result<Value, String> {
-    Ok(run_core_session_async("pack.rollback", json!({})).await?.result)
+    Ok(run_core_session_async("pack.rollback", json!({}))
+        .await?
+        .result)
 }
 
 fn arg_value(name: &str) -> Option<String> {
