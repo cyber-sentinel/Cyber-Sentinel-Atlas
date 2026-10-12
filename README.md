@@ -21,9 +21,14 @@ ATLAS is the **KNOW** layer of the Cyber-Sentinel ecosystem: an offline-first an
 
 ATLAS is designed for SOC analysts, incident responders, threat hunters, DFIR practitioners, detection engineers, security architects, and restricted/high-assurance environments that need investigation context to remain **deterministic, attributable, reviewable, offline-capable, and operationally safe**.
 
-> **First Preview engineering readiness:** READY  
-> **Release state:** Pre-preview / unreleased  
-> **Public Preview state:** BLOCKED / fail-closed  
+> **First Preview engineering readiness:** READY
+>
+> **Release state:** Pre-preview / unreleased
+>
+> **Repository visibility:** Public
+>
+> **Public Preview state:** BLOCKED / fail-closed
+>
 > **No technical claim without provenance.**
 
 ## Current State
