@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 680" role="img" aria-labelledby="title desc">
+  <title id="title">ATLAS verified content pipeline</title>
+  <desc id="desc">Authoritative sources are acquired, normalized, validated, converted to canonical records, indexed, packaged with trust, and consumed by shared core surfaces.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#07111f"/><stop offset="1" stop-color="#111827"/></linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#60a5fa"/></marker>
+  </defs>
+  <rect width="1500" height="680" rx="30" fill="url(#bg)"/>
+  <text x="750" y="66" text-anchor="middle" fill="#f8fafc" font-family="Segoe UI,Arial,sans-serif" font-size="34" font-weight="700">ATLAS Verified Content Pipeline</text>
+  <text x="750" y="101" text-anchor="middle" fill="#94a3b8" font-family="Segoe UI,Arial,sans-serif" font-size="16">From authoritative evidence to deterministic analyst surfaces</text>
+
+  <g font-family="Segoe UI,Arial,sans-serif">
+    <g transform="translate(60 175)"><rect width="165" height="150" rx="20" fill="#0f172a" stroke="#64748b"/><text x="82" y="48" text-anchor="middle" fill="#e2e8f0" font-size="17" font-weight="700">Authoritative</text><text x="82" y="70" text-anchor="middle" fill="#e2e8f0" font-size="17" font-weight="700">Sources</text><text x="82" y="105" text-anchor="middle" fill="#94a3b8" font-size="12">Official docs</text><text x="82" y="124" text-anchor="middle" fill="#94a3b8" font-size="12">Provider evidence</text></g>
+    <g transform="translate(250 175)"><rect width="165" height="150" rx="20" fill="#0f172a" stroke="#64748b"/><text x="82" y="55" text-anchor="middle" fill="#e2e8f0" font-size="17" font-weight="700">Acquisition</text><text x="82" y="80" text-anchor="middle" fill="#e2e8f0" font-size="17" font-weight="700">+ Snapshots</text><text x="82" y="116" text-anchor="middle" fill="#94a3b8" font-size="12">Pinned identity</text><text x="82" y="135" text-anchor="middle" fill="#94a3b8" font-size="12">Lineage captured</text></g>
+    <g transform="translate(440 175)"><rect width="165" height="150" rx="20" fill="#0f172a" stroke="#64748b"/><text x="82" y="55" text-anchor="middle" fill="#e2e8f0" font-size="17" font-weight="700">Parse</text><text x="82" y="80" text-anchor="middle" fill="#e2e8f0" font-size="17" font-weight="700">+ Normalize</text><text x="82" y="116" text-anchor="middle" fill="#94a3b8" font-size="12">Schema mapping</text><text x="82" y="135" text-anchor="middle" fill="#94a3b8" font-size="12">Version context</text></g>
+    <g transform="translate(630 175)"><rect width="165" height="150" rx="20" fill="#082f2b" stroke="#2dd4bf" stroke-width="2"/><text x="82" y="55" text-anchor="middle" fill="#ccfbf1" font-size="17" font-weight="700">Validation</text><text x="82" y="80" text-anchor="middle" fill="#ccfbf1" font-size="17" font-weight="700">+ Human Review</text><text x="82" y="116" text-anchor="middle" fill="#99f6e4" font-size="12">Fail closed</text><text x="82" y="135" text-anchor="middle" fill="#99f6e4" font-size="12">Evidence checked</text></g>
+    <g transform="translate(820 175)"><rect width="165" height="150" rx="20" fill="#0b1f3a" stroke="#3b82f6" stroke-width="2"/><text x="82" y="55" text-anchor="middle" fill="#dbeafe" font-size="17" font-weight="700">Canonical</text><text x="82" y="80" text-anchor="middle" fill="#dbeafe" font-size="17" font-weight="700">AtlasRecord</text><text x="82" y="116" text-anchor="middle" fill="#93c5fd" font-size="12">Stable identity</text><text x="82" y="135" text-anchor="middle" fill="#93c5fd" font-size="12">Claim provenance</text></g>
+    <g transform="translate(1010 175)"><rect width="165" height="150" rx="20" fill="#0b1f3a" stroke="#3b82f6"/><text x="82" y="55" text-anchor="middle" fill="#dbeafe" font-size="17" font-weight="700">Deterministic</text><text x="82" y="80" text-anchor="middle" fill="#dbeafe" font-size="17" font-weight="700">Search</text><text x="82" y="116" text-anchor="middle" fill="#93c5fd" font-size="12">SQLite + FTS5</text><text x="82" y="135" text-anchor="middle" fill="#93c5fd" font-size="12">Exact before lexical</text></g>
+    <g transform="translate(1200 175)"><rect width="240" height="150" rx="20" fill="#21123d" stroke="#8b5cf6" stroke-width="2"/><text x="120" y="48" text-anchor="middle" fill="#f3e8ff" font-size="17" font-weight="700">Verified Content Pack</text><text x="120" y="75" text-anchor="middle" fill="#c4b5fd" font-size="14">.atlaspack + TUF trust</text><text x="120" y="106" text-anchor="middle" fill="#c4b5fd" font-size="12">Checksum • rollback protection</text><text x="120" y="126" text-anchor="middle" fill="#c4b5fd" font-size="12">Last Known Good</text></g>
+  </g>
+
+  <g stroke="#60a5fa" stroke-width="4" marker-end="url(#arrow)"><path d="M225 250 H242"/><path d="M415 250 H432"/><path d="M605 250 H622"/><path d="M795 250 H812"/><path d="M985 250 H1002"/><path d="M1175 250 H1192"/></g>
+
+  <path d="M1320 325 V395 H750" fill="none" stroke="#8b5cf6" stroke-width="4" marker-end="url(#arrow)"/>
+  <rect x="565" y="395" width="370" height="90" rx="22" fill="#0b1f3a" stroke="#38bdf8" stroke-width="2"/>
+  <text x="750" y="430" text-anchor="middle" fill="#f8fafc" font-family="Segoe UI,Arial,sans-serif" font-size="20" font-weight="700">Production Shared Core — Go</text>
+  <text x="750" y="457" text-anchor="middle" fill="#94a3b8" font-family="Segoe UI,Arial,sans-serif" font-size="13">Bounded local stdio protocol • no default network listener</text>
+
+  <g font-family="Segoe UI,Arial,sans-serif" font-size="14">
+    <rect x="200" y="540" width="210" height="62" rx="17" fill="#0f172a" stroke="#334155"/><text x="305" y="568" text-anchor="middle" fill="#f8fafc" font-weight="700">Windows Desktop</text><text x="305" y="587" text-anchor="middle" fill="#94a3b8">Tauri analyst workbench</text>
+    <rect x="445" y="540" width="210" height="62" rx="17" fill="#0f172a" stroke="#334155"/><text x="550" y="568" text-anchor="middle" fill="#f8fafc" font-weight="700">Web / PWA</text><text x="550" y="587" text-anchor="middle" fill="#94a3b8">Shared canonical contracts</text>
+    <rect x="690" y="540" width="210" height="62" rx="17" fill="#0f172a" stroke="#334155"/><text x="795" y="568" text-anchor="middle" fill="#f8fafc" font-weight="700">API / CLI</text><text x="795" y="587" text-anchor="middle" fill="#94a3b8">Deterministic interfaces</text>
+    <rect x="935" y="540" width="260" height="62" rx="17" fill="#0f172a" stroke="#334155"/><text x="1065" y="568" text-anchor="middle" fill="#f8fafc" font-weight="700">Grounded AI</text><text x="1065" y="587" text-anchor="middle" fill="#94a3b8">Optional assistance over verified context</text>
+  </g>
+  <path d="M750 485 V520" stroke="#5eead4" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M750 520 H305 V532 M750 520 H550 V532 M750 520 H795 V532 M750 520 H1065 V532" fill="none" stroke="#5eead4" stroke-width="3"/>
+
+  <text x="750" y="645" text-anchor="middle" fill="#5eead4" font-family="Segoe UI,Arial,sans-serif" font-size="14" font-weight="700">Source authority and provenance survive every transformation.</text>
+</svg>
