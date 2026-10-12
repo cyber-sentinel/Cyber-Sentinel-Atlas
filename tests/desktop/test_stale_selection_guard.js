@@ -78,6 +78,15 @@ test('successful search preserves the currently selected record context', async 
   assert.equal(h.metricsReset(), false);
 });
 
+test('record-resolution failure represented as an empty result clears Entity focus and pivots', async () => {
+  const h = harness([]);
+  await h.context.runSearchQuery('record.get failed closed');
+  assert.equal(h.context.state.currentRecordId, null);
+  assert.equal(h.context.state.currentMatch, null);
+  assert.equal(h.elements.get('entityPivots').children.length, 0);
+  assert.equal(h.elements.get('recordDetail').textContent, 'No record selected.');
+});
+
 test('guard is loaded after main workspace script so it wraps the final search function', () => {
   const mainAt = html.indexOf('<script src="main.js"></script>');
   const guardAt = html.indexOf('<script src="stale-selection-guard.js"></script>');

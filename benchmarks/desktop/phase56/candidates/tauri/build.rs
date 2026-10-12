@@ -23,9 +23,8 @@ fn write_deterministic_windows_icon() -> PathBuf {
     const DIB_BYTES: u32 = 40 + PIXEL_BYTES + MASK_BYTES;
     const IMAGE_OFFSET: u32 = 6 + 16;
 
-    let manifest_dir = PathBuf::from(
-        env::var_os("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR is required"),
-    );
+    let manifest_dir =
+        PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR is required"));
     let icon_dir = manifest_dir.join("icons");
     fs::create_dir_all(&icon_dir).expect("failed to create deterministic Tauri icon directory");
     let icon_path = icon_dir.join("icon.ico");

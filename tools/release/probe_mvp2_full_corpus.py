@@ -22,6 +22,11 @@ APPROVED = ROOT / "content" / "encyclopedia" / "approved-exemplars.json"
 POWERSHELL_BATCH_GLOB = "powershell-operational-26100-batch*.json"
 SEARCH_CONTRACT = "1.0.0"
 DETAIL_CONTRACT = "1.0.0"
+GOVERNED_EXAMPLE_TARGETS = {
+    "atlas:event:microsoft.windows.security:4624",
+    "atlas:event:microsoft.windows.security:4688",
+    "atlas:event:microsoft.sysmon:1",
+}
 
 
 def write_frame(stream: BinaryIO, value: dict[str, Any]) -> None:
@@ -131,9 +136,23 @@ def target_in_search(result: Any, target_id: str) -> bool:
     if not isinstance(result, dict) or result.get("search_contract_version") != SEARCH_CONTRACT:
         return False
     matches = result.get("matches")
-    return isinstance(matches, list) and any(
-        isinstance(item, dict) and item.get("target_id") == target_id for item in matches
-    )
+    if not isinstance(matches, list):
+        return False
+    targets = [
+        item.get("target_id") for item in matches
+        if isinstance(item, dict) and item.get("target_id") == target_id
+    ]
+    return len(targets) == 1
+
+
+def synthetic_match(item: Any) -> bool:
+    if not isinstance(item, dict):
+        return False
+    value = " ".join(
+        str(item.get(key, ""))
+        for key in ("target_id", "title", "provider", "product", "namespace", "match_reason")
+    ).lower()
+    return "synthetic.test" in value or "synthetic collision" in value
 
 
 def claim_value(claim: dict[str, Any]) -> Any:
@@ -178,6 +197,9 @@ def verify_detail(event: dict[str, Any], detail: Any) -> dict[str, Any]:
     ]
     if len(overview_claims) != 1 or not isinstance(claim_value(overview_claims[0]), dict):
         raise RuntimeError(f"{target_id}: telemetry.represents overview projection missing/ambiguous")
+    runtime_overview = claim_value(overview_claims[0])
+    if not isinstance(runtime_overview.get("summary"), str) or not runtime_overview["summary"].strip():
+        raise RuntimeError(f"{target_id}: runtime analyst overview summary missing")
 
     field_ids = {
         item.get("id") for item in projected_fields
@@ -193,6 +215,33 @@ def verify_detail(event: dict[str, Any], detail: Any) -> dict[str, Any]:
         raise RuntimeError(
             f"{target_id}: field semantics mismatch; expected {len(expected_fields)}, got {len(field_semantics)}"
         )
+    expected_field_names = sorted(
+        str(item.get("native_name", "")) for item in expected_fields if isinstance(item, dict)
+    )
+    projected_field_names = sorted(
+        str(value.get("native_name", ""))
+        for item in field_semantics
+        for value in [claim_value(item)]
+        if isinstance(value, dict)
+    )
+    if projected_field_names != expected_field_names:
+        raise RuntimeError(
+            f"{target_id}: field semantics identity mismatch; expected {expected_field_names}, "
+            f"got {projected_field_names}"
+        )
+
+    example_ok = target_id not in GOVERNED_EXAMPLE_TARGETS
+    if target_id in GOVERNED_EXAMPLE_TARGETS:
+        examples = runtime_overview.get("examples")
+        example_ok = (
+            isinstance(examples, list)
+            and len(examples) == 1
+            and isinstance(examples[0], str)
+            and "sanitized" in examples[0].lower()
+            and "synthetic/documentation-only" in examples[0].lower()
+        )
+        if not example_ok:
+            raise RuntimeError(f"{target_id}: governed sanitized analyst example is missing")
 
     sources = detail.get("sources")
     if not isinstance(sources, list):
@@ -209,6 +258,7 @@ def verify_detail(event: dict[str, Any], detail: Any) -> dict[str, Any]:
         "overview_ok": True,
         "fields_ok": True,
         "sources_ok": True,
+        "example_ok": example_ok,
     }
 
 
@@ -293,6 +343,9 @@ def main() -> int:
                 "search.query",
                 {"query": query, "graph_depth": 1, "limit": 50},
             )
+            matches = search.get("matches") if isinstance(search, dict) else None
+            if isinstance(matches, list) and any(synthetic_match(item) for item in matches):
+                raise RuntimeError(f"{target_id}: internal/synthetic fixture leaked into analyst search")
             if not target_in_search(search, target_id):
                 raise RuntimeError(f"{target_id}: not discoverable by analyst query {query!r}")
             detail = request_process(
@@ -316,6 +369,9 @@ def main() -> int:
             "all_field_projections_exact": True,
             "all_overviews_present": True,
             "all_primary_sources_projected": True,
+            "all_field_semantics_exact": True,
+            "governed_examples_present": True,
+            "synthetic_fixture_leakage": False,
         }
         expected_summary = (429, 30, 43, 502)
         actual_summary = (
