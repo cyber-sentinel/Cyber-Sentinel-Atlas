@@ -14,7 +14,7 @@ IDS = [
 ]
 SOURCE_ID = "atlas:source:atlas.source:microsoft-windows-powershell-operational-provider-26100"
 RAW_SHA = "sha256-cdd3f6b37731ebc384e160743893ac3a53e9457e60b2b9438e4c5b585c793f25"
-NORMALIZED_SHA = "sha256-66778e77ab79e38034c1a7a5005db2a3513124d141e77b2905bb0146d75bc3fc"
+NORMALIZED_SHA = "sha256-48f42f368d6b1e3c6235a9a03252288ab4981cb64ba824664821842112a6aaf0"
 
 
 def load_module(name: str, path: Path):
