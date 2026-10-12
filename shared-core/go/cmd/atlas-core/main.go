@@ -36,7 +36,30 @@ func validCommitNamespace(value string) bool {
 
 func isolatedEngineeringBuild(version string) bool {
 	value := strings.ToLower(version)
-	return strings.Contains(value, "preview") || strings.Contains(value, "mvp2-private")
+	return strings.Contains(value, "preview") ||
+		(strings.Contains(value, "mvp2") && strings.Contains(value, "private"))
+}
+
+func bundledEngineeringPreviewPresent(bundleRoot string) (bool, error) {
+	archivePath := filepath.Join(bundleRoot, bundledPreviewPackName)
+	rootPath := filepath.Join(bundleRoot, bundledPreviewRootName)
+	var archiveErr error
+	var rootErr error
+	if _, err := os.Lstat(archivePath); err != nil {
+		archiveErr = err
+	}
+	if _, err := os.Lstat(rootPath); err != nil {
+		rootErr = err
+	}
+	archiveMissing := errors.Is(archiveErr, os.ErrNotExist)
+	rootMissing := errors.Is(rootErr, os.ErrNotExist)
+	if archiveErr != nil && !archiveMissing {
+		return false, fmt.Errorf("inspect bundled engineering preview pack: %w", archiveErr)
+	}
+	if rootErr != nil && !rootMissing {
+		return false, fmt.Errorf("inspect bundled engineering preview trust root: %w", rootErr)
+	}
+	return !(archiveMissing && rootMissing), nil
 }
 
 // resolveRuntimeRoot keeps release/runtime state stable while isolating
@@ -46,12 +69,16 @@ func isolatedEngineeringBuild(version string) bool {
 // active generation to shadow the newly bundled pack and would also create
 // invalid trust continuity between unrelated preview roots. Production and
 // ordinary development builds retain the canonical stable runtime root.
-func resolveRuntimeRoot() (string, error) {
+func resolveRuntimeRoot(bundleRoot string) (string, error) {
 	base, err := pack.DefaultRuntimeRoot()
 	if err != nil {
 		return "", err
 	}
-	if !isolatedEngineeringBuild(coreVersion) {
+	bundledPreview, err := bundledEngineeringPreviewPresent(bundleRoot)
+	if err != nil {
+		return "", err
+	}
+	if !isolatedEngineeringBuild(coreVersion) && !bundledPreview {
 		return base, nil
 	}
 	if !validCommitNamespace(coreCommit) {
@@ -143,15 +170,16 @@ func openRuntimeWithBundle(runtimeRoot, bundleRoot string) (*app.Runtime, error)
 }
 
 func openRuntime() (*app.Runtime, error) {
-	runtimeRoot, err := resolveRuntimeRoot()
-	if err != nil {
-		return nil, err
-	}
 	executable, err := os.Executable()
 	if err != nil {
 		return nil, fmt.Errorf("resolve atlas-core executable: %w", err)
 	}
-	return openRuntimeWithBundle(runtimeRoot, filepath.Dir(executable))
+	bundleRoot := filepath.Dir(executable)
+	runtimeRoot, err := resolveRuntimeRoot(bundleRoot)
+	if err != nil {
+		return nil, err
+	}
+	return openRuntimeWithBundle(runtimeRoot, bundleRoot)
 }
 
 func main() {

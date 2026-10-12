@@ -11,7 +11,7 @@ import (
 )
 
 func TestResolveRuntimeRootNamespacesEngineeringBuildByCommit(t *testing.T) {
-	for _, version := range []string{"0.1.0-preview", "0.2.0-mvp2-private"} {
+	for _, version := range []string{"0.1.0-preview", "0.2.0-mvp2-private", "0.2.0-mvp2-powershell-private"} {
 		t.Run(version, func(t *testing.T) {
 			oldVersion, oldCommit := coreVersion, coreCommit
 			defer func() {
@@ -24,7 +24,7 @@ func TestResolveRuntimeRootNamespacesEngineeringBuildByCommit(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			got, err := resolveRuntimeRoot()
+			got, err := resolveRuntimeRoot(t.TempDir())
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -48,7 +48,7 @@ func TestResolveRuntimeRootProductionUsesStableBase(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	got, err := resolveRuntimeRoot()
+	got, err := resolveRuntimeRoot(t.TempDir())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -65,8 +65,51 @@ func TestResolveRuntimeRootEngineeringRejectsUnsafeCommit(t *testing.T) {
 	coreVersion = "0.2.0-mvp2-private"
 	coreCommit = "../not-a-commit"
 
-	if _, err := resolveRuntimeRoot(); err == nil || !strings.Contains(err.Error(), "40-character hexadecimal") {
+	if _, err := resolveRuntimeRoot(t.TempDir()); err == nil || !strings.Contains(err.Error(), "40-character hexadecimal") {
 		t.Fatalf("unsafe engineering commit must fail closed: %v", err)
+	}
+}
+
+func TestResolveRuntimeRootBundledPreviewNamespacesStableVersion(t *testing.T) {
+	oldVersion, oldCommit := coreVersion, coreCommit
+	defer func() {
+		coreVersion, coreCommit = oldVersion, oldCommit
+	}()
+	coreVersion = "1.0.0"
+	coreCommit = strings.Repeat("c", 40)
+	bundleRoot := t.TempDir()
+	if err := os.WriteFile(filepath.Join(bundleRoot, bundledPreviewPackName), []byte("fixture"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	base, err := pack.DefaultRuntimeRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, err := resolveRuntimeRoot(bundleRoot)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := filepath.Join(base, "preview-builds", coreCommit)
+	if got != want {
+		t.Fatalf("bundled preview runtime root = %q want %q", got, want)
+	}
+}
+
+func TestResolveRuntimeRootBundledPreviewRejectsUnsafeCommit(t *testing.T) {
+	oldVersion, oldCommit := coreVersion, coreCommit
+	defer func() {
+		coreVersion, coreCommit = oldVersion, oldCommit
+	}()
+	coreVersion = "1.0.0"
+	coreCommit = "unknown"
+	bundleRoot := t.TempDir()
+	if err := os.WriteFile(filepath.Join(bundleRoot, bundledPreviewRootName), []byte("fixture"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := resolveRuntimeRoot(bundleRoot); err == nil || !strings.Contains(err.Error(), "40-character hexadecimal") {
+		t.Fatalf("bundled preview with unsafe commit must fail closed: %v", err)
 	}
 }
 
