@@ -54,6 +54,19 @@ class Phase541ReferenceSearchTests(unittest.TestCase):
         self.assertEqual("scoped_identifier", result["match_stage"])
         self.assertEqual(["atlas:event:microsoft.windows.security:4688"], self.target_ids(result))
 
+    def test_scope_word_does_not_hide_a_longer_lexical_title(self):
+        scoped = search.parse_query("Windows 4688")
+        self.assertEqual("microsoft.windows.security", scoped["scope_hints"]["namespace"])
+        self.assertEqual("4688", scoped["identifier_value_hint"])
+
+        phrase = search.parse_query("Windows process baseline anomaly hunting")
+        self.assertEqual({}, phrase["scope_hints"])
+        self.assertIsNone(phrase["identifier_value_hint"])
+        self.assertEqual(
+            ["Windows", "process", "baseline", "anomaly", "hunting"],
+            phrase["terms"],
+        )
+
     def test_sysmon_scoped_exact(self):
         result = self.resolver.resolve("SYSMon   1")
         self.assertEqual("scoped_identifier", result["match_stage"])
