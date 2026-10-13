@@ -724,9 +724,9 @@ class SQLiteSearchCore:
             title_params.extend(title_scope_params)
         title_rows = self.conn.execute(title_sql, title_params).fetchall()
         exact_pairs.extend((str(row["target_id"]), str(row["title"])) for row in title_rows)
-        if exact_pairs:
-            stage = identifier_stage or "lexical"
-            reason = "exact native identifier or entity name" if identifier_stage else "exact entity name"
+        if exact_pairs and identifier_stage:
+            stage = identifier_stage
+            reason = "exact native identifier or entity name"
             return self._envelope(
                 query,
                 stage,
@@ -747,16 +747,26 @@ class SQLiteSearchCore:
             alias_params.extend(alias_scope_params)
         alias_rows = self.conn.execute(alias_sql, alias_params).fetchall()
         if alias_rows:
-            pairs = [(str(row["target_id"]), str(row["value"])) for row in alias_rows]
+            pairs = exact_pairs + [
+                (str(row["target_id"]), str(row["value"])) for row in alias_rows
+            ]
             return self._envelope(
                 query,
                 "alias",
-                self._select_documents_for_targets(pairs, "exact scoped alias"),
+                self._select_documents_for_targets(
+                    pairs, "exact scoped alias or entity name"
+                ),
             )
 
         lexical_text = " ".join(request["terms"])
         tokens = _fts_tokens(lexical_text)
         if not tokens:
+            if exact_pairs:
+                return self._envelope(
+                    query,
+                    "lexical",
+                    self._select_documents_for_targets(exact_pairs, "exact entity name"),
+                )
             return self._envelope(query, "none", [])
         expression = _fts_expression(tokens)
         scope_sql, scope_params = _scope_clause(request["scope_hints"])
@@ -773,18 +783,23 @@ class SQLiteSearchCore:
         title_norm = _fold(lexical_text)
         sql += """
             ORDER BY
-              engine_score ASC,
               CASE WHEN d.title_norm=? THEN 0 ELSE 1 END ASC,
+              engine_score ASC,
               d.title_norm ASC,
               d.target_id ASC
             LIMIT ?
         """
         params.extend([title_norm, limit])
         rows = self.conn.execute(sql, params).fetchall()
-        matches = [
-            self._row_match(row, normalized, "bounded SQLite FTS5 lexical match")
-            for row in rows
-        ]
+        exact_target_ids = {target_id for target_id, _ in exact_pairs}
+        matches = []
+        for row in rows:
+            reason = "bounded SQLite FTS5 lexical match"
+            if str(row["target_id"]) in exact_target_ids:
+                reason = "exact entity name with bounded lexical expansion"
+            matches.append(self._row_match(row, normalized, reason))
+        if not matches and exact_pairs:
+            matches = self._select_documents_for_targets(exact_pairs, "exact entity name")
         return self._envelope(query, "lexical", matches)
 
     def numeric_browse(

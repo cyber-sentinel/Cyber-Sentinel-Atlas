@@ -234,11 +234,8 @@ func (c *Core) Resolve(query string, graphDepth, limit int) (Result, error) {
 			exactPairs[id] = value
 		}
 	}
-	if len(exactPairs) > 0 {
+	if len(exactPairs) > 0 && identifierStage != "" {
 		stage, reason := identifierStage, "exact native identifier or entity name"
-		if stage == "" {
-			stage, reason = "lexical", "exact entity name"
-		}
 		matches, e := c.stableMatches(exactPairs, reason)
 		return c.envelope(query, stage, matches), e
 	}
@@ -254,12 +251,21 @@ func (c *Core) Resolve(query string, graphDepth, limit int) (Result, error) {
 		return Result{}, err
 	}
 	if len(pairs) > 0 {
-		matches, e := c.stableMatches(pairs, "exact scoped alias")
+		for id, value := range pairs {
+			if _, exists := exactPairs[id]; !exists {
+				exactPairs[id] = value
+			}
+		}
+		matches, e := c.stableMatches(exactPairs, "exact scoped alias or entity name")
 		return c.envelope(query, "alias", matches), e
 	}
 	lexical := strings.Join(request.terms, " ")
 	tokens := lexicalTokenRE.FindAllString(norm.NFKC.String(lexical), -1)
 	if len(tokens) == 0 {
+		if len(exactPairs) > 0 {
+			matches, e := c.stableMatches(exactPairs, "exact entity name")
+			return c.envelope(query, "lexical", matches), e
+		}
 		return c.envelope(query, "none", []Match{}), nil
 	}
 	if len(tokens) > MaxTerms {
@@ -277,7 +283,7 @@ func (c *Core) Resolve(query string, graphDepth, limit int) (Result, error) {
 		sqlText += " AND " + where
 		params = append(params, args...)
 	}
-	sqlText += ` ORDER BY bm25(documents_fts) ASC,CASE WHEN d.title_norm=? THEN 0 ELSE 1 END ASC,d.title_norm ASC,d.target_id ASC LIMIT ?`
+	sqlText += ` ORDER BY CASE WHEN d.title_norm=? THEN 0 ELSE 1 END ASC,bm25(documents_fts) ASC,d.title_norm ASC,d.target_id ASC LIMIT ?`
 	params = append(params, fold(lexical), limit)
 	rows, err := c.db.Query(sqlText, params...)
 	if err != nil {
@@ -291,10 +297,18 @@ func (c *Core) Resolve(query string, graphDepth, limit int) (Result, error) {
 		if err = rows.Scan(&row.id, &row.entity, &row.title, &row.namespace, &row.platform, &row.product, &row.provider, &row.channel, &row.lifecycle, &score); err != nil {
 			return Result{}, err
 		}
-		matches = append(matches, row.match(request.normalized, "bounded SQLite FTS5 lexical match"))
+		reason := "bounded SQLite FTS5 lexical match"
+		if _, exact := exactPairs[row.id]; exact {
+			reason = "exact entity name with bounded lexical expansion"
+		}
+		matches = append(matches, row.match(request.normalized, reason))
 	}
 	if err = rows.Err(); err != nil {
 		return Result{}, err
+	}
+	if len(matches) == 0 && len(exactPairs) > 0 {
+		matches, e := c.stableMatches(exactPairs, "exact entity name")
+		return c.envelope(query, "lexical", matches), e
 	}
 	return c.envelope(query, "lexical", matches), nil
 }

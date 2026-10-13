@@ -398,9 +398,9 @@ class ReferenceResolver:
             if request["scope_hints"] and not _scope_matches(seed, request["scope_hints"]):
                 continue
             exact.append((target_id, document["title"]))
-        if exact:
-            stage = identifier_stage or "lexical"
-            reason = "exact native identifier or entity name" if identifier_stage else "exact entity name"
+        if exact and identifier_stage:
+            stage = identifier_stage
+            reason = "exact native identifier or entity name"
             return self._envelope(query, stage, exact, reason)
 
         alias_hits: list[tuple[str, str]] = []
@@ -412,10 +412,16 @@ class ReferenceResolver:
                         continue
                 alias_hits.append((item["target_id"], item["value"]))
         if alias_hits:
-            return self._envelope(query, "alias", alias_hits, "exact scoped alias")
+            return self._envelope(
+                query,
+                "alias",
+                exact + alias_hits,
+                "exact scoped alias or entity name",
+            )
 
         lexical_terms = [_fold(term) for term in request["terms"] if term]
-        lexical_results: list[tuple[int, str]] = []
+        exact_target_ids = {target_id for target_id, _ in exact}
+        lexical_results: list[tuple[int, int, str]] = []
         if lexical_terms:
             for target_id, doc in self.documents.items():
                 seed = self._seed_for_target(target_id)
@@ -426,12 +432,20 @@ class ReferenceResolver:
                 folded = _fold(haystack)
                 score = sum(1 for term in lexical_terms if term in folded)
                 if score == len(lexical_terms):
-                    lexical_results.append((score, target_id))
+                    exact_rank = 0 if target_id in exact_target_ids else 1
+                    lexical_results.append((exact_rank, score, target_id))
         if lexical_results:
-            lexical_results.sort(key=lambda pair: (-pair[0], _fold(self.documents[pair[1]]["title"]), pair[1]))
+            lexical_results.sort(
+                key=lambda pair: (
+                    pair[0],
+                    -pair[1],
+                    _fold(self.documents[pair[2]]["title"]),
+                    pair[2],
+                )
+            )
             matches = [
                 self._make_match(target_id, normalized, "engine-neutral reference lexical containment", reference_score=score)
-                for score, target_id in lexical_results
+                for _, score, target_id in lexical_results
             ]
             return {
                 "search_contract_version": SEARCH_CONTRACT_VERSION,
@@ -441,6 +455,8 @@ class ReferenceResolver:
                 "matches": matches,
             }
 
+        if exact:
+            return self._envelope(query, "lexical", exact, "exact entity name")
         return self._envelope(query, "none", [], "no exact, alias, or reference lexical match")
 
     def numeric_browse(self, *, namespace: str, identifier_type: str = "event_id") -> list[dict[str, Any]]:
