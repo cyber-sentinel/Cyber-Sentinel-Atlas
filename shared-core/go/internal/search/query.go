@@ -46,12 +46,16 @@ func parseQuery(query string, graphDepth int) (parsedQuery, error) {
 	if filterCount > MaxFilters {
 		return parsedQuery{}, invalid("query exceeds %d structured filters", MaxFilters)
 	}
+	// Natural scope shorthands are bounded two-term identifier lookups such
+	// as "windows 4688" and "sysmon 1". Longer phrases that happen to start
+	// with a scope word must remain lexical queries; otherwise legitimate
+	// titles in adjacent namespaces are silently filtered out.
 	if len(request.terms) >= 2 {
 		if implied, ok := scopeWords[strings.ToLower(request.terms[0])]; ok {
-			for key, value := range implied {
-				request.scope[key] = value
-			}
 			if len(request.terms) == 2 {
+				for key, value := range implied {
+					request.scope[key] = value
+				}
 				request.idValue = request.terms[1]
 				request.hasID = true
 			}

@@ -141,10 +141,15 @@ def parse_query(query: str, *, graph_depth: int = 1) -> dict[str, Any]:
     identifier_value_hint: str | None = None
     scope_hints.update({entry["key"]: entry["value"] for entry in filters})
 
-    if len(terms) >= 2 and terms[0].casefold() in SCOPE_WORDS:
+    # Natural scope shorthands are identifier lookups (for example,
+    # ``windows 4688`` or ``sysmon 1``). Treating the first word of every
+    # longer phrase as a scope silently hides legitimate titles such as
+    # ``Windows process baseline anomaly hunting`` from other Windows
+    # namespaces. Longer phrases remain lexical queries; callers that need
+    # an explicit scope can use the typed filters above.
+    if len(terms) == 2 and terms[0].casefold() in SCOPE_WORDS:
         scope_hints.update(SCOPE_WORDS[terms[0].casefold()])
-        if len(terms) == 2:
-            identifier_value_hint = terms[1]
+        identifier_value_hint = terms[1]
     elif len(terms) == 3 and terms[0].casefold() == "event" and terms[1].casefold() == "id":
         identifier_type_hint = "event_id"
         identifier_value_hint = terms[2]
