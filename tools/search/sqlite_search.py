@@ -780,7 +780,7 @@ class SQLiteSearchCore:
         if scope_sql:
             sql += " AND " + scope_sql
             params.extend(scope_params)
-        title_norm = _fold(lexical_text)
+        title_norm = _fold(normalized)
         sql += """
             ORDER BY
               CASE WHEN d.title_norm=? THEN 0 ELSE 1 END ASC,

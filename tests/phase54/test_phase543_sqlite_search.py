@@ -135,6 +135,49 @@ class Phase543SQLiteSearchTests(unittest.TestCase):
             "atlas:tool:synthetic.unix:powershell-helper", self.target_ids(result)
         )
 
+    def test_scope_word_in_exact_title_still_ranks_the_exact_entity_first(self):
+        fixture = copy.deepcopy(self.fixture)
+        fixture["records"].append(
+            {
+                "id": "atlas:attack-technique:mitre.attack:t9999.001",
+                "entity_type": "attack-subtechnique",
+                "title": "Windows Permissions",
+                "namespace": "mitre.attack",
+                "scope": {
+                    "platform": "windows",
+                    "product": "mitre-attack",
+                    "provider": "mitre",
+                    "channel": None,
+                },
+                "lifecycle": "current",
+                "description": "Synthetic fixture for scope-aware exact-title ranking.",
+                "native_identifiers": [
+                    {
+                        "type": "attack_id",
+                        "value": "T9999.001",
+                        "case_sensitive": False,
+                        "primary": True,
+                        "namespace": "mitre.attack",
+                        "numeric_semantics": False,
+                    }
+                ],
+                "aliases": [],
+            }
+        )
+        bundle = reference.build_projection_bundle(fixture)
+        path = Path(self.temp.name) / "scope-title.sqlite3"
+        search.build_index(bundle, path)
+        with search.SQLiteSearchCore.open(path, expected_bundle=bundle) as core:
+            result = core.resolve("Windows Permissions")
+        self.assertEqual(
+            "atlas:attack-technique:mitre.attack:t9999.001",
+            self.target_ids(result)[0],
+        )
+        self.assertEqual(
+            "exact entity name with bounded lexical expansion",
+            result["matches"][0]["match_reason"],
+        )
+
     def test_structured_filters_are_bound_and_case_insensitive(self):
         result = self.core.resolve("provider:MITRE PowerShell")
         self.assertEqual(["atlas:attack-technique:mitre.attack:t1059.001"], self.target_ids(result))

@@ -149,7 +149,11 @@ def parse_query(query: str, *, graph_depth: int = 1) -> dict[str, Any]:
     # ``Windows process baseline anomaly hunting`` from other Windows
     # namespaces. Longer phrases remain lexical queries; callers that need
     # an explicit scope can use the typed filters above.
-    if len(terms) == 2 and terms[0].casefold() in SCOPE_WORDS:
+    if (
+        len(terms) == 2
+        and terms[0].casefold() in SCOPE_WORDS
+        and re.fullmatch(r"[0-9]+", terms[1])
+    ):
         scope_hints.update(SCOPE_WORDS[terms[0].casefold()])
         identifier_value_hint = terms[1]
     elif len(terms) == 3 and terms[0].casefold() == "event" and terms[1].casefold() == "id":

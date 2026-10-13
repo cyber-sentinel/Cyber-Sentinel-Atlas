@@ -52,7 +52,7 @@ func parseQuery(query string, graphDepth int) (parsedQuery, error) {
 	// titles in adjacent namespaces are silently filtered out.
 	if len(request.terms) >= 2 {
 		if implied, ok := scopeWords[strings.ToLower(request.terms[0])]; ok {
-			if len(request.terms) == 2 {
+			if len(request.terms) == 2 && isASCIIDigits(request.terms[1]) {
 				for key, value := range implied {
 					request.scope[key] = value
 				}
@@ -69,6 +69,18 @@ func parseQuery(query string, graphDepth int) (parsedQuery, error) {
 		request.hasID = true
 	}
 	return request, nil
+}
+
+func isASCIIDigits(value string) bool {
+	if value == "" {
+		return false
+	}
+	for _, char := range value {
+		if char < '0' || char > '9' {
+			return false
+		}
+	}
+	return true
 }
 
 func validateLimit(limit int) error {
@@ -284,7 +296,7 @@ func (c *Core) Resolve(query string, graphDepth, limit int) (Result, error) {
 		params = append(params, args...)
 	}
 	sqlText += ` ORDER BY CASE WHEN d.title_norm=? THEN 0 ELSE 1 END ASC,bm25(documents_fts) ASC,d.title_norm ASC,d.target_id ASC LIMIT ?`
-	params = append(params, fold(lexical), limit)
+	params = append(params, fold(request.normalized), limit)
 	rows, err := c.db.Query(sqlText, params...)
 	if err != nil {
 		return Result{}, err
