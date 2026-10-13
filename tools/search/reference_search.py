@@ -376,9 +376,10 @@ class ReferenceResolver:
         if canonical:
             return self._envelope(query, "canonical_identifier", canonical, "exact canonical identifier")
 
+        exact: list[tuple[str, str]] = []
+        identifier_stage: str | None = None
         value_hint = request.get("identifier_value_hint")
         if value_hint is not None:
-            exact: list[tuple[str, str]] = []
             for item in self.identifiers:
                 if request.get("identifier_type_hint") and item["identifier_type"] != request["identifier_type_hint"]:
                     continue
@@ -388,8 +389,19 @@ class ReferenceResolver:
                 if _match_value(value_hint, item["value"], item["case_sensitive"]):
                     exact.append((item["target_id"], item["value"]))
             if exact:
-                stage = "scoped_identifier" if request["scope_hints"] else "native_identifier"
-                return self._envelope(query, stage, exact, "registry-aware exact native identifier")
+                identifier_stage = "scoped_identifier" if request["scope_hints"] else "native_identifier"
+
+        for target_id, document in self.documents.items():
+            if _fold(document["title"]) != _fold(normalized):
+                continue
+            seed = self._seed_for_target(target_id)
+            if request["scope_hints"] and not _scope_matches(seed, request["scope_hints"]):
+                continue
+            exact.append((target_id, document["title"]))
+        if exact:
+            stage = identifier_stage or "lexical"
+            reason = "exact native identifier or entity name" if identifier_stage else "exact entity name"
+            return self._envelope(query, stage, exact, reason)
 
         alias_hits: list[tuple[str, str]] = []
         for item in self.aliases:

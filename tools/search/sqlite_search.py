@@ -692,6 +692,8 @@ class SQLiteSearchCore:
                 self._select_documents_for_targets(pairs, "exact canonical identifier"),
             )
 
+        exact_pairs: list[tuple[str, str]] = []
+        identifier_stage: str | None = None
         value_hint = request.get("identifier_value_hint")
         if value_hint is not None:
             scope_sql, scope_params = _scope_clause(request["scope_hints"])
@@ -711,15 +713,25 @@ class SQLiteSearchCore:
                 params.extend(scope_params)
             rows = self.conn.execute(sql, params).fetchall()
             if rows:
-                pairs = [(str(row["target_id"]), str(row["value"])) for row in rows]
-                stage = "scoped_identifier" if request["scope_hints"] else "native_identifier"
-                return self._envelope(
-                    query,
-                    stage,
-                    self._select_documents_for_targets(
-                        pairs, "registry-aware exact native identifier"
-                    ),
-                )
+                exact_pairs.extend((str(row["target_id"]), str(row["value"])) for row in rows)
+                identifier_stage = "scoped_identifier" if request["scope_hints"] else "native_identifier"
+
+        title_scope_sql, title_scope_params = _scope_clause(request["scope_hints"])
+        title_sql = "SELECT d.target_id,d.title FROM documents d WHERE d.title_norm=?"
+        title_params: list[Any] = [_fold(normalized)]
+        if title_scope_sql:
+            title_sql += " AND " + title_scope_sql
+            title_params.extend(title_scope_params)
+        title_rows = self.conn.execute(title_sql, title_params).fetchall()
+        exact_pairs.extend((str(row["target_id"]), str(row["title"])) for row in title_rows)
+        if exact_pairs:
+            stage = identifier_stage or "lexical"
+            reason = "exact native identifier or entity name" if identifier_stage else "exact entity name"
+            return self._envelope(
+                query,
+                stage,
+                self._select_documents_for_targets(exact_pairs, reason),
+            )
 
         alias_scope_sql, alias_scope_params = _scope_clause(request["scope_hints"])
         alias_sql = """

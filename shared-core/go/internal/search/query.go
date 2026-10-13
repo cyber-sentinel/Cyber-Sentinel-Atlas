@@ -190,6 +190,8 @@ func (c *Core) Resolve(query string, graphDepth, limit int) (Result, error) {
 	if err != sql.ErrNoRows {
 		return Result{}, err
 	}
+	exactPairs := map[string]string{}
+	identifierStage := ""
 	if request.hasID {
 		where, args := scopeClause(request.scope, "d")
 		sqlText := `SELECT i.target_id,i.value FROM identifiers i JOIN documents d ON d.target_id=i.target_id WHERE ((i.case_sensitive=1 AND i.match_value=?) OR (i.case_sensitive=0 AND i.match_value=?))`
@@ -207,15 +209,40 @@ func (c *Core) Resolve(query string, graphDepth, limit int) (Result, error) {
 			return Result{}, e
 		}
 		if len(pairs) > 0 {
-			matches, e := c.stableMatches(pairs, "registry-aware exact native identifier")
-			stage := "native_identifier"
+			identifierStage = "native_identifier"
 			if len(request.scope) > 0 {
-				stage = "scoped_identifier"
+				identifierStage = "scoped_identifier"
 			}
-			return c.envelope(query, stage, matches), e
+			for id, value := range pairs {
+				exactPairs[id] = value
+			}
 		}
 	}
 	where, args := scopeClause(request.scope, "d")
+	titleSQL := `SELECT d.target_id,d.title FROM documents d WHERE d.title_norm=?`
+	titleParams := []any{fold(request.normalized)}
+	if where != "" {
+		titleSQL += " AND " + where
+		titleParams = append(titleParams, args...)
+	}
+	titlePairs, err := queryPairs(c.db, titleSQL, titleParams...)
+	if err != nil {
+		return Result{}, err
+	}
+	for id, value := range titlePairs {
+		if _, exists := exactPairs[id]; !exists {
+			exactPairs[id] = value
+		}
+	}
+	if len(exactPairs) > 0 {
+		stage, reason := identifierStage, "exact native identifier or entity name"
+		if stage == "" {
+			stage, reason = "lexical", "exact entity name"
+		}
+		matches, e := c.stableMatches(exactPairs, reason)
+		return c.envelope(query, stage, matches), e
+	}
+	where, args = scopeClause(request.scope, "d")
 	sqlText := `SELECT a.target_id,a.value FROM aliases a JOIN documents d ON d.target_id=a.target_id WHERE ((a.case_sensitive=1 AND a.match_value=?) OR (a.case_sensitive=0 AND a.match_value=?))`
 	params := []any{norm.NFKC.String(request.normalized), fold(request.normalized)}
 	if where != "" {

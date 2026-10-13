@@ -87,7 +87,7 @@ class Phase543SQLiteSearchTests(unittest.TestCase):
         self.assertEqual("direct", result["status"])
         self.assertEqual("lexical", result["match_stage"])
         self.assertEqual(["atlas:attack-technique:mitre.attack:t1059.001"], self.target_ids(result))
-        self.assertEqual("bounded SQLite FTS5 lexical match", result["matches"][0]["match_reason"])
+        self.assertEqual("exact entity name", result["matches"][0]["match_reason"])
 
     def test_structured_filters_are_bound_and_case_insensitive(self):
         result = self.core.resolve("provider:MITRE PowerShell")
