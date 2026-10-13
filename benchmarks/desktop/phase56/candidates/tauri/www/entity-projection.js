@@ -22,12 +22,39 @@
   function overviewPredicate(base){return kind(base)==='hunt'?'behavior.description':'telemetry.represents';}
   function tabs(base){return TAB_MODELS[kind(base)];}
   function label(base){return {event:'Telemetry Event',tool:'Tool Intelligence',hunt:'Hunt Profile',knowledge:'Knowledge Entity'}[kind(base)];}
+  function toolFunctions(security={}){
+    const values=[];
+    for(const row of Array.isArray(security.gtfobins_functions)?security.gtfobins_functions:[]){
+      if(!row||typeof row!=='object')continue;
+      const label=String(row.label||row.function||'Capability').trim();
+      const contexts=(Array.isArray(row.contexts)?row.contexts:[]).filter(value=>typeof value==='string'&&value.trim());
+      const inherited=(Array.isArray(row.inherited_from)?row.inherited_from:[]).filter(value=>typeof value==='string'&&value.trim());
+      values.push(`${label}${contexts.length?` · contexts: ${contexts.join(', ')}`:''}${inherited.length?` · inherited from: ${inherited.join(', ')}`:''}`);
+    }
+    values.push(...(Array.isArray(security.lolbas_categories)?security.lolbas_categories:[]));
+    return [...new Set(values.filter(value=>typeof value==='string'&&value.trim()))];
+  }
+  function toolContexts(security={}){
+    return [...new Set((Array.isArray(security.execution_contexts)?security.execution_contexts:[]).map(row=>{
+      if(typeof row==='string')return row;
+      if(!row||typeof row!=='object')return '';
+      const context=String(row.context||'').trim(),meaning=String(row.meaning||'').trim();
+      return context?`${context}${meaning?` · ${meaning}`:''}`:'';
+    }).filter(Boolean))];
+  }
+  function toolTechniques(security={}){
+    return [...new Set((Array.isArray(security.attack_techniques)?security.attack_techniques:[]).filter(value=>typeof value==='string'&&value.trim()))];
+  }
   function entityPivots(base,overview={},security={},collection={}){
     const type=kind(base),values=[];
     if(type==='event')return values;
-    if(type==='tool')values.push(...(security.lolbas_categories||[]),...(security.attack_techniques||[]),...(collection.recommended_telemetry||[]));
+    if(type==='tool'){
+      const functions=(Array.isArray(security.gtfobins_functions)?security.gtfobins_functions:[]).map(row=>row?.label||row?.function);
+      const contexts=(Array.isArray(security.execution_contexts)?security.execution_contexts:[]).map(row=>typeof row==='string'?row:row?.context);
+      values.push(...functions,...contexts,...(security.lolbas_categories||[]),...toolTechniques(security),...(collection.recommended_telemetry||[]));
+    }
     if(type==='hunt')values.push(...(overview.artifact_families||[]),...(security.related_event_ids||[]).map(id=>`Event ${id}`));
     return [...new Set(values.filter(value=>typeof value==='string'&&value.trim()))].slice(0,8);
   }
-  return Object.freeze({kind,overviewPredicate,tabs,label,entityPivots,TAB_MODELS});
+  return Object.freeze({kind,overviewPredicate,tabs,label,toolFunctions,toolContexts,toolTechniques,entityPivots,TAB_MODELS});
 });

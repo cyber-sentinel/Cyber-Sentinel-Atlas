@@ -69,10 +69,17 @@ test('Tool and Hunt Profile projection is generic and does not fake Event fields
   assert.equal(projection.tabs(tool).some(tab=>tab[1]==='Fields'),false);
   assert.equal(projection.tabs(hunt).some(tab=>tab[1]==='Example'),false);
   assert.deepEqual(projection.entityPivots(tool,{}, {lolbas_categories:['Execute'],attack_techniques:['T1218']},{recommended_telemetry:['Windows 4688']}),['Execute','T1218','Windows 4688']);
+  const gtfoSecurity={gtfobins_functions:[{function:'shell',label:'Shell',contexts:['sudo'],inherited_from:['less']}],execution_contexts:[{context:'sudo',meaning:'Requires sudo context.'}],attack_techniques:['T1059']};
+  assert.deepEqual(projection.toolFunctions(gtfoSecurity),['Shell · contexts: sudo · inherited from: less']);
+  assert.deepEqual(projection.toolContexts(gtfoSecurity),['sudo · Requires sudo context.']);
+  assert.deepEqual(projection.toolTechniques(gtfoSecurity),['T1059']);
+  assert.deepEqual(projection.entityPivots(tool,{},gtfoSecurity,{}),['Shell','sudo','T1059']);
   assert.deepEqual(projection.entityPivots(hunt,{artifact_families:['process-tree']},{related_event_ids:['4688']},{}),['process-tree','Event 4688']);
   assert.ok(main.includes("firstClaim(detail,entityProjection.overviewPredicate(base))"));
   assert.ok(main.includes("entityProjection.tabs(base)"));
   assert.ok(main.includes("entityProjection.entityPivots(base,overview,security,collection)"));
+  assert.ok(main.includes("listCard('Execution Context',entityProjection.toolContexts(security)"));
+  assert.ok(main.includes("listCard('Defensive Telemetry'"));
 });
 
 test('workspace preserves the frozen seven-command Desktop boundary', () => {
