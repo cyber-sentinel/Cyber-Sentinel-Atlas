@@ -77,6 +77,12 @@ func validateLimit(limit int) error {
 	}
 	return nil
 }
+func validateCatalogOffset(offset int) error {
+	if offset < 0 || offset > MaxCatalogOffset {
+		return invalid("catalog offset must be between 0 and %d", MaxCatalogOffset)
+	}
+	return nil
+}
 func validateFilters(filters map[string]string) (map[string]string, error) {
 	if filters == nil {
 		return map[string]string{}, nil

@@ -23,7 +23,9 @@ MAX_GRAPH_DEPTH = 2
 
 FILTER_KEYS = {
     "platform", "product", "provider", "channel", "namespace",
-    "type", "lifecycle", "version",
+    "type", "lifecycle", "version", "family", "source_family",
+    "domain", "tactic", "active", "telemetry_family", "function",
+    "context",
 }
 
 SCOPE_WORDS = {
@@ -246,22 +248,46 @@ def build_projection_bundle(fixture: dict[str, Any]) -> dict[str, Any]:
                 "derivation": "fixture-source-alias",
             })
 
+        facets: dict[str, Any] = {
+            "namespace": record.get("namespace"),
+            "platform": scope["platform"],
+            "product": scope["product"],
+            "provider": scope["provider"],
+            "channel": scope["channel"],
+            "type": record.get("entity_type"),
+            "lifecycle": record.get("lifecycle"),
+        }
+        extra_facets = record.get("extra_facets") or {}
+        if not isinstance(extra_facets, dict):
+            raise ValueError(f"extra_facets must be an object: {target_id}")
+        for key, value in sorted(extra_facets.items()):
+            if key not in FILTER_KEYS:
+                raise ValueError(f"unsupported extra facet key {key!r}: {target_id}")
+            if key in facets and facets[key] not in (None, ""):
+                raise ValueError(f"extra facet cannot replace canonical facet {key!r}: {target_id}")
+            if isinstance(value, list):
+                normalized_values = sorted({str(item).strip() for item in value if str(item).strip()}, key=_fold)
+                if len(normalized_values) > 64:
+                    raise ValueError(f"extra facet {key!r} exceeds 64 values: {target_id}")
+                for facet_value in normalized_values:
+                    filters.append({"target_id": target_id, "facets": {key: facet_value}})
+            elif value is None:
+                continue
+            elif isinstance(value, (str, int, float, bool)):
+                text_value = str(value).strip()
+                if text_value:
+                    filters.append({"target_id": target_id, "facets": {key: text_value}})
+            else:
+                raise ValueError(f"extra facet {key!r} must be scalar or scalar array: {target_id}")
+
         filters.append({
             "target_id": target_id,
-            "facets": {
-                "namespace": record.get("namespace"),
-                "platform": scope["platform"],
-                "product": scope["product"],
-                "provider": scope["provider"],
-                "channel": scope["channel"],
-                "type": record.get("entity_type"),
-                "lifecycle": record.get("lifecycle"),
-            },
+            "facets": facets,
         })
 
     identifiers.sort(key=lambda item: (item["namespace"], item["identifier_type"], item["value"], item["target_id"]))
     aliases.sort(key=lambda item: (_fold(item["value"]), item["target_id"]))
-    filters.sort(key=lambda item: item["target_id"])
+    filters.sort(key=lambda item: (item["target_id"], _canonical_json(item.get("facets") or {})))
 
     source_for_digest = sorted(records, key=lambda item: item["id"])
     binding = {

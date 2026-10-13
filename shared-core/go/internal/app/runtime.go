@@ -263,7 +263,10 @@ func buildRecordDetail(store *canonical.Store, record canonical.Record) map[stri
 type catalogParams struct {
 	Filters map[string]string `json:"filters,omitempty"`
 	Facet   string            `json:"facet,omitempty"`
+	Query   string            `json:"query,omitempty"`
+	Sort    string            `json:"sort,omitempty"`
 	Limit   *int              `json:"limit,omitempty"`
+	Offset  *int              `json:"offset,omitempty"`
 }
 
 type graphParams struct {
@@ -409,11 +412,15 @@ func (r *Runtime) Handle(method string, raw json.RawMessage) (any, *protocol.Ope
 			}
 			return map[string]any{"facet": params.Facet, "values": values}, nil
 		}
-		items, err := r.Search.Browse(params.Filters, limit)
+		offset := 0
+		if params.Offset != nil {
+			offset = *params.Offset
+		}
+		page, err := r.Search.BrowsePage(params.Filters, params.Query, params.Sort, limit, offset)
 		if err != nil {
 			return nil, classifyQuery(err)
 		}
-		return map[string]any{"items": items}, nil
+		return page, nil
 	case "graph.expand":
 		if r == nil || r.Graph == nil {
 			return nil, packNotReady()

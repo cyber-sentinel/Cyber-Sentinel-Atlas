@@ -37,6 +37,8 @@ DEFAULT_GRAPH_RELATIONSHIP_TYPES = frozenset(
         "SUPERSEDED_BY",
         "VERSION_OF",
         "MAPS_TO_ATTACK",
+        "HAS_SUBTECHNIQUE",
+        "BELONGS_TO_TACTIC",
         "COUNTERED_BY",
         "DETECTED_BY",
         "HUNTED_BY",

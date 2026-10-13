@@ -1,5 +1,6 @@
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
+use std::collections::HashMap;
 use std::fs::{self, File};
 use std::io::{Read, Write};
 #[cfg(windows)]
@@ -15,6 +16,7 @@ const CREATE_NO_WINDOW: u32 = 0x08000000;
 const MAX_UI_QUERY_SCALARS: usize = 512;
 const MAX_UI_IDENTIFIER_SCALARS: usize = 1024;
 const MAX_UI_RESULT_LIMIT: i64 = 100;
+const MAX_UI_CATALOG_OFFSET: i64 = 1_000_000;
 const MAX_UI_GRAPH_DEPTH: i64 = 32;
 const ENV_ALLOWLIST: &[&str] = &[
     "PATH",
@@ -26,6 +28,11 @@ const ENV_ALLOWLIST: &[&str] = &[
     "USERPROFILE",
     "LOCALAPPDATA",
     "APPDATA",
+];
+const CATALOG_FILTER_ALLOWLIST: &[&str] = &[
+    "platform", "product", "provider", "channel", "namespace", "type", "lifecycle",
+    "version", "family", "source_family", "domain", "tactic", "active",
+    "telemetry_family", "function", "context",
 ];
 
 #[derive(Debug)]
@@ -390,6 +397,54 @@ async fn search_records(query: String, limit: Option<i64>) -> Result<Value, Stri
 }
 
 #[tauri::command]
+async fn list_entities(
+    filters: Option<HashMap<String, String>>,
+    query: Option<String>,
+    sort: Option<String>,
+    limit: Option<i64>,
+    offset: Option<i64>,
+) -> Result<Value, String> {
+    let filters = filters.unwrap_or_default();
+    if filters.len() > 16 {
+        return Err("catalog filters exceed the Desktop bound".into());
+    }
+    for (key, value) in &filters {
+        if !CATALOG_FILTER_ALLOWLIST.contains(&key.as_str()) {
+            return Err(format!("unsupported catalog filter: {key}"));
+        }
+        validate_nonempty_scalar_bounded(value, "catalog filter", 256)?;
+    }
+    let query = query.unwrap_or_default();
+    if query.chars().count() > MAX_UI_QUERY_SCALARS {
+        return Err("catalog query exceeds the Desktop input bound".into());
+    }
+    let sort = sort.unwrap_or_else(|| "name".to_string());
+    if !matches!(sort.as_str(), "name" | "id" | "type") {
+        return Err("unsupported catalog sort".into());
+    }
+    let limit = limit.unwrap_or(50);
+    if !(1..=MAX_UI_RESULT_LIMIT).contains(&limit) {
+        return Err("limit is outside the Desktop result bound".into());
+    }
+    let offset = offset.unwrap_or(0);
+    if !(0..=MAX_UI_CATALOG_OFFSET).contains(&offset) {
+        return Err("catalog offset is outside the Desktop bound".into());
+    }
+    Ok(run_core_session_async(
+        "catalog.list",
+        json!({
+            "filters": filters,
+            "query": query,
+            "sort": sort,
+            "limit": limit,
+            "offset": offset
+        }),
+    )
+    .await?
+    .result)
+}
+
+#[tauri::command]
 async fn get_record(id: String) -> Result<Value, String> {
     validate_nonempty_scalar_bounded(&id, "id", MAX_UI_IDENTIFIER_SCALARS)?;
     Ok(
@@ -485,6 +540,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             core_status,
             search_records,
+            list_entities,
             get_record,
             expand_graph,
             pack_status,

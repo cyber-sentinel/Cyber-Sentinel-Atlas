@@ -36,6 +36,8 @@
         "PRECEDES",
         "FOLLOWS",
         "MAPS_TO_ATTACK",
+        "HAS_SUBTECHNIQUE",
+        "BELONGS_TO_TACTIC",
         "COUNTERED_BY",
         "DETECTED_BY",
         "HUNTED_BY",

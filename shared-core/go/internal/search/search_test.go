@@ -140,6 +140,27 @@ func TestPythonOracleSearchCatalogGraphParity(t *testing.T) {
 	if !reflect.DeepEqual(browse, oracle.Browse) {
 		t.Fatalf("catalog browse parity: got %v want %v", browse, oracle.Browse)
 	}
+	firstPage, err := core.BrowsePage(map[string]string{"provider": "microsoft-windows-security-auditing"}, "", "name", 1, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	secondPage, err := core.BrowsePage(map[string]string{"provider": "microsoft-windows-security-auditing"}, "", "name", 1, 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if firstPage.TotalCount != 2 || len(firstPage.Items) != 1 || len(secondPage.Items) != 1 || firstPage.Items[0].TargetID == secondPage.Items[0].TargetID {
+		t.Fatalf("bounded catalog pagination failed: first=%#v second=%#v", firstPage, secondPage)
+	}
+	if firstPage.NextOffset == nil || *firstPage.NextOffset != 1 || secondPage.NextOffset != nil {
+		t.Fatalf("catalog next offsets are not deterministic: first=%#v second=%#v", firstPage.NextOffset, secondPage.NextOffset)
+	}
+	lexicalPage, err := core.BrowsePage(nil, "PowerShell", "id", 20, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if lexicalPage.TotalCount == 0 || len(lexicalPage.Items) == 0 {
+		t.Fatal("bounded lexical catalog query returned no PowerShell record")
+	}
 
 	facets, err := core.FacetValues("provider", nil, 100)
 	if err != nil {
