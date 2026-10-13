@@ -161,6 +161,13 @@ func TestPythonOracleSearchCatalogGraphParity(t *testing.T) {
 	if lexicalPage.TotalCount == 0 || len(lexicalPage.Items) == 0 {
 		t.Fatal("bounded lexical catalog query returned no PowerShell record")
 	}
+	identifierPage, err := core.BrowsePage(nil, "T1059.001", "name", 20, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(identifierPage.Items) == 0 || identifierPage.Items[0].TargetID != "atlas:attack-technique:mitre.attack:t1059.001" {
+		t.Fatalf("exact catalog identifier was not ranked first: %#v", identifierPage.Items)
+	}
 
 	facets, err := core.FacetValues("provider", nil, 100)
 	if err != nil {

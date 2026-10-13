@@ -5,6 +5,8 @@ import (
 	"sort"
 	"strings"
 	"unicode/utf8"
+
+	"golang.org/x/text/unicode/norm"
 )
 
 func (c *Core) Browse(filters map[string]string, limit int) ([]CatalogItem, error) {
@@ -45,6 +47,8 @@ func (c *Core) BrowsePage(filters map[string]string, textQuery, sortBy string, l
 	}
 	clauses := []string{}
 	args := []any{}
+	rankArgs := []any{}
+	rankOrder := ""
 	for _, key := range sortedKeys(normalized) {
 		clauses = append(clauses, "EXISTS (SELECT 1 FROM facets f WHERE f.target_id=d.target_id AND f.facet_key=? AND f.facet_value_norm=?)")
 		args = append(args, key, fold(normalized[key]))
@@ -62,6 +66,11 @@ func (c *Core) BrowsePage(filters map[string]string, textQuery, sortBy string, l
 		join = " JOIN documents_fts ON documents_fts.target_id=d.target_id"
 		clauses = append(clauses, "documents_fts MATCH ?")
 		args = append(args, strings.Join(parts, " OR "))
+		rankOrder = `CASE WHEN d.title_norm=?
+			OR EXISTS (SELECT 1 FROM identifiers qi WHERE qi.target_id=d.target_id AND ((qi.case_sensitive=1 AND qi.match_value=?) OR (qi.case_sensitive=0 AND qi.match_value=?)))
+			OR EXISTS (SELECT 1 FROM aliases qa WHERE qa.target_id=d.target_id AND ((qa.case_sensitive=1 AND qa.match_value=?) OR (qa.case_sensitive=0 AND qa.match_value=?)))
+			THEN 0 ELSE 1 END ASC,`
+		rankArgs = []any{fold(textQuery), norm.NFKC.String(textQuery), fold(textQuery), norm.NFKC.String(textQuery), fold(textQuery)}
 	}
 	where := ""
 	if len(clauses) > 0 {
@@ -74,9 +83,11 @@ func (c *Core) BrowsePage(filters map[string]string, textQuery, sortBy string, l
 	query := `SELECT d.target_id,d.entity_type,d.title,d.namespace,d.platform,d.product,d.provider,d.channel,d.lifecycle,
 		COALESCE((SELECT i.value FROM identifiers i WHERE i.target_id=d.target_id ORDER BY i.primary_flag DESC,i.identifier_type ASC,i.value ASC LIMIT 1),''),
 		COALESCE((SELECT lower(i.value) FROM identifiers i WHERE i.target_id=d.target_id ORDER BY i.primary_flag DESC,i.identifier_type ASC,i.value ASC LIMIT 1),'') AS primary_identifier_norm
-		FROM documents d` + join + where + " ORDER BY " + orderBy + " LIMIT ? OFFSET ?"
-	args = append(args, limit, offset)
-	rows, err := c.db.Query(query, args...)
+		FROM documents d` + join + where + " ORDER BY " + rankOrder + orderBy + " LIMIT ? OFFSET ?"
+	queryArgs := append([]any{}, args...)
+	queryArgs = append(queryArgs, rankArgs...)
+	queryArgs = append(queryArgs, limit, offset)
+	rows, err := c.db.Query(query, queryArgs...)
 	if err != nil {
 		return CatalogPage{}, err
 	}
