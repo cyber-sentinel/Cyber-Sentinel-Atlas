@@ -7,7 +7,7 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(){
   const CATEGORIES=Object.freeze([
     Object.freeze({id:'all',label:'All',filters:Object.freeze({}),types:Object.freeze([])}),
-    Object.freeze({id:'attack',label:'MITRE ATT&CK',filters:Object.freeze({source_family:'mitre-attack'}),types:Object.freeze([
+    Object.freeze({id:'attack',label:'MITRE ATT&CK',filters:Object.freeze({source_family:'mitre-attack',lifecycle:'current'}),types:Object.freeze([
       Object.freeze({value:'attack-tactic',label:'Tactics'}),Object.freeze({value:'attack-technique',label:'Techniques'}),Object.freeze({value:'attack-subtechnique',label:'Sub-techniques'})
     ])}),
     Object.freeze({id:'lolbas',label:'LOLBAS',filters:Object.freeze({source_family:'lolbas'}),types:Object.freeze([])}),
@@ -24,7 +24,8 @@
       const option=selected.types.find(item=>item.value===subtype);
       if(option)filters[option.facet||'type']=option.value;
     }
-    if(lifecycle)filters.lifecycle=lifecycle;
+    if(lifecycle==='all')delete filters.lifecycle;
+    else if(lifecycle)filters.lifecycle=lifecycle;
     return filters;
   }
   function pageNumber(offset,limit){return Math.floor(Math.max(0,offset)/Math.max(1,limit))+1;}

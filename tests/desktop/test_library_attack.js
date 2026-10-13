@@ -16,6 +16,8 @@ const projection = require(path.join(webRoot, 'entity-projection.js'));
 test('Library categories map to deterministic governed facets', () => {
   assert.deepEqual(library.CATEGORIES.map(item => item.id), ['all','attack','lolbas','gtfobins','telemetry','hunt']);
   assert.deepEqual(library.filtersFor('attack','attack-subtechnique','current'), {source_family:'mitre-attack',type:'attack-subtechnique',lifecycle:'current'});
+  assert.deepEqual(library.filtersFor('attack','',''), {source_family:'mitre-attack',lifecycle:'current'});
+  assert.deepEqual(library.filtersFor('attack','','all'), {source_family:'mitre-attack'});
   assert.deepEqual(library.filtersFor('telemetry','sysmon',''), {family:'telemetry',telemetry_family:'sysmon'});
   assert.equal(library.pageNumber(96,48),3);
   assert.equal(library.nextOffset({next_offset:48}),48);
