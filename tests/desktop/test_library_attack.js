@@ -18,7 +18,8 @@ test('Library categories map to deterministic governed facets', () => {
   assert.deepEqual(library.filtersFor('attack','attack-subtechnique','current'), {source_family:'mitre-attack',type:'attack-subtechnique',lifecycle:'current'});
   assert.deepEqual(library.filtersFor('attack','',''), {source_family:'mitre-attack',lifecycle:'current'});
   assert.deepEqual(library.filtersFor('attack','','all'), {source_family:'mitre-attack'});
-  assert.deepEqual(library.filtersFor('telemetry','sysmon',''), {family:'telemetry',telemetry_family:'sysmon'});
+  assert.deepEqual(library.filtersFor('telemetry','sysmon',''), {family:'telemetry',telemetry_family:'sysmon',lifecycle:'current'});
+  assert.deepEqual(library.filtersFor('all','',''), {lifecycle:'current'});
   assert.equal(library.pageNumber(96,48),3);
   assert.equal(library.nextOffset({next_offset:48}),48);
   assert.equal(library.nextOffset({next_offset:null}),null);
@@ -27,6 +28,7 @@ test('Library categories map to deterministic governed facets', () => {
 test('Library UI uses runtime catalog counts, filters and bounded pagination', () => {
   for (const id of ['libraryCategories','libraryQuery','librarySubtype','libraryLifecycle','libraryGrid','libraryPrevious','libraryNext']) assert.ok(html.includes(`id="${id}"`));
   assert.ok(main.includes('await atlas.catalog('));
+  assert.ok(main.includes("libraryModel.filtersFor(item.id,'','')"));
   assert.ok(main.includes("state.libraryLimit:48") === false);
   assert.ok(main.includes('libraryLimit:48'));
   assert.ok(rust.includes('const MAX_UI_CATALOG_OFFSET: i64 = 1_000_000'));

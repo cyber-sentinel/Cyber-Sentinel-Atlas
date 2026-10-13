@@ -25,7 +25,7 @@
       if(option)filters[option.facet||'type']=option.value;
     }
     if(lifecycle==='all')delete filters.lifecycle;
-    else if(lifecycle)filters.lifecycle=lifecycle;
+    else filters.lifecycle=lifecycle||'current';
     return filters;
   }
   function pageNumber(offset,limit){return Math.floor(Math.max(0,offset)/Math.max(1,limit))+1;}

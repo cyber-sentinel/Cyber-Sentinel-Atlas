@@ -79,7 +79,7 @@ function renderLibraryPage(page){
 }
 async function refreshLibraryCounts(){
   await Promise.all(libraryModel.CATEGORIES.map(async item=>{
-    try{const page=await atlas.catalog(item.filters,'','name',1,0),node=document.querySelector(`[data-library-category="${item.id}"] .library-category-count`);if(node)node.textContent=Number(page?.total_count||0).toLocaleString();}catch(_){/* Main catalog call remains authoritative. */}
+    try{const page=await atlas.catalog(libraryModel.filtersFor(item.id,'',''),'','name',1,0),node=document.querySelector(`[data-library-category="${item.id}"] .library-category-count`);if(node)node.textContent=Number(page?.total_count||0).toLocaleString();}catch(_){/* Main catalog call remains authoritative. */}
   }));
 }
 async function loadLibrary(resetOffset=false){
