@@ -25,7 +25,8 @@ FILTER_KEYS = {
     "platform", "product", "provider", "channel", "namespace",
     "type", "lifecycle", "version", "family", "source_family",
     "domain", "tactic", "active", "telemetry_family", "function",
-    "context",
+    "context", "binary", "tool_type", "attack_technique",
+    "parent_technique", "detection_strategy",
 }
 
 SCOPE_WORDS = {

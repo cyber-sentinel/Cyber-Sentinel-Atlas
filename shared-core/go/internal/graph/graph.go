@@ -20,12 +20,14 @@ var registeredRelationshipTypes = map[string]struct{}{
 	"PRECEDES": {}, "FOLLOWS": {}, "MAPS_TO_ATTACK": {}, "COUNTERED_BY": {}, "DETECTED_BY": {}, "HUNTED_BY": {},
 	"INVESTIGATED_BY": {}, "RESPONDED_BY": {}, "REQUIRES_TELEMETRY": {}, "DERIVED_FROM": {}, "SUPPORTED_BY": {},
 	"SUPERSEDES": {}, "SUPERSEDED_BY": {}, "VERSION_OF": {}, "VALIDATED_BY": {}, "HAS_TELEMETRY_PROVIDER": {}, "HAS_TELEMETRY_SOURCE": {},
+	"HAS_SUBTECHNIQUE": {}, "BELONGS_TO_TACTIC": {}, "DETECTS": {}, "HAS_ANALYTIC": {}, "USES_DATA_COMPONENT": {}, "MITIGATES": {},
 }
 
 var defaultRelationshipTypes = map[string]struct{}{
 	"RELATED_TO": {}, "EQUIVALENT_SIGNAL": {}, "SUPERSEDES": {}, "SUPERSEDED_BY": {}, "VERSION_OF": {},
 	"MAPS_TO_ATTACK": {}, "COUNTERED_BY": {}, "DETECTED_BY": {}, "HUNTED_BY": {}, "INVESTIGATED_BY": {},
 	"RESPONDED_BY": {}, "REQUIRES_TELEMETRY": {}, "HAS_TELEMETRY_PROVIDER": {}, "HAS_TELEMETRY_SOURCE": {},
+	"HAS_SUBTECHNIQUE": {}, "BELONGS_TO_TACTIC": {}, "DETECTS": {}, "HAS_ANALYTIC": {}, "USES_DATA_COMPONENT": {}, "MITIGATES": {},
 }
 
 type Pivot struct {

@@ -68,6 +68,7 @@
           <label for="librarySubtype">Type</label><select id="librarySubtype"><option value="">All types</option></select>
           <label for="libraryLifecycle">Lifecycle</label><select id="libraryLifecycle"><option value="">Current (default)</option><option value="all">Include deprecated / revoked</option><option value="deprecated">Deprecated</option><option value="retired">Revoked / retired</option></select>
           <label for="librarySort">Sort</label><select id="librarySort"><option value="name">Name</option><option value="id">Identifier</option><option value="type">Type</option></select>
+          <fieldset id="libraryToolFacets" class="library-tool-facets hidden"><legend>Tool intelligence filters</legend><label for="libraryBinary">Binary / Executable</label><select id="libraryBinary"><option value="">All binaries</option></select><label for="libraryFunction">Function</label><select id="libraryFunction"><option value="">All functions</option></select><label for="libraryToolType">Type</label><select id="libraryToolType"><option value="">All tool types</option></select><label for="libraryTechnique">MITRE Technique</label><select id="libraryTechnique"><option value="">All techniques</option></select><label for="libraryContext">Execution Context</label><select id="libraryContext"><option value="">All contexts</option></select></fieldset>
           <button class="secondary-button" type="submit">Apply</button>
         </form>
         <div id="libraryStatus" class="search-meta" aria-live="polite">Loading verified catalog…</div>

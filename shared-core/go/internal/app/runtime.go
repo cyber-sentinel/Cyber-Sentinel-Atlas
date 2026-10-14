@@ -126,10 +126,11 @@ type recordParams struct {
 }
 
 const (
-	maxDetailFields        = 256
-	maxDetailClaims        = 1024
-	maxDetailSources       = 256
-	maxDetailRelationships = 512
+	maxDetailFields          = 256
+	maxDetailClaims          = 1024
+	maxDetailSources         = 256
+	maxDetailRelationships   = 512
+	maxDetailRelatedEntities = 512
 )
 
 func appendBounded(records []canonical.Record, record canonical.Record, limit int) ([]canonical.Record, bool) {
@@ -170,6 +171,8 @@ func buildRecordDetail(store *canonical.Store, record canonical.Record) map[stri
 	claims := make([]canonical.Record, 0)
 	sources := make([]canonical.Record, 0)
 	relationships := make([]canonical.Record, 0)
+	relatedEntities := make([]canonical.Record, 0)
+	relatedEntityIDs := map[string]struct{}{}
 	sourceIDs := map[string]struct{}{}
 	truncated := map[string]bool{}
 
@@ -190,6 +193,27 @@ func buildRecordDetail(store *canonical.Store, record canonical.Record) map[stri
 			var hit bool
 			relationships, hit = appendBounded(relationships, candidate, maxDetailRelationships)
 			truncated["relationships"] = truncated["relationships"] || hit
+			relatedID := from
+			if from == targetID {
+				relatedID = to
+			}
+			if relatedID != "" {
+				relatedEntityIDs[relatedID] = struct{}{}
+			}
+		}
+	}
+	orderedRelatedEntityIDs := make([]string, 0, len(relatedEntityIDs))
+	for id := range relatedEntityIDs {
+		orderedRelatedEntityIDs = append(orderedRelatedEntityIDs, id)
+	}
+	sort.Strings(orderedRelatedEntityIDs)
+	for _, id := range orderedRelatedEntityIDs {
+		if len(relatedEntities) >= maxDetailRelatedEntities {
+			truncated["related_entities"] = true
+			break
+		}
+		if related, ok := store.Get(id); ok && recordString(related, "record_kind") == "entity" {
+			relatedEntities = append(relatedEntities, related)
 		}
 	}
 
@@ -244,17 +268,19 @@ func buildRecordDetail(store *canonical.Store, record canonical.Record) map[stri
 	}
 
 	return map[string]any{
-		"detail_version": "1.0.0",
-		"record":         record,
-		"fields":         fields,
-		"claims":         claims,
-		"sources":        sources,
-		"relationships":  relationships,
+		"detail_version":   "1.0.0",
+		"record":           record,
+		"fields":           fields,
+		"claims":           claims,
+		"sources":          sources,
+		"relationships":    relationships,
+		"related_entities": relatedEntities,
 		"counts": map[string]any{
-			"fields":        len(fieldIDs),
-			"claims":        len(claims),
-			"sources":       len(sourceIDs),
-			"relationships": len(relationships),
+			"fields":           len(fieldIDs),
+			"claims":           len(claims),
+			"sources":          len(sourceIDs),
+			"relationships":    len(relationships),
+			"related_entities": len(relatedEntities),
 		},
 		"truncated": truncated,
 	}

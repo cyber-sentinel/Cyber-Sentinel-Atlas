@@ -46,6 +46,11 @@ const CATALOG_FILTER_ALLOWLIST: &[&str] = &[
     "telemetry_family",
     "function",
     "context",
+    "binary",
+    "tool_type",
+    "attack_technique",
+    "parent_technique",
+    "detection_strategy",
 ];
 
 #[derive(Debug)]

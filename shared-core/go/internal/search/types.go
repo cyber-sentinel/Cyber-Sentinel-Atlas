@@ -29,6 +29,8 @@ var (
 		"namespace": {}, "type": {}, "lifecycle": {}, "version": {},
 		"family": {}, "source_family": {}, "domain": {}, "tactic": {},
 		"active": {}, "telemetry_family": {}, "function": {}, "context": {},
+		"binary": {}, "tool_type": {}, "attack_technique": {},
+		"parent_technique": {}, "detection_strategy": {},
 	}
 	scopeWords = map[string]map[string]string{
 		"sysmon":  {"namespace": "microsoft.sysmon", "product": "sysmon"},
