@@ -33,6 +33,7 @@
           "permissions": [
             "allow-core-status",
             "allow-search-records",
+            "allow-list-entities",
             "allow-get-record",
             "allow-expand-graph",
             "allow-pack-status",

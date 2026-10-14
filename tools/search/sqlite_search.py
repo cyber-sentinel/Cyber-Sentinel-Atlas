@@ -692,6 +692,8 @@ class SQLiteSearchCore:
                 self._select_documents_for_targets(pairs, "exact canonical identifier"),
             )
 
+        exact_pairs: list[tuple[str, str]] = []
+        identifier_stage: str | None = None
         value_hint = request.get("identifier_value_hint")
         if value_hint is not None:
             scope_sql, scope_params = _scope_clause(request["scope_hints"])
@@ -711,15 +713,25 @@ class SQLiteSearchCore:
                 params.extend(scope_params)
             rows = self.conn.execute(sql, params).fetchall()
             if rows:
-                pairs = [(str(row["target_id"]), str(row["value"])) for row in rows]
-                stage = "scoped_identifier" if request["scope_hints"] else "native_identifier"
-                return self._envelope(
-                    query,
-                    stage,
-                    self._select_documents_for_targets(
-                        pairs, "registry-aware exact native identifier"
-                    ),
-                )
+                exact_pairs.extend((str(row["target_id"]), str(row["value"])) for row in rows)
+                identifier_stage = "scoped_identifier" if request["scope_hints"] else "native_identifier"
+
+        title_scope_sql, title_scope_params = _scope_clause(request["scope_hints"])
+        title_sql = "SELECT d.target_id,d.title FROM documents d WHERE d.title_norm=?"
+        title_params: list[Any] = [_fold(normalized)]
+        if title_scope_sql:
+            title_sql += " AND " + title_scope_sql
+            title_params.extend(title_scope_params)
+        title_rows = self.conn.execute(title_sql, title_params).fetchall()
+        exact_pairs.extend((str(row["target_id"]), str(row["title"])) for row in title_rows)
+        if exact_pairs and identifier_stage:
+            stage = identifier_stage
+            reason = "exact native identifier or entity name"
+            return self._envelope(
+                query,
+                stage,
+                self._select_documents_for_targets(exact_pairs, reason),
+            )
 
         alias_scope_sql, alias_scope_params = _scope_clause(request["scope_hints"])
         alias_sql = """
@@ -735,16 +747,26 @@ class SQLiteSearchCore:
             alias_params.extend(alias_scope_params)
         alias_rows = self.conn.execute(alias_sql, alias_params).fetchall()
         if alias_rows:
-            pairs = [(str(row["target_id"]), str(row["value"])) for row in alias_rows]
+            pairs = exact_pairs + [
+                (str(row["target_id"]), str(row["value"])) for row in alias_rows
+            ]
             return self._envelope(
                 query,
                 "alias",
-                self._select_documents_for_targets(pairs, "exact scoped alias"),
+                self._select_documents_for_targets(
+                    pairs, "exact scoped alias or entity name"
+                ),
             )
 
         lexical_text = " ".join(request["terms"])
         tokens = _fts_tokens(lexical_text)
         if not tokens:
+            if exact_pairs:
+                return self._envelope(
+                    query,
+                    "lexical",
+                    self._select_documents_for_targets(exact_pairs, "exact entity name"),
+                )
             return self._envelope(query, "none", [])
         expression = _fts_expression(tokens)
         scope_sql, scope_params = _scope_clause(request["scope_hints"])
@@ -758,21 +780,26 @@ class SQLiteSearchCore:
         if scope_sql:
             sql += " AND " + scope_sql
             params.extend(scope_params)
-        title_norm = _fold(lexical_text)
+        title_norm = _fold(normalized)
         sql += """
             ORDER BY
-              engine_score ASC,
               CASE WHEN d.title_norm=? THEN 0 ELSE 1 END ASC,
+              engine_score ASC,
               d.title_norm ASC,
               d.target_id ASC
             LIMIT ?
         """
         params.extend([title_norm, limit])
         rows = self.conn.execute(sql, params).fetchall()
-        matches = [
-            self._row_match(row, normalized, "bounded SQLite FTS5 lexical match")
-            for row in rows
-        ]
+        exact_target_ids = {target_id for target_id, _ in exact_pairs}
+        matches = []
+        for row in rows:
+            reason = "bounded SQLite FTS5 lexical match"
+            if str(row["target_id"]) in exact_target_ids:
+                reason = "exact entity name with bounded lexical expansion"
+            matches.append(self._row_match(row, normalized, reason))
+        if not matches and exact_pairs:
+            matches = self._select_documents_for_targets(exact_pairs, "exact entity name")
         return self._envelope(query, "lexical", matches)
 
     def numeric_browse(

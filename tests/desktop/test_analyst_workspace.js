@@ -82,10 +82,10 @@ test('Tool and Hunt Profile projection is generic and does not fake Event fields
   assert.ok(main.includes("listCard('Defensive Telemetry'"));
 });
 
-test('workspace preserves the frozen seven-command Desktop boundary', () => {
+test('workspace extends the frozen Desktop boundary with one bounded catalog command', () => {
   const commands = [...main.matchAll(/invoke\('([a-z_]+)'/g)].map(match => match[1]);
-  assert.deepEqual(commands, ['core_status','search_records','get_record','expand_graph','pack_status','pack_update','pack_rollback']);
-  assert.equal(tauri.app.security.capabilities[0].permissions.length, 7);
+  assert.deepEqual(commands, ['core_status','search_records','list_entities','get_record','expand_graph','pack_status','pack_update','pack_rollback']);
+  assert.equal(tauri.app.security.capabilities[0].permissions.length, 8);
   assert.equal(tauri.app.security.csp.includes("connect-src 'none'"), true);
 });
 
@@ -120,7 +120,7 @@ test('search and record failures clear prior selection and use nested Shared Cor
 test('Tauri commands keep blocking child-process I/O off the WebView command executor', () => {
   assert.ok(rustMain.includes('async fn run_core_session_async'));
   assert.ok(rustMain.includes('tauri::async_runtime::spawn_blocking'));
-  for (const command of ['core_status','search_records','get_record','expand_graph','pack_status','pack_update','pack_rollback']) {
+  for (const command of ['core_status','search_records','list_entities','get_record','expand_graph','pack_status','pack_update','pack_rollback']) {
     assert.ok(rustMain.includes(`async fn ${command}(`), `${command} must remain asynchronous`);
   }
   assert.ok(rustMain.includes('stdout_reader = thread::spawn'));

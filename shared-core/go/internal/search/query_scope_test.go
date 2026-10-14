@@ -21,4 +21,12 @@ func TestImplicitScopeAppliesOnlyToIdentifierShorthand(t *testing.T) {
 	if len(phrase.terms) != 5 {
 		t.Fatalf("lexical title terms changed: %#v", phrase.terms)
 	}
+
+	twoTermTitle, err := parseQuery("Windows Permissions", 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(twoTermTitle.scope) != 0 || twoTermTitle.hasID {
+		t.Fatalf("two-term lexical title was incorrectly treated as an identifier shorthand: %#v", twoTermTitle)
+	}
 }

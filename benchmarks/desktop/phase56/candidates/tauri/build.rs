@@ -80,6 +80,7 @@ fn main() {
     let app_manifest = tauri_build::AppManifest::new().commands(&[
         "core_status",
         "search_records",
+        "list_entities",
         "get_record",
         "expand_graph",
         "pack_status",

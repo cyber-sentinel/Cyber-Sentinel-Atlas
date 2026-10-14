@@ -23,7 +23,10 @@ MAX_GRAPH_DEPTH = 2
 
 FILTER_KEYS = {
     "platform", "product", "provider", "channel", "namespace",
-    "type", "lifecycle", "version",
+    "type", "lifecycle", "version", "family", "source_family",
+    "domain", "tactic", "active", "telemetry_family", "function",
+    "context", "binary", "tool_type", "attack_technique",
+    "parent_technique", "detection_strategy",
 }
 
 SCOPE_WORDS = {
@@ -147,7 +150,11 @@ def parse_query(query: str, *, graph_depth: int = 1) -> dict[str, Any]:
     # ``Windows process baseline anomaly hunting`` from other Windows
     # namespaces. Longer phrases remain lexical queries; callers that need
     # an explicit scope can use the typed filters above.
-    if len(terms) == 2 and terms[0].casefold() in SCOPE_WORDS:
+    if (
+        len(terms) == 2
+        and terms[0].casefold() in SCOPE_WORDS
+        and re.fullmatch(r"[0-9]+", terms[1])
+    ):
         scope_hints.update(SCOPE_WORDS[terms[0].casefold()])
         identifier_value_hint = terms[1]
     elif len(terms) == 3 and terms[0].casefold() == "event" and terms[1].casefold() == "id":
@@ -246,22 +253,46 @@ def build_projection_bundle(fixture: dict[str, Any]) -> dict[str, Any]:
                 "derivation": "fixture-source-alias",
             })
 
+        facets: dict[str, Any] = {
+            "namespace": record.get("namespace"),
+            "platform": scope["platform"],
+            "product": scope["product"],
+            "provider": scope["provider"],
+            "channel": scope["channel"],
+            "type": record.get("entity_type"),
+            "lifecycle": record.get("lifecycle"),
+        }
+        extra_facets = record.get("extra_facets") or {}
+        if not isinstance(extra_facets, dict):
+            raise ValueError(f"extra_facets must be an object: {target_id}")
+        for key, value in sorted(extra_facets.items()):
+            if key not in FILTER_KEYS:
+                raise ValueError(f"unsupported extra facet key {key!r}: {target_id}")
+            if key in facets and facets[key] not in (None, ""):
+                raise ValueError(f"extra facet cannot replace canonical facet {key!r}: {target_id}")
+            if isinstance(value, list):
+                normalized_values = sorted({str(item).strip() for item in value if str(item).strip()}, key=_fold)
+                if len(normalized_values) > 64:
+                    raise ValueError(f"extra facet {key!r} exceeds 64 values: {target_id}")
+                for facet_value in normalized_values:
+                    filters.append({"target_id": target_id, "facets": {key: facet_value}})
+            elif value is None:
+                continue
+            elif isinstance(value, (str, int, float, bool)):
+                text_value = str(value).strip()
+                if text_value:
+                    filters.append({"target_id": target_id, "facets": {key: text_value}})
+            else:
+                raise ValueError(f"extra facet {key!r} must be scalar or scalar array: {target_id}")
+
         filters.append({
             "target_id": target_id,
-            "facets": {
-                "namespace": record.get("namespace"),
-                "platform": scope["platform"],
-                "product": scope["product"],
-                "provider": scope["provider"],
-                "channel": scope["channel"],
-                "type": record.get("entity_type"),
-                "lifecycle": record.get("lifecycle"),
-            },
+            "facets": facets,
         })
 
     identifiers.sort(key=lambda item: (item["namespace"], item["identifier_type"], item["value"], item["target_id"]))
     aliases.sort(key=lambda item: (_fold(item["value"]), item["target_id"]))
-    filters.sort(key=lambda item: item["target_id"])
+    filters.sort(key=lambda item: (item["target_id"], _canonical_json(item.get("facets") or {})))
 
     source_for_digest = sorted(records, key=lambda item: item["id"])
     binding = {
@@ -350,9 +381,10 @@ class ReferenceResolver:
         if canonical:
             return self._envelope(query, "canonical_identifier", canonical, "exact canonical identifier")
 
+        exact: list[tuple[str, str]] = []
+        identifier_stage: str | None = None
         value_hint = request.get("identifier_value_hint")
         if value_hint is not None:
-            exact: list[tuple[str, str]] = []
             for item in self.identifiers:
                 if request.get("identifier_type_hint") and item["identifier_type"] != request["identifier_type_hint"]:
                     continue
@@ -362,8 +394,19 @@ class ReferenceResolver:
                 if _match_value(value_hint, item["value"], item["case_sensitive"]):
                     exact.append((item["target_id"], item["value"]))
             if exact:
-                stage = "scoped_identifier" if request["scope_hints"] else "native_identifier"
-                return self._envelope(query, stage, exact, "registry-aware exact native identifier")
+                identifier_stage = "scoped_identifier" if request["scope_hints"] else "native_identifier"
+
+        for target_id, document in self.documents.items():
+            if _fold(document["title"]) != _fold(normalized):
+                continue
+            seed = self._seed_for_target(target_id)
+            if request["scope_hints"] and not _scope_matches(seed, request["scope_hints"]):
+                continue
+            exact.append((target_id, document["title"]))
+        if exact and identifier_stage:
+            stage = identifier_stage
+            reason = "exact native identifier or entity name"
+            return self._envelope(query, stage, exact, reason)
 
         alias_hits: list[tuple[str, str]] = []
         for item in self.aliases:
@@ -374,10 +417,16 @@ class ReferenceResolver:
                         continue
                 alias_hits.append((item["target_id"], item["value"]))
         if alias_hits:
-            return self._envelope(query, "alias", alias_hits, "exact scoped alias")
+            return self._envelope(
+                query,
+                "alias",
+                exact + alias_hits,
+                "exact scoped alias or entity name",
+            )
 
         lexical_terms = [_fold(term) for term in request["terms"] if term]
-        lexical_results: list[tuple[int, str]] = []
+        exact_target_ids = {target_id for target_id, _ in exact}
+        lexical_results: list[tuple[int, int, str]] = []
         if lexical_terms:
             for target_id, doc in self.documents.items():
                 seed = self._seed_for_target(target_id)
@@ -388,12 +437,20 @@ class ReferenceResolver:
                 folded = _fold(haystack)
                 score = sum(1 for term in lexical_terms if term in folded)
                 if score == len(lexical_terms):
-                    lexical_results.append((score, target_id))
+                    exact_rank = 0 if target_id in exact_target_ids else 1
+                    lexical_results.append((exact_rank, score, target_id))
         if lexical_results:
-            lexical_results.sort(key=lambda pair: (-pair[0], _fold(self.documents[pair[1]]["title"]), pair[1]))
+            lexical_results.sort(
+                key=lambda pair: (
+                    pair[0],
+                    -pair[1],
+                    _fold(self.documents[pair[2]]["title"]),
+                    pair[2],
+                )
+            )
             matches = [
                 self._make_match(target_id, normalized, "engine-neutral reference lexical containment", reference_score=score)
-                for score, target_id in lexical_results
+                for _, score, target_id in lexical_results
             ]
             return {
                 "search_contract_version": SEARCH_CONTRACT_VERSION,
@@ -403,6 +460,8 @@ class ReferenceResolver:
                 "matches": matches,
             }
 
+        if exact:
+            return self._envelope(query, "lexical", exact, "exact entity name")
         return self._envelope(query, "none", [], "no exact, alias, or reference lexical match")
 
     def numeric_browse(self, *, namespace: str, identifier_type: str = "event_id") -> list[dict[str, Any]]:

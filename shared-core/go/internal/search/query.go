@@ -52,7 +52,7 @@ func parseQuery(query string, graphDepth int) (parsedQuery, error) {
 	// titles in adjacent namespaces are silently filtered out.
 	if len(request.terms) >= 2 {
 		if implied, ok := scopeWords[strings.ToLower(request.terms[0])]; ok {
-			if len(request.terms) == 2 {
+			if len(request.terms) == 2 && isASCIIDigits(request.terms[1]) {
 				for key, value := range implied {
 					request.scope[key] = value
 				}
@@ -71,9 +71,27 @@ func parseQuery(query string, graphDepth int) (parsedQuery, error) {
 	return request, nil
 }
 
+func isASCIIDigits(value string) bool {
+	if value == "" {
+		return false
+	}
+	for _, char := range value {
+		if char < '0' || char > '9' {
+			return false
+		}
+	}
+	return true
+}
+
 func validateLimit(limit int) error {
 	if limit < 1 || limit > MaxTopK {
 		return invalid("limit must be between 1 and %d", MaxTopK)
+	}
+	return nil
+}
+func validateCatalogOffset(offset int) error {
+	if offset < 0 || offset > MaxCatalogOffset {
+		return invalid("catalog offset must be between 0 and %d", MaxCatalogOffset)
 	}
 	return nil
 }
@@ -184,6 +202,8 @@ func (c *Core) Resolve(query string, graphDepth, limit int) (Result, error) {
 	if err != sql.ErrNoRows {
 		return Result{}, err
 	}
+	exactPairs := map[string]string{}
+	identifierStage := ""
 	if request.hasID {
 		where, args := scopeClause(request.scope, "d")
 		sqlText := `SELECT i.target_id,i.value FROM identifiers i JOIN documents d ON d.target_id=i.target_id WHERE ((i.case_sensitive=1 AND i.match_value=?) OR (i.case_sensitive=0 AND i.match_value=?))`
@@ -201,15 +221,37 @@ func (c *Core) Resolve(query string, graphDepth, limit int) (Result, error) {
 			return Result{}, e
 		}
 		if len(pairs) > 0 {
-			matches, e := c.stableMatches(pairs, "registry-aware exact native identifier")
-			stage := "native_identifier"
+			identifierStage = "native_identifier"
 			if len(request.scope) > 0 {
-				stage = "scoped_identifier"
+				identifierStage = "scoped_identifier"
 			}
-			return c.envelope(query, stage, matches), e
+			for id, value := range pairs {
+				exactPairs[id] = value
+			}
 		}
 	}
 	where, args := scopeClause(request.scope, "d")
+	titleSQL := `SELECT d.target_id,d.title FROM documents d WHERE d.title_norm=?`
+	titleParams := []any{fold(request.normalized)}
+	if where != "" {
+		titleSQL += " AND " + where
+		titleParams = append(titleParams, args...)
+	}
+	titlePairs, err := queryPairs(c.db, titleSQL, titleParams...)
+	if err != nil {
+		return Result{}, err
+	}
+	for id, value := range titlePairs {
+		if _, exists := exactPairs[id]; !exists {
+			exactPairs[id] = value
+		}
+	}
+	if len(exactPairs) > 0 && identifierStage != "" {
+		stage, reason := identifierStage, "exact native identifier or entity name"
+		matches, e := c.stableMatches(exactPairs, reason)
+		return c.envelope(query, stage, matches), e
+	}
+	where, args = scopeClause(request.scope, "d")
 	sqlText := `SELECT a.target_id,a.value FROM aliases a JOIN documents d ON d.target_id=a.target_id WHERE ((a.case_sensitive=1 AND a.match_value=?) OR (a.case_sensitive=0 AND a.match_value=?))`
 	params := []any{norm.NFKC.String(request.normalized), fold(request.normalized)}
 	if where != "" {
@@ -221,12 +263,21 @@ func (c *Core) Resolve(query string, graphDepth, limit int) (Result, error) {
 		return Result{}, err
 	}
 	if len(pairs) > 0 {
-		matches, e := c.stableMatches(pairs, "exact scoped alias")
+		for id, value := range pairs {
+			if _, exists := exactPairs[id]; !exists {
+				exactPairs[id] = value
+			}
+		}
+		matches, e := c.stableMatches(exactPairs, "exact scoped alias or entity name")
 		return c.envelope(query, "alias", matches), e
 	}
 	lexical := strings.Join(request.terms, " ")
 	tokens := lexicalTokenRE.FindAllString(norm.NFKC.String(lexical), -1)
 	if len(tokens) == 0 {
+		if len(exactPairs) > 0 {
+			matches, e := c.stableMatches(exactPairs, "exact entity name")
+			return c.envelope(query, "lexical", matches), e
+		}
 		return c.envelope(query, "none", []Match{}), nil
 	}
 	if len(tokens) > MaxTerms {
@@ -244,8 +295,8 @@ func (c *Core) Resolve(query string, graphDepth, limit int) (Result, error) {
 		sqlText += " AND " + where
 		params = append(params, args...)
 	}
-	sqlText += ` ORDER BY bm25(documents_fts) ASC,CASE WHEN d.title_norm=? THEN 0 ELSE 1 END ASC,d.title_norm ASC,d.target_id ASC LIMIT ?`
-	params = append(params, fold(lexical), limit)
+	sqlText += ` ORDER BY CASE WHEN d.title_norm=? THEN 0 ELSE 1 END ASC,bm25(documents_fts) ASC,d.title_norm ASC,d.target_id ASC LIMIT ?`
+	params = append(params, fold(request.normalized), limit)
 	rows, err := c.db.Query(sqlText, params...)
 	if err != nil {
 		return Result{}, err
@@ -258,10 +309,18 @@ func (c *Core) Resolve(query string, graphDepth, limit int) (Result, error) {
 		if err = rows.Scan(&row.id, &row.entity, &row.title, &row.namespace, &row.platform, &row.product, &row.provider, &row.channel, &row.lifecycle, &score); err != nil {
 			return Result{}, err
 		}
-		matches = append(matches, row.match(request.normalized, "bounded SQLite FTS5 lexical match"))
+		reason := "bounded SQLite FTS5 lexical match"
+		if _, exact := exactPairs[row.id]; exact {
+			reason = "exact entity name with bounded lexical expansion"
+		}
+		matches = append(matches, row.match(request.normalized, reason))
 	}
 	if err = rows.Err(); err != nil {
 		return Result{}, err
+	}
+	if len(matches) == 0 && len(exactPairs) > 0 {
+		matches, e := c.stableMatches(exactPairs, "exact entity name")
+		return c.envelope(query, "lexical", matches), e
 	}
 	return c.envelope(query, "lexical", matches), nil
 }

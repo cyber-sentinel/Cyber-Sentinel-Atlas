@@ -38,6 +38,40 @@ class Phase541ReferenceSearchTests(unittest.TestCase):
         self.assertNotIn("index_adapter_id", binding)
         self.assertNotIn("index_adapter_version", binding)
 
+    def test_extra_facets_preserve_multiple_values_without_overwriting_scope(self):
+        fixture = copy.deepcopy(self.fixture)
+        fixture["records"][0]["extra_facets"] = {
+            "source_family": "mitre-attack",
+            "tactic": ["TA0002", "TA0005"],
+        }
+        bundle = search.build_projection_bundle(fixture)
+        target = fixture["records"][0]["id"]
+        rows = [row["facets"] for row in bundle["filters"] if row["target_id"] == target]
+        self.assertIn({"source_family": "mitre-attack"}, rows)
+        self.assertIn({"tactic": "TA0002"}, rows)
+        self.assertIn({"tactic": "TA0005"}, rows)
+        conflicting = copy.deepcopy(fixture)
+        conflicting["records"][0]["extra_facets"]["platform"] = ["Linux"]
+        with self.assertRaises(ValueError):
+            search.build_projection_bundle(conflicting)
+
+    def test_tool_and_attack_library_facets_are_first_class(self):
+        fixture = copy.deepcopy(self.fixture)
+        fixture["records"][0]["extra_facets"] = {
+            "binary": ["certutil", "certutil.exe"],
+            "function": ["Download", "Encode"],
+            "tool_type": "OSBinary",
+            "attack_technique": ["T1105"],
+            "context": ["sudo"],
+            "parent_technique": "T1098",
+            "detection_strategy": ["DET0310"],
+        }
+        bundle = search.build_projection_bundle(fixture)
+        target = fixture["records"][0]["id"]
+        rows = [row["facets"] for row in bundle["filters"] if row["target_id"] == target]
+        for expected in ({"binary": "certutil.exe"}, {"function": "Download"}, {"tool_type": "OSBinary"}, {"attack_technique": "T1105"}, {"context": "sudo"}, {"parent_technique": "T1098"}, {"detection_strategy": "DET0310"}):
+            self.assertIn(expected, rows)
+
     def test_exact_windows_4688(self):
         result = self.resolver.resolve("4688")
         self.assertEqual("direct", result["status"])

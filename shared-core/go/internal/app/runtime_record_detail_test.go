@@ -108,4 +108,8 @@ func TestRecordGetDetailProjectionIsBoundedAndDeterministic(t *testing.T) {
 	if !ok || len(relationships) != 1 || relationships[0]["id"] != rel["id"] {
 		t.Fatalf("unexpected relationships: %#v", projection["relationships"])
 	}
+	related, ok := projection["related_entities"].([]canonical.Record)
+	if !ok || len(related) != 1 || related[0]["id"] != field["id"] {
+		t.Fatalf("unexpected related entities: %#v", projection["related_entities"])
+	}
 }

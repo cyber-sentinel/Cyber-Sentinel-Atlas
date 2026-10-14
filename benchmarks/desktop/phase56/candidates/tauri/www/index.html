@@ -6,6 +6,7 @@
   <meta name="color-scheme" content="dark">
   <title>Cyber-Sentinel ATLAS</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="library.css">
 </head>
 <body data-theme="atlas-dark" data-entity-mode="idle">
   <a class="skip-link" href="#workspace">Skip to workspace</a>
@@ -26,6 +27,7 @@
     <aside class="sidebar" aria-label="Primary navigation">
       <nav class="nav-stack">
         <button class="nav-item active" type="button" data-view="explore" aria-current="page"><span class="nav-icon" aria-hidden="true">⌕</span><span>Explore</span></button>
+        <button class="nav-item" type="button" data-view="library"><span class="nav-icon" aria-hidden="true">▦</span><span>Library</span></button>
         <button class="nav-item" type="button" data-view="investigation"><span class="nav-icon" aria-hidden="true">⎔</span><span>Investigation</span></button>
         <button class="nav-item" type="button" data-view="mindmap"><span class="nav-icon" aria-hidden="true">⌘</span><span>Mind Map</span></button>
         <button class="nav-item" type="button" data-view="advanced"><span class="nav-icon" aria-hidden="true">⚙</span><span>Settings</span></button>
@@ -56,6 +58,22 @@
           </div>
           <article class="answer-column"><div id="quickDetail" class="quick-detail empty-answer"><div class="empty-orb" aria-hidden="true">◇</div><h3>Select a result</h3><p>ATLAS will show the analyst-facing summary, field semantics, security relevance and source-backed pivots here.</p></div></article>
         </section>
+      </section>
+
+      <section class="view" data-view-panel="library" aria-labelledby="libraryTitle">
+        <div class="section-heading"><div><div class="eyebrow">GOVERNED KNOWLEDGE CATALOG</div><h2 id="libraryTitle">Library</h2><p>Browse the active verified pack by first-class knowledge family. Counts come from Shared Core and are never hardcoded.</p></div><div id="libraryTotal" class="meta-chip">0 RECORDS</div></div>
+        <div id="libraryCategories" class="library-categories" role="group" aria-label="Library category"></div>
+        <form id="libraryForm" class="library-toolbar" autocomplete="off">
+          <label for="libraryQuery">Filter current category</label><input id="libraryQuery" type="search" maxlength="512" placeholder="Name or identifier…">
+          <label for="librarySubtype">Type</label><select id="librarySubtype"><option value="">All types</option></select>
+          <label for="libraryLifecycle">Lifecycle</label><select id="libraryLifecycle"><option value="">Current (default)</option><option value="all">Include deprecated / revoked</option><option value="deprecated">Deprecated</option><option value="retired">Revoked / retired</option></select>
+          <label for="librarySort">Sort</label><select id="librarySort"><option value="name">Name</option><option value="id">Identifier</option><option value="type">Type</option></select>
+          <fieldset id="libraryToolFacets" class="library-tool-facets hidden"><legend>Tool intelligence filters</legend><label for="libraryBinary">Binary / Executable</label><select id="libraryBinary"><option value="">All binaries</option></select><label for="libraryFunction">Function</label><select id="libraryFunction"><option value="">All functions</option></select><label for="libraryToolType">Type</label><select id="libraryToolType"><option value="">All tool types</option></select><label for="libraryTechnique">MITRE Technique</label><select id="libraryTechnique"><option value="">All techniques</option></select><label for="libraryContext">Execution Context</label><select id="libraryContext"><option value="">All contexts</option></select></fieldset>
+          <button class="secondary-button" type="submit">Apply</button>
+        </form>
+        <div id="libraryStatus" class="search-meta" aria-live="polite">Loading verified catalog…</div>
+        <div id="libraryGrid" class="library-grid"></div>
+        <nav class="library-pagination" aria-label="Library pages"><button id="libraryPrevious" class="secondary-button" type="button" disabled>Previous</button><span id="libraryPage">Page 1</span><button id="libraryNext" class="secondary-button" type="button" disabled>Next</button></nav>
       </section>
 
       <section class="view" data-view-panel="investigation" aria-labelledby="investigationTitle">
@@ -98,6 +116,6 @@
 
     <footer class="footer"><span>Cyber-Sentinel ATLAS</span><span id="footerState">Local-first analyst workspace</span></footer>
   </div>
-  <script src="entity-state.js"></script><script src="entity-projection.js"></script><script src="investigation-model.js"></script><script src="main.js"></script><script src="stale-selection-guard.js"></script>
+  <script src="entity-state.js"></script><script src="entity-projection.js"></script><script src="investigation-model.js"></script><script src="library-model.js"></script><script src="main.js"></script><script src="stale-selection-guard.js"></script>
 </body>
 </html>

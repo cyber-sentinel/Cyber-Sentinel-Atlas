@@ -11,13 +11,14 @@ import (
 )
 
 const (
-	ContractVersion = "1.0.0"
-	DefaultTopK     = 20
-	MaxTopK         = 100
-	MaxQueryScalars = 512
-	MaxTerms        = 32
-	MaxFilters      = 16
-	MaxGraphDepth   = 2
+	ContractVersion  = "1.0.0"
+	DefaultTopK      = 20
+	MaxTopK          = 100
+	MaxQueryScalars  = 512
+	MaxTerms         = 32
+	MaxFilters       = 16
+	MaxGraphDepth    = 2
+	MaxCatalogOffset = 1_000_000
 )
 
 var (
@@ -26,6 +27,10 @@ var (
 	filterKeys     = map[string]struct{}{
 		"platform": {}, "product": {}, "provider": {}, "channel": {},
 		"namespace": {}, "type": {}, "lifecycle": {}, "version": {},
+		"family": {}, "source_family": {}, "domain": {}, "tactic": {},
+		"active": {}, "telemetry_family": {}, "function": {}, "context": {},
+		"binary": {}, "tool_type": {}, "attack_technique": {},
+		"parent_technique": {}, "detection_strategy": {},
 	}
 	scopeWords = map[string]map[string]string{
 		"sysmon":  {"namespace": "microsoft.sysmon", "product": "sysmon"},
@@ -93,11 +98,21 @@ type Result struct {
 }
 
 type CatalogItem struct {
-	TargetID   string  `json:"target_id"`
-	Title      string  `json:"title"`
-	EntityType string  `json:"entity_type"`
-	Scope      Scope   `json:"scope"`
-	Lifecycle  *string `json:"lifecycle"`
+	TargetID          string              `json:"target_id"`
+	Title             string              `json:"title"`
+	EntityType        string              `json:"entity_type"`
+	Scope             Scope               `json:"scope"`
+	Lifecycle         *string             `json:"lifecycle"`
+	PrimaryIdentifier string              `json:"primary_identifier,omitempty"`
+	Facets            map[string][]string `json:"facets,omitempty"`
+}
+
+type CatalogPage struct {
+	Items      []CatalogItem `json:"items"`
+	TotalCount int64         `json:"total_count"`
+	Limit      int           `json:"limit"`
+	Offset     int           `json:"offset"`
+	NextOffset *int          `json:"next_offset"`
 }
 
 type FacetValue struct {
