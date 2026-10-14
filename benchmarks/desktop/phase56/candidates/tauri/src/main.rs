@@ -30,9 +30,22 @@ const ENV_ALLOWLIST: &[&str] = &[
     "APPDATA",
 ];
 const CATALOG_FILTER_ALLOWLIST: &[&str] = &[
-    "platform", "product", "provider", "channel", "namespace", "type", "lifecycle",
-    "version", "family", "source_family", "domain", "tactic", "active",
-    "telemetry_family", "function", "context",
+    "platform",
+    "product",
+    "provider",
+    "channel",
+    "namespace",
+    "type",
+    "lifecycle",
+    "version",
+    "family",
+    "source_family",
+    "domain",
+    "tactic",
+    "active",
+    "telemetry_family",
+    "function",
+    "context",
 ];
 
 #[derive(Debug)]
