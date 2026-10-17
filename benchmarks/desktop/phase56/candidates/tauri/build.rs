@@ -24,14 +24,7 @@ fn set_pixel(pixels: &mut [[u8; 4]], x: i32, y: i32, color: [u8; 4]) {
     pixels[(y as u32 * ICON_WIDTH + x as u32) as usize] = color;
 }
 
-fn draw_line(
-    pixels: &mut [[u8; 4]],
-    mut x0: i32,
-    mut y0: i32,
-    x1: i32,
-    y1: i32,
-    color: [u8; 4],
-) {
+fn draw_line(pixels: &mut [[u8; 4]], mut x0: i32, mut y0: i32, x1: i32, y1: i32, color: [u8; 4]) {
     let dx = (x1 - x0).abs();
     let sx = if x0 < x1 { 1 } else { -1 };
     let dy = -(y1 - y0).abs();
@@ -76,9 +69,24 @@ fn write_deterministic_windows_icon() -> PathBuf {
     let white = [0xff, 0xfd, 0xec, 0xff];
     let mut pixels = vec![background; (ICON_WIDTH * ICON_HEIGHT) as usize];
 
-    let hex = [(16, 2), (28, 9), (28, 23), (16, 30), (4, 23), (4, 9), (16, 2)];
+    let hex = [
+        (16, 2),
+        (28, 9),
+        (28, 23),
+        (16, 30),
+        (4, 23),
+        (4, 9),
+        (16, 2),
+    ];
     for pair in hex.windows(2) {
-        draw_line(&mut pixels, pair[0].0, pair[0].1, pair[1].0, pair[1].1, cyan);
+        draw_line(
+            &mut pixels,
+            pair[0].0,
+            pair[0].1,
+            pair[1].0,
+            pair[1].1,
+            cyan,
+        );
     }
     draw_line(&mut pixels, 10, 24, 16, 8, white);
     draw_line(&mut pixels, 16, 8, 22, 24, white);
