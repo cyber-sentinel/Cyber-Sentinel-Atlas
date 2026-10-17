@@ -29,6 +29,7 @@ function harness(result) {
     'investigationPurpose','investigationConfidence','entityPivots'
   ];
   const elements = new Map(ids.map(id => [id, element()]));
+  const document = { getElementById: id => elements.get(id) || null };
   let metricsReset = false;
   const context = {
     state: {
@@ -38,7 +39,6 @@ function harness(result) {
       currentInvestigation: { id: 'old-investigation' },
       currentTab: 'fields'
     },
-    document: { getElementById: id => elements.get(id) || null },
     el: (tag, className, content) => ({ tag, className, textContent: content || '' }),
     updateMetrics: value => { if (value === null) metricsReset = true; },
     runSearchQuery: async () => result,
@@ -48,7 +48,11 @@ function harness(result) {
     Promise
   };
   vm.createContext(context);
+  // The stale-selection guard itself does not require a browser DOM during install.
+  // Keep the minimal document out of the VM until after evaluation so the separate
+  // acceptance-remediation UI layer does not auto-install against an incomplete DOM.
   vm.runInContext(guardSource, context);
+  context.document = document;
   return { context, elements, metricsReset: () => metricsReset };
 }
 
