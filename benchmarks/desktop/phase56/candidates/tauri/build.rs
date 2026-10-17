@@ -2,6 +2,9 @@ use std::env;
 use std::fs;
 use std::path::PathBuf;
 
+const ICON_WIDTH: u32 = 32;
+const ICON_HEIGHT: u32 = 32;
+
 fn push_u16_le(buffer: &mut Vec<u8>, value: u16) {
     buffer.extend_from_slice(&value.to_le_bytes());
 }
@@ -14,12 +17,49 @@ fn push_i32_le(buffer: &mut Vec<u8>, value: i32) {
     buffer.extend_from_slice(&value.to_le_bytes());
 }
 
+fn set_pixel(pixels: &mut [[u8; 4]], x: i32, y: i32, color: [u8; 4]) {
+    if x < 0 || y < 0 || x >= ICON_WIDTH as i32 || y >= ICON_HEIGHT as i32 {
+        return;
+    }
+    pixels[(y as u32 * ICON_WIDTH + x as u32) as usize] = color;
+}
+
+fn draw_line(
+    pixels: &mut [[u8; 4]],
+    mut x0: i32,
+    mut y0: i32,
+    x1: i32,
+    y1: i32,
+    color: [u8; 4],
+) {
+    let dx = (x1 - x0).abs();
+    let sx = if x0 < x1 { 1 } else { -1 };
+    let dy = -(y1 - y0).abs();
+    let sy = if y0 < y1 { 1 } else { -1 };
+    let mut error = dx + dy;
+    loop {
+        set_pixel(pixels, x0, y0, color);
+        set_pixel(pixels, x0 + 1, y0, color);
+        set_pixel(pixels, x0, y0 + 1, color);
+        if x0 == x1 && y0 == y1 {
+            break;
+        }
+        let doubled = 2 * error;
+        if doubled >= dy {
+            error += dy;
+            x0 += sx;
+        }
+        if doubled <= dx {
+            error += dx;
+            y0 += sy;
+        }
+    }
+}
+
 fn write_deterministic_windows_icon() -> PathBuf {
-    const WIDTH: u32 = 16;
-    const HEIGHT: u32 = 16;
-    const PIXEL_BYTES: u32 = WIDTH * HEIGHT * 4;
-    const MASK_ROW_BYTES: u32 = WIDTH.div_ceil(32) * 4;
-    const MASK_BYTES: u32 = MASK_ROW_BYTES * HEIGHT;
+    const PIXEL_BYTES: u32 = ICON_WIDTH * ICON_HEIGHT * 4;
+    const MASK_ROW_BYTES: u32 = ICON_WIDTH.div_ceil(32) * 4;
+    const MASK_BYTES: u32 = MASK_ROW_BYTES * ICON_HEIGHT;
     const DIB_BYTES: u32 = 40 + PIXEL_BYTES + MASK_BYTES;
     const IMAGE_OFFSET: u32 = 6 + 16;
 
@@ -29,21 +69,37 @@ fn write_deterministic_windows_icon() -> PathBuf {
     fs::create_dir_all(&icon_dir).expect("failed to create deterministic Tauri icon directory");
     let icon_path = icon_dir.join("icon.ico");
 
+    // Deterministic ATLAS mark: dark field, cyan hex shell and a high-contrast A glyph.
+    // The icon is generated during build so no binary asset is added to source control.
+    let background = [0x1d, 0x13, 0x07, 0xff];
+    let cyan = [0xff, 0xd2, 0x55, 0xff];
+    let white = [0xff, 0xfd, 0xec, 0xff];
+    let mut pixels = vec![background; (ICON_WIDTH * ICON_HEIGHT) as usize];
+
+    let hex = [(16, 2), (28, 9), (28, 23), (16, 30), (4, 23), (4, 9), (16, 2)];
+    for pair in hex.windows(2) {
+        draw_line(&mut pixels, pair[0].0, pair[0].1, pair[1].0, pair[1].1, cyan);
+    }
+    draw_line(&mut pixels, 10, 24, 16, 8, white);
+    draw_line(&mut pixels, 16, 8, 22, 24, white);
+    draw_line(&mut pixels, 12, 19, 20, 19, cyan);
+
     let mut icon = Vec::with_capacity((IMAGE_OFFSET + DIB_BYTES) as usize);
     push_u16_le(&mut icon, 0);
     push_u16_le(&mut icon, 1);
     push_u16_le(&mut icon, 1);
-    icon.push(WIDTH as u8);
-    icon.push(HEIGHT as u8);
+    icon.push(ICON_WIDTH as u8);
+    icon.push(ICON_HEIGHT as u8);
     icon.push(0);
     icon.push(0);
     push_u16_le(&mut icon, 1);
     push_u16_le(&mut icon, 32);
     push_u32_le(&mut icon, DIB_BYTES);
     push_u32_le(&mut icon, IMAGE_OFFSET);
+
     push_u32_le(&mut icon, 40);
-    push_i32_le(&mut icon, WIDTH as i32);
-    push_i32_le(&mut icon, (HEIGHT * 2) as i32);
+    push_i32_le(&mut icon, ICON_WIDTH as i32);
+    push_i32_le(&mut icon, (ICON_HEIGHT * 2) as i32);
     push_u16_le(&mut icon, 1);
     push_u16_le(&mut icon, 32);
     push_u32_le(&mut icon, 0);
@@ -52,8 +108,12 @@ fn write_deterministic_windows_icon() -> PathBuf {
     push_i32_le(&mut icon, 0);
     push_u32_le(&mut icon, 0);
     push_u32_le(&mut icon, 0);
-    for _ in 0..(WIDTH * HEIGHT) {
-        icon.extend_from_slice(&[0x20, 0x12, 0x0b, 0xff]);
+
+    // ICO DIB pixel rows are stored bottom-up in BGRA order.
+    for y in (0..ICON_HEIGHT).rev() {
+        for x in 0..ICON_WIDTH {
+            icon.extend_from_slice(&pixels[(y * ICON_WIDTH + x) as usize]);
+        }
     }
     icon.resize((IMAGE_OFFSET + DIB_BYTES) as usize, 0);
     fs::write(&icon_path, &icon).expect("failed to write deterministic Tauri Windows icon");
