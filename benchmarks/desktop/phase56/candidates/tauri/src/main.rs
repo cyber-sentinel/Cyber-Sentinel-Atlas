@@ -21,6 +21,8 @@ const CREATE_NO_WINDOW: u32 = 0x08000000;
 const CORE_SESSION_TIMEOUT: Duration = Duration::from_secs(120);
 const CORE_SESSION_POLL_INTERVAL: Duration = Duration::from_millis(20);
 const CORE_STDERR_DIAGNOSTIC_LIMIT: usize = 2000;
+#[cfg(windows)]
+const WEBVIEW2_OFFLINE_BROWSER_ARGUMENTS: &str = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --disable-background-networking --disable-component-update --disable-sync --metrics-recording-only --no-first-run";
 const MAX_UI_QUERY_SCALARS: usize = 512;
 const MAX_UI_IDENTIFIER_SCALARS: usize = 1024;
 const MAX_UI_RESULT_LIMIT: i64 = 100;
@@ -542,7 +544,48 @@ fn arg_value(name: &str) -> Option<String> {
     None
 }
 
+#[cfg(windows)]
+fn configure_offline_webview() -> Result<(), String> {
+    for argument in std::env::args_os().skip(1) {
+        let normalized = argument.to_string_lossy().to_ascii_lowercase();
+        if normalized.starts_with("--edge-webview-switches") {
+            return Err(
+                "--edge-webview-switches is not permitted for the offline ATLAS host".to_string(),
+            );
+        }
+    }
+
+    // Tauri applies the same allowlist programmatically from tauri.conf.json.
+    // Also replace inherited environment arguments so a non-elevated WebView2
+    // cannot append caller-controlled switches or fall through to a per-user
+    // AdditionalBrowserArguments registry override. Remove debugger hooks before
+    // Tauri constructs the browser environment.
+    //
+    // SAFETY: this function is Windows-only. Rust documents process-environment
+    // mutation as always safe on Windows, and it runs before Tauri or atlas-core
+    // starts any application worker threads.
+    unsafe {
+        std::env::set_var(
+            "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS",
+            WEBVIEW2_OFFLINE_BROWSER_ARGUMENTS,
+        );
+        std::env::remove_var("WEBVIEW2_PIPE_FOR_SCRIPT_DEBUGGER");
+        std::env::remove_var("WEBVIEW2_WAIT_FOR_SCRIPT_DEBUGGER");
+    }
+    Ok(())
+}
+
+#[cfg(not(windows))]
+fn configure_offline_webview() -> Result<(), String> {
+    Ok(())
+}
+
 fn main() {
+    if let Err(error) = configure_offline_webview() {
+        eprintln!("{error}");
+        std::process::exit(1);
+    }
+
     if std::env::args().any(|arg| arg == "--atlas-probe") {
         let result = (|| -> Result<(), String> {
             let output = arg_value("--probe-output").ok_or("--probe-output is required")?;

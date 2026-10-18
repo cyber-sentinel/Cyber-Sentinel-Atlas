@@ -136,6 +136,50 @@ test('Tauri host gives bounded enriched-pack cold activation enough time and rep
   assert.ok(rustMain.includes('CORE_STDERR_DIAGNOSTIC_LIMIT'));
 });
 
+test('Tauri host applies an exact fail-closed WebView2 offline allowlist before startup', () => {
+  const expectedArguments = [
+    '--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection',
+    '--disable-background-networking',
+    '--disable-component-update',
+    '--disable-sync',
+    '--metrics-recording-only',
+    '--no-first-run',
+  ];
+  const browserArgumentLiterals = [...rustMain.matchAll(/"(--[^"\r\n]+)"/g)]
+    .map(match => match[1])
+    .filter(value => value.includes('--disable-background-networking'));
+
+  assert.ok(rustMain.includes('WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS'));
+  assert.deepEqual(browserArgumentLiterals, [expectedArguments.join(' ')]);
+  assert.equal(tauri.app.windows[0].additionalBrowserArgs, expectedArguments.join(' '));
+  assert.ok(rustMain.includes('normalized.starts_with("--edge-webview-switches")'));
+  assert.ok(rustMain.includes('WEBVIEW2_PIPE_FOR_SCRIPT_DEBUGGER'));
+  assert.ok(rustMain.includes('WEBVIEW2_WAIT_FOR_SCRIPT_DEBUGGER'));
+
+  const mainIndex = rustMain.indexOf('fn main() {');
+  const configureIndex = rustMain.indexOf('configure_offline_webview()', mainIndex);
+  const builderIndex = rustMain.indexOf('tauri::Builder::default()', mainIndex);
+  assert.notEqual(mainIndex, -1, 'host main entrypoint must remain explicit');
+  assert.notEqual(configureIndex, -1, 'offline WebView2 configuration must be invoked');
+  assert.notEqual(builderIndex, -1, 'Tauri Builder startup must remain explicit');
+  assert.ok(configureIndex < builderIndex, 'offline WebView2 configuration must run before Tauri startup');
+
+  const configuredSurface = `${rustMain}\n${JSON.stringify(tauri)}`;
+  for (const forbiddenArgument of [
+    '--remote-debugging-port',
+    '--remote-debugging-pipe',
+    '--remote-allow-origins',
+    '--disable-web-security',
+    '--allow-running-insecure-content',
+    '--ignore-certificate-errors',
+    '--allow-insecure-localhost',
+    '--proxy-server',
+    '--host-resolver-rules',
+  ]) {
+    assert.equal(configuredSurface.includes(forbiddenArgument), false, `forbidden WebView2 argument: ${forbiddenArgument}`);
+  }
+});
+
 test('Mind Map renders a bounded graphical node-link view without arbitrary graph execution', () => {
   assert.ok(html.includes('id="graphResults"'));
   assert.ok(main.includes("createElementNS('http://www.w3.org/2000/svg',tag)"));
