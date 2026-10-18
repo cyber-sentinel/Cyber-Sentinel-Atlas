@@ -127,6 +127,15 @@ test('Tauri commands keep blocking child-process I/O off the WebView command exe
   assert.ok(rustMain.includes('stderr_reader = thread::spawn'));
 });
 
+test('Tauri host gives bounded enriched-pack cold activation enough time and reports timeout evidence', () => {
+  assert.ok(rustMain.includes('const CORE_SESSION_TIMEOUT: Duration = Duration::from_secs(120);'));
+  assert.ok(rustMain.includes('const CORE_SESSION_POLL_INTERVAL: Duration = Duration::from_millis(20);'));
+  assert.equal(rustMain.includes('Duration::from_secs(15)'), false);
+  assert.ok(rustMain.includes('atlas-core stdio request timed out after {elapsed_ms} ms'));
+  assert.ok(rustMain.includes('stdout_bytes={}'));
+  assert.ok(rustMain.includes('CORE_STDERR_DIAGNOSTIC_LIMIT'));
+});
+
 test('Mind Map renders a bounded graphical node-link view without arbitrary graph execution', () => {
   assert.ok(html.includes('id="graphResults"'));
   assert.ok(main.includes("createElementNS('http://www.w3.org/2000/svg',tag)"));

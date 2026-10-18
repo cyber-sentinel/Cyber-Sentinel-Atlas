@@ -13,6 +13,14 @@ use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 const MAX_RESPONSE: usize = 8 * 1024 * 1024;
 #[cfg(windows)]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
+// A first run may need to verify and atomically activate the bundled private
+// preview pack before atlas-core can read the handshake. The enriched pack is
+// materially larger than the original MVP fixture, so the previous 15-second
+// process-wide limit could kill a healthy, bounded cold activation. Keep the
+// host fail-closed, but give cold activation an explicit product-level budget.
+const CORE_SESSION_TIMEOUT: Duration = Duration::from_secs(120);
+const CORE_SESSION_POLL_INTERVAL: Duration = Duration::from_millis(20);
+const CORE_STDERR_DIAGNOSTIC_LIMIT: usize = 2000;
 const MAX_UI_QUERY_SCALARS: usize = 512;
 const MAX_UI_IDENTIFIER_SCALARS: usize = 1024;
 const MAX_UI_RESULT_LIMIT: i64 = 100;
@@ -261,7 +269,7 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
         Ok::<Vec<u8>, String>(bytes)
     });
 
-    let mut timed_out = false;
+    let mut timeout_elapsed_ms = None;
     let status = loop {
         if let Some(status) = child
             .try_wait()
@@ -269,14 +277,14 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
         {
             break status;
         }
-        if started.elapsed() > Duration::from_secs(15) {
+        if started.elapsed() > CORE_SESSION_TIMEOUT {
             let _ = child.kill();
-            timed_out = true;
+            timeout_elapsed_ms = Some(started.elapsed().as_millis());
             break child
                 .wait()
                 .map_err(|e| format!("wait for timed-out atlas-core: {e}"))?;
         }
-        thread::sleep(Duration::from_millis(20));
+        thread::sleep(CORE_SESSION_POLL_INTERVAL);
     };
 
     let stdout = stdout_reader
@@ -285,8 +293,16 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
     let stderr = stderr_reader
         .join()
         .map_err(|_| "atlas-core stderr reader panicked".to_string())??;
-    if timed_out {
-        return Err("atlas-core stdio request timed out".into());
+    if let Some(elapsed_ms) = timeout_elapsed_ms {
+        let stderr_excerpt = String::from_utf8_lossy(&stderr)
+            .chars()
+            .take(CORE_STDERR_DIAGNOSTIC_LIMIT)
+            .collect::<String>();
+        return Err(format!(
+            "atlas-core stdio request timed out after {elapsed_ms} ms (limit {} ms); stdout_bytes={}; stderr={stderr_excerpt}",
+            CORE_SESSION_TIMEOUT.as_millis(),
+            stdout.len()
+        ));
     }
     if !status.success() {
         return Err(format!(
@@ -294,7 +310,7 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
             status.code(),
             String::from_utf8_lossy(&stderr)
                 .chars()
-                .take(2000)
+                .take(CORE_STDERR_DIAGNOSTIC_LIMIT)
                 .collect::<String>()
         ));
     }
