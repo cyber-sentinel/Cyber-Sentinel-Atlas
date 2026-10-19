@@ -13,6 +13,54 @@ permissions:
   contents: read
 
 jobs:
+  # Stacked MVP-2 PRs target another feature branch, not main. Most specialized
+  # workflows therefore cannot validate their exact heads. Keep a public-safe,
+  # fail-closed Desktop/Core regression gate independent of private Windows packs.
+  mvp2-stacked-regression:
+    name: MVP-2 Desktop and Shared Core regressions
+    if: ${{ github.event_name == 'pull_request' && contains(github.head_ref, 'mvp2') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout PR merge ref
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check desktop JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          for source in benchmarks/desktop/phase56/candidates/tauri/www/*.js; do
+            node --check "$source"
+          done
+
+      - name: Run desktop and Product Acceptance regressions
+        run: node --test tests/desktop/*.js
+
+      - name: Set up production Go toolchain
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.9'
+          cache-dependency-path: shared-core/go/go.sum
+
+      - name: Verify Shared Core modules
+        working-directory: shared-core/go
+        run: go mod verify
+
+      - name: Run Shared Core unit tests
+        working-directory: shared-core/go
+        run: go test ./... -count=1
+
+      - name: Run Shared Core static analysis
+        working-directory: shared-core/go
+        run: go vet ./...
+
   validate-foundation:
     runs-on: [self-hosted, linux, x64, atlas-ci, atlas-linux]
     timeout-minutes: 20
