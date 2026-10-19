@@ -18,6 +18,7 @@
         "minHeight": 600,
         "resizable": true,
         "fullscreen": false,
+        "useHttpsScheme": true,
         "additionalBrowserArgs": "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --disable-background-networking --disable-preconnect --disable-component-update --disable-sync --metrics-recording-only --no-first-run"
       }
     ],
