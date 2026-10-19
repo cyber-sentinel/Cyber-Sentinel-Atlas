@@ -7,6 +7,7 @@ use std::io::{Read, Write};
 use std::os::windows::process::CommandExt;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
+use std::sync::Mutex;
 use std::thread;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
@@ -21,6 +22,11 @@ const CREATE_NO_WINDOW: u32 = 0x08000000;
 const CORE_SESSION_TIMEOUT: Duration = Duration::from_secs(120);
 const CORE_SESSION_POLL_INTERVAL: Duration = Duration::from_millis(20);
 const CORE_STDERR_DIAGNOSTIC_LIMIT: usize = 2000;
+// Every Desktop command starts a short-lived atlas-core process. Serialize the
+// processes inside one host so first-run pack activation cannot race between
+// concurrent UI refreshes. The guard lives inside spawn_blocking callers, so a
+// cold activation never blocks Tauri's asynchronous command executor.
+static CORE_SESSION_GATE: Mutex<()> = Mutex::new(());
 #[cfg(windows)]
 const WEBVIEW2_OFFLINE_BROWSER_ARGUMENTS: &str = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --disable-background-networking --disable-preconnect --disable-component-update --disable-sync --metrics-recording-only --no-first-run";
 const MAX_UI_QUERY_SCALARS: usize = 512;
@@ -405,14 +411,24 @@ async fn run_core_session_async(
     method: &'static str,
     params: Value,
 ) -> Result<CoreSessionEvidence, String> {
-    tauri::async_runtime::spawn_blocking(move || run_core_session(method, params))
+    tauri::async_runtime::spawn_blocking(move || {
+        let _guard = CORE_SESSION_GATE
+            .lock()
+            .map_err(|_| "atlas-core session gate is poisoned".to_string())?;
+        run_core_session(method, params)
+    })
         .await
         .map_err(|error| format!("atlas-core worker failed: {error}"))?
 }
 
 #[tauri::command]
 async fn core_status() -> Result<Value, String> {
-    tauri::async_runtime::spawn_blocking(run_core_probe)
+    tauri::async_runtime::spawn_blocking(|| {
+        let _guard = CORE_SESSION_GATE
+            .lock()
+            .map_err(|_| "atlas-core session gate is poisoned".to_string())?;
+        run_core_probe()
+    })
         .await
         .map_err(|error| format!("atlas-core status worker failed: {error}"))?
 }

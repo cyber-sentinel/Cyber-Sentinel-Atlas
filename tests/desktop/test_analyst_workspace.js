@@ -120,6 +120,9 @@ test('search and record failures clear prior selection and use nested Shared Cor
 test('Tauri commands keep blocking child-process I/O off the WebView command executor', () => {
   assert.ok(rustMain.includes('async fn run_core_session_async'));
   assert.ok(rustMain.includes('tauri::async_runtime::spawn_blocking'));
+  assert.ok(rustMain.includes('static CORE_SESSION_GATE: Mutex<()> = Mutex::new(())'));
+  assert.equal((rustMain.match(/CORE_SESSION_GATE\s*\.lock\(\)/g) || []).length, 2, 'both status and application commands must share the first-run session gate');
+  assert.ok(rustMain.includes('atlas-core session gate is poisoned'));
   for (const command of ['core_status','search_records','list_entities','get_record','expand_graph','pack_status','pack_update','pack_rollback']) {
     assert.ok(rustMain.includes(`async fn ${command}(`), `${command} must remain asynchronous`);
   }
