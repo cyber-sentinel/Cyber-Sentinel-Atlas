@@ -140,6 +140,7 @@ test('Tauri host applies an exact fail-closed WebView2 offline allowlist before 
   const expectedArguments = [
     '--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection',
     '--disable-background-networking',
+    '--disable-preconnect',
     '--disable-component-update',
     '--disable-sync',
     '--metrics-recording-only',

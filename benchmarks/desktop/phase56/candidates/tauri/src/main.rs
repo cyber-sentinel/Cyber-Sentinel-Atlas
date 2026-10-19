@@ -22,7 +22,7 @@ const CORE_SESSION_TIMEOUT: Duration = Duration::from_secs(120);
 const CORE_SESSION_POLL_INTERVAL: Duration = Duration::from_millis(20);
 const CORE_STDERR_DIAGNOSTIC_LIMIT: usize = 2000;
 #[cfg(windows)]
-const WEBVIEW2_OFFLINE_BROWSER_ARGUMENTS: &str = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --disable-background-networking --disable-component-update --disable-sync --metrics-recording-only --no-first-run";
+const WEBVIEW2_OFFLINE_BROWSER_ARGUMENTS: &str = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --disable-background-networking --disable-preconnect --disable-component-update --disable-sync --metrics-recording-only --no-first-run";
 const MAX_UI_QUERY_SCALARS: usize = 512;
 const MAX_UI_IDENTIFIER_SCALARS: usize = 1024;
 const MAX_UI_RESULT_LIMIT: i64 = 100;
