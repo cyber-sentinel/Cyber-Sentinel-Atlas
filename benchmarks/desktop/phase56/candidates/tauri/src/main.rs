@@ -417,8 +417,8 @@ async fn run_core_session_async(
             .map_err(|_| "atlas-core session gate is poisoned".to_string())?;
         run_core_session(method, params)
     })
-        .await
-        .map_err(|error| format!("atlas-core worker failed: {error}"))?
+    .await
+    .map_err(|error| format!("atlas-core worker failed: {error}"))?
 }
 
 #[tauri::command]
@@ -429,8 +429,8 @@ async fn core_status() -> Result<Value, String> {
             .map_err(|_| "atlas-core session gate is poisoned".to_string())?;
         run_core_probe()
     })
-        .await
-        .map_err(|error| format!("atlas-core status worker failed: {error}"))?
+    .await
+    .map_err(|error| format!("atlas-core status worker failed: {error}"))?
 }
 
 #[tauri::command]
