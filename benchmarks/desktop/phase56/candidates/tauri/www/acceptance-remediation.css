@@ -74,6 +74,15 @@
   color: #b8ff75;
 }
 
+.localized-definition-fa {
+  text-align: right;
+  line-height: 1.95;
+}
+
+.localized-definition-fa + .localized-definition-fa {
+  margin-top: 8px;
+}
+
 .summary-card h4,
 .info-card h4,
 .source-card h4,

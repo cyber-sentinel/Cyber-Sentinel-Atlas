@@ -99,6 +99,14 @@
     'T1059.001': 'این Sub-technique بر سوءاستفاده از PowerShell برای اجرای command و script در Windows تمرکز دارد. PowerShell یک محیط قدرتمند مدیریت و automation است و فعالیت آن باید با process lineage، command-line، Script Block Logging، Module Logging، AMSI و PowerShell Operational telemetry بررسی شود. وجود PowerShell به‌تنهایی نشانه حمله نیست؛ analyst باید parent process، user context، encoded یا obfuscated content، network activity و ارتباط با سایر evidenceها را ارزیابی کند. متن انگلیسی و روابط نسخه‌بندی‌شده MITRE ATT&CK برای ممیزی حفظ می‌شوند.',
     M1042: 'این ATT&CK Mitigation کاهش سطح حمله از طریق غیرفعال‌سازی یا حذف feature، program، protocol، service یا component غیرضروری و آسیب‌پذیر را توصیه می‌کند. اجرای عملی آن می‌تواند شامل حذف software منسوخ یا End-of-Life، غیرفعال‌سازی قابلیت‌های بدون استفاده مانند SMBv1 یا Telnet، محدودکردن نصب application غیرمجاز، حذف serviceهای غیرضروری و کنترل pluginها باشد. پیش از اعمال تغییر در Production باید dependencyهای کسب‌وکار، change window، تست سازگاری و rollback plan بررسی شوند؛ غیرفعال‌سازی بدون این کنترل‌ها ممکن است outage ایجاد کند. فهرست Mitigated Techniques در Overview از روابط واقعی نسخه جاری MITRE ATT&CK ساخته می‌شود و برای بررسی دامنه کنترل قابل انتخاب است.'
   });
+  const ATTACK_DEFINITIONS_FA = Object.freeze({
+    'T1059.001': Object.freeze([
+      'مهاجمان ممکن است برای اجرای command و script از PowerShell سوءاستفاده کنند. PowerShell یک command-line interface تعاملی و محیط scripting قدرتمند است که به‌صورت داخلی در Windows وجود دارد و می‌تواند برای کشف اطلاعات، مدیریت سیستم و اجرای code استفاده شود.',
+      'برای نمونه، cmdlet مربوط به Start-Process یک executable را اجرا می‌کند و Invoke-Command می‌تواند command را روی سیستم محلی یا remote اجرا کند؛ اتصال PowerShell به سیستم‌های remote معمولاً به مجوزهای administrator نیاز دارد. PowerShell همچنین می‌تواند executable را از Internet دریافت کند و آن را از disk یا مستقیماً در memory اجرا کند.',
+      'Frameworkهای شناخته‌شده‌ای مانند Empire، PowerSploit، PoshC2 و PSAttack از قابلیت‌های PowerShell استفاده کرده‌اند. بنابراین analyst باید رفتار، process lineage، script content، network activity و user context را بررسی کند و صرف وجود PowerShell را به‌تنهایی نشانه حمله تلقی نکند.',
+      'اجرای PowerShell الزاماً با powershell.exe انجام نمی‌شود. مهاجم می‌تواند از طریق assembly زیرساختی System.Management.Automation در .NET Framework و Windows Common Language Interface به قابلیت‌های PowerShell دسترسی پیدا کند؛ در نتیجه detection نباید صرفاً به نام process وابسته باشد.'
+    ])
+  });
   const DYNAMIC_FA = Object.freeze({
     'Key investigative pivots': 'محورهای کلیدی بررسی',
     'Why it matters': 'اهمیت امنیتی',
@@ -673,6 +681,31 @@
     setTextIfDifferent(element, value);
   }
 
+  function localizeRecordDefinition(language) {
+    const { base } = recordParts();
+    const identifier = primaryIdentifier(base);
+    const translated = ATTACK_DEFINITIONS_FA[identifier];
+    for (const card of document.querySelectorAll('.info-card')) {
+      const heading = card.querySelector('h4');
+      const englishHeading = heading?.dataset.atlasEn || normalizeSpaces(heading?.textContent);
+      if (englishHeading !== 'Definition') continue;
+      const list = card.querySelector('ul');
+      if (!list) continue;
+      if (!list.dataset.atlasEnItems) {
+        list.dataset.atlasEnItems = JSON.stringify([...list.querySelectorAll(':scope > li')].map(item => item.textContent || ''));
+      }
+      let values;
+      try { values = JSON.parse(list.dataset.atlasEnItems); } catch (_) { values = []; }
+      const localized = language === 'fa' && translated ? translated : values;
+      list.replaceChildren();
+      for (const value of localized) {
+        const item = node('li', language === 'fa' && translated ? 'localized-definition-fa' : '', value);
+        if (language === 'fa' && translated) item.setAttribute('dir', 'rtl');
+        list.append(item);
+      }
+    }
+  }
+
   function applyLanguage(language = currentLanguage()) {
     document.documentElement.lang = language === 'fa' ? 'fa' : 'en';
     for (const [selector, fa] of Object.entries(STATIC_FA)) translateStatic(selector, fa, language);
@@ -686,6 +719,7 @@
       const fa = DYNAMIC_FA[heading.dataset.atlasEn];
       setTextIfDifferent(heading, language === 'fa' && fa ? fa : heading.dataset.atlasEn);
     }
+    localizeRecordDefinition(language);
     const toggle = document.getElementById('languageToggle');
     if (toggle) {
       toggle.textContent = language === 'fa' ? 'EN' : 'FA';
@@ -788,6 +822,7 @@
     buildRelationshipGroups,
     isAttackIdentifier,
     READING_AIDS_FA,
+    ATTACK_DEFINITIONS_FA,
     install
   });
 }));

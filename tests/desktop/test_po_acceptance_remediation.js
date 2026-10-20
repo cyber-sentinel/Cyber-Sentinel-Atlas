@@ -116,6 +116,17 @@ test('Persian reading aids are bounded and explicitly available for the Product 
   assert.ok(remediationSource.includes("id = 'languageToggle'"));
 });
 
+test('FA mode has a complete analyst-facing Definition overlay for PowerShell T1059.001', () => {
+  const paragraphs = remediation.ATTACK_DEFINITIONS_FA['T1059.001'];
+  assert.equal(paragraphs.length, 4);
+  assert.ok(paragraphs.some(value => value.includes('Start-Process') && value.includes('Invoke-Command')));
+  assert.ok(paragraphs.some(value => value.includes('System.Management.Automation') && value.includes('.NET Framework')));
+  assert.ok(paragraphs.some(value => value.includes('PowerSploit') && value.includes('process lineage')));
+  assert.ok(remediationSource.includes('localizeRecordDefinition(language)'));
+  assert.ok(remediationSource.includes('data-atlas-en-items') === false);
+  assert.ok(visualSource.includes('.localized-definition-fa'));
+});
+
 test('acceptance presentation includes hierarchy, split event title and restrained lime headings', () => {
   assert.ok(htmlSource.includes('acceptance-remediation.css'));
   assert.ok(visualSource.includes('.attack-breadcrumb'));
