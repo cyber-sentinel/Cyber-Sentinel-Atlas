@@ -130,6 +130,20 @@ test('Tauri commands keep blocking child-process I/O off the WebView command exe
   assert.ok(rustMain.includes('stderr_reader = thread::spawn'));
 });
 
+test('read-only Desktop calls reuse one bounded verified Core session', () => {
+  assert.ok(rustMain.includes('static PERSISTENT_CORE_SESSION: Mutex<Option<PersistentCoreSession>>'));
+  assert.ok(rustMain.includes('fn start_persistent_core_session()'));
+  assert.ok(rustMain.includes('fn run_persistent_core_session('));
+  assert.ok(rustMain.includes('.recv_timeout(CORE_SESSION_TIMEOUT)'));
+  assert.ok(rustMain.includes('command.creation_flags(CREATE_NO_WINDOW)'));
+  for (const method of ['search.query','catalog.list','record.get','graph.expand','pack.status']) {
+    assert.ok(rustMain.includes(`"${method}"`), `missing persistent read method ${method}`);
+  }
+  assert.ok(rustMain.includes('invalidate_persistent_core_session()?'));
+  assert.ok(rustMain.includes('run_core_session(method, params)'));
+  assert.ok(rustMain.includes('Pack mutations must never run against a process holding the previous'));
+});
+
 test('Tauri host gives bounded enriched-pack cold activation enough time and reports timeout evidence', () => {
   assert.ok(rustMain.includes('const CORE_SESSION_TIMEOUT: Duration = Duration::from_secs(120);'));
   assert.ok(rustMain.includes('const CORE_SESSION_POLL_INTERVAL: Duration = Duration::from_millis(20);'));
