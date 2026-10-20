@@ -171,6 +171,8 @@ test('Tauri host applies an exact fail-closed WebView2 offline allowlist before 
   assert.deepEqual(browserArgumentLiterals, [expectedArguments.join(' ')]);
   assert.equal(tauri.app.windows[0].additionalBrowserArgs, expectedArguments.join(' '));
   assert.equal(tauri.app.windows[0].useHttpsScheme, true, 'Windows custom protocol must not use the ambient HTTP.sys port 80 origin');
+  assert.equal(tauri.app.windows[0].maximized, true, 'ATLAS analyst workspace must start maximized');
+  assert.equal(tauri.app.windows[0].fullscreen, false, 'ATLAS must preserve native window controls instead of exclusive fullscreen');
   assert.ok(rustMain.includes('normalized.starts_with("--edge-webview-switches")'));
   assert.ok(rustMain.includes('WEBVIEW2_PIPE_FOR_SCRIPT_DEBUGGER'));
   assert.ok(rustMain.includes('WEBVIEW2_WAIT_FOR_SCRIPT_DEBUGGER'));
