@@ -94,8 +94,32 @@
     PublishURLs: 'Publish URLs'
   });
   const READING_AIDS_FA = Object.freeze({
-    '4872': 'این رویداد زمانی ثبت می‌شود که Certificate Services یک فهرست ابطال گواهی (CRL) را منتشر می‌کند. نشانه‌های %1 تا %5 در پیام خام، جای‌نگهدارهای قالب Microsoft Provider هستند و هنگام ثبت رویداد با مقادیر واقعی جایگزین می‌شوند. متن مرجع انگلیسی بدون تغییر حفظ شده است.',
-    T1059: 'این تکنیک بیان می‌کند که مهاجم ممکن است از مفسرهای فرمان و اسکریپت برای اجرای دستور، اسکریپت یا فایل اجرایی سوءاستفاده کند. نمونه‌های مرتبط شامل PowerShell، Windows Command Shell، Unix Shell، Python، JavaScript و Visual Basic هستند. متن مرجع MITRE به زبان اصلی حفظ شده است.'
+    '4872': 'این رویداد موفقیت انتشار Certificate Revocation List (CRL) توسط Active Directory Certificate Services را ثبت می‌کند. برای تولید آن، Audit Certification Services و گزینه ممیزی «Revoke certificates and publish CRLs» در CA باید فعال باشند. Is Base CRL مشخص می‌کند خروجی یک Base CRL کامل است یا Delta CRL؛ CRL Number شماره ترتیبی انتشار، Key Container هویت محفظه کلید CA، Next Publish زمان برنامه‌ریزی‌شده انتشار بعدی و Publish URLs مقصدهای انتشار مانند file، LDAP یا HTTP را نشان می‌دهند. مقادیر %1 تا %5 فقط جای‌نگهدارهای پیام خام Microsoft Provider هستند و در Event واقعی با داده‌های Field جایگزین می‌شوند.',
+    T1059: 'این ATT&CK Technique استفاده مهاجم از command و script interpreterها را برای اجرای command، script یا binary مدل می‌کند. این مفسرها رابط استاندارد تعامل با سیستم‌عامل و application هستند و در Windows، Linux، macOS و محیط‌های cross-platform حضور دارند. مهاجم می‌تواند command یا script را در payload اولیه، سند lure، payload ثانویه دریافت‌شده از C2، terminal تعاملی یا Remote Service اجرا کند. نمونه‌های زیرمجموعه شامل PowerShell، Windows Command Shell، Unix Shell، Python، JavaScript، AppleScript و سایر Sub-techniqueهای نسخه جاری ATT&CK است. این توضیح ترجمه تحلیلی ATLAS از محتوای نسخه‌بندی‌شده MITRE ATT&CK است و متن انگلیسی منبع برای ممیزی حفظ می‌شود.',
+    'T1059.001': 'این Sub-technique بر سوءاستفاده از PowerShell برای اجرای command و script در Windows تمرکز دارد. PowerShell یک محیط قدرتمند مدیریت و automation است و فعالیت آن باید با process lineage، command-line، Script Block Logging، Module Logging، AMSI و PowerShell Operational telemetry بررسی شود. وجود PowerShell به‌تنهایی نشانه حمله نیست؛ analyst باید parent process، user context، encoded یا obfuscated content، network activity و ارتباط با سایر evidenceها را ارزیابی کند. متن انگلیسی و روابط نسخه‌بندی‌شده MITRE ATT&CK برای ممیزی حفظ می‌شوند.'
+  });
+  const DYNAMIC_FA = Object.freeze({
+    'Key investigative pivots': 'محورهای کلیدی بررسی',
+    'Why it matters': 'اهمیت امنیتی',
+    'Event context': 'زمینه رویداد',
+    'Correlations': 'همبستگی‌ها',
+    'Definition': 'تعریف',
+    'Enterprise ATT&CK Context': 'زمینه Enterprise ATT&CK',
+    'ATT&CK identity': 'هویت ATT&CK',
+    'Lifecycle': 'چرخه عمر',
+    'Versioned ATT&CK Object': 'شیء نسخه‌بندی‌شده ATT&CK',
+    'Platforms': 'پلتفرم‌ها',
+    'Tactics': 'Tacticها',
+    'Parent Technique': 'Technique والد',
+    'Security analysis': 'تحلیل امنیتی',
+    'Detection / hunt pivots': 'محورهای Detection / Hunt',
+    'Collection / prerequisites': 'جمع‌آوری / پیش‌نیازها',
+    'Verified Relationships': 'روابط تأییدشده',
+    'Security Meaning': 'معنای امنیتی',
+    'Functions / Capabilities': 'Functionها / قابلیت‌ها',
+    'Execution Context': 'زمینه اجرا',
+    'Related Telemetry': 'Telemetry مرتبط',
+    'Sources': 'منابع'
   });
   const TAB_FA = Object.freeze({
     overview: 'مرور', fields: 'فیلدها', example: 'نمونه', analysis: 'تشخیص و شکار', capabilities: 'قابلیت‌ها',
@@ -381,7 +405,7 @@
     if (!description.dataset.atlasRawText) description.dataset.atlasRawText = rawDescription;
     const source = [rawDescription, rawTitle].map(parseProviderTemplate).find(item => item.fields.length);
     if (!source) return;
-    setTextIfDifferent(title, cleanProviderTitle(rawTitle));
+    if (/%\d+/.test(rawTitle)) setTextIfDifferent(title, cleanProviderTitle(rawTitle));
     if (!description.dataset.providerCleaned) {
       const parsed = parseProviderTemplate(rawDescription);
       const clean = [parsed.lead, parsed.tail].filter(Boolean).join(' ');
@@ -622,7 +646,7 @@
     }
     if (aid.dataset.key !== (key || 'generic')) {
       aid.dataset.key = key || 'generic';
-      aid.replaceChildren(node('strong', '', 'راهنمای فارسی (غیرمرجع)'), node('span', '', body));
+      aid.replaceChildren(node('strong', '', 'خلاصه فارسی ATLAS'), node('span', '', body));
     }
     aid.hidden = currentLanguage() !== 'fa';
   }
@@ -652,6 +676,11 @@
       if (!tab.dataset.atlasEn) tab.dataset.atlasEn = tab.textContent;
       const fa = TAB_FA[tab.dataset.tab];
       setTextIfDifferent(tab, language === 'fa' && fa ? fa : tab.dataset.atlasEn);
+    }
+    for (const heading of document.querySelectorAll('.summary-card h4,.info-card h4,.source-card h4,.example-card h4,.field-group>h4,.relationship-group h5')) {
+      if (!heading.dataset.atlasEn) heading.dataset.atlasEn = heading.textContent;
+      const fa = DYNAMIC_FA[heading.dataset.atlasEn];
+      setTextIfDifferent(heading, language === 'fa' && fa ? fa : heading.dataset.atlasEn);
     }
     const toggle = document.getElementById('languageToggle');
     if (toggle) {

@@ -29,6 +29,7 @@ ROOT = Path(__file__).resolve().parents[2]
 ANALYST_EXAMPLES = ROOT / "content" / "encyclopedia" / "mvp2-analyst-examples.json"
 EXPECTED_EXAMPLE_SUBJECTS = frozenset({
     "atlas:event:microsoft.windows.security:4624",
+    "atlas:event:microsoft.windows.security:4872",
     "atlas:event:microsoft.windows.security:4688",
     "atlas:event:microsoft.sysmon:1",
 })

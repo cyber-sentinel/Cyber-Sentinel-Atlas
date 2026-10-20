@@ -34128,7 +34128,7 @@
       "id": "atlas:event:microsoft.windows.security:4872",
       "namespace": "microsoft.windows.security",
       "canonical_key": "4872",
-      "title": "Windows Security Event 4872 — Certificate Services published the certificate revocation list (CRL). Base CRL: %1 CRL Number: %2 Key Container: %3 Next Publish: %4 Publish URLs: %5",
+      "title": "Windows Security Event 4872 — Certificate Services published the certificate revocation list (CRL)",
       "provider": "Microsoft-Windows-Security-Auditing",
       "channel": "Security",
       "product": "Windows Security Auditing",
@@ -34138,7 +34138,7 @@
         "4872",
         "Event ID 4872",
         "Windows 4872",
-        "Certificate Services published the certificate revocation list (CRL). Base CRL: %1 CRL Number: %2 Key Container: %3 Next Publish: %4 Publish URLs: %5"
+        "Certificate Services published the certificate revocation list (CRL)"
       ],
       "lifecycle": "current",
       "source_id": "atlas:source:atlas.source:microsoft-windows-security-auditing-provider-26100-batch18",
@@ -34157,11 +34157,19 @@
         "redistribution": "source-link-and-coverage-benchmark-only"
       },
       "overview": {
-        "summary": "Microsoft provider message: Certificate Services published the certificate revocation list (CRL). Base CRL: %1 CRL Number: %2 Key Container: %3 Next Publish: %4 Publish URLs: %5 Version-aware field shapes are bound to controlled Windows Server 2025 build 26100 evidence.",
-        "category": "Windows Security Auditing",
-        "subcategory": "Provider-defined Security auditing",
-        "event_type": "Provider-defined",
+        "summary": "Records successful publication of a certificate revocation list (CRL) by Active Directory Certificate Services. The event identifies whether the publication is a base or delta CRL, its sequence number, the CA key container, the next planned publication time and the configured publication destinations.",
+        "category": "Object Access",
+        "subcategory": "Certification Services",
+        "event_type": "Success",
         "provider_level": "win:Informational",
+        "provider_message_template": "Certificate Services published the certificate revocation list (CRL). Base CRL: %1 CRL Number: %2 Key Container: %3 Next Publish: %4 Publish URLs: %5",
+        "supported_windows": [
+          "Windows Server 2008 R2 / Windows 7",
+          "Windows Server 2012 R2 / Windows 8.1",
+          "Windows Server 2016 / Windows 10",
+          "Windows Server 2019 / Windows Server 2022",
+          "Windows Server 2025 controlled provider evidence"
+        ],
         "event_versions": [
           {
             "version": "0",
@@ -34173,15 +34181,29 @@
       },
       "collection": {
         "requirements": [
-          "Enable the applicable Windows Security audit policy for this provider identity.",
+          "Enable Advanced Audit Policy Configuration > Object Access > Audit Certification Services for Success events.",
+          "Enable the Certification Authority audit-filter operation for revoking certificates and publishing CRLs.",
           "Preserve native Event ID, provider, channel and Version for deterministic parsing."
         ],
-        "interpretation_note": "Interpret provider message and native fields in surrounding identity, authentication, policy or system activity context; validate expected administrative and security operations before assigning malicious intent."
+        "interpretation_note": "Validate the publication against the issuing CA schedule and approved change/incident activity. A successful local publication event does not by itself prove that every LDAP, file or HTTP distribution endpoint is reachable by relying parties."
       },
-      "correlations": [],
+      "correlations": [
+        {
+          "target": "4871",
+          "key": "CA identity + CRL publication time",
+          "purpose": "correlate the request to publish a CRL with the resulting successful publication"
+        },
+        {
+          "target": "CRL distribution endpoint telemetry",
+          "key": "Publish URLs + CRL Number + time",
+          "purpose": "verify that the newly published CRL reached the configured file, LDAP or HTTP retrieval locations",
+          "limitation": "Event 4872 proves the CA publication operation, not end-to-end client retrieval from every distribution point"
+        }
+      ],
       "analysis": [
-        "Validate against expected administrative, identity, authentication, policy and system activity before assigning malicious intent.",
-        "Use provider-native version and field set as structural authority."
+        "Compare CRL Number and Next Publish with the CA publication schedule; investigate unexpected, missing or rapidly repeated publication activity.",
+        "Validate every Publish URL and downstream replication/transfer path, especially after CA configuration or CDP changes.",
+        "Treat routine scheduled CRL publication as expected administrative activity; this success event is operational evidence, not a malicious verdict."
       ],
       "fields": [
         {
@@ -34189,9 +34211,19 @@
           "section": "Additional Information",
           "native_name": "IsBaseCRL",
           "type": "UnicodeString",
-          "meaning": "Provider-rendered `IsBaseCRL` field preserved from controlled Microsoft event metadata.",
+          "meaning": "Indicates whether the published object is a complete base CRL rather than a delta CRL containing changes since its associated base CRL.",
           "versions": [
             "0"
+          ],
+          "values": [
+            {
+              "value": "Yes",
+              "meaning": "A base CRL was published."
+            },
+            {
+              "value": "No",
+              "meaning": "A delta CRL was published."
+            }
           ]
         },
         {
@@ -34199,7 +34231,7 @@
           "section": "Additional Information",
           "native_name": "CRLNumber",
           "type": "UnicodeString",
-          "meaning": "Provider-rendered `CRLNumber` field preserved from controlled Microsoft event metadata.",
+          "meaning": "Sequence number assigned to the published CRL; use it with CA identity and time to detect missing, repeated or out-of-order publications.",
           "versions": [
             "0"
           ]
@@ -34209,7 +34241,7 @@
           "section": "Additional Information",
           "native_name": "KeyContainer",
           "type": "UnicodeString",
-          "meaning": "Provider-rendered `KeyContainer` field preserved from controlled Microsoft event metadata.",
+          "meaning": "Name of the CA key container associated with the signing identity used for the CRL publication.",
           "versions": [
             "0"
           ]
@@ -34219,7 +34251,7 @@
           "section": "Additional Information",
           "native_name": "NextPublish",
           "type": "UnicodeString",
-          "meaning": "Provider-rendered `NextPublish` field preserved from controlled Microsoft event metadata.",
+          "meaning": "Planned time for the next CRL publication; compare it with the CA schedule and the validity window of the published CRL.",
           "versions": [
             "0"
           ]
@@ -34229,7 +34261,7 @@
           "section": "Additional Information",
           "native_name": "PublishURLs",
           "type": "UnicodeString",
-          "meaning": "Provider-rendered `PublishURLs` field preserved from controlled Microsoft event metadata.",
+          "meaning": "Configured destinations to which the CA publishes CRL data, such as local/file paths, LDAP locations or HTTP-backed distribution workflows. Validate downstream availability separately.",
           "versions": [
             "0"
           ]

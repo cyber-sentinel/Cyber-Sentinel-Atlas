@@ -24,6 +24,37 @@
   function overviewPredicate(base){return ['hunt','attack'].includes(kind(base))?'behavior.description':'telemetry.represents';}
   function tabs(base){return TAB_MODELS[kind(base)];}
   function label(base){return {event:'Telemetry Event',tool:'Tool Intelligence',hunt:'Hunt Profile',attack:'MITRE ATT&CK',knowledge:'Knowledge Entity'}[kind(base)];}
+  function normalizeSpaces(value){return String(value==null?'':value).replace(/\s+/g,' ').trim();}
+  function cleanProviderTitle(value){
+    const text=normalizeSpaces(value),tokenIndex=text.search(/%\d+/);
+    if(tokenIndex<0)return text;
+    const prefix=text.slice(0,tokenIndex),sentenceBreak=prefix.lastIndexOf('. ');
+    if(sentenceBreak>=0)return prefix.slice(0,sentenceBreak+1).trim();
+    const fieldStart=prefix.search(/\b(?:Base CRL|CRL Number|Key Container|Next Publish|Publish URLs)\s*:/i);
+    if(fieldStart>0)return prefix.slice(0,fieldStart).replace(/[,:;\s]+$/,'').trim();
+    return prefix.replace(/[A-Za-z][A-Za-z0-9 /_-]{1,48}:\s*$/,'').replace(/[,:;\s]+$/,'').trim();
+  }
+  function eventTitleParts(eventId,value){
+    const id=normalizeSpaces(eventId),clean=cleanProviderTitle(value);
+    const escaped=id.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    const semantic=clean.replace(new RegExp(`^Windows Security Event(?: ID)?\\s*\\(?${escaped}\\)?\\s*(?:—|:|-)\\s*`,'i'),'').trim();
+    return {prefix:`Windows Security Event ID (${id}) :`,semantic:semantic||'Provider-defined event'};
+  }
+  function primaryIdentifier(record){
+    const identifiers=Array.isArray(record?.native_identifiers)?record.native_identifiers:[],primary=identifiers.find(item=>item?.primary)||identifiers[0];
+    return primary?.value?String(primary.value).toUpperCase():'';
+  }
+  function attackBreadcrumb(detail,base,security={}){
+    if(kind(base)!=='attack')return[];
+    const names=new Map(),add=record=>{const id=primaryIdentifier(record);if(id&&record?.title)names.set(id,String(record.title));};
+    add(base);for(const related of Array.isArray(detail?.related_entities)?detail.related_entities:[])add(related);
+    const current=String(security.attack_id||primaryIdentifier(base)).toUpperCase();
+    const parent=String(security.parent_technique||'').toUpperCase();
+    if(parent&&security.parent_technique_name&&!names.has(parent))names.set(parent,String(security.parent_technique_name));
+    const tacticIds=(Array.isArray(security.tactics)?security.tactics:[]).map(value=>String(value).toUpperCase()).sort();
+    const ids=[...tacticIds,parent,current].filter(Boolean);
+    return [...new Set(ids)].map(id=>({id,name:names.get(id)||'',current:id===current}));
+  }
   function attackDetails(security={}){
     const rows=[];
     const add=(label,value)=>{if(value!==null&&value!==undefined&&value!=='')rows.push(`${label}: ${Array.isArray(value)?value.join(', '):value}`);};
@@ -65,5 +96,5 @@
     if(type==='attack')values.push(security.attack_id,security.parent_technique,...(security.tactics||[]),...(security.subtechniques||[]),...(security.detection_strategies||[]),...(security.analytics||[]),...(security.mitigations||[]),...(security.data_components||[]),...(security.platforms||[]));
     return [...new Set(values.filter(value=>typeof value==='string'&&value.trim()))].slice(0,8);
   }
-  return Object.freeze({kind,overviewPredicate,tabs,label,toolFunctions,toolContexts,toolTechniques,attackDetails,entityPivots,TAB_MODELS});
+  return Object.freeze({kind,overviewPredicate,tabs,label,cleanProviderTitle,eventTitleParts,attackBreadcrumb,toolFunctions,toolContexts,toolTechniques,attackDetails,entityPivots,TAB_MODELS});
 });

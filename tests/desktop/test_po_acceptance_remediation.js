@@ -9,6 +9,10 @@ const root = path.resolve(__dirname, '..', '..');
 const tauriRoot = path.join(root, 'benchmarks', 'desktop', 'phase56', 'candidates', 'tauri');
 const remediationPath = path.join(tauriRoot, 'www', 'stale-selection-guard.js');
 const remediationSource = fs.readFileSync(remediationPath, 'utf8');
+const mainSource = fs.readFileSync(path.join(tauriRoot, 'www', 'main.js'), 'utf8');
+const htmlSource = fs.readFileSync(path.join(tauriRoot, 'www', 'index.html'), 'utf8');
+const visualSource = fs.readFileSync(path.join(tauriRoot, 'www', 'acceptance-remediation.css'), 'utf8');
+const projection = require(path.join(tauriRoot, 'www', 'entity-projection.js'));
 const buildRs = fs.readFileSync(path.join(tauriRoot, 'build.rs'), 'utf8');
 const remediation = require(remediationPath);
 
@@ -23,6 +27,36 @@ test('provider template placeholders are removed from the analyst title but pres
     { label: 'Next Publish', token: '%4' },
     { label: 'Publish URLs', token: '%5' }
   ]);
+});
+
+test('provider placeholders are removed from search, hero and Entity projections generically', () => {
+  const input = 'Windows Security Event 4872 — Certificate Services published the certificate revocation list (CRL). Base CRL: %1 CRL Number: %2';
+  assert.equal(projection.cleanProviderTitle(input), 'Windows Security Event 4872 — Certificate Services published the certificate revocation list (CRL).');
+  assert.deepEqual(projection.eventTitleParts('4872', input), {
+    prefix: 'Windows Security Event ID (4872) :',
+    semantic: 'Certificate Services published the certificate revocation list (CRL).'
+  });
+  assert.ok(mainSource.includes('entityProjection.cleanProviderTitle(m.title'));
+  assert.ok(mainSource.includes('event-title-prefix'));
+  assert.ok(mainSource.includes('event-title-name'));
+});
+
+test('ATT&CK breadcrumb projects tactic, parent technique and current sub-technique', () => {
+  const base={entity_type:'attack-subtechnique',title:'Command and Scripting Interpreter: PowerShell',native_identifiers:[{type:'attack_id',value:'T1059.001',primary:true}]};
+  const detail={related_entities:[
+    {title:'Execution',native_identifiers:[{type:'attack_id',value:'TA0002',primary:true}]},
+    {title:'Command and Scripting Interpreter',native_identifiers:[{type:'attack_id',value:'T1059',primary:true}]}
+  ]};
+  assert.deepEqual(projection.attackBreadcrumb(detail,base,{attack_id:'T1059.001',parent_technique:'T1059',tactics:['TA0002']}),[
+    {id:'TA0002',name:'Execution',current:false},
+    {id:'T1059',name:'Command and Scripting Interpreter',current:false},
+    {id:'T1059.001',name:'Command and Scripting Interpreter: PowerShell',current:true}
+  ]);
+});
+
+test('event value dictionaries are projected into matching field rows', () => {
+  assert.ok(mainSource.includes('event_value_dictionaries'));
+  assert.ok(mainSource.includes('eventDictionaries[valuesRef]'));
 });
 
 test('provider field labels and raw provider types are rendered as analyst-facing text', () => {
@@ -57,8 +91,16 @@ test('relationship grouping keeps mapped tools source-backed but separates them 
 test('Persian reading aids are bounded and explicitly available for the Product Owner acceptance canaries', () => {
   assert.ok(remediation.READING_AIDS_FA['4872'].includes('%1'));
   assert.ok(remediation.READING_AIDS_FA.T1059.includes('PowerShell'));
-  assert.ok(remediationSource.includes('راهنمای فارسی (غیرمرجع)'));
+  assert.ok(remediation.READING_AIDS_FA['T1059.001'].includes('Script Block Logging'));
+  assert.ok(remediationSource.includes('خلاصه فارسی ATLAS'));
   assert.ok(remediationSource.includes("id = 'languageToggle'"));
+});
+
+test('acceptance presentation includes hierarchy, split event title and restrained lime headings', () => {
+  assert.ok(htmlSource.includes('acceptance-remediation.css'));
+  assert.ok(visualSource.includes('.attack-breadcrumb'));
+  assert.ok(visualSource.includes('.event-title-prefix'));
+  assert.ok(visualSource.includes('#b8ff75'));
 });
 
 test('acceptance remediation remains offline and does not add a network path', () => {
