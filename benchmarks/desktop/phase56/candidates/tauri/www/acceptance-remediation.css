@@ -48,6 +48,32 @@
   font-size: 10px;
 }
 
+.attack-entity-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.attack-entity-link {
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--soft);
+  border-radius: 9px;
+  background: rgb(85 210 255 / 4.5%);
+  color: var(--text);
+  font: 700 10px/1.45 ui-monospace, Consolas, monospace;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.attack-entity-link:hover,
+.attack-entity-link:focus-visible {
+  border-color: rgb(184 255 117 / 52%);
+  color: #b8ff75;
+}
+
 .summary-card h4,
 .info-card h4,
 .source-card h4,

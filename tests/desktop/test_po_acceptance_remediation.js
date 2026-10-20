@@ -54,6 +54,24 @@ test('ATT&CK breadcrumb projects tactic, parent technique and current sub-techni
   ]);
 });
 
+test('ATT&CK mitigations project named mitigated Techniques from source-backed relationships', () => {
+  const base={id:'atlas:attack-mitigation:mitre.attack:m1042',entity_type:'attack-mitigation',title:'Disable or Remove Feature or Program',native_identifiers:[{type:'attack_id',value:'M1042',primary:true}]};
+  const detail={relationships:[
+    {from:base.id,to:'atlas:attack-technique:mitre.attack:t1059',relationship_type:'MITIGATES'},
+    {from:base.id,to:'atlas:attack-subtechnique:mitre.attack:t1059.001',relationship_type:'MITIGATES'}
+  ],related_entities:[
+    {id:'atlas:attack-technique:mitre.attack:t1059',title:'Command and Scripting Interpreter',native_identifiers:[{type:'attack_id',value:'T1059',primary:true}]},
+    {id:'atlas:attack-subtechnique:mitre.attack:t1059.001',title:'Command and Scripting Interpreter: PowerShell',native_identifiers:[{type:'attack_id',value:'T1059.001',primary:true}]}
+  ]};
+  assert.equal(projection.attackObjectType(base,{object_type:'course-of-action'}),'attack-mitigation');
+  assert.deepEqual(projection.mitigatedTechniques(detail,base,{mitigated_techniques:['T1059','T1059.001']}),[
+    {id:'T1059',name:'Command and Scripting Interpreter',record_id:'atlas:attack-technique:mitre.attack:t1059',label:'T1059 · Command and Scripting Interpreter'},
+    {id:'T1059.001',name:'Command and Scripting Interpreter: PowerShell',record_id:'atlas:attack-subtechnique:mitre.attack:t1059.001',label:'T1059.001 · Command and Scripting Interpreter: PowerShell'}
+  ]);
+  assert.ok(projection.attackDetails({mitigated_techniques:['T1059']}).includes('Mitigated techniques: T1059'));
+  assert.ok(projection.entityPivots(base,{}, {attack_id:'M1042',mitigated_techniques:['T1059']},{}).includes('T1059'));
+});
+
 test('event value dictionaries are projected into matching field rows', () => {
   assert.ok(mainSource.includes('event_value_dictionaries'));
   assert.ok(mainSource.includes('eventDictionaries[valuesRef]'));
@@ -92,6 +110,8 @@ test('Persian reading aids are bounded and explicitly available for the Product 
   assert.ok(remediation.READING_AIDS_FA['4872'].includes('%1'));
   assert.ok(remediation.READING_AIDS_FA.T1059.includes('PowerShell'));
   assert.ok(remediation.READING_AIDS_FA['T1059.001'].includes('Script Block Logging'));
+  assert.ok(remediation.READING_AIDS_FA.M1042.includes('rollback plan'));
+  assert.ok(remediation.READING_AIDS_FA.M1042.includes('Mitigated Techniques'));
   assert.ok(remediationSource.includes('خلاصه فارسی ATLAS'));
   assert.ok(remediationSource.includes("id = 'languageToggle'"));
 });
@@ -101,6 +121,9 @@ test('acceptance presentation includes hierarchy, split event title and restrain
   assert.ok(visualSource.includes('.attack-breadcrumb'));
   assert.ok(visualSource.includes('.event-title-prefix'));
   assert.ok(visualSource.includes('#b8ff75'));
+  assert.ok(visualSource.includes('.attack-entity-link'));
+  assert.ok(mainSource.includes("attackType==='attack-mitigation'"));
+  assert.ok(mainSource.includes("attackEntityCard('Mitigated Techniques'"));
 });
 
 test('acceptance remediation remains offline and does not add a network path', () => {

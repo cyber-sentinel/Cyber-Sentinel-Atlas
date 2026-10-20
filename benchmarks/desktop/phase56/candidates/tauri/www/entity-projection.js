@@ -58,8 +58,32 @@
   function attackDetails(security={}){
     const rows=[];
     const add=(label,value)=>{if(value!==null&&value!==undefined&&value!=='')rows.push(`${label}: ${Array.isArray(value)?value.join(', '):value}`);};
-    add('ATT&CK ID',security.attack_id);add('STIX ID',security.stix_id);add('Object type',security.object_type);add('Platforms',security.platforms);add('Tactics',security.tactics);add('Parent technique',security.parent_technique_name&&security.parent_technique?`${security.parent_technique} · ${security.parent_technique_name}`:security.parent_technique);add('Sub-techniques',security.subtechniques);add('Detection Strategies',security.detection_strategies);add('Analytics',security.analytics);add('Mitigations',security.mitigations);add('Detected techniques',security.detected_techniques);add('Data Components',security.data_components);add('Version',security.attack_version);add('Source modified',security.source_modified);
+    add('ATT&CK ID',security.attack_id);add('STIX ID',security.stix_id);add('Object type',security.object_type);add('Platforms',security.platforms);add('Tactics',security.tactics);add('Parent technique',security.parent_technique_name&&security.parent_technique?`${security.parent_technique} · ${security.parent_technique_name}`:security.parent_technique);add('Sub-techniques',security.subtechniques);add('Detection Strategies',security.detection_strategies);add('Analytics',security.analytics);add('Mitigations',security.mitigations);add('Mitigated techniques',security.mitigated_techniques);add('Detected techniques',security.detected_techniques);add('Data Components',security.data_components);add('Version',security.attack_version);add('Source modified',security.source_modified);
     return rows;
+  }
+  function attackObjectType(base,security={}){
+    return String(base?.entity_type||security?.object_type||'').toLowerCase();
+  }
+  function relatedAttackEntities(detail,base,relationshipType){
+    const current=String(base?.id||''),relatedById=new Map((Array.isArray(detail?.related_entities)?detail.related_entities:[]).map(record=>[String(record?.id||''),record])),rows=[];
+    for(const relationship of Array.isArray(detail?.relationships)?detail.relationships:[]){
+      if(!relationship||String(relationship.relationship_type||'').toUpperCase()!==String(relationshipType||'').toUpperCase())continue;
+      const outbound=String(relationship.from||'')===current,relatedId=outbound?relationship.to:relationship.from;
+      if(!relatedId||String(relatedId).includes(':source:'))continue;
+      const record=relatedById.get(String(relatedId)),id=primaryIdentifier(record);
+      if(id)rows.push({id,name:String(record?.title||''),record_id:String(relatedId)});
+    }
+    return rows;
+  }
+  function mitigatedTechniques(detail,base,security={}){
+    const rows=relatedAttackEntities(detail,base,'MITIGATES'),names=new Map(),related=Array.isArray(detail?.related_entities)?detail.related_entities:[];
+    for(const record of related){const id=primaryIdentifier(record);if(id&&record?.title)names.set(id,String(record.title));}
+    for(const value of Array.isArray(security?.mitigated_techniques)?security.mitigated_techniques:[]){
+      const id=String(value||'').toUpperCase();if(id)rows.push({id,name:names.get(id)||'',record_id:''});
+    }
+    const unique=new Map();
+    for(const row of rows){if(!unique.has(row.id))unique.set(row.id,{...row,label:`${row.id}${row.name?` · ${row.name}`:''}`});}
+    return [...unique.values()].sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true}));
   }
   function toolFunctions(security={}){
     const values=[];
@@ -93,8 +117,8 @@
       values.push(...functions,...contexts,...(security.lolbas_categories||[]),...toolTechniques(security),...(collection.recommended_telemetry||[]));
     }
     if(type==='hunt')values.push(...(overview.artifact_families||[]),...(security.related_event_ids||[]).map(id=>`Event ${id}`));
-    if(type==='attack')values.push(security.attack_id,security.parent_technique,...(security.tactics||[]),...(security.subtechniques||[]),...(security.detection_strategies||[]),...(security.analytics||[]),...(security.mitigations||[]),...(security.data_components||[]),...(security.platforms||[]));
+    if(type==='attack')values.push(security.attack_id,security.parent_technique,...(security.tactics||[]),...(security.subtechniques||[]),...(security.detection_strategies||[]),...(security.analytics||[]),...(security.mitigations||[]),...(security.mitigated_techniques||[]),...(security.data_components||[]),...(security.platforms||[]));
     return [...new Set(values.filter(value=>typeof value==='string'&&value.trim()))].slice(0,8);
   }
-  return Object.freeze({kind,overviewPredicate,tabs,label,cleanProviderTitle,eventTitleParts,attackBreadcrumb,toolFunctions,toolContexts,toolTechniques,attackDetails,entityPivots,TAB_MODELS});
+  return Object.freeze({kind,overviewPredicate,tabs,label,cleanProviderTitle,eventTitleParts,attackBreadcrumb,attackObjectType,relatedAttackEntities,mitigatedTechniques,toolFunctions,toolContexts,toolTechniques,attackDetails,entityPivots,TAB_MODELS});
 });
