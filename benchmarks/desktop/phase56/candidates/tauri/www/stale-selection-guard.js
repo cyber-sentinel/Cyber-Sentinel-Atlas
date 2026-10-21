@@ -645,20 +645,133 @@
     return '';
   }
 
-  function ensurePersianReadingAid(base) {
+  function claimObject(detail, predicate) {
+    const claim = (Array.isArray(detail?.claims) ? detail.claims : []).find(item => item?.predicate === predicate);
+    const value = claim?.object?.value;
+    return value && typeof value === 'object' ? value : {};
+  }
+
+  function compactValues(value, limit = 5) {
+    const values = Array.isArray(value) ? value : (value === null || value === undefined || value === '' ? [] : [value]);
+    return [...new Set(values.map(item => {
+      if (typeof item === 'string' || typeof item === 'number') return normalizeSpaces(item);
+      if (!item || typeof item !== 'object') return '';
+      return normalizeSpaces(item.label || item.name || item.title || item.function || item.context || item.meaning || '');
+    }).filter(Boolean))].slice(0, limit);
+  }
+
+  function namedAttackValues(values, names, limit = 6) {
+    return compactValues(values, limit).map(value => {
+      const id = isAttackIdentifier(value) || String(value).toUpperCase();
+      const name = names.get(id);
+      return name ? `${id} (${name})` : id;
+    });
+  }
+
+  function structuredPersianReadingAid(detail, base, kind) {
+    const identifier = primaryIdentifier(base) || String(base?.id || 'بدون شناسه');
+    const title = cleanProviderTitle(base?.title || '').replace(/^Windows Security Event(?: ID)?\s*\(?\d+\)?\s*(?:—|:|-)\s*/i, '');
+    const security = claimObject(detail, 'security.relevance');
+    const collection = claimObject(detail, 'telemetry.requires-policy');
+    const names = attackNameMap(detail, base);
+    const context = (Array.isArray(base?.native_identifiers) ? base.native_identifiers : []).find(item => item?.primary)?.context
+      || (Array.isArray(base?.native_identifiers) ? base.native_identifiers[0]?.context : {}) || {};
+
+    if (kind === 'attack') {
+      const type = String(base?.entity_type || 'attack-object');
+      const label = ({
+        'attack-tactic': 'Tactic',
+        'attack-technique': 'Technique',
+        'attack-subtechnique': 'Sub-technique',
+        'attack-detection-strategy': 'Detection Strategy',
+        'attack-analytic': 'Analytic',
+        'attack-mitigation': 'Mitigation',
+        'attack-data-component': 'Data Component'
+      })[type] || 'Object';
+      const sentences = [`این رکورد یک ${label} نسخه‌بندی‌شده در MITRE ATT&CK با شناسه ${identifier}${title ? ` و عنوان «${title}»` : ''} است.`];
+      const tactics = namedAttackValues(security.tactics, names);
+      const parent = namedAttackValues(security.parent_technique || security.parent_technique_name, names, 1);
+      const platforms = compactValues(security.platforms);
+      const strategies = namedAttackValues(security.detection_strategies, names);
+      const analytics = namedAttackValues(security.analytics, names);
+      const mitigations = namedAttackValues(security.mitigations || security.mitigated_techniques, names);
+      const subtechniques = namedAttackValues(security.subtechniques, names);
+      if (tactics.length) sentences.push(`Tacticهای مرتبط: ${tactics.join('، ')}.`);
+      if (parent.length) sentences.push(`Technique والد: ${parent.join('، ')}.`);
+      if (subtechniques.length) sentences.push(`Sub-techniqueهای قابل مرور: ${subtechniques.join('، ')}.`);
+      if (platforms.length) sentences.push(`دامنه Platform: ${platforms.join('، ')}.`);
+      if (strategies.length) sentences.push(`Detection Strategyهای منبع‌محور: ${strategies.join('، ')}.`);
+      if (analytics.length) sentences.push(`Analyticهای مرتبط: ${analytics.join('، ')}.`);
+      if (mitigations.length) sentences.push(`${type === 'attack-mitigation' ? 'Techniqueهای تحت پوشش' : 'Mitigationهای مرتبط'}: ${mitigations.join('، ')}.`);
+      sentences.push('برای تعریف کامل منبع، روابط و وضعیت lifecycle از تب‌های ATT&CK Context، Relationships و Sources استفاده کنید. متن مرجع English برای ممیزی بدون تغییر نگهداری می‌شود.');
+      return sentences.join(' ');
+    }
+
+    if (kind === 'event') {
+      const fields = compactValues((Array.isArray(detail?.fields) ? detail.fields : []).map(field => field?.native_name || field?.canonical_key || field?.title), 6);
+      const provider = context.provider || 'Provider کنترل‌شده';
+      const channel = context.channel ? ` در Channel ${context.channel}` : '';
+      const sentences = [`این رکورد Telemetry Event با شناسه ${identifier}${title ? ` و عنوان «${title}»` : ''} از ${provider}${channel} است.`];
+      if (fields.length) sentences.push(`${detail.fields.length} فیلد ساختاریافته در Pack موجود است؛ از جمله ${fields.join('، ')}.`);
+      const telemetry = compactValues([...(compactValues(collection.recommended_telemetry, 4)), ...(compactValues(collection.conditional_telemetry, 4))], 6);
+      if (telemetry.length) sentences.push(`Telemetry تکمیلی پیشنهادی: ${telemetry.join('، ')}.`);
+      sentences.push('برای معنی Fieldها، Exampleهای governed، Detection & Hunt و provenance به تب‌های مربوط مراجعه کنید؛ این خلاصه فقط از metadata بسته‌بندی‌شده ساخته شده است.');
+      return sentences.join(' ');
+    }
+
+    if (kind === 'tool') {
+      const functions = compactValues(security.gtfobins_functions || security.lolbas_categories, 6);
+      const contexts = compactValues(security.execution_contexts, 5);
+      const techniques = namedAttackValues(security.attack_techniques, names, 5);
+      const platforms = compactValues([context.platform, ...(compactValues(security.platforms, 4))], 4);
+      const sentences = [`این رکورد Tool Intelligence با شناسه ${identifier}${title ? ` و عنوان «${title}»` : ''}${platforms.length ? ` برای ${platforms.join('، ')}` : ''} است.`];
+      if (functions.length) sentences.push(`Functionها و capabilityهای منبع‌محور: ${functions.join('، ')}.`);
+      if (contexts.length) sentences.push(`Execution Contextهای امنیتی: ${contexts.join('، ')}.`);
+      if (techniques.length) sentences.push(`ATT&CK mappingهای منبع‌محور: ${techniques.join('، ')}.`);
+      sentences.push('این موجودیت یک ابزار dual-use است؛ قابلیت و context باید همراه با process lineage، privilege و telemetry واقعی ارزیابی شوند.');
+      return sentences.join(' ');
+    }
+
+    if (kind === 'hunt') {
+      const overview = claimObject(detail, 'behavior.description');
+      const artifacts = compactValues(overview.artifact_families, 6);
+      const events = compactValues(security.related_event_ids, 8).map(value => `Event ID ${value}`);
+      const sentences = [`این رکورد Hunt Profile با شناسه ${identifier}${title ? ` و عنوان «${title}»` : ''} است.`];
+      if (artifacts.length) sentences.push(`Artifact familyهای بررسی: ${artifacts.join('، ')}.`);
+      if (events.length) sentences.push(`Telemetry Eventهای مرتبط: ${events.join('، ')}.`);
+      sentences.push('Investigation pivotها و روابط این پروفایل از داده governed فعال استخراج شده‌اند و باید با evidence محیط تطبیق داده شوند.');
+      return sentences.join(' ');
+    }
+
+    return `این رکورد Knowledge Entity با شناسه ${identifier}${title ? ` و عنوان «${title}»` : ''} است. داده‌های قابل اتکا، روابط و provenance آن را در تب‌های Overview، Relationships و Sources مرور کنید. این خلاصه از metadata بسته‌بندی‌شده تولید شده و جایگزین متن مرجع نیست.`;
+  }
+
+  function persianReadingAid(detail, base, kind) {
+    const key = recordReadingAidKey(base);
+    if (key) return { key: `curated:${key}`, heading: 'راهنمای فارسی ATLAS', body: READING_AIDS_FA[key], curated: true };
+    const identity = primaryIdentifier(base) || String(base?.id || 'unknown');
+    return {
+      key: `structured:${identity}`,
+      heading: 'خلاصه ساختاریافته فارسی ATLAS',
+      body: structuredPersianReadingAid(detail, base, kind),
+      curated: false
+    };
+  }
+
+  function ensurePersianReadingAid(detail, base, kind) {
     const hero = document.querySelector('.answer-hero');
     if (!hero) return;
     let aid = hero.querySelector('.persian-reading-aid');
-    const key = recordReadingAidKey(base);
-    const body = key ? READING_AIDS_FA[key] : 'ترجمه کامل این رکورد هنوز در knowledge pack بسته‌بندی نشده است؛ متن مرجع انگلیسی بدون تغییر نمایش داده می‌شود.';
+    const readingAid = persianReadingAid(detail, base, kind);
     if (!aid) {
       aid = node('section', 'persian-reading-aid');
       aid.setAttribute('dir', 'rtl');
       hero.append(aid);
     }
-    if (aid.dataset.key !== (key || 'generic')) {
-      aid.dataset.key = key || 'generic';
-      aid.replaceChildren(node('strong', '', 'خلاصه فارسی ATLAS'), node('span', '', body));
+    if (aid.dataset.key !== readingAid.key) {
+      aid.dataset.key = readingAid.key;
+      aid.dataset.curated = String(readingAid.curated);
+      aid.replaceChildren(node('strong', '', readingAid.heading), node('span', '', readingAid.body));
     }
     aid.hidden = currentLanguage() !== 'fa';
   }
@@ -697,6 +810,10 @@
       let values;
       try { values = JSON.parse(list.dataset.atlasEnItems); } catch (_) { values = []; }
       const localized = language === 'fa' && translated ? translated : values;
+      if (heading) {
+        if (language === 'fa') heading.textContent = translated ? 'تعریف فارسی' : 'تعریف مرجع (English)';
+        else heading.textContent = heading.dataset.atlasEn || 'Definition';
+      }
       list.replaceChildren();
       for (const value of localized) {
         const item = node('li', language === 'fa' && translated ? 'localized-definition-fa' : '', value);
@@ -787,7 +904,7 @@
     enhanceRelationships(detail, base, kind);
     enhanceRecordSymbol(kind);
     enhanceEntityRail(detail, base, kind);
-    ensurePersianReadingAid(base);
+    ensurePersianReadingAid(detail, base, kind);
     applyLanguage();
   }
 
@@ -821,6 +938,8 @@
     classifyRelationship,
     buildRelationshipGroups,
     isAttackIdentifier,
+    structuredPersianReadingAid,
+    persianReadingAid,
     READING_AIDS_FA,
     ATTACK_DEFINITIONS_FA,
     install

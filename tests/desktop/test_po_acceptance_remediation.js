@@ -112,8 +112,64 @@ test('Persian reading aids are bounded and explicitly available for the Product 
   assert.ok(remediation.READING_AIDS_FA['T1059.001'].includes('Script Block Logging'));
   assert.ok(remediation.READING_AIDS_FA.M1042.includes('rollback plan'));
   assert.ok(remediation.READING_AIDS_FA.M1042.includes('Mitigated Techniques'));
-  assert.ok(remediationSource.includes('خلاصه فارسی ATLAS'));
+  assert.ok(remediationSource.includes('راهنمای فارسی ATLAS'));
   assert.ok(remediationSource.includes("id = 'languageToggle'"));
+});
+
+test('FA mode replaces the generic missing-translation fallback with record-specific structured summaries', () => {
+  assert.equal(remediationSource.includes('ترجمه کامل این رکورد هنوز در knowledge pack بسته‌بندی نشده است'), false);
+
+  const attackBase = {
+    id: 'atlas:attack-subtechnique:mitre.attack:t1098.007',
+    entity_type: 'attack-subtechnique',
+    title: 'Account Manipulation: Additional Local or Domain Groups',
+    native_identifiers: [{ type: 'attack_id', value: 'T1098.007', primary: true }]
+  };
+  const attackDetail = {
+    claims: [{ predicate: 'security.relevance', object: { value: {
+      tactics: ['TA0003', 'TA0004'],
+      parent_technique: 'T1098',
+      platforms: ['Windows'],
+      detection_strategies: ['DET0310']
+    } } }],
+    related_entities: [
+      { title: 'Persistence', native_identifiers: [{ type: 'attack_id', value: 'TA0003', primary: true }] },
+      { title: 'Privilege Escalation', native_identifiers: [{ type: 'attack_id', value: 'TA0004', primary: true }] },
+      { title: 'Account Manipulation', native_identifiers: [{ type: 'attack_id', value: 'T1098', primary: true }] },
+      { title: 'Account Object Change Monitoring', native_identifiers: [{ type: 'attack_id', value: 'DET0310', primary: true }] }
+    ]
+  };
+  const attackAid = remediation.persianReadingAid(attackDetail, attackBase, 'attack');
+  assert.equal(attackAid.curated, false);
+  assert.equal(attackAid.heading, 'خلاصه ساختاریافته فارسی ATLAS');
+  assert.match(attackAid.body, /T1098\.007/);
+  assert.match(attackAid.body, /T1098 \(Account Manipulation\)/);
+  assert.match(attackAid.body, /TA0003 \(Persistence\)/);
+  assert.match(attackAid.body, /DET0310 \(Account Object Change Monitoring\)/);
+
+  const eventBase = {
+    id: 'atlas:event:windows:4624',
+    entity_type: 'event',
+    title: 'Windows Security Event 4624 — An account was successfully logged on',
+    native_identifiers: [{ type: 'event_id', value: '4624', primary: true, context: { provider: 'Microsoft-Windows-Security-Auditing', channel: 'Security' } }]
+  };
+  const eventDetail = { fields: [{ native_name: 'LogonType' }, { native_name: 'TargetUserName' }] };
+  const eventAid = remediation.persianReadingAid(eventDetail, eventBase, 'event');
+  assert.equal(eventAid.key, 'structured:4624');
+  assert.match(eventAid.body, /Microsoft-Windows-Security-Auditing/);
+  assert.match(eventAid.body, /2 فیلد ساختاریافته/);
+  assert.match(eventAid.body, /LogonType/);
+
+  const nextEvent = { ...eventBase, id: 'atlas:event:windows:4625', native_identifiers: [{ type: 'event_id', value: '4625', primary: true }] };
+  assert.notEqual(remediation.persianReadingAid({}, nextEvent, 'event').key, eventAid.key);
+});
+
+test('curated Persian aids remain distinct from deterministic structured summaries', () => {
+  const base = { entity_type: 'attack-technique', title: 'Command and Scripting Interpreter', native_identifiers: [{ type: 'attack_id', value: 'T1059', primary: true }] };
+  const aid = remediation.persianReadingAid({}, base, 'attack');
+  assert.equal(aid.curated, true);
+  assert.equal(aid.heading, 'راهنمای فارسی ATLAS');
+  assert.match(aid.body, /PowerShell/);
 });
 
 test('FA mode has a complete analyst-facing Definition overlay for PowerShell T1059.001', () => {
