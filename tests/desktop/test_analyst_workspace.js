@@ -120,11 +120,85 @@ test('search and record failures clear prior selection and use nested Shared Cor
 test('Tauri commands keep blocking child-process I/O off the WebView command executor', () => {
   assert.ok(rustMain.includes('async fn run_core_session_async'));
   assert.ok(rustMain.includes('tauri::async_runtime::spawn_blocking'));
+  assert.ok(rustMain.includes('static CORE_SESSION_GATE: Mutex<()> = Mutex::new(())'));
+  assert.equal((rustMain.match(/CORE_SESSION_GATE\s*\.lock\(\)/g) || []).length, 2, 'both status and application commands must share the first-run session gate');
+  assert.ok(rustMain.includes('atlas-core session gate is poisoned'));
   for (const command of ['core_status','search_records','list_entities','get_record','expand_graph','pack_status','pack_update','pack_rollback']) {
     assert.ok(rustMain.includes(`async fn ${command}(`), `${command} must remain asynchronous`);
   }
   assert.ok(rustMain.includes('stdout_reader = thread::spawn'));
   assert.ok(rustMain.includes('stderr_reader = thread::spawn'));
+});
+
+test('read-only Desktop calls reuse one bounded verified Core session', () => {
+  assert.ok(rustMain.includes('static PERSISTENT_CORE_SESSION: Mutex<Option<PersistentCoreSession>>'));
+  assert.ok(rustMain.includes('fn start_persistent_core_session()'));
+  assert.ok(rustMain.includes('fn run_persistent_core_session('));
+  assert.ok(rustMain.includes('.recv_timeout(CORE_SESSION_TIMEOUT)'));
+  assert.ok(rustMain.includes('command.creation_flags(CREATE_NO_WINDOW)'));
+  for (const method of ['search.query','catalog.list','record.get','graph.expand','pack.status']) {
+    assert.ok(rustMain.includes(`"${method}"`), `missing persistent read method ${method}`);
+  }
+  assert.ok(rustMain.includes('invalidate_persistent_core_session()?'));
+  assert.ok(rustMain.includes('run_core_session(method, params)'));
+  assert.ok(rustMain.includes('Pack mutations must never run against a process holding the previous'));
+});
+
+test('Tauri host gives bounded enriched-pack cold activation enough time and reports timeout evidence', () => {
+  assert.ok(rustMain.includes('const CORE_SESSION_TIMEOUT: Duration = Duration::from_secs(120);'));
+  assert.ok(rustMain.includes('const CORE_SESSION_POLL_INTERVAL: Duration = Duration::from_millis(20);'));
+  assert.equal(rustMain.includes('Duration::from_secs(15)'), false);
+  assert.ok(rustMain.includes('atlas-core stdio request timed out after {elapsed_ms} ms'));
+  assert.ok(rustMain.includes('stdout_bytes={}'));
+  assert.ok(rustMain.includes('CORE_STDERR_DIAGNOSTIC_LIMIT'));
+});
+
+test('Tauri host applies an exact fail-closed WebView2 offline allowlist before startup', () => {
+  const expectedArguments = [
+    '--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection',
+    '--disable-background-networking',
+    '--disable-preconnect',
+    '--disable-component-update',
+    '--disable-sync',
+    '--metrics-recording-only',
+    '--no-first-run',
+  ];
+  const browserArgumentLiterals = [...rustMain.matchAll(/"(--[^"\r\n]+)"/g)]
+    .map(match => match[1])
+    .filter(value => value.includes('--disable-background-networking'));
+
+  assert.ok(rustMain.includes('WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS'));
+  assert.deepEqual(browserArgumentLiterals, [expectedArguments.join(' ')]);
+  assert.equal(tauri.app.windows[0].additionalBrowserArgs, expectedArguments.join(' '));
+  assert.equal(tauri.app.windows[0].useHttpsScheme, true, 'Windows custom protocol must not use the ambient HTTP.sys port 80 origin');
+  assert.equal(tauri.app.windows[0].maximized, true, 'ATLAS analyst workspace must start maximized');
+  assert.equal(tauri.app.windows[0].fullscreen, false, 'ATLAS must preserve native window controls instead of exclusive fullscreen');
+  assert.ok(rustMain.includes('normalized.starts_with("--edge-webview-switches")'));
+  assert.ok(rustMain.includes('WEBVIEW2_PIPE_FOR_SCRIPT_DEBUGGER'));
+  assert.ok(rustMain.includes('WEBVIEW2_WAIT_FOR_SCRIPT_DEBUGGER'));
+
+  const mainIndex = rustMain.indexOf('fn main() {');
+  const configureIndex = rustMain.indexOf('configure_offline_webview()', mainIndex);
+  const builderIndex = rustMain.indexOf('tauri::Builder::default()', mainIndex);
+  assert.notEqual(mainIndex, -1, 'host main entrypoint must remain explicit');
+  assert.notEqual(configureIndex, -1, 'offline WebView2 configuration must be invoked');
+  assert.notEqual(builderIndex, -1, 'Tauri Builder startup must remain explicit');
+  assert.ok(configureIndex < builderIndex, 'offline WebView2 configuration must run before Tauri startup');
+
+  const configuredSurface = `${rustMain}\n${JSON.stringify(tauri)}`;
+  for (const forbiddenArgument of [
+    '--remote-debugging-port',
+    '--remote-debugging-pipe',
+    '--remote-allow-origins',
+    '--disable-web-security',
+    '--allow-running-insecure-content',
+    '--ignore-certificate-errors',
+    '--allow-insecure-localhost',
+    '--proxy-server',
+    '--host-resolver-rules',
+  ]) {
+    assert.equal(configuredSurface.includes(forbiddenArgument), false, `forbidden WebView2 argument: ${forbiddenArgument}`);
+  }
 });
 
 test('Mind Map renders a bounded graphical node-link view without arbitrary graph execution', () => {

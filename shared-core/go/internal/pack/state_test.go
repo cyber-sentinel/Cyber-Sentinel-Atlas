@@ -4,9 +4,37 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 )
+
+func TestPrepareRuntimeRootConcurrentInitialization(t *testing.T) {
+	root := filepath.Join(t.TempDir(), "nested", "runtime")
+	const workers = 32
+	errorsByWorker := make(chan error, workers)
+	var wait sync.WaitGroup
+	for range workers {
+		wait.Add(1)
+		go func() {
+			defer wait.Done()
+			errorsByWorker <- PrepareRuntimeRoot(root)
+		}()
+	}
+	wait.Wait()
+	close(errorsByWorker)
+	for err := range errorsByWorker {
+		if err != nil {
+			t.Fatalf("concurrent runtime preparation failed: %v", err)
+		}
+	}
+	for _, name := range []string{"state", "staging", "tuf", "generations", "reports"} {
+		info, err := os.Lstat(filepath.Join(root, name))
+		if err != nil || !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
+			t.Fatalf("runtime subdirectory %q is missing or unsafe: info=%v err=%v", name, info, err)
+		}
+	}
+}
 
 func TestStrictSemverPrecedence(t *testing.T) {
 	cases := []struct {

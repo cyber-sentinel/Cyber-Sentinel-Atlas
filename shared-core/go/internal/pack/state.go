@@ -47,30 +47,27 @@ func DefaultRuntimeState() RuntimeState {
 }
 
 func PrepareRuntimeRoot(root string) error {
-	info, err := os.Lstat(root)
-	if err == nil {
-		if !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
-			return fmt.Errorf("runtime root must be a normal directory")
-		}
-	} else if errors.Is(err, os.ErrNotExist) {
-		if err := os.MkdirAll(root, 0o700); err != nil {
-			return err
-		}
-	} else {
+	if err := os.MkdirAll(root, 0o700); err != nil {
 		return err
+	}
+	info, err := os.Lstat(root)
+	if err != nil {
+		return err
+	}
+	if !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
+		return fmt.Errorf("runtime root must be a normal directory")
 	}
 	for _, name := range []string{"state", "staging", "tuf", "generations", "reports"} {
 		p := filepath.Join(root, name)
-		if info, err := os.Lstat(p); err == nil {
-			if !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
-				return fmt.Errorf("runtime subdirectory is unsafe: %s", name)
-			}
-		} else if errors.Is(err, os.ErrNotExist) {
-			if err := os.Mkdir(p, 0o700); err != nil {
-				return err
-			}
-		} else {
+		if err := os.Mkdir(p, 0o700); err != nil && !errors.Is(err, os.ErrExist) {
 			return err
+		}
+		info, err := os.Lstat(p)
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
+			return fmt.Errorf("runtime subdirectory is unsafe: %s", name)
 		}
 	}
 	return nil
