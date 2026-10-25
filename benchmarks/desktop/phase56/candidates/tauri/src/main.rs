@@ -6,13 +6,34 @@ use std::io::{Read, Write};
 #[cfg(windows)]
 use std::os::windows::process::CommandExt;
 use std::path::{Path, PathBuf};
-use std::process::{Command, Stdio};
+use std::process::{Child, ChildStdin, ChildStdout, Command, Stdio};
+use std::sync::atomic::{AtomicU64, AtomicUsize, Ordering};
+use std::sync::{Arc, Mutex, mpsc};
 use std::thread;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 const MAX_RESPONSE: usize = 8 * 1024 * 1024;
 #[cfg(windows)]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
+// A first run may need to verify and atomically activate the bundled private
+// preview pack before atlas-core can read the handshake. The enriched pack is
+// materially larger than the original MVP fixture, so the previous 15-second
+// process-wide limit could kill a healthy, bounded cold activation. Keep the
+// host fail-closed, but give cold activation an explicit product-level budget.
+const CORE_SESSION_TIMEOUT: Duration = Duration::from_secs(120);
+const CORE_SESSION_POLL_INTERVAL: Duration = Duration::from_millis(20);
+const CORE_STDERR_DIAGNOSTIC_LIMIT: usize = 2000;
+// Every Desktop command starts a short-lived atlas-core process. Serialize the
+// processes inside one host so first-run pack activation cannot race between
+// concurrent UI refreshes. The guard lives inside spawn_blocking callers, so a
+// cold activation never blocks Tauri's asynchronous command executor.
+static CORE_SESSION_GATE: Mutex<()> = Mutex::new(());
+static PERSISTENT_CORE_SESSION: Mutex<Option<PersistentCoreSession>> = Mutex::new(None);
+static CORE_REQUEST_SEQUENCE: AtomicU64 = AtomicU64::new(1);
+#[cfg(windows)]
+const WEBVIEW2_OFFLINE_BROWSER_ARGUMENTS: &str = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --disable-background-networking --disable-preconnect --disable-component-update --disable-sync --metrics-recording-only --no-first-run";
+#[cfg(windows)]
+const ATLAS_BUILD_SOURCE_SHA: &str = env!("ATLAS_BUILD_SOURCE_SHA");
 const MAX_UI_QUERY_SCALARS: usize = 512;
 const MAX_UI_IDENTIFIER_SCALARS: usize = 1024;
 const MAX_UI_RESULT_LIMIT: i64 = 100;
@@ -60,6 +81,24 @@ struct CoreSessionEvidence {
     sidecar_size_bytes: u64,
     elapsed_ms: f64,
     stderr_bytes: usize,
+}
+
+struct PersistentCoreSession {
+    child: Arc<Mutex<Child>>,
+    stdin: ChildStdin,
+    responses: mpsc::Receiver<Result<Value, String>>,
+    stderr_bytes: Arc<AtomicUsize>,
+    sidecar_sha256: String,
+    sidecar_size_bytes: u64,
+}
+
+impl Drop for PersistentCoreSession {
+    fn drop(&mut self) {
+        if let Ok(mut child) = self.child.lock() {
+            let _ = child.kill();
+            let _ = child.wait();
+        }
+    }
 }
 
 fn sha256_file(path: &Path) -> Result<([u8; 32], String), String> {
@@ -261,7 +300,7 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
         Ok::<Vec<u8>, String>(bytes)
     });
 
-    let mut timed_out = false;
+    let mut timeout_elapsed_ms = None;
     let status = loop {
         if let Some(status) = child
             .try_wait()
@@ -269,14 +308,14 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
         {
             break status;
         }
-        if started.elapsed() > Duration::from_secs(15) {
+        if started.elapsed() > CORE_SESSION_TIMEOUT {
             let _ = child.kill();
-            timed_out = true;
+            timeout_elapsed_ms = Some(started.elapsed().as_millis());
             break child
                 .wait()
                 .map_err(|e| format!("wait for timed-out atlas-core: {e}"))?;
         }
-        thread::sleep(Duration::from_millis(20));
+        thread::sleep(CORE_SESSION_POLL_INTERVAL);
     };
 
     let stdout = stdout_reader
@@ -285,8 +324,16 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
     let stderr = stderr_reader
         .join()
         .map_err(|_| "atlas-core stderr reader panicked".to_string())??;
-    if timed_out {
-        return Err("atlas-core stdio request timed out".into());
+    if let Some(elapsed_ms) = timeout_elapsed_ms {
+        let stderr_excerpt = String::from_utf8_lossy(&stderr)
+            .chars()
+            .take(CORE_STDERR_DIAGNOSTIC_LIMIT)
+            .collect::<String>();
+        return Err(format!(
+            "atlas-core stdio request timed out after {elapsed_ms} ms (limit {} ms); stdout_bytes={}; stderr={stderr_excerpt}",
+            CORE_SESSION_TIMEOUT.as_millis(),
+            stdout.len()
+        ));
     }
     if !status.success() {
         return Err(format!(
@@ -294,7 +341,7 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
             status.code(),
             String::from_utf8_lossy(&stderr)
                 .chars()
-                .take(2000)
+                .take(CORE_STDERR_DIAGNOSTIC_LIMIT)
                 .collect::<String>()
         ));
     }
@@ -352,6 +399,223 @@ fn run_core_session(method: &'static str, params: Value) -> Result<CoreSessionEv
     })
 }
 
+fn read_response_frame(reader: &mut ChildStdout) -> Result<Value, String> {
+    let mut prefix = [0u8; 4];
+    reader
+        .read_exact(&mut prefix)
+        .map_err(|e| format!("read atlas-core response prefix: {e}"))?;
+    let length = u32::from_be_bytes(prefix) as usize;
+    if length == 0 || length > MAX_RESPONSE {
+        return Err(format!("invalid response frame length: {length}"));
+    }
+    let mut body = vec![0u8; length];
+    reader
+        .read_exact(&mut body)
+        .map_err(|e| format!("read atlas-core response payload: {e}"))?;
+    serde_json::from_slice(&body).map_err(|e| format!("parse response JSON: {e}"))
+}
+
+fn persistent_exchange(
+    session: &mut PersistentCoreSession,
+    request_id: &str,
+    method: &'static str,
+    params: Value,
+) -> Result<(Value, f64), String> {
+    let request = json!({"id": request_id, "method": method, "params": params});
+    let wire = frame(&request)?;
+    let started = Instant::now();
+    session
+        .stdin
+        .write_all(&wire)
+        .map_err(|e| format!("write atlas-core stdin: {e}"))?;
+    session
+        .stdin
+        .flush()
+        .map_err(|e| format!("flush atlas-core stdin: {e}"))?;
+
+    let response = session
+        .responses
+        .recv_timeout(CORE_SESSION_TIMEOUT)
+        .map_err(|error| match error {
+            mpsc::RecvTimeoutError::Timeout => format!(
+                "atlas-core stdio request timed out after {} ms",
+                CORE_SESSION_TIMEOUT.as_millis()
+            ),
+            mpsc::RecvTimeoutError::Disconnected => {
+                "atlas-core response stream disconnected".to_string()
+            }
+        })??;
+    if response.get("id").and_then(Value::as_str) != Some(request_id) {
+        return Err("atlas-core response id mismatch".into());
+    }
+    if response.get("ok").and_then(Value::as_bool) != Some(true) {
+        let error = response.get("error").unwrap_or(&Value::Null);
+        let code = error
+            .get("code")
+            .and_then(Value::as_str)
+            .unwrap_or("ATLAS_OPERATION_FAILED");
+        let message = error
+            .get("message")
+            .and_then(Value::as_str)
+            .unwrap_or("Shared Core operation failed");
+        return Err(format!("{code}: {message}"));
+    }
+    let elapsed_ms = (started.elapsed().as_secs_f64() * 1000.0 * 1000.0).round() / 1000.0;
+    Ok((
+        response.get("result").cloned().unwrap_or(Value::Null),
+        elapsed_ms,
+    ))
+}
+
+fn start_persistent_core_session() -> Result<PersistentCoreSession, String> {
+    let (core, sidecar_sha256) = locate_and_verify_sidecar()?;
+    let sidecar_size_bytes = fs::metadata(&core)
+        .map_err(|e| format!("sidecar metadata: {e}"))?
+        .len();
+    let base = core.parent().ok_or("sidecar has no parent")?;
+    let mut command = Command::new(&core);
+    command
+        .arg("--serve-stdio")
+        .current_dir(base)
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .env_clear();
+    for key in ENV_ALLOWLIST {
+        if let Some(value) = std::env::var_os(key) {
+            command.env(key, value);
+        }
+    }
+    #[cfg(windows)]
+    {
+        command.creation_flags(CREATE_NO_WINDOW);
+    }
+
+    let mut child = command
+        .spawn()
+        .map_err(|e| format!("spawn persistent atlas-core: {e}"))?;
+    let stdin = child
+        .stdin
+        .take()
+        .ok_or("persistent atlas-core stdin unavailable")?;
+    let mut stdout = child
+        .stdout
+        .take()
+        .ok_or("persistent atlas-core stdout unavailable")?;
+    let mut stderr = child
+        .stderr
+        .take()
+        .ok_or("persistent atlas-core stderr unavailable")?;
+    let child = Arc::new(Mutex::new(child));
+    let stderr_bytes = Arc::new(AtomicUsize::new(0));
+    let stderr_counter = Arc::clone(&stderr_bytes);
+    thread::spawn(move || {
+        let mut buffer = [0u8; 4096];
+        while let Ok(read) = stderr.read(&mut buffer) {
+            if read == 0 {
+                break;
+            }
+            stderr_counter.fetch_add(read, Ordering::Relaxed);
+        }
+    });
+
+    let (response_sender, responses) = mpsc::channel();
+    thread::spawn(move || {
+        loop {
+            let response = read_response_frame(&mut stdout);
+            let terminal = response.is_err();
+            if response_sender.send(response).is_err() || terminal {
+                break;
+            }
+        }
+    });
+
+    let mut session = PersistentCoreSession {
+        child,
+        stdin,
+        responses,
+        stderr_bytes,
+        sidecar_sha256,
+        sidecar_size_bytes,
+    };
+    let nonce = session_nonce();
+    let (handshake, _) = persistent_exchange(
+        &mut session,
+        "atlas-preview-persistent-handshake",
+        "core.handshake",
+        json!({
+            "protocol": "atlas-core",
+            "version": "1.0.0",
+            "client_name": "atlas-desktop-tauri",
+            "client_version": "0.1.0-preview",
+            "session_nonce": nonce
+        }),
+    )?;
+    if handshake.get("protocol").and_then(Value::as_str) != Some("atlas-core")
+        || handshake.get("version").and_then(Value::as_str) != Some("1.0.0")
+        || handshake.get("session_nonce").and_then(Value::as_str) != Some(nonce.as_str())
+    {
+        return Err("persistent atlas-core handshake mismatch".into());
+    }
+    Ok(session)
+}
+
+fn invalidate_persistent_core_session() -> Result<(), String> {
+    let mut slot = PERSISTENT_CORE_SESSION
+        .lock()
+        .map_err(|_| "persistent atlas-core session is poisoned".to_string())?;
+    slot.take();
+    Ok(())
+}
+
+fn run_persistent_core_session(
+    method: &'static str,
+    params: Value,
+) -> Result<CoreSessionEvidence, String> {
+    let mut slot = PERSISTENT_CORE_SESSION
+        .lock()
+        .map_err(|_| "persistent atlas-core session is poisoned".to_string())?;
+    if slot.is_none() {
+        *slot = Some(start_persistent_core_session()?);
+    }
+    let request_id = format!(
+        "atlas-preview-operation-{}",
+        CORE_REQUEST_SEQUENCE.fetch_add(1, Ordering::Relaxed)
+    );
+    let exchange = persistent_exchange(
+        slot.as_mut()
+            .ok_or("persistent atlas-core session missing")?,
+        &request_id,
+        method,
+        params,
+    );
+    match exchange {
+        Ok((result, elapsed_ms)) => {
+            let session = slot
+                .as_ref()
+                .ok_or("persistent atlas-core session missing")?;
+            Ok(CoreSessionEvidence {
+                result,
+                sidecar_sha256: session.sidecar_sha256.clone(),
+                sidecar_size_bytes: session.sidecar_size_bytes,
+                elapsed_ms,
+                stderr_bytes: session.stderr_bytes.load(Ordering::Relaxed),
+            })
+        }
+        Err(error) => {
+            slot.take();
+            Err(error)
+        }
+    }
+}
+
+fn is_persistent_read_method(method: &str) -> bool {
+    matches!(
+        method,
+        "search.query" | "catalog.list" | "record.get" | "graph.expand" | "pack.status"
+    )
+}
+
 fn validate_nonempty_scalar_bounded(value: &str, field: &str, max: usize) -> Result<(), String> {
     if value.trim().is_empty() {
         return Err(format!("{field} must not be empty"));
@@ -387,16 +651,36 @@ async fn run_core_session_async(
     method: &'static str,
     params: Value,
 ) -> Result<CoreSessionEvidence, String> {
-    tauri::async_runtime::spawn_blocking(move || run_core_session(method, params))
-        .await
-        .map_err(|error| format!("atlas-core worker failed: {error}"))?
+    tauri::async_runtime::spawn_blocking(move || {
+        let _guard = CORE_SESSION_GATE
+            .lock()
+            .map_err(|_| "atlas-core session gate is poisoned".to_string())?;
+        if is_persistent_read_method(method) {
+            run_persistent_core_session(method, params)
+        } else {
+            // Pack mutations must never run against a process holding the previous
+            // active generation. Close it before mutation and force the next read
+            // to verify, open and index the newly selected generation.
+            invalidate_persistent_core_session()?;
+            let result = run_core_session(method, params);
+            invalidate_persistent_core_session()?;
+            result
+        }
+    })
+    .await
+    .map_err(|error| format!("atlas-core worker failed: {error}"))?
 }
 
 #[tauri::command]
 async fn core_status() -> Result<Value, String> {
-    tauri::async_runtime::spawn_blocking(run_core_probe)
-        .await
-        .map_err(|error| format!("atlas-core status worker failed: {error}"))?
+    tauri::async_runtime::spawn_blocking(|| {
+        let _guard = CORE_SESSION_GATE
+            .lock()
+            .map_err(|_| "atlas-core session gate is poisoned".to_string())?;
+        run_core_probe()
+    })
+    .await
+    .map_err(|error| format!("atlas-core status worker failed: {error}"))?
 }
 
 #[tauri::command]
@@ -526,7 +810,76 @@ fn arg_value(name: &str) -> Option<String> {
     None
 }
 
+#[cfg(windows)]
+fn configure_offline_webview() -> Result<(), String> {
+    for argument in std::env::args_os().skip(1) {
+        let normalized = argument.to_string_lossy().to_ascii_lowercase();
+        if normalized.starts_with("--edge-webview-switches") {
+            return Err(
+                "--edge-webview-switches is not permitted for the offline ATLAS host".to_string(),
+            );
+        }
+    }
+
+    if ATLAS_BUILD_SOURCE_SHA.len() != 40
+        || !ATLAS_BUILD_SOURCE_SHA
+            .bytes()
+            .all(|byte| byte.is_ascii_hexdigit())
+    {
+        return Err("embedded ATLAS build source identity is invalid".to_string());
+    }
+    let local_app_data = std::env::var_os("LOCALAPPDATA")
+        .map(PathBuf::from)
+        .ok_or("LOCALAPPDATA is required for isolated WebView2 state")?;
+    if !local_app_data.is_absolute() {
+        return Err("LOCALAPPDATA must be an absolute path".to_string());
+    }
+    let webview2_user_data = local_app_data
+        .join("Cyber-Sentinel")
+        .join("ATLAS")
+        .join("MVP2")
+        .join(ATLAS_BUILD_SOURCE_SHA)
+        .join("webview2");
+    fs::create_dir_all(&webview2_user_data)
+        .map_err(|error| format!("create isolated WebView2 state: {error}"))?;
+
+    // Tauri applies the same allowlist programmatically from tauri.conf.json.
+    // Also replace inherited environment arguments so a non-elevated WebView2
+    // cannot append caller-controlled switches or fall through to a per-user
+    // AdditionalBrowserArguments registry override. Remove debugger hooks before
+    // Tauri constructs the browser environment.
+    //
+    // SAFETY: this function is Windows-only. Rust documents process-environment
+    // mutation as always safe on Windows, and it runs before Tauri or atlas-core
+    // starts any application worker threads.
+    unsafe {
+        std::env::set_var(
+            "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS",
+            WEBVIEW2_OFFLINE_BROWSER_ARGUMENTS,
+        );
+        // Replace any inherited value. Reusing WebView2's default per-app
+        // profile can revive stale service-worker/component state from an
+        // older candidate and trigger background traffic despite the offline
+        // browser switches. Exact-source isolation also prevents an old MVP
+        // profile from shadowing a newer private candidate.
+        std::env::set_var("WEBVIEW2_USER_DATA_FOLDER", &webview2_user_data);
+        std::env::remove_var("WEBVIEW2_PIPE_FOR_SCRIPT_DEBUGGER");
+        std::env::remove_var("WEBVIEW2_WAIT_FOR_SCRIPT_DEBUGGER");
+    }
+    Ok(())
+}
+
+#[cfg(not(windows))]
+fn configure_offline_webview() -> Result<(), String> {
+    Ok(())
+}
+
 fn main() {
+    if let Err(error) = configure_offline_webview() {
+        eprintln!("{error}");
+        std::process::exit(1);
+    }
+
     if std::env::args().any(|arg| arg == "--atlas-probe") {
         let result = (|| -> Result<(), String> {
             let output = arg_value("--probe-output").ok_or("--probe-output is required")?;

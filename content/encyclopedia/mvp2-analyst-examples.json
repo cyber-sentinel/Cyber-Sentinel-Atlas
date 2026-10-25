@@ -11,6 +11,11 @@
       "text": "Sanitized ATLAS example — Subject: Security ID S-1-5-18, Account Name LABHOST$, Logon ID 0x3E7 · Logon Type 10 (RemoteInteractive) · New Logon: Security ID S-1-5-21-111111111-222222222-333333333-1105, Account Name analyst.user, Account Domain LAB, Logon ID 0x6A31F · Process: ID 0x4A0, Name C:\\Windows\\System32\\svchost.exe · Network: Workstation ADMIN-WS01, Source Network Address 192.0.2.44, Source Port 54432 · Authentication: Logon Process User32, Authentication Package Negotiate, Key Length 0. Values are synthetic/documentation-only."
     },
     {
+      "subject_id": "atlas:event:microsoft.windows.security:4872",
+      "label": "CRL publication — sanitized ATLAS example",
+      "text": "Sanitized ATLAS example — Certificate Services published a certificate revocation list (CRL). Is Base CRL: Yes · CRL Number: 42 · Key Container: CONTOSO-LAB-ISSUING-CA · Next Publish: 2026-10-21T00:00:00Z · Publish URLs: file:///C:/Windows/System32/CertSrv/CertEnroll/CONTOSO-LAB-ISSUING-CA.crl; ldap:///CN=CONTOSO-LAB-ISSUING-CA,CN=CDP,CN=Public Key Services,CN=Services,CN=Configuration,DC=example,DC=test. Values and identifiers are synthetic/documentation-only and are not copied from the external benchmark."
+    },
+    {
       "subject_id": "atlas:event:microsoft.windows.security:4688",
       "label": "PowerShell process creation — sanitized ATLAS example",
       "text": "Sanitized ATLAS example — Creator Subject: Security ID S-1-5-21-111111111-222222222-333333333-1105, Account Name analyst.user, Account Domain LAB, Logon ID 0x6A31F · New Process ID 0x14F0 · New Process Name C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe · Token Elevation Type %%1937 · Mandatory Label S-1-16-8192 · Creator Process ID 0x0950 · Creator Process Name C:\\Windows\\explorer.exe · Process Command Line: powershell.exe -NoProfile -Command \"Get-Process\". Values are synthetic/documentation-only."
