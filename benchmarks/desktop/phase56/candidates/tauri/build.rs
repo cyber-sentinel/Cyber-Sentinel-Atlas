@@ -1,9 +1,51 @@
 use std::env;
 use std::fs;
 use std::path::PathBuf;
+use std::process::Command;
 
 const ICON_WIDTH: u32 = 32;
 const ICON_HEIGHT: u32 = 32;
+
+fn is_git_sha(value: &str) -> bool {
+    value.len() == 40 && value.bytes().all(|byte| byte.is_ascii_hexdigit())
+}
+
+fn resolve_build_source_sha() -> String {
+    println!("cargo:rerun-if-env-changed=ATLAS_SOURCE_SHA");
+    println!("cargo:rerun-if-env-changed=GITHUB_SHA");
+
+    for name in ["ATLAS_SOURCE_SHA", "GITHUB_SHA"] {
+        if let Ok(value) = env::var(name) {
+            let normalized = value.trim().to_ascii_lowercase();
+            assert!(
+                is_git_sha(&normalized),
+                "{name} must be an exact 40-character hexadecimal Git SHA"
+            );
+            return normalized;
+        }
+    }
+
+    let manifest_dir =
+        PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR is required"));
+    let output = Command::new("git")
+        .args(["rev-parse", "HEAD"])
+        .current_dir(&manifest_dir)
+        .output()
+        .expect("ATLAS_SOURCE_SHA/GITHUB_SHA unset and git rev-parse could not run");
+    assert!(
+        output.status.success(),
+        "ATLAS_SOURCE_SHA/GITHUB_SHA unset and Git source identity is unavailable"
+    );
+    let value = String::from_utf8(output.stdout)
+        .expect("git rev-parse returned non-UTF-8 output")
+        .trim()
+        .to_ascii_lowercase();
+    assert!(
+        is_git_sha(&value),
+        "git rev-parse did not return an exact 40-character hexadecimal Git SHA"
+    );
+    value
+}
 
 fn push_u16_le(buffer: &mut Vec<u8>, value: u16) {
     buffer.extend_from_slice(&value.to_le_bytes());
@@ -142,6 +184,8 @@ fn configure_windows_gui_subsystem() {
 }
 
 fn main() {
+    let source_sha = resolve_build_source_sha();
+    println!("cargo:rustc-env=ATLAS_BUILD_SOURCE_SHA={source_sha}");
     configure_windows_gui_subsystem();
     let icon_path = write_deterministic_windows_icon();
     let windows = tauri_build::WindowsAttributes::new().window_icon_path(icon_path);

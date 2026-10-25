@@ -168,6 +168,18 @@ test('Tauri host applies an exact fail-closed WebView2 offline allowlist before 
     .filter(value => value.includes('--disable-background-networking'));
 
   assert.ok(rustMain.includes('WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS'));
+  assert.ok(rustMain.includes('WEBVIEW2_USER_DATA_FOLDER'));
+  assert.ok(rustMain.includes('const ATLAS_BUILD_SOURCE_SHA: &str = env!("ATLAS_BUILD_SOURCE_SHA");'));
+  assert.ok(rustMain.includes('.join(ATLAS_BUILD_SOURCE_SHA)'));
+  assert.ok(rustMain.includes('.join("webview2")'));
+  assert.ok(rustMain.includes('std::env::set_var("WEBVIEW2_USER_DATA_FOLDER", &webview2_user_data)'));
+  assert.ok(rustMain.includes('LOCALAPPDATA must be an absolute path'));
+  assert.ok(rustMain.includes('embedded ATLAS build source identity is invalid'));
+  assert.ok(buildRs.includes('fn resolve_build_source_sha()'));
+  assert.ok(buildRs.includes('cargo:rerun-if-env-changed=ATLAS_SOURCE_SHA'));
+  assert.ok(buildRs.includes('cargo:rerun-if-env-changed=GITHUB_SHA'));
+  assert.ok(buildRs.includes('cargo:rustc-env=ATLAS_BUILD_SOURCE_SHA={source_sha}'));
+  assert.ok(buildRs.includes('value.len() == 40'));
   assert.deepEqual(browserArgumentLiterals, [expectedArguments.join(' ')]);
   assert.equal(tauri.app.windows[0].additionalBrowserArgs, expectedArguments.join(' '));
   assert.equal(tauri.app.windows[0].useHttpsScheme, true, 'Windows custom protocol must not use the ambient HTTP.sys port 80 origin');

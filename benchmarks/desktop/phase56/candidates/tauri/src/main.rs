@@ -32,6 +32,8 @@ static PERSISTENT_CORE_SESSION: Mutex<Option<PersistentCoreSession>> = Mutex::ne
 static CORE_REQUEST_SEQUENCE: AtomicU64 = AtomicU64::new(1);
 #[cfg(windows)]
 const WEBVIEW2_OFFLINE_BROWSER_ARGUMENTS: &str = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --disable-background-networking --disable-preconnect --disable-component-update --disable-sync --metrics-recording-only --no-first-run";
+#[cfg(windows)]
+const ATLAS_BUILD_SOURCE_SHA: &str = env!("ATLAS_BUILD_SOURCE_SHA");
 const MAX_UI_QUERY_SCALARS: usize = 512;
 const MAX_UI_IDENTIFIER_SCALARS: usize = 1024;
 const MAX_UI_RESULT_LIMIT: i64 = 100;
@@ -819,6 +821,28 @@ fn configure_offline_webview() -> Result<(), String> {
         }
     }
 
+    if ATLAS_BUILD_SOURCE_SHA.len() != 40
+        || !ATLAS_BUILD_SOURCE_SHA
+            .bytes()
+            .all(|byte| byte.is_ascii_hexdigit())
+    {
+        return Err("embedded ATLAS build source identity is invalid".to_string());
+    }
+    let local_app_data = std::env::var_os("LOCALAPPDATA")
+        .map(PathBuf::from)
+        .ok_or("LOCALAPPDATA is required for isolated WebView2 state")?;
+    if !local_app_data.is_absolute() {
+        return Err("LOCALAPPDATA must be an absolute path".to_string());
+    }
+    let webview2_user_data = local_app_data
+        .join("Cyber-Sentinel")
+        .join("ATLAS")
+        .join("MVP2")
+        .join(ATLAS_BUILD_SOURCE_SHA)
+        .join("webview2");
+    fs::create_dir_all(&webview2_user_data)
+        .map_err(|error| format!("create isolated WebView2 state: {error}"))?;
+
     // Tauri applies the same allowlist programmatically from tauri.conf.json.
     // Also replace inherited environment arguments so a non-elevated WebView2
     // cannot append caller-controlled switches or fall through to a per-user
@@ -833,6 +857,12 @@ fn configure_offline_webview() -> Result<(), String> {
             "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS",
             WEBVIEW2_OFFLINE_BROWSER_ARGUMENTS,
         );
+        // Replace any inherited value. Reusing WebView2's default per-app
+        // profile can revive stale service-worker/component state from an
+        // older candidate and trigger background traffic despite the offline
+        // browser switches. Exact-source isolation also prevents an old MVP
+        // profile from shadowing a newer private candidate.
+        std::env::set_var("WEBVIEW2_USER_DATA_FOLDER", &webview2_user_data);
         std::env::remove_var("WEBVIEW2_PIPE_FOR_SCRIPT_DEBUGGER");
         std::env::remove_var("WEBVIEW2_WAIT_FOR_SCRIPT_DEBUGGER");
     }
