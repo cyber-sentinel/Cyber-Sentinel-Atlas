@@ -56,6 +56,17 @@ The PowerShell `43/43` and integrated `502/502` figures describe the validated M
 
 The global Windows denominator remains intentionally undefined while additional mandatory telemetry families are brought under controlled family-specific coverage. ATLAS does not publish a misleading “all Windows Event IDs” percentage.
 
+## Engineering Review Snapshot — 2026-10-25
+
+This snapshot distinguishes the public `main` baseline, private engineering test candidates, and **Product Owner acceptance**; none is interchangeable with a signed/public release.
+
+- [MVP-2 Product Owner remediation Draft PR #231](https://github.com/cyber-sentinel/Cyber-Sentinel-Atlas/pull/231) is still under review at `d4a1c45ac46c30ccbf936fea67361b3cfd853dd2`. [Foundation Hygiene run #40185293219](https://github.com/cyber-sentinel/Cyber-Sentinel-Atlas/actions/runs/40185293219) passed for that PR head. The branch is stacked on dependent candidate branches, not merged into `main`.
+- Product Owner-authorized **local smoke testing** previously used ATLAS source `7fa0ce2af16361e865202c30a42bec56be79ad47`; an application window, the enriched preview Pack, Entity and FA → EN → FA switching were observed. This is **not** full UI/functional acceptance or approval of a newer candidate.
+- The older Phase 5.10.5 build must **not** be substituted for that locally tested candidate. New PR revisions require separate provenance and approval before any additional unsigned-binary execution.
+- Open acceptance items include Persian generic translation fallback, unexpected CMD/PowerShell windows, offline/pack integrity, Entity/interaction behavior, clean-install experience, packaging/signing and release authority. A passing CI suite is not a substitute for the interactive acceptance checklist.
+
+Public README content intentionally does not expose private artifact identifiers, protected Control Plane state or unapproved binary downloads.
+
 ## Why ATLAS Exists
 
 Security investigation knowledge is fragmented across operating systems, SIEMs, EDR/XDR platforms, cloud environments, container runtimes, vendor documentation, threat intelligence, detection repositories, DFIR references, standards, and analyst experience.
@@ -245,10 +256,12 @@ Machine-readable coverage and release-state artifacts remain authoritative when 
 ATLAS       — KNOW   → Connect • Search • Investigate • Explain
 DefenseOps  — DEFEND → Detect • Hunt • Validate • Respond • Automate
 Skills      — APPLY  → Execute • Review • Reuse • Govern
+AION        — INTERACT → Visualize • Listen • Speak • Adapt
 ```
 
 - [Cyber-Sentinel DefenseOps](https://github.com/cyber-sentinel/Cyber-Sentinel-DefenseOps)
 - [Cyber-Sentinel Skills](https://github.com/cyber-sentinel/Cyber-Sentinel-Skills)
+- [Cyber-Sentinel AION](https://github.com/cyber-sentinel/Cyber-Sentinel-AION) — the versioned visual/voice interaction layer; product facts remain with ATLAS
 - [Cyber-Sentinel ecosystem landing page](https://github.com/cyber-sentinel)
 
 ## Release & Licensing Boundary
